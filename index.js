@@ -2,13 +2,17 @@ import Fastify from "fastify";
 import WebSocket, { WebSocketServer } from "ws";
 import twilio from "twilio";
 
+/* =========================
+   FASTIFY SETUP
+========================= */
+
 const app = Fastify({ logger: true });
+
+// 🔴 CRITIQUE : accepter webhooks Twilio (x-www-form-urlencoded)
 app.addContentTypeParser(
   "application/x-www-form-urlencoded",
   { parseAs: "string" },
-  (req, body, done) => {
-    done(null, body);
-  }
+  (req, body, done) => done(null, body)
 );
 
 /* =========================
@@ -26,25 +30,19 @@ const CALLER_ID = process.env.TWILIO_FROM_NUMBER || "+16802034198";
    ROOT
 ========================= */
 
-app.get("/", async () => {
-  return { status: "ok" };
-});
+app.get("/", async () => ({ status: "ok" }));
 
 /* =========================
-   TEST CALL (Twilio appelle ton téléphone)
+   TEST CALL
+   (Twilio appelle TON téléphone)
 ========================= */
 
-app.get("/test-call", async (req, reply) => {
-  const {
-    TWILIO_ACCOUNT_SID,
-    TWILIO_AUTH_TOKEN,
-    TWILIO_FROM_NUMBER,
-  } = process.env;
+app.get("/test-call", async () => {
+  const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER } =
+    process.env;
 
   if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_FROM_NUMBER) {
-    return reply.code(400).send({
-      error: "Missing Twilio credentials",
-    });
+    return { error: "Missing Twilio env vars" };
   }
 
   const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
@@ -56,10 +54,7 @@ app.get("/test-call", async (req, reply) => {
     method: "POST",
   });
 
-  return {
-    ok: true,
-    callSid: call.sid,
-  };
+  return { ok: true, callSid: call.sid };
 });
 
 /* =========================
@@ -74,9 +69,6 @@ async function voiceHandler(req, reply) {
 
   let twiml;
 
-  // ⚠️ IMPORTANT :
-  // - PAS de <Dial> ici
-  // - Twilio a déjà appelé le téléphone
   if (mode === "outbound") {
     twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
@@ -85,7 +77,7 @@ async function voiceHandler(req, reply) {
   </Say>
   <Pause length="1"/>
   <Connect>
-    <Stream url="${wsUrl}" />
+    <Stream url="${wsUrl}" track="both_tracks" />
   </Connect>
 </Response>`;
   } else {
@@ -110,37 +102,106 @@ const wss = new WebSocketServer({ noServer: true });
 wss.on("connection", (ws) => {
   console.log("✅ Twilio WebSocket connected");
 
-  ws.on("message", (msg) => {
-    const data = JSON.parse(msg.toString());
+  let streamSid = null;
 
-    if (data.event === "start") {
-      console.log("▶️ START stream");
+  /* ===== μ-law helpers ===== */
 
-      // 🎵 Beep (440 Hz, µ-law, 8000 Hz, ~300 ms)
-      const beep = Buffer.alloc(2400);
-      for (let i = 0; i < beep.length; i++) {
-        beep[i] =
-          128 + Math.round(30 * Math.sin((2 * Math.PI * 440 * i) / 8000));
+  function linear2ulaw(sample) {
+    const BIAS = 0x84;
+    const CLIP = 32635;
+
+    let sign = (sample >> 8) & 0x80;
+    if (sign) sample = -sample;
+    if (sample > CLIP) sample = CLIP;
+
+    sample += BIAS;
+
+    let exponent = 7;
+    for (
+      let expMask = 0x4000;
+      (sample & expMask) === 0 && exponent > 0;
+      expMask >>= 1
+    ) {
+      exponent--;
+    }
+
+    const mantissa = (sample >> (exponent + 3)) & 0x0f;
+    return ~(sign | (exponent << 4) | mantissa) & 0xff;
+  }
+
+  function buildMulawBeep({ freq = 440, seconds = 0.6, sampleRate = 8000 }) {
+    const totalSamples = Math.floor(seconds * sampleRate);
+    const out = Buffer.alloc(totalSamples);
+
+    for (let i = 0; i < totalSamples; i++) {
+      const t = i / sampleRate;
+      const pcm = Math.sin(2 * Math.PI * freq * t) * 0.35;
+      const s16 = Math.max(-1, Math.min(1, pcm)) * 32767;
+      out[i] = linear2ulaw(s16 | 0);
+    }
+    return out;
+  }
+
+  function sendMulawInFrames(mulawBytes) {
+    const frameSize = 160; // 20 ms @ 8kHz
+    let offset = 0;
+
+    const timer = setInterval(() => {
+      if (ws.readyState !== WebSocket.OPEN || !streamSid) {
+        clearInterval(timer);
+        return;
+      }
+
+      const chunk = mulawBytes.subarray(offset, offset + frameSize);
+      offset += frameSize;
+
+      if (chunk.length === 0) {
+        clearInterval(timer);
+        return;
       }
 
       ws.send(
         JSON.stringify({
           event: "media",
+          streamSid,
           media: {
-            payload: beep.toString("base64"),
+            payload: Buffer.from(chunk).toString("base64"),
           },
         })
       );
+    }, 20);
+  }
+
+  /* ===== WS events ===== */
+
+  ws.on("message", (msg) => {
+    let data;
+    try {
+      data = JSON.parse(msg.toString());
+    } catch {
+      return;
+    }
+
+    if (data.event === "start") {
+      streamSid = data.start.streamSid;
+      console.log("▶️ START", streamSid);
+
+      setTimeout(() => {
+        const beep = buildMulawBeep({ seconds: 0.6 });
+        sendMulawInFrames(beep);
+      }, 150);
+    }
+
+    if (data.event === "stop") {
+      console.log("⏹ STOP");
     }
   });
 
-  ws.on("close", () => {
-    console.log("❌ WebSocket closed");
-  });
+  ws.on("close", () => console.log("❌ WebSocket closed"));
 });
 
 /* =========================
-   SERVER + WS UPGRADE
+   HTTP → WS UPGRADE
 ========================= */
 
 app.server.on("upgrade", (req, socket, head) => {
@@ -151,6 +212,10 @@ app.server.on("upgrade", (req, socket, head) => {
   }
 });
 
+/* =========================
+   START SERVER
+========================= */
+
 app.listen({ port: PORT, host: "0.0.0.0" }, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server running on ${PORT}`);
 });
