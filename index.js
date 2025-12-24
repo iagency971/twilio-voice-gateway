@@ -58,6 +58,34 @@ app.get("/test-call", async (req, reply) => {
   return { ok: true, callSid: call.sid, to, from, url };
 });
 
+app.get("/twilio/voice", async (req, reply) => {
+  // on délègue à la même logique que POST
+  const mode = (req.query?.mode || "stream").toString();
+  const wsUrl = PUBLIC_URL.replace("https://", "wss://") + "/twilio/stream";
+
+  let twiml;
+  if (mode === "dial") {
+    twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say voice="alice" language="fr-FR">Connexion en cours.</Say>
+  <Pause length="1"/>
+  <Dial callerId="${CALLER_ID}">
+    <Number url="${PUBLIC_URL}/twilio/voice?mode=stream" method="POST">${MY_PHONE}</Number>
+  </Dial>
+</Response>`;
+  } else {
+    twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Connect>
+    <Stream url="${wsUrl}" />
+  </Connect>
+</Response>`;
+  }
+
+  reply.type("text/xml").send(twiml);
+});
+
+
 /**
  * MODE TEST #1 (Dial) : fait sonner ton téléphone
  * -> Utile pour vérifier que Twilio peut composer ton numéro
