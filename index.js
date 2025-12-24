@@ -41,7 +41,8 @@ app.post("/twilio/voice", async (req, reply) => {
   if (mode === "dial") {
     twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say voice="alice">Test appel sortant</Say>
+  <Say voice="alice">Connexion en cours.</Say>
+  <Pause length="1"/>
   <Dial callerId="${CALLER_ID}">
     <Number>${MY_PHONE}</Number>
   </Dial>
