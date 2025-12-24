@@ -4,12 +4,11 @@ import twilio from "twilio";
 
 const app = Fastify({ logger: true });
 
+// Twilio Voice webhooks
 app.addContentTypeParser(
   "application/x-www-form-urlencoded",
   { parseAs: "string" },
-  (req, body, done) => {
-    done(null, body);
-  }
+  (req, body, done) => done(null, body)
 );
 
 /* =========================
@@ -26,30 +25,22 @@ const MY_PHONE = process.env.MY_PHONE || "+590690565128";
    ROOT
 ========================= */
 
-app.get("/", async () => {
-  return { status: "ok" };
-});
+app.get("/", async () => ({ status: "ok" }));
 
 /* =========================
-   TEST CALL (Twilio appelle ton téléphone)
+   TEST CALL
 ========================= */
 
-app.get("/test-call", async (req, reply) => {
+app.get("/test-call", async () => {
   const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER } =
     process.env;
-
-  if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_FROM_NUMBER) {
-    return reply.code(400).send({
-      error: "Missing Twilio credentials",
-    });
-  }
 
   const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
   const call = await client.calls.create({
     to: MY_PHONE,
     from: TWILIO_FROM_NUMBER,
-    url: `${PUBLIC_URL}/twilio/voice?mode=outbound`,
+    url: `${PUBLIC_URL}/twilio/voice`,
     method: "POST",
   });
 
@@ -60,39 +51,23 @@ app.get("/test-call", async (req, reply) => {
    TWILIO VOICE WEBHOOK
 ========================= */
 
-async function voiceHandler(req, reply) {
-  const mode = (req.query?.mode || "outbound").toString();
-
-  // WSS robuste (sans slash final)
+app.post("/twilio/voice", async (req, reply) => {
   const wsUrl =
     PUBLIC_URL.replace("https://", "wss://").replace(/\/$/, "") +
     "/twilio/stream";
 
-  app.log.info({ mode, wsUrl }, "VOICE WEBHOOK");
+  app.log.info({ wsUrl }, "VOICE WEBHOOK");
 
-  let twiml;
-
-  if (mode === "outbound") {
-    twiml = `<?xml version="1.0" encoding="UTF-8"?>
+  reply.type("text/xml").send(`
+<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say voice="alice" language="fr-FR">Connexion au serveur audio.</Say>
-  <Pause length="1"/>
   <Connect>
     <Stream url="${wsUrl}" />
   </Connect>
-</Response>`;
-  } else {
-    twiml = `<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-  <Say>Invalid mode</Say>
-</Response>`;
-  }
-
-  reply.type("text/xml").send(twiml);
-}
-
-app.post("/twilio/voice", voiceHandler);
-app.get("/twilio/voice", voiceHandler);
+</Response>
+`);
+});
 
 /* =========================
    WEBSOCKET – MEDIA STREAMS
@@ -100,7 +75,6 @@ app.get("/twilio/voice", voiceHandler);
 
 const wss = new WebSocketServer({ noServer: true });
 
-// -------- μ-law encoder (PCM16 -> G.711 μ-law) --------
 function linear2ulaw(sample) {
   const BIAS = 0x84;
   const CLIP = 32635;
@@ -124,14 +98,13 @@ function linear2ulaw(sample) {
   return ~(sign | (exponent << 4) | mantissa) & 0xff;
 }
 
-// beep PCM16 -> μlaw bytes
-function buildMulawBeep({ freq = 440, seconds = 0.6, sampleRate = 8000 }) {
+function buildMulawBeep({ freq = 600, seconds = 0.8, sampleRate = 8000 }) {
   const totalSamples = Math.floor(seconds * sampleRate);
   const out = Buffer.alloc(totalSamples);
 
   for (let i = 0; i < totalSamples; i++) {
     const t = i / sampleRate;
-    const pcm = Math.sin(2 * Math.PI * freq * t) * 0.35; // amplitude
+    const pcm = Math.sin(2 * Math.PI * freq * t) * 0.9; // 🔥 AMPLITUDE MAX
     const s16 = Math.max(-1, Math.min(1, pcm)) * 32767;
     out[i] = linear2ulaw(s16 | 0);
   }
@@ -143,8 +116,8 @@ wss.on("connection", (ws) => {
 
   let streamSid = null;
 
-  function sendMulawInFrames(mulawBytes) {
-    const frameSize = 160; // 20ms @ 8kHz
+  function sendFrames(bytes) {
+    const frameSize = 160;
     let offset = 0;
 
     const timer = setInterval(() => {
@@ -153,10 +126,10 @@ wss.on("connection", (ws) => {
         return;
       }
 
-      const chunk = mulawBytes.subarray(offset, offset + frameSize);
+      const chunk = bytes.subarray(offset, offset + frameSize);
       offset += frameSize;
 
-      if (chunk.length === 0) {
+      if (!chunk.length) {
         clearInterval(timer);
         return;
       }
@@ -172,50 +145,35 @@ wss.on("connection", (ws) => {
   }
 
   ws.on("message", (msg) => {
-    let data;
-    try {
-      data = JSON.parse(msg.toString());
-    } catch {
-      return;
-    }
+    const data = JSON.parse(msg.toString());
 
     if (data.event === "start") {
-      streamSid = data.start?.streamSid;
+      streamSid = data.start.streamSid;
       console.log("▶️ START", streamSid);
 
-      // envoie le beep après un petit délai
-      setTimeout(() => {
-        const beep = buildMulawBeep({ seconds: 0.6 });
-        sendMulawInFrames(beep);
-      }, 150);
-    }
+      // 🔇 100 ms silence pour couper le ringback
+      sendFrames(Buffer.alloc(800, 0xff));
 
-    if (data.event === "stop") {
-      console.log("⏹ STOP");
+      // 🔊 BEEP immédiatement après
+      sendFrames(buildMulawBeep({}));
     }
-  });
-
-  ws.on("close", () => {
-    console.log("❌ WebSocket closed");
   });
 });
 
 /* =========================
-   SERVER + WS UPGRADE
+   WS UPGRADE
 ========================= */
 
 app.server.on("upgrade", (req, socket, head) => {
-  // ⚠️ garde ton match strict car chez toi ça marche
   if (req.url === "/twilio/stream") {
     wss.handleUpgrade(req, socket, head, (ws) => {
-      wss.emit("connection", ws, req);
+      wss.emit("connection", ws);
     });
   } else {
     socket.destroy();
   }
 });
 
-app.listen({ port: PORT, host: "0.0.0.0" }, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
-
+app.listen({ port: PORT, host: "0.0.0.0" }, () =>
+  console.log(`🚀 Server on ${PORT}`)
+);
