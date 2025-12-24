@@ -15,13 +15,11 @@ app.addContentTypeParser(
   (req, body, done) => done(null, body)
 );
 app.post("/twilio/voice", async (req, reply) => {
-  const wsUrl = PUBLIC_URL.replace("https://", "wss://") + "/twilio/stream";
-
   const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Connect>
-    <Stream url="${wsUrl}" />
-  </Connect>
+  <Dial>
+    <Number>+590690565128</Number>
+  </Dial>
 </Response>`;
 
   reply.type("text/xml").send(twiml);
