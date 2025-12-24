@@ -14,7 +14,6 @@ app.addContentTypeParser(
   { parseAs: "string" },
   (req, body, done) => done(null, body)
 );
-// Webhook Twilio Voice (TwiML)
 app.post("/twilio/voice", async (req, reply) => {
   const wsUrl = PUBLIC_URL.replace("https://", "wss://") + "/twilio/stream";
 
@@ -25,7 +24,7 @@ app.post("/twilio/voice", async (req, reply) => {
   </Connect>
 </Response>`;
 
-  reply.header("Content-Type", "text/xml").send(twiml);
+  reply.type("text/xml").send(twiml);
 });
 
 // Endpoint test
