@@ -63,7 +63,9 @@ app.get("/test-call", async (req, reply) => {
  */
 async function voiceHandler(req, reply) {
   const mode = (req.query?.mode || "outbound").toString();
-  const wsUrl = PUBLIC_URL.replace("https://", "wss://") + "/twilio/stream";
+  const base = process.env.RENDER_EXTERNAL_URL || PUBLIC_URL;
+  const wsUrl = base.replace("https://", "wss://").replace(/\/$/, "") + "/twilio/stream";
+
 
   app.log.info({ mode, wsUrl }, "VOICE WEBHOOK");
 
