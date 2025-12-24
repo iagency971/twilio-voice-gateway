@@ -1,16 +1,23 @@
 import Fastify from "fastify";
-import { WebSocketServer } from "ws";
-import WebSocket from "ws";
 import twilio from "twilio";
+import WebSocket, { WebSocketServer } from "ws";
+
+/* =========================
+   FASTIFY SETUP
+========================= */
 
 const app = Fastify({ logger: true });
 
-// ✅ Twilio webhooks voice arrivent en x-www-form-urlencoded
+// ✅ Twilio Voice webhooks utilisent souvent x-www-form-urlencoded
 app.addContentTypeParser(
   "application/x-www-form-urlencoded",
   { parseAs: "string" },
   (req, body, done) => done(null, body)
 );
+
+/* =========================
+   CONFIG
+========================= */
 
 const PORT = process.env.PORT || 10000;
 const PUBLIC_URL =
@@ -18,19 +25,25 @@ const PUBLIC_URL =
 
 const MY_PHONE = process.env.MY_PHONE || "+590690565128";
 
+/* =========================
+   ROUTES
+========================= */
+
 app.get("/", async () => ({ status: "ok" }));
 
-/** 1 clic = Twilio appelle ton téléphone */
-app.get("/test-call", async () => {
+/**
+ * 1 clic = Twilio appelle ton téléphone (vrai call, pas Twilio Client)
+ */
+app.get("/test-call", async (req, reply) => {
   const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER } =
     process.env;
 
   if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_FROM_NUMBER) {
-    return {
+    return reply.code(400).send({
       ok: false,
       error: "Missing env vars",
       needed: ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_FROM_NUMBER"],
-    };
+    });
   }
 
   const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
@@ -45,7 +58,9 @@ app.get("/test-call", async () => {
   return { ok: true, callSid: call.sid };
 });
 
-/** TwiML Voice webhook */
+/**
+ * Twilio Voice webhook -> renvoie TwiML
+ */
 async function voiceHandler(req, reply) {
   const mode = (req.query?.mode || "outbound").toString();
   const wsUrl = PUBLIC_URL.replace("https://", "wss://") + "/twilio/stream";
@@ -74,20 +89,40 @@ async function voiceHandler(req, reply) {
 app.post("/twilio/voice", voiceHandler);
 app.get("/twilio/voice", voiceHandler);
 
-/** Start HTTP server */
+/* =========================
+   START HTTP SERVER
+========================= */
+
 await app.listen({ port: PORT, host: "0.0.0.0" });
 
-/** WebSocket Media Streams — attaché au serveur (stable Render) */
-const wss = new WebSocketServer({
-  server: app.server,
-  path: "/twilio/stream",
+/* =========================
+   WEBSOCKET (Media Streams)
+   IMPORTANT: upgrade tolérant (prefix match)
+========================= */
+
+const wss = new WebSocketServer({ noServer: true });
+
+// ✅ Upgrade tolérant : accepte /twilio/stream ET /twilio/stream?... (query params)
+app.server.on("upgrade", (req, socket, head) => {
+  const url = req.url || "";
+  app.log.info({ url }, "WS UPGRADE REQUEST");
+
+  if (!url.startsWith("/twilio/stream")) {
+    socket.destroy();
+    return;
+  }
+
+  wss.handleUpgrade(req, socket, head, (ws) => {
+    wss.emit("connection", ws, req);
+  });
 });
 
-wss.on("connection", (ws) => {
-  console.log("✅ Twilio WebSocket connected");
+wss.on("connection", (ws, req) => {
+  app.log.info({ url: req.url }, "✅ Twilio WebSocket connected");
 
   let streamSid = null;
 
+  // PCM16 -> μ-law (G.711)
   function linear2ulaw(sample) {
     const BIAS = 0x84;
     const CLIP = 32635;
@@ -111,6 +146,7 @@ wss.on("connection", (ws) => {
     return ~(sign | (exponent << 4) | mantissa) & 0xff;
   }
 
+  // Génère beep μ-law 8kHz
   function buildMulawBeep({ freq = 440, seconds = 0.6, sampleRate = 8000 }) {
     const totalSamples = Math.floor(seconds * sampleRate);
     const out = Buffer.alloc(totalSamples);
@@ -124,6 +160,7 @@ wss.on("connection", (ws) => {
     return out;
   }
 
+  // Envoi en frames 20ms (160 bytes) avec streamSid (OBLIGATOIRE)
   function sendMulawInFrames(mulawBytes) {
     const frameSize = 160; // 20ms @ 8kHz
     let offset = 0;
@@ -162,8 +199,9 @@ wss.on("connection", (ws) => {
 
     if (data.event === "start") {
       streamSid = data.start.streamSid;
-      console.log("▶️ START", { streamSid });
+      app.log.info({ streamSid }, "▶️ START");
 
+      // petit délai pour stabiliser la lecture
       setTimeout(() => {
         const beep = buildMulawBeep({ seconds: 0.6 });
         sendMulawInFrames(beep);
@@ -171,9 +209,9 @@ wss.on("connection", (ws) => {
     }
 
     if (data.event === "stop") {
-      console.log("⏹ STOP");
+      app.log.info("⏹ STOP");
     }
   });
 
-  ws.on("close", () => console.log("❌ WebSocket closed"));
+  ws.on("close", () => app.log.info("❌ WS closed"));
 });
