@@ -3,6 +3,13 @@ import WebSocket, { WebSocketServer } from "ws";
 import twilio from "twilio";
 
 const app = Fastify({ logger: true });
+app.addContentTypeParser(
+  "application/x-www-form-urlencoded",
+  { parseAs: "string" },
+  (req, body, done) => {
+    done(null, body);
+  }
+);
 
 /* =========================
    CONFIG
