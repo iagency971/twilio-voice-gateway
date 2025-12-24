@@ -3,13 +3,13 @@ import { WebSocketServer } from "ws";
 
 const app = Fastify({ logger: true });
 
-// URL publique Render (ou variable que tu mets toi-même)
+// URL publique Render
 const PUBLIC_URL =
   process.env.PUBLIC_BASE_URL ||
   process.env.RENDER_EXTERNAL_URL ||
   "https://example.com";
 
-// 1) Webhook Twilio Voice -> renvoie TwiML
+// Webhook Twilio Voice (TwiML)
 app.post("/twilio/voice", async (req, reply) => {
   const wsUrl = PUBLIC_URL.replace("https://", "wss://") + "/twilio/stream";
 
@@ -23,26 +23,42 @@ app.post("/twilio/voice", async (req, reply) => {
   reply.header("Content-Type", "text/xml").send(twiml);
 });
 
-// 2) Petit endpoint de test (facultatif mais utile)
+// Endpoint test
 app.get("/", async () => {
-  return { ok: true };
+  return { status: "ok" };
 });
 
-// 3) Démarrage HTTP
+// Start HTTP server
 const port = process.env.PORT || 3000;
 await app.listen({ port, host: "0.0.0.0" });
 
-// 4) WebSocket Server attaché au vrai serveur HTTP Fastify
+// WebSocket Media Stream
 const wss = new WebSocketServer({
   server: app.server,
   path: "/twilio/stream",
 });
 
 wss.on("connection", (ws) => {
-  console.log("✅ Twilio WebSocket connecté");
+  console.log("✅ Twilio WebSocket connected");
 
   ws.on("message", (data) => {
     let msg;
     try {
       msg = JSON.parse(data.toString());
-    } c
+    } catch {
+      return;
+    }
+
+    if (msg.event === "start") {
+      console.log("▶️ START", msg.start);
+    }
+
+    if (msg.event === "stop") {
+      console.log("⏹ STOP");
+    }
+  });
+
+  ws.on("close", () => {
+    console.log("❌ WebSocket closed");
+  });
+});
