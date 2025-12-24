@@ -1,3 +1,4 @@
+import twilio from "twilio";
 import Fastify from "fastify";
 import { WebSocketServer } from "ws";
 
@@ -22,6 +23,40 @@ app.addContentTypeParser(
 );
 
 app.get("/", async () => ({ status: "ok" }));
+app.get("/test-call", async (req, reply) => {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const from = process.env.TWILIO_FROM_NUMBER;
+
+  const to = process.env.MY_PHONE || MY_PHONE;
+
+  if (!accountSid || !authToken || !from || !to) {
+    return reply.code(400).send({
+      error: "Missing env vars",
+      needed: ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_FROM_NUMBER", "MY_PHONE"],
+      got: {
+        TWILIO_ACCOUNT_SID: !!accountSid,
+        TWILIO_AUTH_TOKEN: !!authToken,
+        TWILIO_FROM_NUMBER: !!from,
+        MY_PHONE: !!to
+      }
+    });
+  }
+
+  const client = twilio(accountSid, authToken);
+
+  // Twilio va appeler TON téléphone et récupérer le TwiML ici
+  const url = `${PUBLIC_URL}/twilio/voice?mode=dial`;
+
+  const call = await client.calls.create({
+    to,
+    from,
+    url,
+    method: "POST"
+  });
+
+  return { ok: true, callSid: call.sid, to, from, url };
+});
 
 /**
  * MODE TEST #1 (Dial) : fait sonner ton téléphone
