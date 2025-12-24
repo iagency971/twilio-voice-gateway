@@ -8,7 +8,12 @@ const PUBLIC_URL =
   process.env.PUBLIC_BASE_URL ||
   process.env.RENDER_EXTERNAL_URL ||
   "https://example.com";
-
+// Twilio envoie souvent application/x-www-form-urlencoded
+app.addContentTypeParser(
+  "application/x-www-form-urlencoded",
+  { parseAs: "string" },
+  (req, body, done) => done(null, body)
+);
 // Webhook Twilio Voice (TwiML)
 app.post("/twilio/voice", async (req, reply) => {
   const wsUrl = PUBLIC_URL.replace("https://", "wss://") + "/twilio/stream";
