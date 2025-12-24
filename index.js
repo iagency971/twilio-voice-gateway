@@ -4,11 +4,13 @@ import twilio from "twilio";
 
 const app = Fastify({ logger: true });
 
-// Twilio Voice webhooks
+// ⚠️ Obligatoire pour Twilio Voice
 app.addContentTypeParser(
   "application/x-www-form-urlencoded",
   { parseAs: "string" },
-  (req, body, done) => done(null, body)
+  (req, body, done) => {
+    done(null, body);
+  }
 );
 
 /* =========================
@@ -25,15 +27,24 @@ const MY_PHONE = process.env.MY_PHONE || "+590690565128";
    ROOT
 ========================= */
 
-app.get("/", async () => ({ status: "ok" }));
+app.get("/", async () => {
+  return { status: "ok" };
+});
 
 /* =========================
    TEST CALL
+   Twilio appelle ton téléphone
 ========================= */
 
-app.get("/test-call", async () => {
+app.get("/test-call", async (req, reply) => {
   const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER } =
     process.env;
+
+  if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_FROM_NUMBER) {
+    return reply.code(400).send({
+      error: "Missing Twilio credentials",
+    });
+  }
 
   const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
@@ -44,11 +55,15 @@ app.get("/test-call", async () => {
     method: "POST",
   });
 
-  return { ok: true, callSid: call.sid };
+  return {
+    ok: true,
+    callSid: call.sid,
+  };
 });
 
 /* =========================
    TWILIO VOICE WEBHOOK
+   (TwiML)
 ========================= */
 
 app.post("/twilio/voice", async (req, reply) => {
@@ -58,15 +73,37 @@ app.post("/twilio/voice", async (req, reply) => {
 
   app.log.info({ wsUrl }, "VOICE WEBHOOK");
 
-  reply.type("text/xml").send(`
-<?xml version="1.0" encoding="UTF-8"?>
+  const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say voice="alice" language="fr-FR">Connexion au serveur audio.</Say>
+  <Say voice="alice" language="fr-FR">
+    Connexion au serveur audio.
+  </Say>
+  <Pause length="1"/>
   <Connect>
     <Stream url="${wsUrl}" />
   </Connect>
-</Response>
-`);
+</Response>`;
+
+  reply.type("text/xml").send(twiml);
+});
+
+app.get("/twilio/voice", async (req, reply) => {
+  const wsUrl =
+    PUBLIC_URL.replace("https://", "wss://").replace(/\/$/, "") +
+    "/twilio/stream";
+
+  const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say voice="alice" language="fr-FR">
+    Connexion au serveur audio.
+  </Say>
+  <Pause length="1"/>
+  <Connect>
+    <Stream url="${wsUrl}" />
+  </Connect>
+</Response>`;
+
+  reply.type("text/xml").send(twiml);
 });
 
 /* =========================
@@ -75,103 +112,45 @@ app.post("/twilio/voice", async (req, reply) => {
 
 const wss = new WebSocketServer({ noServer: true });
 
-function linear2ulaw(sample) {
-  const BIAS = 0x84;
-  const CLIP = 32635;
-
-  let sign = (sample >> 8) & 0x80;
-  if (sign) sample = -sample;
-  if (sample > CLIP) sample = CLIP;
-
-  sample += BIAS;
-
-  let exponent = 7;
-  for (
-    let expMask = 0x4000;
-    (sample & expMask) === 0 && exponent > 0;
-    expMask >>= 1
-  ) {
-    exponent--;
-  }
-
-  const mantissa = (sample >> (exponent + 3)) & 0x0f;
-  return ~(sign | (exponent << 4) | mantissa) & 0xff;
-}
-
-function buildMulawBeep({ freq = 600, seconds = 0.8, sampleRate = 8000 }) {
-  const totalSamples = Math.floor(seconds * sampleRate);
-  const out = Buffer.alloc(totalSamples);
-
-  for (let i = 0; i < totalSamples; i++) {
-    const t = i / sampleRate;
-    const pcm = Math.sin(2 * Math.PI * freq * t) * 0.9; // 🔥 AMPLITUDE MAX
-    const s16 = Math.max(-1, Math.min(1, pcm)) * 32767;
-    out[i] = linear2ulaw(s16 | 0);
-  }
-  return out;
-}
-
 wss.on("connection", (ws) => {
   console.log("✅ Twilio WebSocket connected");
 
-  let streamSid = null;
-
-  function sendFrames(bytes) {
-    const frameSize = 160;
-    let offset = 0;
-
-    const timer = setInterval(() => {
-      if (ws.readyState !== WebSocket.OPEN || !streamSid) {
-        clearInterval(timer);
-        return;
-      }
-
-      const chunk = bytes.subarray(offset, offset + frameSize);
-      offset += frameSize;
-
-      if (!chunk.length) {
-        clearInterval(timer);
-        return;
-      }
-
-      ws.send(
-        JSON.stringify({
-          event: "media",
-          streamSid,
-          media: { payload: Buffer.from(chunk).toString("base64") },
-        })
-      );
-    }, 20);
-  }
-
   ws.on("message", (msg) => {
-    const data = JSON.parse(msg.toString());
+    let data;
+    try {
+      data = JSON.parse(msg.toString());
+    } catch {
+      return;
+    }
 
     if (data.event === "start") {
-      streamSid = data.start.streamSid;
-      console.log("▶️ START", streamSid);
-
-      // 🔊 BEEP immédiatement (μ-law valide uniquement)
-      sendFrames(buildMulawBeep({}));
-
+      console.log("▶️ START", data.start?.streamSid);
     }
+
+    if (data.event === "stop") {
+      console.log("⏹ STOP");
+    }
+  });
+
+  ws.on("close", () => {
+    console.log("❌ WebSocket closed");
   });
 });
 
 /* =========================
-   WS UPGRADE
+   SERVER + WS UPGRADE
 ========================= */
 
 app.server.on("upgrade", (req, socket, head) => {
   if (req.url === "/twilio/stream") {
     wss.handleUpgrade(req, socket, head, (ws) => {
-      wss.emit("connection", ws);
+      wss.emit("connection", ws, req);
     });
   } else {
     socket.destroy();
   }
 });
 
-app.listen({ port: PORT, host: "0.0.0.0" }, () =>
-  console.log(`🚀 Server on ${PORT}`)
-);
+app.listen({ port: PORT, host: "0.0.0.0" }, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
