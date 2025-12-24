@@ -76,10 +76,10 @@ app.post("/twilio/voice", async (req, reply) => {
   if (mode === "dial") {
     twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say voice="alice">Connexion en cours.</Say>
+  <Say voice="alice" language="fr-FR">Connexion en cours.</Say>
   <Pause length="1"/>
   <Dial callerId="${CALLER_ID}">
-    <Number>${MY_PHONE}</Number>
+    <Number url="${PUBLIC_URL}/twilio/voice?mode=stream">${MY_PHONE}</Number>
   </Dial>
 </Response>`;
   } else {
