@@ -151,11 +151,9 @@ wss.on("connection", (ws) => {
       streamSid = data.start.streamSid;
       console.log("▶️ START", streamSid);
 
-      // 🔇 100 ms silence pour couper le ringback
-      sendFrames(Buffer.alloc(800, 0xff));
-
-      // 🔊 BEEP immédiatement après
+      // 🔊 BEEP immédiatement (μ-law valide uniquement)
       sendFrames(buildMulawBeep({}));
+
     }
   });
 });
