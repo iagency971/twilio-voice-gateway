@@ -1,5 +1,6 @@
 name: XAU 2026 Holdout Relay
 # dedicated result branch; force update is safe because this branch stores transient research outputs only
+# rerun-token: 2026-08-17T23:38Z
 on:
   push:
     branches: [agent/xau-multiyear-research]
