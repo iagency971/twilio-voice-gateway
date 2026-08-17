@@ -1,0 +1,90 @@
+name: XAU Frozen Holdout 2026 Final
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-holdout-final.yml'
+permissions:
+  contents: write
+jobs:
+  holdout-final:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Acquire frozen source window
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2025-05 --to-month 2026-06 --out /tmp/xau_holdout.csv
+      - name: Run frozen Phase A worker
+        run: python xau-multiyear/scripts/run_a_annual_worker.py /tmp/xau_holdout.csv --target-start 2026-05-01 --target-end 2026-06-23 --out /tmp/holdout --controls 5
+      - name: Compute locked pure-family holdout estimands
+        run: |
+          python - <<'PY'
+          import json, numpy as np, pandas as pd
+          from pathlib import Path
+          out=Path('/tmp/holdout')
+          e=pd.read_csv(out/'event_pairs.csv')
+          e=e[pd.to_numeric(e['n_controls'],errors='coerce').fillna(0)>0].copy()
+          e['contact_time']=pd.to_datetime(e['contact_time'],utc=True)
+          e['week']=e['contact_time'].dt.to_period('W-SUN').astype(str)
+          def famset(v):
+              try:return frozenset(json.loads(v))
+              except:return frozenset()
+          fs=e['constituent_families'].map(famset)
+          samples={
+            'DISPLACEMENT_ORIGIN_ONLY':frozenset(['DISPLACEMENT_ORIGIN']),
+            'OBJECTIVE_LIQUIDITY_ONLY':frozenset(['OBJECTIVE_LIQUIDITY']),
+            'MEMORY_ONLY':frozenset(['MEMORY']),
+            'FVG_ONLY':frozenset(['FVG']),
+            'DOZ_OBJECTIVE_ONLY':frozenset(['DISPLACEMENT_ORIGIN','OBJECTIVE_LIQUIDITY']),
+            'DOZ_FVG_ONLY':frozenset(['DISPLACEMENT_ORIGIN','FVG']),
+          }
+          rng=np.random.default_rng(971); rows=[]
+          for name,target in samples.items():
+              g=e[fs==target].copy()
+              if g.empty:continue
+              row={'sample':name,'paired_events':len(g),'weeks':g['week'].nunique()}
+              for th in ['0_25','0_5','1_0','1_5']:
+                  d=pd.to_numeric(g[f'paired_diff_reaction_{th}sigma'],errors='coerce').dropna()
+                  row[f'lift_{th}sigma_pp']=100*d.mean()
+                  row[f'actual_{th}sigma_pct']=100*pd.to_numeric(g.loc[d.index,f'reaction_{th}sigma'],errors='coerce').mean()
+                  row[f'control_{th}sigma_pct']=100*pd.to_numeric(g.loc[d.index,f'control_reaction_{th}sigma'],errors='coerce').mean()
+                  tmp=g.loc[d.index,['week']].copy(); tmp['d']=d
+                  agg=tmp.groupby('week').d.agg(['sum','count'])
+                  boot=[]; n=len(agg)
+                  if n>1:
+                      sums=agg['sum'].to_numpy(float); cnt=agg['count'].to_numpy(float)
+                      for _ in range(5000):
+                          ix=rng.integers(0,n,n); boot.append(100*sums[ix].sum()/cnt[ix].sum())
+                      row[f'ci95_low_{th}sigma_pp']=float(np.quantile(boot,.025)); row[f'ci95_high_{th}sigma_pp']=float(np.quantile(boot,.975))
+                  else:
+                      row[f'ci95_low_{th}sigma_pp']=np.nan; row[f'ci95_high_{th}sigma_pp']=np.nan
+              rows.append(row)
+          pd.DataFrame(rows).to_csv(out/'pure_locked_holdout_summary.csv',index=False)
+          m=json.load(open(out/'run_manifest.json'))
+          assert m['target_events']>10000,m
+          assert m['paired_events_any']>0.95*m['target_events'],m
+          print(pd.DataFrame(rows).to_string(index=False))
+          PY
+      - name: Publish compact result through GitHub Contents API
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_BRANCH: agent/xau-multiyear-research
+          REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import base64, os, requests
+          files={
+            'xau-final-results/holdout_2026_may_june/run_manifest.json':'/tmp/holdout/run_manifest.json',
+            'xau-final-results/holdout_2026_may_june/paired_summary_by_family.csv':'/tmp/holdout/paired_summary_by_family.csv',
+            'xau-final-results/holdout_2026_may_june/pure_locked_holdout_summary.csv':'/tmp/holdout/pure_locked_holdout_summary.csv',
+          }
+          repo=os.environ['REPO']; branch=os.environ['TARGET_BRANCH']; token=os.environ['GH_TOKEN']
+          h={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for path,src in files.items():
+              url=f'https://api.github.com/repos/{repo}/contents/{path}'
+              r=requests.get(url,headers=h,params={'ref':branch}); sha=r.json().get('sha') if r.status_code==200 else None
+              body={'message':f'publish frozen holdout result: {path.split("/")[-1]} [skip ci]','content':base64.b64encode(open(src,'rb').read()).decode(),'branch':branch}
+              if sha:body['sha']=sha
+              rr=requests.put(url,headers=h,json=body); rr.raise_for_status(); print('PUBLISHED',path)
+          PY
