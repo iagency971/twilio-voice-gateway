@@ -21,7 +21,6 @@ def test_clean_rejection_pullback_fills_proximal_edge():
     b=_bars()
     r=dict(contact_idx=5,lower=99.5,upper=100.0,sigma60=1.0,side='SUPPORT',approach_direction=-1,
            behavior_v2='CLEAN_REJECTION',first_reclaim_minutes_v2=2)
-    # Reclaim confirmed at 7. First executable pullback to 100.0 occurs at 9.
     b.iloc[8,b.columns.get_loc('low_ask')]=100.05
     b.iloc[9,b.columns.get_loc('low_ask')]=99.95
     x=build_entry(r,b,'RECLAIM_PULLBACK')
@@ -42,7 +41,6 @@ def test_pullback_cancels_if_invalidated_before_fill():
     b=_bars()
     r=dict(contact_idx=5,lower=99.5,upper=100.0,sigma60=1.0,side='SUPPORT',approach_direction=-1,
            behavior_v2='CLEAN_REJECTION',first_reclaim_minutes_v2=2)
-    # Stop for this setup is 99.1 (max(2*0.2,0.1)=0.4). Minute 8 invalidates without filling 100.0 ASK.
     b.iloc[8,b.columns.get_loc('low_bid')]=99.0
     b.iloc[8,b.columns.get_loc('low_ask')]=100.1
     assert build_entry(r,b,'RECLAIM_PULLBACK') is None
@@ -52,8 +50,12 @@ def test_pullback_same_bar_fill_and_stop_is_loss():
     b=_bars()
     r=dict(contact_idx=5,lower=99.5,upper=100.0,sigma60=1.0,side='SUPPORT',approach_direction=-1,
            behavior_v2='CLEAN_REJECTION',first_reclaim_minutes_v2=2)
+    # Minute 8 both fills the 100.0 limit and spans above the 1R TP while also below the stop.
+    # The simulator must resolve this ambiguous M1 bar adversarially as SL.
     b.iloc[8,b.columns.get_loc('low_ask')]=99.9
     b.iloc[8,b.columns.get_loc('low_bid')]=99.0
+    b.iloc[8,b.columns.get_loc('high_bid')]=101.0
+    b.iloc[8,b.columns.get_loc('high_ask')]=101.2
     x=build_entry(r,b,'RECLAIM_PULLBACK')
     assert x and x['entry_idx']==8
     s=simulate_one(x,b,1.0)
