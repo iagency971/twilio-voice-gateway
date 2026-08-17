@@ -1,5 +1,5 @@
 name: XAU 2026 Holdout Relay
-# dedicated result branch to avoid non-fast-forward races
+# dedicated result branch; force update is safe because this branch stores transient research outputs only
 on:
   push:
     branches: [agent/xau-multiyear-research]
@@ -35,9 +35,9 @@ jobs:
           mkdir -p xau-holdout-results/2026-may-june
           cp /tmp/holdout/paired_summary_by_family.csv xau-holdout-results/2026-may-june/paired_summary_by_family.csv
           cp /tmp/holdout/run_manifest.json xau-holdout-results/2026-may-june/run_manifest.json
-          cp /tmp/holdout/event_pairs.csv.gz xau-holdout-results/2026-may-june/event_pairs.csv.gz
+          gzip -c /tmp/holdout/event_pairs.csv > xau-holdout-results/2026-may-june/event_pairs.csv.gz
           git config user.name 'xau-research-bot'
           git config user.email 'actions@users.noreply.github.com'
           git add xau-holdout-results/2026-may-june
           git commit -m 'record frozen May-Jun 2026 holdout result [skip ci]'
-          git push origin HEAD:agent/xau-holdout-2026-result
+          git push --force origin HEAD:agent/xau-holdout-2026-result
