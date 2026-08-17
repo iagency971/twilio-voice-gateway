@@ -43,9 +43,9 @@ jobs:
           s=pd.read_csv(f'/tmp/phase_c_{y}/summary.csv')
           m=json.load(open(f'/tmp/phase_c_{y}/manifest.json'))
           assert {'DISPLACEMENT_ORIGIN_ONLY','OBJECTIVE_LIQUIDITY_ONLY'}.issubset(set(s['sample']))
-          assert m['events'] > 1000, m
+          assert m['target_events'] > 1000, m
           assert int(s['trades'].max()) > 100
-          print('ANNUAL_PHASE_C_OK',y,m['events'],int(s['trades'].max()))
+          print('ANNUAL_PHASE_C_OK',y,m['target_events'],int(s['trades'].max()))
           PY
       - uses: actions/upload-artifact@v4
         with:
