@@ -43,20 +43,43 @@ def _buffer(bars, i, sigma, mult=0.10):
     return max(2.0 * _spread_at(bars, i), mult * float(sigma))
 
 
-def build_entry(rec, bars, behavior, acceptance_minutes=5, retest_minutes=30, buffer_mult=0.10):
-    """Build one causal entry from a Phase-B event."""
+def build_entry(rec, bars, behavior, acceptance_minutes=5, retest_minutes=30, passive_wait_minutes=15, buffer_mult=0.10):
+    """Build one causal entry from a Phase-B event.
+
+    PASSIVE_TOUCH is the preregistered passive benchmark: a standing limit at the
+    zone centre, filled only if the executable quote reaches it. The other models
+    enter after observable confirmation or on an accepted-break retest.
+    """
     n = len(bars)
     active = _active_array(bars)
     ci = int(rec["contact_idx"])
     lo = float(rec["lower"])
     up = float(rec["upper"])
+    centre = 0.5 * (lo + up)
     sig = float(rec["sigma60"])
     if not np.isfinite(sig) or sig <= 0:
         return None
     se = _effective_side(rec)
     long_reject = se == "SUPPORT"
+    limit_entry = False
 
-    if behavior == "TOUCH_NEXT_OPEN":
+    if behavior == "PASSIVE_TOUCH":
+        direction = "LONG" if long_reject else "SHORT"
+        start = ci
+        end = min(n, ci + int(passive_wait_minutes) + 1)
+        if direction == "LONG":
+            arr = bars["low_ask"].to_numpy(float)
+            candidates = np.flatnonzero((arr[start:end] <= centre) & active[start:end])
+        else:
+            arr = bars["high_bid"].to_numpy(float)
+            candidates = np.flatnonzero((arr[start:end] >= centre) & active[start:end])
+        if len(candidates) == 0:
+            return None
+        ei = start + int(candidates[0])
+        confirm_i = ci
+        sweep_extreme = np.nan
+        limit_entry = True
+    elif behavior == "TOUCH_NEXT_OPEN":
         ei = _next_active(active, ci + 1, 2)
         if ei < 0: return None
         direction = "LONG" if long_reject else "SHORT"
@@ -96,10 +119,13 @@ def build_entry(rec, bars, behavior, acceptance_minutes=5, retest_minutes=30, bu
         if len(candidates) == 0: return None
         ei = start + int(candidates[0])
         sweep_extreme = np.nan
+        limit_entry = True
     else:
         raise ValueError(behavior)
 
-    if direction == "LONG":
+    if behavior == "PASSIVE_TOUCH":
+        entry = float(centre)
+    elif direction == "LONG":
         entry = float(up) if behavior == "ACCEPTANCE_RETEST" else float(bars["open_ask"].iloc[ei])
     else:
         entry = float(lo) if behavior == "ACCEPTANCE_RETEST" else float(bars["open_bid"].iloc[ei])
@@ -118,14 +144,14 @@ def build_entry(rec, bars, behavior, acceptance_minutes=5, retest_minutes=30, bu
         "confirm_idx": confirm_i, "entry_idx": ei, "entry_price": entry,
         "stop_price": float(stop), "risk_price": float(risk), "buffer_price": float(buf),
         "entry_delay_minutes": int(ei-ci), "sigma60": sig,
-        "intrabar_limit_entry": bool(behavior == "ACCEPTANCE_RETEST"),
+        "intrabar_limit_entry": bool(limit_entry),
     }
 
 
 def simulate_one(entry, bars, target_r, horizon_minutes=120, commission_rt_per_lot=22.0, contract_oz=100.0):
     """Simulate with executable BID/ASK OHLC and adverse ambiguity resolution.
 
-    For an intrabar limit retest fill, the entry minute cannot reveal the order of fill/high/low.
+    For an intrabar limit fill, the entry minute cannot reveal the order of fill/high/low.
     A stop range touch on that minute is therefore counted as a loss; a target range touch is
     ignored until the next minute. Market-at-open entries may use the whole entry bar.
     """
