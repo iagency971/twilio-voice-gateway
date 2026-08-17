@@ -1,0 +1,41 @@
+name: XAU Phase C v2 Entry Surface 2025
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-phase-c-v2-2025.yml'
+permissions:
+  contents: write
+jobs:
+  phase-c-v2-2025:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest
+      - name: Entry unit tests v1+v2
+        env:
+          PYTHONPATH: xau-multiyear/src
+        run: python -m pytest -q xau-multiyear/tests/test_entries_v1.py xau-multiyear/tests/test_entries_v2.py
+      - name: Acquire 2024-01 through 2026-01
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2024-01 --to-month 2026-01 --out /tmp/xau_phase_c_v2.csv
+      - name: Run Phase C v2 2025
+        run: python xau-multiyear/scripts/run_phase_c_entries_v2.py /tmp/xau_phase_c_v2.csv --target-start 2025-01-01 --target-end 2026-01-01 --out /tmp/phase_c_v2_2025
+      - name: Validate R2 and publish isolated result
+        run: |
+          python - <<'PY'
+          import pandas as pd, json
+          s=pd.read_csv('/tmp/phase_c_v2_2025/summary.csv'); m=json.load(open('/tmp/phase_c_v2_2025/manifest.json'))
+          assert 'RECLAIM_PULLBACK' in set(s['entry_model'])
+          assert {'DISPLACEMENT_ORIGIN_ONLY','OBJECTIVE_LIQUIDITY_ONLY'}.issubset(set(s['sample']))
+          assert int(s[s.entry_model=='RECLAIM_PULLBACK']['trades'].max()) > 100
+          print('PHASE_C_V2_2025_GATE_OK'); print(s[s.entry_model=='RECLAIM_PULLBACK'].to_string(index=False))
+          PY
+          mkdir -p xau-phase-c-v2-results/2025
+          cp /tmp/phase_c_v2_2025/summary.csv xau-phase-c-v2-results/2025/summary.csv
+          cp /tmp/phase_c_v2_2025/manifest.json xau-phase-c-v2-results/2025/manifest.json
+          git config user.name 'xau-research-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add xau-phase-c-v2-results/2025
+          git commit -m 'record Phase C v2 2025 entry surface [skip ci]'
+          git push --force origin HEAD:agent/xau-phase-c-v2-2025-result
