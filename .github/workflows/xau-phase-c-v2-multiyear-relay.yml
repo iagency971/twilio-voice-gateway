@@ -1,0 +1,66 @@
+name: XAU Phase C v2 Multiyear Relay 2011-2025
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-phase-c-v2-multiyear-relay.yml'
+permissions:
+  contents: write
+jobs:
+  annual:
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest
+      - name: Entry tests v1 plus R2
+        env:
+          PYTHONPATH: xau-multiyear/src
+        run: python -m pytest -q xau-multiyear/tests/test_entries_v1.py xau-multiyear/tests/test_entries_v2.py
+      - name: Resolve dates
+        id: dates
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+          echo "start=${Y}-01-01" >> "$GITHUB_OUTPUT"
+          echo "end=$((Y+1))-01-01" >> "$GITHUB_OUTPUT"
+      - name: Acquire 12m warmup plus target plus Jan post-window
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_phase_c_${{ matrix.year }}.csv
+      - name: Run frozen Phase C v2 surface
+        run: python xau-multiyear/scripts/run_phase_c_entries_v2.py /tmp/xau_phase_c_${{ matrix.year }}.csv --target-start ${{ steps.dates.outputs.start }} --target-end ${{ steps.dates.outputs.end }} --out /tmp/phase_c_${{ matrix.year }}
+      - name: Validate annual gate
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          y=${{ matrix.year }}
+          s=pd.read_csv(f'/tmp/phase_c_{y}/summary.csv'); m=json.load(open(f'/tmp/phase_c_{y}/manifest.json'))
+          assert {'DISPLACEMENT_ORIGIN_ONLY','OBJECTIVE_LIQUIDITY_ONLY'}.issubset(set(s['sample']))
+          assert 'RECLAIM_PULLBACK' in set(s['entry_model'])
+          assert m['target_events'] > 1000
+          print('PHASE_C_V2_ANNUAL_OK', y, m['target_events'])
+          PY
+      - name: Publish annual compact result directly
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+          YEAR: ${{ matrix.year }}
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests
+          y=os.environ['YEAR']; h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          files={f'xau-final-results/phase_c_v2_2011_2025/annual/{y}_summary.csv':pathlib.Path(f'/tmp/phase_c_{y}/summary.csv'),f'xau-final-results/phase_c_v2_2011_2025/annual/{y}_manifest.json':pathlib.Path(f'/tmp/phase_c_{y}/manifest.json')}
+          for path,p in files.items():
+              url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              r=requests.get(url,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None
+              body={'message':f'publish Phase C v2 {y} {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha: body['sha']=sha
+              rr=requests.put(url,headers=h,json=body); rr.raise_for_status(); print('PUBLISHED',path)
+          PY
