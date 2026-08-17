@@ -64,6 +64,15 @@ def test_touch_next_open_uses_ask_for_long():
     assert abs(x['entry_price']-100.2)<1e-9
 
 
+def test_passive_touch_requires_executable_quote_at_zone_centre():
+    b=_bars()
+    r=dict(contact_idx=5,lower=99.5,upper=100.0,sigma60=1.0,side='SUPPORT',approach_direction=-1)
+    # Centre=99.75, but ASK low is 100.15, so no fill until minute 9.
+    b.iloc[9,b.columns.get_loc('low_ask')]=99.70
+    x=build_entry(r,b,'PASSIVE_TOUCH')
+    assert x and x['entry_idx']==9 and x['entry_price']==99.75 and x['intrabar_limit_entry']
+
+
 def test_intrabar_limit_ignores_same_bar_tp_but_honors_stop():
     b=_bars()
     entry=dict(direction='LONG',entry_idx=10,entry_price=100.0,stop_price=99.0,risk_price=1.0,intrabar_limit_entry=True)
