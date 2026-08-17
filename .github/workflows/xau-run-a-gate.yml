@@ -33,16 +33,21 @@ jobs:
           cp xau-run-a/controls.py /tmp/xau_runner/src/rzr/controls.py
           echo '750beff4dc2ee262bdd8e4ddf3beae9b938be51d3e7dd6e5b399bca2f0c88fdb  /tmp/xau_runner/src/rzr/controls.py' | sha256sum -c -
           python -m py_compile /tmp/xau_runner/src/rzr/controls.py
+
+      - name: Install dependencies
+        working-directory: /tmp/xau_runner
+        run: python -m pip install -r requirements.txt
+
+      - name: Verify runner imports
+        shell: bash
+        run: |
+          set -euo pipefail
           python - <<'PY'
           import sys
           sys.path.insert(0,'/tmp/xau_runner/src')
           import rzr.controls, rzr.engine, rzr.zones, rzr.labels
           print('RUNNER_IMPORT_GATE_OK')
           PY
-
-      - name: Install dependencies
-        working-directory: /tmp/xau_runner
-        run: python -m pip install -r requirements.txt
 
       - name: Acquire January 2010 XAUUSD BID and ASK
         working-directory: /tmp/xau_runner
