@@ -22,74 +22,15 @@ jobs:
       - name: Checkout transient branch
         uses: actions/checkout@v4
 
-      - name: Rebuild and verify research runner
+      - name: Diagnose transferred research runner
         shell: bash
         run: |
-          set -euo pipefail
+          set -u
           sha256sum xau-run-a/minrunner.b64.part00 xau-run-a/minrunner.b64.part01 xau-run-a/minrunner.b64.part02 xau-run-a/minrunner.b64.part03
           cat xau-run-a/minrunner.b64.part00 xau-run-a/minrunner.b64.part01 xau-run-a/minrunner.b64.part02 xau-run-a/minrunner.b64.part03 > /tmp/minrunner.b64
           echo "B64_BYTES=$(wc -c < /tmp/minrunner.b64)"
-          echo '24d0f2901a5872598c9b82c96677fffcc45a2757e61622b9865127634728590c  /tmp/minrunner.b64' | sha256sum -c -
+          sha256sum /tmp/minrunner.b64
           base64 -d /tmp/minrunner.b64 > /tmp/xau_runner_min.zip
-          echo '70113a10c3a2a697e87e6a001ce6489056ffb1a7a7bf55243b0431c7b3615239  /tmp/xau_runner_min.zip' | sha256sum -c -
-          mkdir -p /tmp/xau_runner
-          unzip -q /tmp/xau_runner_min.zip -d /tmp/xau_runner
-
-      - name: Install dependencies
-        working-directory: /tmp/xau_runner
-        run: python -m pip install -r requirements.txt
-
-      - name: Acquire January 2010 XAUUSD BID and ASK
-        working-directory: /tmp/xau_runner
-        run: python scripts/acquire_xauusd_dukascopy.py --from-month 2010-01 --to-month 2010-01 --side both --merge
-
-      - name: Verify acquisition gate
-        working-directory: /tmp/xau_runner
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import pandas as pd
-          a=pd.read_csv('data/processed/dukascopy_download_audit.csv')
-          print(a.to_string(index=False))
-          assert len(a)==2, len(a)
-          assert a['monotonic'].all()
-          assert (a['duplicates']==0).all()
-          assert (a['invalid_ohlc']==0).all()
-          assert (a['rows']==44640).all(), a[['side','rows']].to_dict('records')
-          m=pd.read_csv('data/processed/xauusd_bidask_mid_m1_2010-01_2010-01.csv')
-          assert len(m)==44640, len(m)
-          assert m['spread'].notna().all()
-          assert (m['spread']>=0).all()
-          print('MID_ROWS',len(m),'SPREAD_MEAN',m['spread'].mean(),'SPREAD_P95',m['spread'].quantile(.95))
-          PY
-
-      - name: Run price-only reaction-zone gate on mid price
-        working-directory: /tmp/xau_runner
-        run: python scripts/run_a_price_only.py data/processed/xauusd_bidask_mid_m1_2010-01_2010-01.csv --start 2010-01-01 --end 2010-02-01 --out results/run_a_jan2010_mid
-
-      - name: Build compact gate bundle
-        working-directory: /tmp/xau_runner
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p artifact
-          cp data/processed/dukascopy_download_audit.csv artifact/
-          cp results/run_a_jan2010_mid/summary_by_family.csv artifact/
-          cp results/run_a_jan2010_mid/yearly_by_family.csv artifact/
-          cp results/run_a_jan2010_mid/run_manifest.json artifact/
-          python - <<'PY'
-          import pandas as pd, json
-          m=pd.read_csv('data/processed/xauusd_bidask_mid_m1_2010-01_2010-01.csv')
-          stats={'rows':int(len(m)),'spread_mean':float(m['spread'].mean()),'spread_median':float(m['spread'].median()),'spread_p95':float(m['spread'].quantile(.95)),'spread_max':float(m['spread'].max())}
-          with open('artifact/spread_stats.json','w') as f: json.dump(stats,f,indent=2)
-          print(json.dumps(stats,indent=2))
-          PY
-
-      - name: Upload gate results
-        uses: actions/upload-artifact@v4
-        with:
-          name: xau-run-a-jan2010-gate
-          path: /tmp/xau_runner/artifact
-          if-no-files-found: error
-          retention-days: 7
+          echo "ZIP_SHA=$(sha256sum /tmp/xau_runner_min.zip)"
+          unzip -t /tmp/xau_runner_min.zip || true
+          exit 1
