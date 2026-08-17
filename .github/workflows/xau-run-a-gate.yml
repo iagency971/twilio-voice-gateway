@@ -33,6 +33,7 @@ jobs:
           cp xau-run-a/controls.py /tmp/xau_runner/src/rzr/controls.py
           echo '750beff4dc2ee262bdd8e4ddf3beae9b938be51d3e7dd6e5b399bca2f0c88fdb  /tmp/xau_runner/src/rzr/controls.py' | sha256sum -c -
           python -m py_compile /tmp/xau_runner/src/rzr/controls.py
+          mkdir -p /tmp/xau_runner/data/raw /tmp/xau_runner/data/processed /tmp/xau_runner/results
 
       - name: Install dependencies
         working-directory: /tmp/xau_runner
