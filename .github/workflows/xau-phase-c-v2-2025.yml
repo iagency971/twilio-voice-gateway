@@ -1,4 +1,5 @@
 name: XAU Phase C v2 Entry Surface 2025
+# rerun after corrected same-bar ambiguity unit test
 on:
   push:
     branches: [agent/xau-multiyear-research]
