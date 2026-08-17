@@ -1,0 +1,26 @@
+{
+  "input_bars": 602940,
+  "input_start": "2025-05-01 00:00:00+00:00",
+  "input_end": "2026-06-23 16:59:00+00:00",
+  "target_start": "2026-05-01 00:00:00+00:00",
+  "target_end": "2026-06-23 00:00:00+00:00",
+  "zones": 113947,
+  "target_events": 11228,
+  "control_draws": 54783,
+  "paired_events_any": 11060,
+  "paired_events_full": 10868,
+  "controls_per_contact": 5,
+  "timings_seconds": {
+    "load": 1.488564,
+    "features": 17.491182,
+    "zones": 215.424233,
+    "zone_stack_hints": 10.651886,
+    "first_contacts": 7.467303,
+    "contact_stacking": 12.115466,
+    "contact_labels": 6.729007,
+    "controls": 8.726262,
+    "control_labels": 3.791637
+  },
+  "primary_estimand": "event-level paired reaction difference: actual - equally weighted mean matched controls",
+  "control_candidate_window": "restricted to target_start <= control_time < target_end"
+}
