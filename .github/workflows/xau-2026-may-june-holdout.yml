@@ -1,0 +1,36 @@
+name: XAU 2026 May-Jun Holdout
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-2026-may-june-holdout.yml'
+permissions:
+  contents: read
+jobs:
+  holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Acquire 12m warmup plus May-Jun 2026
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2025-05 --to-month 2026-06 --out /tmp/xau_holdout.csv
+      - name: Run frozen holdout worker
+        run: python xau-multiyear/scripts/run_a_annual_worker.py /tmp/xau_holdout.csv --target-start 2026-05-01 --target-end 2026-06-23 --out /tmp/holdout --controls 5
+      - name: Validate holdout output
+        run: |
+          python - <<'PY'
+          import json, pandas as pd
+          m=json.load(open('/tmp/holdout/run_manifest.json'))
+          assert m['target_events'] > 10000, m
+          assert m['paired_events_any'] > 0.95*m['target_events'], m
+          s=pd.read_csv('/tmp/holdout/paired_summary_by_family.csv')
+          assert set(s['family']) >= {'DISPLACEMENT_ORIGIN','FVG','MEMORY','OBJECTIVE_LIQUIDITY'}
+          print('HOLDOUT_GATE_OK')
+          print(s[s['mode']=='ANY_CONTROL'].to_string(index=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-run-a-2026-may-june-holdout
+          path: /tmp/holdout
+          retention-days: 7
