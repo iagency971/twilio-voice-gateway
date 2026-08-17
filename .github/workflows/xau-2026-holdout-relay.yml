@@ -1,4 +1,5 @@
 name: XAU 2026 Holdout Relay
+# explicit rerun marker 2026-08-17
 on:
   push:
     branches: [agent/xau-multiyear-research]
