@@ -1,0 +1,53 @@
+name: XAU GC Databento Cost Check
+
+on:
+  push:
+    branches:
+      - agent/xau-run-a-transient
+    paths:
+      - 'xau-gc-databento/TRIGGER'
+
+permissions:
+  contents: read
+
+jobs:
+  gc-cost-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout transient branch
+        uses: actions/checkout@v4
+
+      - name: Require API key without exposing it
+        shell: bash
+        env:
+          DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+        run: |
+          if [ -z "$DATABENTO_API_KEY" ]; then
+            echo 'DATABENTO_API_KEY secret is missing.'
+            exit 2
+          fi
+          echo 'DATABENTO_API_KEY_PRESENT'
+
+      - name: Install Databento client
+        run: python -m pip install databento
+
+      - name: Cost check only — no data download
+        env:
+          DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+        run: python xau-gc-databento/gc_databento_cost_matrix.py --end 2026-08-17 --out outputs/gc_databento_cost_matrix.json
+
+      - name: Verify no market-data payload was created
+        shell: bash
+        run: |
+          test -f outputs/gc_databento_cost_matrix.json
+          find outputs -type f -maxdepth 2 -print
+          test "$(find outputs -type f | wc -l)" -eq 1
+          echo 'COST_CHECK_ONLY_GATE_OK'
+
+      - name: Upload exact cost matrix
+        uses: actions/upload-artifact@v4
+        with:
+          name: gc-databento-cost-matrix
+          path: outputs/gc_databento_cost_matrix.json
+          retention-days: 7
