@@ -1,4 +1,5 @@
 name: XAU Phase C v2 Multiyear Relay 2011-2025
+# rerun after corrected R2 ambiguity unit test
 on:
   push:
     branches: [agent/xau-multiyear-research]
