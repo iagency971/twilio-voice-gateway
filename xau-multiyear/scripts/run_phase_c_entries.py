@@ -20,7 +20,7 @@ from rzr.behavior_v2 import classify_behavior_v2
 from rzr.entries_v1 import build_entry, simulate_surface, TARGET_RS
 
 FAMILIES = ['DISPLACEMENT_ORIGIN', 'OBJECTIVE_LIQUIDITY', 'MEMORY', 'FVG']
-ENTRY_MODELS = ['TOUCH_NEXT_OPEN', 'CLEAN_REJECTION', 'FAILED_AUCTION', 'ACCEPTANCE_RETEST']
+ENTRY_MODELS = ['PASSIVE_TOUCH', 'TOUCH_NEXT_OPEN', 'CLEAN_REJECTION', 'FAILED_AUCTION', 'ACCEPTANCE_RETEST']
 
 
 def pf(x: pd.Series) -> float:
@@ -79,7 +79,7 @@ def main():
             rows.append({'sample':sample,'entry_model':model,'target_r':float(tr),'trades':int(len(g)),'tp_pct':100.0*float((g.result=='TP').mean()),'sl_pct':100.0*float((g.result=='SL').mean()),'time_pct':100.0*float((g.result=='TIME').mean()),'ambiguous_same_bar_pct':100.0*float(g.ambiguous_same_bar.mean()),'avg_gross_R':float(g.gross_R.mean()),'pf_gross':float(pf(g.gross_R)),'avg_net_R_legacy22':float(g.net_R_legacy22.mean()),'pf_net_legacy22':float(pf(g.net_R_legacy22)),'avg_net_R_cost1_5x':float(g.net_R_cost1_5x.mean()),'pf_net_cost1_5x':float(pf(g.net_R_cost1_5x)),'median_risk_price':float(g.risk_price.median()),'median_entry_delay_minutes':float(g.entry_delay_minutes.median()),'median_legacy_commission_R':float(g.legacy_commission_R.median())})
     summary=pd.DataFrame(rows)
     trades.to_csv(outdir/'trade_surface.csv.gz',index=False,compression='gzip'); summary.to_csv(outdir/'summary.csv',index=False)
-    manifest={'source_commit':os.getenv('GITHUB_SHA','LOCAL'),'target_start':str(start),'target_end':str(end),'bars':int(len(bars)),'zones_generated':int(len(zones)),'target_events':int(len(contacts)),'entry_models':ENTRY_MODELS,'target_R_surface':list(TARGET_RS),'horizon_minutes':int(args.horizon_minutes),'stop_buffer_rule':'max(2 x contemporaneous spread, 0.10 x causal sigma60)','same_bar_tp_sl_rule':'SL / adverse resolution; intrabar limit target ignored on fill minute, stop honored','execution':'market longs ASK / shorts BID; exits executable opposite side; stop gaps worsened','commission_sensitivity':'$22 round-turn per 100oz broker lot plus preregistered 1.5x cost stress ($33)','overlap_policy':'signal-level study; overlapping candidate trades allowed; portfolio constraints deferred','entry_counts':entry_counts}
+    manifest={'source_commit':os.getenv('GITHUB_SHA','LOCAL'),'target_start':str(start),'target_end':str(end),'bars':int(len(bars)),'zones_generated':int(len(zones)),'target_events':int(len(contacts)),'entry_models':ENTRY_MODELS,'target_R_surface':list(TARGET_RS),'horizon_minutes':int(args.horizon_minutes),'passive_touch_rule':'standing limit at zone centre; executable quote must reach centre within 15 minutes of first zone contact','stop_buffer_rule':'max(2 x contemporaneous spread, 0.10 x causal sigma60)','same_bar_tp_sl_rule':'SL / adverse resolution; intrabar limit target ignored on fill minute, stop honored','execution':'market longs ASK / shorts BID; exits executable opposite side; stop gaps worsened','commission_sensitivity':'$22 round-turn per 100oz broker lot plus preregistered 1.5x cost stress ($33)','overlap_policy':'signal-level study; overlapping candidate trades allowed; portfolio constraints deferred','entry_counts':entry_counts}
     (outdir/'manifest.json').write_text(json.dumps(manifest,indent=2)); print(json.dumps(manifest,indent=2));
     if len(summary): print(summary.to_string(index=False))
 
