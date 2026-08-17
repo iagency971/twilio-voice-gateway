@@ -1,0 +1,51 @@
+name: XAU GC Databento Cost Final
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-gc-databento-cost-final.yml'
+permissions:
+  contents: write
+jobs:
+  cost-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Determine key status
+        run: |
+          mkdir -p /tmp/gc-cost
+          if [ -z "$DATABENTO_API_KEY" ]; then
+            printf '{"status":"MISSING_DATABENTO_API_KEY","download_performed":false}\n' > /tmp/gc-cost/status.json
+            echo 'NO_KEY'
+          else
+            printf '{"status":"KEY_PRESENT","download_performed":false}\n' > /tmp/gc-cost/status.json
+            echo 'KEY_PRESENT'
+          fi
+      - name: Install Databento client only when key exists
+        if: env.DATABENTO_API_KEY != ''
+        run: python -m pip install databento
+      - name: Metadata cost check only — absolutely no market-data download
+        if: env.DATABENTO_API_KEY != ''
+        run: python xau-gc-databento/gc_databento_cost_matrix.py --end 2026-08-17 --out /tmp/gc-cost/gc_databento_cost_matrix.json
+      - name: Publish status and optional cost matrix
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+        run: |
+          python - <<'PY'
+          import base64, os, pathlib, requests
+          src=pathlib.Path('/tmp/gc-cost')
+          files={'xau-final-results/gc_databento_cost/status.json':src/'status.json'}
+          if (src/'gc_databento_cost_matrix.json').exists(): files['xau-final-results/gc_databento_cost/cost_matrix.json']=src/'gc_databento_cost_matrix.json'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for path,p in files.items():
+              url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              r=requests.get(url,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None
+              body={'message':f'publish GC Databento cost status: {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha: body['sha']=sha
+              rr=requests.put(url,headers=h,json=body); rr.raise_for_status(); print('PUBLISHED',path)
+          PY
