@@ -1,0 +1,118 @@
+name: XAU Phase C Multiyear 2011-2025
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-phase-c-multiyear.yml'
+permissions:
+  contents: write
+jobs:
+  annual:
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest
+      - name: Phase C unit tests
+        env:
+          PYTHONPATH: xau-multiyear/src
+        run: python -m pytest -q xau-multiyear/tests/test_entries_v1.py
+      - name: Resolve annual window
+        id: dates
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+          echo "start=${Y}-01-01" >> "$GITHUB_OUTPUT"
+          echo "end=$((Y+1))-01-01" >> "$GITHUB_OUTPUT"
+      - name: Acquire 12m warmup plus target plus Jan post-window
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_phase_c_${{ matrix.year }}.csv
+      - name: Run unchanged Phase C surface
+        run: python xau-multiyear/scripts/run_phase_c_entries.py /tmp/xau_phase_c_${{ matrix.year }}.csv --target-start ${{ steps.dates.outputs.start }} --target-end ${{ steps.dates.outputs.end }} --out /tmp/phase_c_${{ matrix.year }}
+      - name: Validate annual output
+        run: |
+          python - <<'PY'
+          import json, pandas as pd
+          y=${{ matrix.year }}
+          s=pd.read_csv(f'/tmp/phase_c_{y}/summary.csv')
+          m=json.load(open(f'/tmp/phase_c_{y}/manifest.json'))
+          assert {'DISPLACEMENT_ORIGIN_ONLY','OBJECTIVE_LIQUIDITY_ONLY'}.issubset(set(s['sample']))
+          assert m['events'] > 1000, m
+          assert int(s['trades'].max()) > 100
+          print('ANNUAL_PHASE_C_OK',y,m['events'],int(s['trades'].max()))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase-c-${{ matrix.year }}
+          path: |
+            /tmp/phase_c_${{ matrix.year }}/summary.csv
+            /tmp/phase_c_${{ matrix.year }}/manifest.json
+          retention-days: 7
+  aggregate:
+    needs: annual
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: phase-c-*
+          path: /tmp/all
+          merge-multiple: false
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Aggregate annual surfaces without selecting a winner
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, numpy as np, pandas as pd
+          root=Path('/tmp/all'); frames=[]; mans=[]
+          for d in sorted(root.glob('phase-c-*')):
+              y=int(d.name.split('-')[-1]); s=pd.read_csv(d/'summary.csv'); s.insert(0,'year',y); frames.append(s)
+              m=json.load(open(d/'manifest.json')); m['year']=y; mans.append(m)
+          a=pd.concat(frames,ignore_index=True).sort_values(['sample','entry_model','target_r','year'])
+          rows=[]
+          for keys,g in a.groupby(['sample','entry_model','target_r'],sort=True):
+              sample,model,tr=keys; w=g['trades'].astype(float); n=float(w.sum())
+              def wavg(c): return float(np.average(g[c].astype(float),weights=w)) if n>0 else np.nan
+              rows.append({
+                'sample':sample,'entry_model':model,'target_r':float(tr),'years':int(g['year'].nunique()),'total_trades':int(n),
+                'weighted_avg_gross_R':wavg('avg_gross_R'),'weighted_avg_net_R_legacy22':wavg('avg_net_R_legacy22'),'weighted_avg_net_R_cost1_5x':wavg('avg_net_R_cost1_5x'),
+                'annual_mean_net_R_legacy22':float(g['avg_net_R_legacy22'].mean()),'annual_median_net_R_legacy22':float(g['avg_net_R_legacy22'].median()),
+                'positive_years_net_legacy22':int((g['avg_net_R_legacy22']>0).sum()),'positive_years_cost1_5x':int((g['avg_net_R_cost1_5x']>0).sum()),
+                'pf_net_gt1_years':int((g['pf_net_legacy22']>1).sum()),'median_pf_net_legacy22':float(g['pf_net_legacy22'].replace([np.inf,-np.inf],np.nan).median()),
+                'min_annual_net_R_legacy22':float(g['avg_net_R_legacy22'].min()),'max_annual_net_R_legacy22':float(g['avg_net_R_legacy22'].max()),
+                'weighted_tp_pct':wavg('tp_pct'),'weighted_sl_pct':wavg('sl_pct'),'weighted_time_pct':wavg('time_pct'),
+                'weighted_ambiguous_same_bar_pct':wavg('ambiguous_same_bar_pct'),'median_risk_price_across_years':float(g['median_risk_price'].median())
+              })
+          out=Path('/tmp/aggregate'); out.mkdir(exist_ok=True)
+          a.to_csv(out/'annual_summary.csv',index=False); pd.DataFrame(rows).to_csv(out/'multiyear_summary.csv',index=False)
+          json.dump({'years':[2011,2025],'annual_jobs':15,'model':'unchanged entries_v1 + run_phase_c_entries','selection':'NONE; full preregistered surface retained','annual_manifests':mans},open(out/'manifest.json','w'),indent=2)
+          print(pd.DataFrame(rows).sort_values(['weighted_avg_net_R_legacy22'],ascending=False).head(30).to_string(index=False))
+          PY
+      - name: Publish consolidated Phase C result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+        run: |
+          python - <<'PY'
+          import base64, os, requests
+          files={
+            'xau-final-results/phase_c_2011_2025/annual_summary.csv':'/tmp/aggregate/annual_summary.csv',
+            'xau-final-results/phase_c_2011_2025/multiyear_summary.csv':'/tmp/aggregate/multiyear_summary.csv',
+            'xau-final-results/phase_c_2011_2025/manifest.json':'/tmp/aggregate/manifest.json',
+          }
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for path,src in files.items():
+              url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              r=requests.get(url,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None
+              body={'message':f'publish Phase C multiyear: {path.split("/")[-1]} [skip ci]','content':base64.b64encode(open(src,'rb').read()).decode(),'branch':os.environ['BRANCH']}
+              if sha: body['sha']=sha
+              rr=requests.put(url,headers=h,json=body); rr.raise_for_status(); print('PUBLISHED',path)
+          PY
