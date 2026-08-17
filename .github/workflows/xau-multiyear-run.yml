@@ -1,0 +1,58 @@
+name: XAU Multiyear Run A 2011-2025
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-multiyear-run.yml'
+permissions:
+  contents: read
+jobs:
+  annual:
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Acquire 12m warmup target year and Jan post-window
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          FROM=$((Y-1))-01
+          TO=$((Y+1))-01
+          python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month "$FROM" --to-month "$TO" --out "/tmp/xau_${Y}.csv"
+      - name: Run annual paired reaction-zone study
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          python xau-multiyear/scripts/run_a_annual_worker.py "/tmp/xau_${Y}.csv" --target-start "${Y}-01-01" --target-end "$((Y+1))-01-01" --out "/tmp/run_${Y}" --controls 5
+      - name: Validate annual output
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          YEAR="$Y" python - <<'PY'
+          import json, os, pandas as pd
+          y=int(os.environ['YEAR'])
+          p=f'/tmp/run_{y}'
+          m=json.load(open(f'{p}/run_manifest.json'))
+          s=pd.read_csv(f'{p}/paired_summary_by_family.csv')
+          assert m['controls_per_contact']==5,m
+          assert m['target_events']>1000,m
+          assert m['paired_events_any']>0,m
+          assert set(['DISPLACEMENT_ORIGIN','FVG','MEMORY','OBJECTIVE_LIQUIDITY']).issubset(set(s.family)),s.family.unique()
+          assert ((s[s['mode']=='ANY_CONTROL'].control_coverage_pct)>70).all(),s
+          print('ANNUAL_GATE_OK',y,m['target_events'],m['paired_events_any'])
+          PY
+          gzip -9 "/tmp/run_${Y}/event_pairs.csv"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-run-a-${{ matrix.year }}
+          path: |
+            /tmp/run_${{ matrix.year }}/run_manifest.json
+            /tmp/run_${{ matrix.year }}/paired_summary_by_family.csv
+            /tmp/run_${{ matrix.year }}/event_pairs.csv.gz
+          retention-days: 7
