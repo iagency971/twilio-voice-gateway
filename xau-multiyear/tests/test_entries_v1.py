@@ -45,7 +45,7 @@ def test_accepted_support_flips_short_on_retest():
            behavior_v2='ACCEPTED_BREAK')
     x=build_entry(r,b,'ACCEPTANCE_RETEST',acceptance_minutes=5,retest_minutes=30)
     assert x and x['direction']=='SHORT' and x['entry_idx']==12 and x['entry_price']==99.5
-    assert x['stop_price']>100.0
+    assert x['stop_price']>100.0 and x['intrabar_limit_entry']
 
 
 def test_same_bar_tp_sl_is_loss():
@@ -62,3 +62,16 @@ def test_touch_next_open_uses_ask_for_long():
     r=dict(contact_idx=5,lower=99.5,upper=100.0,sigma60=1.0,side='SUPPORT',approach_direction=-1)
     x=build_entry(r,b,'TOUCH_NEXT_OPEN')
     assert abs(x['entry_price']-100.2)<1e-9
+
+
+def test_intrabar_limit_ignores_same_bar_tp_but_honors_stop():
+    b=_bars()
+    entry=dict(direction='LONG',entry_idx=10,entry_price=100.0,stop_price=99.0,risk_price=1.0,intrabar_limit_entry=True)
+    b.iloc[10,b.columns.get_loc('high_bid')]=102.0
+    b.iloc[10,b.columns.get_loc('low_bid')]=98.8
+    out=simulate_one(entry,b,1.0)
+    assert out['result']=='SL'
+    b=_bars()
+    b.iloc[10,b.columns.get_loc('high_bid')]=102.0
+    out=simulate_one(entry,b,1.0)
+    assert not (out['result']=='TP' and out['exit_idx']==10)
