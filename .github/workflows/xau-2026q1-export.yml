@@ -1,0 +1,26 @@
+name: XAU Jan-Apr 2026 Benchmark Export
+
+on:
+  push:
+    branches:
+      - agent/xau-run-a-transient
+    paths:
+      - 'xau-perf/acquire_2026q1.py'
+      - '.github/workflows/xau-2026q1-export.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas requests
+      - run: python xau-perf/acquire_2026q1.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xauusd-2026q1-bidask-mid
+          path: outputs/xau_2026q1/xauusd_bidask_mid_m1_2026-01_2026-04.csv
+          retention-days: 7
