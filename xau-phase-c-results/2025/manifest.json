@@ -1,0 +1,52 @@
+{
+  "source_commit": "1b3f53e137d09b0f291fb37591f5e78e23f2b883",
+  "target_start": "2025-01-01 00:00:00+00:00",
+  "target_end": "2026-01-01 00:00:00+00:00",
+  "bars": 1097280,
+  "zones_generated": 214622,
+  "target_events": 80617,
+  "entry_models": [
+    "PASSIVE_TOUCH",
+    "TOUCH_NEXT_OPEN",
+    "CLEAN_REJECTION",
+    "FAILED_AUCTION",
+    "ACCEPTANCE_RETEST"
+  ],
+  "target_R_surface": [
+    0.5,
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0
+  ],
+  "horizon_minutes": 120,
+  "passive_touch_rule": "standing limit at zone centre; executable quote must reach centre within 15 minutes of first zone contact",
+  "stop_buffer_rule": "max(2 x contemporaneous spread, 0.10 x causal sigma60)",
+  "same_bar_tp_sl_rule": "SL / adverse resolution; intrabar limit target ignored on fill minute, stop honored",
+  "execution": "market longs ASK / shorts BID; exits executable opposite side; stop gaps worsened",
+  "commission_sensitivity": "$22 round-turn per 100oz broker lot plus preregistered 1.5x cost stress ($33)",
+  "overlap_policy": "signal-level study; overlapping candidate trades allowed; portfolio constraints deferred",
+  "entry_counts": {
+    "DISPLACEMENT_ORIGIN_ONLY:PASSIVE_TOUCH": 504,
+    "DISPLACEMENT_ORIGIN_ONLY:TOUCH_NEXT_OPEN": 1285,
+    "DISPLACEMENT_ORIGIN_ONLY:CLEAN_REJECTION": 1032,
+    "DISPLACEMENT_ORIGIN_ONLY:FAILED_AUCTION": 198,
+    "DISPLACEMENT_ORIGIN_ONLY:ACCEPTANCE_RETEST": 12,
+    "OBJECTIVE_LIQUIDITY_ONLY:PASSIVE_TOUCH": 1329,
+    "OBJECTIVE_LIQUIDITY_ONLY:TOUCH_NEXT_OPEN": 2270,
+    "OBJECTIVE_LIQUIDITY_ONLY:CLEAN_REJECTION": 1586,
+    "OBJECTIVE_LIQUIDITY_ONLY:FAILED_AUCTION": 457,
+    "OBJECTIVE_LIQUIDITY_ONLY:ACCEPTANCE_RETEST": 66,
+    "MEMORY_ONLY:PASSIVE_TOUCH": 892,
+    "MEMORY_ONLY:TOUCH_NEXT_OPEN": 1323,
+    "MEMORY_ONLY:CLEAN_REJECTION": 868,
+    "MEMORY_ONLY:FAILED_AUCTION": 267,
+    "MEMORY_ONLY:ACCEPTANCE_RETEST": 66,
+    "DOZ_OBJECTIVE_ONLY:PASSIVE_TOUCH": 27,
+    "DOZ_OBJECTIVE_ONLY:TOUCH_NEXT_OPEN": 35,
+    "DOZ_OBJECTIVE_ONLY:CLEAN_REJECTION": 17,
+    "DOZ_OBJECTIVE_ONLY:FAILED_AUCTION": 18,
+    "DOZ_OBJECTIVE_ONLY:ACCEPTANCE_RETEST": 0
+  }
+}
