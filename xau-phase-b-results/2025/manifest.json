@@ -1,0 +1,10 @@
+{
+  "target_start": "2025-01-01 00:00:00+00:00",
+  "target_end": "2026-01-01 00:00:00+00:00",
+  "bars": 1097280,
+  "zones_generated": 214622,
+  "target_events": 80617,
+  "classifier": "behavior_v2: CLEAN_REJECTION / FAILED_AUCTION / ACCEPTED_BREAK / UNRESOLVED",
+  "failed_auction_rule": "distal breach followed by proximal reclaim within 15 minutes",
+  "acceptance_rule": "unchanged preregistered 5-minute acceptance rule"
+}
