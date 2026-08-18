@@ -1,0 +1,9 @@
+{
+  "dataset": "GLBX.MDP3",
+  "symbol": "GC.v.0",
+  "schema": "trades",
+  "start": "2011-01-01",
+  "end": "2026-08-17",
+  "cost_usd": 469.7670160532,
+  "download_performed": false
+}
