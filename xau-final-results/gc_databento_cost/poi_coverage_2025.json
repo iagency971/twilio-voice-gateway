@@ -1,0 +1,53 @@
+{
+  "year": 2025,
+  "all_events": 80617,
+  "selected_non_fvg_only_poi_events": 6909,
+  "profiles": [
+    {
+      "before_min": 10,
+      "after_min": 15,
+      "events": 6909,
+      "merged_windows": 2393,
+      "covered_minutes": 130390.0,
+      "calendar_coverage_pct": 24.807838660578387,
+      "naive_cost_estimate_at_2025_density_usd": 9.196127978365274
+    },
+    {
+      "before_min": 30,
+      "after_min": 15,
+      "events": 6909,
+      "merged_windows": 1877,
+      "covered_minutes": 175420.0,
+      "calendar_coverage_pct": 33.3751902587519,
+      "naive_cost_estimate_at_2025_density_usd": 12.371997622247385
+    },
+    {
+      "before_min": 60,
+      "after_min": 15,
+      "events": 6909,
+      "merged_windows": 1309,
+      "covered_minutes": 225770.0,
+      "calendar_coverage_pct": 42.95471841704718,
+      "naive_cost_estimate_at_2025_density_usd": 15.923075494098686
+    },
+    {
+      "before_min": 30,
+      "after_min": 5,
+      "events": 6909,
+      "merged_windows": 2110,
+      "covered_minutes": 154320.0,
+      "calendar_coverage_pct": 29.360730593607308,
+      "naive_cost_estimate_at_2025_density_usd": 10.883859725602647
+    },
+    {
+      "before_min": 60,
+      "after_min": 0,
+      "events": 6909,
+      "merged_windows": 1576,
+      "covered_minutes": 202690.0,
+      "calendar_coverage_pct": 38.56354642313546,
+      "naive_cost_estimate_at_2025_density_usd": 14.295292429901506
+    }
+  ],
+  "note": "Coverage only. No Databento market-data request; cost figures are density-proportional rough estimates, not quotes."
+}
