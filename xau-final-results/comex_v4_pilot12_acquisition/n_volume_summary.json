@@ -1,0 +1,54 @@
+{
+  "version": "COMEX_V4_PILOT12_N_VOLUME_V1",
+  "market_data_download_performed": false,
+  "source": "existing paid TBBO pilot artifact",
+  "overall": {
+    "sessions": 12,
+    "total_volume": 2345492.0,
+    "n_volume": 42428.0,
+    "n_volume_share": 0.01808916849854956,
+    "n_touch_classifiable_volume_fraction_of_n_valid": 0.9978680058748283,
+    "known_touch_volume_weighted_accuracy": 0.9897797226399598
+  },
+  "by_era": [
+    {
+      "sessions": 3,
+      "total_volume": 518471.0,
+      "n_volume": 22517.0,
+      "n_volume_share": 0.043429622871867475,
+      "n_touch_classifiable_volume_fraction_of_n_valid": 0.9960407491436452,
+      "known_touch_volume_weighted_accuracy": 0.950109398667981,
+      "era": "E1_2011_2013"
+    },
+    {
+      "sessions": 3,
+      "total_volume": 594826.0,
+      "n_volume": 5550.0,
+      "n_volume_share": 0.009330459663834466,
+      "n_touch_classifiable_volume_fraction_of_n_valid": 1.0,
+      "known_touch_volume_weighted_accuracy": 0.9996036545432586,
+      "era": "E2_2014_2018"
+    },
+    {
+      "sessions": 3,
+      "total_volume": 607783.0,
+      "n_volume": 4385.0,
+      "n_volume_share": 0.007214746052456222,
+      "n_touch_classifiable_volume_fraction_of_n_valid": 0.9997685720897941,
+      "known_touch_volume_weighted_accuracy": 1.0,
+      "era": "E3_2019_2022"
+    },
+    {
+      "sessions": 3,
+      "total_volume": 624412.0,
+      "n_volume": 9976.0,
+      "n_volume_share": 0.015976630814270067,
+      "n_touch_classifiable_volume_fraction_of_n_valid": 1.0,
+      "known_touch_volume_weighted_accuracy": 0.9999983588854863,
+      "era": "E4_2023_2025"
+    }
+  ],
+  "max_session_n_volume_share": 0.09620158971757145,
+  "max_session_n_volume_share_date": "2013-05-29",
+  "note": "Native N is not assumed missing at random. Touch-rule recovery is evaluated by traded volume as well as record count."
+}
