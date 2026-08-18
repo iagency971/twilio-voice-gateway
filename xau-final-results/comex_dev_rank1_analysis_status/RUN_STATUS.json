@@ -1,5 +1,5 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V3",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V4",
   "workflows": {
     "xau-comex-dev-rank1-entry-decision-features.yml": {
       "found": true,
@@ -54,7 +54,57 @@
       ]
     },
     "xau-comex-dev-rank1-fill-models.yml": {
-      "found": false
+      "found": true,
+      "run_id": 32193888107,
+      "event": "push",
+      "status": "queued",
+      "conclusion": null,
+      "jobs_total": 6,
+      "by_status": {
+        "in_progress": 3,
+        "queued": 3
+      },
+      "by_conclusion": {
+        "NONE": 6
+      },
+      "jobs": [
+        {
+          "id": 95893842853,
+          "name": "model (CLEAN_REJECTION)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95893842918,
+          "name": "model (PASSIVE_TOUCH)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95893842919,
+          "name": "model (ACCEPTANCE_RETEST)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95893842948,
+          "name": "model (FAILED_AUCTION)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95893842960,
+          "name": "model (TOUCH_NEXT_OPEN)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95893842966,
+          "name": "model (RECLAIM_PULLBACK)",
+          "status": "queued",
+          "conclusion": null
+        }
+      ]
     },
     "xau-comex-dev-rank1-binary-behavior.yml": {
       "found": true,
