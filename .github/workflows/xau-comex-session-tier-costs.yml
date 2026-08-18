@@ -1,3 +1,4 @@
+# retrigger 2026-08-18
 name: XAU COMEX Session Tier Costs
 on:
   push:
@@ -66,7 +67,7 @@ jobs:
         run: |
           python - <<'PY'
           import base64,os,pathlib,requests
-          p=pathlib.Path('/tmp/session_tier_costs.json'); path='xau-final-results/comex_acquisition_plan_v1/session_tier_costs.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}; old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None; b={'message':'publish COMEX session tier metadata costs [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']};
+          p=pathlib.Path('/tmp/session_tier_costs.json'); path='xau-final-results/comex_acquisition_plan_v1/session_tier_costs.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}; old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None; b={'message':'publish COMEX session tier metadata costs [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
           if sha:b['sha']=sha
           r=requests.put(u,headers=h,json=b); r.raise_for_status()
           PY
