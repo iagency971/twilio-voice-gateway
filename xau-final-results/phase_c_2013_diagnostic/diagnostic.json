@@ -1,0 +1,11 @@
+{
+  "trades": 1905,
+  "min_gross_R": -7574.736945438251,
+  "p001_gross_R": -14.251804878147627,
+  "p01_gross_R": -1.366013157586884,
+  "count_below_minus2R": 14,
+  "count_below_minus5R": 5,
+  "min_risk_price": 5.28071143435227e-05,
+  "p01_risk_price": 0.3636999999998352,
+  "max_spread_near_entry": 2.365999999999985
+}
