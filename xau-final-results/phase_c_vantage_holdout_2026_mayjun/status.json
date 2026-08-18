@@ -1,4 +1,11 @@
 {
-  "status": "STARTED",
-  "source_commit": "4bdd40b646af17e2a61a3c193ebb6e48491e5ca1"
+  "status": "FAILED",
+  "source_commit": "4bdd40b646af17e2a61a3c193ebb6e48491e5ca1",
+  "steps": {
+    "deps": "success",
+    "tests": "success",
+    "acquire": "success",
+    "runmodel": "success",
+    "publish": "failure"
+  }
 }
