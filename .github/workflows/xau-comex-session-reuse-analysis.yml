@@ -1,3 +1,4 @@
+# retrigger 2026-08-18
 name: XAU COMEX Session Reuse Analysis
 on:
   push:
@@ -30,14 +31,11 @@ jobs:
           e=pd.read_csv('/tmp/plan/canonical_events_all.csv.gz',compression='gzip',low_memory=False)
           s=pd.read_csv('/tmp/plan/session_candidates_all.csv')
           ct=pd.to_datetime(e.contact_time,utc=True).dt.tz_convert(NY)
-          # Research trading date boundary 17:00 New York, same as frozen candidate generator.
           shifted=ct-pd.Timedelta(hours=17)
           e['research_trading_date']=shifted.dt.date.astype(str)
           e['family_stack']='OTHER'
-          hd=e.constituent_families.fillna('').str.contains('DISPLACEMENT_ORIGIN',regex=False)
-          ho=e.constituent_families.fillna('').str.contains('OBJECTIVE_LIQUIDITY',regex=False)
-          hm=e.constituent_families.fillna('').str.contains('MEMORY',regex=False)
-          hf=e.constituent_families.fillna('').str.contains('FVG',regex=False)
+          fam=e.constituent_families.fillna('')
+          hd=fam.str.contains('DISPLACEMENT_ORIGIN',regex=False); ho=fam.str.contains('OBJECTIVE_LIQUIDITY',regex=False); hm=fam.str.contains('MEMORY',regex=False); hf=fam.str.contains('FVG',regex=False)
           pure_d=hd&~ho&~hm&~hf; pure_o=ho&~hd&~hm&~hf; pure_m=hm&~hd&~ho&~hf; pure_f=hf&~hd&~ho&~hm
           e.loc[pure_d,'family_stack']='DOZ_ONLY'; e.loc[pure_o,'family_stack']='OBJECTIVE_ONLY'; e.loc[pure_m,'family_stack']='MEMORY_ONLY'; e.loc[pure_f,'family_stack']='FVG_ONLY'
           e.loc[(hd|ho|hm|hf)&~(pure_d|pure_o|pure_m|pure_f),'family_stack']='CONFLUENCE'
@@ -46,13 +44,12 @@ jobs:
           for tier in [1,2,3,4]:
               dates=set(s.loc[pd.to_numeric(s.panel_rank,errors='coerce')<=tier,'research_trading_date'].astype(str))
               q=e[e.research_trading_date.isin(dates)]
-              for (sp,fam),g in q.groupby(['temporal_split','family_stack']):
-                  r={'session_tier':tier,'split':sp,'family_stack':fam,'events':len(g),'years':g.year.nunique(),'sessions_with_events':g.research_trading_date.nunique()}
+              for (sp,fstack),g in q.groupby(['temporal_split','family_stack']):
+                  r={'session_tier':tier,'split':sp,'family_stack':fstack,'events':len(g),'years':g.year.nunique(),'sessions_with_events':g.research_trading_date.nunique()}
                   for m in models:r[m+'_eligible']=int(g[m+'_eligible'].astype(str).str.lower().eq('true').sum())
                   for b in ['CLEAN_REJECTION','FAILED_AUCTION','ACCEPTED_BREAK','UNRESOLVED']:r['behavior_'+b]=int((g.behavior_v2==b).sum())
                   rows.append(r)
-          out=pd.DataFrame(rows).sort_values(['session_tier','split','family_stack'])
-          out.to_csv('/tmp/session_reuse_counts.csv',index=False)
+          out=pd.DataFrame(rows).sort_values(['session_tier','split','family_stack']); out.to_csv('/tmp/session_reuse_counts.csv',index=False)
           summary={'rows':len(out),'total_events_by_tier':{str(k):int(out[out.session_tier==k].events.sum()) for k in [1,2,3,4]},'source_run':32102932187,'source_events':int(len(e)),'download_performed':False}
           Path('/tmp/session_reuse_summary.json').write_text(json.dumps(summary,indent=2)); print(out.to_string(index=False)); print(json.dumps(summary,indent=2))
           PY
