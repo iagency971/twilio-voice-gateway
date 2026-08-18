@@ -1,0 +1,41 @@
+{
+  "version": "COMEX_ACQUISITION_PLAN_V1",
+  "annual_files": 15,
+  "events": 1274302,
+  "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "fvg_tiers": [
+    1,
+    2,
+    4
+  ],
+  "session_tiers": [
+    2,
+    3,
+    4
+  ],
+  "merge_gap_minutes": [
+    0,
+    5,
+    15,
+    30,
+    60
+  ],
+  "market_data_download_performed": false,
+  "note": "Sampling ranks and temporal splits frozen before any COMEX market-data download."
+}
