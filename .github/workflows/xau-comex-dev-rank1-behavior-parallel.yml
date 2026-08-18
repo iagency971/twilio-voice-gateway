@@ -1,0 +1,98 @@
+# exact-compute-recovery: multiclass-behavior-24-folds-v1
+name: XAU COMEX DEV_RANK1 Behavior Parallel Recovery
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-dev-rank1-behavior-parallel.yml']
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  fold:
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        model: [B0, B1, B2]
+        year: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 numpy pyarrow scikit-learn==1.5.2
+      - name: Download frozen DEV_RANK1 feature artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-event-features-v1
+          path: /tmp/features
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32183736697
+      - name: Run exact frozen outer fold
+        run: |
+          python xau-multiyear/scripts/run_comex_dev_rank1_behavior_fold.py \
+            --features /tmp/features/dev_rank1_event_features.parquet \
+            --outer-year ${{ matrix.year }} \
+            --model ${{ matrix.model }} \
+            --out /tmp/fold
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-behavior-fold-${{ matrix.model }}-${{ matrix.year }}
+          path: /tmp/fold/
+          retention-days: 90
+
+  aggregate:
+    needs: fold
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 numpy pyarrow scikit-learn==1.5.2 requests
+      - name: Download frozen DEV_RANK1 feature artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-event-features-v1
+          path: /tmp/features
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32183736697
+      - name: Download all exact fold artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: comex-dev-rank1-behavior-fold-*
+          path: /tmp/folds
+          merge-multiple: true
+      - name: Aggregate exact frozen cross-fitted behavior result
+        run: |
+          python xau-multiyear/scripts/aggregate_comex_dev_rank1_behavior_folds.py \
+            --features /tmp/features/dev_rank1_event_features.parquet \
+            --fold-root /tmp/folds \
+            --out /tmp/result
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-primary-behavior-parallel-v1
+          path: /tmp/result/
+          retention-days: 90
+      - name: Publish compact multiclass primary result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests
+          src=pathlib.Path('/tmp/result');root='xau-final-results/comex_dev_rank1_primary_behavior_v1';keep=['result.json','metrics.csv','annual_metrics.csv','family_deltas.csv','outer_fold_audit.json'];h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for name in keep:
+              p=src/name
+              if not p.exists():raise SystemExit(f'missing {name}')
+              path=f'{root}/{name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish DEV_RANK1 multiclass behavior exact recovery {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:body['sha']=sha
+              r=requests.put(u,headers=h,json=body);r.raise_for_status()
+          PY
