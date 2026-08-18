@@ -1,0 +1,60 @@
+{
+  "version": "COMEX_SCREENING_PACKAGE_V2",
+  "canonical_events": 1274307,
+  "session_tiers": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "merge_gaps_min": [
+    0,
+    30,
+    60,
+    120,
+    180,
+    240,
+    360,
+    720
+  ],
+  "selection_seed": "COMEX_SUPPLEMENT_V2_SEED_971",
+  "pure_targets": {
+    "DEV": 2000,
+    "VALIDATION": 1000,
+    "COMEX_FEATURE_HOLDOUT": 1000
+  },
+  "abundant_fvg_confluence_targets": {
+    "DEV": 1500,
+    "VALIDATION": 750,
+    "COMEX_FEATURE_HOLDOUT": 750
+  },
+  "acceptance_retest_screening_floors": {
+    "DEV": {
+      "CONFLUENCE": 150,
+      "DOZ_ONLY": 150,
+      "FVG_ONLY": 500,
+      "MEMORY_ONLY": 150,
+      "OBJECTIVE_ONLY": 150
+    },
+    "VALIDATION": {
+      "CONFLUENCE": 100,
+      "DOZ_ONLY": 100,
+      "FVG_ONLY": 250,
+      "MEMORY_ONLY": 100,
+      "OBJECTIVE_ONLY": 100
+    },
+    "COMEX_FEATURE_HOLDOUT": {
+      "CONFLUENCE": 100,
+      "DOZ_ONLY": 100,
+      "FVG_ONLY": 250,
+      "MEMORY_ONLY": 100,
+      "OBJECTIVE_ONLY": 100
+    }
+  },
+  "rare_confluences": "all outside base session panel retained",
+  "fvg_only": "no generic local supplement; full-session panel supplies FVG-only tick sample; acceptance floor may add FVG-only events",
+  "local_scientific_window": "contact -30m / +16m; request bounds snapped outward to 10m",
+  "selection_uses_comex_outcomes": false,
+  "market_data_download_performed": false,
+  "warning": "Screening package, not a virgin strategy validation. Cells below population/power requirements remain inconclusive rather than rejected."
+}
