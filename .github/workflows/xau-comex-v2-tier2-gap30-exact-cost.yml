@@ -1,3 +1,4 @@
+# execute canonical exact quote 2026-08-18
 name: XAU COMEX V2 Tier2 Gap30 Exact Cost
 on:
   push:
