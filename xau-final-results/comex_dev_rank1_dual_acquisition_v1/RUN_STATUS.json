@@ -10,14 +10,14 @@
   "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32179377819",
   "jobs_total": 104,
   "by_status": {
-    "completed": 77,
-    "in_progress": 4,
-    "queued": 23
+    "completed": 93,
+    "in_progress": 3,
+    "queued": 8
   },
   "by_conclusion": {
-    "success": 76,
+    "success": 92,
     "failure": 1,
-    "NONE": 27
+    "NONE": 11
   },
   "failed_jobs": [
     {
