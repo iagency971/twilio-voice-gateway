@@ -1,0 +1,74 @@
+name: XAU COMEX Session Reuse Analysis
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-session-reuse-analysis.yml']
+permissions:
+  actions: read
+  contents: write
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5
+      - uses: actions/download-artifact@v4
+        with:
+          name: comex-acquisition-plan-v1
+          path: /tmp/plan
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32102932187
+      - name: Measure event reuse inside frozen session panels
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          import pandas as pd
+          NY=ZoneInfo('America/New_York')
+          e=pd.read_csv('/tmp/plan/canonical_events_all.csv.gz',compression='gzip',low_memory=False)
+          s=pd.read_csv('/tmp/plan/session_candidates_all.csv')
+          ct=pd.to_datetime(e.contact_time,utc=True).dt.tz_convert(NY)
+          # Research trading date boundary 17:00 New York, same as frozen candidate generator.
+          shifted=ct-pd.Timedelta(hours=17)
+          e['research_trading_date']=shifted.dt.date.astype(str)
+          e['family_stack']='OTHER'
+          hd=e.constituent_families.fillna('').str.contains('DISPLACEMENT_ORIGIN',regex=False)
+          ho=e.constituent_families.fillna('').str.contains('OBJECTIVE_LIQUIDITY',regex=False)
+          hm=e.constituent_families.fillna('').str.contains('MEMORY',regex=False)
+          hf=e.constituent_families.fillna('').str.contains('FVG',regex=False)
+          pure_d=hd&~ho&~hm&~hf; pure_o=ho&~hd&~hm&~hf; pure_m=hm&~hd&~ho&~hf; pure_f=hf&~hd&~ho&~hm
+          e.loc[pure_d,'family_stack']='DOZ_ONLY'; e.loc[pure_o,'family_stack']='OBJECTIVE_ONLY'; e.loc[pure_m,'family_stack']='MEMORY_ONLY'; e.loc[pure_f,'family_stack']='FVG_ONLY'
+          e.loc[(hd|ho|hm|hf)&~(pure_d|pure_o|pure_m|pure_f),'family_stack']='CONFLUENCE'
+          models=['passive_touch','touch_next_open','clean_rejection','failed_auction','acceptance_retest','reclaim_pullback']
+          rows=[]
+          for tier in [1,2,3,4]:
+              dates=set(s.loc[pd.to_numeric(s.panel_rank,errors='coerce')<=tier,'research_trading_date'].astype(str))
+              q=e[e.research_trading_date.isin(dates)]
+              for (sp,fam),g in q.groupby(['temporal_split','family_stack']):
+                  r={'session_tier':tier,'split':sp,'family_stack':fam,'events':len(g),'years':g.year.nunique(),'sessions_with_events':g.research_trading_date.nunique()}
+                  for m in models:r[m+'_eligible']=int(g[m+'_eligible'].astype(str).str.lower().eq('true').sum())
+                  for b in ['CLEAN_REJECTION','FAILED_AUCTION','ACCEPTED_BREAK','UNRESOLVED']:r['behavior_'+b]=int((g.behavior_v2==b).sum())
+                  rows.append(r)
+          out=pd.DataFrame(rows).sort_values(['session_tier','split','family_stack'])
+          out.to_csv('/tmp/session_reuse_counts.csv',index=False)
+          summary={'rows':len(out),'total_events_by_tier':{str(k):int(out[out.session_tier==k].events.sum()) for k in [1,2,3,4]},'source_run':32102932187,'source_events':int(len(e)),'download_performed':False}
+          Path('/tmp/session_reuse_summary.json').write_text(json.dumps(summary,indent=2)); print(out.to_string(index=False)); print(json.dumps(summary,indent=2))
+          PY
+      - name: Publish compact outputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for name in ['session_reuse_counts.csv','session_reuse_summary.json']:
+              p=pathlib.Path('/tmp')/name; path=f'xau-final-results/comex_acquisition_plan_v1/{name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+              b={'message':f'publish COMEX session reuse {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:b['sha']=sha
+              r=requests.put(u,headers=h,json=b); r.raise_for_status()
+          PY
