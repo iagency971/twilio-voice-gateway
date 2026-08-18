@@ -1,4 +1,4 @@
-# trigger-once: native-source-levels-2026-08-18
+# trigger-once: native-source-levels-2026-08-18-artifact-fix
 name: XAU COMEX DEV_RANK1 Native Source Levels
 
 on:
@@ -28,12 +28,19 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32179377819
-      - name: Recover early raw artifacts explicitly
+      - name: Recover early V0 artifact 06610 explicitly
         uses: actions/download-artifact@v4
         with:
-          pattern: comex-dev-rank1-dual-0*
+          name: comex-dev-rank1-dual-06610cec170650590cd663ca
           path: /tmp/new
-          merge-multiple: true
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Recover early V0 artifact 010384 explicitly
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-01038430e355d65828fbe711
+          path: /tmp/new
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32179377819
