@@ -1,5 +1,5 @@
-# zero-cost-only: DEV_RANK1 low-session symbology diagnostic
-name: XAU COMEX DEV_RANK1 Low-Session Symbology QA
+# zero-cost-only: DEV_RANK1 sparse-session parent diagnostic
+name: XAU COMEX DEV_RANK1 Parent-Level Sparse QA
 
 on:
   push:
@@ -20,18 +20,19 @@ jobs:
         with:
           ref: agent/xau-comex-acquisition-plan
       - run: python -m pip install pandas==2.2.3 databento requests
-      - name: Diagnose low sessions using free metadata and symbology only
+      - name: Compare continuous, mapped raw and GC.FUT parent counts — metadata only
         run: |
-          python xau-multiyear/scripts/diagnose_comex_low_sessions.py \
-            --quotes xau-final-results/comex_dev_rank1_gate_v1/dev_rank1_new_session_quotes.csv \
-            --threshold 5000 \
-            --out /tmp/low
+          python xau-multiyear/scripts/diagnose_comex_sparse_sessions_v2.py \
+            --availability xau-final-results/comex_dev_rank1_gate_v1/dev_rank1_session_availability.csv \
+            --trade-threshold 5000 \
+            --m1-threshold 300 \
+            --out /tmp/sparse
       - uses: actions/upload-artifact@v4
         with:
-          name: comex-dev-rank1-low-session-qa-v1
-          path: /tmp/low/
+          name: comex-dev-rank1-sparse-parent-qa-v2
+          path: /tmp/sparse/
           retention-days: 90
-      - name: Publish low-session QA
+      - name: Publish parent-level QA
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -39,13 +40,13 @@ jobs:
         run: |
           python - <<'PY'
           import base64,os,pathlib,requests
-          src=pathlib.Path('/tmp/low'); root='xau-final-results/comex_dev_rank1_gate_v1'
+          src=pathlib.Path('/tmp/sparse'); root='xau-final-results/comex_dev_rank1_gate_v1'
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
           for p in src.iterdir():
               if not p.is_file(): continue
               path=f'{root}/{p.name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
               old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
-              body={'message':f'publish COMEX DEV_RANK1 low-session QA {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              body={'message':f'publish COMEX DEV_RANK1 sparse parent QA {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
               if sha: body['sha']=sha
               r=requests.put(u,headers=h,json=body); r.raise_for_status()
           PY
