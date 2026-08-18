@@ -1,5 +1,5 @@
 name: XAU Vantage Holdout 2026 Survivor Only
-# explicit trigger; frozen eight cells unchanged
+# reporting-only fix: frozen zero-trade cells retained; scientific parameters unchanged
 on:
   push:
     branches: [agent/xau-multiyear-research]
@@ -14,6 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Publish STARTED
+        id: marker
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -25,16 +26,22 @@ jobs:
           if sha:b['sha']=sha
           requests.put(u,headers=h,json=b).raise_for_status()
           PY
-      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest
+      - name: Install dependencies
+        id: deps
+        run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest
       - name: Frozen tests
+        id: tests
         env:
           PYTHONPATH: xau-multiyear/src
         run: python -m pytest -q xau-multiyear/tests/test_vantage_overlay.py xau-multiyear/tests/test_entries_v1.py xau-multiyear/tests/test_entries_v2.py xau-multiyear/tests/test_entries_s1.py
       - name: Acquire
+        id: acquire
         run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2025-05 --to-month 2026-06 --out /tmp/xau_holdout.csv
       - name: Run exactly eight frozen cells
+        id: runmodel
         run: python xau-multiyear/scripts/run_phase_c_vantage_holdout_survivors.py /tmp/xau_holdout.csv --target-start 2026-05-01 --target-end 2026-06-30 --out /tmp/holdout
       - name: Gate and publish
+        id: publish
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -45,7 +52,9 @@ jobs:
           out=pathlib.Path('/tmp/holdout'); s=pd.read_csv(out/'survivors_holdout.csv'); m=json.load(open(out/'manifest.json'))
           p=s[s.scenario=='S11_C6_PRIMARY']; st=s[s.scenario=='S18_C9_STRESS']; pc=p[p.entry_model=='CLEAN_REJECTION']; sc=st[st.entry_model=='CLEAN_REJECTION']
           assert len(pc)==6 and len(sc)==6 and len(s)==32
-          gate={'target_start':'2026-05-01T00:00:00Z','target_end':'2026-06-30T00:00:00Z','target_events':int(m['target_events']),'doz_objective_only_events':int(m['doz_objective_only_events']),'clean_rejection_trades_per_cell':int(pc.trades.iloc[0]),'primary_positive_rr_cells':int((pc.avg_net_R>0).sum()),'primary_median_net_R_across_rr':float(pc.avg_net_R.median()),'stress_positive_rr_cells':int((sc.avg_net_R>0).sum()),'stress_median_net_R_across_rr':float(sc.avg_net_R.median()),'gate_A_primary':bool((pc.avg_net_R>0).sum()>=4 and pc.avg_net_R.median()>0),'gate_B_stress':bool((sc.avg_net_R>0).sum()>=3 and sc.avg_net_R.median()>=0),'clean_rejection_family_pass':bool((pc.avg_net_R>0).sum()>=4 and pc.avg_net_R.median()>0 and (sc.avg_net_R>0).sum()>=3 and sc.avg_net_R.median()>=0),'touch_next_open_primary_positive_cells':int((p[p.entry_model=='TOUCH_NEXT_OPEN'].avg_net_R>0).sum()),'interpretation':'Frozen eight survivors only; no holdout promotion.'}
+          pmed=float(pc.avg_net_R.median()) if pc.avg_net_R.notna().any() else None
+          smed=float(sc.avg_net_R.median()) if sc.avg_net_R.notna().any() else None
+          gate={'target_start':'2026-05-01T00:00:00Z','target_end':'2026-06-30T00:00:00Z','target_events':int(m['target_events']),'doz_objective_only_events':int(m['doz_objective_only_events']),'clean_rejection_trades_per_cell':int(pc.trades.iloc[0]),'primary_positive_rr_cells':int((pc.avg_net_R>0).sum()),'primary_median_net_R_across_rr':pmed,'stress_positive_rr_cells':int((sc.avg_net_R>0).sum()),'stress_median_net_R_across_rr':smed,'gate_A_primary':bool((pc.avg_net_R>0).sum()>=4 and pmed is not None and pmed>0),'gate_B_stress':bool((sc.avg_net_R>0).sum()>=3 and smed is not None and smed>=0),'clean_rejection_family_pass':bool((pc.avg_net_R>0).sum()>=4 and pmed is not None and pmed>0 and (sc.avg_net_R>0).sum()>=3 and smed is not None and smed>=0),'touch_next_open_primary_positive_cells':int((p[p.entry_model=='TOUCH_NEXT_OPEN'].avg_net_R>0).sum()),'interpretation':'Frozen eight survivors only; no holdout promotion. Zero-trade cells are explicitly reported rather than omitted.'}
           (out/'gate.json').write_text(json.dumps(gate,indent=2),encoding='utf-8')
           H={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json'}
           files={'xau-final-results/phase_c_vantage_holdout_2026_survivor_only/survivors_holdout.csv':out/'survivors_holdout.csv','xau-final-results/phase_c_vantage_holdout_2026_survivor_only/manifest.json':out/'manifest.json','xau-final-results/phase_c_vantage_holdout_2026_survivor_only/gate.json':out/'gate.json'}
@@ -56,4 +65,22 @@ jobs:
           path='xau-final-results/phase_c_vantage_holdout_2026_survivor_only/status.json'; data=json.dumps({'status':'COMPLETED','source_commit':os.environ['GITHUB_SHA']},indent=2).encode(); u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; r=requests.get(u,headers=H,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None; b={'message':'mark survivor holdout completed [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']};
           if sha:b['sha']=sha
           requests.put(u,headers=H,json=b).raise_for_status(); print(json.dumps(gate,indent=2)); print(s.to_string(index=False))
+          PY
+      - name: Publish FAILED
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+          DEPS: ${{ steps.deps.outcome }}
+          TESTS: ${{ steps.tests.outcome }}
+          ACQUIRE: ${{ steps.acquire.outcome }}
+          RUNMODEL: ${{ steps.runmodel.outcome }}
+          PUBLISH: ${{ steps.publish.outcome }}
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          p='xau-final-results/phase_c_vantage_holdout_2026_survivor_only/status.json'; data=json.dumps({'status':'FAILED','source_commit':os.environ.get('GITHUB_SHA'),'steps':{'deps':os.environ.get('DEPS'),'tests':os.environ.get('TESTS'),'acquire':os.environ.get('ACQUIRE'),'runmodel':os.environ.get('RUNMODEL'),'publish':os.environ.get('PUBLISH')}},indent=2).encode(); h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json'}; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{p}"; r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None; b={'message':'mark survivor holdout failed [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']};
+          if sha:b['sha']=sha
+          requests.put(u,headers=h,json=b).raise_for_status()
           PY
