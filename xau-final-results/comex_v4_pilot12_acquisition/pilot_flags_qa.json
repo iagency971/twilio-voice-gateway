@@ -1,0 +1,32 @@
+{
+  "version": "COMEX_PILOT_FLAGS_QA_V1",
+  "market_data_download_performed": false,
+  "source": "existing paid 12-session trades artifact",
+  "sessions": 12,
+  "records": 1205168,
+  "totals": {
+    "price_grid_0_1_violation_records": 0,
+    "nonpositive_size_records": 0,
+    "F_PUBLISHER_SPECIFIC_records": 0,
+    "F_MAYBE_BAD_BOOK_records": 0,
+    "F_BAD_TS_RECV_records": 406754,
+    "F_MBP_records": 0,
+    "F_SNAPSHOT_records": 0,
+    "F_TOB_records": 0,
+    "F_LAST_records": 47771,
+    "unknown_flag_bits_records": 0
+  },
+  "side_values_union": [
+    "A",
+    "B",
+    "N"
+  ],
+  "blocking": {
+    "price_grid_clean": true,
+    "sizes_positive": true,
+    "sequence_never_backward": true,
+    "no_unexpected_schema_flags": true,
+    "no_unknown_flag_bits": true
+  },
+  "note": "F_MAYBE_BAD_BOOK and F_BAD_TS_RECV are reported, not silently removed. Their handling follows the frozen feature specification."
+}
