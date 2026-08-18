@@ -1,0 +1,15 @@
+{
+  "version": "COMEX_PILOT_SESSION_BOUNDARY_QA_V1",
+  "market_data_download_performed": false,
+  "source": "existing paid 12-session trades artifact",
+  "sessions": 12,
+  "sessions_with_multiple_instruments": 0,
+  "sessions_with_17xx_ny_trades": 4,
+  "total_17xx_ny_trades": 874,
+  "sessions_with_maintenance_gap_candidate": 4,
+  "maintenance_gap_minutes_min": 45.05135,
+  "maintenance_gap_minutes_median": 45.055958333333336,
+  "maintenance_gap_minutes_max": 45.330749999999995,
+  "sequence_backward_steps_total": 0,
+  "note": "This QA does not infer trade direction or strategy outcomes. It only checks raw paid pilot files for session-boundary and mapping behavior."
+}
