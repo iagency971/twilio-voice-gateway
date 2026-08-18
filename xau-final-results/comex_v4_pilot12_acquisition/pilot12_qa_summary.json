@@ -1,5 +1,5 @@
 {
-  "version": "COMEX_V4_PILOT12_QA_V1",
+  "version": "COMEX_V4_PILOT12_QA_V3_MULTISET_BBO_RECOVERY",
   "sessions": 12,
   "schemas_downloaded": [
     "trades",
@@ -9,12 +9,14 @@
   "approved_cap_usd": 4.03,
   "gate_quote_total_usd": 4.022682189941,
   "immediate_pre_download_quote_total_usd": 4.022682189941,
+  "portal_observed_usage_usd": 4.01,
+  "portal_observed_usage_source": "user-provided Databento Data usage screenshot, 2026-08-18",
   "quote_within_cap": true,
   "trades_records": 1205168,
   "tbbo_records": 1205168,
   "record_counts_equal_all_sessions": true,
-  "trade_key_match_all_sessions": true,
-  "trade_payload_match_all_sessions": false,
+  "trade_key_multiset_equal_all_sessions": true,
+  "trade_payload_multiset_equal_all_sessions": true,
   "trades_side_missing_records": 27665,
   "trades_side_missing_rate": 0.022955305816284535,
   "side_missing_by_era": [
@@ -43,251 +45,85 @@
       "side_missing_rate": 0.016025338716695012
     }
   ],
+  "bbo_side_recovery_overall": {
+    "known_side_records_with_valid_bbo": 1177503,
+    "known_side_bbo_classifiable_records": 1158426,
+    "known_side_bbo_classifiable_fraction": 0.9837987673916755,
+    "known_side_bbo_correct_records": 1154570,
+    "known_side_bbo_accuracy_if_classifiable": 0.9966713454290563,
+    "unspecified_side_records_with_valid_bbo": 27665,
+    "unspecified_side_bbo_classifiable_records": 27550,
+    "unspecified_side_bbo_classifiable_fraction": 0.9958431230797036,
+    "unspecified_side_bbo_pred_sell_records": 13659,
+    "unspecified_side_bbo_pred_buy_records": 13891,
+    "unspecified_side_bbo_conflict_records": 34,
+    "unspecified_side_bbo_ambiguous_records": 81
+  },
+  "bbo_side_recovery_by_era": [
+    {
+      "known_side_records_with_valid_bbo": 323143,
+      "known_side_bbo_classifiable_records": 310011,
+      "known_side_bbo_classifiable_fraction": 0.9593616448445426,
+      "known_side_bbo_correct_records": 306217,
+      "known_side_bbo_accuracy_if_classifiable": 0.9877617245839664,
+      "unspecified_side_records_with_valid_bbo": 17769,
+      "unspecified_side_bbo_classifiable_records": 17666,
+      "unspecified_side_bbo_classifiable_fraction": 0.9942033879227868,
+      "unspecified_side_bbo_pred_sell_records": 9181,
+      "unspecified_side_bbo_pred_buy_records": 8485,
+      "unspecified_side_bbo_conflict_records": 23,
+      "unspecified_side_bbo_ambiguous_records": 80,
+      "era": "E1_2011_2013"
+    },
+    {
+      "known_side_records_with_valid_bbo": 241353,
+      "known_side_bbo_classifiable_records": 240553,
+      "known_side_bbo_classifiable_fraction": 0.9966853529891901,
+      "known_side_bbo_correct_records": 240492,
+      "known_side_bbo_accuracy_if_classifiable": 0.999746417629379,
+      "unspecified_side_records_with_valid_bbo": 2641,
+      "unspecified_side_bbo_classifiable_records": 2635,
+      "unspecified_side_bbo_classifiable_fraction": 0.9977281332828474,
+      "unspecified_side_bbo_pred_sell_records": 1307,
+      "unspecified_side_bbo_pred_buy_records": 1328,
+      "unspecified_side_bbo_conflict_records": 6,
+      "unspecified_side_bbo_ambiguous_records": 0,
+      "era": "E2_2014_2018"
+    },
+    {
+      "known_side_records_with_valid_bbo": 289607,
+      "known_side_bbo_classifiable_records": 288340,
+      "known_side_bbo_classifiable_fraction": 0.9956251057467533,
+      "known_side_bbo_correct_records": 288340,
+      "known_side_bbo_accuracy_if_classifiable": 1.0,
+      "unspecified_side_records_with_valid_bbo": 1988,
+      "unspecified_side_bbo_classifiable_records": 1984,
+      "unspecified_side_bbo_classifiable_fraction": 0.9979879275653923,
+      "unspecified_side_bbo_pred_sell_records": 918,
+      "unspecified_side_bbo_pred_buy_records": 1066,
+      "unspecified_side_bbo_conflict_records": 3,
+      "unspecified_side_bbo_ambiguous_records": 1,
+      "era": "E3_2019_2022"
+    },
+    {
+      "known_side_records_with_valid_bbo": 323400,
+      "known_side_bbo_classifiable_records": 319522,
+      "known_side_bbo_classifiable_fraction": 0.988008658008658,
+      "known_side_bbo_correct_records": 319521,
+      "known_side_bbo_accuracy_if_classifiable": 0.999996870325048,
+      "unspecified_side_records_with_valid_bbo": 5267,
+      "unspecified_side_bbo_classifiable_records": 5265,
+      "unspecified_side_bbo_classifiable_fraction": 0.9996202771976457,
+      "unspecified_side_bbo_pred_sell_records": 2253,
+      "unspecified_side_bbo_pred_buy_records": 3012,
+      "unspecified_side_bbo_conflict_records": 2,
+      "unspecified_side_bbo_ambiguous_records": 0,
+      "era": "E4_2023_2025"
+    }
+  ],
   "qa_gate_side_total_le_2pct": false,
   "qa_gate_side_each_era_le_5pct": false,
   "qa_gate_symbols_present": true,
-  "qa_pass_for_trade_side_experiment": false,
-  "raw_files": [
-    {
-      "era": "E1_2011_2013",
-      "research_trading_date": "2011-08-05",
-      "schema": "tbbo",
-      "raw_file": "2011-08-05__tbbo.dbn.zst",
-      "raw_file_bytes": 1769949,
-      "sha256": "5e8da6283af405c55d8606b631b6494745d7fc4e6af7e3e0d8979f1e865ce74c",
-      "records_downloaded": 138987,
-      "immediate_pre_download_quote_usd": 0.289949476719
-    },
-    {
-      "era": "E1_2011_2013",
-      "research_trading_date": "2011-08-05",
-      "schema": "trades",
-      "raw_file": "2011-08-05__trades.dbn.zst",
-      "raw_file_bytes": 1261789,
-      "sha256": "48ddb25d57be495a614cac10cc56d248f31db0110e52986a4e5b5bdcb68a5e87",
-      "records_downloaded": 138987,
-      "immediate_pre_download_quote_usd": 0.173969686031
-    },
-    {
-      "era": "E1_2011_2013",
-      "research_trading_date": "2013-02-07",
-      "schema": "tbbo",
-      "raw_file": "2013-02-07__tbbo.dbn.zst",
-      "raw_file_bytes": 1402220,
-      "sha256": "1a69e437029d4ccbee45ad9aa9f74eaf73d889d74d74393704b34320ecf5426b",
-      "records_downloaded": 127463,
-      "immediate_pre_download_quote_usd": 0.265908539295
-    },
-    {
-      "era": "E1_2011_2013",
-      "research_trading_date": "2013-02-07",
-      "schema": "trades",
-      "raw_file": "2013-02-07__trades.dbn.zst",
-      "raw_file_bytes": 959554,
-      "sha256": "10ee3adda906d2c895b41906e8158aa2baee0358c2b88296bedcef71b36ba957",
-      "records_downloaded": 127463,
-      "immediate_pre_download_quote_usd": 0.159545123577
-    },
-    {
-      "era": "E1_2011_2013",
-      "research_trading_date": "2013-05-29",
-      "schema": "tbbo",
-      "raw_file": "2013-05-29__tbbo.dbn.zst",
-      "raw_file_bytes": 943925,
-      "sha256": "d0ebb190cd841771aabea968fdb79206621f3a6fd0762d16e819b18c74ae6965",
-      "records_downloaded": 74462,
-      "immediate_pre_download_quote_usd": 0.155339837074
-    },
-    {
-      "era": "E1_2011_2013",
-      "research_trading_date": "2013-05-29",
-      "schema": "trades",
-      "raw_file": "2013-05-29__trades.dbn.zst",
-      "raw_file_bytes": 679955,
-      "sha256": "a866274610fa7e0af72fd93b4e16f2017f8d6820bf295bafb81594a692148391",
-      "records_downloaded": 74462,
-      "immediate_pre_download_quote_usd": 0.093203902245
-    },
-    {
-      "era": "E2_2014_2018",
-      "research_trading_date": "2015-08-06",
-      "schema": "tbbo",
-      "raw_file": "2015-08-06__tbbo.dbn.zst",
-      "raw_file_bytes": 728190,
-      "sha256": "236bc992451b5b32cbcd142fc9fd8d2fbb64071488fc2177d2d84e51c0d0b06b",
-      "records_downloaded": 65842,
-      "immediate_pre_download_quote_usd": 0.137357115746
-    },
-    {
-      "era": "E2_2014_2018",
-      "research_trading_date": "2015-08-06",
-      "schema": "trades",
-      "raw_file": "2015-08-06__trades.dbn.zst",
-      "raw_file_bytes": 479700,
-      "sha256": "a2c4f1b612d89d0a6ef648a54915a35975ebd1f7ee199b53ebe46060493a5be5",
-      "records_downloaded": 65842,
-      "immediate_pre_download_quote_usd": 0.082414269447
-    },
-    {
-      "era": "E2_2014_2018",
-      "research_trading_date": "2017-10-31",
-      "schema": "tbbo",
-      "raw_file": "2017-10-31__tbbo.dbn.zst",
-      "raw_file_bytes": 2233216,
-      "sha256": "27251c840f9c60a12c9cb8fad9310256673f4ac8ff0a8bb9b3201d27a3c03042",
-      "records_downloaded": 90668,
-      "immediate_pre_download_quote_usd": 0.189148187637
-    },
-    {
-      "era": "E2_2014_2018",
-      "research_trading_date": "2017-10-31",
-      "schema": "trades",
-      "raw_file": "2017-10-31__trades.dbn.zst",
-      "raw_file_bytes": 1682769,
-      "sha256": "eee484e272303ee4dce0e7402070c8f468935153c8018984bdd1d9d4932384c9",
-      "records_downloaded": 90668,
-      "immediate_pre_download_quote_usd": 0.113488912582
-    },
-    {
-      "era": "E2_2014_2018",
-      "research_trading_date": "2018-01-02",
-      "schema": "tbbo",
-      "raw_file": "2018-01-02__tbbo.dbn.zst",
-      "raw_file_bytes": 2182231,
-      "sha256": "f7e3830ac388f2cc75f23220bae2cb6b292fe7d249409d80e64dc3f3a6f49ede",
-      "records_downloaded": 87484,
-      "immediate_pre_download_quote_usd": 0.182505846024
-    },
-    {
-      "era": "E2_2014_2018",
-      "research_trading_date": "2018-01-02",
-      "schema": "trades",
-      "raw_file": "2018-01-02__trades.dbn.zst",
-      "raw_file_bytes": 1655414,
-      "sha256": "cc28d2f67798a34f8fb729b6f099db252c8bfc03ec860bacc5c7154d621e10a5",
-      "records_downloaded": 87484,
-      "immediate_pre_download_quote_usd": 0.109503507614
-    },
-    {
-      "era": "E3_2019_2022",
-      "research_trading_date": "2019-05-06",
-      "schema": "tbbo",
-      "raw_file": "2019-05-06__tbbo.dbn.zst",
-      "raw_file_bytes": 2219339,
-      "sha256": "3628e7d7bf515b2ee07a2c7486e3867ea63465cb5bf62bcfacd1bffd2f9c316c",
-      "records_downloaded": 90377,
-      "immediate_pre_download_quote_usd": 0.18854111433
-    },
-    {
-      "era": "E3_2019_2022",
-      "research_trading_date": "2019-05-06",
-      "schema": "trades",
-      "raw_file": "2019-05-06__trades.dbn.zst",
-      "raw_file_bytes": 1673206,
-      "sha256": "eda6378e6ce869287418fd461feb9a89372efc2843e3ef23192eea7644bcffed",
-      "records_downloaded": 90377,
-      "immediate_pre_download_quote_usd": 0.113124668598
-    },
-    {
-      "era": "E3_2019_2022",
-      "research_trading_date": "2021-01-07",
-      "schema": "tbbo",
-      "raw_file": "2021-01-07__tbbo.dbn.zst",
-      "raw_file_bytes": 2701652,
-      "sha256": "98a1ef41518fdaf2a111feffcac8a32caef6a6384486012ef1f325ba4256b58c",
-      "records_downloaded": 106401,
-      "immediate_pre_download_quote_usd": 0.221969783306
-    },
-    {
-      "era": "E3_2019_2022",
-      "research_trading_date": "2021-01-07",
-      "schema": "trades",
-      "raw_file": "2021-01-07__trades.dbn.zst",
-      "raw_file_bytes": 2109377,
-      "sha256": "8f712fd494a11dc3209a9081ddd179fa21a9fb92c1711e580f2b0a7316d6a86c",
-      "records_downloaded": 106401,
-      "immediate_pre_download_quote_usd": 0.133181869984
-    },
-    {
-      "era": "E3_2019_2022",
-      "research_trading_date": "2021-09-28",
-      "schema": "tbbo",
-      "raw_file": "2021-09-28__tbbo.dbn.zst",
-      "raw_file_bytes": 2422074,
-      "sha256": "3f94b51a47d910c49d6341531be75d7aef6d8b3776e4c561e45ee8ba9ad6a871",
-      "records_downloaded": 94817,
-      "immediate_pre_download_quote_usd": 0.197803676128
-    },
-    {
-      "era": "E3_2019_2022",
-      "research_trading_date": "2021-09-28",
-      "schema": "trades",
-      "raw_file": "2021-09-28__trades.dbn.zst",
-      "raw_file_bytes": 1869205,
-      "sha256": "6e51059fc1a98420b2282998e2ff2b50b59226a0ce078f28cf386e4c0c6be5b5",
-      "records_downloaded": 94817,
-      "immediate_pre_download_quote_usd": 0.118682205677
-    },
-    {
-      "era": "E4_2023_2025",
-      "research_trading_date": "2024-03-06",
-      "schema": "tbbo",
-      "raw_file": "2024-03-06__tbbo.dbn.zst",
-      "raw_file_bytes": 3126520,
-      "sha256": "c0f48a8b2b97af1e472ab2d425307d8ce9487950e0bcb6219f1140baa3d54c3e",
-      "records_downloaded": 124112,
-      "immediate_pre_download_quote_usd": 0.258917808533
-    },
-    {
-      "era": "E4_2023_2025",
-      "research_trading_date": "2024-03-06",
-      "schema": "trades",
-      "raw_file": "2024-03-06__trades.dbn.zst",
-      "raw_file_bytes": 2375918,
-      "sha256": "1c15c8371a61de757c432c1ea877d4c7fc7c0eb6b6fd714143457b025b017214",
-      "records_downloaded": 124112,
-      "immediate_pre_download_quote_usd": 0.15535068512
-    },
-    {
-      "era": "E4_2023_2025",
-      "research_trading_date": "2024-12-18",
-      "schema": "tbbo",
-      "raw_file": "2024-12-18__tbbo.dbn.zst",
-      "raw_file_bytes": 2067577,
-      "sha256": "8e6c1c64fc45dff4c85a93a761e4aca879aff04a55952f8e7d83a0f78f5dbf73",
-      "records_downloaded": 80752,
-      "immediate_pre_download_quote_usd": 0.168461799622
-    },
-    {
-      "era": "E4_2023_2025",
-      "research_trading_date": "2024-12-18",
-      "schema": "trades",
-      "raw_file": "2024-12-18__trades.dbn.zst",
-      "raw_file_bytes": 1603958,
-      "sha256": "a9c6acd1930c2f79d1291378432539e286c5fe7bebb9b688c1a26e05240a9863",
-      "records_downloaded": 80752,
-      "immediate_pre_download_quote_usd": 0.101077079773
-    },
-    {
-      "era": "E4_2023_2025",
-      "research_trading_date": "2025-05-21",
-      "schema": "tbbo",
-      "raw_file": "2025-05-21__tbbo.dbn.zst",
-      "raw_file_bytes": 3101412,
-      "sha256": "8e20e9847a488dcba1bf3c3819cdc22fbb93859f45d062843c97925e72491629",
-      "records_downloaded": 123803,
-      "immediate_pre_download_quote_usd": 0.258273184299
-    },
-    {
-      "era": "E4_2023_2025",
-      "research_trading_date": "2025-05-21",
-      "schema": "trades",
-      "raw_file": "2025-05-21__trades.dbn.zst",
-      "raw_file_bytes": 2434602,
-      "sha256": "7aee5b761fbeef2d77aff97eeb6993a89e08dbbeddaf5b19513ce152ddb68355",
-      "records_downloaded": 123803,
-      "immediate_pre_download_quote_usd": 0.15496391058
-    }
-  ],
-  "note": "Portal/account billing remains the authority for actual credit consumption; these are immediate pre-download metadata quotes and downloaded-file QA."
+  "qa_pass_for_native_side_only_experiment": false,
+  "note": "No market-data request is made by this QA script. Portal/account billing remains authoritative for actual credit consumption. V3 compares transaction multisets exactly and evaluates pre-trade BBO recovery of N-side records against native A/B records."
 }
