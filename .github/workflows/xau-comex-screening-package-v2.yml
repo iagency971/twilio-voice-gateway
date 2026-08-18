@@ -1,3 +1,4 @@
+# execute canonical V2 2026-08-18
 name: XAU COMEX Screening Package V2
 on:
   push:
