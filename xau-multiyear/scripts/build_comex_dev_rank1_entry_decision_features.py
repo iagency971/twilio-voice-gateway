@@ -36,6 +36,7 @@ def decision_rows(e):
 def main():
     ap=argparse.ArgumentParser()
     for x in ['new-root','pilot-root','requests','sessions','mapping','events','xau-context','out']:ap.add_argument('--'+x,required=True)
+    ap.add_argument('--model',choices=MODELS,required=False,default=None)
     a=ap.parse_args();out=Path(a.out);out.mkdir(parents=True,exist_ok=True);newroot=Path(a.new_root);pilotroot=Path(a.pilot_root)
     req=pd.read_csv(a.requests,dtype={'symbols':str});sessions=pd.read_csv(a.sessions);sessions=sessions[sessions.acquisition_stage.eq('DEV_RANK1')].copy();mapping=pd.read_csv(a.mapping,dtype={'v0_start_iid':str,'n0_start_iid':str});assert len(sessions)==96 and len(mapping)==96
     cand,mk=feat.build_candidate_map(newroot,pilotroot,req,sessions,mapping);ctxm=[o for o in mk.values() if o.get('request_type')=='CONTINUOUS_OHLCV_CONTEXT'];assert len(ctxm)==1;ctxfile=feat.find_one(newroot,f"{ctxm[0]['request_id']}.dbn.zst");assert ctxfile is not None;ctx=feat.prepare_context(ctxfile,a.xau_context)
@@ -44,9 +45,14 @@ def main():
         p=m.lower();use += [p+'_eligible',p+'_entry_time',p+'_entry_delay_min']
     e=pd.read_csv(a.events,compression='gzip',usecols=lambda c:c in set(use),low_memory=False);e['contact_time']=pd.to_datetime(e.contact_time,utc=True);e['research_trading_date']=feat.xau_day_key(e.contact_time);selected=set(sessions.research_trading_date.astype(str));e=e[e.research_trading_date.isin(selected)].copy();assert len(e)==31710
     e['signature']=e.constituent_families.map(feat.family_signature);e['family_stack']=e.signature.map(feat.family_stack);sw=sessions[['research_trading_date','quarter','vol_band','poststrat_weight']].copy();sw.research_trading_date=sw.research_trading_date.astype(str);e=e.merge(sw,on='research_trading_date',how='left',validate='many_to_one')
-    d=decision_rows(e);assert set(d.entry_model.unique())==set(MODELS);mp=mapping.set_index(mapping.research_trading_date.astype(str));rows=[]
-    for k,(date,g) in enumerate(d.groupby('research_trading_date',sort=True),1):
-        print(f'session {k}/96 {date} decisions={len(g)}',flush=True);mr=mp.loc[date];s0,s1=feat.session_bounds(date);paths={}
+    d=decision_rows(e);assert set(d.entry_model.unique())==set(MODELS)
+    if a.model is not None:
+        d=d[d.entry_model.eq(a.model)].copy().reset_index(drop=True)
+        if d.empty:raise SystemExit(f'no decision rows for {a.model}')
+    mp=mapping.set_index(mapping.research_trading_date.astype(str));rows=[]
+    grouped=list(d.groupby('research_trading_date',sort=True))
+    for k,(date,g) in enumerate(grouped,1):
+        print(f'session {k}/{len(grouped)} {date} decisions={len(g)} model={a.model or "ALL"}',flush=True);mr=mp.loc[date];s0,s1=feat.session_bounds(date);paths={}
         for lab in ['V0','N0']:
             z=cand.get((date,lab));p=z.get('path') if z else None
             if p is not None and str(p) not in paths:paths[str(p)]=feat.prep_tape(p,date)
@@ -84,6 +90,6 @@ def main():
     counts=[]
     for model,g in f.groupby('entry_model'):
         counts.append({'entry_model':model,'decision_events':len(g),'filled_or_entered':int(g.fill_or_entry.sum()),'fill_rate':float(g.fill_or_entry.mean()),'sessions':int(g.research_trading_date.nunique()),'years':int(g.year.nunique()),'b2_available':int(g.b2_available.fillna(False).sum())})
-    meta={'version':'COMEX_DEV_RANK1_ENTRY_DECISION_FEATURES_V1','market_data_api_calls':False,'rows':len(f),'sessions':int(f.research_trading_date.nunique()),'models':MODELS,'counts':counts,'decision_population_freeze':'COMEX_DEV_RANK1_ENTRY_DECISION_POPULATIONS_FREEZE_v1.md','net_r_not_computed':True,'rr_not_selected':True}
+    meta={'version':'COMEX_DEV_RANK1_ENTRY_DECISION_FEATURES_V1_1','market_data_api_calls':False,'rows':len(f),'sessions':int(f.research_trading_date.nunique()),'models':sorted(f.entry_model.unique().tolist()),'requested_model':a.model,'counts':counts,'decision_population_freeze':'COMEX_DEV_RANK1_ENTRY_DECISION_POPULATIONS_FREEZE_v1.md','net_r_not_computed':True,'rr_not_selected':True,'scientific_change_from_v1':'none; optional model filter applied before session feature loop for orchestration only'}
     (out/'entry_decision_feature_manifest.json').write_text(json.dumps(meta,indent=2));f.head(200).to_csv(out/'entry_decision_sample_200.csv',index=False);print(json.dumps(meta,indent=2))
 if __name__=='__main__':main()
