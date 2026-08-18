@@ -1,0 +1,89 @@
+{
+  "version": "COMEX_DEV_RANK1_EVENT_FEATURE_RUN_STATUS_V1",
+  "run_id": 32183736697,
+  "head_sha": "24ec29f53233370346c7f2d748183dd03c7c1cfa",
+  "status": "in_progress",
+  "conclusion": null,
+  "created_at": "2026-08-18T20:42:11Z",
+  "updated_at": "2026-08-18T20:42:16Z",
+  "jobs": [
+    {
+      "id": 95862512978,
+      "name": "features",
+      "status": "in_progress",
+      "conclusion": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python -m pip install pandas==2.2.3 numpy databento pyarrow requests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Download successful DEV_RANK1 artifacts \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Recover successful early V0 artifact 06610",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Recover successful early V0 artifact 010384",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Locate paid pilot raw artifact",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Acquire canonical free XAU midpoint context for selected sessions only",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "Build frozen event-level B0 B1 B2 features \u2014 no Databento API key",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Publish compact feature manifest",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    }
+  ]
+}
