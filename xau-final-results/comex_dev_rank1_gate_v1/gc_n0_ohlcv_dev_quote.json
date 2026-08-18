@@ -1,0 +1,12 @@
+{
+  "version": "GC_N0_OHLCV_DEV_QUOTE_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "symbol": "GC.n.0",
+  "schema": "ohlcv-1m",
+  "start": "2010-06-06",
+  "end": "2019-01-01",
+  "cost_usd": 10.679362416267,
+  "records": 2925224,
+  "billable_bytes": 163812544
+}
