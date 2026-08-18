@@ -1,5 +1,5 @@
 name: XAU Phase C v2 Entry Surface 2025
-# rerun after corrected same-bar ambiguity unit test
+# explicit rerun 2026-08-17 after R2 code/test freeze
 on:
   push:
     branches: [agent/xau-multiyear-research]
