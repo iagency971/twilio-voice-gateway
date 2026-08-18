@@ -1,4 +1,5 @@
 name: XAU Vantage Holdout 2026 Survivor Only
+# explicit trigger; frozen eight cells unchanged
 on:
   push:
     branches: [agent/xau-multiyear-research]
