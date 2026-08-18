@@ -2,15 +2,48 @@
   "branch": "agent/xau-comex-acquisition-plan",
   "runs": [
     {
+      "id": 32105025642,
+      "name": "XAU COMEX Session Reuse Analysis",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "952b2ca7e8e6c591a0e0ad76a0ce89fb517457be",
+      "run_number": 2,
+      "created_at": "2026-08-18T05:59:19Z",
+      "updated_at": "2026-08-18T06:04:58Z"
+    },
+    {
+      "id": 32105002535,
+      "name": "XAU COMEX Session Reuse Analysis",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "797a55457a949beb8849d3908a34f837333824cb",
+      "run_number": 1,
+      "created_at": "2026-08-18T05:58:58Z",
+      "updated_at": "2026-08-18T06:02:29Z"
+    },
+    {
+      "id": 32104889692,
+      "name": "XAU COMEX Acquisition Plan V1",
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "50e6653a9c9cabd4c5e8291c9866b0ca9a5edd2b",
+      "run_number": 5,
+      "created_at": "2026-08-18T05:57:13Z",
+      "updated_at": "2026-08-18T06:03:33Z"
+    },
+    {
       "id": 32104463421,
       "name": "XAU COMEX Acquisition Plan V1",
       "event": "push",
-      "status": "queued",
+      "status": "in_progress",
       "conclusion": null,
       "head_sha": "90850e8e43d216f86f64240739ebe3e7af02770d",
       "run_number": 4,
       "created_at": "2026-08-18T05:50:45Z",
-      "updated_at": "2026-08-18T05:50:45Z"
+      "updated_at": "2026-08-18T05:52:50Z"
     },
     {
       "id": 32103593048,
@@ -27,12 +60,12 @@
       "id": 32103489117,
       "name": "XAU GC Prewindow Cost Curve 2025",
       "event": "push",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "failure",
       "head_sha": "5bc05349e9dd10681dfe601155fb04dcd5ad8e14",
       "run_number": 2,
       "created_at": "2026-08-18T05:35:41Z",
-      "updated_at": "2026-08-18T05:46:36Z"
+      "updated_at": "2026-08-18T05:53:44Z"
     },
     {
       "id": 32103469809,
@@ -49,12 +82,12 @@
       "id": 32103223316,
       "name": "XAU COMEX Acquisition Plan V1",
       "event": "push",
-      "status": "in_progress",
+      "status": "queued",
       "conclusion": null,
       "head_sha": "90f560b227305e01a8562d57c13140eb5abb0a0b",
       "run_number": 3,
       "created_at": "2026-08-18T05:31:40Z",
-      "updated_at": "2026-08-18T05:41:33Z"
+      "updated_at": "2026-08-18T05:58:08Z"
     },
     {
       "id": 32103089916,
