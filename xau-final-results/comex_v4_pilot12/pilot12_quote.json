@@ -1,0 +1,189 @@
+{
+  "version": "COMEX_V4_PILOT12_METADATA_V1",
+  "selection_seed": "COMEX_V4_PILOT12_SEED_971",
+  "selection_rule": "4 eras x 3 XAU volatility bands; deterministic hash; unused quarter preferred within era when available",
+  "eras": [
+    {
+      "name": "E1_2011_2013",
+      "start_year": 2011,
+      "end_year": 2013
+    },
+    {
+      "name": "E2_2014_2018",
+      "start_year": 2014,
+      "end_year": 2018
+    },
+    {
+      "name": "E3_2019_2022",
+      "start_year": 2019,
+      "end_year": 2022
+    },
+    {
+      "name": "E4_2023_2025",
+      "start_year": 2023,
+      "end_year": 2025
+    }
+  ],
+  "schemas": [
+    "trades",
+    "tbbo",
+    "bbo-1s",
+    "mbp-1"
+  ],
+  "sessions": [
+    {
+      "era": "E1_2011_2013",
+      "research_trading_date": "2012-08-11",
+      "year": 2012,
+      "quarter": 3,
+      "vol_band": 0,
+      "pilot_vol_band": 0,
+      "quarter_diversified": true,
+      "pilot_hash": "0149e27c28a692d61e56abdfb044d7b2e39d1a62fb7e895658c41cb18c12ad14"
+    },
+    {
+      "era": "E1_2011_2013",
+      "research_trading_date": "2012-06-22",
+      "year": 2012,
+      "quarter": 2,
+      "vol_band": 1,
+      "pilot_vol_band": 1,
+      "quarter_diversified": true,
+      "pilot_hash": "0002cfbc36174f2315b1e8276346cadc74b73db04a79088e554932cd5631e020"
+    },
+    {
+      "era": "E1_2011_2013",
+      "research_trading_date": "2012-10-05",
+      "year": 2012,
+      "quarter": 4,
+      "vol_band": 2,
+      "pilot_vol_band": 2,
+      "quarter_diversified": true,
+      "pilot_hash": "008f51dce85b82570b676edc8045a2da0b0ecef73c48ae82100ab22b36c00105"
+    },
+    {
+      "era": "E2_2014_2018",
+      "research_trading_date": "2014-10-21",
+      "year": 2014,
+      "quarter": 4,
+      "vol_band": 0,
+      "pilot_vol_band": 0,
+      "quarter_diversified": true,
+      "pilot_hash": "029f61dc8e21bd1ebb85552c31644e07f382852fca7e4bc1d27e07baebf3a29b"
+    },
+    {
+      "era": "E2_2014_2018",
+      "research_trading_date": "2018-02-09",
+      "year": 2018,
+      "quarter": 1,
+      "vol_band": 1,
+      "pilot_vol_band": 1,
+      "quarter_diversified": true,
+      "pilot_hash": "00d1123ff425719ffb45da97b5f90da2200c46b0a57dc2006aa14d6217928e6e"
+    },
+    {
+      "era": "E2_2014_2018",
+      "research_trading_date": "2016-06-08",
+      "year": 2016,
+      "quarter": 2,
+      "vol_band": 2,
+      "pilot_vol_band": 2,
+      "quarter_diversified": true,
+      "pilot_hash": "01028a778d36eb8a8440599421c80ed801abe48abf965a81e2a1a5a87c6c82d5"
+    },
+    {
+      "era": "E3_2019_2022",
+      "research_trading_date": "2021-05-27",
+      "year": 2021,
+      "quarter": 2,
+      "vol_band": 0,
+      "pilot_vol_band": 0,
+      "quarter_diversified": true,
+      "pilot_hash": "008e8c7993609bddc8c13a07854b3ba03e722e68018774f61d65bf889e6cb6b9"
+    },
+    {
+      "era": "E3_2019_2022",
+      "research_trading_date": "2021-10-06",
+      "year": 2021,
+      "quarter": 4,
+      "vol_band": 1,
+      "pilot_vol_band": 1,
+      "quarter_diversified": true,
+      "pilot_hash": "016630c3dbefa8bb79a3b901ea770fc1f5c50b7cc10faa26a01ce645e1a8030a"
+    },
+    {
+      "era": "E3_2019_2022",
+      "research_trading_date": "2020-03-20",
+      "year": 2020,
+      "quarter": 1,
+      "vol_band": 2,
+      "pilot_vol_band": 2,
+      "quarter_diversified": true,
+      "pilot_hash": "0272cd2ad9c6133496fcaacbd8d7143d958fe2ae420eb53c2555c6ea43eee9c3"
+    },
+    {
+      "era": "E4_2023_2025",
+      "research_trading_date": "2023-07-19",
+      "year": 2023,
+      "quarter": 3,
+      "vol_band": 0,
+      "pilot_vol_band": 0,
+      "quarter_diversified": true,
+      "pilot_hash": "00c144dc1c1539cf8ab067eed1388771891c59aa5d9f5874ce2ca7b1c2b2aa1f"
+    },
+    {
+      "era": "E4_2023_2025",
+      "research_trading_date": "2023-12-06",
+      "year": 2023,
+      "quarter": 4,
+      "vol_band": 1,
+      "pilot_vol_band": 1,
+      "quarter_diversified": true,
+      "pilot_hash": "0102a4c0a937b686599ad44e8ddbc9458bbc139895b1573dba60346b5224abee"
+    },
+    {
+      "era": "E4_2023_2025",
+      "research_trading_date": "2023-04-19",
+      "year": 2023,
+      "quarter": 2,
+      "vol_band": 2,
+      "pilot_vol_band": 2,
+      "quarter_diversified": true,
+      "pilot_hash": "0324732f7d50d66d1d2785ab44f6b694c9f8c15b71c0d5e22768aa0bb0e46691"
+    }
+  ],
+  "summary": [
+    {
+      "schema": "bbo-1s",
+      "sessions": 12,
+      "cost_usd": 0.7686688005919999,
+      "records": 573161,
+      "billable_bytes": 45852880
+    },
+    {
+      "schema": "mbp-1",
+      "sessions": 12,
+      "cost_usd": 1.363857015967,
+      "records": 10169655,
+      "billable_bytes": 813572400
+    },
+    {
+      "schema": "tbbo",
+      "sessions": 12,
+      "cost_usd": 1.961948275566,
+      "records": 940458,
+      "billable_bytes": 75236640
+    },
+    {
+      "schema": "trades",
+      "sessions": 12,
+      "cost_usd": 1.1771689653389998,
+      "records": 940458,
+      "billable_bytes": 45141984
+    }
+  ],
+  "pilot_total_if_all_four_schemas_were_downloaded_usd": 5.271643057464001,
+  "authorization": "METADATA_ONLY",
+  "download_performed": false,
+  "warning": "No Databento market-data range/batch download is called by this script. Quotes only."
+}
