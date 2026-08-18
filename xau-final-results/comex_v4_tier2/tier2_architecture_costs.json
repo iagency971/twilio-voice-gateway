@@ -1,0 +1,57 @@
+{
+  "version": "COMEX_V4_TIER2_ARCHITECTURE_COSTS_V1",
+  "metadata_only": true,
+  "download_performed": false,
+  "corrected_tier2_sessions": 357,
+  "already_paid_pilot_sessions": 12,
+  "remaining_sessions_to_buy": 345,
+  "old_tier2_weekend_sessions": 13,
+  "continuous_costs_usd": {
+    "ohlcv_1m": 20.342466905713,
+    "bbo_1m": 7.630651295185
+  },
+  "portal_observed_pilot_spend_usd": 4.01,
+  "architectures": [
+    {
+      "architecture": "TRADES_ALL_357",
+      "remaining_session_data_cost_usd": 39.150808453552,
+      "continuous_ohlcv_1m_usd": 20.342466905713,
+      "continuous_bbo_1m_usd": 7.630651295185,
+      "new_stage1_cost_usd": 67.12392665445,
+      "pilot_already_spent_usd": 4.01,
+      "total_project_spend_after_stage1_usd": 71.13392665445001,
+      "credit_remaining_from_125_usd": 53.86607334554999
+    },
+    {
+      "architecture": "TBBO_ALL_357",
+      "remaining_session_data_cost_usd": 65.251347422598,
+      "continuous_ohlcv_1m_usd": 20.342466905713,
+      "continuous_bbo_1m_usd": 7.630651295185,
+      "new_stage1_cost_usd": 93.224465623496,
+      "pilot_already_spent_usd": 4.01,
+      "total_project_spend_after_stage1_usd": 97.234465623496,
+      "credit_remaining_from_125_usd": 27.765534376503993
+    },
+    {
+      "architecture": "HYBRID_TBBO_2011_2013_TRADES_2014_2025",
+      "remaining_session_data_cost_usd": 44.18428730964,
+      "continuous_ohlcv_1m_usd": 20.342466905713,
+      "continuous_bbo_1m_usd": 7.630651295185,
+      "new_stage1_cost_usd": 72.157405510538,
+      "pilot_already_spent_usd": 4.01,
+      "total_project_spend_after_stage1_usd": 76.167405510538,
+      "credit_remaining_from_125_usd": 48.832594489462
+    },
+    {
+      "architecture": "HYBRID_TBBO_2011_2018_TRADES_2019_2025",
+      "remaining_session_data_cost_usd": 52.251284360888,
+      "continuous_ohlcv_1m_usd": 20.342466905713,
+      "continuous_bbo_1m_usd": 7.630651295185,
+      "new_stage1_cost_usd": 80.22440256178601,
+      "pilot_already_spent_usd": 4.01,
+      "total_project_spend_after_stage1_usd": 84.23440256178601,
+      "credit_remaining_from_125_usd": 40.76559743821399
+    }
+  ],
+  "note": "Pilot 12 sessions are excluded from new session-data requests to prevent double spending; all costs here are metadata.get_cost only."
+}
