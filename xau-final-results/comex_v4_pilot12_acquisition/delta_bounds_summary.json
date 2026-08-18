@@ -1,0 +1,159 @@
+{
+  "version": "COMEX_V4_PILOT12_DELTA_BOUNDS_V1",
+  "market_data_download_performed": false,
+  "source": "existing paid trades pilot artifact",
+  "definition": "delta_min=B-A-N; delta_max=B-A+N; sign robust if interval excludes zero",
+  "overall": [
+    {
+      "horizon_min": 1,
+      "active_windows": 16545,
+      "robust_sign_fraction": 0.9193714113025083
+    },
+    {
+      "horizon_min": 5,
+      "active_windows": 16545,
+      "robust_sign_fraction": 0.9065578724690239
+    },
+    {
+      "horizon_min": 15,
+      "active_windows": 16545,
+      "robust_sign_fraction": 0.862314898760955
+    },
+    {
+      "horizon_min": 30,
+      "active_windows": 16545,
+      "robust_sign_fraction": 0.8270776669688727
+    }
+  ],
+  "by_era": [
+    {
+      "era": "E1_2011_2013",
+      "horizon_min": 1,
+      "active_windows": 4176,
+      "robust_sign_windows": 3560,
+      "robust_sign_fraction": 0.8524904214559387,
+      "ambiguous_sign_windows": 616
+    },
+    {
+      "era": "E1_2011_2013",
+      "horizon_min": 5,
+      "active_windows": 4176,
+      "robust_sign_windows": 3508,
+      "robust_sign_fraction": 0.8400383141762452,
+      "ambiguous_sign_windows": 668
+    },
+    {
+      "era": "E1_2011_2013",
+      "horizon_min": 15,
+      "active_windows": 4176,
+      "robust_sign_windows": 3233,
+      "robust_sign_fraction": 0.7741858237547893,
+      "ambiguous_sign_windows": 943
+    },
+    {
+      "era": "E1_2011_2013",
+      "horizon_min": 30,
+      "active_windows": 4176,
+      "robust_sign_windows": 3073,
+      "robust_sign_fraction": 0.7358716475095786,
+      "ambiguous_sign_windows": 1103
+    },
+    {
+      "era": "E2_2014_2018",
+      "horizon_min": 1,
+      "active_windows": 4100,
+      "robust_sign_windows": 3895,
+      "robust_sign_fraction": 0.95,
+      "ambiguous_sign_windows": 205
+    },
+    {
+      "era": "E2_2014_2018",
+      "horizon_min": 5,
+      "active_windows": 4100,
+      "robust_sign_windows": 3873,
+      "robust_sign_fraction": 0.9446341463414634,
+      "ambiguous_sign_windows": 227
+    },
+    {
+      "era": "E2_2014_2018",
+      "horizon_min": 15,
+      "active_windows": 4100,
+      "robust_sign_windows": 3758,
+      "robust_sign_fraction": 0.9165853658536586,
+      "ambiguous_sign_windows": 342
+    },
+    {
+      "era": "E2_2014_2018",
+      "horizon_min": 30,
+      "active_windows": 4100,
+      "robust_sign_windows": 3676,
+      "robust_sign_fraction": 0.8965853658536586,
+      "ambiguous_sign_windows": 424
+    },
+    {
+      "era": "E3_2019_2022",
+      "horizon_min": 1,
+      "active_windows": 4132,
+      "robust_sign_windows": 3931,
+      "robust_sign_fraction": 0.9513552758954501,
+      "ambiguous_sign_windows": 201
+    },
+    {
+      "era": "E3_2019_2022",
+      "horizon_min": 5,
+      "active_windows": 4132,
+      "robust_sign_windows": 3929,
+      "robust_sign_fraction": 0.9508712487899322,
+      "ambiguous_sign_windows": 203
+    },
+    {
+      "era": "E3_2019_2022",
+      "horizon_min": 15,
+      "active_windows": 4132,
+      "robust_sign_windows": 3833,
+      "robust_sign_fraction": 0.9276379477250726,
+      "ambiguous_sign_windows": 299
+    },
+    {
+      "era": "E3_2019_2022",
+      "horizon_min": 30,
+      "active_windows": 4132,
+      "robust_sign_windows": 3715,
+      "robust_sign_fraction": 0.899080348499516,
+      "ambiguous_sign_windows": 417
+    },
+    {
+      "era": "E4_2023_2025",
+      "horizon_min": 1,
+      "active_windows": 4137,
+      "robust_sign_windows": 3825,
+      "robust_sign_fraction": 0.9245830311820159,
+      "ambiguous_sign_windows": 312
+    },
+    {
+      "era": "E4_2023_2025",
+      "horizon_min": 5,
+      "active_windows": 4137,
+      "robust_sign_windows": 3689,
+      "robust_sign_fraction": 0.8917089678510999,
+      "ambiguous_sign_windows": 448
+    },
+    {
+      "era": "E4_2023_2025",
+      "horizon_min": 15,
+      "active_windows": 4137,
+      "robust_sign_windows": 3443,
+      "robust_sign_fraction": 0.8322455885907662,
+      "ambiguous_sign_windows": 694
+    },
+    {
+      "era": "E4_2023_2025",
+      "horizon_min": 30,
+      "active_windows": 4137,
+      "robust_sign_windows": 3220,
+      "robust_sign_fraction": 0.7783417935702199,
+      "ambiguous_sign_windows": 917
+    }
+  ],
+  "decision_note": "No N-side imputation is required when the delta interval has a robust sign; ambiguous windows remain explicitly uncertain."
+}
