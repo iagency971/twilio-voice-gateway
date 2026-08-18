@@ -1,0 +1,28 @@
+{
+  "schema": "trades",
+  "source_plan_run": 32102932187,
+  "rows": [
+    {
+      "session_tier": 1,
+      "session_dates": 180,
+      "cost_usd": 20.066493988035
+    },
+    {
+      "session_tier": 2,
+      "session_dates": 357,
+      "cost_usd": 39.918261766426
+    },
+    {
+      "session_tier": 3,
+      "session_dates": 534,
+      "cost_usd": 59.085141956794
+    },
+    {
+      "session_tier": 4,
+      "session_dates": 711,
+      "cost_usd": 78.87723255156101
+    }
+  ],
+  "download_performed": false,
+  "note": "Wide 17:00 previous NY day through 18:00 research day envelope; metadata get_cost only."
+}
