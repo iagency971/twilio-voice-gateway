@@ -99,9 +99,10 @@ For each frozen entry-model × risk-rule × RR outcome:
 - B0/B1/B2 use exactly the same filled observations for a comparison;
 - all COMEX predictors obey the model-specific causal `decision_time` cutoff and contain no post-entry information;
 - ridge linear regression only;
-- `C ∈ {0.01, 0.1, 1, 10, 100}`;
+- the preregistered regularization grid remains `C ∈ {0.01, 0.1, 1, 10, 100}`;
+- for `sklearn.linear_model.Ridge`, the mapping is frozen as **`alpha = 1 / C`**, so larger C means weaker L2 regularization exactly as in the logistic models;
 - outer LOYO across 2011–2018;
-- C selected inside each outer fold by inner LOYO squared error;
+- C selected inside each outer fold by inner LOYO family-balanced squared error;
 - preprocessing fitted on training folds only.
 
 Primary predictive comparison for the continuous net-R target is cross-fitted squared-error improvement B1 vs B0 and B2 vs B1, consistent with the preregistered ridge-selection loss. Mean net-R, PF, positive-year count, worst-year R and clustered confidence intervals remain economic diagnostics on the realized filled-trade outcomes; they do not replace the predictive gate.
