@@ -40,6 +40,21 @@ def pf(x: pd.Series) -> float:
     return pos / neg
 
 
+def _zero_summary_row(scenario: str, sc: dict, model: str, risk_rule: str,
+                      vol_floor_k: float, target_r: float) -> dict:
+    """Represent a frozen cell with no executable trades without dropping the cell."""
+    return {
+        'scenario': scenario, 'scenario_role': sc['role'], 'spread_usd': float(sc['spread_usd']),
+        'commission_rt_usd': float(sc['commission_rt_usd']), 'sample': 'DOZ_OBJECTIVE_ONLY',
+        'entry_model': model, 'risk_rule': risk_rule, 'vol_floor_k': vol_floor_k,
+        'target_r': float(target_r), 'trades': 0, 'tp_pct': np.nan, 'sl_pct': np.nan,
+        'time_pct': np.nan, 'ambiguous_same_bar_pct': np.nan, 'avg_gross_R': np.nan,
+        'pf_gross': np.nan, 'avg_net_R': np.nan, 'pf_net': np.nan,
+        'median_risk_price': np.nan, 'min_risk_price': np.nan,
+        'median_entry_delay_minutes': np.nan, 'sum_net_R': 0.0,
+    }
+
+
 def main():
     ap = argparse.ArgumentParser(description='Frozen eight-cell Vantage holdout runner; no cell discovery.')
     ap.add_argument('csv')
@@ -122,29 +137,47 @@ def main():
     trades = pd.DataFrame(rows)
     summaries = []
     group_cols = ['scenario','scenario_role','spread_usd','commission_rt_usd','sample','entry_model','risk_rule','vol_floor_k','target_r']
-    for key, g in trades.groupby(group_cols, sort=True, dropna=False):
-        scenario, role, spread, comm, sample_name, model, risk_rule, k, tr = key
-        summaries.append({
-            'scenario':scenario,'scenario_role':role,'spread_usd':float(spread),'commission_rt_usd':float(comm),
-            'sample':sample_name,'entry_model':model,'risk_rule':risk_rule,
-            'vol_floor_k':float(k) if pd.notna(k) else np.nan,'target_r':float(tr),'trades':int(len(g)),
-            'tp_pct':100.0*float((g.result=='TP').mean()),'sl_pct':100.0*float((g.result=='SL').mean()),
-            'time_pct':100.0*float((g.result=='TIME').mean()),'ambiguous_same_bar_pct':100.0*float(g.ambiguous_same_bar.mean()),
-            'avg_gross_R':float(g.gross_R.mean()),'pf_gross':float(pf(g.gross_R)),
-            'avg_net_R':float(g.net_R.mean()),'pf_net':float(pf(g.net_R)),
-            'median_risk_price':float(g.risk_price.median()),'min_risk_price':float(g.risk_price.min()),
-            'median_entry_delay_minutes':float(g.entry_delay_minutes.median()),'sum_net_R':float(g.net_R.sum()),
-        })
+    if not trades.empty:
+        for key, g in trades.groupby(group_cols, sort=True, dropna=False):
+            scenario, role, spread, comm, sample_name, model, risk_rule, k, tr = key
+            summaries.append({
+                'scenario':scenario,'scenario_role':role,'spread_usd':float(spread),'commission_rt_usd':float(comm),
+                'sample':sample_name,'entry_model':model,'risk_rule':risk_rule,
+                'vol_floor_k':float(k) if pd.notna(k) else np.nan,'target_r':float(tr),'trades':int(len(g)),
+                'tp_pct':100.0*float((g.result=='TP').mean()),'sl_pct':100.0*float((g.result=='SL').mean()),
+                'time_pct':100.0*float((g.result=='TIME').mean()),'ambiguous_same_bar_pct':100.0*float(g.ambiguous_same_bar.mean()),
+                'avg_gross_R':float(g.gross_R.mean()),'pf_gross':float(pf(g.gross_R)),
+                'avg_net_R':float(g.net_R.mean()),'pf_net':float(pf(g.net_R)),
+                'median_risk_price':float(g.risk_price.median()),'min_risk_price':float(g.risk_price.min()),
+                'median_entry_delay_minutes':float(g.entry_delay_minutes.median()),'sum_net_R':float(g.net_R.sum()),
+            })
+
+    # A frozen cell with zero executable trades is evidence too. Keep it in the table instead of
+    # letting pandas groupby silently omit it and turning a low-N holdout into a workflow failure.
+    def cell_key(r):
+        return (str(r['scenario']), str(r['entry_model']), str(r['risk_rule']), round(float(r['target_r']), 6))
+    present = {cell_key(r) for r in summaries}
+    for scenario, sc in SCENARIOS.items():
+        for tr in CLEAN_RR:
+            row = _zero_summary_row(scenario, sc, 'CLEAN_REJECTION', 'STRUCTURAL', np.nan, tr)
+            if cell_key(row) not in present:
+                summaries.append(row); present.add(cell_key(row))
+        for k, tr in TNO_CELLS:
+            row = _zero_summary_row(scenario, sc, 'TOUCH_NEXT_OPEN', f'VOL_FLOOR_{k:.2f}', float(k), tr)
+            if cell_key(row) not in present:
+                summaries.append(row); present.add(cell_key(row))
+
     summary = pd.DataFrame(summaries).sort_values(['scenario','entry_model','target_r']).reset_index(drop=True)
     assert len(summary) == 32, len(summary)
     summary.to_csv(outdir/'survivors_holdout.csv', index=False)
     manifest = {
-        'source_commit':os.getenv('GITHUB_SHA','LOCAL'),'version':'PHASE_C_VANTAGE_HOLDOUT_SURVIVORS_V1',
+        'source_commit':os.getenv('GITHUB_SHA','LOCAL'),'version':'PHASE_C_VANTAGE_HOLDOUT_SURVIVORS_V1_ZERO_CELL_REPORTING_FIX',
         'target_start':str(start),'target_end':str(end),'bars':int(len(bars_mid)),'zones_generated':int(len(zones)),
         'target_events':int(len(contacts)),'doz_objective_only_events':int(len(sample)),
         'frozen_clean_rejection_rr':list(CLEAN_RR),'frozen_tno_cells':[{'k':k,'target_r':tr} for k,tr in TNO_CELLS],
         'scenarios':SCENARIOS,'horizon_minutes':int(args.horizon_minutes),'entry_counts':counts,
-        'scientific_rule':'Exactly the eight 2011-2025 survivors; no holdout cell discovery.'
+        'scientific_rule':'Exactly the eight 2011-2025 survivors; no holdout cell discovery.',
+        'reporting_fix':'Frozen zero-trade cells are explicitly retained with trades=0 and NaN performance instead of failing publication.'
     }
     (outdir/'manifest.json').write_text(json.dumps(manifest,indent=2),encoding='utf-8')
     print(json.dumps(manifest,indent=2)); print(summary.to_string(index=False))
