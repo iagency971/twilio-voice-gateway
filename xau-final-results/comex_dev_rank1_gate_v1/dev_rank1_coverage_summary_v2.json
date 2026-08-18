@@ -1,0 +1,450 @@
+{
+  "version": "COMEX_DEV_RANK1_COVERAGE_SUMMARY_V2_TRUE_NUNIQUE",
+  "market_data_download_performed": false,
+  "events": 25458,
+  "selected_rank1_sessions": 96,
+  "sessions_with_events": 76,
+  "broad_families": [
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 535,
+      "independent_sessions": 76,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 336,
+      "independent_sessions": 74,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 23828,
+      "independent_sessions": 76,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 136,
+      "independent_sessions": 40,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 623,
+      "independent_sessions": 76,
+      "years": 8
+    }
+  ],
+  "family_entry_models": [
+    {
+      "family_stack": "CONFLUENCE",
+      "eligible_events": 27,
+      "independent_sessions": 20,
+      "years": 8,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "eligible_events": 224,
+      "independent_sessions": 69,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "eligible_events": 237,
+      "independent_sessions": 69,
+      "years": 8,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "eligible_events": 357,
+      "independent_sessions": 75,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "eligible_events": 271,
+      "independent_sessions": 72,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "eligible_events": 509,
+      "independent_sessions": 76,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "eligible_events": 4,
+      "independent_sessions": 4,
+      "years": 2,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "eligible_events": 252,
+      "independent_sessions": 71,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "eligible_events": 64,
+      "independent_sessions": 41,
+      "years": 8,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "eligible_events": 133,
+      "independent_sessions": 61,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "eligible_events": 213,
+      "independent_sessions": 68,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "eligible_events": 334,
+      "independent_sessions": 74,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "eligible_events": 141,
+      "independent_sessions": 53,
+      "years": 8,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "eligible_events": 12183,
+      "independent_sessions": 76,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "eligible_events": 11276,
+      "independent_sessions": 76,
+      "years": 8,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "eligible_events": 14154,
+      "independent_sessions": 76,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "eligible_events": 13368,
+      "independent_sessions": 76,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "eligible_events": 23746,
+      "independent_sessions": 76,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "eligible_events": 5,
+      "independent_sessions": 5,
+      "years": 4,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "eligible_events": 82,
+      "independent_sessions": 30,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "eligible_events": 18,
+      "independent_sessions": 10,
+      "years": 5,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "eligible_events": 81,
+      "independent_sessions": 33,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "eligible_events": 72,
+      "independent_sessions": 26,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "eligible_events": 133,
+      "independent_sessions": 39,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "eligible_events": 9,
+      "independent_sessions": 9,
+      "years": 4,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "eligible_events": 437,
+      "independent_sessions": 75,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "eligible_events": 97,
+      "independent_sessions": 45,
+      "years": 8,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "eligible_events": 302,
+      "independent_sessions": 72,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "eligible_events": 334,
+      "independent_sessions": 75,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "eligible_events": 607,
+      "independent_sessions": 76,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    }
+  ],
+  "family_behaviors": [
+    {
+      "family_stack": "CONFLUENCE",
+      "behavior_v2": "ACCEPTED_BREAK",
+      "events": 64,
+      "independent_sessions": 40,
+      "years": 8
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "behavior_v2": "CLEAN_REJECTION",
+      "events": 224,
+      "independent_sessions": 69,
+      "years": 8
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "behavior_v2": "FAILED_AUCTION",
+      "events": 239,
+      "independent_sessions": 69,
+      "years": 8
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "behavior_v2": "UNRESOLVED",
+      "events": 8,
+      "independent_sessions": 8,
+      "years": 5
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "behavior_v2": "ACCEPTED_BREAK",
+      "events": 10,
+      "independent_sessions": 10,
+      "years": 5
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "behavior_v2": "CLEAN_REJECTION",
+      "events": 252,
+      "independent_sessions": 71,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "behavior_v2": "FAILED_AUCTION",
+      "events": 64,
+      "independent_sessions": 41,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "behavior_v2": "UNRESOLVED",
+      "events": 10,
+      "independent_sessions": 10,
+      "years": 5
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "behavior_v2": "ACCEPTED_BREAK",
+      "events": 249,
+      "independent_sessions": 64,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "behavior_v2": "CLEAN_REJECTION",
+      "events": 12223,
+      "independent_sessions": 76,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "behavior_v2": "FAILED_AUCTION",
+      "events": 11300,
+      "independent_sessions": 76,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "behavior_v2": "UNRESOLVED",
+      "events": 56,
+      "independent_sessions": 33,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "behavior_v2": "ACCEPTED_BREAK",
+      "events": 8,
+      "independent_sessions": 8,
+      "years": 5
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "behavior_v2": "CLEAN_REJECTION",
+      "events": 83,
+      "independent_sessions": 30,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "behavior_v2": "FAILED_AUCTION",
+      "events": 18,
+      "independent_sessions": 10,
+      "years": 5
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "behavior_v2": "UNRESOLVED",
+      "events": 27,
+      "independent_sessions": 19,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "behavior_v2": "ACCEPTED_BREAK",
+      "events": 25,
+      "independent_sessions": 16,
+      "years": 7
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "behavior_v2": "CLEAN_REJECTION",
+      "events": 438,
+      "independent_sessions": 75,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "behavior_v2": "FAILED_AUCTION",
+      "events": 97,
+      "independent_sessions": 45,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "behavior_v2": "UNRESOLVED",
+      "events": 63,
+      "independent_sessions": 48,
+      "years": 8
+    }
+  ],
+  "confluence_signatures": [
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+FVG",
+      "events": 209,
+      "independent_sessions": 71,
+      "years": 8
+    },
+    {
+      "signature": "MEMORY+FVG",
+      "events": 139,
+      "independent_sessions": 52,
+      "years": 8
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+FVG",
+      "events": 112,
+      "independent_sessions": 59,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+MEMORY+FVG",
+      "events": 22,
+      "independent_sessions": 15,
+      "years": 6
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY",
+      "events": 20,
+      "independent_sessions": 17,
+      "years": 6
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY+FVG",
+      "events": 18,
+      "independent_sessions": 15,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+MEMORY",
+      "events": 6,
+      "independent_sessions": 4,
+      "years": 4
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+MEMORY+FVG",
+      "events": 5,
+      "independent_sessions": 4,
+      "years": 4
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+MEMORY",
+      "events": 4,
+      "independent_sessions": 4,
+      "years": 2
+    }
+  ],
+  "note": "All independent-session counts are computed directly from canonical event rows using nunique(research_trading_date); no cross-signature summation."
+}
