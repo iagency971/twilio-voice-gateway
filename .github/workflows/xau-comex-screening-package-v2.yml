@@ -1,0 +1,78 @@
+name: XAU COMEX Screening Package V2
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - '.github/workflows/xau-comex-screening-package-v2.yml'
+      - 'xau-multiyear/scripts/build_comex_screening_package_v2.py'
+permissions:
+  actions: read
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: comex-acquisition-plan-v1
+          path: /tmp/canonical
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32104889692
+      - name: Verify canonical source
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          m=json.load(open('/tmp/canonical/manifest.json'))
+          assert int(m['events'])==1274307,m
+          x=pd.read_csv('/tmp/canonical/event_counts_by_year.csv')
+          assert int(x.events.sum())==1274307
+          assert int(x.loc[x.year==2011,'events'].iloc[0])==101473
+          print('CANONICAL_SOURCE_OK',m['events'])
+          PY
+      - name: Build screening package V2
+        run: python xau-multiyear/scripts/build_comex_screening_package_v2.py --events /tmp/canonical/canonical_events_all.csv.gz --sessions /tmp/canonical/session_candidates_all.csv --out /tmp/v2
+      - name: QA package
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          m=json.load(open('/tmp/v2/package_v2_manifest.json'))
+          assert m['canonical_events']==1274307
+          s=pd.read_csv('/tmp/v2/package_v2_summary.csv')
+          assert set(s.session_tier)=={1,2,3,4}
+          c=pd.read_csv('/tmp/v2/package_v2_counts_by_family.csv')
+          assert {'DEV','VALIDATION','COMEX_FEATURE_HOLDOUT'}.issubset(set(c['split']))
+          f=pd.read_csv('/tmp/v2/package_v2_window_frontier.csv')
+          assert {0,30,60,120,180,240,360,720}.issubset(set(f.merge_gap_min))
+          print('PACKAGE_V2_QA_OK')
+          print(s.to_string(index=False))
+          print(f[f.session_tier==2].to_string(index=False))
+          PY
+      - run: cd /tmp/v2 && sha256sum package_v2_manifest.json package_v2_summary.csv package_v2_counts_by_family.csv package_v2_counts_by_signature.csv package_v2_acceptance_counts.csv package_v2_window_frontier.csv tier2_supplement_events.csv.gz > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-screening-package-v2
+          path: /tmp/v2
+          retention-days: 30
+          compression-level: 0
+      - name: Publish compact outputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests
+          src=pathlib.Path('/tmp/v2')
+          names=['package_v2_manifest.json','package_v2_summary.csv','package_v2_counts_by_family.csv','package_v2_counts_by_signature.csv','package_v2_acceptance_counts.csv','package_v2_window_frontier.csv','SHA256SUMS.txt']
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for name in names:
+              p=src/name; path=f'xau-final-results/comex_screening_package_v2/{name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+              b={'message':f'publish COMEX screening V2 {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:b['sha']=sha
+              r=requests.put(u,headers=h,json=b); r.raise_for_status()
+          PY
