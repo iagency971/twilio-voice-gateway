@@ -1,0 +1,22 @@
+{
+  "version": "COMEX_EVENT_TIMING_V1",
+  "year": 2025,
+  "target_start": "2025-01-01 00:00:00+00:00",
+  "target_end": "2026-01-01 00:00:00+00:00",
+  "events": 80617,
+  "fvg_only_events": 73708,
+  "non_fvg_only_events": 6909,
+  "session_candidates": 258,
+  "temporal_split": "COMEX_FEATURE_HOLDOUT",
+  "fvg_seed": "COMEX_FVG_SAMPLE_V1_SEED_971",
+  "session_seed": "COMEX_SESSION_PANEL_V1_SEED_971",
+  "uniform_tick_window": "contact -30m through contact +16m; end is exclusive in acquisition plan",
+  "models": [
+    "PASSIVE_TOUCH",
+    "TOUCH_NEXT_OPEN",
+    "CLEAN_REJECTION",
+    "FAILED_AUCTION",
+    "ACCEPTANCE_RETEST",
+    "RECLAIM_PULLBACK"
+  ]
+}
