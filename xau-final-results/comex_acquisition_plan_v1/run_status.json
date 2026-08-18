@@ -2,6 +2,17 @@
   "branch": "agent/xau-comex-acquisition-plan",
   "runs": [
     {
+      "id": 32104463421,
+      "name": "XAU COMEX Acquisition Plan V1",
+      "event": "push",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "90850e8e43d216f86f64240739ebe3e7af02770d",
+      "run_number": 4,
+      "created_at": "2026-08-18T05:50:45Z",
+      "updated_at": "2026-08-18T05:50:45Z"
+    },
+    {
       "id": 32103593048,
       "name": "XAU GC Schema Cost Upper Bounds",
       "event": "push",
@@ -27,12 +38,12 @@
       "id": 32103469809,
       "name": "XAU GC Prewindow Cost Curve 2025",
       "event": "push",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "failure",
       "head_sha": "e5a2d25606eb993f20b981978fa205b5eb0cbdcf",
       "run_number": 1,
       "created_at": "2026-08-18T05:35:23Z",
-      "updated_at": "2026-08-18T05:45:33Z"
+      "updated_at": "2026-08-18T05:51:54Z"
     },
     {
       "id": 32103223316,
@@ -82,12 +93,12 @@
       "id": 32102932187,
       "name": "XAU COMEX Acquisition Plan V1",
       "event": "push",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "head_sha": "2551841ecab50533510c76f93fefcd7f964df1a3",
       "run_number": 2,
       "created_at": "2026-08-18T05:27:14Z",
-      "updated_at": "2026-08-18T05:47:17Z"
+      "updated_at": "2026-08-18T05:51:07Z"
     },
     {
       "id": 32102804966,
