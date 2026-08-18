@@ -1,0 +1,135 @@
+{
+  "version": "COMEX_FROZEN_SESSION_CONTRACT_DIAGNOSTIC_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "session_rule": "freeze actual instrument mapped by selected causal roll rule at canonical GC session start; never switch instrument within session",
+  "sessions": 96,
+  "same_start_contract_sessions": 86,
+  "different_start_contract_sessions": 10,
+  "n0_more_trades_sessions": 6,
+  "v0_more_trades_sessions": 4,
+  "ties": 86,
+  "different_mapping_comparison": [
+    {
+      "research_trading_date": "2011-07-28",
+      "year": 2011,
+      "v0_start_instrument_id": "107159",
+      "n0_start_instrument_id": "197210",
+      "v0_frozen_trades": 21275,
+      "n0_frozen_trades": 80183,
+      "n0_to_v0_trade_ratio": 3.7688836662749705
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "year": 2012,
+      "v0_start_instrument_id": "169060",
+      "n0_start_instrument_id": "100686",
+      "v0_frozen_trades": 2486,
+      "n0_frozen_trades": 66770,
+      "n0_to_v0_trade_ratio": 26.858407079646017
+    },
+    {
+      "research_trading_date": "2012-07-30",
+      "year": 2012,
+      "v0_start_instrument_id": "171052",
+      "n0_start_instrument_id": "118951",
+      "v0_frozen_trades": 13622,
+      "n0_frozen_trades": 54824,
+      "n0_to_v0_trade_ratio": 4.0246659815005135
+    },
+    {
+      "research_trading_date": "2013-05-29",
+      "year": 2013,
+      "v0_start_instrument_id": "119585",
+      "n0_start_instrument_id": "17311",
+      "v0_frozen_trades": 74395,
+      "n0_frozen_trades": 52985,
+      "n0_to_v0_trade_ratio": 0.7122118421936958
+    },
+    {
+      "research_trading_date": "2014-01-24",
+      "year": 2014,
+      "v0_start_instrument_id": "99832",
+      "n0_start_instrument_id": "128149",
+      "v0_frozen_trades": 98024,
+      "n0_frozen_trades": 12074,
+      "n0_to_v0_trade_ratio": 0.12317391659185506
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "year": 2015,
+      "v0_start_instrument_id": "149695",
+      "n0_start_instrument_id": "140855",
+      "v0_frozen_trades": 31,
+      "n0_frozen_trades": 1303,
+      "n0_to_v0_trade_ratio": 42.03225806451613
+    },
+    {
+      "research_trading_date": "2017-03-29",
+      "year": 2017,
+      "v0_start_instrument_id": "805",
+      "n0_start_instrument_id": "160078",
+      "v0_frozen_trades": 47475,
+      "n0_frozen_trades": 37707,
+      "n0_to_v0_trade_ratio": 0.7942496050552923
+    },
+    {
+      "research_trading_date": "2017-07-24",
+      "year": 2017,
+      "v0_start_instrument_id": "66404",
+      "n0_start_instrument_id": "60173",
+      "v0_frozen_trades": 62453,
+      "n0_frozen_trades": 10472,
+      "n0_to_v0_trade_ratio": 0.16767809392663283
+    },
+    {
+      "research_trading_date": "2017-07-28",
+      "year": 2017,
+      "v0_start_instrument_id": "66404",
+      "n0_start_instrument_id": "60173",
+      "v0_frozen_trades": 6895,
+      "n0_frozen_trades": 73238,
+      "n0_to_v0_trade_ratio": 10.621899927483684
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "year": 2017,
+      "v0_start_instrument_id": "60173",
+      "n0_start_instrument_id": "15562",
+      "v0_frozen_trades": 530,
+      "n0_frozen_trades": 114827,
+      "n0_to_v0_trade_ratio": 216.65471698113208
+    }
+  ],
+  "new_session_costs_usd": {
+    "v0_frozen_raw_trades": 9.515228211881,
+    "n0_frozen_raw_trades": 9.763824105263001
+  },
+  "paid_dev_sessions": [
+    {
+      "research_trading_date": "2013-02-07",
+      "v0_start_instrument_id": "118305",
+      "n0_start_instrument_id": "118305",
+      "same_start_contract": true
+    },
+    {
+      "research_trading_date": "2013-05-29",
+      "v0_start_instrument_id": "119585",
+      "n0_start_instrument_id": "17311",
+      "same_start_contract": false
+    },
+    {
+      "research_trading_date": "2017-10-31",
+      "v0_start_instrument_id": "60173",
+      "n0_start_instrument_id": "60173",
+      "same_start_contract": true
+    },
+    {
+      "research_trading_date": "2018-01-02",
+      "v0_start_instrument_id": "15562",
+      "n0_start_instrument_id": "15562",
+      "same_start_contract": true
+    }
+  ],
+  "note": "Rule comparison uses only market-data availability/liquidity metadata, not XAU outcomes. v.0 and n.0 are both causal smart-symbol mappings based on prior-day information."
+}
