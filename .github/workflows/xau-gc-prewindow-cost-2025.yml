@@ -1,0 +1,73 @@
+name: XAU GC Prewindow Cost Curve 2025
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-gc-prewindow-cost-2025.yml']
+permissions:
+  contents: write
+jobs:
+  quote:
+    strategy:
+      fail-fast: false
+      matrix:
+        before: [5,10,15,30,60]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 databento requests==2.31.0
+      - run: curl -L --fail --retry 3 'https://raw.githubusercontent.com/iagency971/twilio-voice-gateway/agent/xau-phase-b-2025-result/xau-phase-b-results/2025/phase_b_events.csv.gz' -o /tmp/events.csv.gz
+      - name: Exact metadata cost
+        env: {BEFORE: '${{ matrix.before }}'}
+        run: |
+          python - <<'PY'
+          import json,os
+          from concurrent.futures import ThreadPoolExecutor
+          from pathlib import Path
+          import pandas as pd, databento as db
+          before=int(os.environ['BEFORE']); after=16
+          x=pd.read_csv('/tmp/events.csv.gz'); fam=x.constituent_families.fillna('')
+          mask=fam.str.contains('DISPLACEMENT_ORIGIN',regex=False)|fam.str.contains('OBJECTIVE_LIQUIDITY',regex=False)|fam.str.contains('MEMORY',regex=False)
+          ct=pd.to_datetime(x.loc[mask,'contact_time'],utc=True).sort_values()
+          intervals=sorted(zip((ct-pd.Timedelta(minutes=before)).tolist(),(ct+pd.Timedelta(minutes=after)).tolist()))
+          merged=[]
+          for s,e in intervals:
+              if not merged or s>merged[-1][1]: merged.append([s,e])
+              elif e>merged[-1][1]: merged[-1][1]=e
+          c=db.Historical(os.environ['DATABENTO_API_KEY'])
+          def q(z):
+              s,e=z
+              return float(c.metadata.get_cost(dataset='GLBX.MDP3',symbols='GC.v.0',stype_in='continuous',schema='trades',start=s.isoformat(),end=e.isoformat()))
+          with ThreadPoolExecutor(max_workers=6) as ex: costs=list(ex.map(q,merged))
+          out={'year':2025,'before_min':before,'after_min':after,'selected_events':len(ct),'merged_windows':len(merged),'covered_minutes':sum((e-s).total_seconds()/60 for s,e in merged),'cost_usd':sum(costs),'download_performed':False}
+          Path(f'/tmp/cost_{before}.json').write_text(json.dumps(out,indent=2)); print(json.dumps(out,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prewindow-${{ matrix.before }}
+          path: /tmp/cost_${{ matrix.before }}.json
+  publish:
+    needs: quote
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {pattern: 'prewindow-*', path: /tmp/all}
+      - name: Publish curve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,json,os,pathlib,requests
+          rows=[json.loads(p.read_text()) for p in pathlib.Path('/tmp/all').rglob('*.json')]; rows=sorted(rows,key=lambda x:x['before_min'])
+          p=pathlib.Path('/tmp/prewindow_cost_curve_2025.json'); p.write_text(json.dumps({'rows':rows,'download_performed':False},indent=2))
+          path='xau-final-results/gc_databento_cost/prewindow_cost_curve_2025.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None
+          b={'message':'publish 2025 GC prewindow metadata cost curve [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+          if sha:b['sha']=sha
+          rr=requests.put(u,headers=h,json=b); rr.raise_for_status()
+          PY
