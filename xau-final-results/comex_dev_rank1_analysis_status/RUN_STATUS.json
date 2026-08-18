@@ -1,0 +1,34 @@
+{
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V1",
+  "workflows": {
+    "xau-comex-dev-rank1-behavior-parallel.yml": {
+      "found": true,
+      "run_id": 32190353775,
+      "status": "queued",
+      "conclusion": null,
+      "jobs_total": 24,
+      "by_status": {
+        "completed": 8,
+        "in_progress": 8,
+        "queued": 8
+      },
+      "by_conclusion": {
+        "success": 8,
+        "NONE": 16
+      }
+    },
+    "xau-comex-dev-rank1-binary-behavior.yml": {
+      "found": true,
+      "run_id": 32190049489,
+      "status": "in_progress",
+      "conclusion": null,
+      "jobs_total": 1,
+      "by_status": {
+        "in_progress": 1
+      },
+      "by_conclusion": {
+        "NONE": 1
+      }
+    }
+  }
+}
