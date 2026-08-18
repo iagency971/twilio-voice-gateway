@@ -1,0 +1,65 @@
+name: XAU Phase C Vantage RAW Aggregate
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-phase-c-vantage-aggregate.yml'
+permissions:
+  contents: write
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Wait for 15 annual corrected Vantage results and apply frozen gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+        run: |
+          python - <<'PY'
+          import base64,io,json,os,pathlib,time,requests,numpy as np,pandas as pd
+          years=list(range(2011,2026)); scenarios=['S10_C6','S11_C6_PRIMARY','S12_C6','S18_C9_STRESS']
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          def get(path,required=False):
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
+              if r.status_code==200:return base64.b64decode(r.json()['content'])
+              if required:r.raise_for_status()
+              return None
+          deadline=time.time()+2400
+          while True:
+              missing=[y for y in years if get(f'xau-final-results/phase_c_vantage_raw_2011_2025/annual/{y}_summary.csv') is None]
+              print('MISSING',missing,flush=True)
+              if not missing:break
+              if time.time()>=deadline:raise SystemExit(f'annual corrected Vantage summaries still missing: {missing}')
+              time.sleep(20)
+          frames=[]; manifests=[]
+          for y in years:
+              s=pd.read_csv(io.BytesIO(get(f'xau-final-results/phase_c_vantage_raw_2011_2025/annual/{y}_summary.csv',True))); s.insert(0,'year',y); frames.append(s)
+              manifests.append(json.loads(get(f'xau-final-results/phase_c_vantage_raw_2011_2025/annual/{y}_manifest.json',True)))
+          a=pd.concat(frames,ignore_index=True).sort_values(['sample','entry_model','risk_rule','target_r','scenario','year'])
+          keys=['sample','entry_model','risk_rule','vol_floor_k','target_r']; rows=[]
+          for key,gall in a.groupby(keys,sort=True,dropna=False):
+              sample,model,risk_rule,k,tr=key
+              by={sc:gall[gall.scenario==sc].copy() for sc in scenarios}
+              if any(x.year.nunique()!=15 for x in by.values()):continue
+              def stats(g):
+                  w=g.trades.astype(float); N=float(w.sum()); wa=lambda c:float(np.average(g[c].astype(float),weights=w)) if N>0 else np.nan
+                  return {'trades':int(N),'w_net':wa('avg_net_R'),'w_gross':wa('avg_gross_R'),'annual_median_net':float(g.avg_net_R.median()),'positive_years':int((g.avg_net_R>0).sum()),'median_pf':float(g.pf_net.replace([np.inf,-np.inf],np.nan).median()),'min_year':float(g.avg_net_R.min()),'max_year':float(g.avg_net_R.max())}
+              st={sc:stats(g) for sc,g in by.items()}; p=st['S11_C6_PRIMARY']; stress=st['S18_C9_STRESS']
+              row={'sample':sample,'entry_model':model,'risk_rule':risk_rule,'vol_floor_k':float(k) if pd.notna(k) else np.nan,'target_r':float(tr),'years':15,'total_trades_primary':p['trades'],'weighted_avg_gross_R_primary':p['w_gross'],'weighted_avg_net_R_primary':p['w_net'],'annual_median_net_R_primary':p['annual_median_net'],'positive_years_primary':p['positive_years'],'median_annual_pf_primary':p['median_pf'],'min_annual_net_R_primary':p['min_year'],'max_annual_net_R_primary':p['max_year'],'weighted_avg_net_R_spread010':st['S10_C6']['w_net'],'weighted_avg_net_R_spread012':st['S12_C6']['w_net'],'weighted_avg_net_R_stress':stress['w_net'],'positive_years_stress':stress['positive_years'],'median_annual_pf_stress':stress['median_pf']}
+              gates=[row['total_trades_primary']>=300,row['weighted_avg_net_R_primary']>0,row['annual_median_net_R_primary']>0,row['positive_years_primary']>=10,np.isfinite(row['median_annual_pf_primary']) and row['median_annual_pf_primary']>1,row['weighted_avg_net_R_spread010']>0 and row['weighted_avg_net_R_spread012']>0,row['weighted_avg_net_R_stress']>0,row['positive_years_stress']>=8]
+              for i,v in enumerate(gates,1):row[f'gate_{i}']=bool(v)
+              row['survives_vantage_gate']=bool(all(gates)); rows.append(row)
+          m=pd.DataFrame(rows).sort_values(['survives_vantage_gate','weighted_avg_net_R_primary'],ascending=[False,False]); survivors=m[m.survives_vantage_gate].copy()
+          out=pathlib.Path('/tmp/vagg');out.mkdir(exist_ok=True);a.to_csv(out/'annual_summary.csv',index=False);m.to_csv(out/'multiyear_summary.csv',index=False);survivors.to_csv(out/'survivors.csv',index=False)
+          json.dump({'years':years,'annual_files':15,'decision_gate':'PHASE_C_VANTAGE_RAW_MULTIYEAR_GATE.md','scenarios':scenarios,'surface_cells':int(len(m)),'survivors':int(len(survivors)),'selection':'NONE after annual results; complete frozen surface evaluated','annual_manifests':manifests},open(out/'manifest.json','w'),indent=2)
+          print('TOP_PRIMARY');print(m.head(30).to_string(index=False));print('SURVIVORS',len(survivors));print(survivors.to_string(index=False) if len(survivors) else 'NONE')
+          for fn in ['annual_summary.csv','multiyear_summary.csv','survivors.csv','manifest.json']:
+              path=f'xau-final-results/phase_c_vantage_raw_2011_2025/{fn}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+              body={'message':f'publish corrected Vantage RAW aggregate {fn} [skip ci]','content':base64.b64encode((out/fn).read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:body['sha']=sha
+              r=requests.put(u,headers=h,json=body);r.raise_for_status()
+          PY
