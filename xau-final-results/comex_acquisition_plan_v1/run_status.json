@@ -2,26 +2,48 @@
   "branch": "agent/xau-comex-acquisition-plan",
   "runs": [
     {
+      "id": 32150380727,
+      "name": "XAU COMEX Screening Package V3",
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "589de19b36ac02f7c32652442bd5e46d23c07937",
+      "run_number": 2,
+      "created_at": "2026-08-18T14:46:21Z",
+      "updated_at": "2026-08-18T14:46:25Z"
+    },
+    {
+      "id": 32150345206,
+      "name": "XAU COMEX Screening Package V3",
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "f82f4c2872c1abf5ccd754f6e69ac51daee25a9c",
+      "run_number": 1,
+      "created_at": "2026-08-18T14:46:00Z",
+      "updated_at": "2026-08-18T14:46:03Z"
+    },
+    {
       "id": 32144233989,
       "name": "XAU COMEX V2 Tier2 Gap30 Exact Cost",
       "event": "push",
-      "status": "queued",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "head_sha": "e40b83808b87f3d7f3c837d8cec68b187a1ddc9e",
       "run_number": 2,
       "created_at": "2026-08-18T13:45:37Z",
-      "updated_at": "2026-08-18T13:45:37Z"
+      "updated_at": "2026-08-18T14:45:38Z"
     },
     {
       "id": 32144177887,
       "name": "XAU COMEX V2 Tier2 Gap30 Exact Cost",
       "event": "push",
-      "status": "queued",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "cancelled",
       "head_sha": "15f825f0b894fc616fa23ae9651aa5b002f0b54e",
       "run_number": 1,
       "created_at": "2026-08-18T13:45:04Z",
-      "updated_at": "2026-08-18T13:45:04Z"
+      "updated_at": "2026-08-18T13:49:17Z"
     },
     {
       "id": 32143850787,
