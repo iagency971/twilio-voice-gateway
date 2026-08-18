@@ -51,31 +51,13 @@ def retry(fn, *args, **kwargs):
 
 
 def meta_cost(client: db.Historical, schema: str, start: pd.Timestamp, end: pd.Timestamp) -> float:
-    return float(
-        retry(
-            client.metadata.get_cost,
-            dataset=DATASET,
-            symbols=SYMBOL,
-            stype_in=STYPE_IN,
-            schema=schema,
-            start=start.isoformat(),
-            end=end.isoformat(),
-        )
-    )
+    return float(retry(client.metadata.get_cost, dataset=DATASET, symbols=SYMBOL, stype_in=STYPE_IN,
+                       schema=schema, start=start.isoformat(), end=end.isoformat()))
 
 
 def meta_count(client: db.Historical, schema: str, start: pd.Timestamp, end: pd.Timestamp) -> int:
-    return int(
-        retry(
-            client.metadata.get_record_count,
-            dataset=DATASET,
-            symbols=SYMBOL,
-            stype_in=STYPE_IN,
-            schema=schema,
-            start=start.isoformat(),
-            end=end.isoformat(),
-        )
-    )
+    return int(retry(client.metadata.get_record_count, dataset=DATASET, symbols=SYMBOL, stype_in=STYPE_IN,
+                     schema=schema, start=start.isoformat(), end=end.isoformat()))
 
 
 def gate(args: argparse.Namespace) -> None:
@@ -89,8 +71,7 @@ def gate(args: argparse.Namespace) -> None:
         raise SystemExit(f"pilot sessions missing columns: {sorted(missing)}")
     if len(sessions) != 12 or sessions.research_trading_date.duplicated().any():
         raise SystemExit("pilot session file must contain exactly 12 unique dates")
-    weekdays = pd.to_datetime(sessions.research_trading_date).dt.weekday
-    if (weekdays >= 5).any():
+    if (pd.to_datetime(sessions.research_trading_date).dt.weekday >= 5).any():
         raise SystemExit("pilot contains weekend date; acquisition blocked")
 
     client = db.Historical(key)
@@ -100,30 +81,26 @@ def gate(args: argparse.Namespace) -> None:
         for schema in ("trades", "tbbo"):
             cost = meta_cost(client, schema, start, end)
             records = meta_count(client, schema, start, end)
-            rows.append(
-                {
-                    "era": r.era,
-                    "research_trading_date": str(r.research_trading_date),
-                    "year": int(r.year),
-                    "quarter": int(r.quarter),
-                    "vol_band": int(r.vol_band),
-                    "panel_rank_v4": int(r.panel_rank_v4),
-                    "schema": schema,
-                    "start_utc": start.isoformat(),
-                    "end_utc": end.isoformat(),
-                    "quoted_cost_usd": cost,
-                    "quoted_records": records,
-                }
-            )
+            rows.append({
+                "era": r.era,
+                "research_trading_date": str(r.research_trading_date),
+                "year": int(r.year),
+                "quarter": int(r.quarter),
+                "vol_band": int(r.vol_band),
+                "panel_rank_v4": int(r.panel_rank_v4),
+                "schema": schema,
+                "start_utc": start.isoformat(),
+                "end_utc": end.isoformat(),
+                "quoted_cost_usd": cost,
+                "quoted_records": records,
+            })
     total = float(sum(x["quoted_cost_usd"] for x in rows))
     cap = float(args.cap_usd)
     if total > cap + 1e-12:
         raise SystemExit(f"HARD GATE: current quote ${total:.9f} exceeds approved cap ${cap:.2f}; no download")
 
-    out = Path(args.out)
-    out.mkdir(parents=True, exist_ok=True)
-    matrix = {"include": rows}
-    (out / "matrix.json").write_text(json.dumps(matrix, separators=(",", ":")), encoding="utf-8")
+    out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
+    (out / "matrix.json").write_text(json.dumps({"include": rows}, separators=(",", ":")), encoding="utf-8")
     gate_doc = {
         "version": "COMEX_V4_PILOT12_DOWNLOAD_GATE_V1",
         "dataset": DATASET,
@@ -147,42 +124,34 @@ def download_one(args: argparse.Namespace) -> None:
     key = os.environ.get("DATABENTO_API_KEY")
     if not key:
         raise SystemExit("DATABENTO_API_KEY missing")
-    start = pd.Timestamp(args.start)
-    end = pd.Timestamp(args.end)
+    start = pd.Timestamp(args.start); end = pd.Timestamp(args.end)
     if start.tzinfo is None or end.tzinfo is None:
         raise SystemExit("start/end must be timezone-aware")
-    expected = float(args.expected_cost)
+    expected = float(args.expected_cost); expected_records = int(args.expected_records)
     client = db.Historical(key)
     current = meta_cost(client, args.schema, start, end)
+    current_records = meta_count(client, args.schema, start, end)
     tolerance = float(args.tolerance_usd)
     if current > expected + tolerance + 1e-12:
-        raise SystemExit(
-            f"REQUEST GATE: {args.date} {args.schema} quote rose from ${expected:.9f} "
-            f"to ${current:.9f}, tolerance ${tolerance:.5f}; no download"
-        )
+        raise SystemExit(f"REQUEST GATE: {args.date} {args.schema} quote rose from ${expected:.9f} to ${current:.9f}, tolerance ${tolerance:.5f}; no download")
+    if current_records != expected_records:
+        raise SystemExit(f"REQUEST GATE: record count changed for {args.date} {args.schema}: {expected_records} -> {current_records}; no download")
 
-    out = Path(args.out)
-    out.mkdir(parents=True, exist_ok=True)
+    out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
     raw = out / f"{args.date}__{args.schema}.dbn.zst"
     if raw.exists():
         raise SystemExit(f"refusing to overwrite existing raw file: {raw}")
 
-    # This is the only market-data request in this command.
-    store = client.timeseries.get_range(
-        dataset=DATASET,
-        symbols=SYMBOL,
-        stype_in=STYPE_IN,
-        schema=args.schema,
-        start=start.isoformat(),
-        end=end.isoformat(),
-        path=str(raw),
-    )
+    # The sole market-data request made by this command.
+    store = client.timeseries.get_range(dataset=DATASET, symbols=SYMBOL, stype_in=STYPE_IN,
+                                        schema=args.schema, start=start.isoformat(), end=end.isoformat(), path=str(raw))
     df = store.to_df(map_symbols=True)
     if len(df) == 0:
         raise RuntimeError("download returned zero records")
+    if len(df) != expected_records:
+        raise RuntimeError(f"downloaded record count {len(df)} differs from gated metadata count {expected_records}")
 
-    side_missing = None
-    side_counts = None
+    side_missing = None; side_counts = None
     if "side" in df.columns:
         s = df["side"].astype(str)
         miss = s.isin(["N", "None", "nan", "NaN", "", "0"])
@@ -201,6 +170,7 @@ def download_one(args: argparse.Namespace) -> None:
         "gate_quote_usd": expected,
         "immediate_pre_download_quote_usd": current,
         "quote_tolerance_usd": tolerance,
+        "gated_records": expected_records,
         "records_downloaded": int(len(df)),
         "raw_file": raw.name,
         "raw_file_bytes": int(raw.stat().st_size),
@@ -216,27 +186,14 @@ def download_one(args: argparse.Namespace) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    ap = argparse.ArgumentParser()
-    sub = ap.add_subparsers(dest="cmd", required=True)
-    g = sub.add_parser("gate")
-    g.add_argument("--sessions", required=True)
-    g.add_argument("--out", required=True)
-    g.add_argument("--cap-usd", type=float, default=DEFAULT_CAP_USD)
+    ap = argparse.ArgumentParser(); sub = ap.add_subparsers(dest="cmd", required=True)
+    g = sub.add_parser("gate"); g.add_argument("--sessions", required=True); g.add_argument("--out", required=True); g.add_argument("--cap-usd", type=float, default=DEFAULT_CAP_USD)
     d = sub.add_parser("download-one")
-    d.add_argument("--era", required=True)
-    d.add_argument("--date", required=True)
-    d.add_argument("--schema", required=True)
-    d.add_argument("--start", required=True)
-    d.add_argument("--end", required=True)
-    d.add_argument("--expected-cost", required=True, type=float)
+    for x in ["era", "date", "schema", "start", "end", "out"]: d.add_argument(f"--{x}", required=True)
+    d.add_argument("--expected-cost", required=True, type=float); d.add_argument("--expected-records", required=True, type=int)
     d.add_argument("--tolerance-usd", type=float, default=PER_REQUEST_QUOTE_TOLERANCE_USD)
-    d.add_argument("--out", required=True)
     return ap.parse_args()
 
 
 if __name__ == "__main__":
-    args = parse_args()
-    if args.cmd == "gate":
-        gate(args)
-    else:
-        download_one(args)
+    args = parse_args(); gate(args) if args.cmd == "gate" else download_one(args)
