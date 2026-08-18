@@ -1,5 +1,5 @@
-# metadata-only: final DEV_RANK1 frozen-contract candidate quotes
-name: XAU COMEX DEV_RANK1 Final Contract Quote
+# metadata-only: lightweight N0 and dual DEV_RANK1 quote
+name: XAU COMEX DEV_RANK1 N0-Dual Quote
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 jobs:
   quote:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     env:
       DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
     steps:
@@ -20,17 +20,17 @@ jobs:
         with:
           ref: agent/xau-comex-acquisition-plan
       - run: python -m pip install pandas==2.2.3 databento requests
-      - name: Quote V0/N0 frozen-session candidates — metadata only
+      - name: Quote N0 frozen plus dual divergent-contract option — metadata only
         run: |
-          python xau-multiyear/scripts/quote_comex_dev_rank1_final_contract_candidates.py \
+          python xau-multiyear/scripts/quote_comex_dev_rank1_n0_dual_lite.py \
             --mapping xau-final-results/comex_dev_rank1_gate_v1/frozen_session_mapping_all.csv \
-            --out /tmp/finalquote
+            --out /tmp/quote
       - uses: actions/upload-artifact@v4
         with:
-          name: comex-dev-rank1-final-contract-quotes-v1
-          path: /tmp/finalquote/
+          name: comex-dev-rank1-n0-dual-lite-quote-v1
+          path: /tmp/quote/
           retention-days: 90
-      - name: Publish final candidate quotes
+      - name: Publish lightweight quote
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -38,10 +38,10 @@ jobs:
         run: |
           python - <<'PY'
           import base64,os,pathlib,requests
-          src=pathlib.Path('/tmp/finalquote');root='xau-final-results/comex_dev_rank1_gate_v1';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          src=pathlib.Path('/tmp/quote');root='xau-final-results/comex_dev_rank1_gate_v1';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
           for p in src.iterdir():
               if not p.is_file():continue
-              path=f'{root}/{p.name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish COMEX DEV_RANK1 final candidate quote {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              path=f'{root}/{p.name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish COMEX DEV_RANK1 N0-dual quote {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
               if sha:body['sha']=sha
               r=requests.put(u,headers=h,json=body);r.raise_for_status()
           PY
