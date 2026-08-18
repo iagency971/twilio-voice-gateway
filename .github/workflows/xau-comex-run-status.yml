@@ -1,4 +1,4 @@
-# retrigger 2026-08-18
+# refresh after canonical parity correction
 name: XAU COMEX Run Status Probe
 on:
   push:
