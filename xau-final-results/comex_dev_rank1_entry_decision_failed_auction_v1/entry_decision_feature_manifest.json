@@ -1,0 +1,25 @@
+{
+  "version": "COMEX_DEV_RANK1_ENTRY_DECISION_FEATURES_V1_1",
+  "market_data_api_calls": false,
+  "rows": 14520,
+  "sessions": 95,
+  "models": [
+    "FAILED_AUCTION"
+  ],
+  "requested_model": "FAILED_AUCTION",
+  "counts": [
+    {
+      "entry_model": "FAILED_AUCTION",
+      "decision_events": 14520,
+      "filled_or_entered": 14487,
+      "fill_rate": 0.9977272727272727,
+      "sessions": 95,
+      "years": 8,
+      "b2_available": 14011
+    }
+  ],
+  "decision_population_freeze": "COMEX_DEV_RANK1_ENTRY_DECISION_POPULATIONS_FREEZE_v1.md",
+  "net_r_not_computed": true,
+  "rr_not_selected": true,
+  "scientific_change_from_v1": "none; optional model filter applied before session feature loop for orchestration only"
+}
