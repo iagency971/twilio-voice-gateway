@@ -1,0 +1,44 @@
+{
+  "period": [
+    "2010-06-06",
+    "2026-08-17"
+  ],
+  "rows": [
+    {
+      "schema": "ohlcv-1m",
+      "cost_usd": 20.342466905713,
+      "records": 5572081,
+      "billable_bytes": 312036536,
+      "status": "OK"
+    },
+    {
+      "schema": "trades",
+      "cost_usd": 480.955557346344,
+      "records": 384242632,
+      "billable_bytes": 18443646336,
+      "status": "OK"
+    },
+    {
+      "schema": "tbbo",
+      "cost_usd": 801.59259557724,
+      "records": 384242632,
+      "billable_bytes": 30739410560,
+      "status": "OK"
+    },
+    {
+      "schema": "bbo-1s",
+      "cost_usd": 277.348946928978,
+      "records": 206806364,
+      "billable_bytes": 16544509120,
+      "status": "OK"
+    },
+    {
+      "schema": "mbp-1",
+      "cost_usd": 508.770421653986,
+      "records": 3793667226,
+      "billable_bytes": 303493378080,
+      "status": "OK"
+    }
+  ],
+  "download_performed": false
+}
