@@ -1,0 +1,22 @@
+{
+  "year": 2025,
+  "source_events_total": 80617,
+  "selected_events": 6909,
+  "selected_families_any": [
+    "DISPLACEMENT_ORIGIN",
+    "OBJECTIVE_LIQUIDITY",
+    "MEMORY"
+  ],
+  "fvg_only_excluded": true,
+  "window_before_minutes": 60,
+  "window_after_minutes": 15,
+  "rounded_outward_to_minutes": 10,
+  "merged_windows": 1309,
+  "covered_minutes": 225770.0,
+  "calendar_coverage_pct": 42.95471841704718,
+  "windowed_trades_cost_usd": 25.74966770411501,
+  "full_year_trades_cost_usd": 37.069444477558,
+  "saving_pct_vs_full_year": 30.53667766803474,
+  "download_performed": false,
+  "note": "Metadata get_cost only. No market data downloaded."
+}
