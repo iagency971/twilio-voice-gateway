@@ -5,7 +5,6 @@ import argparse
 import json
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import databento as db
 
@@ -41,22 +40,27 @@ def qa_pair(date: str, era: str, trades_path: Path, tbbo_path: Path) -> dict:
         a = tr[key + payload].copy(); b = tb[key + payload].copy()
         out["trades_duplicate_keys"] = int(a.duplicated(key).sum())
         out["tbbo_duplicate_keys"] = int(b.duplicated(key).sum())
-        m = a.merge(b, on=key, how="outer", suffixes=("_trades", "_tbbo"), indicator=True)
-        out["key_match_fraction"] = float((m["_merge"] == "both").sum() / max(len(m), 1))
+        # Some CME packets contain several trade records sharing ts_event/instrument_id/sequence.
+        # Add a deterministic within-key ordinal to avoid a cartesian merge in QA.
+        a["_ord"] = a.groupby(key, dropna=False).cumcount()
+        b["_ord"] = b.groupby(key, dropna=False).cumcount()
+        join_key = key + ["_ord"]
+        m = a.merge(b, on=join_key, how="outer", suffixes=("_trades", "_tbbo"), indicator=True)
+        both = m["_merge"] == "both"
+        out["key_ordinal_match_fraction"] = float(both.sum() / max(len(m), 1))
         for c in payload:
             left = f"{c}_trades"; right = f"{c}_tbbo"
-            if left in m.columns and right in m.columns:
-                if c == "side":
-                    eq = m[left].astype(str).eq(m[right].astype(str))
-                else:
-                    eq = pd.to_numeric(m[left], errors="coerce").eq(pd.to_numeric(m[right], errors="coerce"))
-                out[f"{c}_match_fraction"] = float(eq[m["_merge"] == "both"].mean()) if (m["_merge"] == "both").any() else 0.0
+            if c == "side":
+                eq = m[left].astype(str).eq(m[right].astype(str))
+            else:
+                eq = pd.to_numeric(m[left], errors="coerce").eq(pd.to_numeric(m[right], errors="coerce"))
+            out[f"{c}_match_fraction"] = float(eq[both].mean()) if both.any() else 0.0
     else:
-        out["key_match_fraction"] = 0.0
+        out["key_ordinal_match_fraction"] = 0.0
 
-    miss, n, rate, counts = side_stats(tr)
+    miss, _, rate, counts = side_stats(tr)
     out["trades_side_missing"] = miss; out["trades_side_missing_rate"] = rate; out["trades_side_counts"] = counts
-    miss2, n2, rate2, counts2 = side_stats(tb)
+    miss2, _, rate2, counts2 = side_stats(tb)
     out["tbbo_side_missing"] = miss2; out["tbbo_side_missing_rate"] = rate2; out["tbbo_side_counts"] = counts2
 
     out["trades_instrument_ids"] = sorted(int(x) for x in pd.Series(tr.get("instrument_id", pd.Series(dtype=float))).dropna().unique())
@@ -76,70 +80,53 @@ def qa_pair(date: str, era: str, trades_path: Path, tbbo_path: Path) -> dict:
         if valid.any():
             out["tbbo_spread_median"] = float(spread[valid].median())
             out["tbbo_spread_p95"] = float(spread[valid].quantile(0.95))
-        sell = valid & side.eq("A")
-        buy = valid & side.eq("B")
-        out["sell_aggressor_records"] = int(sell.sum())
-        out["buy_aggressor_records"] = int(buy.sum())
+        sell = valid & side.eq("A"); buy = valid & side.eq("B"); none = valid & side.isin(SIDE_NONE)
+        out["sell_aggressor_records"] = int(sell.sum()); out["buy_aggressor_records"] = int(buy.sum()); out["unspecified_side_records_with_bbo"] = int(none.sum())
         out["sell_price_at_or_below_bid_fraction"] = float((px[sell] <= bid[sell] + 1e-12).mean()) if sell.any() else None
         out["buy_price_at_or_above_ask_fraction"] = float((px[buy] >= ask[buy] - 1e-12).mean()) if buy.any() else None
+        # For N-side records, report how many are mechanically classifiable from pre-trade BBO.
+        if none.any():
+            n_sell = px[none] <= bid[none] + 1e-12
+            n_buy = px[none] >= ask[none] - 1e-12
+            classifiable = n_sell | n_buy
+            out["unspecified_side_bbo_classifiable_fraction"] = float(classifiable.mean())
+            out["unspecified_side_bbo_ambiguous_fraction"] = float((~classifiable).mean())
     return out
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--raw-root", required=True)
-    ap.add_argument("--sessions", required=True)
-    ap.add_argument("--gate", required=True)
-    ap.add_argument("--out", required=True)
-    args = ap.parse_args()
-
+    ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", required=True); ap.add_argument("--sessions", required=True); ap.add_argument("--gate", required=True); ap.add_argument("--out", required=True); args = ap.parse_args()
     root = Path(args.raw_root); outdir = Path(args.out); outdir.mkdir(parents=True, exist_ok=True)
-    sessions = pd.read_csv(args.sessions)
-    era_by_date = dict(zip(sessions.research_trading_date.astype(str), sessions.era.astype(str)))
+    sessions = pd.read_csv(args.sessions); era_by_date = dict(zip(sessions.research_trading_date.astype(str), sessions.era.astype(str)))
     gate = json.loads(Path(args.gate).read_text())
 
     pair_rows = []
     for date, era in era_by_date.items():
-        t = list(root.rglob(f"{date}__trades.dbn.zst"))
-        b = list(root.rglob(f"{date}__tbbo.dbn.zst"))
-        if len(t) != 1 or len(b) != 1:
-            raise SystemExit(f"expected one trades and one tbbo file for {date}; got {len(t)}, {len(b)}")
+        t = list(root.rglob(f"{date}__trades.dbn.zst")); b = list(root.rglob(f"{date}__tbbo.dbn.zst"))
+        if len(t) != 1 or len(b) != 1: raise SystemExit(f"expected one trades and one tbbo file for {date}; got {len(t)}, {len(b)}")
         pair_rows.append(qa_pair(date, era, t[0], b[0]))
+    q = pd.DataFrame(pair_rows); q.to_csv(outdir / "pilot12_qa_by_session.csv", index=False)
 
-    q = pd.DataFrame(pair_rows)
-    q.to_csv(outdir / "pilot12_qa_by_session.csv", index=False)
-
-    total_tr = int(q.trades_records.sum()); total_tb = int(q.tbbo_records.sum())
-    total_missing = int(q.trades_side_missing.sum())
-    total_missing_rate = float(total_missing / total_tr) if total_tr else 1.0
+    total_tr = int(q.trades_records.sum()); total_tb = int(q.tbbo_records.sum()); total_missing = int(q.trades_side_missing.sum()); total_missing_rate = float(total_missing / total_tr) if total_tr else 1.0
     era_missing = []
     for era, g in q.groupby("era", sort=True):
-        n = int(g.trades_records.sum()); m = int(g.trades_side_missing.sum())
-        era_missing.append({"era": era, "records": n, "side_missing": m, "side_missing_rate": float(m / n) if n else 1.0})
+        n = int(g.trades_records.sum()); m = int(g.trades_side_missing.sum()); era_missing.append({"era": era, "records": n, "side_missing": m, "side_missing_rate": float(m / n) if n else 1.0})
 
-    key_ok = bool((q.key_match_fraction >= 0.999999).all())
+    key_ok = bool((q.key_ordinal_match_fraction >= 0.999999).all())
     payload_ok = all(bool((q[c] >= 0.999999).all()) for c in ["price_match_fraction", "size_match_fraction", "side_match_fraction"] if c in q.columns)
-    side_total_ok = total_missing_rate <= 0.02
-    side_era_ok = all(x["side_missing_rate"] <= 0.05 for x in era_missing)
-    counts_ok = bool(q.record_count_equal.all())
-    symbols_ok = bool(q.trades_symbols.astype(str).str.len().gt(2).all() and q.tbbo_symbols.astype(str).str.len().gt(2).all())
+    side_total_ok = total_missing_rate <= 0.02; side_era_ok = all(x["side_missing_rate"] <= 0.05 for x in era_missing); counts_ok = bool(q.record_count_equal.all()); symbols_ok = bool(q.trades_symbols.astype(str).str.len().gt(2).all() and q.tbbo_symbols.astype(str).str.len().gt(2).all())
 
     raw_meta = []
     for p in sorted(root.rglob("*.json")):
         try:
             d = json.loads(p.read_text())
             if d.get("version") == "COMEX_V4_PILOT12_RAW_FILE_V1": raw_meta.append(d)
-        except Exception:
-            pass
-    if len(raw_meta) != 24:
-        raise SystemExit(f"expected 24 raw metadata JSON files, got {len(raw_meta)}")
+        except Exception: pass
+    if len(raw_meta) != 24: raise SystemExit(f"expected 24 raw metadata JSON files, got {len(raw_meta)}")
 
-    immediate_quote_total = float(sum(float(x["immediate_pre_download_quote_usd"]) for x in raw_meta))
-    gate_quote_total = float(gate["current_pre_download_quote_usd"])
-    cap = float(gate["approved_cap_usd"])
-
+    immediate_quote_total = float(sum(float(x["immediate_pre_download_quote_usd"]) for x in raw_meta)); gate_quote_total = float(gate["current_pre_download_quote_usd"]); cap = float(gate["approved_cap_usd"])
     summary = {
-        "version": "COMEX_V4_PILOT12_QA_V1",
+        "version": "COMEX_V4_PILOT12_QA_V2_ORDINAL_JOIN",
         "sessions": 12,
         "schemas_downloaded": ["trades", "tbbo"],
         "download_performed": True,
@@ -150,7 +137,7 @@ def main() -> None:
         "trades_records": total_tr,
         "tbbo_records": total_tb,
         "record_counts_equal_all_sessions": counts_ok,
-        "trade_key_match_all_sessions": key_ok,
+        "trade_key_ordinal_match_all_sessions": key_ok,
         "trade_payload_match_all_sessions": payload_ok,
         "trades_side_missing_records": total_missing,
         "trades_side_missing_rate": total_missing_rate,
@@ -158,13 +145,10 @@ def main() -> None:
         "qa_gate_side_total_le_2pct": side_total_ok,
         "qa_gate_side_each_era_le_5pct": side_era_ok,
         "qa_gate_symbols_present": symbols_ok,
-        "qa_pass_for_trade_side_experiment": bool(counts_ok and key_ok and payload_ok and side_total_ok and side_era_ok and symbols_ok),
-        "raw_files": [{k: x[k] for k in ["era", "research_trading_date", "schema", "raw_file", "raw_file_bytes", "sha256", "records_downloaded", "immediate_pre_download_quote_usd"]} for x in raw_meta],
-        "note": "Portal/account billing remains the authority for actual credit consumption; these are immediate pre-download metadata quotes and downloaded-file QA.",
+        "qa_pass_for_native_side_only_experiment": bool(counts_ok and key_ok and payload_ok and side_total_ok and side_era_ok and symbols_ok),
+        "note": "Portal/account billing remains authoritative for actual credit consumption. V2 fixes duplicate-key cartesian joins and reports TBBO classifiability of unspecified-side records.",
     }
-    (outdir / "pilot12_qa_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
-    print(json.dumps(summary, indent=2))
+    (outdir / "pilot12_qa_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8"); print(json.dumps(summary, indent=2))
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": main()
