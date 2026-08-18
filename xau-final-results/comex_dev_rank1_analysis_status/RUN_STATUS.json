@@ -1,20 +1,18 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V2",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V3",
   "workflows": {
     "xau-comex-dev-rank1-entry-decision-features.yml": {
       "found": true,
       "run_id": 32192726623,
-      "status": "queued",
-      "conclusion": null,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
       "jobs_total": 6,
       "by_status": {
-        "completed": 1,
-        "in_progress": 2,
-        "queued": 3
+        "completed": 6
       },
       "by_conclusion": {
-        "success": 1,
-        "NONE": 5
+        "success": 6
       },
       "jobs": [
         {
@@ -26,218 +24,57 @@
         {
           "id": 95890368647,
           "name": "build (TOUCH_NEXT_OPEN)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95890368690,
           "name": "build (FAILED_AUCTION)",
-          "status": "queued",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95890368692,
           "name": "build (ACCEPTANCE_RETEST)",
-          "status": "queued",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95890368713,
           "name": "build (RECLAIM_PULLBACK)",
-          "status": "queued",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95890369141,
           "name": "build (PASSIVE_TOUCH)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         }
       ]
+    },
+    "xau-comex-dev-rank1-fill-models.yml": {
+      "found": false
     },
     "xau-comex-dev-rank1-binary-behavior.yml": {
       "found": true,
       "run_id": 32190049489,
-      "status": "in_progress",
-      "conclusion": null,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "cancelled",
       "jobs_total": 1,
       "by_status": {
-        "in_progress": 1
+        "completed": 1
       },
       "by_conclusion": {
-        "NONE": 1
+        "cancelled": 1
       },
       "jobs": [
         {
           "id": 95882190934,
           "name": "diagnostic",
-          "status": "in_progress",
-          "conclusion": null
-        }
-      ]
-    },
-    "xau-comex-dev-rank1-behavior-parallel.yml": {
-      "found": true,
-      "run_id": 32190353775,
-      "status": "completed",
-      "conclusion": "success",
-      "jobs_total": 25,
-      "by_status": {
-        "completed": 25
-      },
-      "by_conclusion": {
-        "success": 25
-      },
-      "jobs": [
-        {
-          "id": 95883107347,
-          "name": "fold (B0, 2014)",
           "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107432,
-          "name": "fold (B1, 2011)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107435,
-          "name": "fold (B0, 2013)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107445,
-          "name": "fold (B0, 2016)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107457,
-          "name": "fold (B1, 2018)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107463,
-          "name": "fold (B1, 2016)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107471,
-          "name": "fold (B2, 2012)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107473,
-          "name": "fold (B0, 2011)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107476,
-          "name": "fold (B1, 2017)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107478,
-          "name": "fold (B2, 2011)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107479,
-          "name": "fold (B1, 2012)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107485,
-          "name": "fold (B1, 2013)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107488,
-          "name": "fold (B0, 2017)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107497,
-          "name": "fold (B0, 2018)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107518,
-          "name": "fold (B1, 2015)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107536,
-          "name": "fold (B0, 2012)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107543,
-          "name": "fold (B1, 2014)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883107654,
-          "name": "fold (B0, 2015)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883108431,
-          "name": "fold (B2, 2013)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883108528,
-          "name": "fold (B2, 2014)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883108594,
-          "name": "fold (B2, 2018)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883108618,
-          "name": "fold (B2, 2015)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883108626,
-          "name": "fold (B2, 2016)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95883108724,
-          "name": "fold (B2, 2017)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95889421560,
-          "name": "aggregate",
-          "status": "completed",
-          "conclusion": "success"
+          "conclusion": "cancelled"
         }
       ]
     }
