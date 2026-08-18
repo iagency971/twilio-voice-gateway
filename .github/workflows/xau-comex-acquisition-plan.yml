@@ -1,3 +1,4 @@
+# final planning run: metadata quotes only, no market-data download
 name: XAU COMEX Acquisition Plan V1
 on:
   push:
@@ -33,23 +34,9 @@ jobs:
           PY
         env:
           YEAR: ${{ matrix.year }}
-      - name: Acquire XAUUSD M1 warmup + target
-        run: >-
-          python xau-multiyear/scripts/acquire_dukascopy_window.py
-          --from-month '${{ steps.w.outputs.from_month }}'
-          --to-month '${{ steps.w.outputs.to_month }}'
-          --out /tmp/xau_${{ matrix.year }}.csv
-      - name: Build canonical event timing table
-        run: >-
-          python xau-multiyear/scripts/build_comex_event_table.py
-          /tmp/xau_${{ matrix.year }}.csv
-          --target-start '${{ steps.w.outputs.target_start }}'
-          --target-end '${{ steps.w.outputs.target_end }}'
-          --out /tmp/comex_${{ matrix.year }}
-      - name: Hash annual outputs
-        run: |
-          cd /tmp/comex_${{ matrix.year }}
-          sha256sum events.csv.gz session_candidates.csv manifest.json > SHA256SUMS.txt
+      - run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month '${{ steps.w.outputs.from_month }}' --to-month '${{ steps.w.outputs.to_month }}' --out /tmp/xau_${{ matrix.year }}.csv
+      - run: python xau-multiyear/scripts/build_comex_event_table.py /tmp/xau_${{ matrix.year }}.csv --target-start '${{ steps.w.outputs.target_start }}' --target-end '${{ steps.w.outputs.target_end }}' --out /tmp/comex_${{ matrix.year }}
+      - run: cd /tmp/comex_${{ matrix.year }} && sha256sum events.csv.gz session_candidates.csv manifest.json > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
           name: comex-events-${{ matrix.year }}
@@ -60,7 +47,7 @@ jobs:
   aggregate:
     needs: annual-events
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - run: python -m pip install pandas==2.2.3 numpy==2.3.5
@@ -68,37 +55,99 @@ jobs:
         with:
           pattern: comex-events-*
           path: /tmp/annual
-      - name: Aggregate frozen plan
-        run: python xau-multiyear/scripts/aggregate_comex_acquisition_plan.py --root /tmp/annual --out /tmp/plan
-      - name: Hash aggregate
-        run: |
-          cd /tmp/plan
-          sha256sum canonical_events_all.csv.gz window_frontier.csv fvg_sampling_tiers.csv session_sampling_tiers.csv annual_manifest.csv manifest.json > SHA256SUMS.txt
+      - run: python xau-multiyear/scripts/aggregate_comex_acquisition_plan.py --root /tmp/annual --out /tmp/plan
+      - run: cd /tmp/plan && sha256sum canonical_events_all.csv.gz window_frontier.csv fvg_sampling_tiers.csv session_sampling_tiers.csv annual_manifest.csv manifest.json > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
           name: comex-acquisition-plan-v1
           path: /tmp/plan
           retention-days: 30
           compression-level: 0
-      - name: Publish compact planning outputs only
+      - name: Publish compact planning outputs
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           BRANCH: agent/xau-comex-acquisition-plan
         run: |
           python - <<'PY'
-          import base64, os, pathlib, requests
+          import base64,os,pathlib,requests
           src=pathlib.Path('/tmp/plan')
           names=['manifest.json','annual_manifest.csv','event_counts_by_year.csv','fvg_sampling_tiers.csv','session_sampling_tiers.csv','window_frontier.csv','SHA256SUMS.txt']
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
           for name in names:
               p=src/name
-              if not p.exists(): continue
-              path=f'xau-final-results/comex_acquisition_plan_v1/{name}'
-              url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
-              r=requests.get(url,headers=h,params={'ref':os.environ['BRANCH']})
-              sha=r.json().get('sha') if r.status_code==200 else None
-              body={'message':f'publish COMEX acquisition plan {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
-              if sha: body['sha']=sha
-              rr=requests.put(url,headers=h,json=body); rr.raise_for_status(); print('PUBLISHED',path)
+              if not p.exists():continue
+              path=f'xau-final-results/comex_acquisition_plan_v1/{name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None
+              b={'message':f'publish COMEX acquisition plan {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:b['sha']=sha
+              rr=requests.put(u,headers=h,json=b); rr.raise_for_status()
+          PY
+
+  exact-costs:
+    needs: aggregate
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - {name: local_fvg1_trades, file: local_a1_b0_gap30m.csv, schema: trades}
+          - {name: local_fvg2_trades, file: local_a2_b0_gap30m.csv, schema: trades}
+          - {name: local_fvg4_trades, file: local_a4_b0_gap30m.csv, schema: trades}
+          - {name: local_fvg4_bbo1s, file: local_a4_b0_gap30m.csv, schema: bbo-1s}
+          - {name: local_fvg4_tbbo, file: local_a4_b0_gap30m.csv, schema: tbbo}
+          - {name: local_fvg4_mbp1, file: local_a4_b0_gap30m.csv, schema: mbp-1}
+          - {name: session2_trades, file: session_a2_b0_gap0m.csv, schema: trades}
+          - {name: session4_trades, file: session_a4_b0_gap0m.csv, schema: trades}
+          - {name: union_fvg2_sess2_trades, file: union_a2_b2_gap30m.csv, schema: trades}
+          - {name: union_fvg4_sess2_trades, file: union_a4_b2_gap30m.csv, schema: trades}
+          - {name: union_fvg4_sess4_trades, file: union_a4_b4_gap30m.csv, schema: trades}
+          - {name: union_fvg4_sess2_mbp1, file: union_a4_b2_gap30m.csv, schema: mbp-1}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install databento pandas==2.2.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: comex-acquisition-plan-v1
+          path: /tmp/plan
+      - run: python xau-gc-databento/cost_windows_exact.py '/tmp/plan/${{ matrix.file }}' --schema '${{ matrix.schema }}' --workers 3 --out '/tmp/${{ matrix.name }}.json'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cost-${{ matrix.name }}
+          path: /tmp/${{ matrix.name }}.json
+          retention-days: 30
+
+  publish-costs:
+    needs: exact-costs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cost-*
+          path: /tmp/costs
+      - name: Aggregate and publish exact metadata costs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,json,os,pathlib,requests
+          rows=[]
+          for p in pathlib.Path('/tmp/costs').rglob('*.json'):
+              x=json.loads(p.read_text()); x['quote_name']=p.stem; rows.append(x)
+          rows=sorted(rows,key=lambda x:x['quote_name'])
+          out={'quotes':rows,'download_performed':False,'note':'Databento metadata APIs only; no market-data download.'}
+          q=pathlib.Path('/tmp/exact_cost_frontier.json'); q.write_text(json.dumps(out,indent=2))
+          path='xau-final-results/comex_acquisition_plan_v1/exact_cost_frontier.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None
+          b={'message':'publish exact COMEX metadata cost frontier [skip ci]','content':base64.b64encode(q.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+          if sha:b['sha']=sha
+          rr=requests.put(u,headers=h,json=b); rr.raise_for_status()
           PY
