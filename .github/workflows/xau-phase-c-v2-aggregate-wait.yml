@@ -1,0 +1,70 @@
+name: XAU Phase C v2 Aggregate Wait
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-phase-c-v2-aggregate-wait.yml'
+permissions:
+  contents: write
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Wait for all 15 annual Phase C v2 summaries, aggregate full surface, apply frozen gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+        run: |
+          python - <<'PY'
+          import base64, io, json, os, time, pathlib, requests, numpy as np, pandas as pd
+          years=list(range(2011,2026)); h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          def get(path):
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
+              if r.status_code!=200:return None
+              return base64.b64decode(r.json()['content'])
+          deadline=time.time()+1200
+          missing=years
+          while time.time()<deadline:
+              missing=[y for y in years if get(f'xau-final-results/phase_c_v2_2011_2025/annual/{y}_summary.csv') is None]
+              print('MISSING',missing,flush=True)
+              if not missing:break
+              time.sleep(20)
+          if missing: raise SystemExit(f'annual summaries still missing: {missing}')
+          frames=[]; manifests=[]
+          for y in years:
+              b=get(f'xau-final-results/phase_c_v2_2011_2025/annual/{y}_summary.csv'); s=pd.read_csv(io.BytesIO(b)); s.insert(0,'year',y); frames.append(s)
+              mb=get(f'xau-final-results/phase_c_v2_2011_2025/annual/{y}_manifest.json'); manifests.append(json.loads(mb))
+          a=pd.concat(frames,ignore_index=True).sort_values(['sample','entry_model','target_r','year'])
+          rows=[]
+          for (sample,model,tr),g in a.groupby(['sample','entry_model','target_r'],sort=True):
+              w=g.trades.astype(float); N=float(w.sum())
+              wa=lambda c: float(np.average(g[c].astype(float),weights=w)) if N>0 else np.nan
+              medpf=float(g.pf_net_legacy22.replace([np.inf,-np.inf],np.nan).median())
+              row={'sample':sample,'entry_model':model,'target_r':float(tr),'years':int(g.year.nunique()),'total_trades':int(N),
+                   'weighted_avg_gross_R':wa('avg_gross_R'),'weighted_avg_net_R_legacy22':wa('avg_net_R_legacy22'),'weighted_avg_net_R_cost1_5x':wa('avg_net_R_cost1_5x'),
+                   'annual_mean_net_R_legacy22':float(g.avg_net_R_legacy22.mean()),'annual_median_net_R_legacy22':float(g.avg_net_R_legacy22.median()),
+                   'positive_years_net_legacy22':int((g.avg_net_R_legacy22>0).sum()),'positive_years_cost1_5x':int((g.avg_net_R_cost1_5x>0).sum()),
+                   'median_pf_net_legacy22':medpf,'pf_net_gt1_years':int((g.pf_net_legacy22>1).sum()),
+                   'min_annual_net_R_legacy22':float(g.avg_net_R_legacy22.min()),'max_annual_net_R_legacy22':float(g.avg_net_R_legacy22.max()),
+                   'weighted_tp_pct':wa('tp_pct'),'weighted_sl_pct':wa('sl_pct'),'weighted_time_pct':wa('time_pct'),'weighted_ambiguous_same_bar_pct':wa('ambiguous_same_bar_pct'),
+                   'median_risk_price_across_years':float(g.median_risk_price.median())}
+              gates=[row['total_trades']>=300,row['weighted_avg_net_R_legacy22']>0,row['annual_median_net_R_legacy22']>0,row['positive_years_net_legacy22']>=10,row['weighted_avg_net_R_cost1_5x']>0,row['positive_years_cost1_5x']>=8,np.isfinite(medpf) and medpf>1]
+              for i,v in enumerate(gates,1):row[f'gate_{i}']=bool(v)
+              row['survives_phase_c_v2']=bool(all(gates)); rows.append(row)
+          m=pd.DataFrame(rows).sort_values(['survives_phase_c_v2','weighted_avg_net_R_legacy22'],ascending=[False,False])
+          out=pathlib.Path('/tmp/agg'); out.mkdir(exist_ok=True); a.to_csv(out/'annual_summary.csv',index=False); m.to_csv(out/'multiyear_summary.csv',index=False)
+          gate=m[m.survives_phase_c_v2].copy(); gate.to_csv(out/'survivors.csv',index=False)
+          json.dump({'years':years,'annual_files':15,'decision_gate':'PHASE_C_V2_DECISION_GATE.md','surface_cells':int(len(m)),'survivors':int(len(gate)),'selection':'NONE; full surface retained','annual_manifests':manifests},open(out/'manifest.json','w'),indent=2)
+          print('TOP_BY_NET_R')
+          print(m.head(30).to_string(index=False)); print('SURVIVORS',len(gate)); print(gate.to_string(index=False) if len(gate) else 'NONE')
+          for fn in ['annual_summary.csv','multiyear_summary.csv','survivors.csv','manifest.json']:
+              path=f'xau-final-results/phase_c_v2_2011_2025/{fn}'; p=out/fn; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None
+              body={'message':f'publish Phase C v2 aggregate {fn} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']};
+              if sha:body['sha']=sha
+              rr=requests.put(u,headers=h,json=body); rr.raise_for_status(); print('PUBLISHED',path)
+          PY
