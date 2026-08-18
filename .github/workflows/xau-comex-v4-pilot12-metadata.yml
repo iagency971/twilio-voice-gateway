@@ -1,5 +1,5 @@
-# metadata-only: corrected V4 tier2 architecture costs
-name: XAU COMEX V4 Tier2 Architecture Quote
+# metadata-only: finalize staged V4 Stage1 plan
+name: XAU COMEX V4 Stage1 Staged Plan
 
 on:
   push:
@@ -11,9 +11,9 @@ permissions:
   contents: write
 
 jobs:
-  quote:
+  finalize:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     env:
       DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
     steps:
@@ -29,18 +29,20 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32102932187
-      - name: Quote corrected tier2 architectures — metadata only
+      - name: Finalize staged plan and M1 metadata costs
         run: |
-          python xau-multiyear/scripts/quote_comex_v4_tier2_architectures.py \
-            --sessions /tmp/plan/session_candidates_all.csv \
+          python xau-multiyear/scripts/finalize_comex_v4_stage_plan.py \
+            --candidates /tmp/plan/session_candidates_all.csv \
+            --panel xau-final-results/comex_v4_tier2/tier2_sessions_v4.csv \
+            --costs xau-final-results/comex_v4_tier2/tier2_remaining_session_schema_costs.csv \
             --pilot xau-final-results/comex_v4_pilot12/pilot12_sessions.csv \
-            --out /tmp/tier2
+            --out /tmp/stage1
       - uses: actions/upload-artifact@v4
         with:
-          name: comex-v4-tier2-architecture-costs
-          path: /tmp/tier2/
+          name: comex-v4-stage1-staged-plan
+          path: /tmp/stage1/
           retention-days: 90
-      - name: Publish compact metadata quotes
+      - name: Publish staged plan
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -48,12 +50,12 @@ jobs:
         run: |
           python - <<'PY'
           import base64,os,pathlib,requests
-          src=pathlib.Path('/tmp/tier2'); root='xau-final-results/comex_v4_tier2'
+          src=pathlib.Path('/tmp/stage1'); root='xau-final-results/comex_v4_stage1'
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          for name in ['tier2_architecture_costs.json','tier2_sessions_v4.csv','tier2_remaining_session_schema_costs.csv']:
+          for name in ['stage1_staged_plan.json','stage1_sessions.csv','stage1_strata_weights.csv','stage1_m1_costs.csv']:
               p=src/name; path=f'{root}/{name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
               old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
-              body={'message':f'publish COMEX V4 tier2 metadata {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              body={'message':f'publish COMEX V4 staged plan {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
               if sha: body['sha']=sha
               r=requests.put(u,headers=h,json=body); r.raise_for_status()
           PY
