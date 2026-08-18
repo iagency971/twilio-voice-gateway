@@ -12,6 +12,13 @@
       "status": "OK"
     },
     {
+      "schema": "bbo-1m",
+      "cost_usd": 7.630651295185,
+      "records": 5689826,
+      "billable_bytes": 455186080,
+      "status": "OK"
+    },
+    {
       "schema": "trades",
       "cost_usd": 480.955557346344,
       "records": 384242632,
