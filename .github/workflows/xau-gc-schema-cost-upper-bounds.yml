@@ -1,3 +1,4 @@
+# retrigger 2026-08-18
 name: XAU GC Schema Cost Upper Bounds
 on:
   push:
@@ -23,9 +24,8 @@ jobs:
           c=db.Historical(os.environ['DATABENTO_API_KEY']); rows=[]
           for schema in ['ohlcv-1m','trades','tbbo','bbo-1s','mbp-1']:
               kw=dict(dataset='GLBX.MDP3',symbols='GC.v.0',stype_in='continuous',schema=schema,start='2010-06-06',end='2026-08-17')
-              try:
-                  rows.append({'schema':schema,'cost_usd':float(c.metadata.get_cost(**kw)),'records':int(c.metadata.get_record_count(**kw)),'billable_bytes':int(c.metadata.get_billable_size(**kw)),'status':'OK'})
-              except Exception as e:rows.append({'schema':schema,'status':'ERROR','error':str(e)})
+              try: rows.append({'schema':schema,'cost_usd':float(c.metadata.get_cost(**kw)),'records':int(c.metadata.get_record_count(**kw)),'billable_bytes':int(c.metadata.get_billable_size(**kw)),'status':'OK'})
+              except Exception as e: rows.append({'schema':schema,'status':'ERROR','error':str(e)})
           out={'period':['2010-06-06','2026-08-17'],'rows':rows,'download_performed':False}
           Path('/tmp/schema_costs.json').write_text(json.dumps(out,indent=2)); print(json.dumps(out,indent=2))
           PY
