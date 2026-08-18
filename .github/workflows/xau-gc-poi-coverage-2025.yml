@@ -1,0 +1,63 @@
+name: XAU GC POI Coverage 2025
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-gc-poi-coverage-2025.yml'
+permissions:
+  contents: write
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 requests==2.31.0
+      - name: Fetch Phase B events
+        run: |
+          curl -L --fail --retry 3 \
+            'https://raw.githubusercontent.com/iagency971/twilio-voice-gateway/agent/xau-phase-b-2025-result/xau-phase-b-results/2025/phase_b_events.csv.gz' \
+            -o /tmp/events.csv.gz
+      - name: Compute merged POI coverage profiles
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          df=pd.read_csv('/tmp/events.csv.gz')
+          fam=df['constituent_families'].fillna('')
+          mask=(fam.str.contains('DISPLACEMENT_ORIGIN',regex=False)|fam.str.contains('OBJECTIVE_LIQUIDITY',regex=False)|fam.str.contains('MEMORY',regex=False))
+          x=df.loc[mask].copy()
+          ct=pd.to_datetime(x.contact_time,utc=True).sort_values()
+          year_minutes=(pd.Timestamp('2026-01-01',tz='UTC')-pd.Timestamp('2025-01-01',tz='UTC')).total_seconds()/60
+          profiles=[]
+          for before,after in [(10,15),(30,15),(60,15),(30,5),(60,0)]:
+              starts=(ct-pd.Timedelta(minutes=before)).dt.floor('10min')
+              ends=(ct+pd.Timedelta(minutes=after)).dt.ceil('10min')
+              ints=sorted(zip(starts.tolist(),ends.tolist()),key=lambda z:z[0])
+              merged=[]
+              for s,e in ints:
+                  if not merged or s>merged[-1][1]: merged.append([s,e])
+                  elif e>merged[-1][1]: merged[-1][1]=e
+              mins=sum((e-s).total_seconds()/60 for s,e in merged)
+              profiles.append({'before_min':before,'after_min':after,'events':int(len(x)),'merged_windows':len(merged),'covered_minutes':mins,'calendar_coverage_pct':100*mins/year_minutes,'naive_cost_estimate_at_2025_density_usd':37.069444477558*mins/year_minutes})
+          out={'year':2025,'all_events':int(len(df)),'selected_non_fvg_only_poi_events':int(len(x)),'profiles':profiles,'note':'Coverage only. No Databento market-data request; cost figures are density-proportional rough estimates, not quotes.'}
+          Path('/tmp/coverage.json').write_text(json.dumps(out,indent=2),encoding='utf-8')
+          print(json.dumps(out,indent=2))
+          PY
+      - name: Publish result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+        run: |
+          python - <<'PY'
+          import base64, os, pathlib, requests
+          p=pathlib.Path('/tmp/coverage.json'); path='xau-final-results/gc_databento_cost/poi_coverage_2025.json'
+          url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          r=requests.get(url,headers=h,params={'ref':os.environ['BRANCH']}); sha=r.json().get('sha') if r.status_code==200 else None
+          body={'message':'publish GC POI coverage 2025 [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          rr=requests.put(url,headers=h,json=body); rr.raise_for_status()
+          PY
