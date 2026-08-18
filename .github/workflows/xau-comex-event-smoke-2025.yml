@@ -1,3 +1,4 @@
+# retrigger 2026-08-18
 name: XAU COMEX Event Timing Smoke 2025
 on:
   push:
@@ -27,17 +28,14 @@ jobs:
           for m in ['clean_rejection','failed_auction','reclaim_pullback']:
               q=e[e[m+'_eligible'].astype(str).str.lower().eq('true')]
               if len(q):
-                  d=pd.to_datetime(q[m+'_decision_time'],utc=True)
-                  c=pd.to_datetime(q.contact_time,utc=True)
+                  d=pd.to_datetime(q[m+'_decision_time'],utc=True); c=pd.to_datetime(q.contact_time,utc=True)
                   assert ((d-c)>=pd.Timedelta(minutes=1)).all()
                   assert ((d-c)<=pd.Timedelta(minutes=16)).all(), (m,(d-c).max())
           a=e[e.acceptance_retest_eligible.astype(str).str.lower().eq('true')]
-          if len(a):
-              assert ((pd.to_datetime(a.acceptance_retest_decision_time,utc=True)-pd.to_datetime(a.contact_time,utc=True))==pd.Timedelta(minutes=5)).all()
+          if len(a): assert ((pd.to_datetime(a.acceptance_retest_decision_time,utc=True)-pd.to_datetime(a.contact_time,utc=True))==pd.Timedelta(minutes=5)).all()
           f=e[e.fvg_only.astype(str).str.lower().eq('true')]
           out={'events':len(e),'fvg_only':len(f),'non_fvg':len(e)-len(f),'behavior':e.behavior_v2.value_counts().to_dict()}
-          open('/tmp/out/qa_summary.json','w').write(json.dumps(out,indent=2))
-          print(json.dumps(out,indent=2))
+          open('/tmp/out/qa_summary.json','w').write(json.dumps(out,indent=2)); print(json.dumps(out,indent=2))
           PY
       - name: Publish compact smoke outputs
         env:
