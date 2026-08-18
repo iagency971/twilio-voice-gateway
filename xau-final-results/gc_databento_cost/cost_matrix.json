@@ -2,33 +2,41 @@
   {
     "name": "GC_OHLCV1M_FULL",
     "schema": "ohlcv-1m",
-    "start": "2010-06-01",
+    "start": "2010-06-06",
     "end": "2026-08-17",
-    "status": "ERROR",
-    "error": "422 data_start_before_available_start\n`start` in query ('2010-06-01 00:00:00+00:00') was before the available start of dataset GLBX.MDP3 ('2010-06-06 00:00:00+00:00'). Try requesting with a later `start`.\ndocumentation: https://databento.com/docs/api-reference-historical/basics/datasets"
+    "cost_usd": 20.342466905713,
+    "records": 5572081,
+    "billable_bytes": 312036536,
+    "status": "OK"
   },
   {
     "name": "GC_TRADES_FULL",
     "schema": "trades",
-    "start": "2010-06-01",
+    "start": "2010-06-06",
     "end": "2026-08-17",
-    "status": "ERROR",
-    "error": "422 data_start_before_available_start\n`start` in query ('2010-06-01 00:00:00+00:00') was before the available start of dataset GLBX.MDP3 ('2010-06-06 00:00:00+00:00'). Try requesting with a later `start`.\ndocumentation: https://databento.com/docs/api-reference-historical/basics/datasets"
+    "cost_usd": 480.955557346344,
+    "records": 384242632,
+    "billable_bytes": 18443646336,
+    "status": "OK"
   },
   {
     "name": "GC_MBP1_FULL",
     "schema": "mbp-1",
-    "start": "2010-06-01",
+    "start": "2010-06-06",
     "end": "2026-08-17",
-    "status": "ERROR",
-    "error": "422 data_start_before_available_start\n`start` in query ('2010-06-01 00:00:00+00:00') was before the available start of dataset GLBX.MDP3 ('2010-06-06 00:00:00+00:00'). Try requesting with a later `start`.\ndocumentation: https://databento.com/docs/api-reference-historical/basics/datasets"
+    "cost_usd": 508.770421653986,
+    "records": 3793667226,
+    "billable_bytes": 303493378080,
+    "status": "OK"
   },
   {
     "name": "GC_MBO_MODERN",
     "schema": "mbo",
-    "start": "2017-05-01",
+    "start": "2017-05-21",
     "end": "2026-08-17",
-    "status": "ERROR",
-    "error": "422 data_schema_not_fully_available\nSchema `mbo` for dataset `GLBX.MDP3` is only available between 2017-05-21T00:00:00.000000000Z and 2026-08-18T04:20:00.000000000Z. Try requesting a different schema to get data for the requested time period.\ndocumentation: https://databento.com/docs/api-reference-historical/basics/datasets"
+    "cost_usd": 620.769942627847,
+    "records": 6612565977,
+    "billable_bytes": 370303694712,
+    "status": "OK"
   }
 ]
