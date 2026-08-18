@@ -1,0 +1,329 @@
+{
+  "version": "COMEX_DEV_RANK1_COVERAGE_CORRECT_DAYKEY_V3",
+  "market_data_download_performed": false,
+  "day_key_definition": "America/New_York local date; +1 day if local hour >=17; vectorized as date(local+7h)",
+  "selected_rank1_sessions": 96,
+  "sessions_with_events": 96,
+  "events": 31710,
+  "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+  ],
+  "broad_families": [
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 655,
+      "independent_sessions": 96,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 426,
+      "independent_sessions": 90,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 29797,
+      "independent_sessions": 96,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 128,
+      "independent_sessions": 38,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 704,
+      "independent_sessions": 96,
+      "years": 8
+    }
+  ],
+  "family_entry_models": [
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 437,
+      "independent_sessions": 95,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 146,
+      "independent_sessions": 70,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 17718,
+      "independent_sessions": 96,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 80,
+      "independent_sessions": 25,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 333,
+      "independent_sessions": 91,
+      "years": 8,
+      "entry_model": "PASSIVE_TOUCH"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 627,
+      "independent_sessions": 96,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 422,
+      "independent_sessions": 90,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 29714,
+      "independent_sessions": 96,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 125,
+      "independent_sessions": 38,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 691,
+      "independent_sessions": 95,
+      "years": 8,
+      "entry_model": "TOUCH_NEXT_OPEN"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 273,
+      "independent_sessions": 88,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 344,
+      "independent_sessions": 88,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 15370,
+      "independent_sessions": 96,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 86,
+      "independent_sessions": 32,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 533,
+      "independent_sessions": 95,
+      "years": 8,
+      "entry_model": "CLEAN_REJECTION"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 307,
+      "independent_sessions": 90,
+      "years": 8,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 64,
+      "independent_sessions": 46,
+      "years": 8,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 14027,
+      "independent_sessions": 95,
+      "years": 8,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 16,
+      "independent_sessions": 6,
+      "years": 5,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 73,
+      "independent_sessions": 42,
+      "years": 8,
+      "entry_model": "FAILED_AUCTION"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 28,
+      "independent_sessions": 23,
+      "years": 7,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 5,
+      "independent_sessions": 5,
+      "years": 4,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 156,
+      "independent_sessions": 69,
+      "years": 8,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 4,
+      "independent_sessions": 3,
+      "years": 3,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 14,
+      "independent_sessions": 12,
+      "years": 6,
+      "entry_model": "ACCEPTANCE_RETEST"
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 343,
+      "independent_sessions": 94,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 244,
+      "independent_sessions": 81,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 16936,
+      "independent_sessions": 95,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 71,
+      "independent_sessions": 25,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 388,
+      "independent_sessions": 94,
+      "years": 8,
+      "entry_model": "RECLAIM_PULLBACK"
+    }
+  ],
+  "confluence_signatures": [
+    {
+      "signature": "DISPLACEMENT_ORIGIN+FVG",
+      "events": 131,
+      "independent_sessions": 66,
+      "years": 8
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+MEMORY",
+      "events": 2,
+      "independent_sessions": 2,
+      "years": 2
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+MEMORY+FVG",
+      "events": 3,
+      "independent_sessions": 3,
+      "years": 3
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY",
+      "events": 21,
+      "independent_sessions": 20,
+      "years": 8
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY+FVG",
+      "events": 16,
+      "independent_sessions": 16,
+      "years": 8
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY+MEMORY+FVG",
+      "events": 3,
+      "independent_sessions": 3,
+      "years": 3
+    },
+    {
+      "signature": "MEMORY+FVG",
+      "events": 190,
+      "independent_sessions": 64,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+FVG",
+      "events": 267,
+      "independent_sessions": 94,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+MEMORY",
+      "events": 12,
+      "independent_sessions": 11,
+      "years": 5
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+MEMORY+FVG",
+      "events": 10,
+      "independent_sessions": 8,
+      "years": 4
+    }
+  ],
+  "blocking": {
+    "all_event_dates_subset_selected": true,
+    "independent_sessions_le_96": true
+  },
+  "note": "Supersedes earlier coverage summaries whose helper incorrectly used date(ts-17h). Session selection itself is unchanged."
+}
