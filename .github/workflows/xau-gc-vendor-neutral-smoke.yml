@@ -1,0 +1,20 @@
+name: XAU GC vendor-neutral smoke
+
+on:
+  push:
+    branches:
+      - agent/xau-gc-vendor-neutral
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile xau-gc-vendor-neutral/*.py
+      - name: Smoke test
+        run: python xau-gc-vendor-neutral/test_smoke.py
