@@ -1,0 +1,12 @@
+{
+  "rows": 60,
+  "total_events_by_tier": {
+    "1": 46951,
+    "2": 93704,
+    "3": 137990,
+    "4": 183774
+  },
+  "source_run": 32102932187,
+  "source_events": 1274302,
+  "download_performed": false
+}
