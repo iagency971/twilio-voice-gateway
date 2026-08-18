@@ -1,4 +1,4 @@
-# zero-cost-only: frozen-session GC contract roll diagnostic
+# trigger-once: 2026-08-18-frozen-session-contract-v1
 name: XAU COMEX DEV_RANK1 Frozen Session Contract QA
 
 on:
