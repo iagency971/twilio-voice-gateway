@@ -1,0 +1,22 @@
+{
+  "version": "PHASE_C_S1_PROMOTED_MULTIYEAR_V1",
+  "source_commit": "87631c731344748d27ed6d66236df65ff168550a",
+  "target_start": "2013-01-01 00:00:00+00:00",
+  "target_end": "2014-01-01 00:00:00+00:00",
+  "target_events": 85294,
+  "sample": "DISPLACEMENT_ORIGIN_ONLY",
+  "entry_model": "TOUCH_NEXT_OPEN",
+  "vol_floor_k": 1.0,
+  "target_R_surface": [
+    1.0,
+    1.5,
+    2.0
+  ],
+  "built_trades": 1082,
+  "widened_trades": 404,
+  "rule": "risk=max(structural_risk,1.0*causal sigma60); never tightens structural stop",
+  "selection_source": "2025 preregistered S1 computational screen",
+  "decision_gate": "PHASE_C_S1_MULTIYEAR_GATE.md",
+  "costs": "$22 RT/100oz and 1.5x stress",
+  "horizon_minutes": 120
+}
