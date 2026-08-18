@@ -1,0 +1,39 @@
+{
+  "version": "COMEX_DEV_RANK1_EXACT_RAW_CONTRACT_QUOTE_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "n0_primary": {
+    "new_raw_requests": 93,
+    "reused_paid_sessions": [
+      "2013-02-07",
+      "2017-10-31",
+      "2018-01-02"
+    ],
+    "raw_trades_cost_usd": 9.830145299435001,
+    "continuous_n0_ohlcv_cost_usd": 10.679362416267,
+    "total_new_cost_usd": 20.509507715702,
+    "recommended_hard_cap_usd": 20.52,
+    "project_spend_after_purchase_usd": 24.519507715701998,
+    "nominal_credit_remaining_usd": 100.480492284298
+  },
+  "dual": {
+    "additional_v0_raw_requests": 9,
+    "reused_paid_v0_alternates": [
+      "2013-05-29"
+    ],
+    "additional_v0_cost_usd": 0.316417872906,
+    "total_new_cost_usd": 20.825925588608,
+    "recommended_hard_cap_usd": 20.84,
+    "project_spend_after_purchase_usd": 24.835925588608,
+    "nominal_credit_remaining_usd": 100.164074411392
+  },
+  "paid_n0_topup_dates": [
+    "2013-05-29"
+  ],
+  "session_count": 96,
+  "notes": [
+    "No market data downloaded.",
+    "Canonical raw session bounds 18:00 ET to 17:15 ET before 2015-09-21, otherwise to 17:00 ET.",
+    "No selected date dropped for low/zero activity."
+  ]
+}
