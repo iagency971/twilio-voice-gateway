@@ -1,0 +1,14 @@
+scope,key,decision_events,fill,nonfill,b2_events,b2_fill,b2_nonfill,sessions
+year,2011,76,37,39,66,32,34,12
+year,2012,64,35,29,52,26,26,12
+year,2013,71,39,32,71,39,32,12
+year,2014,49,25,24,45,24,21,12
+year,2015,51,32,19,46,28,18,12
+year,2016,21,12,9,21,12,9,8
+year,2017,18,13,5,18,13,5,9
+year,2018,30,14,16,30,14,16,11
+family,CONFLUENCE,64,28,36,63,28,35,41
+family,DOZ_ONLY,7,5,2,7,5,2,7
+family,FVG_ONLY,278,156,122,250,138,112,84
+family,MEMORY_ONLY,6,4,2,4,3,1,4
+family,OBJECTIVE_ONLY,25,14,11,25,14,11,18
