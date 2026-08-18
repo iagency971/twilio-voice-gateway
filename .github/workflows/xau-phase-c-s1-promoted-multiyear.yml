@@ -1,4 +1,5 @@
 name: XAU Phase C S1 Promoted Multiyear 2011-2025
+# explicit trigger after workflow creation; protocol unchanged
 on:
   push:
     branches: [agent/xau-multiyear-research]
