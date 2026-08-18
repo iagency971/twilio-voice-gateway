@@ -1,0 +1,4 @@
+session_tier,base_session_dates,supplement_events,supplement_unique_dates,all_full_session_dates_if_promoted,local_gap30_windows,local_gap30_minutes,local_gap60_windows,local_gap60_minutes,full_session_merged_windows,full_session_minutes_if_all_promoted
+2,357,18180,3486,3843,10681,816130.0,9610,868950.0,851,5584980.0
+3,534,15325,3291,3825,9340,696640.0,8476,739200.0,872,5560320.0
+4,711,13143,3067,3778,8226,603420.0,7496,639450.0,906,5494740.0
