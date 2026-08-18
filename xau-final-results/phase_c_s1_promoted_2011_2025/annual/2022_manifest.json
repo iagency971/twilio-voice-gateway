@@ -1,6 +1,6 @@
 {
   "version": "PHASE_C_S1_PROMOTED_MULTIYEAR_V1",
-  "source_commit": "87631c731344748d27ed6d66236df65ff168550a",
+  "source_commit": "2244bf8f4a88f4f6555349995e58bc9fa2cc14b6",
   "target_start": "2022-01-01 00:00:00+00:00",
   "target_end": "2023-01-01 00:00:00+00:00",
   "target_events": 82534,
