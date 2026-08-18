@@ -1,0 +1,56 @@
+{
+  "version": "COMEX_DEV_RANK1_BEHAVIOR_B1_INTERMEDIATE_FREEZE_V1",
+  "role": "INTERMEDIATE_PRIMARY_COMPONENT",
+  "target": "behavior_v2 multiclass",
+  "events": 30525,
+  "sessions": 92,
+  "comparison": {
+    "comparison": "B1_vs_B0",
+    "family_balanced_event_logloss_improvement": -0.08895647681196683,
+    "population_event_logloss_improvement": -0.016060680627900115,
+    "session_balanced_logloss_improvement": -0.015393042682600222,
+    "year_deltas": [
+      {
+        "year": 2011,
+        "logloss_improvement": -0.02015882713902406
+      },
+      {
+        "year": 2012,
+        "logloss_improvement": -0.010782694498771006
+      },
+      {
+        "year": 2013,
+        "logloss_improvement": -0.16706838673388413
+      },
+      {
+        "year": 2014,
+        "logloss_improvement": -0.02135666953631221
+      },
+      {
+        "year": 2015,
+        "logloss_improvement": -0.11990424788317933
+      },
+      {
+        "year": 2016,
+        "logloss_improvement": -0.026099625362943413
+      },
+      {
+        "year": 2017,
+        "logloss_improvement": -0.03355967740514243
+      },
+      {
+        "year": 2018,
+        "logloss_improvement": 0.007831751540755993
+      }
+    ],
+    "positive_years": 1,
+    "cluster_bootstrap_95": {
+      "lo": -0.18509828602253298,
+      "median": -0.08304791453877952,
+      "hi": -0.014713994851130466,
+      "n": 2000
+    },
+    "directional_gate": false
+  },
+  "note": "All 8 B0 and all 8 B1 outer folds were complete before this aggregation. B2 was still running; this file freezes only B1 versus B0 and cannot prejudge B2."
+}
