@@ -1,4 +1,4 @@
-# refresh after canonical parity correction
+# refresh current planning status
 name: XAU COMEX Run Status Probe
 on:
   push:
@@ -21,8 +21,8 @@ jobs:
           import base64,json,os,requests
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
           u=f"https://api.github.com/repos/{os.environ['REPO']}/actions/runs"
-          r=requests.get(u,headers=h,params={'branch':os.environ['BRANCH'],'per_page':50}); r.raise_for_status()
-          wanted={'XAU COMEX Acquisition Plan V1','XAU COMEX Event Timing Smoke 2025','XAU GC Schema Cost Upper Bounds','XAU GC Prewindow Cost Curve 2025'}
+          r=requests.get(u,headers=h,params={'branch':os.environ['BRANCH'],'per_page':70}); r.raise_for_status()
+          wanted={'XAU COMEX Acquisition Plan V1','XAU COMEX Event Timing Smoke 2025','XAU GC Schema Cost Upper Bounds','XAU GC Prewindow Cost Curve 2025','XAU COMEX Session Reuse Analysis'}
           rows=[]
           for x in r.json().get('workflow_runs',[]):
               if x.get('name') in wanted:
