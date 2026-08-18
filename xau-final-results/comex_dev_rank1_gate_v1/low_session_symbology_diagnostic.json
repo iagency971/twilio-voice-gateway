@@ -1,0 +1,86 @@
+{
+  "version": "COMEX_LOW_SESSION_SYMBOLOGY_DIAGNOSTIC_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "threshold_trades": 5000,
+  "sessions": [
+    {
+      "research_trading_date": "2011-12-26",
+      "year": 2011,
+      "continuous_trades": 0,
+      "continuous_ohlcv_1m": 0,
+      "instrument_ids": "143862",
+      "raw_symbols": "GCG2",
+      "raw_symbol_trades": 0,
+      "raw_symbol_ohlcv_1m": 0,
+      "continuous_vs_raw_trade_equal": true
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "year": 2012,
+      "continuous_trades": 2541,
+      "continuous_ohlcv_1m": 500,
+      "instrument_ids": "169060",
+      "raw_symbols": "GCJ2",
+      "raw_symbol_trades": 2541,
+      "raw_symbol_ohlcv_1m": 500,
+      "continuous_vs_raw_trade_equal": true
+    },
+    {
+      "research_trading_date": "2012-11-22",
+      "year": 2012,
+      "continuous_trades": 102,
+      "continuous_ohlcv_1m": 12,
+      "instrument_ids": "118951",
+      "raw_symbols": "GCZ2",
+      "raw_symbol_trades": 102,
+      "raw_symbol_ohlcv_1m": 12,
+      "continuous_vs_raw_trade_equal": true
+    },
+    {
+      "research_trading_date": "2014-01-20",
+      "year": 2014,
+      "continuous_trades": 0,
+      "continuous_ohlcv_1m": 0,
+      "instrument_ids": "99832",
+      "raw_symbols": "GCG4",
+      "raw_symbol_trades": 0,
+      "raw_symbol_ohlcv_1m": 0,
+      "continuous_vs_raw_trade_equal": true
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "year": 2014,
+      "continuous_trades": 247,
+      "continuous_ohlcv_1m": 22,
+      "instrument_ids": "75820",
+      "raw_symbols": "GCQ4",
+      "raw_symbol_trades": 247,
+      "raw_symbol_ohlcv_1m": 22,
+      "continuous_vs_raw_trade_equal": true
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "year": 2015,
+      "continuous_trades": 711,
+      "continuous_ohlcv_1m": 34,
+      "instrument_ids": "140855",
+      "raw_symbols": "GCM5",
+      "raw_symbol_trades": 1479,
+      "raw_symbol_ohlcv_1m": 138,
+      "continuous_vs_raw_trade_equal": false
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "year": 2017,
+      "continuous_trades": 530,
+      "continuous_ohlcv_1m": 273,
+      "instrument_ids": "60173",
+      "raw_symbols": "GCZ7",
+      "raw_symbol_trades": 530,
+      "raw_symbol_ohlcv_1m": 273,
+      "continuous_vs_raw_trade_equal": true
+    }
+  ],
+  "note": "No session is excluded by this diagnostic. It distinguishes sparse/closed raw markets from continuous-symbol mapping anomalies."
+}
