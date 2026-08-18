@@ -1,0 +1,25 @@
+{
+  "version": "COMEX_DEV_RANK1_ENTRY_DECISION_FEATURES_V1_1",
+  "market_data_api_calls": false,
+  "rows": 380,
+  "sessions": 88,
+  "models": [
+    "ACCEPTANCE_RETEST"
+  ],
+  "requested_model": "ACCEPTANCE_RETEST",
+  "counts": [
+    {
+      "entry_model": "ACCEPTANCE_RETEST",
+      "decision_events": 380,
+      "filled_or_entered": 207,
+      "fill_rate": 0.5447368421052632,
+      "sessions": 88,
+      "years": 8,
+      "b2_available": 349
+    }
+  ],
+  "decision_population_freeze": "COMEX_DEV_RANK1_ENTRY_DECISION_POPULATIONS_FREEZE_v1.md",
+  "net_r_not_computed": true,
+  "rr_not_selected": true,
+  "scientific_change_from_v1": "none; optional model filter applied before session feature loop for orchestration only"
+}
