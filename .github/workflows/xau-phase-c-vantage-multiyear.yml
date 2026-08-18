@@ -1,4 +1,5 @@
 name: XAU Phase C Vantage RAW Multiyear 2011-2025
+# explicit rerun after initial workflow creation; scientific protocol unchanged
 on:
   push:
     branches: [agent/xau-multiyear-research]
