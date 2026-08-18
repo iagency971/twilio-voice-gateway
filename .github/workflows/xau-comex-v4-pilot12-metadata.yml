@@ -1,5 +1,5 @@
-# metadata-only: one-call GC.n.0 OHLCV DEV quote
-name: XAU COMEX DEV N0 OHLCV Quote
+# metadata-only: exact raw N0 and dual DEV_RANK1 tape quote
+name: XAU COMEX DEV_RANK1 Exact Raw Contract Quote
 
 on:
   push:
@@ -12,26 +12,53 @@ permissions:
 jobs:
   quote:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     env:
       DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/xau-comex-acquisition-plan
-      - run: python -m pip install databento requests
-      - name: Quote GC.n.0 OHLCV-1m — metadata only
+      - run: python -m pip install pandas==2.2.3 databento requests
+      - name: Quote raw N0 primary and V0 alternates — metadata get_cost only
         run: |
           python - <<'PY'
-          import json,os
+          import json,math,os,time
+          from concurrent.futures import ThreadPoolExecutor,as_completed
           from pathlib import Path
-          import databento as db
-          c=db.Historical(os.environ['DATABENTO_API_KEY'])
-          kw=dict(dataset='GLBX.MDP3',symbols='GC.n.0',stype_in='continuous',schema='ohlcv-1m',start='2010-06-06',end='2019-01-01')
-          out={'version':'GC_N0_OHLCV_DEV_QUOTE_V1','metadata_only':True,'market_data_download_performed':False,'symbol':'GC.n.0','schema':'ohlcv-1m','start':'2010-06-06','end':'2019-01-01','cost_usd':float(c.metadata.get_cost(**kw)),'records':int(c.metadata.get_record_count(**kw)),'billable_bytes':int(c.metadata.get_billable_size(**kw))}
-          Path('/tmp/n0.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          from zoneinfo import ZoneInfo
+          import pandas as pd,databento as db
+          NY=ZoneInfo('America/New_York');c=db.Historical(os.environ['DATABENTO_API_KEY']);p=pd.read_csv('xau-final-results/comex_dev_rank1_gate_v1/frozen_session_mapping_all.csv');p.research_trading_date=p.research_trading_date.astype(str)
+          def b(d):
+              x=pd.Timestamp(d);s=pd.Timestamp(f'{(x-pd.Timedelta(days=1)).date()} 18:00:00',tz=NY).tz_convert('UTC');cl='17:15:00' if x.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';e=pd.Timestamp(f'{x.date()} {cl}',tz=NY).tz_convert('UTC');return s,e
+          def cost(d,i):
+              s,e=b(d);err=None
+              for k in range(6):
+                  try:return float(c.metadata.get_cost(dataset='GLBX.MDP3',symbols=str(i),stype_in='instrument_id',schema='trades',start=s.isoformat(),end=e.isoformat()))
+                  except Exception as z:err=z;time.sleep(min(10,2**k))
+              raise RuntimeError(err)
+          tasks=[];reused_n0=[];reused_alt=[]
+          for r in p.itertuples():
+              same=str(r.v0_start_iid)==str(r.n0_start_iid);paid=bool(r.already_paid)
+              if paid and same:reused_n0.append(r.research_trading_date)
+              else:tasks.append((r.research_trading_date,str(r.n0_start_iid),'N0'))
+              if not same:
+                  if paid:reused_alt.append(r.research_trading_date)
+                  else:tasks.append((r.research_trading_date,str(r.v0_start_iid),'V0_ALT'))
+          rows=[];errs=[]
+          with ThreadPoolExecutor(max_workers=10) as ex:
+              fs={ex.submit(cost,d,i):(d,i,l) for d,i,l in tasks}
+              for f in as_completed(fs):
+                  d,i,l=fs[f]
+                  try:rows.append({'research_trading_date':d,'instrument_id':i,'label':l,'cost_usd':f.result()})
+                  except Exception as e:errs.append({'date':d,'label':l,'error':str(e)})
+          if errs:raise SystemExit(f'failures={len(errs)} {errs[:3]}')
+          q=pd.DataFrame(rows);q.to_csv('/tmp/raw_costs.csv',index=False);n0=float(q[q.label=='N0'].cost_usd.sum());alt=float(q[q.label=='V0_ALT'].cost_usd.sum());m1=10.679362416267;n0_total=n0+m1;dual=n0+alt+m1
+          cap=lambda x:math.ceil((x+0.005)*100)/100
+          out={'version':'COMEX_DEV_RANK1_EXACT_RAW_CONTRACT_QUOTE_V1','metadata_only':True,'market_data_download_performed':False,'n0_primary':{'new_raw_requests':int((q.label=='N0').sum()),'reused_paid_sessions':reused_n0,'raw_trades_cost_usd':n0,'continuous_n0_ohlcv_cost_usd':m1,'total_new_cost_usd':n0_total,'recommended_hard_cap_usd':cap(n0_total),'project_spend_after_purchase_usd':4.01+n0_total,'nominal_credit_remaining_usd':125-4.01-n0_total},'dual':{'additional_v0_raw_requests':int((q.label=='V0_ALT').sum()),'reused_paid_v0_alternates':reused_alt,'additional_v0_cost_usd':alt,'total_new_cost_usd':dual,'recommended_hard_cap_usd':cap(dual),'project_spend_after_purchase_usd':4.01+dual,'nominal_credit_remaining_usd':125-4.01-dual},'paid_n0_topup_dates':[x for x in p[p.already_paid].research_trading_date if x not in reused_n0],'session_count':int(len(p)),'notes':['No market data downloaded.','Canonical raw session bounds 18:00 ET to 17:15 ET before 2015-09-21, otherwise to 17:00 ET.','No selected date dropped for low/zero activity.']}
+          Path('/tmp/out.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
           PY
-      - name: Publish quote
+      - name: Publish exact quote
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -39,7 +66,9 @@ jobs:
         run: |
           python - <<'PY'
           import base64,os,pathlib,requests
-          p=pathlib.Path('/tmp/n0.json');path='xau-final-results/comex_dev_rank1_gate_v1/gc_n0_ohlcv_dev_quote.json';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':'publish GC.n.0 OHLCV DEV metadata quote [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
-          if sha:body['sha']=sha
-          r=requests.put(u,headers=h,json=body);r.raise_for_status()
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for src,name in [('/tmp/out.json','dev_rank1_exact_raw_contract_quote.json'),('/tmp/raw_costs.csv','dev_rank1_exact_raw_contract_costs.csv')]:
+              p=pathlib.Path(src);path=f'xau-final-results/comex_dev_rank1_gate_v1/{name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish exact DEV_RANK1 raw quote {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:body['sha']=sha
+              r=requests.put(u,headers=h,json=body);r.raise_for_status()
           PY
