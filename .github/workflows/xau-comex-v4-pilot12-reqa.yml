@@ -1,5 +1,5 @@
-# qa-only: summarize DEV_RANK1 coverage inventory
-name: XAU COMEX DEV_RANK1 Coverage Summary
+# qa-only: true-nunique DEV_RANK1 coverage summary
+name: XAU COMEX DEV_RANK1 Coverage Summary V2
 
 on:
   push:
@@ -7,25 +7,32 @@ on:
     paths: ['.github/workflows/xau-comex-v4-pilot12-reqa.yml']
 
 permissions:
+  actions: read
   contents: write
 
 jobs:
   summarize:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/xau-comex-acquisition-plan
       - run: python -m pip install pandas==2.2.3 requests
-      - name: Aggregate existing zero-cost coverage files
+      - uses: actions/download-artifact@v4
+        with:
+          name: comex-acquisition-plan-v1
+          path: /tmp/plan
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32102932187
+      - name: Recompute coverage directly from canonical event rows
         run: |
-          python xau-multiyear/scripts/summarize_comex_dev_rank1_coverage.py \
-            --entry xau-final-results/comex_dev_rank1_gate_v1/dev_rank1_coverage_entry_models.csv \
-            --confluence xau-final-results/comex_dev_rank1_gate_v1/dev_rank1_coverage_confluence_behavior_direction_year.csv \
-            --broad xau-final-results/comex_dev_rank1_gate_v1/dev_rank1_coverage_broad_summary.csv \
+          python xau-multiyear/scripts/summarize_comex_dev_rank1_coverage_raw.py \
+            --events /tmp/plan/canonical_events_all.csv.gz \
+            --sessions xau-final-results/comex_dev_rank1_gate_v1/corrected_primary_sessions.csv \
             --out /tmp/coverage
-      - name: Publish compact coverage inventory
+      - name: Publish corrected coverage inventory
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -36,7 +43,7 @@ jobs:
           src=pathlib.Path('/tmp/coverage');root='xau-final-results/comex_dev_rank1_gate_v1';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
           for p in src.iterdir():
               if not p.is_file():continue
-              path=f'{root}/{p.name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish DEV_RANK1 coverage inventory {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              path=f'{root}/{p.name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish corrected DEV_RANK1 coverage {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
               if sha:body['sha']=sha
               r=requests.put(u,headers=h,json=body);r.raise_for_status()
           PY
