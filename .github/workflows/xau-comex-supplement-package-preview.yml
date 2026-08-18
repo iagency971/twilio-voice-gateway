@@ -1,0 +1,97 @@
+name: XAU COMEX Supplement Package Preview
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-supplement-package-preview.yml']
+permissions:
+  actions: read
+  contents: write
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5
+      - uses: actions/download-artifact@v4
+        with:
+          name: comex-acquisition-plan-v1
+          path: /tmp/plan
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32102932187
+      - name: Build frozen supplemental package shapes
+        run: |
+          python - <<'PY'
+          import hashlib,json,math
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          import numpy as np,pandas as pd
+          NY=ZoneInfo('America/New_York'); SEED='COMEX_SUPPLEMENT_V1_SEED_971'
+          e=pd.read_csv('/tmp/plan/canonical_events_all.csv.gz',compression='gzip',low_memory=False)
+          s=pd.read_csv('/tmp/plan/session_candidates_all.csv')
+          ct=pd.to_datetime(e.contact_time,utc=True); local=ct.dt.tz_convert(NY); e['research_trading_date']=(local-pd.Timedelta(hours=17)).dt.date.astype(str)
+          fam=e.constituent_families.fillna('')
+          tags=[]
+          order=['DISPLACEMENT_ORIGIN','OBJECTIVE_LIQUIDITY','MEMORY','FVG']
+          for x in fam:
+              xs=[z for z in order if z in x]; tags.append('+'.join(xs) if xs else 'OTHER')
+          e['signature']=tags
+          e['h']=[hashlib.sha256(f'{SEED}|{u}'.encode()).hexdigest() for u in e.event_uid]
+          pure_targets={'DEV':2000,'VALIDATION':1000,'COMEX_FEATURE_HOLDOUT':1000}
+          fvg_conf_targets={'DEV':1500,'VALIDATION':750,'COMEX_FEATURE_HOLDOUT':750}
+          pure={'DISPLACEMENT_ORIGIN','OBJECTIVE_LIQUIDITY','MEMORY'}
+          abundant={'DISPLACEMENT_ORIGIN+FVG','OBJECTIVE_LIQUIDITY+FVG','MEMORY+FVG'}
+          rare=set(e.signature.unique())-pure-abundant-{'FVG','OTHER'}
+          def session_bounds(d):
+              d=pd.Timestamp(d); prev=(d-pd.Timedelta(days=1)).date(); cur=d.date()
+              return pd.Timestamp(f'{prev} 17:00:00',tz=NY).tz_convert('UTC'),pd.Timestamp(f'{cur} 18:00:00',tz=NY).tz_convert('UTC')
+          def snap10(t,ceil=False):
+              t=pd.Timestamp(t).tz_convert('UTC') if pd.Timestamp(t).tzinfo else pd.Timestamp(t,tz='UTC')
+              ns=10*60*10**9; v=t.value
+              w=((v+ns-1)//ns*ns) if ceil else (v//ns*ns)
+              return pd.Timestamp(w,tz='UTC')
+          def merge(intervals,gap=30):
+              if not intervals:return []
+              a=sorted(intervals); out=[]; s0,e0=a[0]; gd=pd.Timedelta(minutes=gap)
+              for s1,e1 in a[1:]:
+                  if s1<=e0+gd: e0=max(e0,e1)
+                  else: out.append((s0,e0)); s0,e0=s1,e1
+              out.append((s0,e0)); return out
+          rows=[]; detail=[]
+          for tier in [2,3,4]:
+              covered=set(s.loc[pd.to_numeric(s.panel_rank,errors='coerce')<=tier,'research_trading_date'].astype(str))
+              selected=e[e.research_trading_date.isin(covered)].copy()
+              supplements=[]
+              for (sp,sig),g in e[~e.research_trading_date.isin(covered)].groupby(['temporal_split','signature']):
+                  if sig=='FVG' or sig=='OTHER': n=0
+                  elif sig in pure: n=max(0,pure_targets.get(sp,0)-int(((selected.temporal_split==sp)&(selected.signature==sig)).sum()))
+                  elif sig in abundant: n=max(0,fvg_conf_targets.get(sp,0)-int(((selected.temporal_split==sp)&(selected.signature==sig)).sum()))
+                  else: n=len(g) # rare confluences all retained
+                  if n>0: supplements.append(g.sort_values('h').head(n))
+              sup=pd.concat(supplements,ignore_index=True) if supplements else e.iloc[:0].copy()
+              intervals=[(snap10(pd.Timestamp(t)-pd.Timedelta(minutes=30),False),snap10(pd.Timestamp(t)+pd.Timedelta(minutes=16),True)) for t in pd.to_datetime(sup.contact_time,utc=True)]
+              m30=merge(intervals,30); m60=merge(intervals,60)
+              sup_dates=set(sup.research_trading_date.astype(str)); all_dates=covered|sup_dates
+              full_sessions=[session_bounds(d) for d in sorted(all_dates)]
+              full_sessions_merged=merge(full_sessions,0)
+              rows.append({'session_tier':tier,'base_session_dates':len(covered),'supplement_events':len(sup),'supplement_unique_dates':len(sup_dates),'all_full_session_dates_if_promoted':len(all_dates),'local_gap30_windows':len(m30),'local_gap30_minutes':sum((b-a).total_seconds()/60 for a,b in m30),'local_gap60_windows':len(m60),'local_gap60_minutes':sum((b-a).total_seconds()/60 for a,b in m60),'full_session_merged_windows':len(full_sessions_merged),'full_session_minutes_if_all_promoted':sum((b-a).total_seconds()/60 for a,b in full_sessions_merged)})
+              for (sp,sig),g in sup.groupby(['temporal_split','signature']): detail.append({'session_tier':tier,'split':sp,'signature':sig,'supplement_events':len(g),'supplement_dates':g.research_trading_date.nunique()})
+          pd.DataFrame(rows).to_csv('/tmp/package_shapes.csv',index=False); pd.DataFrame(detail).to_csv('/tmp/package_detail.csv',index=False)
+          Path('/tmp/package_summary.json').write_text(json.dumps({'rows':rows,'source_run':32102932187,'download_performed':False},indent=2)); print(pd.DataFrame(rows).to_string(index=False)); print(pd.DataFrame(detail).to_string(index=False))
+          PY
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for name in ['package_shapes.csv','package_detail.csv','package_summary.json']:
+              p=pathlib.Path('/tmp')/name; path=f'xau-final-results/comex_acquisition_plan_v1/{name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+              b={'message':f'publish COMEX package preview {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:b['sha']=sha
+              r=requests.put(u,headers=h,json=b); r.raise_for_status()
+          PY
