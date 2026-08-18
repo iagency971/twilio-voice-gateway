@@ -1,4 +1,4 @@
-# execute 2026-08-18
+# execute 2026-08-18 accelerated within 20 metadata req/s limit
 name: XAU COMEX V3 Tier2 Gap30 Exact Cost
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
   quote-year:
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 8
       matrix:
         year: [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
     runs-on: ubuntu-latest
