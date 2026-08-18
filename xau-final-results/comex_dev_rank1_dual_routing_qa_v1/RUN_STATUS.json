@@ -1,0 +1,17 @@
+{
+  "version": "COMEX_DEV_RANK1_DUAL_ROUTING_RUN_STATUS_V1",
+  "run_id": 32182519961,
+  "head_sha": "c2ab9e81cf51e623a2dacbb89f83faec8083c83d",
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-08-18T20:29:19Z",
+  "updated_at": "2026-08-18T20:31:47Z",
+  "jobs": [
+    {
+      "id": 95858647529,
+      "name": "routing_qa",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}
