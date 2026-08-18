@@ -1,0 +1,51 @@
+name: XAU COMEX DEV_RANK1 DUAL Status
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-dev-rank1-dual-status.yml']
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - name: Query acquisition run and publish status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          u=f"{base}/actions/workflows/xau-comex-dev-rank1-dual-acquire.yml/runs"
+          rs=requests.get(u,headers=h,params={'branch':os.environ['BRANCH'],'per_page':10}).json().get('workflow_runs',[])
+          if not rs: raise SystemExit('no acquisition workflow run found')
+          r=rs[0]
+          jobs=requests.get(f"{base}/actions/runs/{r['id']}/jobs",headers=h,params={'per_page':100}).json().get('jobs',[])
+          out={
+            'version':'COMEX_DEV_RANK1_DUAL_RUN_STATUS_V1',
+            'run_id':r['id'],'head_sha':r['head_sha'],'event':r['event'],'status':r['status'],'conclusion':r.get('conclusion'),
+            'created_at':r['created_at'],'updated_at':r['updated_at'],'html_url':r['html_url'],
+            'jobs_total':len(jobs),
+            'jobs':[{k:j.get(k) for k in ['id','name','status','conclusion','started_at','completed_at']} for j in jobs],
+          }
+          raw=(json.dumps(out,indent=2)+'\n').encode()
+          path='xau-final-results/comex_dev_rank1_dual_acquisition_v1/RUN_STATUS.json'
+          cu=f"{base}/contents/{path}"
+          old=requests.get(cu,headers=h,params={'ref':os.environ['BRANCH']})
+          sha=old.json().get('sha') if old.status_code==200 else None
+          body={'message':'publish DEV_RANK1 DUAL acquisition run status [skip ci]','content':base64.b64encode(raw).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          q=requests.put(cu,headers=h,json=body);q.raise_for_status()
+          print(json.dumps(out,indent=2))
+          PY
