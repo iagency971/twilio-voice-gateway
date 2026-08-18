@@ -1,0 +1,247 @@
+{
+  "version": "COMEX_ROLL_SYMBOL_CANDIDATE_DIAGNOSTIC_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "dates": [
+    "2012-03-30",
+    "2014-06-13",
+    "2015-02-05",
+    "2015-04-01",
+    "2017-11-30"
+  ],
+  "symbols": [
+    "GC.v.0",
+    "GC.v.1",
+    "GC.v.2",
+    "GC.n.0",
+    "GC.c.0"
+  ],
+  "rows": [
+    {
+      "research_trading_date": "2012-03-30",
+      "symbol": "GC.v.0",
+      "instrument_ids": "169060",
+      "trades_records": 2541,
+      "ohlcv_1m_records": 500,
+      "parent_trades_all_children": 74624,
+      "parent_ohlcv_1m_all_children": 3296
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "symbol": "GC.v.1",
+      "instrument_ids": "100686",
+      "trades_records": 66885,
+      "ohlcv_1m_records": 1372,
+      "parent_trades_all_children": 74624,
+      "parent_ohlcv_1m_all_children": 3296
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "symbol": "GC.v.2",
+      "instrument_ids": "171052",
+      "trades_records": 362,
+      "ohlcv_1m_records": 96,
+      "parent_trades_all_children": 74624,
+      "parent_ohlcv_1m_all_children": 3296
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "symbol": "GC.n.0",
+      "instrument_ids": "100686",
+      "trades_records": 66885,
+      "ohlcv_1m_records": 1372,
+      "parent_trades_all_children": 74624,
+      "parent_ohlcv_1m_all_children": 3296
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "symbol": "GC.c.0",
+      "instrument_ids": "169060",
+      "trades_records": 2541,
+      "ohlcv_1m_records": 500,
+      "parent_trades_all_children": 74624,
+      "parent_ohlcv_1m_all_children": 3296
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "symbol": "GC.v.0",
+      "instrument_ids": "75820",
+      "trades_records": 247,
+      "ohlcv_1m_records": 22,
+      "parent_trades_all_children": 251,
+      "parent_ohlcv_1m_all_children": 26
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "symbol": "GC.v.1",
+      "instrument_ids": "152343",
+      "trades_records": 0,
+      "ohlcv_1m_records": 0,
+      "parent_trades_all_children": 251,
+      "parent_ohlcv_1m_all_children": 26
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "symbol": "GC.v.2",
+      "instrument_ids": "237954",
+      "trades_records": 0,
+      "ohlcv_1m_records": 0,
+      "parent_trades_all_children": 251,
+      "parent_ohlcv_1m_all_children": 26
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "symbol": "GC.n.0",
+      "instrument_ids": "75820",
+      "trades_records": 247,
+      "ohlcv_1m_records": 22,
+      "parent_trades_all_children": 251,
+      "parent_ohlcv_1m_all_children": 26
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "symbol": "GC.c.0",
+      "instrument_ids": "107772",
+      "trades_records": 0,
+      "ohlcv_1m_records": 0,
+      "parent_trades_all_children": 251,
+      "parent_ohlcv_1m_all_children": 26
+    },
+    {
+      "research_trading_date": "2015-02-05",
+      "symbol": "GC.v.0",
+      "instrument_ids": "149695",
+      "trades_records": 96651,
+      "ohlcv_1m_records": 80,
+      "parent_trades_all_children": 101710,
+      "parent_ohlcv_1m_all_children": 938
+    },
+    {
+      "research_trading_date": "2015-02-05",
+      "symbol": "GC.v.1",
+      "instrument_ids": "122816",
+      "trades_records": 569,
+      "ohlcv_1m_records": 3,
+      "parent_trades_all_children": 101710,
+      "parent_ohlcv_1m_all_children": 938
+    },
+    {
+      "research_trading_date": "2015-02-05",
+      "symbol": "GC.v.2",
+      "instrument_ids": "140855",
+      "trades_records": 413,
+      "ohlcv_1m_records": 360,
+      "parent_trades_all_children": 101710,
+      "parent_ohlcv_1m_all_children": 938
+    },
+    {
+      "research_trading_date": "2015-02-05",
+      "symbol": "GC.n.0",
+      "instrument_ids": "149695",
+      "trades_records": 96651,
+      "ohlcv_1m_records": 80,
+      "parent_trades_all_children": 101710,
+      "parent_ohlcv_1m_all_children": 938
+    },
+    {
+      "research_trading_date": "2015-02-05",
+      "symbol": "GC.c.0",
+      "instrument_ids": "90781",
+      "trades_records": 433,
+      "ohlcv_1m_records": 6,
+      "parent_trades_all_children": 101710,
+      "parent_ohlcv_1m_all_children": 938
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "symbol": "GC.v.0",
+      "instrument_ids": "140855",
+      "trades_records": 711,
+      "ohlcv_1m_records": 34,
+      "parent_trades_all_children": 1609,
+      "parent_ohlcv_1m_all_children": 318
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "symbol": "GC.v.1",
+      "instrument_ids": "149695",
+      "trades_records": 805,
+      "ohlcv_1m_records": 113,
+      "parent_trades_all_children": 1609,
+      "parent_ohlcv_1m_all_children": 318
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "symbol": "GC.v.2",
+      "instrument_ids": "49895",
+      "trades_records": 17,
+      "ohlcv_1m_records": 10,
+      "parent_trades_all_children": 1609,
+      "parent_ohlcv_1m_all_children": 318
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "symbol": "GC.n.0",
+      "instrument_ids": "140855",
+      "trades_records": 1479,
+      "ohlcv_1m_records": 138,
+      "parent_trades_all_children": 1609,
+      "parent_ohlcv_1m_all_children": 318
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "symbol": "GC.c.0",
+      "instrument_ids": "149695",
+      "trades_records": 37,
+      "ohlcv_1m_records": 9,
+      "parent_trades_all_children": 1609,
+      "parent_ohlcv_1m_all_children": 318
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "symbol": "GC.v.0",
+      "instrument_ids": "60173",
+      "trades_records": 530,
+      "ohlcv_1m_records": 273,
+      "parent_trades_all_children": 120081,
+      "parent_ohlcv_1m_all_children": 3874
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "symbol": "GC.v.1",
+      "instrument_ids": "15562",
+      "trades_records": 114827,
+      "ohlcv_1m_records": 1379,
+      "parent_trades_all_children": 120081,
+      "parent_ohlcv_1m_all_children": 3874
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "symbol": "GC.v.2",
+      "instrument_ids": "2115",
+      "trades_records": 868,
+      "ohlcv_1m_records": 368,
+      "parent_trades_all_children": 120081,
+      "parent_ohlcv_1m_all_children": 3874
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "symbol": "GC.n.0",
+      "instrument_ids": "15562",
+      "trades_records": 114827,
+      "ohlcv_1m_records": 1379,
+      "parent_trades_all_children": 120081,
+      "parent_ohlcv_1m_all_children": 3874
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "symbol": "GC.c.0",
+      "instrument_ids": "60173",
+      "trades_records": 530,
+      "ohlcv_1m_records": 273,
+      "parent_trades_all_children": 120081,
+      "parent_ohlcv_1m_all_children": 3874
+    }
+  ],
+  "note": "Counts only. No symbol-selection rule is changed by this diagnostic."
+}
