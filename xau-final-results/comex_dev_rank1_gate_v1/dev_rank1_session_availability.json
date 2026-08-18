@@ -1,0 +1,115 @@
+{
+  "version": "COMEX_DEV_RANK1_SESSION_AVAILABILITY_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "sessions": 96,
+  "trades_quantiles": {
+    "0": 0.0,
+    "0.01": 0.0,
+    "0.05": 665.75,
+    "0.1": 17612.0,
+    "0.25": 66845.5,
+    "0.5": 84176.5,
+    "0.75": 98378.75,
+    "0.9": 127545.5,
+    "0.95": 155769.75,
+    "0.99": 184893.4999999997,
+    "1": 287161.0
+  },
+  "ohlcv_m1_quantiles": {
+    "0": 0.0,
+    "0.01": 0.0,
+    "0.05": 68.5,
+    "0.1": 1110.0,
+    "0.25": 1359.0,
+    "0.5": 1375.0,
+    "0.75": 1383.0,
+    "0.9": 1398.5,
+    "0.95": 1401.0,
+    "0.99": 1403.3,
+    "1": 1409.0
+  },
+  "zero_trade_sessions": [
+    "2011-12-26",
+    "2014-01-20"
+  ],
+  "zero_m1_sessions": [
+    "2011-12-26",
+    "2014-01-20"
+  ],
+  "under_5000_trades": [
+    {
+      "research_trading_date": "2011-12-26",
+      "trades_records": 0,
+      "ohlcv_1m_records": 0
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "trades_records": 2541,
+      "ohlcv_1m_records": 500
+    },
+    {
+      "research_trading_date": "2012-11-22",
+      "trades_records": 102,
+      "ohlcv_1m_records": 12
+    },
+    {
+      "research_trading_date": "2014-01-20",
+      "trades_records": 0,
+      "ohlcv_1m_records": 0
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "trades_records": 247,
+      "ohlcv_1m_records": 22
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "trades_records": 711,
+      "ohlcv_1m_records": 34
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "trades_records": 530,
+      "ohlcv_1m_records": 273
+    }
+  ],
+  "under_300_active_m1": [
+    {
+      "research_trading_date": "2011-12-26",
+      "trades_records": 0,
+      "ohlcv_1m_records": 0
+    },
+    {
+      "research_trading_date": "2012-11-22",
+      "trades_records": 102,
+      "ohlcv_1m_records": 12
+    },
+    {
+      "research_trading_date": "2014-01-20",
+      "trades_records": 0,
+      "ohlcv_1m_records": 0
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "trades_records": 247,
+      "ohlcv_1m_records": 22
+    },
+    {
+      "research_trading_date": "2015-02-05",
+      "trades_records": 96651,
+      "ohlcv_1m_records": 80
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "trades_records": 711,
+      "ohlcv_1m_records": 34
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "trades_records": 530,
+      "ohlcv_1m_records": 273
+    }
+  ],
+  "note": "Threshold lists are diagnostics only; this script does not change session selection."
+}
