@@ -1,0 +1,24 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_SOURCE_LEVELS_V1",
+  "market_data_api_calls": false,
+  "analytical_sessions": 96,
+  "source_sessions_with_primary_levels": 91,
+  "missing_source_sessions": [
+    "2011-12-26",
+    "2012-11-22",
+    "2014-01-20",
+    "2015-02-05",
+    "2017-03-29"
+  ],
+  "levels_per_source": 4,
+  "levels_total": 364,
+  "level_types": [
+    "VWAP",
+    "POC",
+    "VAH",
+    "VAL"
+  ],
+  "contact_rule": "future primary contact requires first exact GC trade at level tick in next auction session on same raw instrument; no M1 crossing substitution",
+  "hvn_lvn_status": "not instantiated here; secondary definitions retained but local-extrema tie convention not expanded post-acquisition",
+  "outcomes_used_to_create_levels": false
+}
