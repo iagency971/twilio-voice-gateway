@@ -1,0 +1,11 @@
+{
+  "events": 80617,
+  "fvg_only": 73708,
+  "non_fvg": 6909,
+  "behavior": {
+    "CLEAN_REJECTION": 40489,
+    "FAILED_AUCTION": 39175,
+    "ACCEPTED_BREAK": 614,
+    "UNRESOLVED": 339
+  }
+}
