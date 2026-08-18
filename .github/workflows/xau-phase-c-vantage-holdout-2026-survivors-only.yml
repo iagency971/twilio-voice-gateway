@@ -1,5 +1,5 @@
 name: XAU Vantage Holdout 2026 Survivor Only
-# reporting-only fix: frozen zero-trade cells retained; scientific parameters unchanged
+# explicit zero-trade-safe trigger; frozen scientific parameters unchanged
 on:
   push:
     branches: [agent/xau-multiyear-research]
