@@ -1,5 +1,5 @@
-# trigger-once: 2026-08-18-delta-bounds-v1
-name: XAU COMEX V4 Pilot12 QA-only Replay
+# qa-only: paid pilot DBN flags and grid checks
+name: XAU COMEX V4 Pilot12 Flags QA
 
 on:
   push:
@@ -11,52 +11,49 @@ permissions:
   contents: write
 
 jobs:
-  reqa:
+  qa:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/xau-comex-acquisition-plan
-      - run: python -m pip install pandas==2.2.3 numpy databento requests
-      - name: Locate completed acquisition run containing raw artifact
+      - run: python -m pip install pandas==2.2.3 databento requests
+      - name: Locate completed paid pilot artifact
         id: locate
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
         run: |
           python - <<'PY' >> "$GITHUB_OUTPUT"
-          import os, requests
-          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          base=f"https://api.github.com/repos/{os.environ['REPO']}"; u=f"{base}/actions/workflows/xau-comex-v4-pilot12-metadata.yml/runs"
-          runs=requests.get(u,headers=h,params={'branch':'agent/xau-comex-acquisition-plan','status':'success','per_page':30}).json().get('workflow_runs',[])
-          found=None
+          import os,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          runs=requests.get(f"{base}/actions/workflows/xau-comex-v4-pilot12-metadata.yml/runs",headers=h,params={'branch':'agent/xau-comex-acquisition-plan','status':'success','per_page':30}).json().get('workflow_runs',[]);found=None
           for r in runs:
               arts=requests.get(f"{base}/actions/runs/{r['id']}/artifacts",headers=h,params={'per_page':100}).json().get('artifacts',[])
-              if any(a['name']=='comex-v4-pilot12-raw-and-qa' and not a.get('expired') for a in arts): found=r['id']; break
-          if not found: raise SystemExit('raw acquisition artifact not found; no Databento calls attempted')
+              if any(a['name']=='comex-v4-pilot12-raw-and-qa' and not a.get('expired') for a in arts): found=r['id'];break
+          if not found: raise SystemExit('raw acquisition artifact not found')
           print(f'run_id={found}')
           PY
-      - name: Download existing paid raw artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: comex-v4-pilot12-raw-and-qa
           path: /tmp/acq
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: ${{ steps.locate.outputs.run_id }}
-      - name: Analyze native-side delta uncertainty bounds
+      - name: Run flags and price-grid QA — existing files only
         run: |
-          python xau-multiyear/scripts/analyze_comex_v4_delta_bounds.py \
+          python xau-multiyear/scripts/qa_comex_pilot_flags.py \
             --raw-root /tmp/acq \
             --sessions xau-final-results/comex_v4_pilot12/pilot12_sessions.csv \
-            --out /tmp/delta
+            --out /tmp/flags
       - uses: actions/upload-artifact@v4
         with:
-          name: comex-v4-pilot12-delta-bounds-v1
-          path: /tmp/delta/
+          name: comex-v4-pilot12-flags-qa-v1
+          path: /tmp/flags/
           retention-days: 90
-      - name: Publish delta-bounds analysis
+      - name: Publish flags QA
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -64,12 +61,10 @@ jobs:
         run: |
           python - <<'PY'
           import base64,os,pathlib,requests
-          src=pathlib.Path('/tmp/delta'); root='xau-final-results/comex_v4_pilot12_acquisition'
-          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          for name in ['delta_bounds_summary.json','delta_bounds_by_session.csv']:
-              p=src/name; path=f'{root}/{name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
-              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
-              body={'message':f'publish COMEX V4 pilot delta-bounds analysis {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
-              if sha: body['sha']=sha
-              r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          src=pathlib.Path('/tmp/flags');root='xau-final-results/comex_v4_pilot12_acquisition';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for p in src.iterdir():
+              if not p.is_file(): continue
+              path=f'{root}/{p.name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish COMEX pilot flags QA {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:body['sha']=sha
+              r=requests.put(u,headers=h,json=body);r.raise_for_status()
           PY
