@@ -1,0 +1,814 @@
+{
+  "version": "COMEX_DEV_RANK1_DUAL_RUN_STATUS_V1",
+  "run_id": 32179377819,
+  "head_sha": "cbe5701eaf828d4a624f9ca0592b9fba0d63e8f1",
+  "event": "push",
+  "status": "queued",
+  "conclusion": null,
+  "created_at": "2026-08-18T19:55:47Z",
+  "updated_at": "2026-08-18T19:57:58Z",
+  "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32179377819",
+  "jobs_total": 100,
+  "jobs": [
+    {
+      "id": 95848587065,
+      "name": "gate",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:55:50Z",
+      "completed_at": "2026-08-18T19:57:58Z"
+    },
+    {
+      "id": 95849230258,
+      "name": "download (06610cec170650590cd663ca, RAW_TRADES, V0_DUAL_ALTERNATE, 2017-03-29, GLBX.MDP3, trades,...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": "2026-08-18T19:58:30Z"
+    },
+    {
+      "id": 95849230261,
+      "name": "download (0a4d76ff55756735f40fe579, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-02-05, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-08-18T19:58:32Z",
+      "completed_at": "2026-08-18T19:59:05Z"
+    },
+    {
+      "id": 95849230295,
+      "name": "download (15ef2421d540886a8b0bddde, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-09-30, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:01Z",
+      "completed_at": "2026-08-18T19:59:26Z"
+    },
+    {
+      "id": 95849230308,
+      "name": "download (01038430e355d65828fbe711, RAW_TRADES, V0_DUAL_ALTERNATE, 2017-07-28, GLBX.MDP3, trades,...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": "2026-08-18T19:58:27Z"
+    },
+    {
+      "id": 95849230312,
+      "name": "download (046f2866c80462c8ff285844, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-06-22, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": "2026-08-18T19:58:32Z"
+    },
+    {
+      "id": 95849230321,
+      "name": "download (05118c269931eeb4da301fd5, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-01-20, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:58:02Z",
+      "completed_at": "2026-08-18T19:58:59Z"
+    },
+    {
+      "id": 95849230327,
+      "name": "download (0dc66cff9d212d4c2ee08c1c, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-07-28, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:01Z",
+      "completed_at": "2026-08-18T19:59:39Z"
+    },
+    {
+      "id": 95849230332,
+      "name": "download (0d6e2e71d8b242cda34088f9, RAW_TRADES, V0_DUAL_ALTERNATE, 2014-01-24, GLBX.MDP3, trades,...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:58:35Z",
+      "completed_at": "2026-08-18T19:58:59Z"
+    },
+    {
+      "id": 95849230338,
+      "name": "download (204a6a1bdd03761f2ef3d3f4, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-11-24, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:42Z",
+      "completed_at": "2026-08-18T20:00:14Z"
+    },
+    {
+      "id": 95849230341,
+      "name": "download (1748b2cb15bdc6adf712cf66, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-05-29, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:33Z",
+      "completed_at": "2026-08-18T20:00:05Z"
+    },
+    {
+      "id": 95849230354,
+      "name": "download (14bd39f712f152b38d2fc89b, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-08-20, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:01Z",
+      "completed_at": "2026-08-18T19:59:38Z"
+    },
+    {
+      "id": 95849230374,
+      "name": "download (1649498e4d4044a722357913, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-04-01, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:07Z",
+      "completed_at": "2026-08-18T19:59:31Z"
+    },
+    {
+      "id": 95849230386,
+      "name": "download (0a03fe747d22caa3adb5e18f, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-05-16, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:58:29Z",
+      "completed_at": "2026-08-18T19:59:00Z"
+    },
+    {
+      "id": 95849230438,
+      "name": "download (170669898214b05ef11130e9, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-02-22, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:29Z",
+      "completed_at": "2026-08-18T19:59:56Z"
+    },
+    {
+      "id": 95849231418,
+      "name": "download (20e52bbbec47b9e0c21dd0ec, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-11-16, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:41Z",
+      "completed_at": "2026-08-18T20:00:28Z"
+    },
+    {
+      "id": 95849231549,
+      "name": "download (21fed584c420c6a140449944, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-04-21, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:00:07Z",
+      "completed_at": "2026-08-18T20:00:42Z"
+    },
+    {
+      "id": 95849231585,
+      "name": "download (23f7757b162b25dfa6baea77, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-08-08, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:00:16Z",
+      "completed_at": "2026-08-18T20:00:42Z"
+    },
+    {
+      "id": 95849231601,
+      "name": "download (28d9f8d82d3273afc48e435c, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-10-13, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:00:30Z",
+      "completed_at": "2026-08-18T20:01:10Z"
+    },
+    {
+      "id": 95849231642,
+      "name": "download (21b9b87af0028bf7e4c5fae2, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-03-17, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T19:59:58Z",
+      "completed_at": "2026-08-18T20:00:32Z"
+    },
+    {
+      "id": 95849231662,
+      "name": "download (316d2ad3a854499daa61df55, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-06-11, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:00:44Z",
+      "completed_at": "2026-08-18T20:01:45Z"
+    },
+    {
+      "id": 95849231683,
+      "name": "download (378ac0661e651f6b90d26221, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-03-21, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:00:46Z",
+      "completed_at": "2026-08-18T20:01:45Z"
+    },
+    {
+      "id": 95849231711,
+      "name": "download (2b6a1f8970e700c8b4fbda52, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-11-20, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:00:34Z",
+      "completed_at": "2026-08-18T20:01:02Z"
+    },
+    {
+      "id": 95849231759,
+      "name": "download (3889932e29ec7ad7531b758a, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-10-12, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:01:04Z",
+      "completed_at": "2026-08-18T20:01:30Z"
+    },
+    {
+      "id": 95849231805,
+      "name": "download (4190db30e9ebd553e2bb8044, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-07-10, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:01:12Z",
+      "completed_at": "2026-08-18T20:02:04Z"
+    },
+    {
+      "id": 95849232783,
+      "name": "download (483bcc64bae984b9d212ba33, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-04-25, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:01:47Z",
+      "completed_at": "2026-08-18T20:02:30Z"
+    },
+    {
+      "id": 95849232852,
+      "name": "download (44af4cb1b0f474903befb0c6, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-04-28, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:01:33Z",
+      "completed_at": "2026-08-18T20:02:00Z"
+    },
+    {
+      "id": 95849232922,
+      "name": "download (4971b1cbc1b1c925bc7f10fe, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-07-04, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:01:47Z",
+      "completed_at": "2026-08-18T20:02:13Z"
+    },
+    {
+      "id": 95849232957,
+      "name": "download (4d36b4645dcd2033f58ed6f9, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-10-30, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:02:06Z",
+      "completed_at": "2026-08-18T20:02:31Z"
+    },
+    {
+      "id": 95849232990,
+      "name": "download (4e247a6d67fd6f189ef7c3dc, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-06-26, GLBX.MDP3, trad...",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-08-18T20:02:15Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849232996,
+      "name": "download (4d32c3049011397db7bbe6bd, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-11-30, GLBX.MDP3, trad...",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-18T20:02:02Z",
+      "completed_at": "2026-08-18T20:02:33Z"
+    },
+    {
+      "id": 95849233090,
+      "name": "download (4e589122832b753ea791c781, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-07-24, GLBX.MDP3, trad...",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-08-18T20:02:32Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849233163,
+      "name": "download (4ebcb0bfd5a756e4a288c74b, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-05-07, GLBX.MDP3, trad...",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-08-18T20:02:34Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849233257,
+      "name": "download (53202fdf7f7f38307ba8da49, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-12-01, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849233271,
+      "name": "download (4f40b26170c24d9fa18b73ef, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-07-01, GLBX.MDP3, trad...",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-08-18T20:02:35Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849233915,
+      "name": "download (548d6cfa80c370f9e56bcaa3, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-11-21, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234148,
+      "name": "download (567080fdbdcd1b9fbd4f2833, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-06-19, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234282,
+      "name": "download (64711d89043381cda0ecda8f, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-02-04, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234336,
+      "name": "download (5745c318022774a1a22a2cc6, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-03-30, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234341,
+      "name": "download (5841f731f03f078b75f85e93, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-03-29, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234450,
+      "name": "download (57f3d64f0100f87b6c70f74e, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-11-17, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234559,
+      "name": "download (6be838bc4294ab53762f99fe, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-02-26, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234611,
+      "name": "download (6c0c3811eb2084c9edd74824, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-11-22, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234876,
+      "name": "download (738a23e9706fadae605ba82f, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-12-31, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849234893,
+      "name": "download (74e684c3f6e329194dff56d8, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-11-16, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849235328,
+      "name": "download (76f5b2954527e6dccfaf4008, RAW_TRADES, V0_DUAL_ALTERNATE, 2015-04-01, GLBX.MDP3, trades,...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849235473,
+      "name": "download (7908d620839a22e86c84e2e2, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-10-10, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849235672,
+      "name": "download (797c11231390886690837334, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-05-09, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849235797,
+      "name": "download (7d9246dfe4dca4c9540ea376, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-09-06, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849235988,
+      "name": "download (84ae5997a774a304c484f6fd, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-04-21, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849236087,
+      "name": "download (8891d6248d7fba67570f96ac, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-09-22, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849236114,
+      "name": "download (86b4c5fe9e45d2cd05af72df, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-03-23, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849236206,
+      "name": "download (8c504633df50affcde10daff, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-04-05, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849236213,
+      "name": "download (939d5d2a0812cc7fc68ea77e, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-01-24, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849236351,
+      "name": "download (94f8d8a4e631ad1b5e740343, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-07-02, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849236406,
+      "name": "download (9af4f9fb1784042897fb7152, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-04-23, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849236696,
+      "name": "download (aa006e06b82a3e4d086656f8, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-05-18, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849236876,
+      "name": "download (adad66d883042eeb6f3f0c16, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-08-19, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237055,
+      "name": "download (ae3e87a6ed4be795b24c85fa, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-09-27, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237197,
+      "name": "download (b0ee9440cd6d50e5efac09eb, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-04-13, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237253,
+      "name": "download (bb32e5b37845157784ad7044, RAW_TRADES, V0_DUAL_ALTERNATE, 2017-07-24, GLBX.MDP3, trades,...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237266,
+      "name": "download (b3ef00793238580b7cc8dd84, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-07-28, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237317,
+      "name": "download (bb3ee66c2506f8cd9f9e1793, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-07-19, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:57:59Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237635,
+      "name": "download (bd0640d20e68fca9d56f6116, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-09-01, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237662,
+      "name": "download (bdffb750f08afd679e8e9ae7, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-04-20, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237673,
+      "name": "download (bea4ddb8b9033d511e8674e7, RAW_TRADES, V0_DUAL_ALTERNATE, 2012-07-30, GLBX.MDP3, trades,...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237985,
+      "name": "download (c3e7e28ae16f772d3b1da3dd, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-11-23, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849237990,
+      "name": "download (c2259f884223f3d5dbac5543, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-09-25, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849238505,
+      "name": "download (c52c52478b25177ccdad506e, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-04-14, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849238531,
+      "name": "download (c52243022bc0d0862c38901d, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-01-10, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849238615,
+      "name": "download (c4cfd71e3e40538a92d0392d, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-10-29, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849238670,
+      "name": "download (c52c96a36f6f0758cbea2cfd, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-01-11, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849238766,
+      "name": "download (c554916964b73e993af0e45f, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-02-24, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849239040,
+      "name": "download (c647d46c1f05f58adc7808c3, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-08-29, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849239110,
+      "name": "download (c56a4a9d51b3dc77e03ef88a, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2017-06-16, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849239154,
+      "name": "download (cbaf01da8fa0461e72992a27, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-03-09, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849239448,
+      "name": "download (cc7fde5256de4ebb97c5e61b, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-03-14, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849239520,
+      "name": "download (d04c2a142bb5e8da07482c23, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-06-04, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849239780,
+      "name": "download (d2095601cc5cb3d3d11b45f8, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-12-26, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849239806,
+      "name": "download (d3b1a8c449c29d097f54f8b5, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-07-18, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849240101,
+      "name": "download (d54dcf8639647531ca291d8b, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-06-01, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849240293,
+      "name": "download (d5b3b89248be301656734edb, RAW_TRADES, V0_DUAL_ALTERNATE, 2011-07-28, GLBX.MDP3, trades,...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849240311,
+      "name": "download (d6c1c7f9dc1cab4150bfff8e, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-02-18, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849240316,
+      "name": "download (d9af5f638bdafbc5b54d9156, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-11-13, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849240467,
+      "name": "download (d6f8889925f680e106cb3164, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-12-09, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849240594,
+      "name": "download (de574d24a8f52e86259c7267, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-03-01, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849240745,
+      "name": "download (df347790b2ffbd3c498b4d4a, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-06-13, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849240777,
+      "name": "download (dfb6a217280a86fb08ff0466, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-04-16, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241065,
+      "name": "download (e2e5783a123e43e567347277, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2015-07-20, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241077,
+      "name": "download (e191389796f67c1a4a236d4f, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-11-04, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241368,
+      "name": "download (e795eef23ece9639b2137b0f, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2013-09-09, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241416,
+      "name": "download (e902db0d49d2da6d75b1075c, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-02-28, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241676,
+      "name": "download (ef78b9afcb153b6cc942bbbe, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2012-07-30, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241686,
+      "name": "download (eb0bb2b52356dc9dd7c739c6, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2014-10-09, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241728,
+      "name": "download (eb03015e8657d9aeb2018710, RAW_TRADES, V0_DUAL_ALTERNATE, 2012-03-30, GLBX.MDP3, trades,...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241771,
+      "name": "download (ef8fb7c95396228bb3a516d5, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-12-14, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241902,
+      "name": "download (f44e3930c53fe593dbb094b2, RAW_TRADES, V0_DUAL_ALTERNATE, 2017-11-30, GLBX.MDP3, trades,...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849241987,
+      "name": "download (f515a3f6366d676213182cec, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2016-03-15, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849242313,
+      "name": "download (f993d6e882421b7b067d88eb, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2018-12-26, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    },
+    {
+      "id": 95849242350,
+      "name": "download (f79bf57e3bb462951a5f4934, RAW_TRADES, N0_PRIMARY_CANDIDATE, 2011-01-20, GLBX.MDP3, trad...",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-08-18T19:58:00Z",
+      "completed_at": null
+    }
+  ]
+}
