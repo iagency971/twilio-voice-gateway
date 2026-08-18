@@ -1,0 +1,198 @@
+{
+  "version": "COMEX_V4_PILOT12_SIDE_RULES_V1",
+  "market_data_download_performed": false,
+  "source": "existing paid TBBO pilot artifact",
+  "rules": [
+    {
+      "rule": "midquote",
+      "known": 1177503,
+      "classified": 1164455,
+      "coverage": 0.98891892419807,
+      "correct": 1158008,
+      "accuracy": 0.994463504386172,
+      "n_valid": 27631,
+      "n_classified": 27597,
+      "n_recovery_coverage": 0.9987694980275778
+    },
+    {
+      "rule": "midquote_tick",
+      "known": 1177503,
+      "classified": 1177503,
+      "coverage": 1.0,
+      "correct": 1168474,
+      "accuracy": 0.9923320789840875,
+      "n_valid": 27631,
+      "n_classified": 27631,
+      "n_recovery_coverage": 1.0
+    },
+    {
+      "rule": "quote_tick_full",
+      "known": 1177503,
+      "classified": 1177503,
+      "coverage": 1.0,
+      "correct": 1168474,
+      "accuracy": 0.9923320789840875,
+      "n_valid": 27631,
+      "n_classified": 27631,
+      "n_recovery_coverage": 1.0
+    },
+    {
+      "rule": "touch_only",
+      "known": 1177503,
+      "classified": 1158426,
+      "coverage": 0.9837987673916755,
+      "correct": 1154570,
+      "accuracy": 0.9966713454290563,
+      "n_valid": 27631,
+      "n_classified": 27550,
+      "n_recovery_coverage": 0.9970685100068764
+    }
+  ],
+  "by_era": [
+    {
+      "era": "E1_2011_2013",
+      "rule": "midquote",
+      "coverage": 0.9730614619533767,
+      "accuracy": 0.9809755818317124,
+      "n_recovery_coverage": 0.9981404260114956,
+      "known": 323143,
+      "n_valid": 17746
+    },
+    {
+      "era": "E1_2011_2013",
+      "rule": "midquote_tick",
+      "coverage": 1.0,
+      "accuracy": 0.975271010048183,
+      "n_recovery_coverage": 1.0,
+      "known": 323143,
+      "n_valid": 17746
+    },
+    {
+      "era": "E1_2011_2013",
+      "rule": "quote_tick_full",
+      "coverage": 1.0,
+      "accuracy": 0.975271010048183,
+      "n_recovery_coverage": 1.0,
+      "known": 323143,
+      "n_valid": 17746
+    },
+    {
+      "era": "E1_2011_2013",
+      "rule": "touch_only",
+      "coverage": 0.9593616448445426,
+      "accuracy": 0.9877617245839664,
+      "n_recovery_coverage": 0.9954919418460498,
+      "known": 323143,
+      "n_valid": 17746
+    },
+    {
+      "era": "E2_2014_2018",
+      "rule": "midquote",
+      "coverage": 0.9967060695330077,
+      "accuracy": 0.9997381088968149,
+      "n_recovery_coverage": 1.0,
+      "known": 241353,
+      "n_valid": 2635
+    },
+    {
+      "era": "E2_2014_2018",
+      "rule": "midquote_tick",
+      "coverage": 1.0,
+      "accuracy": 0.9990387523668651,
+      "n_recovery_coverage": 1.0,
+      "known": 241353,
+      "n_valid": 2635
+    },
+    {
+      "era": "E2_2014_2018",
+      "rule": "quote_tick_full",
+      "coverage": 1.0,
+      "accuracy": 0.9990387523668651,
+      "n_recovery_coverage": 1.0,
+      "known": 241353,
+      "n_valid": 2635
+    },
+    {
+      "era": "E2_2014_2018",
+      "rule": "touch_only",
+      "coverage": 0.9966853529891901,
+      "accuracy": 0.999746417629379,
+      "n_recovery_coverage": 1.0,
+      "known": 241353,
+      "n_valid": 2635
+    },
+    {
+      "era": "E3_2019_2022",
+      "rule": "midquote",
+      "coverage": 0.9957079766718346,
+      "accuracy": 0.9999722572859303,
+      "n_recovery_coverage": 0.9994962216624685,
+      "known": 289607,
+      "n_valid": 1985
+    },
+    {
+      "era": "E3_2019_2022",
+      "rule": "midquote_tick",
+      "coverage": 1.0,
+      "accuracy": 0.9993784680618908,
+      "n_recovery_coverage": 1.0,
+      "known": 289607,
+      "n_valid": 1985
+    },
+    {
+      "era": "E3_2019_2022",
+      "rule": "quote_tick_full",
+      "coverage": 1.0,
+      "accuracy": 0.9993784680618908,
+      "n_recovery_coverage": 1.0,
+      "known": 289607,
+      "n_valid": 1985
+    },
+    {
+      "era": "E3_2019_2022",
+      "rule": "touch_only",
+      "coverage": 0.9956251057467533,
+      "accuracy": 1.0,
+      "n_recovery_coverage": 0.9994962216624685,
+      "known": 289607,
+      "n_valid": 1985
+    },
+    {
+      "era": "E4_2023_2025",
+      "rule": "midquote",
+      "coverage": 0.9928726035868893,
+      "accuracy": 0.9987729488157711,
+      "n_recovery_coverage": 1.0,
+      "known": 323400,
+      "n_valid": 5265
+    },
+    {
+      "era": "E4_2023_2025",
+      "rule": "midquote_tick",
+      "coverage": 1.0,
+      "accuracy": 0.9980643166357452,
+      "n_recovery_coverage": 1.0,
+      "known": 323400,
+      "n_valid": 5265
+    },
+    {
+      "era": "E4_2023_2025",
+      "rule": "quote_tick_full",
+      "coverage": 1.0,
+      "accuracy": 0.9980643166357452,
+      "n_recovery_coverage": 1.0,
+      "known": 323400,
+      "n_valid": 5265
+    },
+    {
+      "era": "E4_2023_2025",
+      "rule": "touch_only",
+      "coverage": 0.988008658008658,
+      "accuracy": 0.999996870325048,
+      "n_recovery_coverage": 1.0,
+      "known": 323400,
+      "n_valid": 5265
+    }
+  ],
+  "decision_note": "Rule selection must be frozen before any larger acquisition; native N is retained as an explicit missingness/auction-type feature rather than silently discarded."
+}
