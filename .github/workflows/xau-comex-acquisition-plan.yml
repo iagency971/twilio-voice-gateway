@@ -1,4 +1,4 @@
-# final planning run: metadata quotes only, no market-data download
+# canonical warmup/parity corrected; metadata quotes only, no market-data download
 name: XAU COMEX Acquisition Plan V1
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
           python - <<'PY' >> "$GITHUB_OUTPUT"
           import os
           y=int(os.environ['YEAR'])
-          print(f"from_month={'2010-06' if y==2011 else str(y-1)+'-01'}")
+          print(f"from_month={'2009-12' if y==2011 else str(y-1)+'-01'}")
           print(f"to_month={y+1}-01")
           print(f"target_start={y}-01-01")
           print(f"target_end={y+1}-01-01")
@@ -36,6 +36,16 @@ jobs:
           YEAR: ${{ matrix.year }}
       - run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month '${{ steps.w.outputs.from_month }}' --to-month '${{ steps.w.outputs.to_month }}' --out /tmp/xau_${{ matrix.year }}.csv
       - run: python xau-multiyear/scripts/build_comex_event_table.py /tmp/xau_${{ matrix.year }}.csv --target-start '${{ steps.w.outputs.target_start }}' --target-end '${{ steps.w.outputs.target_end }}' --out /tmp/comex_${{ matrix.year }}
+      - name: Canonical event-count parity
+        env: {YEAR: '${{ matrix.year }}'}
+        run: |
+          python - <<'PY'
+          import json,os
+          expected={2011:101473,2012:82007,2013:85294,2014:88507,2015:85672,2016:82696,2017:76320,2018:84706,2019:86902,2020:81382,2021:82225,2022:82534,2023:87156,2024:86816,2025:80617}
+          y=int(os.environ['YEAR']); m=json.load(open(f'/tmp/comex_{y}/manifest.json'))
+          assert int(m['events'])==expected[y], (y,m['events'],expected[y])
+          print('PARITY_OK',y,m['events'])
+          PY
       - run: cd /tmp/comex_${{ matrix.year }} && sha256sum events.csv.gz session_candidates.csv manifest.json > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
@@ -56,6 +66,15 @@ jobs:
           pattern: comex-events-*
           path: /tmp/annual
       - run: python xau-multiyear/scripts/aggregate_comex_acquisition_plan.py --root /tmp/annual --out /tmp/plan
+      - name: Aggregate parity gate
+        run: |
+          python - <<'PY'
+          import json
+          m=json.load(open('/tmp/plan/manifest.json'))
+          assert int(m['events'])==1274307, m
+          assert int(m['annual_files'])==15, m
+          print('AGGREGATE_PARITY_OK',m['events'])
+          PY
       - run: cd /tmp/plan && sha256sum canonical_events_all.csv.gz window_frontier.csv fvg_sampling_tiers.csv session_sampling_tiers.csv annual_manifest.csv manifest.json > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
