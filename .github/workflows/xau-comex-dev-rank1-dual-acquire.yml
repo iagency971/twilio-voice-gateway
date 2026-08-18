@@ -1,0 +1,149 @@
+name: XAU COMEX DEV_RANK1 DUAL One-Shot Acquisition
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - 'xau-authorizations/DEV_RANK1_DUAL_20_84.json'
+
+concurrency:
+  group: xau-comex-dev-rank1-dual-one-shot
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      matrix: ${{ steps.emit.outputs.matrix }}
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 databento requests
+      - name: Global exact pre-download hard gate — metadata only
+        run: |
+          python xau-multiyear/scripts/acquire_comex_dev_rank1_dual.py gate \
+            --requests xau-final-results/comex_dev_rank1_dual_manifest_v1/dev_rank1_dual_requests.csv \
+            --manifest xau-final-results/comex_dev_rank1_dual_manifest_v1/dev_rank1_dual_request_manifest.json \
+            --authorization xau-authorizations/DEV_RANK1_DUAL_20_84.json \
+            --completion-marker xau-final-results/comex_dev_rank1_dual_acquisition_v1/ACQUISITION_COMPLETE.json \
+            --out /tmp/gate
+      - name: Emit valid dynamic matrix
+        id: emit
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, math
+          p='/tmp/gate/matrix.json'
+          obj=json.load(open(p))
+          def clean(x):
+              if isinstance(x,float) and math.isnan(x): return ''
+              if isinstance(x,dict): return {k:clean(v) for k,v in x.items()}
+              if isinstance(x,list): return [clean(v) for v in x]
+              return x
+          print('matrix='+json.dumps(clean(obj),separators=(',',':'),allow_nan=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-gate-v1
+          path: /tmp/gate/
+          retention-days: 90
+
+  download:
+    needs: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJson(needs.gate.outputs.matrix) }}
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 databento
+      - name: One authorized request — no paid retry
+        run: |
+          mkdir -p /tmp/request
+          python xau-multiyear/scripts/acquire_comex_dev_rank1_dual.py download-one \
+            --request-id '${{ matrix.request_id }}' \
+            --request-type '${{ matrix.request_type }}' \
+            --candidate-role '${{ matrix.candidate_role }}' \
+            --research-trading-date '${{ matrix.research_trading_date }}' \
+            --dataset '${{ matrix.dataset }}' \
+            --schema '${{ matrix.schema }}' \
+            --symbols '${{ matrix.symbols }}' \
+            --stype-in '${{ matrix.stype_in }}' \
+            --start '${{ matrix.start }}' \
+            --end '${{ matrix.end }}' \
+            --gate-cost-usd '${{ matrix.gate_cost_usd }}' \
+            --gate-records '${{ matrix.gate_records }}' \
+            --out /tmp/request
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: comex-dev-rank1-dual-${{ matrix.request_id }}
+          path: /tmp/request/
+          retention-days: 90
+
+  finalize:
+    if: ${{ always() && needs.gate.result == 'success' }}
+    needs: [gate, download]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 requests
+      - name: Download all successful request artifacts from this run
+        uses: actions/download-artifact@v4
+        with:
+          pattern: comex-dev-rank1-dual-*
+          path: /tmp/all
+          merge-multiple: true
+      - name: Finalize completeness and hashes
+        run: |
+          python xau-multiyear/scripts/acquire_comex_dev_rank1_dual.py finalize \
+            --requests xau-final-results/comex_dev_rank1_dual_manifest_v1/dev_rank1_dual_requests.csv \
+            --root /tmp/all \
+            --out /tmp/final
+      - name: Assemble consolidated artifact
+        run: |
+          mkdir -p /tmp/consolidated
+          cp -a /tmp/all/. /tmp/consolidated/
+          cp -a /tmp/final/. /tmp/consolidated/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-consolidated-v1
+          path: /tmp/consolidated/
+          retention-days: 90
+      - name: Publish compact acquisition state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64, os, pathlib, requests
+          src=pathlib.Path('/tmp/final')
+          root='xau-final-results/comex_dev_rank1_dual_acquisition_v1'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for p in sorted(src.iterdir()):
+              if not p.is_file(): continue
+              path=f'{root}/{p.name}'
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
+              sha=old.json().get('sha') if old.status_code==200 else None
+              body={'message':f'publish DEV_RANK1 DUAL acquisition state {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha: body['sha']=sha
+              r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          PY
