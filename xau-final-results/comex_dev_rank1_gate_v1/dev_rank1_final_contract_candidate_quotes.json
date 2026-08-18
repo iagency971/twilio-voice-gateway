@@ -1,0 +1,54 @@
+{
+  "version": "COMEX_DEV_RANK1_FINAL_CONTRACT_CANDIDATE_QUOTES_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "pilot_actual_spend_usd": 4.01,
+  "architectures": [
+    {
+      "architecture": "V0_FROZEN_SESSION_RAW_TRADES_PLUS_GC.v.0_OHLCV1M",
+      "continuous_symbol": "GC.v.0",
+      "analytical_sessions": 96,
+      "new_tape_requests": 92,
+      "reused_paid_sessions": 4,
+      "new_tape_cost_usd": 9.515228211880999,
+      "continuous_ohlcv_1m_cost_usd": 10.623191446066,
+      "new_total_quote_usd": 20.138419657946997,
+      "recommended_hard_cap_usd": 20.15,
+      "project_spend_after_purchase_usd": 24.148419657946995,
+      "nominal_credit_remaining_usd": 100.851580342053,
+      "zero_record_new_requests": [
+        "2011-12-26",
+        "2012-11-22",
+        "2014-01-20"
+      ]
+    },
+    {
+      "architecture": "N0_FROZEN_SESSION_RAW_TRADES_PLUS_GC.n.0_OHLCV1M",
+      "continuous_symbol": "GC.n.0",
+      "analytical_sessions": 96,
+      "new_tape_requests": 93,
+      "reused_paid_sessions": 3,
+      "new_tape_cost_usd": 9.830145299435,
+      "continuous_ohlcv_1m_cost_usd": 10.679362416267,
+      "new_total_quote_usd": 20.509507715702,
+      "recommended_hard_cap_usd": 20.52,
+      "project_spend_after_purchase_usd": 24.519507715701998,
+      "nominal_credit_remaining_usd": 100.480492284298,
+      "zero_record_new_requests": [
+        "2011-12-26",
+        "2012-11-22",
+        "2014-01-20"
+      ]
+    }
+  ],
+  "candidate_preference_before_pro_review": "N0 frozen at canonical session start; chosen for causal roll robustness, not XAU outcomes",
+  "n0_paid_session_requiring_primary_contract_topup": [
+    "2013-05-29"
+  ],
+  "notes": [
+    "No session is dropped for low/zero activity.",
+    "Raw trade contract is frozen at canonical GC session start; no intraday contract switching.",
+    "Continuous OHLCV is context only. Selected-session M1 may be reconstructed from raw trades when continuous OHLCV is incomplete.",
+    "Prior-session exact tape is not automatically purchased; native-zone retests are deferred to Stage2."
+  ]
+}
