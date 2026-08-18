@@ -1,10 +1,10 @@
+# trigger-once: fill-models-from-feature-run-32192726623
 name: XAU COMEX DEV_RANK1 Fill Models
 
 on:
-  workflow_run:
-    workflows: ["XAU COMEX DEV_RANK1 Entry Decision Features"]
-    types: [completed]
+  push:
     branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-dev-rank1-fill-models.yml']
 
 permissions:
   actions: read
@@ -12,7 +12,6 @@ permissions:
 
 jobs:
   model:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -32,7 +31,7 @@ jobs:
           path: /tmp/features
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: 32192726623
       - name: Run frozen nested LOYO fill model
         run: |
           python xau-multiyear/scripts/run_comex_dev_rank1_fill_model.py \
