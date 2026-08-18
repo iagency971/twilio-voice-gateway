@@ -1,0 +1,146 @@
+{
+  "version": "COMEX_DEV_RANK1_PRIMARY_MODEL_RESULT_V1",
+  "target": "reaction",
+  "dataset": "B2 causally available events only",
+  "events": 30525,
+  "sessions": 92,
+  "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+  ],
+  "C_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "nested_validation": "outer LOYO; C chosen by inner LOYO on remaining years",
+  "training_weights": "poststratified and equal total influence per broad family",
+  "feature_counts": {
+    "B0": 10,
+    "B1_increment": 23,
+    "B2_increment": 98
+  },
+  "primary_exclusions": {
+    "B1": [
+      "b1_available",
+      "b1_context_instrument_id",
+      "b1_exact_prev_minute",
+      "b1_last_bar_age_min"
+    ],
+    "B2": [
+      "b2_active_contract",
+      "b2_active_instrument_id",
+      "b2_available",
+      "b2_p_ref",
+      "b2_session_elapsed_min"
+    ],
+    "B2_secondary_N": "excluded from first primary fit"
+  },
+  "comparisons": [
+    {
+      "comparison": "B1_vs_B0",
+      "family_balanced_event_logloss_improvement": -0.0011996139721145993,
+      "population_event_logloss_improvement": -0.006861254991348487,
+      "session_balanced_logloss_improvement": -0.006433051063948092,
+      "year_deltas": [
+        {
+          "year": 2011,
+          "logloss_improvement": -0.016540212356117745
+        },
+        {
+          "year": 2012,
+          "logloss_improvement": 0.009868026847313471
+        },
+        {
+          "year": 2013,
+          "logloss_improvement": 0.0012439011456689686
+        },
+        {
+          "year": 2014,
+          "logloss_improvement": 0.0011515357880235721
+        },
+        {
+          "year": 2015,
+          "logloss_improvement": -0.03275213237550051
+        },
+        {
+          "year": 2016,
+          "logloss_improvement": -0.002437390361705538
+        },
+        {
+          "year": 2017,
+          "logloss_improvement": 0.004628946194272787
+        },
+        {
+          "year": 2018,
+          "logloss_improvement": -0.02247583844082157
+        }
+      ],
+      "positive_years": 4,
+      "cluster_bootstrap_95": {
+        "lo": -0.01579820447093784,
+        "median": -0.0020541321926194622,
+        "hi": 0.014893085378449626,
+        "n": 2000
+      },
+      "directional_gate": false
+    },
+    {
+      "comparison": "B2_vs_B1",
+      "family_balanced_event_logloss_improvement": -0.011224265265382116,
+      "population_event_logloss_improvement": -0.02089932100325398,
+      "session_balanced_logloss_improvement": -0.0199132020562941,
+      "year_deltas": [
+        {
+          "year": 2011,
+          "logloss_improvement": -0.01350069380663127
+        },
+        {
+          "year": 2012,
+          "logloss_improvement": -0.02754792111325527
+        },
+        {
+          "year": 2013,
+          "logloss_improvement": -0.028982587162254547
+        },
+        {
+          "year": 2014,
+          "logloss_improvement": -0.026681302799716144
+        },
+        {
+          "year": 2015,
+          "logloss_improvement": -0.008430951184109914
+        },
+        {
+          "year": 2016,
+          "logloss_improvement": -0.010205847977635796
+        },
+        {
+          "year": 2017,
+          "logloss_improvement": 0.01762772136359725
+        },
+        {
+          "year": 2018,
+          "logloss_improvement": 0.005893803153912525
+        }
+      ],
+      "positive_years": 2,
+      "cluster_bootstrap_95": {
+        "lo": -0.020822901952018715,
+        "median": -0.011226389878019938,
+        "hi": -0.0037311470784916856,
+        "n": 2000
+      },
+      "directional_gate": false
+    }
+  ],
+  "interpretation": "DEV_RANK1 controlled discovery only; not independent final validation and not a trading strategy promotion."
+}
