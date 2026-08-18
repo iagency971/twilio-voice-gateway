@@ -1,0 +1,44 @@
+name: XAU COMEX DEV_RANK1 DUAL Preflight
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-dev-rank1-dual-preflight.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3
+      - name: Compile acquisition scripts
+        run: |
+          python -m py_compile \
+            xau-multiyear/scripts/build_comex_dev_rank1_dual_manifest.py \
+            xau-multiyear/scripts/acquire_comex_dev_rank1_dual.py
+      - name: Validate frozen state — no Databento secret
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,pandas as pd
+          root=pathlib.Path('.')
+          m=json.loads((root/'xau-final-results/comex_dev_rank1_dual_manifest_v1/dev_rank1_dual_request_manifest.json').read_text())
+          r=root/'xau-final-results/comex_dev_rank1_dual_manifest_v1/dev_rank1_dual_requests.csv'
+          q=pd.read_csv(r,dtype={'symbols':str})
+          sha=hashlib.sha256(r.read_bytes()).hexdigest()
+          assert m['architecture']=='DUAL_V0_N0_CAUSAL_ACTIVE'
+          assert m['authorization']=='NOT_AUTHORIZED_FOR_DOWNLOAD'
+          assert m['total_new_requests']==103
+          assert len(q)==103 and q.request_id.nunique()==103
+          assert (q.request_type=='RAW_TRADES').sum()==102
+          assert (q.request_type=='CONTINUOUS_OHLCV_CONTEXT').sum()==1
+          assert sha==m['request_csv_sha256']=='25b1cfbd33215f8a1d7a9d6ac86515777df382d5be4fa4f4a74ebb541b381794'
+          assert abs(float(m['hard_cap_usd'])-20.84)<1e-12
+          assert not (root/'xau-authorizations/DEV_RANK1_DUAL_20_84.json').exists()
+          print('PREFLIGHT_OK: manifest frozen, authorization absent, no market-data call possible')
+          PY
