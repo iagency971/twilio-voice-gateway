@@ -1,0 +1,98 @@
+{
+  "version": "COMEX_V4_STAGE1_STAGED_PLAN_V1",
+  "metadata_only": true,
+  "download_performed": false,
+  "architecture": "TRADES primary; native A/B only; N retained explicitly with delta/CVD uncertainty bounds; TBBO deferred after QA pilot",
+  "corrected_panel_sessions": 357,
+  "qa_only_already_paid_sessions": 12,
+  "primary_model_sessions": 345,
+  "stage_counts": [
+    {
+      "stage": "DEV_RANK1",
+      "sessions": 92,
+      "qa_only_sessions": 0,
+      "new_trades_cost_usd": 9.524125277991999
+    },
+    {
+      "stage": "DEV_RANK2",
+      "sessions": 94,
+      "qa_only_sessions": 0,
+      "new_trades_cost_usd": 10.126588582987
+    },
+    {
+      "stage": "QA_ONLY_ALREADY_PAID",
+      "sessions": 12,
+      "qa_only_sessions": 12,
+      "new_trades_cost_usd": 0.0
+    },
+    {
+      "stage": "CONFIRM",
+      "sessions": 92,
+      "qa_only_sessions": 0,
+      "new_trades_cost_usd": 11.684589028360001
+    },
+    {
+      "stage": "LOCKED_TEST",
+      "sessions": 67,
+      "qa_only_sessions": 0,
+      "new_trades_cost_usd": 7.815505564213001
+    }
+  ],
+  "stage_sequence": [
+    {
+      "stage": "DEV_RANK1",
+      "new_session_trades_usd": 9.524125277991999,
+      "new_m1_context_usd": 14.63742300868,
+      "incremental_cost_usd": 24.161548286672,
+      "cumulative_project_spend_usd": 28.171548286672,
+      "credit_remaining_from_125_usd": 96.82845171332801
+    },
+    {
+      "stage": "DEV_RANK2",
+      "new_session_trades_usd": 10.126588582987,
+      "new_m1_context_usd": 0.0,
+      "incremental_cost_usd": 10.126588582987,
+      "cumulative_project_spend_usd": 38.298136869659004,
+      "credit_remaining_from_125_usd": 86.701863130341
+    },
+    {
+      "stage": "CONFIRM",
+      "new_session_trades_usd": 11.684589028360001,
+      "new_m1_context_usd": 6.994195878505,
+      "incremental_cost_usd": 18.678784906865,
+      "cumulative_project_spend_usd": 56.97692177652401,
+      "credit_remaining_from_125_usd": 68.02307822347599
+    },
+    {
+      "stage": "LOCKED_TEST",
+      "new_session_trades_usd": 7.815505564213001,
+      "new_m1_context_usd": 5.254443138838,
+      "incremental_cost_usd": 13.069948703051,
+      "cumulative_project_spend_usd": 70.046870479575,
+      "credit_remaining_from_125_usd": 54.953129520424994
+    }
+  ],
+  "optional_forward_2026_m1_cost_usd": 1.087056174874,
+  "pilot_actual_spend_usd": 4.01,
+  "session_list_sha256": "3da93a6cb654b3cdcf532fe59089b81d4655e041872c8b4af3de0e5e529fc536",
+  "strata_weights_sha256": "d7b8074f5e678dca3d4930ccdd7dec3ace99ecfd010b3f43aad0b218a3721ea1",
+  "side_policy": {
+    "native_A_B": "use as disseminated",
+    "native_N": "never silently impute in primary analysis",
+    "n_features": [
+      "N_volume_share",
+      "delta_lower_bound",
+      "delta_upper_bound",
+      "delta_sign_robust"
+    ],
+    "tbbo_touch_rule": "pilot QA only / optional secondary sensitivity",
+    "reason": "Databento N may be structurally non-random; early-period BBO recovery precision was insufficient for primary imputation"
+  },
+  "temporal_policy": {
+    "RETRO_DEV": "2011-2018; rank1 then rank2",
+    "RETRO_CONFIRM": "2019-2022; unopened until DEV transformations frozen",
+    "LOCKED_COMEX_TEST": "2023-2025; 3 QA pilot sessions excluded; remaining sessions unopened until complete model freeze",
+    "TRUE_FORWARD": "2026+ after final freeze"
+  },
+  "note": "All cost calculations are metadata-only. Stage purchases must be separately authorized. Twelve already-paid pilot dates are QA_ONLY and excluded from primary fitting/evaluation."
+}
