@@ -1,0 +1,8 @@
+research_trading_date,year,continuous_trades,continuous_ohlcv_1m,instrument_ids,raw_symbols,raw_symbol_trades,raw_symbol_ohlcv_1m,continuous_vs_raw_trade_equal
+2011-12-26,2011,0,0,143862,GCG2,0,0,True
+2012-03-30,2012,2541,500,169060,GCJ2,2541,500,True
+2012-11-22,2012,102,12,118951,GCZ2,102,12,True
+2014-01-20,2014,0,0,99832,GCG4,0,0,True
+2014-06-13,2014,247,22,75820,GCQ4,247,22,True
+2015-04-01,2015,711,34,140855,GCM5,1479,138,False
+2017-11-30,2017,530,273,60173,GCZ7,530,273,True
