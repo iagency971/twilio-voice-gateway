@@ -1,3 +1,4 @@
+# execute 2026-08-18
 name: XAU COMEX Stage0 Exact Cost
 on:
   push:
@@ -24,36 +25,18 @@ jobs:
       - name: Build and quote canonical Stage 0 package
         run: |
           python - <<'PY'
-          import json,os,time,hashlib
+          import json,os,time
           from pathlib import Path
           from zoneinfo import ZoneInfo
           from concurrent.futures import ThreadPoolExecutor,as_completed
           import pandas as pd, databento as db
-
-          NY=ZoneInfo('America/New_York')
-          client=db.Historical(os.environ['DATABENTO_API_KEY'])
-          e=pd.read_csv('/tmp/plan/canonical_events_all.csv.gz',compression='gzip',low_memory=False)
-          s=pd.read_csv('/tmp/plan/session_candidates_all.csv')
-          assert len(e)==1274307, len(e)
-          s['panel_rank']=pd.to_numeric(s.panel_rank,errors='coerce')
-
-          ct=pd.to_datetime(e.contact_time,utc=True)
-          e['research_trading_date']=(ct.dt.tz_convert(NY)-pd.Timedelta(hours=17)).dt.date.astype(str)
-          fam=e.constituent_families.fillna('')
-          order=['DISPLACEMENT_ORIGIN','OBJECTIVE_LIQUIDITY','MEMORY','FVG']
-          e['signature']=['+'.join([z for z in order if z in x]) or 'OTHER' for x in fam]
-          abundant={'DISPLACEMENT_ORIGIN+FVG','OBJECTIVE_LIQUIDITY+FVG','MEMORY+FVG'}
-          def is_rare(sig): return sig.count('+')>=1 and sig not in abundant
-
-          session_dates=set(s.loc[s.panel_rank<=2,'research_trading_date'].astype(str))
-          rare=e[e.signature.map(is_rare)].copy()
-          rare_out=rare[~rare.research_trading_date.isin(session_dates)].copy()
-
+          NY=ZoneInfo('America/New_York'); client=db.Historical(os.environ['DATABENTO_API_KEY'])
+          e=pd.read_csv('/tmp/plan/canonical_events_all.csv.gz',compression='gzip',low_memory=False); s=pd.read_csv('/tmp/plan/session_candidates_all.csv'); assert len(e)==1274307,len(e); s['panel_rank']=pd.to_numeric(s.panel_rank,errors='coerce')
+          ct=pd.to_datetime(e.contact_time,utc=True); e['research_trading_date']=(ct.dt.tz_convert(NY)-pd.Timedelta(hours=17)).dt.date.astype(str); fam=e.constituent_families.fillna(''); order=['DISPLACEMENT_ORIGIN','OBJECTIVE_LIQUIDITY','MEMORY','FVG']; e['signature']=['+'.join([z for z in order if z in x]) or 'OTHER' for x in fam]
+          abundant={'DISPLACEMENT_ORIGIN+FVG','OBJECTIVE_LIQUIDITY+FVG','MEMORY+FVG'}; is_rare=lambda sig:sig.count('+')>=1 and sig not in abundant
+          session_dates=set(s.loc[s.panel_rank<=2,'research_trading_date'].astype(str)); rare=e[e.signature.map(is_rare)].copy(); rare_out=rare[~rare.research_trading_date.isin(session_dates)].copy()
           def snap10(t,ceil=False):
-              t=pd.Timestamp(t); t=t.tz_convert('UTC') if t.tzinfo else t.tz_localize('UTC')
-              ns=600*10**9; v=t.value
-              w=((v+ns-1)//ns*ns) if ceil else (v//ns*ns)
-              return pd.Timestamp(w,tz='UTC')
+              t=pd.Timestamp(t); t=t.tz_convert('UTC') if t.tzinfo else t.tz_localize('UTC'); ns=600*10**9; v=t.value; w=((v+ns-1)//ns*ns) if ceil else (v//ns*ns); return pd.Timestamp(w,tz='UTC')
           def merge(iv,gap_min=30):
               if not iv:return []
               a=sorted(iv); out=[]; s0,e0=a[0]; gap=pd.Timedelta(minutes=gap_min)
@@ -62,77 +45,30 @@ jobs:
                   else:out.append((s0,e0));s0,e0=s1,e1
               out.append((s0,e0)); return out
           def session_bounds(d):
-              d=pd.Timestamp(d); prev=(d-pd.Timedelta(days=1)).date(); cur=d.date()
-              return pd.Timestamp(f'{prev} 17:00:00',tz=NY).tz_convert('UTC'),pd.Timestamp(f'{cur} 18:00:00',tz=NY).tz_convert('UTC')
-
-          local_raw=[(snap10(pd.Timestamp(t)-pd.Timedelta(minutes=30),False),snap10(pd.Timestamp(t)+pd.Timedelta(minutes=16),True)) for t in pd.to_datetime(rare_out.contact_time,utc=True)]
-          local_windows=merge(local_raw,30)
-          session_windows=[session_bounds(d) for d in sorted(session_dates)]
-
+              d=pd.Timestamp(d); prev=(d-pd.Timedelta(days=1)).date(); cur=d.date(); return pd.Timestamp(f'{prev} 17:00:00',tz=NY).tz_convert('UTC'),pd.Timestamp(f'{cur} 18:00:00',tz=NY).tz_convert('UTC')
+          local_raw=[(snap10(pd.Timestamp(t)-pd.Timedelta(minutes=30)),snap10(pd.Timestamp(t)+pd.Timedelta(minutes=16),True)) for t in pd.to_datetime(rare_out.contact_time,utc=True)]; local_windows=merge(local_raw,30); session_windows=[session_bounds(d) for d in sorted(session_dates)]
           def get_cost(schema,a,b,retries=9):
               err=None
               for k in range(retries):
-                  try:
-                      return float(client.metadata.get_cost(dataset='GLBX.MDP3',symbols='GC.v.0',stype_in='continuous',schema=schema,start=a.isoformat(),end=b.isoformat())),None
-                  except Exception as ex:
-                      err=str(ex); time.sleep(min(30,1.5*(2**k)))
+                  try:return float(client.metadata.get_cost(dataset='GLBX.MDP3',symbols='GC.v.0',stype_in='continuous',schema=schema,start=a.isoformat(),end=b.isoformat())),None
+                  except Exception as ex:err=str(ex);time.sleep(min(30,1.5*(2**k)))
               return None,err
           def quote_windows(schema,windows,label):
-              vals=[]; errors=[]
+              vals=[];errors=[]
               with ThreadPoolExecutor(max_workers=2) as ex:
                   futs={ex.submit(get_cost,schema,a,b):(a,b) for a,b in windows}
                   for f in as_completed(futs):
                       x,er=f.result()
-                      if er: errors.append({'start':str(futs[f][0]),'end':str(futs[f][1]),'error':er})
-                      else: vals.append(x)
-              if errors: raise SystemExit(f'{label}: {len(errors)} metadata failures: {errors[:2]}')
+                      if er:errors.append({'start':str(futs[f][0]),'end':str(futs[f][1]),'error':er})
+                      else:vals.append(x)
+              if errors:raise SystemExit(f'{label}: {len(errors)} metadata failures: {errors[:2]}')
               return float(sum(vals))
-
-          # Complete continuous layers: exact single-range metadata quotes.
-          full_a=pd.Timestamp('2010-06-06',tz='UTC'); full_b=pd.Timestamp('2026-08-17',tz='UTC')
-          ohlcv,_=get_cost('ohlcv-1m',full_a,full_b)
-          bbo1m,_=get_cost('bbo-1m',full_a,full_b)
-          if ohlcv is None or bbo1m is None: raise SystemExit('continuous metadata quote failed')
-
-          session_cost=quote_windows('trades',session_windows,'sessions')
-          local_cost=quote_windows('trades',local_windows,'rare-local')
-
-          sig_counts=[]
-          for (sp,sig),g in rare_out.groupby(['temporal_split','signature']):
-              sig_counts.append({'split':sp,'signature':sig,'supplement_events':int(len(g)),'unique_dates':int(g.research_trading_date.nunique())})
-          covered_rare=rare[rare.research_trading_date.isin(session_dates)]
-          covered_counts=[]
-          for (sp,sig),g in covered_rare.groupby(['temporal_split','signature']):
-              covered_counts.append({'split':sp,'signature':sig,'session_covered_events':int(len(g))})
-
+          full_a=pd.Timestamp('2010-06-06',tz='UTC'); full_b=pd.Timestamp('2026-08-17',tz='UTC'); ohlcv,_=get_cost('ohlcv-1m',full_a,full_b); bbo1m,_=get_cost('bbo-1m',full_a,full_b)
+          if ohlcv is None or bbo1m is None:raise SystemExit('continuous metadata quote failed')
+          session_cost=quote_windows('trades',session_windows,'sessions'); local_cost=quote_windows('trades',local_windows,'rare-local')
+          sig_counts=[{'split':sp,'signature':sig,'supplement_events':int(len(g)),'unique_dates':int(g.research_trading_date.nunique())} for (sp,sig),g in rare_out.groupby(['temporal_split','signature'])]; covered_rare=rare[rare.research_trading_date.isin(session_dates)]; covered_counts=[{'split':sp,'signature':sig,'session_covered_events':int(len(g))} for (sp,sig),g in covered_rare.groupby(['temporal_split','signature'])]
           total=float(ohlcv+bbo1m+session_cost+local_cost)
-          result={
-            'version':'COMEX_STAGE0_EXACT_COST_V1',
-            'source_plan_run':32104889692,
-            'canonical_events':int(len(e)),
-            'schemas':{'continuous':['ohlcv-1m','bbo-1m'],'detailed':'trades'},
-            'continuous_period':['2010-06-06','2026-08-17'],
-            'costs_usd':{
-              'ohlcv_1m_full':float(ohlcv),
-              'bbo_1m_full':float(bbo1m),
-              'session_tier2_trades':float(session_cost),
-              'rare_confluence_local_trades':float(local_cost),
-              'stage0_total':total,
-              'difference_vs_125_credit':float(125.0-total)
-            },
-            'session_tier':2,
-            'session_dates':len(session_dates),
-            'rare_confluence_events_total':int(len(rare)),
-            'rare_confluence_events_covered_by_sessions':int(len(covered_rare)),
-            'rare_confluence_supplement_events':int(len(rare_out)),
-            'rare_confluence_local_raw_windows':int(len(local_raw)),
-            'rare_confluence_local_merged_windows':int(len(local_windows)),
-            'rare_confluence_local_acquisition_minutes':float(sum((b-a).total_seconds()/60 for a,b in local_windows)),
-            'supplement_counts':sig_counts,
-            'session_covered_counts':covered_counts,
-            'acquisition_rule':'local scientific window contact -30/+16; request bounds snapped outward to 10m; adjacent request bounds merged through <=30m gaps',
-            'download_performed':False
-          }
+          result={'version':'COMEX_STAGE0_EXACT_COST_V1','source_plan_run':32104889692,'canonical_events':int(len(e)),'schemas':{'continuous':['ohlcv-1m','bbo-1m'],'detailed':'trades'},'continuous_period':['2010-06-06','2026-08-17'],'costs_usd':{'ohlcv_1m_full':float(ohlcv),'bbo_1m_full':float(bbo1m),'session_tier2_trades':float(session_cost),'rare_confluence_local_trades':float(local_cost),'stage0_total':total,'difference_vs_125_credit':float(125-total)},'session_tier':2,'session_dates':len(session_dates),'rare_confluence_events_total':int(len(rare)),'rare_confluence_events_covered_by_sessions':int(len(covered_rare)),'rare_confluence_supplement_events':int(len(rare_out)),'rare_confluence_local_raw_windows':int(len(local_raw)),'rare_confluence_local_merged_windows':int(len(local_windows)),'rare_confluence_local_acquisition_minutes':float(sum((b-a).total_seconds()/60 for a,b in local_windows)),'supplement_counts':sig_counts,'session_covered_counts':covered_counts,'acquisition_rule':'local scientific window contact -30/+16; request bounds snapped outward to 10m; adjacent request bounds merged through <=30m gaps','download_performed':False}
           Path('/tmp/stage0_exact_cost.json').write_text(json.dumps(result,indent=2)); print(json.dumps(result,indent=2))
           PY
       - name: Publish exact Stage 0 quote
@@ -143,12 +79,7 @@ jobs:
         run: |
           python - <<'PY'
           import base64,os,pathlib,requests
-          p=pathlib.Path('/tmp/stage0_exact_cost.json')
-          path='xau-final-results/comex_acquisition_plan_v1/stage0_exact_cost.json'
-          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
-          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
-          b={'message':'publish canonical COMEX Stage 0 exact metadata quote [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+          p=pathlib.Path('/tmp/stage0_exact_cost.json'); path='xau-final-results/comex_acquisition_plan_v1/stage0_exact_cost.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}; old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None; b={'message':'publish canonical COMEX Stage 0 exact metadata quote [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
           if sha:b['sha']=sha
-          r=requests.put(u,headers=h,json=b); r.raise_for_status()
+          r=requests.put(u,headers=h,json=b);r.raise_for_status()
           PY
