@@ -1,0 +1,156 @@
+{
+  "version": "COMEX_DEV_RANK1_V0_N0_PANEL_DIAGNOSTIC_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "sessions": 96,
+  "same_mapping_sessions": 85,
+  "different_mapping_sessions": 11,
+  "n0_more_trades_sessions": 6,
+  "v0_more_trades_sessions": 5,
+  "n0_at_least_2x_v0_sessions": 6,
+  "n0_at_least_5x_v0_sessions": 3,
+  "n0_at_least_20x_v0_sessions": 2,
+  "largest_n0_to_v0": [
+    {
+      "research_trading_date": "2017-11-30",
+      "year": 2017,
+      "v0_trades": 530,
+      "n0_trades": 114827,
+      "n0_to_v0_trade_ratio": 216.65471698113208,
+      "v0_instrument_ids": "60173",
+      "n0_instrument_ids": "15562"
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "year": 2012,
+      "v0_trades": 2541,
+      "n0_trades": 66885,
+      "n0_to_v0_trade_ratio": 26.322314049586776,
+      "v0_instrument_ids": "169060",
+      "n0_instrument_ids": "100686"
+    },
+    {
+      "research_trading_date": "2017-07-28",
+      "year": 2017,
+      "v0_trades": 6895,
+      "n0_trades": 73238,
+      "n0_to_v0_trade_ratio": 10.621899927483684,
+      "v0_instrument_ids": "66404",
+      "n0_instrument_ids": "60173"
+    },
+    {
+      "research_trading_date": "2012-07-30",
+      "year": 2012,
+      "v0_trades": 13622,
+      "n0_trades": 54824,
+      "n0_to_v0_trade_ratio": 4.0246659815005135,
+      "v0_instrument_ids": "171052",
+      "n0_instrument_ids": "118951"
+    },
+    {
+      "research_trading_date": "2011-07-28",
+      "year": 2011,
+      "v0_trades": 21330,
+      "n0_trades": 80233,
+      "n0_to_v0_trade_ratio": 3.7615096108766997,
+      "v0_instrument_ids": "107159",
+      "n0_instrument_ids": "197210"
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "year": 2015,
+      "v0_trades": 711,
+      "n0_trades": 1479,
+      "n0_to_v0_trade_ratio": 2.080168776371308,
+      "v0_instrument_ids": "140855|149695",
+      "n0_instrument_ids": "140855"
+    },
+    {
+      "research_trading_date": "2011-04-21",
+      "year": 2011,
+      "v0_trades": 79789,
+      "n0_trades": 79789,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "197015",
+      "n0_instrument_ids": "197015"
+    },
+    {
+      "research_trading_date": "2011-01-20",
+      "year": 2011,
+      "v0_trades": 134124,
+      "n0_trades": 134124,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "102263",
+      "n0_instrument_ids": "102263"
+    },
+    {
+      "research_trading_date": "2011-07-04",
+      "year": 2011,
+      "v0_trades": 13894,
+      "n0_trades": 13894,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "107159",
+      "n0_instrument_ids": "107159"
+    },
+    {
+      "research_trading_date": "2011-09-22",
+      "year": 2011,
+      "v0_trades": 179511,
+      "n0_trades": 179511,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "197210",
+      "n0_instrument_ids": "197210"
+    },
+    {
+      "research_trading_date": "2012-03-21",
+      "year": 2012,
+      "v0_trades": 88748,
+      "n0_trades": 88748,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "169060",
+      "n0_instrument_ids": "169060"
+    },
+    {
+      "research_trading_date": "2011-11-17",
+      "year": 2011,
+      "v0_trades": 127628,
+      "n0_trades": 127628,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "197210",
+      "n0_instrument_ids": "197210"
+    },
+    {
+      "research_trading_date": "2012-03-01",
+      "year": 2012,
+      "v0_trades": 156342,
+      "n0_trades": 156342,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "169060",
+      "n0_instrument_ids": "169060"
+    },
+    {
+      "research_trading_date": "2011-06-01",
+      "year": 2011,
+      "v0_trades": 97574,
+      "n0_trades": 97574,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "107159",
+      "n0_instrument_ids": "107159"
+    },
+    {
+      "research_trading_date": "2011-04-05",
+      "year": 2011,
+      "v0_trades": 102263,
+      "n0_trades": 102263,
+      "n0_to_v0_trade_ratio": 1.0,
+      "v0_instrument_ids": "197015",
+      "n0_instrument_ids": "197015"
+    }
+  ],
+  "new_92_costs_usd": {
+    "v0_trades": 9.524125277991999,
+    "n0_trades": 9.752695262429,
+    "v0_plus_n0_naive_sum": 19.276820540421
+  },
+  "note": "Diagnostic only. Full-day record counts cannot be used as a live contract-selection rule. They diagnose how often previous-day volume and open-interest continuous mappings diverge."
+}
