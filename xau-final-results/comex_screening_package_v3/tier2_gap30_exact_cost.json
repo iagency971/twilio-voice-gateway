@@ -1,0 +1,145 @@
+{
+  "version": "COMEX_V3_TIER2_GAP30_EXACT_COST_V1",
+  "package": "lean V3: tier2 sessions + family/confluence/acceptance supplements, gap30",
+  "year_rows": [
+    {
+      "year": 2010,
+      "schema": "trades",
+      "windows": 0,
+      "minutes": 0.0,
+      "cost_usd": 0.0,
+      "download_performed": false
+    },
+    {
+      "year": 2011,
+      "schema": "trades",
+      "windows": 321,
+      "minutes": 55130.0,
+      "cost_usd": 5.143345355984,
+      "download_performed": false
+    },
+    {
+      "year": 2012,
+      "schema": "trades",
+      "windows": 338,
+      "minutes": 55220.0,
+      "cost_usd": 4.281915843482,
+      "download_performed": false
+    },
+    {
+      "year": 2013,
+      "schema": "trades",
+      "windows": 309,
+      "minutes": 54860.0,
+      "cost_usd": 6.492770433424,
+      "download_performed": false
+    },
+    {
+      "year": 2014,
+      "schema": "trades",
+      "windows": 197,
+      "minutes": 46440.0,
+      "cost_usd": 4.014584541321,
+      "download_performed": false
+    },
+    {
+      "year": 2015,
+      "schema": "trades",
+      "windows": 200,
+      "minutes": 46890.0,
+      "cost_usd": 3.779635906217,
+      "download_performed": false
+    },
+    {
+      "year": 2016,
+      "schema": "trades",
+      "windows": 191,
+      "minutes": 46320.0,
+      "cost_usd": 3.638490736479,
+      "download_performed": false
+    },
+    {
+      "year": 2017,
+      "schema": "trades",
+      "windows": 160,
+      "minutes": 43940.0,
+      "cost_usd": 3.534419596192,
+      "download_performed": false
+    },
+    {
+      "year": 2018,
+      "schema": "trades",
+      "windows": 169,
+      "minutes": 44190.0,
+      "cost_usd": 4.126170873642,
+      "download_performed": false
+    },
+    {
+      "year": 2019,
+      "schema": "trades",
+      "windows": 322,
+      "minutes": 53940.0,
+      "cost_usd": 6.786672770977,
+      "download_performed": false
+    },
+    {
+      "year": 2020,
+      "schema": "trades",
+      "windows": 399,
+      "minutes": 60890.0,
+      "cost_usd": 8.254802584647,
+      "download_performed": false
+    },
+    {
+      "year": 2021,
+      "schema": "trades",
+      "windows": 202,
+      "minutes": 46750.0,
+      "cost_usd": 3.961234688767,
+      "download_performed": false
+    },
+    {
+      "year": 2022,
+      "schema": "trades",
+      "windows": 211,
+      "minutes": 48720.0,
+      "cost_usd": 3.945492088801,
+      "download_performed": false
+    },
+    {
+      "year": 2023,
+      "schema": "trades",
+      "windows": 302,
+      "minutes": 53190.0,
+      "cost_usd": 4.570679962639,
+      "download_performed": false
+    },
+    {
+      "year": 2024,
+      "schema": "trades",
+      "windows": 454,
+      "minutes": 63270.0,
+      "cost_usd": 6.308667004111,
+      "download_performed": false
+    },
+    {
+      "year": 2025,
+      "schema": "trades",
+      "windows": 481,
+      "minutes": 64560.0,
+      "cost_usd": 8.237723171711,
+      "download_performed": false
+    }
+  ],
+  "costs_usd": {
+    "ohlcv_1m_full": 20.342466905713,
+    "bbo_1m_full": 7.630651295185,
+    "tier2_v3_package_trades": 77.076605558394,
+    "total": 105.049723759292,
+    "credit_125_remaining": 19.950276240708007
+  },
+  "windows": 4256,
+  "minutes": 784310.0,
+  "download_performed": false,
+  "warning": "Metadata only; no market data download authorized or performed."
+}
