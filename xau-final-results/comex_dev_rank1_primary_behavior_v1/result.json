@@ -1,0 +1,126 @@
+{
+  "version": "COMEX_DEV_RANK1_PRIMARY_MODEL_RESULT_V1_PARALLEL_RECOVERY",
+  "target": "behavior",
+  "dataset": "B2 causally available events only",
+  "events": 30525,
+  "sessions": 92,
+  "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+  ],
+  "C_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "nested_validation": "outer LOYO; C chosen by identical inner LOYO on remaining years",
+  "recovery_reason": "monolithic behavior job hit GitHub timeout; 24 fold jobs preserve identical scientific specification",
+  "solver": "lbfgs",
+  "max_iter": 500,
+  "comparisons": [
+    {
+      "comparison": "B1_vs_B0",
+      "family_balanced_event_logloss_improvement": -0.08895429896697116,
+      "population_event_logloss_improvement": -0.016056836827174514,
+      "session_balanced_logloss_improvement": -0.015390473626918255,
+      "year_deltas": [
+        {
+          "year": 2011,
+          "logloss_improvement": -0.02006915925819075
+        },
+        {
+          "year": 2012,
+          "logloss_improvement": -0.010782694498771006
+        },
+        {
+          "year": 2013,
+          "logloss_improvement": -0.16706838673196078
+        },
+        {
+          "year": 2014,
+          "logloss_improvement": -0.021532034877873252
+        },
+        {
+          "year": 2015,
+          "logloss_improvement": -0.11990424780193687
+        },
+        {
+          "year": 2016,
+          "logloss_improvement": -0.026091435481282566
+        },
+        {
+          "year": 2017,
+          "logloss_improvement": -0.03355967740514243
+        },
+        {
+          "year": 2018,
+          "logloss_improvement": 0.007831751540755993
+        }
+      ],
+      "positive_years": 1,
+      "cluster_bootstrap_95": {
+        "lo": -0.18509712771238848,
+        "median": -0.08304148184574806,
+        "hi": -0.014744815489492517,
+        "n": 2000
+      },
+      "directional_gate": false
+    },
+    {
+      "comparison": "B2_vs_B1",
+      "family_balanced_event_logloss_improvement": -0.041488043017992804,
+      "population_event_logloss_improvement": -0.03877003932439338,
+      "session_balanced_logloss_improvement": -0.037422043015106765,
+      "year_deltas": [
+        {
+          "year": 2011,
+          "logloss_improvement": -0.05768911804386345
+        },
+        {
+          "year": 2012,
+          "logloss_improvement": -0.03332103523464658
+        },
+        {
+          "year": 2013,
+          "logloss_improvement": -0.06479789887512455
+        },
+        {
+          "year": 2014,
+          "logloss_improvement": -0.21549721213422623
+        },
+        {
+          "year": 2015,
+          "logloss_improvement": 0.013849546466969453
+        },
+        {
+          "year": 2016,
+          "logloss_improvement": -0.007153073544574506
+        },
+        {
+          "year": 2017,
+          "logloss_improvement": 0.007701219595046549
+        },
+        {
+          "year": 2018,
+          "logloss_improvement": -0.015464807758303056
+        }
+      ],
+      "positive_years": 2,
+      "cluster_bootstrap_95": {
+        "lo": -0.07019362657569671,
+        "median": -0.04141371972853031,
+        "hi": -0.011271214005780014,
+        "n": 2000
+      },
+      "directional_gate": false
+    }
+  ]
+}
