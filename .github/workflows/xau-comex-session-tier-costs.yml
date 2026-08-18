@@ -1,5 +1,5 @@
-# v4-pilot12-calendar-qa-v2-trigger-final
-name: XAU COMEX V4 Pilot12 Metadata Quote
+# retrigger 2026-08-18
+name: XAU COMEX Session Tier Costs
 on:
   push:
     branches: [agent/xau-comex-acquisition-plan]
@@ -10,13 +10,10 @@ permissions:
 jobs:
   quote:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: agent/xau-comex-acquisition-plan
       - run: python -m pip install pandas==2.2.3 databento
       - uses: actions/download-artifact@v4
         with:
@@ -25,25 +22,52 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32102932187
-      - name: Quote deterministic 12-session pilot — metadata only
+      - name: Quote each tier-4 session once
         run: |
-          python xau-multiyear/scripts/quote_comex_v4_pilot12.py \
-            --sessions /tmp/plan/session_candidates_all.csv \
-            --out /tmp/pilot12
-      - name: Publish compact pilot artifacts
+          python - <<'PY'
+          import json,os,time
+          from concurrent.futures import ThreadPoolExecutor,as_completed
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          import pandas as pd, databento as db
+          NY=ZoneInfo('America/New_York'); c=db.Historical(os.environ['DATABENTO_API_KEY'])
+          s=pd.read_csv('/tmp/plan/session_candidates_all.csv'); s['panel_rank']=pd.to_numeric(s.panel_rank,errors='coerce'); q=s[s.panel_rank<=4].copy()
+          def bounds(d):
+              d=pd.Timestamp(d); prev=(d-pd.Timedelta(days=1)).date(); cur=d.date(); return pd.Timestamp(f'{prev} 17:00:00',tz=NY).tz_convert('UTC'),pd.Timestamp(f'{cur} 18:00:00',tz=NY).tz_convert('UTC')
+          def cost(row):
+              a,b=bounds(row.research_trading_date); err=None
+              for k in range(8):
+                  try:
+                      x=float(c.metadata.get_cost(dataset='GLBX.MDP3',symbols='GC.v.0',stype_in='continuous',schema='trades',start=a.isoformat(),end=b.isoformat()))
+                      return row.Index,x,None
+                  except Exception as e:
+                      err=str(e); time.sleep(min(30,2**k))
+              return row.Index,None,err
+          vals={}; errors=[]
+          with ThreadPoolExecutor(max_workers=2) as ex:
+              fs=[ex.submit(cost,r) for r in q.itertuples()]
+              for f in as_completed(fs):
+                  i,x,e=f.result()
+                  if e: errors.append({'index':int(i),'error':e})
+                  else: vals[i]=x
+          if errors: raise SystemExit(f'metadata failures {len(errors)}: {errors[:3]}')
+          q['cost_usd']=[vals[i] for i in q.index]
+          rows=[]
+          for tier in [1,2,3,4]:
+              z=q[q.panel_rank<=tier]
+              rows.append({'session_tier':tier,'session_dates':int(len(z)),'cost_usd':float(z.cost_usd.sum())})
+          out={'schema':'trades','source_plan_run':32102932187,'rows':rows,'download_performed':False,'note':'Wide 17:00 previous NY day through 18:00 research day envelope; metadata get_cost only.'}
+          Path('/tmp/session_tier_costs.json').write_text(json.dumps(out,indent=2)); print(json.dumps(out,indent=2))
+          PY
+      - name: Publish
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           BRANCH: agent/xau-comex-acquisition-plan
         run: |
           python - <<'PY'
-          import base64, os, pathlib, requests
-          src=pathlib.Path('/tmp/pilot12'); root='xau-final-results/comex_v4_pilot12'
-          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          for name in ['pilot12_sessions.csv','pilot12_schema_quotes.csv','pilot12_quote.json']:
-              p=src/name; path=f'{root}/{name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
-              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
-              body={'message':f'publish COMEX V4 pilot12 metadata {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
-              if sha: body['sha']=sha
-              r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          import base64,os,pathlib,requests
+          p=pathlib.Path('/tmp/session_tier_costs.json'); path='xau-final-results/comex_acquisition_plan_v1/session_tier_costs.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}; old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None; b={'message':'publish COMEX session tier metadata costs [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+          if sha:b['sha']=sha
+          r=requests.put(u,headers=h,json=b); r.raise_for_status()
           PY
