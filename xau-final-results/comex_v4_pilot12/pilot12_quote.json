@@ -1,29 +1,29 @@
 {
-  "version": "COMEX_V4_PILOT12_METADATA_V1",
+  "version": "COMEX_V4_PILOT12_METADATA_V2_CALENDAR_QA",
   "selection_seed": "COMEX_V4_PILOT12_SEED_971",
-  "selection_rule": "4 eras x 3 XAU volatility bands; deterministic hash; unused quarter preferred within era when available",
-  "eras": [
-    {
-      "name": "E1_2011_2013",
-      "start_year": 2011,
-      "end_year": 2013
-    },
-    {
-      "name": "E2_2014_2018",
-      "start_year": 2014,
-      "end_year": 2018
-    },
-    {
-      "name": "E3_2019_2022",
-      "start_year": 2019,
-      "end_year": 2022
-    },
-    {
-      "name": "E4_2023_2025",
-      "start_year": 2023,
-      "end_year": 2025
-    }
-  ],
+  "panel_qa": {
+    "old_tier2_sessions": 357,
+    "old_tier2_weekend_sessions": 13,
+    "old_tier2_weekend_dates": [
+      "2013-12-14",
+      "2013-12-28",
+      "2011-01-29",
+      "2011-06-04",
+      "2011-07-16",
+      "2011-07-23",
+      "2011-10-29",
+      "2011-12-18",
+      "2012-02-25",
+      "2012-03-31",
+      "2012-04-21",
+      "2012-09-16",
+      "2012-12-16"
+    ],
+    "v4_tier2_sessions": 357,
+    "v4_tier2_weekend_sessions": 0,
+    "rerank_rule": "exclude Saturday/Sunday research trading dates, then rerank by frozen panel_hash within year x quarter x vol_band"
+  },
+  "selection_rule": "V4 weekday-valid tier2 only; 4 eras x 3 vol bands; deterministic hash; unused quarter preferred",
   "schemas": [
     "trades",
     "tbbo",
@@ -33,157 +33,158 @@
   "sessions": [
     {
       "era": "E1_2011_2013",
-      "research_trading_date": "2012-08-11",
-      "year": 2012,
+      "research_trading_date": "2013-05-29",
+      "year": 2013,
+      "quarter": 2,
+      "vol_band": 0,
+      "panel_rank_v4": 1,
+      "quarter_diversified": true,
+      "pilot_hash": "157433d9742d80d42e3a6a128c55235c86b0f22f3754162de1cad9ae77a5592a"
+    },
+    {
+      "era": "E1_2011_2013",
+      "research_trading_date": "2013-02-07",
+      "year": 2013,
+      "quarter": 1,
+      "vol_band": 1,
+      "panel_rank_v4": 1,
+      "quarter_diversified": true,
+      "pilot_hash": "1216a7504c38b9c3203dca8d519556fe844e2f6a610f859fd1d55640cf8932ac"
+    },
+    {
+      "era": "E1_2011_2013",
+      "research_trading_date": "2011-08-05",
+      "year": 2011,
+      "quarter": 3,
+      "vol_band": 2,
+      "panel_rank_v4": 2,
+      "quarter_diversified": true,
+      "pilot_hash": "0438905737a044fe739c2641b47d400493693ea151b019defdabb37740900cad"
+    },
+    {
+      "era": "E2_2014_2018",
+      "research_trading_date": "2015-08-06",
+      "year": 2015,
       "quarter": 3,
       "vol_band": 0,
-      "pilot_vol_band": 0,
+      "panel_rank_v4": 2,
       "quarter_diversified": true,
-      "pilot_hash": "0149e27c28a692d61e56abdfb044d7b2e39d1a62fb7e895658c41cb18c12ad14"
+      "pilot_hash": "0650100ef7a2e2f9007c0494008527ba919b0f8edbb790ef3d0a8765eb64186e"
     },
     {
-      "era": "E1_2011_2013",
-      "research_trading_date": "2012-06-22",
-      "year": 2012,
-      "quarter": 2,
+      "era": "E2_2014_2018",
+      "research_trading_date": "2017-10-31",
+      "year": 2017,
+      "quarter": 4,
       "vol_band": 1,
-      "pilot_vol_band": 1,
+      "panel_rank_v4": 1,
       "quarter_diversified": true,
-      "pilot_hash": "0002cfbc36174f2315b1e8276346cadc74b73db04a79088e554932cd5631e020"
-    },
-    {
-      "era": "E1_2011_2013",
-      "research_trading_date": "2012-10-05",
-      "year": 2012,
-      "quarter": 4,
-      "vol_band": 2,
-      "pilot_vol_band": 2,
-      "quarter_diversified": true,
-      "pilot_hash": "008f51dce85b82570b676edc8045a2da0b0ecef73c48ae82100ab22b36c00105"
+      "pilot_hash": "11f0355264728e95152c8ffa06b2e636ec17646a35335833cff197ac0df0bc43"
     },
     {
       "era": "E2_2014_2018",
-      "research_trading_date": "2014-10-21",
-      "year": 2014,
-      "quarter": 4,
-      "vol_band": 0,
-      "pilot_vol_band": 0,
-      "quarter_diversified": true,
-      "pilot_hash": "029f61dc8e21bd1ebb85552c31644e07f382852fca7e4bc1d27e07baebf3a29b"
-    },
-    {
-      "era": "E2_2014_2018",
-      "research_trading_date": "2018-02-09",
+      "research_trading_date": "2018-01-02",
       "year": 2018,
       "quarter": 1,
-      "vol_band": 1,
-      "pilot_vol_band": 1,
-      "quarter_diversified": true,
-      "pilot_hash": "00d1123ff425719ffb45da97b5f90da2200c46b0a57dc2006aa14d6217928e6e"
-    },
-    {
-      "era": "E2_2014_2018",
-      "research_trading_date": "2016-06-08",
-      "year": 2016,
-      "quarter": 2,
       "vol_band": 2,
-      "pilot_vol_band": 2,
+      "panel_rank_v4": 1,
       "quarter_diversified": true,
-      "pilot_hash": "01028a778d36eb8a8440599421c80ed801abe48abf965a81e2a1a5a87c6c82d5"
+      "pilot_hash": "05a7c996aa336394b12df66af94954fe01b9fdab16bcf18c0b80a5c28d334d50"
     },
     {
       "era": "E3_2019_2022",
-      "research_trading_date": "2021-05-27",
-      "year": 2021,
+      "research_trading_date": "2019-05-06",
+      "year": 2019,
       "quarter": 2,
       "vol_band": 0,
-      "pilot_vol_band": 0,
+      "panel_rank_v4": 2,
       "quarter_diversified": true,
-      "pilot_hash": "008e8c7993609bddc8c13a07854b3ba03e722e68018774f61d65bf889e6cb6b9"
+      "pilot_hash": "02be86de07aa733e7f088e975fe1973cd16fde61580f635a4caadcabdb293c56"
     },
     {
       "era": "E3_2019_2022",
-      "research_trading_date": "2021-10-06",
+      "research_trading_date": "2021-01-07",
       "year": 2021,
-      "quarter": 4,
-      "vol_band": 1,
-      "pilot_vol_band": 1,
-      "quarter_diversified": true,
-      "pilot_hash": "016630c3dbefa8bb79a3b901ea770fc1f5c50b7cc10faa26a01ce645e1a8030a"
-    },
-    {
-      "era": "E3_2019_2022",
-      "research_trading_date": "2020-03-20",
-      "year": 2020,
       "quarter": 1,
-      "vol_band": 2,
-      "pilot_vol_band": 2,
-      "quarter_diversified": true,
-      "pilot_hash": "0272cd2ad9c6133496fcaacbd8d7143d958fe2ae420eb53c2555c6ea43eee9c3"
-    },
-    {
-      "era": "E4_2023_2025",
-      "research_trading_date": "2023-07-19",
-      "year": 2023,
-      "quarter": 3,
-      "vol_band": 0,
-      "pilot_vol_band": 0,
-      "quarter_diversified": true,
-      "pilot_hash": "00c144dc1c1539cf8ab067eed1388771891c59aa5d9f5874ce2ca7b1c2b2aa1f"
-    },
-    {
-      "era": "E4_2023_2025",
-      "research_trading_date": "2023-12-06",
-      "year": 2023,
-      "quarter": 4,
       "vol_band": 1,
-      "pilot_vol_band": 1,
+      "panel_rank_v4": 2,
       "quarter_diversified": true,
-      "pilot_hash": "0102a4c0a937b686599ad44e8ddbc9458bbc139895b1573dba60346b5224abee"
+      "pilot_hash": "0ea97edc77fc0edf4100c1f7b7e54c1c088f02d529c87e28508842d545ac6121"
+    },
+    {
+      "era": "E3_2019_2022",
+      "research_trading_date": "2021-09-28",
+      "year": 2021,
+      "quarter": 3,
+      "vol_band": 2,
+      "panel_rank_v4": 1,
+      "quarter_diversified": true,
+      "pilot_hash": "02ec960eca03fc2d97167732c77e893d0d4f6c78359a1c4fb116642c186420f7"
     },
     {
       "era": "E4_2023_2025",
-      "research_trading_date": "2023-04-19",
-      "year": 2023,
+      "research_trading_date": "2025-05-21",
+      "year": 2025,
       "quarter": 2,
-      "vol_band": 2,
-      "pilot_vol_band": 2,
+      "vol_band": 0,
+      "panel_rank_v4": 1,
       "quarter_diversified": true,
-      "pilot_hash": "0324732f7d50d66d1d2785ab44f6b694c9f8c15b71c0d5e22768aa0bb0e46691"
+      "pilot_hash": "06cb6ebd0314e88b768624453431f073af6ffa29b71249dc73055a2cdd33f88a"
+    },
+    {
+      "era": "E4_2023_2025",
+      "research_trading_date": "2024-03-06",
+      "year": 2024,
+      "quarter": 1,
+      "vol_band": 1,
+      "panel_rank_v4": 1,
+      "quarter_diversified": true,
+      "pilot_hash": "0421d5d5678d9ae4a1b4b29353d3e41b9e58ebcbee68c605924f7f2bb3026566"
+    },
+    {
+      "era": "E4_2023_2025",
+      "research_trading_date": "2024-12-18",
+      "year": 2024,
+      "quarter": 4,
+      "vol_band": 2,
+      "panel_rank_v4": 2,
+      "quarter_diversified": true,
+      "pilot_hash": "0b2fffda22c0dbce196f43c0a7a11ec6ab8d8de1553483d735281c0bb9c89138"
     }
   ],
   "summary": [
     {
       "schema": "bbo-1s",
       "sessions": 12,
-      "cost_usd": 0.7686688005919999,
-      "records": 573161,
-      "billable_bytes": 45852880
+      "cost_usd": 0.8384585380549999,
+      "records": 625200,
+      "billable_bytes": 50016000
     },
     {
       "schema": "mbp-1",
       "sessions": 12,
-      "cost_usd": 1.363857015967,
-      "records": 10169655,
-      "billable_bytes": 813572400
+      "cost_usd": 1.553395852446,
+      "records": 11582959,
+      "billable_bytes": 926636720
     },
     {
       "schema": "tbbo",
       "sessions": 12,
-      "cost_usd": 1.961948275566,
-      "records": 940458,
-      "billable_bytes": 75236640
+      "cost_usd": 2.5141763687129997,
+      "records": 1205168,
+      "billable_bytes": 96413440
     },
     {
       "schema": "trades",
       "sessions": 12,
-      "cost_usd": 1.1771689653389998,
-      "records": 940458,
-      "billable_bytes": 45141984
+      "cost_usd": 1.508505821228,
+      "records": 1205168,
+      "billable_bytes": 57848064
     }
   ],
-  "pilot_total_if_all_four_schemas_were_downloaded_usd": 5.271643057464001,
+  "pilot_cost_trades_plus_tbbo_usd": 4.0226821899409995,
+  "pilot_total_if_all_four_schemas_were_downloaded_usd": 6.414536580442,
   "authorization": "METADATA_ONLY",
   "download_performed": false,
-  "warning": "No Databento market-data range/batch download is called by this script. Quotes only."
+  "warning": "No Databento market-data download called."
 }
