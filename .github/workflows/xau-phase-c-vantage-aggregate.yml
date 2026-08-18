@@ -1,4 +1,5 @@
 name: XAU Phase C Vantage RAW Aggregate
+# explicit rerun after initial workflow creation; frozen gate unchanged
 on:
   push:
     branches: [agent/xau-multiyear-research]
