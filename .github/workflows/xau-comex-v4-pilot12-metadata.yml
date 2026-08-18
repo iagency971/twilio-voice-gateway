@@ -1,5 +1,5 @@
-# metadata-only: lightweight N0 and dual DEV_RANK1 quote
-name: XAU COMEX DEV_RANK1 N0-Dual Quote
+# metadata-only: one-call GC.n.0 OHLCV DEV quote
+name: XAU COMEX DEV N0 OHLCV Quote
 
 on:
   push:
@@ -12,25 +12,26 @@ permissions:
 jobs:
   quote:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     env:
       DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/xau-comex-acquisition-plan
-      - run: python -m pip install pandas==2.2.3 databento requests
-      - name: Quote N0 frozen plus dual divergent-contract option — metadata only
+      - run: python -m pip install databento requests
+      - name: Quote GC.n.0 OHLCV-1m — metadata only
         run: |
-          python xau-multiyear/scripts/quote_comex_dev_rank1_n0_dual_lite.py \
-            --mapping xau-final-results/comex_dev_rank1_gate_v1/frozen_session_mapping_all.csv \
-            --out /tmp/quote
-      - uses: actions/upload-artifact@v4
-        with:
-          name: comex-dev-rank1-n0-dual-lite-quote-v1
-          path: /tmp/quote/
-          retention-days: 90
-      - name: Publish lightweight quote
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          import databento as db
+          c=db.Historical(os.environ['DATABENTO_API_KEY'])
+          kw=dict(dataset='GLBX.MDP3',symbols='GC.n.0',stype_in='continuous',schema='ohlcv-1m',start='2010-06-06',end='2019-01-01')
+          out={'version':'GC_N0_OHLCV_DEV_QUOTE_V1','metadata_only':True,'market_data_download_performed':False,'symbol':'GC.n.0','schema':'ohlcv-1m','start':'2010-06-06','end':'2019-01-01','cost_usd':float(c.metadata.get_cost(**kw)),'records':int(c.metadata.get_record_count(**kw)),'billable_bytes':int(c.metadata.get_billable_size(**kw))}
+          Path('/tmp/n0.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+      - name: Publish quote
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -38,10 +39,7 @@ jobs:
         run: |
           python - <<'PY'
           import base64,os,pathlib,requests
-          src=pathlib.Path('/tmp/quote');root='xau-final-results/comex_dev_rank1_gate_v1';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          for p in src.iterdir():
-              if not p.is_file():continue
-              path=f'{root}/{p.name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish COMEX DEV_RANK1 N0-dual quote {p.name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
-              if sha:body['sha']=sha
-              r=requests.put(u,headers=h,json=body);r.raise_for_status()
+          p=pathlib.Path('/tmp/n0.json');path='xau-final-results/comex_dev_rank1_gate_v1/gc_n0_ohlcv_dev_quote.json';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':'publish GC.n.0 OHLCV DEV metadata quote [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+          if sha:body['sha']=sha
+          r=requests.put(u,headers=h,json=body);r.raise_for_status()
           PY
