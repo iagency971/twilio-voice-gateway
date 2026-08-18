@@ -1,0 +1,170 @@
+{
+  "version": "COMEX_SPARSE_SESSION_PARENT_DIAGNOSTIC_V2",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "trade_threshold": 5000,
+  "m1_threshold": 300,
+  "sessions": [
+    {
+      "research_trading_date": "2011-12-26",
+      "year": 2011,
+      "continuous_trades": 0,
+      "continuous_ohlcv_1m": 0,
+      "mapped_instrument_ids": [
+        "143862"
+      ],
+      "mapped_raw_symbols": [
+        "GCG2"
+      ],
+      "mapped_raw_trades": 0,
+      "mapped_raw_ohlcv_1m": 0,
+      "parent_GC_FUT_trades_all_children": 0,
+      "parent_GC_FUT_ohlcv_1m_all_children": 0,
+      "continuous_equals_mapped_raw_trades": true,
+      "continuous_equals_mapped_raw_m1": true,
+      "parent_to_continuous_trade_ratio": 0.0,
+      "parent_to_continuous_m1_ratio": 0.0
+    },
+    {
+      "research_trading_date": "2012-03-30",
+      "year": 2012,
+      "continuous_trades": 2541,
+      "continuous_ohlcv_1m": 500,
+      "mapped_instrument_ids": [
+        "169060"
+      ],
+      "mapped_raw_symbols": [
+        "GCJ2"
+      ],
+      "mapped_raw_trades": 2541,
+      "mapped_raw_ohlcv_1m": 500,
+      "parent_GC_FUT_trades_all_children": 74624,
+      "parent_GC_FUT_ohlcv_1m_all_children": 3296,
+      "continuous_equals_mapped_raw_trades": true,
+      "continuous_equals_mapped_raw_m1": true,
+      "parent_to_continuous_trade_ratio": 29.36796536796537,
+      "parent_to_continuous_m1_ratio": 6.592
+    },
+    {
+      "research_trading_date": "2012-11-22",
+      "year": 2012,
+      "continuous_trades": 102,
+      "continuous_ohlcv_1m": 12,
+      "mapped_instrument_ids": [
+        "118951"
+      ],
+      "mapped_raw_symbols": [
+        "GCZ2"
+      ],
+      "mapped_raw_trades": 102,
+      "mapped_raw_ohlcv_1m": 12,
+      "parent_GC_FUT_trades_all_children": 106,
+      "parent_GC_FUT_ohlcv_1m_all_children": 16,
+      "continuous_equals_mapped_raw_trades": true,
+      "continuous_equals_mapped_raw_m1": true,
+      "parent_to_continuous_trade_ratio": 1.0392156862745099,
+      "parent_to_continuous_m1_ratio": 1.3333333333333333
+    },
+    {
+      "research_trading_date": "2014-01-20",
+      "year": 2014,
+      "continuous_trades": 0,
+      "continuous_ohlcv_1m": 0,
+      "mapped_instrument_ids": [
+        "99832"
+      ],
+      "mapped_raw_symbols": [
+        "GCG4"
+      ],
+      "mapped_raw_trades": 0,
+      "mapped_raw_ohlcv_1m": 0,
+      "parent_GC_FUT_trades_all_children": 0,
+      "parent_GC_FUT_ohlcv_1m_all_children": 0,
+      "continuous_equals_mapped_raw_trades": true,
+      "continuous_equals_mapped_raw_m1": true,
+      "parent_to_continuous_trade_ratio": 0.0,
+      "parent_to_continuous_m1_ratio": 0.0
+    },
+    {
+      "research_trading_date": "2014-06-13",
+      "year": 2014,
+      "continuous_trades": 247,
+      "continuous_ohlcv_1m": 22,
+      "mapped_instrument_ids": [
+        "75820"
+      ],
+      "mapped_raw_symbols": [
+        "GCQ4"
+      ],
+      "mapped_raw_trades": 247,
+      "mapped_raw_ohlcv_1m": 22,
+      "parent_GC_FUT_trades_all_children": 251,
+      "parent_GC_FUT_ohlcv_1m_all_children": 26,
+      "continuous_equals_mapped_raw_trades": true,
+      "continuous_equals_mapped_raw_m1": true,
+      "parent_to_continuous_trade_ratio": 1.0161943319838056,
+      "parent_to_continuous_m1_ratio": 1.1818181818181819
+    },
+    {
+      "research_trading_date": "2015-02-05",
+      "year": 2015,
+      "continuous_trades": 96651,
+      "continuous_ohlcv_1m": 80,
+      "mapped_instrument_ids": [
+        "149695"
+      ],
+      "mapped_raw_symbols": [
+        "GCJ5"
+      ],
+      "mapped_raw_trades": 96651,
+      "mapped_raw_ohlcv_1m": 80,
+      "parent_GC_FUT_trades_all_children": 101710,
+      "parent_GC_FUT_ohlcv_1m_all_children": 938,
+      "continuous_equals_mapped_raw_trades": true,
+      "continuous_equals_mapped_raw_m1": true,
+      "parent_to_continuous_trade_ratio": 1.052342965928961,
+      "parent_to_continuous_m1_ratio": 11.725
+    },
+    {
+      "research_trading_date": "2015-04-01",
+      "year": 2015,
+      "continuous_trades": 711,
+      "continuous_ohlcv_1m": 34,
+      "mapped_instrument_ids": [
+        "140855"
+      ],
+      "mapped_raw_symbols": [
+        "GCM5"
+      ],
+      "mapped_raw_trades": 1479,
+      "mapped_raw_ohlcv_1m": 138,
+      "parent_GC_FUT_trades_all_children": 1609,
+      "parent_GC_FUT_ohlcv_1m_all_children": 318,
+      "continuous_equals_mapped_raw_trades": false,
+      "continuous_equals_mapped_raw_m1": false,
+      "parent_to_continuous_trade_ratio": 2.2630098452883263,
+      "parent_to_continuous_m1_ratio": 9.352941176470589
+    },
+    {
+      "research_trading_date": "2017-11-30",
+      "year": 2017,
+      "continuous_trades": 530,
+      "continuous_ohlcv_1m": 273,
+      "mapped_instrument_ids": [
+        "60173"
+      ],
+      "mapped_raw_symbols": [
+        "GCZ7"
+      ],
+      "mapped_raw_trades": 530,
+      "mapped_raw_ohlcv_1m": 273,
+      "parent_GC_FUT_trades_all_children": 120081,
+      "parent_GC_FUT_ohlcv_1m_all_children": 3874,
+      "continuous_equals_mapped_raw_trades": true,
+      "continuous_equals_mapped_raw_m1": true,
+      "parent_to_continuous_trade_ratio": 226.5679245283019,
+      "parent_to_continuous_m1_ratio": 14.19047619047619
+    }
+  ],
+  "interpretation_rule": "Do not drop a date for low activity alone. Compare continuous, mapped raw contract, and GC.FUT parent counts before classifying closure, short session, mapping issue, or OHLCV-schema gap."
+}
