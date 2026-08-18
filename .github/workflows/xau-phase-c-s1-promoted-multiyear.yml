@@ -1,0 +1,62 @@
+name: XAU Phase C S1 Promoted Multiyear 2011-2025
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-phase-c-s1-promoted-multiyear.yml'
+permissions:
+  contents: write
+jobs:
+  annual:
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest
+      - name: Frozen entry and S1 tests
+        env:
+          PYTHONPATH: xau-multiyear/src
+        run: python -m pytest -q xau-multiyear/tests/test_entries_v1.py xau-multiyear/tests/test_entries_s1.py
+      - name: Resolve annual dates
+        id: dates
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+          echo "start=${Y}-01-01" >> "$GITHUB_OUTPUT"
+          echo "end=$((Y+1))-01-01" >> "$GITHUB_OUTPUT"
+      - name: Acquire warmup target and post-window
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_s1_${{ matrix.year }}.csv
+      - name: Run frozen promoted S1 cells
+        run: python xau-multiyear/scripts/run_phase_c_s1_promoted.py /tmp/xau_s1_${{ matrix.year }}.csv --target-start ${{ steps.dates.outputs.start }} --target-end ${{ steps.dates.outputs.end }} --out /tmp/s1_${{ matrix.year }}
+      - name: Validate and publish annual compact result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+          YEAR: ${{ matrix.year }}
+        run: |
+          python - <<'PY'
+          import base64,json,os,pathlib,requests,pandas as pd
+          y=os.environ['YEAR']; s=pd.read_csv(f'/tmp/s1_{y}/summary.csv'); m=json.load(open(f'/tmp/s1_{y}/manifest.json'))
+          assert len(s)==3
+          assert set(s.target_r)=={1.0,1.5,2.0}
+          assert set(s.vol_floor_k)=={1.0}
+          assert set(s.entry_model)=={'TOUCH_NEXT_OPEN'}
+          assert set(s['sample'])=={'DISPLACEMENT_ORIGIN_ONLY'}
+          assert int(s.trades.min())>100
+          assert float(s.min_risk_price.min())>0
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for fn in ['summary.csv','manifest.json']:
+              src=pathlib.Path(f'/tmp/s1_{y}/{fn}'); path=f'xau-final-results/phase_c_s1_promoted_2011_2025/annual/{y}_{fn}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+              body={'message':f'publish S1 promoted {y} {fn} [skip ci]','content':base64.b64encode(src.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha: body['sha']=sha
+              r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          print('S1_PROMOTED_ANNUAL_OK',y,m['built_trades'])
+          PY
