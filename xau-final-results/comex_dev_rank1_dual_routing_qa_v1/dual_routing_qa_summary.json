@@ -1,0 +1,51 @@
+{
+  "version": "COMEX_DEV_RANK1_DUAL_ROUTING_QA_V1",
+  "market_data_download_performed": false,
+  "analytical_sessions": 96,
+  "canonical_events": 31710,
+  "distinct_raw_tapes_loaded": 102,
+  "raw_records_loaded": 8389668,
+  "raw_qa": {
+    "record_mismatches": 0,
+    "sha_mismatches": 0,
+    "tick_grid_violations": 0,
+    "nonpositive_size": 0,
+    "sequence_backward_steps": 0
+  },
+  "session_availability": {
+    "n0_available": 92,
+    "v0_available": 92,
+    "both_or_same_available": 92,
+    "tape_missing_dates": [
+      "2011-12-26",
+      "2012-11-22",
+      "2014-01-20",
+      "2015-02-05"
+    ],
+    "terminal_N0": 6,
+    "terminal_V0": 4,
+    "terminal_same": 82,
+    "terminal_missing": 4
+  },
+  "routing": {
+    "eligible_decisions": 99575,
+    "in_gc_session": 99146,
+    "outside_gc_session": 429,
+    "active_counts": {
+      "SAME": 86493,
+      "N0": 5922,
+      "V0": 3944,
+      "TAPE_MISSING": 2787,
+      "OUTSIDE_GC_SESSION": 429
+    }
+  },
+  "continuous_n0_context": {
+    "markers": 1,
+    "records_downloaded": 2925224,
+    "raw_bytes": 41410140,
+    "sha256": [
+      "7fe546d5cac2a1ef8dd2fa6837a5c1760e3349e10ed6eabaaa569282a4fbb959"
+    ]
+  },
+  "note": "Routing uses cumulative traded size strictly before the minute containing each causal decision_time. No XAU outcome is used."
+}
