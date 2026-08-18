@@ -4,10 +4,10 @@ import argparse, json, os
 from pathlib import Path
 
 REQUESTS = [
-    {"name":"GC_OHLCV1M_FULL", "schema":"ohlcv-1m", "start":"2010-06-01"},
-    {"name":"GC_TRADES_FULL", "schema":"trades", "start":"2010-06-01"},
-    {"name":"GC_MBP1_FULL", "schema":"mbp-1", "start":"2010-06-01"},
-    {"name":"GC_MBO_MODERN", "schema":"mbo", "start":"2017-05-01"},
+    {"name":"GC_OHLCV1M_FULL", "schema":"ohlcv-1m", "start":"2010-06-06"},
+    {"name":"GC_TRADES_FULL", "schema":"trades", "start":"2010-06-06"},
+    {"name":"GC_MBP1_FULL", "schema":"mbp-1", "start":"2010-06-06"},
+    {"name":"GC_MBO_MODERN", "schema":"mbo", "start":"2017-05-21"},
 ]
 
 def main():
