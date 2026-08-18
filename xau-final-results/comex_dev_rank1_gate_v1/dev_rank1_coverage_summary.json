@@ -1,0 +1,385 @@
+{
+  "version": "COMEX_DEV_RANK1_COVERAGE_SUMMARY_V1",
+  "market_data_download_performed": false,
+  "broad_families": [
+    {
+      "family_stack": "CONFLUENCE",
+      "events": 535,
+      "independent_sessions": 76,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "events": 336,
+      "independent_sessions": 74,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "events": 23828,
+      "independent_sessions": 76,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "events": 136,
+      "independent_sessions": 40,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "events": 623,
+      "independent_sessions": 76,
+      "years": 8
+    }
+  ],
+  "family_entry_models": [
+    {
+      "family_stack": "CONFLUENCE",
+      "entry_model": "ACCEPTANCE_RETEST",
+      "eligible_events": 27,
+      "independent_sessions": 26,
+      "years": 8
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "entry_model": "CLEAN_REJECTION",
+      "eligible_events": 224,
+      "independent_sessions": 173,
+      "years": 8
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "entry_model": "FAILED_AUCTION",
+      "eligible_events": 237,
+      "independent_sessions": 195,
+      "years": 8
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "entry_model": "PASSIVE_TOUCH",
+      "eligible_events": 357,
+      "independent_sessions": 262,
+      "years": 8
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "entry_model": "RECLAIM_PULLBACK",
+      "eligible_events": 271,
+      "independent_sessions": 214,
+      "years": 8
+    },
+    {
+      "family_stack": "CONFLUENCE",
+      "entry_model": "TOUCH_NEXT_OPEN",
+      "eligible_events": 509,
+      "independent_sessions": 326,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "entry_model": "ACCEPTANCE_RETEST",
+      "eligible_events": 4,
+      "independent_sessions": 4,
+      "years": 2
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "entry_model": "CLEAN_REJECTION",
+      "eligible_events": 252,
+      "independent_sessions": 115,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "entry_model": "FAILED_AUCTION",
+      "eligible_events": 64,
+      "independent_sessions": 48,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "entry_model": "PASSIVE_TOUCH",
+      "eligible_events": 133,
+      "independent_sessions": 79,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "entry_model": "RECLAIM_PULLBACK",
+      "eligible_events": 213,
+      "independent_sessions": 102,
+      "years": 8
+    },
+    {
+      "family_stack": "DOZ_ONLY",
+      "entry_model": "TOUCH_NEXT_OPEN",
+      "eligible_events": 334,
+      "independent_sessions": 124,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "entry_model": "ACCEPTANCE_RETEST",
+      "eligible_events": 141,
+      "independent_sessions": 81,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "entry_model": "CLEAN_REJECTION",
+      "eligible_events": 12183,
+      "independent_sessions": 152,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "entry_model": "FAILED_AUCTION",
+      "eligible_events": 11276,
+      "independent_sessions": 152,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "entry_model": "PASSIVE_TOUCH",
+      "eligible_events": 14154,
+      "independent_sessions": 152,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "entry_model": "RECLAIM_PULLBACK",
+      "eligible_events": 13368,
+      "independent_sessions": 152,
+      "years": 8
+    },
+    {
+      "family_stack": "FVG_ONLY",
+      "entry_model": "TOUCH_NEXT_OPEN",
+      "eligible_events": 23746,
+      "independent_sessions": 152,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "entry_model": "ACCEPTANCE_RETEST",
+      "eligible_events": 5,
+      "independent_sessions": 5,
+      "years": 4
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "entry_model": "CLEAN_REJECTION",
+      "eligible_events": 82,
+      "independent_sessions": 46,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "entry_model": "FAILED_AUCTION",
+      "eligible_events": 18,
+      "independent_sessions": 14,
+      "years": 5
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "entry_model": "PASSIVE_TOUCH",
+      "eligible_events": 81,
+      "independent_sessions": 51,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "entry_model": "RECLAIM_PULLBACK",
+      "eligible_events": 72,
+      "independent_sessions": 40,
+      "years": 8
+    },
+    {
+      "family_stack": "MEMORY_ONLY",
+      "entry_model": "TOUCH_NEXT_OPEN",
+      "eligible_events": 133,
+      "independent_sessions": 66,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "entry_model": "ACCEPTANCE_RETEST",
+      "eligible_events": 9,
+      "independent_sessions": 9,
+      "years": 4
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "entry_model": "CLEAN_REJECTION",
+      "eligible_events": 437,
+      "independent_sessions": 144,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "entry_model": "FAILED_AUCTION",
+      "eligible_events": 97,
+      "independent_sessions": 53,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "entry_model": "PASSIVE_TOUCH",
+      "eligible_events": 302,
+      "independent_sessions": 110,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "entry_model": "RECLAIM_PULLBACK",
+      "eligible_events": 334,
+      "independent_sessions": 120,
+      "years": 8
+    },
+    {
+      "family_stack": "OBJECTIVE_ONLY",
+      "entry_model": "TOUCH_NEXT_OPEN",
+      "eligible_events": 607,
+      "independent_sessions": 149,
+      "years": 8
+    }
+  ],
+  "all_signatures_entry_eligible": [
+    {
+      "signature": "FVG",
+      "eligible_events": 74868,
+      "independent_sessions": 841,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY",
+      "eligible_events": 1786,
+      "independent_sessions": 585,
+      "years": 8
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN",
+      "eligible_events": 1000,
+      "independent_sessions": 472,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+FVG",
+      "eligible_events": 601,
+      "independent_sessions": 408,
+      "years": 8
+    },
+    {
+      "signature": "MEMORY+FVG",
+      "eligible_events": 426,
+      "independent_sessions": 275,
+      "years": 8
+    },
+    {
+      "signature": "MEMORY",
+      "eligible_events": 391,
+      "independent_sessions": 222,
+      "years": 8
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+FVG",
+      "eligible_events": 370,
+      "independent_sessions": 302,
+      "years": 8
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY",
+      "eligible_events": 62,
+      "independent_sessions": 57,
+      "years": 6
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+MEMORY+FVG",
+      "eligible_events": 62,
+      "independent_sessions": 60,
+      "years": 6
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY+FVG",
+      "eligible_events": 56,
+      "independent_sessions": 55,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+MEMORY",
+      "eligible_events": 18,
+      "independent_sessions": 12,
+      "years": 4
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+MEMORY+FVG",
+      "eligible_events": 17,
+      "independent_sessions": 14,
+      "years": 4
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+MEMORY",
+      "eligible_events": 13,
+      "independent_sessions": 13,
+      "years": 2
+    }
+  ],
+  "confluence_signatures": [
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+FVG",
+      "events": 209,
+      "independent_sessions": 163,
+      "years": 8
+    },
+    {
+      "signature": "MEMORY+FVG",
+      "events": 139,
+      "independent_sessions": 97,
+      "years": 8
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+FVG",
+      "events": 112,
+      "independent_sessions": 102,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+MEMORY+FVG",
+      "events": 22,
+      "independent_sessions": 22,
+      "years": 6
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY",
+      "events": 20,
+      "independent_sessions": 19,
+      "years": 6
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY+FVG",
+      "events": 18,
+      "independent_sessions": 18,
+      "years": 8
+    },
+    {
+      "signature": "OBJECTIVE_LIQUIDITY+MEMORY",
+      "events": 6,
+      "independent_sessions": 4,
+      "years": 4
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+MEMORY+FVG",
+      "events": 5,
+      "independent_sessions": 4,
+      "years": 4
+    },
+    {
+      "signature": "DISPLACEMENT_ORIGIN+MEMORY",
+      "events": 4,
+      "independent_sessions": 4,
+      "years": 2
+    }
+  ],
+  "note": "Independent-session counts are summed across disjoint years. This is a feasibility inventory, not a power or validation claim."
+}
