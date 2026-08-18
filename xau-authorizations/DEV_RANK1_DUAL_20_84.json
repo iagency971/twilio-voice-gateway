@@ -1,0 +1,7 @@
+{
+  "authorization": "OK DEV_RANK1 DUAL, plafond 20,84 $",
+  "request_csv_sha256": "25b1cfbd33215f8a1d7a9d6ac86515777df382d5be4fa4f4a74ebb541b381794",
+  "hard_cap_usd": 20.84,
+  "one_shot": true,
+  "authorized_at": "2026-08-18T15:54:00-04:00"
+}
