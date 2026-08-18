@@ -1,0 +1,54 @@
+{
+  "version": "COMEX_DEV_RANK1_DUAL_REQUEST_MANIFEST_V1",
+  "created_without_market_download": true,
+  "market_data_download_performed": false,
+  "architecture": "DUAL_V0_N0_CAUSAL_ACTIVE",
+  "dataset": "GLBX.MDP3",
+  "selected_sessions": 96,
+  "divergent_v0_n0_sessions": 10,
+  "new_raw_requests": 102,
+  "new_n0_raw_requests": 93,
+  "new_v0_alternate_raw_requests": 9,
+  "continuous_context_requests": 1,
+  "total_new_requests": 103,
+  "paid_raw_reuse": {
+    "same_contract_n0_reuse_dates": [
+      "2013-02-07",
+      "2017-10-31",
+      "2018-01-02"
+    ],
+    "divergent_v0_reuse_dates": [
+      "2013-05-29"
+    ]
+  },
+  "session_bounds": {
+    "before_2015_09_21": "18:00 America/New_York D-1 to 17:15 D, end-exclusive",
+    "on_after_2015_09_21": "18:00 America/New_York D-1 to 17:00 D, end-exclusive"
+  },
+  "controlling_metadata_quote_usd": 20.825925588608,
+  "hard_cap_usd": 20.84,
+  "pilot_actual_spend_usd": 4.01,
+  "projected_cumulative_spend_usd": 24.835925588608,
+  "authorization": "NOT_AUTHORIZED_FOR_DOWNLOAD",
+  "required_user_authorization_text": "OK DEV_RANK1 DUAL, plafond 20,84 $",
+  "pre_download_gate": [
+    "recompute metadata.get_cost for every request in dev_rank1_dual_requests.csv",
+    "sum exact current cost",
+    "abort if sum > 20.84 USD",
+    "abort if request-manifest SHA256 differs from frozen authorization manifest",
+    "abort if acquisition-complete marker already exists"
+  ],
+  "controlling_file_sha256": {
+    "frozen_session_mapping_all.csv": "e5a75ef474966418a51f41ed3908855d1f430b57370bce799f6d589ab1883a3b",
+    "dev_rank1_exact_raw_contract_quote.json": "2b6a55a4a8ada7c30cf1f0d79ec0b738cd186601e7936f95756654770ccefc1a",
+    "COMEX_DEV_RANK1_ROLL_POLICY_CANONICAL_v2.md": "4b36c0887d4bdfe47ffa15fed5f5fdb088a13d05013dd6c7ba5ed414360b44ec",
+    "corrected_primary_sessions.csv": "6df34e2dc51b4868bb315729d93fad4d5c6afcba0ed9fca059259bc938511696",
+    "corrected_strata_weights.csv": "fb5fff2edc829766504cfeeca5719350e9f665d7cea474faa43abe8e9f192ffa",
+    "COMEX_DEV_RANK1_ANALYSIS_PREREG_v1.md": "bb4fe1b40ee50f6829d6f6a09f7ddf004eb3fd9944d766ee86164bf247e0c36a",
+    "COMEX_DEV_RANK1_FEATURE_SPEC_CANONICAL_v1_1.md": "31736dbd1cf89bee2722a1175f6c49f9082d4b63e91ac05fcd935aee7ba1af3c",
+    "COMEX_DEV_RANK1_FEATURE_SPEC_CANONICAL_v1_2.md": "6d7a70b70ffdaaa57383b5b9c8fd5e21dc15e4c3acdbfdf79ea12b5cf5c0cf0d",
+    "COMEX_DEV_RANK1_AVAILABILITY_POLICY_v1.md": "40e8dd6fae6a16f15a280e0b307ea4b28c59fb1a29ebfdacfb788637707d5faa"
+  },
+  "request_csv_sha256": "25b1cfbd33215f8a1d7a9d6ac86515777df382d5be4fa4f4a74ebb541b381794",
+  "session_csv_sha256": "9cd907bf94646bc8641fd14df6701310a999323007f1b2645caae4ebc7f51499"
+}
