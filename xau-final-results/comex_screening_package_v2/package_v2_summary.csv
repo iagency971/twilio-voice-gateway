@@ -1,0 +1,5 @@
+session_tier,base_session_dates,base_events,supplement_events,union_events,supplement_unique_dates,signature_screen_events,acceptance_floor_events,both_reasons_events
+1,180,46950,22329,69279,3683,20959,1370,0
+2,357,93704,19342,113046,3505,18185,1157,0
+3,534,137989,16324,154313,3303,15331,993,0
+4,711,183773,13928,197701,3085,13149,779,0
