@@ -1,0 +1,19 @@
+{
+  "rows": 525600,
+  "price_min": 1180.6005,
+  "price_max": 1697.3595,
+  "spread_median": 0.3709999999998672,
+  "spread_p99": 2.9400000000000546,
+  "spread_max": 2.953999999999951,
+  "gap_abs_p99": 0.15699999999992542,
+  "gap_abs_p999": 0.3242010000000196,
+  "gap_abs_max": 15.434999999999945,
+  "gap_pct_max": 0.012079402656524216,
+  "range_p999": 4.2999999999999545,
+  "range_max": 19.500500000000102,
+  "count_gap_gt_20": 0,
+  "count_gap_gt_50": 0,
+  "count_gap_gt_100": 0,
+  "count_spread_gt_5": 0,
+  "count_price_below_500": 0
+}
