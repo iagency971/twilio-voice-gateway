@@ -1,5 +1,5 @@
 {
-  "version": "COMEX_ACQUISITION_PLAN_V1",
+  "version": "COMEX_ACQUISITION_PLAN_V1_1",
   "annual_files": 15,
   "events": 1274302,
   "years": [
@@ -36,6 +36,7 @@
     30,
     60
   ],
+  "fvg_seed": "COMEX_FVG_SAMPLE_V1_SEED_971",
   "market_data_download_performed": false,
-  "note": "Sampling ranks and temporal splits frozen before any COMEX market-data download."
+  "note": "FVG ranks recomputed within FVG-only yearly population; local/session/union frontiers frozen before COMEX download."
 }
