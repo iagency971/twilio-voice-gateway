@@ -1,0 +1,120 @@
+name: XAU COMEX DEV_RANK1 Entry Decision Features
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-dev-rank1-entry-decision-features.yml']
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        model: [PASSIVE_TOUCH, TOUCH_NEXT_OPEN, CLEAN_REJECTION, FAILED_AUCTION, ACCEPTANCE_RETEST, RECLAIM_PULLBACK]
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 numpy databento pyarrow requests
+      - name: Download successful DEV_RANK1 artifacts — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          pattern: comex-dev-rank1-dual-*
+          path: /tmp/new
+          merge-multiple: true
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Recover successful early V0 artifact 06610
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-06610cec170650590cd663ca
+          path: /tmp/new
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Recover successful early V0 artifact 010384
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-01038430e355d65828fbe711
+          path: /tmp/new
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Locate paid pilot raw artifact
+        id: pilot
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import os,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          runs=requests.get(f"{base}/actions/workflows/xau-comex-v4-pilot12-metadata.yml/runs",headers=h,params={'branch':'agent/xau-comex-acquisition-plan','status':'success','per_page':50}).json().get('workflow_runs',[]);found=None
+          for r in runs:
+              arts=[]
+              for page in range(1,4):
+                  z=requests.get(f"{base}/actions/runs/{r['id']}/artifacts",headers=h,params={'per_page':100,'page':page}).json().get('artifacts',[]);arts+=z
+                  if len(z)<100:break
+              if any(a['name']=='comex-v4-pilot12-raw-and-qa' and not a.get('expired') for a in arts):found=r['id'];break
+          if not found:raise SystemExit('pilot raw artifact not found')
+          print(f'run_id={found}')
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          name: comex-v4-pilot12-raw-and-qa
+          path: /tmp/pilot
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ steps.pilot.outputs.run_id }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: comex-acquisition-plan-v1
+          path: /tmp/plan
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32102932187
+      - name: Acquire canonical free XAU midpoint context for selected sessions only
+        run: |
+          python xau-multiyear/scripts/acquire_dukascopy_selected_context.py \
+            --sessions xau-final-results/comex_dev_rank1_gate_v1/corrected_primary_sessions.csv \
+            --out /tmp/xau_selected.parquet
+      - name: Build model-specific causal decision features — no Databento API key
+        run: |
+          python xau-multiyear/scripts/build_comex_dev_rank1_entry_decision_features.py \
+            --new-root /tmp/new \
+            --pilot-root /tmp/pilot \
+            --requests xau-final-results/comex_dev_rank1_dual_manifest_v1/dev_rank1_dual_requests.csv \
+            --sessions xau-final-results/comex_dev_rank1_gate_v1/corrected_primary_sessions.csv \
+            --mapping xau-final-results/comex_dev_rank1_gate_v1/frozen_session_mapping_all.csv \
+            --events /tmp/plan/canonical_events_all.csv.gz \
+            --xau-context /tmp/xau_selected.parquet \
+            --model ${{ matrix.model }} \
+            --out /tmp/features
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-entry-decision-${{ matrix.model }}-v1
+          path: /tmp/features/
+          retention-days: 90
+      - name: Publish compact decision manifest
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+          MODEL: ${{ matrix.model }}
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests
+          src=pathlib.Path('/tmp/features');root=f"xau-final-results/comex_dev_rank1_entry_decision_{os.environ['MODEL'].lower()}_v1";h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for name in ['entry_decision_feature_manifest.json','entry_decision_sample_200.csv']:
+              p=src/name;path=f'{root}/{name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f"publish DEV_RANK1 {os.environ['MODEL']} decision features {name} [skip ci]",'content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:body['sha']=sha
+              r=requests.put(u,headers=h,json=body);r.raise_for_status()
+          PY
