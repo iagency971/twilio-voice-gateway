@@ -2,20 +2,43 @@
   "version": "COMEX_DEV_RANK1_DUAL_ACQUISITION_SUMMARY_OFFLINE_V1",
   "source_run_id": 32179377819,
   "expected_requests": 103,
-  "completed_request_markers": 100,
+  "completed_request_markers": 102,
   "missing_request_ids": [
-    "01038430e355d65828fbe711",
-    "06610cec170650590cd663ca",
     "0a4d76ff55756735f40fe579"
   ],
   "extra_request_ids": [],
   "complete": false,
-  "paid_market_requests_performed_in_successful_markers": 97,
+  "paid_market_requests_performed_in_successful_markers": 99,
   "zero_record_metadata_only_requests": 3,
-  "records_downloaded_total": 10880445,
-  "raw_bytes_total": 130613390,
+  "records_downloaded_total": 10934815,
+  "raw_bytes_total": 131392355,
   "note": "Does not include any potentially billable failed request that produced no success marker. Databento portal is accounting source of truth.",
   "files": [
+    {
+      "version": "COMEX_DEV_RANK1_DUAL_REQUEST_FILE_V1",
+      "request_id": "01038430e355d65828fbe711",
+      "request_type": "RAW_TRADES",
+      "candidate_role": "V0_DUAL_ALTERNATE",
+      "research_trading_date": "2017-07-28",
+      "dataset": "GLBX.MDP3",
+      "schema": "trades",
+      "symbols": "66404",
+      "stype_in": "instrument_id",
+      "start": "2017-07-27T22:00:00+00:00",
+      "end": "2017-07-28T21:00:00+00:00",
+      "gate_cost_usd": 0.00863045454,
+      "immediate_pre_download_cost_usd": 0.00863045454,
+      "gate_records": 6895,
+      "records_downloaded": 6895,
+      "raw_file": "01038430e355d65828fbe711.dbn.zst",
+      "raw_file_bytes": 149036,
+      "sha256": "03e69f002648b8d488ed22fe08c63cd421a4ff912674f04ea054e0e77ed605da",
+      "instrument_ids": [
+        66404
+      ],
+      "market_data_request_performed": true,
+      "zero_record_metadata_only": false
+    },
     {
       "version": "COMEX_DEV_RANK1_DUAL_REQUEST_FILE_V1",
       "request_id": "046f2866c80462c8ff285844",
@@ -62,6 +85,31 @@
       "sha256": null,
       "market_data_request_performed": false,
       "zero_record_metadata_only": true
+    },
+    {
+      "version": "COMEX_DEV_RANK1_DUAL_REQUEST_FILE_V1",
+      "request_id": "06610cec170650590cd663ca",
+      "request_type": "RAW_TRADES",
+      "candidate_role": "V0_DUAL_ALTERNATE",
+      "research_trading_date": "2017-03-29",
+      "dataset": "GLBX.MDP3",
+      "schema": "trades",
+      "symbols": "805",
+      "stype_in": "instrument_id",
+      "start": "2017-03-28T22:00:00+00:00",
+      "end": "2017-03-29T21:00:00+00:00",
+      "gate_cost_usd": 0.059424340725,
+      "immediate_pre_download_cost_usd": 0.059424340725,
+      "gate_records": 47475,
+      "records_downloaded": 47475,
+      "raw_file": "06610cec170650590cd663ca.dbn.zst",
+      "raw_file_bytes": 629929,
+      "sha256": "1ee02527f9f07acd82b7a95fb42bb378584f5689a54190498343d1d9c703b552",
+      "instrument_ids": [
+        805
+      ],
+      "market_data_request_performed": true,
+      "zero_record_metadata_only": false
     },
     {
       "version": "COMEX_DEV_RANK1_DUAL_REQUEST_FILE_V1",
