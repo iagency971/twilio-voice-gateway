@@ -1,0 +1,16 @@
+{
+  "target_start": "2026-05-01T00:00:00Z",
+  "target_end": "2026-06-30T00:00:00Z",
+  "target_events": 11447,
+  "doz_objective_only_events": 6,
+  "clean_rejection_trades_per_cell": 0,
+  "primary_positive_rr_cells": 0,
+  "primary_median_net_R_across_rr": null,
+  "stress_positive_rr_cells": 0,
+  "stress_median_net_R_across_rr": null,
+  "gate_A_primary": false,
+  "gate_B_stress": false,
+  "clean_rejection_family_pass": false,
+  "touch_next_open_primary_positive_cells": 0,
+  "interpretation": "Frozen eight survivors only; no holdout promotion. Zero-trade cells are explicitly reported rather than omitted."
+}
