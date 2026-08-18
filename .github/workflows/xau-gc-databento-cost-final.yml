@@ -1,3 +1,4 @@
+# retrigger cost check after Databento secret added 2026-08-18
 name: XAU GC Databento Cost Final
 on:
   push:
