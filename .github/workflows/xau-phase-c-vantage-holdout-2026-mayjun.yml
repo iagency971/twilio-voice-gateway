@@ -1,4 +1,5 @@
 name: XAU Phase C Vantage RAW Holdout May-Jun 2026
+# explicit trigger after workflow creation; no scientific parameter change
 on:
   push:
     branches: [agent/xau-multiyear-research]
