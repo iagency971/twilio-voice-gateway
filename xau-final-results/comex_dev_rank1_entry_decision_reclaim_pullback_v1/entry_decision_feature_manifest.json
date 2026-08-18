@@ -1,0 +1,25 @@
+{
+  "version": "COMEX_DEV_RANK1_ENTRY_DECISION_FEATURES_V1_1",
+  "market_data_api_calls": false,
+  "rows": 31163,
+  "sessions": 96,
+  "models": [
+    "RECLAIM_PULLBACK"
+  ],
+  "requested_model": "RECLAIM_PULLBACK",
+  "counts": [
+    {
+      "entry_model": "RECLAIM_PULLBACK",
+      "decision_events": 31163,
+      "filled_or_entered": 17982,
+      "fill_rate": 0.577030452780541,
+      "sessions": 96,
+      "years": 8,
+      "b2_available": 30127
+    }
+  ],
+  "decision_population_freeze": "COMEX_DEV_RANK1_ENTRY_DECISION_POPULATIONS_FREEZE_v1.md",
+  "net_r_not_computed": true,
+  "rr_not_selected": true,
+  "scientific_change_from_v1": "none; optional model filter applied before session feature loop for orchestration only"
+}
