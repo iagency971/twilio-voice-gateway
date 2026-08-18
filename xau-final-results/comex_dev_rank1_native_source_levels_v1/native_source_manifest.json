@@ -2,16 +2,15 @@
   "version": "COMEX_DEV_RANK1_NATIVE_SOURCE_LEVELS_V1",
   "market_data_api_calls": false,
   "analytical_sessions": 96,
-  "source_sessions_with_primary_levels": 91,
+  "source_sessions_with_primary_levels": 92,
   "missing_source_sessions": [
     "2011-12-26",
     "2012-11-22",
     "2014-01-20",
-    "2015-02-05",
-    "2017-03-29"
+    "2015-02-05"
   ],
   "levels_per_source": 4,
-  "levels_total": 364,
+  "levels_total": 368,
   "level_types": [
     "VWAP",
     "POC",
