@@ -1,0 +1,124 @@
+{
+  "version": "COMEX_DEV_RANK1_ZERO_COST_GATE_V1",
+  "metadata_only": true,
+  "market_data_download_performed": false,
+  "corrected_primary_panel_sessions": 357,
+  "dev_rank1_analytical_sessions": 96,
+  "dev_rank1_already_paid_reused": 4,
+  "dev_rank1_new_sessions_to_buy": 92,
+  "dev_rank2_analytical_sessions": 96,
+  "confirm_primary_sessions": 95,
+  "locked_test_primary_sessions": 70,
+  "qa_only_exposed_confirm_test_sessions": 6,
+  "quote": {
+    "ohlcv_1m_2010_06_06_to_2019_01_01_usd": 10.623191446066,
+    "ohlcv_1m_records": 2909838,
+    "new_dev_rank1_trades_usd": 9.524125277991999,
+    "total_usd": 20.147316724058,
+    "recommended_hard_cap_usd": 20.16,
+    "within_cap": true
+  },
+  "session_metadata_qa": {
+    "new_sessions_quoted": 92,
+    "zero_record_sessions": [
+      "2011-12-26",
+      "2014-01-20"
+    ],
+    "record_count_min": 0,
+    "record_count_median": 84131.0,
+    "record_count_max": 287161,
+    "bottom_5pct_threshold": 629.55,
+    "bottom_5pct_sessions": [
+      {
+        "research_trading_date": "2011-12-26",
+        "trades_record_count": 0
+      },
+      {
+        "research_trading_date": "2012-11-22",
+        "trades_record_count": 102
+      },
+      {
+        "research_trading_date": "2014-01-20",
+        "trades_record_count": 0
+      },
+      {
+        "research_trading_date": "2014-06-13",
+        "trades_record_count": 247
+      },
+      {
+        "research_trading_date": "2017-11-30",
+        "trades_record_count": 530
+      }
+    ]
+  },
+  "symbology_qa": {
+    "continuous_mapping_segments": 43,
+    "unique_instrument_ids": 43,
+    "not_found": [],
+    "partial": [],
+    "status": 0,
+    "message": "OK"
+  },
+  "coverage": {
+    "events": 25458,
+    "independent_sessions": 76,
+    "years": [
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018
+    ],
+    "broad_families": [
+      {
+        "family_stack": "CONFLUENCE",
+        "events": 535,
+        "independent_sessions": 76,
+        "years": 8
+      },
+      {
+        "family_stack": "DOZ_ONLY",
+        "events": 336,
+        "independent_sessions": 74,
+        "years": 8
+      },
+      {
+        "family_stack": "FVG_ONLY",
+        "events": 23828,
+        "independent_sessions": 76,
+        "years": 8
+      },
+      {
+        "family_stack": "MEMORY_ONLY",
+        "events": 136,
+        "independent_sessions": 40,
+        "years": 8
+      },
+      {
+        "family_stack": "OBJECTIVE_ONLY",
+        "events": 623,
+        "independent_sessions": 76,
+        "years": 8
+      }
+    ],
+    "exact_confluence_signatures": 9
+  },
+  "hashes": {
+    "corrected_primary_sessions_sha256": "6df34e2dc51b4868bb315729d93fad4d5c6afcba0ed9fca059259bc938511696",
+    "corrected_strata_weights_sha256": "fb5fff2edc829766504cfeeca5719350e9f665d7cea474faa43abe8e9f192ffa",
+    "coverage_family_sha256": "689c5079e554fea254de095ff3081fac0ac16e229b4e5817adec21ffc8506420",
+    "coverage_entry_models_sha256": "b5500cad9e3cfeb56923a0d106ceec032b2ec1c07e19634a0827e38f2fb41349"
+  },
+  "blocking_gates": {
+    "exactly_96_dev_rank1_sessions": true,
+    "exactly_92_new_dev_rank1_sessions": true,
+    "four_paid_rank1_reused": true,
+    "no_zero_record_new_sessions": false,
+    "symbology_complete": true,
+    "quote_within_20_16": true
+  },
+  "note": "No market-data range or batch request exists in this script. Only free symbology resolution and metadata cost/count queries are used."
+}
