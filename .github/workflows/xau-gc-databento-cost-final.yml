@@ -1,4 +1,5 @@
 # retrigger cost check after Databento secret added 2026-08-18
+# rerun after correcting dataset available-start bounds
 name: XAU GC Databento Cost Final
 on:
   push:
