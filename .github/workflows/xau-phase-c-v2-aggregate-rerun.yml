@@ -1,4 +1,5 @@
 name: XAU Phase C v2 Aggregate Rerun
+# explicit trigger after all 15 annual files became available
 on:
   push:
     branches: [agent/xau-multiyear-research]
@@ -42,7 +43,7 @@ jobs:
           json.dump({'years':years,'annual_files':15,'decision_gate':'PHASE_C_V2_DECISION_GATE.md','surface_cells':int(len(m)),'survivors':int(len(gate)),'selection':'NONE; full surface retained','warning':'TOUCH_NEXT_OPEN cells are diagnostically invalid without a risk floor because near-zero structural risk can create extreme R; retain for audit only, not strategy selection','annual_manifests':manifests},open(out/'manifest.json','w'),indent=2)
           for fn in ['annual_summary.csv','multiyear_summary.csv','survivors.csv','manifest.json']:
               path=f'xau-final-results/phase_c_v2_2011_2025/{fn}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
-              body={'message':f'publish Phase C v2 aggregate {fn} [skip ci]','content':base64.b64encode((out/fn).read_bytes()).decode(),'branch':os.environ['BRANCH']};
+              body={'message':f'publish Phase C v2 aggregate {fn} [skip ci]','content':base64.b64encode((out/fn).read_bytes()).decode(),'branch':os.environ['BRANCH']}
               if sha: body['sha']=sha
               r=requests.put(u,headers=h,json=body); r.raise_for_status()
           print('SURVIVORS',len(gate)); print(gate.to_string(index=False) if len(gate) else 'NONE')
