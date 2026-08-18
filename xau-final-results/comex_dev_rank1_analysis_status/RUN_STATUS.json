@@ -1,130 +1,221 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V4",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V5",
   "workflows": {
-    "xau-comex-dev-rank1-entry-decision-features.yml": {
-      "found": true,
-      "run_id": 32192726623,
-      "event": "push",
-      "status": "completed",
-      "conclusion": "success",
-      "jobs_total": 6,
-      "by_status": {
-        "completed": 6
-      },
-      "by_conclusion": {
-        "success": 6
-      },
-      "jobs": [
-        {
-          "id": 95890368615,
-          "name": "build (CLEAN_REJECTION)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95890368647,
-          "name": "build (TOUCH_NEXT_OPEN)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95890368690,
-          "name": "build (FAILED_AUCTION)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95890368692,
-          "name": "build (ACCEPTANCE_RETEST)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95890368713,
-          "name": "build (RECLAIM_PULLBACK)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 95890369141,
-          "name": "build (PASSIVE_TOUCH)",
-          "status": "completed",
-          "conclusion": "success"
-        }
-      ]
-    },
     "xau-comex-dev-rank1-fill-models.yml": {
       "found": true,
       "run_id": 32193888107,
       "event": "push",
-      "status": "queued",
+      "status": "in_progress",
       "conclusion": null,
       "jobs_total": 6,
       "by_status": {
-        "in_progress": 3,
-        "queued": 3
+        "completed": 5,
+        "in_progress": 1
       },
       "by_conclusion": {
-        "NONE": 6
+        "success": 4,
+        "cancelled": 1,
+        "NONE": 1
       },
       "jobs": [
         {
           "id": 95893842853,
           "name": "model (CLEAN_REJECTION)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95893842918,
           "name": "model (PASSIVE_TOUCH)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "cancelled"
         },
         {
           "id": 95893842919,
           "name": "model (ACCEPTANCE_RETEST)",
-          "status": "queued",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95893842948,
           "name": "model (FAILED_AUCTION)",
-          "status": "queued",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95893842960,
           "name": "model (TOUCH_NEXT_OPEN)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95893842966,
           "name": "model (RECLAIM_PULLBACK)",
-          "status": "queued",
+          "status": "in_progress",
           "conclusion": null
         }
       ]
     },
-    "xau-comex-dev-rank1-binary-behavior.yml": {
+    "xau-comex-dev-rank1-fill-parallel-recovery.yml": {
       "found": true,
-      "run_id": 32190049489,
+      "run_id": 32197961711,
       "event": "push",
-      "status": "completed",
-      "conclusion": "cancelled",
-      "jobs_total": 1,
+      "status": "queued",
+      "conclusion": null,
+      "jobs_total": 24,
       "by_status": {
-        "completed": 1
+        "completed": 8,
+        "in_progress": 8,
+        "queued": 8
       },
       "by_conclusion": {
-        "cancelled": 1
+        "success": 8,
+        "NONE": 16
       },
       "jobs": [
         {
-          "id": 95882190934,
-          "name": "diagnostic",
+          "id": 95905696824,
+          "name": "fold (PASSIVE_TOUCH, B0, 2014)",
           "status": "completed",
-          "conclusion": "cancelled"
+          "conclusion": "success"
+        },
+        {
+          "id": 95905696865,
+          "name": "fold (PASSIVE_TOUCH, B0, 2016)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95905696869,
+          "name": "fold (PASSIVE_TOUCH, B0, 2015)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95905696872,
+          "name": "fold (PASSIVE_TOUCH, B0, 2013)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95905696894,
+          "name": "fold (PASSIVE_TOUCH, B0, 2012)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95905696896,
+          "name": "fold (PASSIVE_TOUCH, B1, 2012)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95905696902,
+          "name": "fold (PASSIVE_TOUCH, B1, 2011)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95905696904,
+          "name": "fold (PASSIVE_TOUCH, B0, 2017)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95905696918,
+          "name": "fold (PASSIVE_TOUCH, B1, 2016)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95905696922,
+          "name": "fold (PASSIVE_TOUCH, B0, 2018)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95905696927,
+          "name": "fold (PASSIVE_TOUCH, B1, 2017)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95905696929,
+          "name": "fold (PASSIVE_TOUCH, B1, 2015)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95905696989,
+          "name": "fold (PASSIVE_TOUCH, B1, 2018)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95905697003,
+          "name": "fold (PASSIVE_TOUCH, B2, 2012)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95905697012,
+          "name": "fold (PASSIVE_TOUCH, B1, 2014)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95905697025,
+          "name": "fold (PASSIVE_TOUCH, B2, 2011)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95905697052,
+          "name": "fold (PASSIVE_TOUCH, B0, 2011)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95905697063,
+          "name": "fold (PASSIVE_TOUCH, B1, 2013)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95905697743,
+          "name": "fold (PASSIVE_TOUCH, B2, 2013)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95905697746,
+          "name": "fold (PASSIVE_TOUCH, B2, 2015)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95905697748,
+          "name": "fold (PASSIVE_TOUCH, B2, 2014)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95905697784,
+          "name": "fold (PASSIVE_TOUCH, B2, 2017)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95905697861,
+          "name": "fold (PASSIVE_TOUCH, B2, 2018)",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95905697894,
+          "name": "fold (PASSIVE_TOUCH, B2, 2016)",
+          "status": "queued",
+          "conclusion": null
         }
       ]
     }
