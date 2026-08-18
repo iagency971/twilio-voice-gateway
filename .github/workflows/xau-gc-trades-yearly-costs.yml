@@ -1,0 +1,55 @@
+name: XAU GC Trades Yearly Costs
+on:
+  push:
+    branches: [agent/xau-multiyear-research]
+    paths:
+      - '.github/workflows/xau-gc-trades-yearly-costs.yml'
+permissions:
+  contents: write
+jobs:
+  costs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install databento
+      - name: Cost by year only
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          import databento as db
+          client=db.Historical(os.environ['DATABENTO_API_KEY'])
+          rows=[]
+          for y in range(2011,2027):
+              start=f'{y}-01-01'
+              end='2026-08-17' if y==2026 else f'{y+1}-01-01'
+              kw=dict(dataset='GLBX.MDP3',symbols='GC.v.0',stype_in='continuous',schema='trades',start=start,end=end)
+              try:
+                  cost=float(client.metadata.get_cost(**kw))
+                  rows.append({'year':y,'start':start,'end':end,'cost_usd':cost,'status':'OK'})
+              except Exception as e:
+                  rows.append({'year':y,'start':start,'end':end,'status':'ERROR','error':str(e)})
+          Path('/tmp/gc_trades_yearly_costs.json').write_text(json.dumps(rows,indent=2),encoding='utf-8')
+          print(json.dumps(rows,indent=2))
+          PY
+      - name: Publish result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-multiyear-research
+        run: |
+          python - <<'PY'
+          import base64, os, pathlib, requests
+          p=pathlib.Path('/tmp/gc_trades_yearly_costs.json')
+          path='xau-final-results/gc_databento_cost/trades_yearly_costs.json'
+          url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          r=requests.get(url,headers=h,params={'ref':os.environ['BRANCH']})
+          sha=r.json().get('sha') if r.status_code==200 else None
+          body={'message':'publish GC trades yearly cost-only matrix [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          rr=requests.put(url,headers=h,json=body); rr.raise_for_status()
+          PY
