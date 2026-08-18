@@ -1,0 +1,64 @@
+name: XAU COMEX DEV_RANK1 Primary Models
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-dev-rank1-primary-models.yml']
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  model:
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [reaction, behavior]
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 numpy pyarrow scikit-learn==1.5.2 requests
+      - name: Download frozen DEV_RANK1 event feature artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-event-features-v1
+          path: /tmp/features
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32183736697
+      - name: Run nested leave-one-year-out primary model
+        run: |
+          python xau-multiyear/scripts/run_comex_dev_rank1_primary_models.py \
+            --features /tmp/features/dev_rank1_event_features.parquet \
+            --target ${{ matrix.target }} \
+            --out /tmp/result
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-primary-${{ matrix.target }}-v1
+          path: /tmp/result/
+          retention-days: 90
+      - name: Publish compact primary results
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+          TARGET: ${{ matrix.target }}
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests
+          src=pathlib.Path('/tmp/result');root=f"xau-final-results/comex_dev_rank1_primary_{os.environ['TARGET']}_v1"
+          keep=['result.json','metrics.csv','annual_metrics.csv','family_deltas.csv','outer_fold_audit.json']
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for name in keep:
+              p=src/name
+              if not p.exists():raise SystemExit(f'missing {name}')
+              path=f'{root}/{name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+              body={'message':f"publish DEV_RANK1 {os.environ['TARGET']} primary result {name} [skip ci]",'content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:body['sha']=sha
+              r=requests.put(u,headers=h,json=body);r.raise_for_status()
+          PY
