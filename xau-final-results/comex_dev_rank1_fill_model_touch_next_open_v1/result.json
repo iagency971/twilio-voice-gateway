@@ -1,0 +1,163 @@
+{
+  "version": "COMEX_DEV_RANK1_FILL_MODEL_RESULT_V1",
+  "entry_model": "TOUCH_NEXT_OPEN",
+  "target": "fill_or_entry",
+  "counts": {
+    "decision_events": 31710,
+    "decision_sessions": 96,
+    "decision_years": 8,
+    "filled_or_entered": 31579,
+    "not_filled_or_entered": 131,
+    "fill_rate": 0.9958688111005992,
+    "b2_available_events": 30609,
+    "primary_comparison_events": 30609,
+    "primary_sessions": 92,
+    "primary_fill": 30556,
+    "primary_nonfill": 53,
+    "primary_fill_rate": 0.998268483125878
+  },
+  "C_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "nested_validation": "outer LOYO; C selected by inner LOYO on remaining years",
+  "freeze": "COMEX_DEV_RANK1_FILL_MODEL_FREEZE_v1.md",
+  "status": "MODELED",
+  "events": 30609,
+  "sessions": 92,
+  "comparisons": [
+    {
+      "comparison": "B1_vs_B0",
+      "family_balanced_event_logloss_improvement": -0.0276009110204761,
+      "population_event_logloss_improvement": -0.009391519018536909,
+      "session_balanced_logloss_improvement": -0.00892396718200669,
+      "year_deltas": [
+        {
+          "year": 2011,
+          "logloss_improvement": -0.027823188107502193,
+          "fill": 4048,
+          "nonfill": 10
+        },
+        {
+          "year": 2012,
+          "logloss_improvement": 0.0371622234881663,
+          "fill": 3435,
+          "nonfill": 11
+        },
+        {
+          "year": 2013,
+          "logloss_improvement": -0.15384071861423237,
+          "fill": 4006,
+          "nonfill": 15
+        },
+        {
+          "year": 2014,
+          "logloss_improvement": 0.012824727592349552,
+          "fill": 3854,
+          "nonfill": 9
+        },
+        {
+          "year": 2015,
+          "logloss_improvement": -0.05292727999886671,
+          "fill": 3734,
+          "nonfill": 4
+        },
+        {
+          "year": 2016,
+          "logloss_improvement": 0.009875674913303642,
+          "fill": 3868,
+          "nonfill": 3
+        },
+        {
+          "year": 2017,
+          "logloss_improvement": -0.0016979616026443437,
+          "fill": 3539,
+          "nonfill": 1
+        },
+        {
+          "year": 2018,
+          "logloss_improvement": 0.004231334762709574,
+          "fill": 4072,
+          "nonfill": 0
+        }
+      ],
+      "positive_years": 4,
+      "cluster_bootstrap_95": {
+        "lo": -0.057117217840505094,
+        "median": -0.02598612908932072,
+        "hi": 0.001274019422805193,
+        "n": 2000
+      },
+      "bootstrap_excludes_zero_positive": false,
+      "directional_gate": false
+    },
+    {
+      "comparison": "B2_vs_B1",
+      "family_balanced_event_logloss_improvement": 0.017126596198537222,
+      "population_event_logloss_improvement": -0.003909804946617339,
+      "session_balanced_logloss_improvement": -0.0036254708462522267,
+      "year_deltas": [
+        {
+          "year": 2011,
+          "logloss_improvement": 0.01546393287445931,
+          "fill": 4048,
+          "nonfill": 10
+        },
+        {
+          "year": 2012,
+          "logloss_improvement": 0.0032415243266762164,
+          "fill": 3435,
+          "nonfill": 11
+        },
+        {
+          "year": 2013,
+          "logloss_improvement": 0.11317405882477416,
+          "fill": 4006,
+          "nonfill": 15
+        },
+        {
+          "year": 2014,
+          "logloss_improvement": -0.008145842749532547,
+          "fill": 3854,
+          "nonfill": 9
+        },
+        {
+          "year": 2015,
+          "logloss_improvement": -0.0321405010563869,
+          "fill": 3734,
+          "nonfill": 4
+        },
+        {
+          "year": 2016,
+          "logloss_improvement": -0.0034359818436165285,
+          "fill": 3868,
+          "nonfill": 3
+        },
+        {
+          "year": 2017,
+          "logloss_improvement": 0.0010927623746562719,
+          "fill": 3539,
+          "nonfill": 1
+        },
+        {
+          "year": 2018,
+          "logloss_improvement": 0.0018092289039172062,
+          "fill": 4072,
+          "nonfill": 0
+        }
+      ],
+      "positive_years": 5,
+      "cluster_bootstrap_95": {
+        "lo": -0.0030345859394975867,
+        "median": 0.01576302414629304,
+        "hi": 0.04036315867855441,
+        "n": 2000
+      },
+      "bootstrap_excludes_zero_positive": false,
+      "directional_gate": false
+    }
+  ]
+}
