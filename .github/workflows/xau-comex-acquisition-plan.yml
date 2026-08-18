@@ -27,7 +27,7 @@ jobs:
           python - <<'PY' >> "$GITHUB_OUTPUT"
           import os
           y=int(os.environ['YEAR'])
-          print(f"from_month={'2009-12' if y==2011 else str(y-1)+'-01'}")
+          print(f"from_month={y-1}-01")
           print(f"to_month={y+1}-01")
           print(f"target_start={y}-01-01")
           print(f"target_end={y+1}-01-01")
