@@ -1,0 +1,70 @@
+{
+  "version": "COMEX_SCREENING_PACKAGE_V3_LEAN",
+  "canonical_events": 1274307,
+  "session_tier": 2,
+  "base_session_dates": 357,
+  "base_events": 93704,
+  "supplement_events": 5476,
+  "union_events": 99180,
+  "reason_counts": {
+    "family_floor": 3125,
+    "confluence_signature_floor": 884,
+    "acceptance_floor": 1467
+  },
+  "local_windows_gap30": 4309,
+  "local_minutes_gap30": 274150.0,
+  "package_windows_gap30": 4256,
+  "package_minutes_gap30": 784310.0,
+  "family_targets": {
+    "DEV": {
+      "CONFLUENCE": 1000,
+      "DOZ_ONLY": 1000,
+      "MEMORY_ONLY": 1000,
+      "OBJECTIVE_ONLY": 1000
+    },
+    "VALIDATION": {
+      "CONFLUENCE": 600,
+      "DOZ_ONLY": 600,
+      "MEMORY_ONLY": 600,
+      "OBJECTIVE_ONLY": 600
+    },
+    "COMEX_FEATURE_HOLDOUT": {
+      "CONFLUENCE": 600,
+      "DOZ_ONLY": 600,
+      "MEMORY_ONLY": 600,
+      "OBJECTIVE_ONLY": 600
+    }
+  },
+  "confluence_signature_min": {
+    "DEV": 100,
+    "VALIDATION": 50,
+    "COMEX_FEATURE_HOLDOUT": 50
+  },
+  "acceptance_targets": {
+    "DEV": {
+      "CONFLUENCE": 150,
+      "DOZ_ONLY": 150,
+      "FVG_ONLY": 500,
+      "MEMORY_ONLY": 150,
+      "OBJECTIVE_ONLY": 150
+    },
+    "VALIDATION": {
+      "CONFLUENCE": 100,
+      "DOZ_ONLY": 100,
+      "FVG_ONLY": 250,
+      "MEMORY_ONLY": 100,
+      "OBJECTIVE_ONLY": 100
+    },
+    "COMEX_FEATURE_HOLDOUT": {
+      "CONFLUENCE": 100,
+      "DOZ_ONLY": 100,
+      "FVG_ONLY": 250,
+      "MEMORY_ONLY": 100,
+      "OBJECTIVE_ONLY": 100
+    }
+  },
+  "selection_seed": "COMEX_SUPPLEMENT_V3_SEED_971",
+  "selection_uses_comex_data": false,
+  "market_data_download_performed": false,
+  "warning": "Lean screening design. Underpopulated cells remain inconclusive; no strategy validation claim."
+}
