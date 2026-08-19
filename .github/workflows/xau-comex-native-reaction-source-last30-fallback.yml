@@ -134,16 +134,31 @@ jobs:
       - name: Hard guard — no treated contact-minute matching / no outcome / no spend
         run: |
           python - <<'PY'
-          import json
+          import json, numpy as np, pandas as pd
           z=json.load(open('/tmp/audit/source_last30_fallback.json'))
           assert z['post_contact_values_used_for_matching'] is False
           assert z['post_anchor_outcomes_read'] is False
           assert z['reaction_outcomes_computed'] is False
           assert z['market_data_api_called'] is False
           assert z['market_data_download_performed'] is False
-          assert z['source_sessions']==92 and z['source_last30_all_positive'] is True
+          assert z['source_sessions']==92
           assert z['parity_summary']['stable_parity_all_pass'] is True
-          print('SOURCE_LAST30_FALLBACK_ZERO_OUTCOME_OK',z['support'])
+          assert z['support']['PRIOR_CLOSE_ONLY']['support_gate_pass'] is True
+
+          prov=pd.read_csv('/tmp/audit/source_last30_provenance.csv')
+          assert len(prov)==92
+          sr=pd.to_numeric(prov['source_range_ticks'],errors='coerce')
+          assert sr.notna().all() and (sr>0).all()
+
+          ev=pd.read_csv('/tmp/audit/event_source_last30_context.csv')
+          sup=pd.read_csv('/tmp/audit/support_prior_close_only.csv')
+          m=sup.merge(ev[['level_id','source_last30_range_ticks']],on='level_id',how='left',validate='one_to_one')
+          full=m['full_k5'].astype(str).str.lower().eq('true')
+          early=pd.to_numeric(m['minute'],errors='coerce').lt(30)
+          used=m[full & early].copy()
+          l30=pd.to_numeric(used['source_last30_range_ticks'],errors='coerce')
+          assert l30.notna().all() and (l30>0).all()
+          print('SOURCE_LAST30_FALLBACK_ZERO_OUTCOME_OK',z['support']['PRIOR_CLOSE_ONLY'], 'matched_early_using_positive_source_last30',len(used))
           PY
 
       - uses: actions/upload-artifact@v4
