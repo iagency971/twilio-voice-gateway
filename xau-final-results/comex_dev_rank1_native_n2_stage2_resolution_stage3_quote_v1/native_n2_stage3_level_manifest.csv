@@ -1,0 +1,2 @@
+level_id,source_research_date,eligible_next_research_date,source_instrument_id,level_type,contact_tick_price,minute_start_utc,minute_end_utc,candidate_rank,stage3_market_request_id
+1223ab410b28e74ebbed372e,2012-09-06,2012-09-07,118951,VAL,1702.0,2012-09-07T12:30:00+00:00,2012-09-07T12:31:00+00:00,3,05b9848a89d1a46721585e99
