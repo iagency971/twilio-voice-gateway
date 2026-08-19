@@ -1,8 +1,12 @@
 # PRO Amendment Gate — COMEX Native Reaction Controls — 2026-08-19
 
-Status: **OUTCOME-BLIND DRAFT — DO NOT COMPUTE REACTION OUTCOMES**
+Status: **OUTCOME-BLIND READY FOR PRO REVALIDATION — DO NOT COMPUTE REACTION OUTCOMES**
 
 Branch: `agent/xau-comex-acquisition-plan`
+
+Latest zero-outcome validation run: **32278975008**  
+Job: **96152960036**  
+Run conclusion: **SUCCESS**
 
 ## Purpose
 
@@ -48,7 +52,7 @@ Permit control candidates from the already-owned `GC.n.0` M1 context only when a
 - original DEV_RANK1 source dates are not duplicated through the expanded pool;
 - all original K=5, same-year, same-bin, same-approach, caliper and deterministic-ranking rules still apply.
 
-Outcome-blind parity QA on canonical testable blocks found 85/85 exact M1 OHLCV parity when the continuous context's underlying `instrument_id` equals the frozen raw N1 instrument. This supports using the stable-IID context as a larger control reservoir, not as a replacement structural instrument.
+Outcome-blind parity QA on canonical testable blocks found **85/85 exact M1 OHLCV parity** when the continuous context's underlying `instrument_id` equals the frozen raw N1 instrument. This supports using the stable-IID context as a larger control reservoir, not as a replacement structural instrument.
 
 ## Proposed Amendment B — early-contact volatility covariate
 
@@ -64,39 +68,93 @@ For an early treated event, a control must be matched symmetrically using the co
 
 No treated contact-minute open/high/low/close or post-`t0` value may be used in matching.
 
+### Provenance nuance fixed by the final hard guard
+
+The compact diagnostic retains `source_last30_all_positive=false` at the global 92-session inventory level because some holiday/early-close source sessions contain no executed trades in the final 30-minute **calendar** window. This is not used to silently impute a value.
+
+The final hard guard instead checks the condition at the level where it matters scientifically: **every matched early treated event that actually uses `source_last30_range_ticks` must have a finite strictly positive source-last30 value, and its matched controls must satisfy the symmetric requirement**. Run 32278975008 passed this guard.
+
+Therefore sessions with unavailable/nonpositive source-last30 are not converted into zero volatility and cannot enter the early-event matched analysis through this fallback.
+
 ## Pseudo-approach rule
 
 Adopt only `PRIOR_CLOSE_ONLY`, i.e. retain the Pro rule based on the latest completed M1 close strictly prior to the control anchor that differs from the control anchor price. Do not use the current control minute open as fallback.
 
-## Outcome-blind support evidence available for review
+`BAR_OPEN_FALLBACK` is not needed: `PRIOR_CLOSE_ONLY` alone passes all frozen support criteria.
 
-The compact diagnostic at:
+## Final outcome-blind support evidence
 
-`xau-final-results/comex_dev_rank1_native_reaction_source_last30_fallback_diagnostic_v1/source_last30_fallback.json`
+Canonical result:
 
-reports, before any reaction outcome:
+`xau-final-results/comex_dev_rank1_native_reaction_source_last30_fallback_v1/source_last30_fallback.json`
 
-- 235 approach-defined treated events;
-- `PRIOR_CLOSE_ONLY`: 227 fully K=5 matched events;
-- 81 matched treated dates;
-- full-match rate 96.5957%;
-- every source year has at least five matched dates;
-- every source year has at least 75% full matching;
-- all Pro support criteria pass;
+Supporting annual table:
+
+`xau-final-results/comex_dev_rank1_native_reaction_source_last30_fallback_v1/support_prior_close_only_by_year.csv`
+
+Source-last30 provenance inventory:
+
+`xau-final-results/comex_dev_rank1_native_reaction_source_last30_fallback_v1/source_last30_provenance.csv`
+
+Final zero-outcome validation run **32278975008** completed successfully, including:
+
+- source raw recovery from already-owned GitHub artifacts only;
+- already-owned `GC.n.0` M1 context only;
+- already-owned N1 raw blocks only;
+- source-last30 audit;
+- pre-guard diagnostic publication;
+- hard guard against treated contact-minute matching leakage, post-anchor outcomes and market-data spending;
+- final artifact upload and compact publication.
+
+### Overall support — `PRIOR_CLOSE_ONLY`
+
+- exact J+1 contacts: 238;
+- approach-defined treated events: **235**;
+- fully K=5 matched events: **227**;
+- fully matched treated dates: **81**;
+- full-match rate: **96.5957%**;
+- minimum matched treated dates in any source year: **6**;
+- minimum annual full-match rate: **85%**;
+- overall rate gate: PASS;
+- treated-date gate: PASS;
+- annual-date gate: PASS;
+- annual-rate gate: PASS;
+- **all Pro support criteria: PASS**.
+
+### Support by source year
+
+| Source year | Approach-defined | K=5 matched | Matched dates | Full-match rate |
+|---|---:|---:|---:|---:|
+| 2011 | 28 | 27 | 10 | 96.43% |
+| 2012 | 27 | 26 | 9 | 96.30% |
+| 2013 | 27 | 27 | 10 | 100.00% |
+| 2014 | 30 | 28 | 10 | 93.33% |
+| 2015 | 29 | 27 | 9 | 93.10% |
+| 2016 | 30 | 29 | 9 | 96.67% |
+| 2017 | 30 | 28 | 12 | 93.33% |
+| 2018 | 34 | 34 | 12 | 100.00% |
+
+### Parity / leakage / spend QA
+
+- canonical N1 comparison blocks: 92;
+- blocks testable under stable underlying `instrument_id`: 85;
+- exact M1 OHLCV parity: **85/85**;
+- `parity_all_exact=true`;
+- `earlier_only_matching=true`;
+- `event_prior_lookback_excludes_contact_minute=true`;
+- `control_prior_lookback_excludes_control_minute=true`;
 - `post_contact_values_used_for_matching=false`;
 - `post_anchor_outcomes_read=false`;
 - `reaction_outcomes_computed=false`;
 - `market_data_api_called=false`;
 - `market_data_download_performed=false`.
 
-A final provenance hard-guard rerun is being completed before this amendment is treated as ready for Pro decision.
-
 ## Questions for Pro
 
 Provide a binary/structured decision on the following only, without requesting or inspecting any reaction outcome:
 
 1. Is Amendment A (expanded already-owned stable-underlying-IID M1 control pool) methodologically acceptable while preserving same source year, same 30-minute bin, same approach, K=5 and original calipers?
-2. Is Amendment B (`source_last30_range_ticks` for treated/control events in the first 30 minutes only) an acceptable causal replacement for an unavailable J+1 local pre-30 range?
+2. Is Amendment B (`source_last30_range_ticks` for treated/control events in the first 30 minutes only, with finite-positive hard guard and no imputation) an acceptable causal replacement for an unavailable J+1 local pre-30 range?
 3. Is retaining `PRIOR_CLOSE_ONLY` and rejecting `BAR_OPEN_FALLBACK` the preferred conservative pseudo-approach rule?
 4. Are additional balance diagnostics required before freezing the control manifest (e.g. standardized covariate differences or overlap summaries), provided those diagnostics remain strictly pre-outcome?
 5. If approved, may the protocol be frozen and the deterministic K=5 manifests hashed before computing W15 outcomes?
