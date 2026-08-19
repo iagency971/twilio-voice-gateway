@@ -1,0 +1,10 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_PREOUTCOME_PUBLICATION_V1",
+  "artifact_freeze_commit_sha": "93930f82c3168dfd02a05edc57b78811739db9eb",
+  "preoutcome_freeze_manifest_sha256": "60713b922eefe24dd8fbc306c1f26cc2557c829ccd0080649afbc9071972ca47",
+  "support_gate_status": "SUPPORT_GATE_REPAIRED_AND_PASS",
+  "reaction_outcomes_computed": false,
+  "w15_opened": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false
+}
