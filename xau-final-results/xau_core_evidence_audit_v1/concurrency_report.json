@@ -1,0 +1,196 @@
+{
+  "cells": [
+    {
+      "scenario": "S10_C6",
+      "target_r": 0.5,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S10_C6",
+      "target_r": 1.0,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S10_C6",
+      "target_r": 1.5,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S10_C6",
+      "target_r": 2.0,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S10_C6",
+      "target_r": 2.5,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S10_C6",
+      "target_r": 3.0,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S11_C6_PRIMARY",
+      "target_r": 0.5,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S11_C6_PRIMARY",
+      "target_r": 1.0,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S11_C6_PRIMARY",
+      "target_r": 1.5,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S11_C6_PRIMARY",
+      "target_r": 2.0,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S11_C6_PRIMARY",
+      "target_r": 2.5,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S11_C6_PRIMARY",
+      "target_r": 3.0,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S12_C6",
+      "target_r": 0.5,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S12_C6",
+      "target_r": 1.0,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S12_C6",
+      "target_r": 1.5,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S12_C6",
+      "target_r": 2.0,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S12_C6",
+      "target_r": 2.5,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S12_C6",
+      "target_r": 3.0,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S18_C9_STRESS",
+      "target_r": 0.5,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S18_C9_STRESS",
+      "target_r": 1.0,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S18_C9_STRESS",
+      "target_r": 1.5,
+      "trades": 304,
+      "entries_while_other_position_open": 2,
+      "pct_entries_while_other_position_open": 0.6578947368421052,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S18_C9_STRESS",
+      "target_r": 2.0,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S18_C9_STRESS",
+      "target_r": 2.5,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    },
+    {
+      "scenario": "S18_C9_STRESS",
+      "target_r": 3.0,
+      "trades": 304,
+      "entries_while_other_position_open": 3,
+      "pct_entries_while_other_position_open": 0.9868421052631579,
+      "max_concurrent_positions_at_entry": 2
+    }
+  ]
+}
