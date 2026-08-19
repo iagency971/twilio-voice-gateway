@@ -1,0 +1,12 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_V1_PREOUTCOME_TRIGGER",
+  "date": "2026-08-19",
+  "branch": "agent/xau-comex-acquisition-plan",
+  "purpose": "Build source-range provenance, causal event context, M1 control universe, deterministic K=5 matched controls, and support QA before any reaction outcome extraction.",
+  "reaction_outcomes_authorized": false,
+  "market_data_api_authorized": false,
+  "market_data_download_authorized": false,
+  "dev_rank2_opened": false,
+  "retro_confirm_opened": false,
+  "locked_comex_test_opened": false
+}
