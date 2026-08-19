@@ -1,24 +1,24 @@
 {
-  "target_workflow": "xau-comex-native-reaction-preoutcome-final.yml",
+  "target_workflow": "xau-preoutcome-source-last30-reconcile.yml",
   "runs_found": 1,
   "runs": [
     {
-      "id": 32285373926,
-      "name": "XAU COMEX Native Reaction Final Preoutcome Freeze",
-      "display_title": "trigger final native reaction preoutcome freeze",
-      "head_sha": "cbb1ad7c4b8a7e56e5af549d2216baffbf1d560c",
+      "id": 32287695983,
+      "name": "XAU Preoutcome Source Last30 Reconcile Probe",
+      "display_title": "trigger source-last30 provenance reconcile probe",
+      "head_sha": "c948a871f7d58a59d8af6c10ce32a6365f3561f3",
       "status": "completed",
       "conclusion": "failure",
-      "created_at": "2026-08-19T18:05:33Z",
-      "updated_at": "2026-08-19T18:06:26Z",
-      "run_started_at": "2026-08-19T18:05:33Z",
+      "created_at": "2026-08-19T18:30:12Z",
+      "updated_at": "2026-08-19T18:30:49Z",
+      "run_started_at": "2026-08-19T18:30:12Z",
       "run_number": 1,
       "event": "push",
-      "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32285373926",
+      "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32287695983",
       "jobs": [
         {
-          "id": 96173525111,
-          "name": "build",
+          "id": 96181037941,
+          "name": "reconcile",
           "status": "completed",
           "conclusion": "failure",
           "steps": [
@@ -38,7 +38,7 @@
               "conclusion": "success"
             },
             {
-              "name": "Download canonical source-session raw artifacts \u2014 GitHub only",
+              "name": "Download current already-owned source raw artifacts",
               "status": "completed",
               "conclusion": "success"
             },
@@ -53,67 +53,32 @@
               "conclusion": "success"
             },
             {
-              "name": "Locate already-paid pilot raw artifact \u2014 GitHub only",
+              "name": "Locate and download already-paid pilot raw",
               "status": "completed",
               "conclusion": "success"
             },
             {
-              "name": "Download already-paid pilot raw \u2014 GitHub only",
+              "name": "Run actions/download-artifact@v4",
               "status": "completed",
               "conclusion": "success"
             },
             {
-              "name": "Download already-owned GC.n.0 M1 context \u2014 GitHub only",
+              "name": "Download pilot with REST after locating",
               "status": "completed",
               "conclusion": "success"
             },
             {
-              "name": "Download owned N1 complete J+1 M1 artifact \u2014 GitHub only",
-              "status": "completed",
-              "conclusion": "success"
-            },
-            {
-              "name": "Download owned N2 Stage1 complete artifact \u2014 GitHub only",
-              "status": "completed",
-              "conclusion": "success"
-            },
-            {
-              "name": "Download owned N2 Stage2 complete artifact \u2014 GitHub only",
-              "status": "completed",
-              "conclusion": "success"
-            },
-            {
-              "name": "Download owned N2 Stage3 complete artifact \u2014 GitHub only",
-              "status": "completed",
-              "conclusion": "success"
-            },
-            {
-              "name": "Build final repaired preoutcome universe \u2014 ZERO OUTCOME / ZERO MARKET API",
+              "name": "Download original guarded zero-QA artifact",
               "status": "completed",
               "conclusion": "failure"
             },
             {
-              "name": "Hard guard \u2014 causal matching only, support pass, no outcomes, no spend",
+              "name": "Re-run current zero QA and compare full original artifact",
               "status": "completed",
               "conclusion": "skipped"
             },
             {
-              "name": "Check GitHub shard sizes",
-              "status": "completed",
-              "conclusion": "skipped"
-            },
-            {
-              "name": "Run actions/upload-artifact@v4",
-              "status": "completed",
-              "conclusion": "skipped"
-            },
-            {
-              "name": "Publish final preoutcome freeze in one commit",
-              "status": "completed",
-              "conclusion": "skipped"
-            },
-            {
-              "name": "Record exact freeze publication commit",
+              "name": "Publish compact reconcile diagnostic",
               "status": "completed",
               "conclusion": "skipped"
             },
@@ -132,6 +97,6 @@
       ]
     }
   ],
-  "failed_job_log_job_id": 96173525111,
-  "failed_job_log_chars": 352040
+  "failed_job_log_job_id": 96181037941,
+  "failed_job_log_chars": 121392
 }

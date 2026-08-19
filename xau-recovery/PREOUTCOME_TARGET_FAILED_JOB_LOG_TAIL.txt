@@ -1,182 +1,414 @@
-d.Timedelta(minutes=30)) & good
-2026-08-19T18:06:20.7119526Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.7121125Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:20.8148522Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.8153121Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:20.8221747Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.8226567Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:20.8230321Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.8232564Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:20.8234904Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.8237047Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:20.9349923Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.9354406Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:20.9428563Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.9433475Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:20.9437465Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.9445392Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:20.9446833Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:20.9448308Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:21.0582928Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.0586861Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.0662506Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.0667405Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.0673278Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.0675604Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:21.0677097Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.0678671Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:21.2004374Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.2008070Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.2096178Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.2100659Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.2105064Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.2107794Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:21.2109605Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.2111109Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:21.5179402Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.5183713Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.5386026Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.5390595Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.5395090Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.5397603Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:21.5399513Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.5401469Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:21.7055241Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.7058705Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.7167473Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.7170710Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.7175318Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.7177516Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:21.7206905Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.7209175Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:21.9086342Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.9090496Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.9209828Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.9214186Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:21.9218306Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.9220810Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:21.9223637Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:21.9226007Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:22.1314168Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.1318040Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.1459089Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.1463586Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.1468135Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.1470670Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:22.1473697Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.1476062Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:22.3081010Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.3085132Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.3194478Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.3198279Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.3203192Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.3205704Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:22.3208092Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.3210411Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:22.5355831Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.5360679Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.5501485Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.5505108Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.5509479Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.5511916Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:22.5513944Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.5515504Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:22.7219137Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.7224528Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.7335221Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.7339146Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.7343711Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.7346218Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:22.7348680Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.7351503Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:22.9087240Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.9090750Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.9205830Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.9209860Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:22.9213533Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.9215912Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:22.9217991Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:22.9220065Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:23.1374404Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.1377539Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.1520981Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.1524891Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.1528656Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.1531813Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:23.1535007Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.1536574Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:23.3160960Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.3165826Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.3268590Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.3274204Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.3278543Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.3280627Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:23.3282849Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.3285016Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:23.4895717Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.4899237Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.5002524Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.5008214Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.5013686Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.5015836Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:23.5017885Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.5020210Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:23.6560301Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.6564462Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.6666959Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.6673244Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.6677013Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.6679130Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:23.6681222Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.6683531Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:23.8044539Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.8048389Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.8136606Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.8140029Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.8144932Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.8147227Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:23.8148842Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.8150500Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:23.9712635Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.9716597Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.9823326Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.9827392Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:23.9832032Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.9834377Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:23.9836436Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:23.9838956Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:24.1359897Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:24.1364420Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:24.1461121Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:24.1466442Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:24.1470214Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:24.1472428Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:24.1474061Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:24.1475590Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:24.2313985Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:24.2317745Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:24.2372764Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_dev_rank1_event_features.py:21: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:24.2375518Z   d=pd.Timestamp(date);prev=(d-pd.Timedelta(days=1)).date();cur=d.date();start=pd.Timestamp(f'{prev} 18:00:00',tz=NY).tz_convert('UTC');close='17:15:00' if d.date()<pd.Timestamp('2015-09-21').date() else '17:00:00';end=pd.Timestamp(f'{cur} {close}',tz=NY).tz_convert('UTC');return start,end
-2026-08-19T18:06:24.2379133Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:108: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:24.2382036Z   m = (ts >= e - pd.Timedelta(minutes=30)) & good
-2026-08-19T18:06:24.2383735Z /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py:131: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
-2026-08-19T18:06:24.2385317Z   "source_last30_start_utc": (e - pd.Timedelta(minutes=30)).isoformat(),
-2026-08-19T18:06:24.2439190Z source-last30 reconciliation failed: {'source_sessions_total': 92, 'source_last30_positive_sessions': 87, 'source_last30_missing_sessions': 5, 'source_last30_flat_sessions': 0, 'nonpositive_source_dates': ['2011-07-04', '2011-11-24', '2012-11-23', '2014-06-13', '2015-04-01'], 'expected_zero_qa_sha256': '5a5fb13b63d8ae8a107a122b63b83657800e9153f0fd664d609ef263849ee08a', 'expected_source_sessions_total': 92, 'expected_positive_sessions': 91, 'expected_missing_sessions': 1, 'expected_flat_sessions': 0, 'expected_nonpositive_source_dates': ['2013-12-25'], 'reconciliation_pass': False}
-2026-08-19T18:06:24.3215883Z ##[error]Process completed with exit code 1.
-2026-08-19T18:06:24.3346151Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-2026-08-19T18:06:24.3347419Z Post job cleanup.
-2026-08-19T18:06:24.4203037Z [command]/usr/bin/git version
-2026-08-19T18:06:24.4240005Z git version 2.55.0
-2026-08-19T18:06:24.4314161Z Temporarily overriding HOME='/home/runner/work/_temp/b104d1d6-82b2-4470-a5a7-18659b3df2cc' before making global git config changes
-2026-08-19T18:06:24.4315949Z Adding repository directory to the temporary git global config as a safe directory
-2026-08-19T18:06:24.4320536Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/twilio-voice-gateway/twilio-voice-gateway
-2026-08-19T18:06:24.4360688Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-2026-08-19T18:06:24.4414385Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-2026-08-19T18:06:24.4658516Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-2026-08-19T18:06:24.4691096Z http.https://github.com/.extraheader
-2026-08-19T18:06:24.4703514Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
-2026-08-19T18:06:24.4739232Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-2026-08-19T18:06:24.5016676Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
-2026-08-19T18:06:24.5055304Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
-2026-08-19T18:06:24.5455096Z Cleaning up orphan processes
-2026-08-19T18:06:24.5860683Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/download-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+-8c33-fd2d23cfef09/workflow-job-run-717d1338-aeb6-5849-8abe-c09b505d9f32/artifacts/63bfd324c416cd083deb2e4fa014510eed32c12bec889533087350eecd6de1ab.zip
+2026-08-19T18:30:39.6738179Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6749262Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-7145a348-bf2e-5d3b-a065-f7eb960f727e/artifacts/93f490e57cb439f507e5d9e9b918c6799acef304b6c794c273b0a01097f10525.zip
+2026-08-19T18:30:39.6751481Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6763123Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-ab059daf-84b2-53ed-8c04-9eaeb8b2f047/artifacts/a9fa42bc1610ac36e54211be42d60d19e552b483805eb6f3b721c1f942f2b9e9.zip
+2026-08-19T18:30:39.6765332Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6776261Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-dab6616f-7eaa-5154-84d9-0d9c9cba8df4/artifacts/342737d680803730c482fcb94125dad910202c96ba80904771e3c6e7c73e9e1b.zip
+2026-08-19T18:30:39.6778105Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6789659Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-65381a80-4ad5-57ac-8e41-a79f8df068bb/artifacts/12a7c773ce26f9921ccde3c802eacf82b1659b918e3dea5dd4b013ecaf0b51f6.zip
+2026-08-19T18:30:39.6791109Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6800481Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-fd287a32-7751-5d13-b090-36c5e6a9430d/artifacts/3b2930c1827f4d518753e81f1e05066de75c95901d16f169e11eab075f227e12.zip
+2026-08-19T18:30:39.6801747Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6812824Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-9e021c5f-a023-5ef5-b1c0-b4a96aea91d1/artifacts/f3ccfaab9d2d7b9efdf9386cc97764904acbf440b6f0985a6fc028c2ef87d792.zip
+2026-08-19T18:30:39.6814556Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6825548Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-111008d1-c03d-5dfe-a26a-de7d44479fc9/artifacts/e1851f6440d1eb87b110fb911a96ccee398e3bd5a307d4082e59e0dbba027ce4.zip
+2026-08-19T18:30:39.6827017Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6837298Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-789d3a81-eabc-5a09-89f7-2a6a12d28994/artifacts/bc7587501285022fbf50cb055121a3d28f914f4dca415c80a0093e06bc3d36e6.zip
+2026-08-19T18:30:39.6839157Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6850255Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-943849b5-869c-5be7-b522-8449a384dacf/artifacts/69e5c5c95b08ec92af5e415421adc1ac2097897fa31d3f65eb2415fac6816281.zip
+2026-08-19T18:30:39.6852624Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6864937Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-13e5e700-3287-5d91-8b0e-531d871d440b/artifacts/8dc5812a7d321b63073850f732109a3b7f974ae8a8273be0b8e645cf63a46921.zip
+2026-08-19T18:30:39.6866163Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6879323Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-fcf25e59-6164-5465-b661-4b0d9bc04ede/artifacts/87c0367e7a902ff136933e47ab03a91caee3e614cf0bf0266f965234fadcbae7.zip
+2026-08-19T18:30:39.6880951Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6892880Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-06f3d155-0cef-5d5b-90b2-25c8c722cd28/artifacts/9d343cb5a004e8aeed544fd53967a52ffa12364bc47674b5999065677b7e14b0.zip
+2026-08-19T18:30:39.6894130Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6906331Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-d992c5f0-4975-5a77-abf0-a7c7c1233a7c/artifacts/ca53a3994a6c001854d55c0fd9681dbeff5c3cd2cdee58a2c1b333f9b287b3c3.zip
+2026-08-19T18:30:39.6908755Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.6919082Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-2a70059a-328c-5bde-9bea-202af9607715/artifacts/41b81ec7d44f2bc5cbdd89c6ce4f6d800c74a51aec9df4770a3ea9d50cde0d28.zip
+2026-08-19T18:30:39.7007888Z (node:2365) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-08-19T18:30:39.7009658Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7486561Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-5822b949-76c7-5c9a-9268-6591e38aa75e/artifacts/a514ed665bd235d3446508b42346f48cdc8367aa0961c0039424837819890b1e.zip
+2026-08-19T18:30:39.7489005Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7523750Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-4946031b-ddc3-5cf4-a572-948f6774a84e/artifacts/ae28abc94e50c312d5b44be02e0fa1027b03598d9ff26fdbd70a5fa38f009dd8.zip
+2026-08-19T18:30:39.7526106Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7538653Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-0481e10c-0027-5e6a-8e94-bfc94cf6ec3e/artifacts/a16eaae6cc9909752122ab074a28630ed927825aa3ea07b3f9e60172324e65b3.zip
+2026-08-19T18:30:39.7540734Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7556189Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-c4341f1b-3e16-5fe9-9c48-a3533008199e/artifacts/c13db9b7897060c32fb2207f7e173be45b9d429a3de88aa20f8b53b1cc51bea2.zip
+2026-08-19T18:30:39.7558876Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7570772Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-43511104-a7e3-5f92-938b-459f668054d4/artifacts/71faead65b7fb029bbdb9c54bb2608a09d55792a2402eceb83fd342114e22edb.zip
+2026-08-19T18:30:39.7573034Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7583621Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-160dcf69-b2fb-54ee-b3a5-3d3382b93c2b/artifacts/edd4d53761ab2c92fde3e18c905f96d8300d11823c13888d06009cf0e1a969f9.zip
+2026-08-19T18:30:39.7585047Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7595489Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-91327a54-a9d3-5879-9c3b-782e6841d8c8/artifacts/d76208dc7b47be20e9da66c7d4439efc2c85c6c9404264a9528b7981a7ccb1fb.zip
+2026-08-19T18:30:39.7596735Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7608717Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-2d2286f4-2456-5261-8f53-cda6c26bec62/artifacts/6b9d6887a7fd8d81e901d1eb46dc0b1a60f2c8e5b3519916b116f4ea7dac9bcb.zip
+2026-08-19T18:30:39.7610265Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7622223Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-3c1aaee2-7417-552f-9fe4-42cae95c1de3/artifacts/34210e1dd9fe9fcbf06f8b21860d779022a58bda1666fbb3c65a86d6ca562ccb.zip
+2026-08-19T18:30:39.7623620Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7634521Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-dae6ea11-25d4-5a93-abf3-1346e28a038f/artifacts/bc1330827024045ec4dab681f39aad858789ac3361250baecc17babc3051a645.zip
+2026-08-19T18:30:39.7636313Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7647318Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-02137e93-5005-5768-89b7-fa88c00ffb5e/artifacts/ac431d38af1f2979c21bb833f881c6a02617fc109c14b07f12ac24a5281b3400.zip
+2026-08-19T18:30:39.7648924Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7663776Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-ea8ba1bf-e071-5139-ad54-51f3f201556c/artifacts/9a48cf5e94805a8ca6518cbb4b7a68828082a0ba7fae039784b51713f8fdbafd.zip
+2026-08-19T18:30:39.7666163Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7677240Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-b520cbb3-bc3f-50b4-9008-11d6f30eabb1/artifacts/5d0a1d009168035eca377b4c09f9f895664efb6a89efb2705374c4e94f013387.zip
+2026-08-19T18:30:39.7679757Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7691647Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-6a867188-d6ee-5c0e-821b-336302b3b1f0/artifacts/1e9e95285b0f7c553361410907b7571764a81c837e19d1592979b2e24bf701d3.zip
+2026-08-19T18:30:39.7693059Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7707426Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-f12540eb-8db9-5bf2-82ee-d7923ff78a32/artifacts/0c972954bc2215fad84c2ab34873381a46f2ea4d47a78828f719e67cfae728d3.zip
+2026-08-19T18:30:39.7710804Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.7722669Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-0b7681c0-f50e-55be-9fe1-cd18dc363464/artifacts/0a38bfc6007894fcfcebd46409d3bee3af00428767dc5349fd46f75a0bcdebc8.zip
+2026-08-19T18:30:39.7724009Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8014106Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-a4004235-c694-5f43-8f8f-265bbb7029c2/artifacts/671dbbf651afa66a4fbdaf8aa9251cac0f9af81457bc7e9452fe0aa2e3953e18.zip
+2026-08-19T18:30:39.8015700Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8098741Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-07d471d4-e3ad-5125-a281-ad241dde83b6/artifacts/6425d87a0f00b0e9c376d76215bd7fb6f5e99d76d4f062506288d08c49f0d056.zip
+2026-08-19T18:30:39.8100292Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8144016Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-3581877d-1f62-5ff1-8fa7-2d364039a82f/artifacts/a1a09198157fae45c8bc219d173edb89ad3955a19f3ff969d43b87eaccc70747.zip
+2026-08-19T18:30:39.8145537Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8158737Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-410ffd32-09ff-590f-89c0-aa71af4b1e55/artifacts/bbca5b38398f9b33324cb91228a16ca5732787e3eaa07b8aaaa627f8cbff6e75.zip
+2026-08-19T18:30:39.8160880Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8172191Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-2bd5d539-23b6-5d4f-bc58-aba2b9402231/artifacts/7c9806ad8dc622328745ba3c27675f68ac5446809970f796dd61b0fbcd176c53.zip
+2026-08-19T18:30:39.8173954Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8185527Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-c3f3f2ed-537c-59cf-a56a-bd8b7ca30431/artifacts/fa5f07087dd8e60dbc6fe6eaffbe2837b5ab4176e08e957545bad5b8389ae353.zip
+2026-08-19T18:30:39.8188272Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8200477Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-aa0ebdc3-233b-59b2-aad3-84e295340140/artifacts/431bf9f785f89975f845bbefbdd04c29a9118cb6490181108a707bc66c8d35eb.zip
+2026-08-19T18:30:39.8202612Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8214911Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-f4464eb9-792a-5aea-89c2-700a6c798549/artifacts/dc9ef82192f271b8592345154f9763614574029043b9de0e6384796a85752c97.zip
+2026-08-19T18:30:39.8216801Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8229069Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-c2b0729b-b0fa-542e-80d6-1abea1c3a282/artifacts/335514bcbda45f3610eaf26e898440a55970feaf6f9b5d57086b8ee35fa6ee3c.zip
+2026-08-19T18:30:39.8230982Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:39.8243239Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-98041d4a-8a3c-53d8-b913-338aaf1e45c7/artifacts/e79b13a85ecf687de2349786f9644bb3611cfc5754ab5435bf19514d39da2b20.zip
+2026-08-19T18:30:39.8244498Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:40.1686588Z SHA256 digest of downloaded artifact is f62818b9dee593ea627ca6d117c2ced95a409fd77607c1eb5073406e09428e17
+2026-08-19T18:30:40.1687695Z Artifact download completed successfully.
+2026-08-19T18:30:40.2209136Z SHA256 digest of downloaded artifact is aba9a03db1c7f57a5973767f13ede255e89231ceaa561ff46580f2a0c139baf7
+2026-08-19T18:30:40.2210357Z Artifact download completed successfully.
+2026-08-19T18:30:40.2213917Z SHA256 digest of downloaded artifact is 1ddd83e056a84c1135f2d263c0a4dd12e45be5b6d9cd7c30fa5b4dae6129a63f
+2026-08-19T18:30:40.2215138Z Artifact download completed successfully.
+2026-08-19T18:30:40.2216531Z SHA256 digest of downloaded artifact is 3a7c6791e7ad6de0cda484f2920bba1f2dd7f6b008d0f6fd11aaaf7106589e9f
+2026-08-19T18:30:40.2217610Z Artifact download completed successfully.
+2026-08-19T18:30:40.2699369Z SHA256 digest of downloaded artifact is 1dfcfbf80af3b9e9e89ea17246bbcaf7784059fe772a3686dac0442dbd1a6219
+2026-08-19T18:30:40.2701851Z Artifact download completed successfully.
+2026-08-19T18:30:40.2702837Z SHA256 digest of downloaded artifact is 6de015d6aec02d03a789f05a9e8514ba4401d57fc876a9d59ccd7b905118ebf1
+2026-08-19T18:30:40.2703770Z Artifact download completed successfully.
+2026-08-19T18:30:40.3022849Z SHA256 digest of downloaded artifact is c094e42bb890bc8e26395bdffceaf8b18e75576247c25c4d99cadf0071a30ec3
+2026-08-19T18:30:40.3023443Z Artifact download completed successfully.
+2026-08-19T18:30:40.3023978Z SHA256 digest of downloaded artifact is a5799518a1a55440ef154d2b9a3d347a130857fccab8653ed4b422e1c89eea40
+2026-08-19T18:30:40.3024497Z Artifact download completed successfully.
+2026-08-19T18:30:40.3984603Z SHA256 digest of downloaded artifact is 67d8806e8635896ece014d5d6be103d979f338fa57fb53263470520b60514225
+2026-08-19T18:30:40.3985660Z Artifact download completed successfully.
+2026-08-19T18:30:40.4135253Z SHA256 digest of downloaded artifact is 6fc13e4035376e14d4ad6ab1363137b46a95d51d8fad99b396921888a06e1406
+2026-08-19T18:30:40.4160934Z Artifact download completed successfully.
+2026-08-19T18:30:40.4162309Z SHA256 digest of downloaded artifact is b23beb7e556a7bb8132e15730f481cb7e2a9328045e04f526a01afeaa24956a3
+2026-08-19T18:30:40.4164341Z Artifact download completed successfully.
+2026-08-19T18:30:40.4490986Z SHA256 digest of downloaded artifact is 89f663ec7df68c109cadfb8df9ba3d17ad1da16dbfd9159fd7d93d7a573dd6e6
+2026-08-19T18:30:40.4491698Z Artifact download completed successfully.
+2026-08-19T18:30:40.4655286Z SHA256 digest of downloaded artifact is 51de992e1a74ef712a12105ff5c2f7c2b308b180177f15a76d4a720db244f76b
+2026-08-19T18:30:40.4656289Z Artifact download completed successfully.
+2026-08-19T18:30:40.4734329Z SHA256 digest of downloaded artifact is f4013fadd790dce0fb5054dd76df1097941d01040ec6461dcbe14701cc569114
+2026-08-19T18:30:40.4738360Z Artifact download completed successfully.
+2026-08-19T18:30:40.5851921Z SHA256 digest of downloaded artifact is 727f17ca4b7221c425c044133db774a24542606eba3777768f885d79cc287e51
+2026-08-19T18:30:40.5852955Z Artifact download completed successfully.
+2026-08-19T18:30:40.6004096Z SHA256 digest of downloaded artifact is 61bd08d1f7654766836434ce7239b53bc80de9fa7af3715a458502d78eb5adef
+2026-08-19T18:30:40.6005107Z Artifact download completed successfully.
+2026-08-19T18:30:40.6164783Z SHA256 digest of downloaded artifact is 164d195971afc900b13aad31fa0fda1c96ada1886460ebbc3e59afbf73d365c9
+2026-08-19T18:30:40.6170071Z Artifact download completed successfully.
+2026-08-19T18:30:40.6239804Z SHA256 digest of downloaded artifact is 5eb6235d93dc154fa4d910855f9a6bdb1fe8fbba213cf52efd52e40fffc487aa
+2026-08-19T18:30:40.6240779Z Artifact download completed successfully.
+2026-08-19T18:30:40.6282106Z SHA256 digest of downloaded artifact is b320e7ccd38025075909a852a043d0ca114796d75c4e5c69e986a67b36aacb32
+2026-08-19T18:30:40.6283077Z Artifact download completed successfully.
+2026-08-19T18:30:40.6288426Z SHA256 digest of downloaded artifact is 411819f83ac63d465f88a352cefde50e9e8e019a6afe103e6ecf10df8f5ea973
+2026-08-19T18:30:40.6289340Z Artifact download completed successfully.
+2026-08-19T18:30:40.6290370Z SHA256 digest of downloaded artifact is 86635cf9905350a2a44aa61df78d7a64255bd59a552b6f8f1ce71f19c7bc6168
+2026-08-19T18:30:40.6291266Z Artifact download completed successfully.
+2026-08-19T18:30:40.6297891Z SHA256 digest of downloaded artifact is 381976db68a7af0dce6790985b2c9784112833c783bc409ab22ed92e37ef6392
+2026-08-19T18:30:40.6299108Z Artifact download completed successfully.
+2026-08-19T18:30:40.6299773Z SHA256 digest of downloaded artifact is 74e176d5412837043920d9563677e70dd73a6f03bf2994806f45c96c9122f107
+2026-08-19T18:30:40.6300306Z Artifact download completed successfully.
+2026-08-19T18:30:40.6324531Z SHA256 digest of downloaded artifact is cdc7d51332c973422616b66a022c50251637e1e215ecbd3a13d9e84bbf3bff1f
+2026-08-19T18:30:40.6325810Z Artifact download completed successfully.
+2026-08-19T18:30:40.6378065Z SHA256 digest of downloaded artifact is 7791ae45edfa8577ad22f826ccca4c08d2f84a9e4dfb7265f87bed4bcc3013aa
+2026-08-19T18:30:40.6381104Z Artifact download completed successfully.
+2026-08-19T18:30:40.6519261Z SHA256 digest of downloaded artifact is 6b24db074701581a900768265aa6c1726b50801e66db845ede6777c6b9824903
+2026-08-19T18:30:40.6520748Z Artifact download completed successfully.
+2026-08-19T18:30:40.6526926Z SHA256 digest of downloaded artifact is 74b587178759173fc1f2576588ef03d2b97e0913c69c970d9a986a51b5b5b1ce
+2026-08-19T18:30:40.6527868Z Artifact download completed successfully.
+2026-08-19T18:30:40.6529139Z SHA256 digest of downloaded artifact is 9038b88674166b46ffea388c56b4a41a3f4d5470246c6f55880ca8c887c8f0cd
+2026-08-19T18:30:40.6530194Z Artifact download completed successfully.
+2026-08-19T18:30:40.6910912Z SHA256 digest of downloaded artifact is 88c21f42331fcb4faa22e680f3055647113489e8b55f4503b51ac52560dd45ce
+2026-08-19T18:30:40.6912002Z Artifact download completed successfully.
+2026-08-19T18:30:40.6914370Z SHA256 digest of downloaded artifact is 1c46289c5fff0e27e5275da71cb7911583253a39a5583598c86f774b18f58eec
+2026-08-19T18:30:40.6915499Z Artifact download completed successfully.
+2026-08-19T18:30:40.7005061Z SHA256 digest of downloaded artifact is 14889b00ccd6e033a5159cbeea00f975fbcb43e7c2b40c8764cd0e411b5c17c3
+2026-08-19T18:30:40.7022243Z Artifact download completed successfully.
+2026-08-19T18:30:40.7028462Z SHA256 digest of downloaded artifact is ec567a7fca6851f79812f5d0cf1bcb6db29cb39101e0500370882ff9ec4d2ed1
+2026-08-19T18:30:40.7029837Z Artifact download completed successfully.
+2026-08-19T18:30:40.7087720Z SHA256 digest of downloaded artifact is 8007af5bd6259553bb2bd24e4441de098fe5c3ac34d248a8ee30f0087dc1c860
+2026-08-19T18:30:40.7089051Z Artifact download completed successfully.
+2026-08-19T18:30:40.7121783Z SHA256 digest of downloaded artifact is d03182d19ab811a9513020639c311264aeb2c911365a29f393ba42288597002a
+2026-08-19T18:30:40.7122744Z Artifact download completed successfully.
+2026-08-19T18:30:40.7172080Z SHA256 digest of downloaded artifact is 87aaf8f4c7e2024aa43ee4b530921897e9858c6e90fe8cf61c030cbef3f4ba8a
+2026-08-19T18:30:40.7173066Z Artifact download completed successfully.
+2026-08-19T18:30:40.7173937Z SHA256 digest of downloaded artifact is 8ebefc78668fec015f97c59eba633656051b16272985748e06ba1dbc931cbdbe
+2026-08-19T18:30:40.7175017Z Artifact download completed successfully.
+2026-08-19T18:30:40.7198450Z SHA256 digest of downloaded artifact is 2933fd2136a8bf0736d123dd808414d90000e14a4de75193cad6d5f3ec485d45
+2026-08-19T18:30:40.7199740Z Artifact download completed successfully.
+2026-08-19T18:30:40.7201117Z SHA256 digest of downloaded artifact is 47cce3201eccb7f4eb144cb26073868fd73abca73f0c9ba31e7d598891c07954
+2026-08-19T18:30:40.7202567Z Artifact download completed successfully.
+2026-08-19T18:30:40.7235581Z SHA256 digest of downloaded artifact is 0823493842cb5300451ad2aed98e24f600c9bb3d908a3287067f05570dd83392
+2026-08-19T18:30:40.7236148Z Artifact download completed successfully.
+2026-08-19T18:30:40.7266813Z SHA256 digest of downloaded artifact is 409a69b273bb11ed910b756739dd13019c05c3b054df662d12219f4488437b10
+2026-08-19T18:30:40.7268419Z Artifact download completed successfully.
+2026-08-19T18:30:40.7292863Z SHA256 digest of downloaded artifact is 5ebdda344f6d2f42d4afd7f2ed45c570b1e8697842aee25dd5dc4e17602d3b53
+2026-08-19T18:30:40.7300360Z Artifact download completed successfully.
+2026-08-19T18:30:40.7338445Z SHA256 digest of downloaded artifact is 6d3a117f87ea5a0ae59d2cb5c723f67319d541e5ae78d18a383fa0c39b48d818
+2026-08-19T18:30:40.7341561Z Artifact download completed successfully.
+2026-08-19T18:30:40.7342649Z SHA256 digest of downloaded artifact is d363257bfa932c839b64c59fbbe8af88e017233514160035e83d281f50696916
+2026-08-19T18:30:40.7343558Z Artifact download completed successfully.
+2026-08-19T18:30:40.7362257Z SHA256 digest of downloaded artifact is bc58ff395f3236db53d29e73a78c6a7be6d1d08676a1e31ce5f8d044538bb6bf
+2026-08-19T18:30:40.7366652Z Artifact download completed successfully.
+2026-08-19T18:30:40.7387291Z SHA256 digest of downloaded artifact is 6d155415f20ece5408eaea789c1c86a44332c1ae9f8366ed730c4a36cb17b8c9
+2026-08-19T18:30:40.7388729Z Artifact download completed successfully.
+2026-08-19T18:30:40.7403972Z SHA256 digest of downloaded artifact is 951276f9d756162389cf27841d3590de7ca09d89692462ab3b29796ad8b5fd93
+2026-08-19T18:30:40.7406158Z Artifact download completed successfully.
+2026-08-19T18:30:40.7424222Z SHA256 digest of downloaded artifact is c294b5523571f5b7ec17c78fef2b28009fd30c178b804fb695c1ab937d62308a
+2026-08-19T18:30:40.7425384Z Artifact download completed successfully.
+2026-08-19T18:30:40.7426517Z SHA256 digest of downloaded artifact is 720054345581634367b9292b0e2de2427c113e2da9b796320bdc4e00cc70f133
+2026-08-19T18:30:40.7427416Z Artifact download completed successfully.
+2026-08-19T18:30:40.7440046Z SHA256 digest of downloaded artifact is 126dac687de5df9c55e0a6fadd9d98837c6ddb93de18bc49cd61021c44dbb900
+2026-08-19T18:30:40.7441002Z Artifact download completed successfully.
+2026-08-19T18:30:40.7445747Z SHA256 digest of downloaded artifact is 8131a76c8cac1c9d6f763e6084cf2f20d3e1d1b795865dc98de58ebebc818f22
+2026-08-19T18:30:40.7446990Z Artifact download completed successfully.
+2026-08-19T18:30:40.7448619Z SHA256 digest of downloaded artifact is beca8c55983c1d90018571cb6b9bb8d3753b974633b9265a5b77a4a795ae4b72
+2026-08-19T18:30:40.7449918Z Artifact download completed successfully.
+2026-08-19T18:30:40.7496035Z SHA256 digest of downloaded artifact is efd0d488e9e207c628a267a5a27105a2cc304861f4e7ceae9d70eac3e0b5f9c7
+2026-08-19T18:30:40.7499830Z Artifact download completed successfully.
+2026-08-19T18:30:40.7527701Z SHA256 digest of downloaded artifact is 92dcea62e88a693318fb1d240218f472db0cf4c97fa6a6afc8f552921866fa71
+2026-08-19T18:30:40.7529749Z Artifact download completed successfully.
+2026-08-19T18:30:40.7550386Z SHA256 digest of downloaded artifact is 185f2a94466b0b9fca4e68513233ba0091445dfc20da494ce6b298fdac675d1b
+2026-08-19T18:30:40.7557189Z Artifact download completed successfully.
+2026-08-19T18:30:40.7558397Z SHA256 digest of downloaded artifact is c96fda1f52507e38092d7ccc79e3390a5e7efd86a1aa221e2a019f256e981283
+2026-08-19T18:30:40.7559308Z Artifact download completed successfully.
+2026-08-19T18:30:40.7585527Z SHA256 digest of downloaded artifact is 1880340572cc93d9ace87c096de9bbe2d4717dee3e502c6c5c380d5e47cc094c
+2026-08-19T18:30:40.7586532Z Artifact download completed successfully.
+2026-08-19T18:30:40.7628250Z SHA256 digest of downloaded artifact is 646807f8db90404734ca6f54d075db1cc4b7ddc242b80346d99aa30c0b03def2
+2026-08-19T18:30:40.7633521Z Artifact download completed successfully.
+2026-08-19T18:30:40.7634717Z SHA256 digest of downloaded artifact is 54981bce4c8a78dc8b3c6b2bf69501b538b68acc27daca4d5025cb7dad8b01aa
+2026-08-19T18:30:40.7635906Z Artifact download completed successfully.
+2026-08-19T18:30:40.7649108Z SHA256 digest of downloaded artifact is 06ee3f988ebea7e6955cd96acccd4e5833cc8a30f9ba0fb503fc1e13c87cafac
+2026-08-19T18:30:40.7650086Z Artifact download completed successfully.
+2026-08-19T18:30:40.7688738Z SHA256 digest of downloaded artifact is 2a0e9ee2d12a939db7c3e272a80e1dafd703745531967e507905ddfef6c8d04d
+2026-08-19T18:30:40.7691754Z Artifact download completed successfully.
+2026-08-19T18:30:40.7753161Z SHA256 digest of downloaded artifact is ab2808e4c9ee876896195f9a8c4bb419320c16dd6fd9be888eaefef08698f572
+2026-08-19T18:30:40.7754154Z Artifact download completed successfully.
+2026-08-19T18:30:40.7771054Z SHA256 digest of downloaded artifact is 7cb5977f805ca97825fd7d19a8ae82179bc8d7348741a392c6bf1b82a7353b5e
+2026-08-19T18:30:40.7772005Z Artifact download completed successfully.
+2026-08-19T18:30:40.7818039Z SHA256 digest of downloaded artifact is d2e259ef1d6f338b08a2d28494db11c2df35aeb96818fd909aa8a781dd9daa7a
+2026-08-19T18:30:40.7819303Z Artifact download completed successfully.
+2026-08-19T18:30:40.7820246Z SHA256 digest of downloaded artifact is 730eba8b255eba910f0711e5b83e2344a85c83e63b3cc98ac177980b41e9a177
+2026-08-19T18:30:40.7826879Z Artifact download completed successfully.
+2026-08-19T18:30:40.7827914Z SHA256 digest of downloaded artifact is 97ffc12b85e232500b84c000d9d21468890e49abed8fa7c4c27f014301cdc053
+2026-08-19T18:30:40.7829134Z Artifact download completed successfully.
+2026-08-19T18:30:40.7841666Z SHA256 digest of downloaded artifact is e5f70ffe4752c75646af761dd6e2fa5eb4df7f47e833b8ae4869816b9fc7582a
+2026-08-19T18:30:40.7842630Z Artifact download completed successfully.
+2026-08-19T18:30:40.7905010Z SHA256 digest of downloaded artifact is 53625a76ac4d4e9cb5a8cbba7500241111812fdfe59c89ccb64e57855bbcd0f5
+2026-08-19T18:30:40.7906092Z Artifact download completed successfully.
+2026-08-19T18:30:40.7938737Z SHA256 digest of downloaded artifact is 86bab4f2316198e099efa585355adba6a5f9575c07a94fcdf239345b75716d54
+2026-08-19T18:30:40.7940325Z Artifact download completed successfully.
+2026-08-19T18:30:40.7964212Z SHA256 digest of downloaded artifact is 4113d3a98c55e599aac76175426050e44674a33e426c745cd05f7d8ddc9b0f39
+2026-08-19T18:30:40.7965125Z Artifact download completed successfully.
+2026-08-19T18:30:40.7973563Z SHA256 digest of downloaded artifact is 9d99b21800f659251aec88d3f12d19ebfb5cb4615b9654103884f12093782f3e
+2026-08-19T18:30:40.7974505Z Artifact download completed successfully.
+2026-08-19T18:30:40.7981651Z SHA256 digest of downloaded artifact is 113ecd4812ea9d433559df2fa61896bbc612bb160b8f3427fe6ec254bfcdfa01
+2026-08-19T18:30:40.7982564Z Artifact download completed successfully.
+2026-08-19T18:30:40.7983280Z SHA256 digest of downloaded artifact is a032d30ca45f0b67ee16c65f34f943f40bd12df821830af8a6841a16b5f626bf
+2026-08-19T18:30:40.7983836Z Artifact download completed successfully.
+2026-08-19T18:30:40.8095958Z SHA256 digest of downloaded artifact is 9f148f687c2fee13ce55ac9cd0f4a67e4f12e3d975a932fc35f46ff3e7c39dad
+2026-08-19T18:30:40.8096922Z Artifact download completed successfully.
+2026-08-19T18:30:40.8100580Z SHA256 digest of downloaded artifact is 41c5682eba7e3d670eb5a7050a59d54ab02d11fa25184231524e9d0764ba524e
+2026-08-19T18:30:40.8101641Z Artifact download completed successfully.
+2026-08-19T18:30:40.8134071Z SHA256 digest of downloaded artifact is 4bcd7b3e4a0716f3719da5c06e8fa77b0b20d28d12ee9e41f142af35e3962f6c
+2026-08-19T18:30:40.8135016Z Artifact download completed successfully.
+2026-08-19T18:30:40.8149070Z SHA256 digest of downloaded artifact is 42d418202263af6734a79d64e06d4e0ac1a09fb0a2451dc1d993b0c96c78fcf6
+2026-08-19T18:30:40.8151471Z Artifact download completed successfully.
+2026-08-19T18:30:40.8160316Z SHA256 digest of downloaded artifact is 88c07edb46199e528ea1ac5f7af9521c8bd1346514f3f63cd49987e8425ccc40
+2026-08-19T18:30:40.8161294Z Artifact download completed successfully.
+2026-08-19T18:30:40.8163425Z SHA256 digest of downloaded artifact is c18e18faeedc9cd0d12659242131ff1c81944ec7254dde3054e1b091a87b4269
+2026-08-19T18:30:40.8164373Z Artifact download completed successfully.
+2026-08-19T18:30:40.8170798Z SHA256 digest of downloaded artifact is 168af0396bafe6824e4167b6ec7a2b1c8e3e2d0aea38b96f442345f737817570
+2026-08-19T18:30:40.8172116Z Artifact download completed successfully.
+2026-08-19T18:30:40.8361048Z SHA256 digest of downloaded artifact is c3f464096f02c3e49b4dc4685075f6a0c73bba7af9c7dc1c1ccae8343b475d9d
+2026-08-19T18:30:40.8376155Z Artifact download completed successfully.
+2026-08-19T18:30:40.8459171Z SHA256 digest of downloaded artifact is f89902d8eb5fdc52f4d1b68fd5f6a6a604c025b301b661ef94eed73fe294b190
+2026-08-19T18:30:40.8460238Z Artifact download completed successfully.
+2026-08-19T18:30:40.8543990Z SHA256 digest of downloaded artifact is 50befac803d851e928e97431c2bb5a622d39a89afa7e707d5f8e37f25cd60eef
+2026-08-19T18:30:40.8545010Z Artifact download completed successfully.
+2026-08-19T18:30:40.8545945Z SHA256 digest of downloaded artifact is 6a46dcf9900f0de364c4bc676ee45397750d92b625bddf06a2794f6c54e5c53b
+2026-08-19T18:30:40.8546904Z Artifact download completed successfully.
+2026-08-19T18:30:40.8642320Z SHA256 digest of downloaded artifact is 8f653316d354378c110f5f6cd67583e5f47360e110e3c204e0365b368bb96ef0
+2026-08-19T18:30:40.8643307Z Artifact download completed successfully.
+2026-08-19T18:30:40.8686630Z SHA256 digest of downloaded artifact is a965b27c23698fa849a63b77075df8054d76571a54a11ad8bdd4bc1da7d9632f
+2026-08-19T18:30:40.8687210Z Artifact download completed successfully.
+2026-08-19T18:30:40.8697379Z SHA256 digest of downloaded artifact is 19e9d84febfdbae716eb16fd445237d4e818e2502a60e81a0649c7a9c1313baf
+2026-08-19T18:30:40.8700413Z Artifact download completed successfully.
+2026-08-19T18:30:40.8726993Z SHA256 digest of downloaded artifact is d45eb22ff736621df8c17b94cb51eeb7a556494d172e06d18a90dddc98813060
+2026-08-19T18:30:40.8727802Z Artifact download completed successfully.
+2026-08-19T18:30:40.8736652Z SHA256 digest of downloaded artifact is 56b6e29e3477f11101df362b756f3e874bf10214de3029317cb014f0cc75a873
+2026-08-19T18:30:40.8737313Z Artifact download completed successfully.
+2026-08-19T18:30:40.8752895Z SHA256 digest of downloaded artifact is eebf78624b58f131506e889f880cc79f29de46f74c4c9c6afda274c2c9783549
+2026-08-19T18:30:40.8753827Z Artifact download completed successfully.
+2026-08-19T18:30:40.8768674Z SHA256 digest of downloaded artifact is 2902884ecc5023acff715870e681a7d0c0b242470417518bf87f4eddad8431d5
+2026-08-19T18:30:40.8769713Z Artifact download completed successfully.
+2026-08-19T18:30:40.8805938Z SHA256 digest of downloaded artifact is c78fd1d4c0141a928e68da03e86ff3788b09b18d984d795e8ee3ad2cd1d0f7a8
+2026-08-19T18:30:40.8806875Z Artifact download completed successfully.
+2026-08-19T18:30:40.8815768Z SHA256 digest of downloaded artifact is 5e0479de4b002ace932ec14bb0d466d0faa4961b1aad424ba5db8147ca956825
+2026-08-19T18:30:40.8816722Z Artifact download completed successfully.
+2026-08-19T18:30:40.8848079Z SHA256 digest of downloaded artifact is 16a74bb4f56716a8e5f8d0b2ff1b4b5b5a7976cfb1cdbf37edc00d60ad14feb4
+2026-08-19T18:30:40.8849234Z Artifact download completed successfully.
+2026-08-19T18:30:40.8858203Z SHA256 digest of downloaded artifact is e53d65e49513ebd59628d6e76289c5c8ec9d9babe0c4f51a133c4d0a51d73f46
+2026-08-19T18:30:40.8859352Z Artifact download completed successfully.
+2026-08-19T18:30:40.8944665Z SHA256 digest of downloaded artifact is ba63dd6ab52362abd99531910b963bdf9772e23d7ccff3573438ddcc4522be0e
+2026-08-19T18:30:40.8945675Z Artifact download completed successfully.
+2026-08-19T18:30:40.8969010Z SHA256 digest of downloaded artifact is 15fc3abbc698a4eb4096122e8eb58f5cade5b5fbaa4abc4239b8a08a25eb7ef0
+2026-08-19T18:30:40.8970006Z Artifact download completed successfully.
+2026-08-19T18:30:40.8984682Z SHA256 digest of downloaded artifact is 5f8ba3450eb0abd4883a8578ad6b53f15550d5024c1ebe9b78a838a938bca3c5
+2026-08-19T18:30:40.8985687Z Artifact download completed successfully.
+2026-08-19T18:30:40.9047902Z SHA256 digest of downloaded artifact is e7391eda21cb103ffd98e045312556d20ff064c079aa91c2a0726a95baed180d
+2026-08-19T18:30:40.9049089Z Artifact download completed successfully.
+2026-08-19T18:30:40.9139656Z SHA256 digest of downloaded artifact is a0a008bb548af78dbafcffe39ef797b626683a8b39655f1a51586ce77b73ddcb
+2026-08-19T18:30:40.9140651Z Artifact download completed successfully.
+2026-08-19T18:30:41.3967551Z SHA256 digest of downloaded artifact is 583739a47f02d6bb1882558d9046e7c6ad959a2b789c2499bdf6b333ac7b4558
+2026-08-19T18:30:41.3968722Z Artifact download completed successfully.
+2026-08-19T18:30:41.3969231Z Total of 100 artifact(s) downloaded
+2026-08-19T18:30:41.3976644Z Download artifact has finished successfully
+2026-08-19T18:30:41.4612053Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-08-19T18:30:41.4613371Z ##[group]Run actions/download-artifact@v4
+2026-08-19T18:30:41.4613648Z with:
+2026-08-19T18:30:41.4613908Z   name: comex-dev-rank1-dual-06610cec170650590cd663ca
+2026-08-19T18:30:41.4614225Z   path: /tmp/source
+2026-08-19T18:30:41.4616793Z   github-token: ***
+2026-08-19T18:30:41.4617055Z   repository: iagency971/twilio-voice-gateway
+2026-08-19T18:30:41.4617358Z   run-id: 32179377819
+2026-08-19T18:30:41.4617582Z   merge-multiple: false
+2026-08-19T18:30:41.4617802Z ##[endgroup]
+2026-08-19T18:30:41.6071636Z Downloading single artifact
+2026-08-19T18:30:41.6143116Z (node:2379) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-08-19T18:30:41.6144000Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-08-19T18:30:41.6342994Z (node:2379) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-08-19T18:30:41.7372345Z Preparing to download the following artifacts:
+2026-08-19T18:30:41.7373875Z - comex-dev-rank1-dual-06610cec170650590cd663ca (ID: 9340281826, Size: 537036, Expected Digest: sha256:45482050fad6deb742d766aaf0caef0d52dada91c0003fe00b4e2f40f90e204a)
+2026-08-19T18:30:41.7411028Z Downloading artifact '9340281826' from 'iagency971/twilio-voice-gateway'
+2026-08-19T18:30:41.8953860Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-e975b8de-6b67-5205-aa2a-e45e38d9ef09/artifacts/8fd3f8afd541de08b2889fe42b30dfab78ef41ffb935fea517a1f7309635a541.zip
+2026-08-19T18:30:41.8956636Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:41.9769750Z (node:2379) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-08-19T18:30:42.0100770Z SHA256 digest of downloaded artifact is 45482050fad6deb742d766aaf0caef0d52dada91c0003fe00b4e2f40f90e204a
+2026-08-19T18:30:42.0101759Z Artifact download completed successfully.
+2026-08-19T18:30:42.0102089Z Total of 1 artifact(s) downloaded
+2026-08-19T18:30:42.0106430Z Download artifact has finished successfully
+2026-08-19T18:30:42.0239418Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-08-19T18:30:42.0240748Z ##[group]Run actions/download-artifact@v4
+2026-08-19T18:30:42.0241207Z with:
+2026-08-19T18:30:42.0241465Z   name: comex-dev-rank1-dual-01038430e355d65828fbe711
+2026-08-19T18:30:42.0241793Z   path: /tmp/source
+2026-08-19T18:30:42.0244368Z   github-token: ***
+2026-08-19T18:30:42.0244637Z   repository: iagency971/twilio-voice-gateway
+2026-08-19T18:30:42.0244937Z   run-id: 32179377819
+2026-08-19T18:30:42.0245163Z   merge-multiple: false
+2026-08-19T18:30:42.0245384Z ##[endgroup]
+2026-08-19T18:30:42.1709622Z Downloading single artifact
+2026-08-19T18:30:42.1780027Z (node:2391) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-08-19T18:30:42.1781326Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-08-19T18:30:42.1988684Z (node:2391) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-08-19T18:30:42.2966347Z Preparing to download the following artifacts:
+2026-08-19T18:30:42.2968195Z - comex-dev-rank1-dual-01038430e355d65828fbe711 (ID: 9340280034, Size: 139033, Expected Digest: sha256:6c171211c0ef89d1060369f1085158aaaa8ff46e49849aec61f7e1ef7224acf2)
+2026-08-19T18:30:42.2998025Z Downloading artifact '9340280034' from 'iagency971/twilio-voice-gateway'
+2026-08-19T18:30:42.4419752Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/6d18dc5e-3331-4dc1-8c33-fd2d23cfef09/workflow-job-run-c7384014-aaf0-5c5d-9275-9798f8352b01/artifacts/d9ae7b906424df68f6ce61284a2a12bad19cf28da4a1e5d9d3f0fdb3b9fe4093.zip
+2026-08-19T18:30:42.4421324Z Starting download of artifact to: /tmp/source
+2026-08-19T18:30:42.4868618Z (node:2391) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-08-19T18:30:42.5020742Z SHA256 digest of downloaded artifact is 6c171211c0ef89d1060369f1085158aaaa8ff46e49849aec61f7e1ef7224acf2
+2026-08-19T18:30:42.5021720Z Artifact download completed successfully.
+2026-08-19T18:30:42.5022228Z Total of 1 artifact(s) downloaded
+2026-08-19T18:30:42.5026551Z Download artifact has finished successfully
+2026-08-19T18:30:42.5156316Z ##[group]Run python - <<'PY'
+2026-08-19T18:30:42.5156643Z [36;1mpython - <<'PY'[0m
+2026-08-19T18:30:42.5156890Z [36;1mimport os,requests[0m
+2026-08-19T18:30:42.5157577Z [36;1mh={'Authorization':f"***'GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}[0m
+2026-08-19T18:30:42.5158736Z [36;1mbase=f"https://api.github.com/repos/{os.environ['REPO']}"[0m
+2026-08-19T18:30:42.5159777Z [36;1mruns=requests.get(f"{base}/actions/workflows/xau-comex-v4-pilot12-metadata.yml/runs",headers=h,params={'branch':'agent/xau-comex-acquisition-plan','status':'success','per_page':50}).json().get('workflow_runs',[])[0m
+2026-08-19T18:30:42.5160661Z [36;1mfound=None[0m
+2026-08-19T18:30:42.5160895Z [36;1mfor r in runs:[0m
+2026-08-19T18:30:42.5161399Z [36;1m    arts=requests.get(f"{base}/actions/runs/{r['id']}/artifacts",headers=h,params={'per_page':100}).json().get('artifacts',[])[0m
+2026-08-19T18:30:42.5162219Z [36;1m    if any(x['name']=='comex-v4-pilot12-raw-and-qa' and not x.get('expired') for x in arts): found=r['id'];break[0m
+2026-08-19T18:30:42.5162823Z [36;1mif not found: raise SystemExit('pilot raw artifact not found')[0m
+2026-08-19T18:30:42.5163237Z [36;1mopen('/tmp/pilot_run','w').write(str(found))[0m
+2026-08-19T18:30:42.5163538Z [36;1mPY[0m
+2026-08-19T18:30:42.5200538Z shell: /usr/bin/bash -e {0}
+2026-08-19T18:30:42.5200795Z env:
+2026-08-19T18:30:42.5203324Z   GH_TOKEN: ***
+2026-08-19T18:30:42.5203563Z   REPO: iagency971/twilio-voice-gateway
+2026-08-19T18:30:42.5203837Z ##[endgroup]
+2026-08-19T18:30:44.7944557Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-08-19T18:30:44.7946009Z ##[group]Run actions/download-artifact@v4
+2026-08-19T18:30:44.7946298Z with:
+2026-08-19T18:30:44.7946515Z   name: comex-v4-pilot12-raw-and-qa
+2026-08-19T18:30:44.7946784Z   path: /tmp/pilot
+2026-08-19T18:30:44.7949631Z   github-token: ***
+2026-08-19T18:30:44.7949900Z   repository: iagency971/twilio-voice-gateway
+2026-08-19T18:30:44.7950211Z   merge-multiple: false
+2026-08-19T18:30:44.7950443Z ##[endgroup]
+2026-08-19T18:30:44.9388641Z Downloading single artifact
+2026-08-19T18:30:44.9463349Z (node:2405) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-08-19T18:30:44.9464326Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-08-19T18:30:44.9697312Z (node:2405) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-08-19T18:30:45.3370828Z ##[error]Unable to download artifact(s): Not Found
+2026-08-19T18:30:45.3481995Z ##[group]Run python - <<'PY'
+2026-08-19T18:30:45.3482312Z [36;1mpython - <<'PY'[0m
+2026-08-19T18:30:45.3482590Z [36;1mimport io,os,requests,zipfile,pathlib[0m
+2026-08-19T18:30:45.3482934Z [36;1mrun=int(open('/tmp/pilot_run').read())[0m
+2026-08-19T18:30:45.3483656Z [36;1mh={'Authorization':f"***'GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}[0m
+2026-08-19T18:30:45.3484290Z [36;1mbase=f"https://api.github.com/repos/{os.environ['REPO']}"[0m
+2026-08-19T18:30:45.3484917Z [36;1marts=requests.get(f"{base}/actions/runs/{run}/artifacts",headers=h,params={'per_page':100}).json()['artifacts'][0m
+2026-08-19T18:30:45.3485644Z [36;1ma=next(x for x in arts if x['name']=='comex-v4-pilot12-raw-and-qa' and not x.get('expired'))[0m
+2026-08-19T18:30:45.3486228Z [36;1mr=requests.get(a['archive_download_url'],headers=h);r.raise_for_status()[0m
+2026-08-19T18:30:45.3486726Z [36;1mpathlib.Path('/tmp/pilot').mkdir(parents=True,exist_ok=True)[0m
+2026-08-19T18:30:45.3487230Z [36;1mzipfile.ZipFile(io.BytesIO(r.content)).extractall('/tmp/pilot')[0m
+2026-08-19T18:30:45.3487604Z [36;1mPY[0m
+2026-08-19T18:30:45.3523966Z shell: /usr/bin/bash -e {0}
+2026-08-19T18:30:45.3524224Z env:
+2026-08-19T18:30:45.3526683Z   GH_TOKEN: ***
+2026-08-19T18:30:45.3526927Z   REPO: iagency971/twilio-voice-gateway
+2026-08-19T18:30:45.3527202Z ##[endgroup]
+2026-08-19T18:30:46.2126194Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-08-19T18:30:46.2127481Z ##[group]Run actions/download-artifact@v4
+2026-08-19T18:30:46.2127775Z with:
+2026-08-19T18:30:46.2128285Z   name: comex-dev-rank1-native-reaction-source-last30-zero-qa-v1
+2026-08-19T18:30:46.2128672Z   path: /tmp/original_zero_qa
+2026-08-19T18:30:46.2131310Z   github-token: ***
+2026-08-19T18:30:46.2131574Z   repository: iagency971/twilio-voice-gateway
+2026-08-19T18:30:46.2131871Z   run-id: 32263559201
+2026-08-19T18:30:46.2132095Z   merge-multiple: false
+2026-08-19T18:30:46.2132324Z ##[endgroup]
+2026-08-19T18:30:46.3604343Z Downloading single artifact
+2026-08-19T18:30:46.3680576Z (node:2419) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-08-19T18:30:46.3681447Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-08-19T18:30:46.3892278Z (node:2419) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-08-19T18:30:46.8524995Z ##[error]Unable to download artifact(s): Not Found
+2026-08-19T18:30:46.8710422Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-08-19T18:30:46.8711697Z Post job cleanup.
+2026-08-19T18:30:46.9539491Z [command]/usr/bin/git version
+2026-08-19T18:30:46.9580168Z git version 2.54.0
+2026-08-19T18:30:46.9624568Z Temporarily overriding HOME='/home/runner/work/_temp/2ec6cadd-4755-44c0-98a8-68a093910150' before making global git config changes
+2026-08-19T18:30:46.9626131Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-19T18:30:46.9631066Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/twilio-voice-gateway/twilio-voice-gateway
+2026-08-19T18:30:46.9671634Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-19T18:30:46.9708294Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-19T18:30:46.9984306Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-19T18:30:47.0012328Z http.https://github.com/.extraheader
+2026-08-19T18:30:47.0024420Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-08-19T18:30:47.0064032Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-19T18:30:47.0322683Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-19T18:30:47.0363152Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-19T18:30:47.0755945Z Cleaning up orphan processes
+2026-08-19T18:30:47.1109486Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/download-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
