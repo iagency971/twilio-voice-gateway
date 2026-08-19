@@ -1,6 +1,6 @@
 name: XAU COMEX Native Reaction Source Last30 Status
 
-# status probe v2 - 2026-08-19
+# status probe v3 - 2026-08-19 post provenance-QA rerun
 on:
   push:
     branches: [agent/xau-comex-acquisition-plan]
