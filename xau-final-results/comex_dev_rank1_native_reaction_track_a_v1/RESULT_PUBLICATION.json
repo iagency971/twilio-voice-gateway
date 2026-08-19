@@ -1,0 +1,10 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_TRACK_A_PUBLICATION_V1",
+  "result_publication_commit_sha": "710178def6c24d7d58f28beb17df0b4b27d123af",
+  "track_a_result_manifest_sha256": "26e0f08e103833ef78e911cb4f6c82bf5d59eadd90abc77bab9ed46d944cf8b5",
+  "decision": "NO_GO_DEV_RANK2_NATIVE_REACTION",
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "new_market_data_spend": 0,
+  "dev_rank2_executed": false
+}
