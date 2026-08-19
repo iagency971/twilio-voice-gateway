@@ -1,0 +1,12 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_TRACK_A_V1_TRIGGER",
+  "date": "2026-08-19",
+  "authorized_by_user": true,
+  "preoutcome_freeze_manifest_sha256": "60713b922eefe24dd8fbc306c1f26cc2557c829ccd0080649afbc9071972ca47",
+  "preoutcome_artifact_freeze_commit_sha": "93930f82c3168dfd02a05edc57b78811739db9eb",
+  "execute": "TRACK_A_FROZEN_W15_PRIMARY_AND_PREREGISTERED_SECONDARIES",
+  "new_market_data_authorized": false,
+  "dev_rank2_execution_authorized": false,
+  "confirm_execution_authorized": false,
+  "locked_test_execution_authorized": false
+}
