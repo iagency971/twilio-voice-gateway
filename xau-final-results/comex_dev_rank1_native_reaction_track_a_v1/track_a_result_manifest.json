@@ -1,0 +1,23 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_TRACK_A_RESULT_MANIFEST_V1",
+  "preoutcome_freeze_manifest_sha256": "60713b922eefe24dd8fbc306c1f26cc2557c829ccd0080649afbc9071972ca47",
+  "preoutcome_artifact_freeze_commit_sha": "93930f82c3168dfd02a05edc57b78811739db9eb",
+  "protocol_sha256_at_execution": "ee77aaf57a0fdc72c8146c2e0938a22e0b8173b9b8d011216c639e18a1ebd97b",
+  "execution_script_sha256": "815ace729491f40105a50550dd22a52ee5e096cbaf9b841dd4fb5a6964d0e7b1",
+  "workflow_sha256": "974171a993187c23c92797cf4a569ff96200012a9f1ad1b1bb9df45daab52723",
+  "generated_files_sha256": {
+    "TRACK_A_RESULT.md": "b83e75e13e366f2a6c22dc19de20863bd84ae37546c5abcf408285e8d9604e76",
+    "event_control_effects.csv": "b706a5b099e20cd7f348a37ea1dae00425dde798387f0433c37db04b46c426d3",
+    "family_robustness.csv": "ef4141c53f1160461e5500ea9dc44bce626a63699261370aabdfe71d99ccf385",
+    "outcome_execution_guard.json": "53b6b0beb74a4e061d5526b27626e90d0a86f647200e12f6ffb94b4b0b1c68c7",
+    "primary_bootstrap_20000.csv.gz": "29d697baf8027d0aec6de54ce438a152786b5506fdd91c0ccb0cc019d094b5ab",
+    "primary_date_effects.csv": "8c54a97c4a97470b86c537e3fd8e8f498602699b0ebbff6e6936d56053d4c506",
+    "secondary_family_w15_holm.csv": "e7834b835a8a7a4a0b3b26b805e1906c411490b78d534848b12b5233ae67997a",
+    "secondary_horizon_holm.csv": "bced88e7ba888c09f35a9dc0b0a5a8ec2027027c4581d32123a3f4aabf667b2c",
+    "selected_control_anchor_outcomes.csv": "36e73df4a7c9f1a30e638bdd4562ab6965e27443bee0df838aa6d13b28057a9a",
+    "track_a_decision.json": "a9c648e78c1c5c8f31abc461b7bc64ac2130438e5f9140a39f53387545a61ba7",
+    "treated_anchor_outcomes.csv": "cde46f571290cbe92a4575691b59e069300a696155e301c7bc796a34ffac1a5b",
+    "year_stability.csv": "ecc96838efa51f1e7149ee07cf410ec6e30495788bfc5c1cca9b6ddb746a3e59"
+  },
+  "decision": "NO_GO_DEV_RANK2_NATIVE_REACTION"
+}

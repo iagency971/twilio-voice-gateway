@@ -1,0 +1,71 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_TRACK_A_DECISION_V1",
+  "preoutcome_freeze_manifest_sha256": "60713b922eefe24dd8fbc306c1f26cc2557c829ccd0080649afbc9071972ca47",
+  "preoutcome_artifact_freeze_commit_sha": "93930f82c3168dfd02a05edc57b78811739db9eb",
+  "scientific_estimand": "EVENT_VS_MATCHED_REFERENCE_ANCHOR_POST_CONTACT_MINUTE",
+  "primary_horizon": "W15",
+  "primary_endpoint": "DELTA_NRB15",
+  "matched_events": 227,
+  "matched_treated_dates": 81,
+  "A_support_gate": {
+    "pass": true,
+    "criteria": {
+      "matched_events_ge_160": true,
+      "matched_dates_ge_60": true,
+      "every_source_year_matched_dates_ge_5": true,
+      "defined_contact_full_match_rate_ge_0_85": true,
+      "every_source_year_full_match_rate_ge_0_75": true
+    }
+  },
+  "B_primary_effect_gate": {
+    "pass": false,
+    "theta_NRB15": -0.01778503489907026,
+    "theta_ge_0_02": false,
+    "bootstrap_ci95_lower": -0.03899457780258087,
+    "bootstrap_ci95_upper": 0.0012119706857348835,
+    "ci_lower_gt_0": false,
+    "date_weighted_raw_reaction_balance_ticks": -3.6211934156379595,
+    "raw_ticks_ge_2": false
+  },
+  "primary_signflip": {
+    "draws": 50000,
+    "seed": 20260820,
+    "two_sided_p": 0.08235835283294334
+  },
+  "primary_bootstrap": {
+    "valid_replicates": 20000,
+    "seed": 20260819,
+    "panel_dates": 92,
+    "minimum_matched_date_draws_per_valid_replicate": 65,
+    "attempts_for_20000_valid": 20000,
+    "implementation": "DETERMINISTIC_EVENT_LOCAL_REMATCH_REGENERATED_AND_ASSERTED_IDENTICAL_THEN_MEMOIZED_PER_BOOTSTRAP_DRAW",
+    "ci_method": "95_PERCENTILE_DATE_CLUSTER_BOOTSTRAP"
+  },
+  "C_year_stability_gate": {
+    "pass": false,
+    "positive_years": 2,
+    "at_least_6_of_8_years_positive": false,
+    "all_leave_one_year_out_positive": false,
+    "max_abs_year_contribution_share": 0.2927977070895703,
+    "no_year_over_35pct_abs_contribution": true,
+    "gate_pass": false
+  },
+  "D_family_robustness_gate": {
+    "pass": false,
+    "positive_families": 1,
+    "at_least_3_of_4_families_positive": false,
+    "all_leave_one_family_out_positive": false,
+    "max_abs_family_contribution_share": 0.4580746703505303,
+    "no_family_over_50pct_abs_contribution": true,
+    "gate_pass": false
+  },
+  "decision": "NO_GO_DEV_RANK2_NATIVE_REACTION",
+  "secondary_results_can_rescue_primary": false,
+  "dev_rank2_opened_by_this_run": false,
+  "confirm_or_locked_opened_by_this_run": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "new_market_data_spend": 0,
+  "mfe_mae_computed": false,
+  "order_dependent_first_hit_metric_computed": false
+}
