@@ -32,6 +32,7 @@ jobs:
               C[col]=pd.to_numeric(C[col],errors='coerce'); E[col]=pd.to_numeric(E[col],errors='coerce')
           def b(v): return str(v).strip().lower()=='true' if not isinstance(v,(bool,np.bool_)) else bool(v)
           def ratio_ok(a,b0,lo,hi): return np.isfinite(a) and np.isfinite(b0) and a>0 and b0>0 and lo<=a/b0<=hi
+          def rmask(series,b0,lo,hi): return series.map(lambda x: ratio_ok(float(x),float(b0),lo,hi)).astype(bool)
           C['_excl60_ok']=~C['excluded_native_contact_pm60'].map(b)
           C['_w15']=C['w15_complete'].map(b)
           C['_pre30']=C['pre30_complete'].map(b)
@@ -55,17 +56,17 @@ jobs:
                   eligible=defined and b(e['w15_complete']) and np.isfinite(e['source_range_ticks']) and (normal_cov or (sc['early'] and early))
                   n_dates=0
                   if eligible:
-                      q=C[(C['year'].astype(int)==int(e['year'])) & (C['control_source_research_date'].astype(str)!=str(e['source_research_date']))].copy()
-                      q=q[(q['away_sign'].astype(float)==float(e['away_sign'])) & q['_excl60_ok'] & q['_w15']]
+                      q=C.loc[(C['year'].astype(int)==int(e['year'])) & (C['control_source_research_date'].astype(str)!=str(e['source_research_date']))].copy()
+                      q=q.loc[(q['away_sign'].astype(float)==float(e['away_sign'])) & q['_excl60_ok'] & q['_w15']]
                       event_bin=int(math.floor(float(e['anchor_minute_of_session'])/sc['bin']))
-                      q=q[np.floor(q['anchor_minute_of_session']/sc['bin']).astype(int)==event_bin]
-                      q=q[q['source_range_ticks'].map(lambda x: ratio_ok(float(x),float(e['source_range_ticks']),sc['lo'],sc['hi']))]
+                      q=q.loc[np.floor(q['anchor_minute_of_session']/sc['bin']).astype(int)==event_bin]
+                      q=q.loc[rmask(q['source_range_ticks'],e['source_range_ticks'],sc['lo'],sc['hi'])]
                       if not (sc['early'] and early):
-                          q=q[q['_pre30'] & q['pre30_range_ticks'].notna() & q['pre5_signed_move_norm'].notna()]
-                          q=q[q['pre30_range_ticks'].map(lambda x: ratio_ok(float(x),float(e['pre30_range_ticks']),sc['lo'],sc['hi']))]
+                          q=q.loc[q['_pre30'] & q['pre30_range_ticks'].notna() & q['pre5_signed_move_norm'].notna()]
+                          q=q.loc[rmask(q['pre30_range_ticks'],e['pre30_range_ticks'],sc['lo'],sc['hi'])]
                       n_dates=int(q['control_source_research_date'].astype(str).nunique())
                   rr.append({'year':int(e['year']),'date':str(e['source_research_date']),'defined':defined,'event_eligible':eligible,'eligible_dates':n_dates,'matched':eligible and n_dates>=sc['K']})
-              R=pd.DataFrame(rr); D=R[R['defined']]
+              R=pd.DataFrame(rr); D=R.loc[R['defined']]
               defined_n=int(len(D)); matched=int(D['matched'].sum()); matched_dates=int(D.loc[D['matched'],'date'].nunique())
               ystats=[]
               for y,g in D.groupby('year'):
@@ -74,7 +75,7 @@ jobs:
               crit={'matched_events_ge_160':matched>=160,'matched_dates_ge_60':matched_dates>=60,'every_year_matched_dates_ge_5':all(x['matched_dates']>=5 for x in ystats),'defined_contact_full_match_rate_ge_0_85':(matched/defined_n if defined_n else 0)>=.85,'every_year_full_match_rate_ge_0_75':all(x['match_rate']>=.75 for x in ystats)}
               summaries.append({'scenario':sc['name'],'K':sc['K'],'time_bin_minutes':sc['bin'],'ratio_caliper':[sc['lo'],sc['hi']],'early_fallback':sc['early'],'defined_events':defined_n,'event_eligible':int(D['event_eligible'].sum()),'matched_events':matched,'matched_dates':matched_dates,'match_rate':matched/defined_n if defined_n else 0,'support_gate_pass':all(crit.values()),'criteria':crit})
               yearly.extend(ystats)
-          out={'version':'COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_V1_1','post_anchor_outcomes_read':False,'reaction_outcomes_computed':False,'market_data_api_called':False,'market_data_download_performed':False,'scenarios':summaries,'notes':['Only pre-anchor/source covariates and already-frozen +-60 contact exclusion flags are used.','No W5/W15/W60/SC reaction endpoint is read or computed.','Early fallback applies only for treated minute-of-session <30; it drops unavailable J+1 pre30/pre5 matching symmetrically for event/control while retaining same year, time bin, approach sign, source-range caliper and +-60 exclusion.']}
+          out={'version':'COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_V1_2','post_anchor_outcomes_read':False,'reaction_outcomes_computed':False,'market_data_api_called':False,'market_data_download_performed':False,'scenarios':summaries,'notes':['Only pre-anchor/source covariates and already-frozen +-60 contact exclusion flags are used.','No W5/W15/W60/SC reaction endpoint is read or computed.','Early fallback applies only for treated minute-of-session <30; it drops unavailable J+1 pre30/pre5 matching symmetrically for event/control while retaining same year, time bin, approach sign, source-range caliper and +-60 exclusion.']}
           Path('/tmp/support_sensitivity.json').write_text(json.dumps(out,indent=2))
           pd.DataFrame(yearly).to_csv('/tmp/support_sensitivity_by_year.csv',index=False)
           print(json.dumps(out,indent=2))
