@@ -1,0 +1,25 @@
+scenario,target_r,independent_trades,selected_trades,skipped_overlapping_entries,same_minute_exit_entry_skips,mean_net_R,sum_net_R,pf_net,sequencing_rule,unresolved_sequencing_ambiguity
+S10_C6,0.5,304,302,2,0,0.1278067918469228,38.59765113777069,1.5703618091281033,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S10_C6,1.0,304,302,2,0,0.28249640361531214,85.31391389182427,1.8650831922378532,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S10_C6,1.5,304,302,2,0,0.2954061068404424,89.2126442658136,1.6902196804276788,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S10_C6,2.0,304,301,3,0,0.313472398321827,94.35519189486993,1.6656654374150943,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S10_C6,2.5,304,301,3,0,0.299046807461332,90.01308904586094,1.5863372008330752,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S10_C6,3.0,304,301,3,0,0.3320140620827698,99.93623268691371,1.6337305994594442,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S11_C6_PRIMARY,0.5,304,302,2,0,0.12343780087614661,37.27821586459628,1.542711386161766,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S11_C6_PRIMARY,1.0,304,302,2,0,0.2665448924630728,80.49655752384798,1.7999206864589936,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S11_C6_PRIMARY,1.5,304,302,2,0,0.2889481034646999,87.26232724633937,1.6746138452725357,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S11_C6_PRIMARY,2.0,304,301,3,0,0.30200147896472995,90.90244516838372,1.6366206880331313,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S11_C6_PRIMARY,2.5,304,301,3,0,0.27980502221657905,84.2213116871903,1.5450577594847046,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S11_C6_PRIMARY,3.0,304,301,3,0,0.32351244268163415,97.37724524717189,1.6177004102203973,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S12_C6,0.5,304,302,2,0,0.11906945264543194,35.95897469892044,1.5160390999131346,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S12_C6,1.0,304,302,2,0,0.24888297190931286,75.16265751661248,1.7319928512947327,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S12_C6,1.5,304,302,2,0,0.2776473869863263,83.84951086987054,1.643374578313913,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S12_C6,2.0,304,301,3,0,0.27910851174078316,84.01166203397574,1.5798722995082857,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S12_C6,2.5,304,301,3,0,0.2773295769808977,83.4762026712502,1.5403985494662964,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S12_C6,3.0,304,301,3,0,0.3202094632134808,96.38304842725772,1.6115861950575359,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S18_C9_STRESS,0.5,304,302,2,0,0.08904555582592359,26.891757859428925,1.3639186124896545,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S18_C9_STRESS,1.0,304,302,2,0,0.1678653222337127,50.695327314581235,1.4453467756616123,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S18_C9_STRESS,1.5,304,302,2,0,0.19814622968294332,59.840161364248885,1.4306924630301114,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S18_C9_STRESS,2.0,304,301,3,0,0.22371615730959024,67.33856335018666,1.4536574266631084,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S18_C9_STRESS,2.5,304,301,3,0,0.19862237675019645,59.785335401809135,1.3779341784341248,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
+S18_C9_STRESS,3.0,304,301,3,0,0.22060878704962242,66.40324490193635,1.4059705932537292,entry_time then contact_time then event_id; require next entry_time > active exit_time,False
