@@ -1,0 +1,31 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_PREPRO_READINESS_V0_9",
+  "ready_for_pro_method_review": true,
+  "reaction_outcomes_computed": false,
+  "mfe_mae_computed": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "final_368_status_sha256": "8a825b0bc1deba51959b78ab6e62206fe49232e76329558e83949bf6d3d4151a",
+  "native_levels": 368,
+  "exact_contact_events": 238,
+  "contact_stage_counts": {
+    "1": 231,
+    "2": 6,
+    "3": 1
+  },
+  "n1_complete_session_blocks": 92,
+  "contacts_with_unique_n1_session_coverage": 238,
+  "contacts_with_n2_contact_raw_present": 238,
+  "n2_raw_integrity_failures": 0,
+  "n2_contact_interval_failures": 0,
+  "missing_n1": [],
+  "missing_n2": [],
+  "integrity_fail": [],
+  "n2_interval_fail": [],
+  "source_session_range_normalizer_provenance_audited": false,
+  "notes": [
+    "This audit checks file availability, mapping and raw-file integrity only.",
+    "It deliberately does not decode post-contact price paths or calculate reaction outcomes.",
+    "Source-session-range normalizer provenance remains a PRE-PRO/final-v1 QA item if Pro approves that normalizer."
+  ]
+}
