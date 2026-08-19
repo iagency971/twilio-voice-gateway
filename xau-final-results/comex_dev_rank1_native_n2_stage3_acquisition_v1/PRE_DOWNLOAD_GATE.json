@@ -1,0 +1,28 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE3_PRE_DOWNLOAD_GATE_V1",
+  "authorization": "OK NATIVE N2 STAGE3, plafond 0,025 $",
+  "approved_cap_usd": 0.025,
+  "frozen_quote_usd": 0.024528264999,
+  "current_exact_quote_usd": 0.024528264999,
+  "remaining_margin_usd": 0.00047173500100000307,
+  "requests": 1,
+  "market_request_manifest_sha256": "eed47cb6427563ec10a5d3c930d7d550d4a09108888b1830af184e693d237f28",
+  "level_manifest_sha256": "1472c3d0fae9cc1de56635d1009abeff998b80ebbb186e0dd9bdd694f76b2a6e",
+  "market_data_download_performed": false,
+  "later_stage_download_authorized": false,
+  "row": {
+    "market_request_id": "05b9848a89d1a46721585e99",
+    "request_type": "NATIVE_N2_STAGE3_EXACT_TRADES",
+    "eligible_next_research_date": "2012-09-07",
+    "source_instrument_id": "118951",
+    "dataset": "GLBX.MDP3",
+    "schema": "trades",
+    "symbols": "118951",
+    "stype_in": "instrument_id",
+    "start": "2012-09-07T12:30:00+00:00",
+    "end": "2012-09-07T12:31:00+00:00",
+    "candidate_minute_count": 1,
+    "cost_usd": 0.024528264999,
+    "gate_cost_usd": 0.024528264999
+  }
+}
