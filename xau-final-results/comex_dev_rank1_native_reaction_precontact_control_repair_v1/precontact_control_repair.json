@@ -1,0 +1,79 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_PRECONTACT_CONTROL_REPAIR_V1",
+  "post_contact_values_used_for_matching": false,
+  "post_anchor_outcomes_read": false,
+  "reaction_outcomes_computed": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "parity_summary": {
+    "n1_blocks": 92,
+    "stable_same_iid_blocks": 85,
+    "stable_blocks_exact_parity": 85,
+    "stable_parity_all_pass": true
+  },
+  "controls_total": 2375350,
+  "control_blocks": 1810,
+  "reserved_non_dev_rank1_dates": 261,
+  "event_context_rows": 238,
+  "minute0_defined_events": 27,
+  "early_defined_events": 54,
+  "support": {
+    "STRICT": {
+      "mode": "STRICT",
+      "defined_events": 235,
+      "eligible_events": 180,
+      "matched_events": 176,
+      "matched_dates": 74,
+      "match_rate": 0.7489361702127659,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": false,
+        "every_source_year_full_match_rate_ge_0_75": false
+      },
+      "support_gate_pass": false
+    },
+    "EARLY_AVAILABLE": {
+      "mode": "EARLY_AVAILABLE",
+      "defined_events": 235,
+      "eligible_events": 207,
+      "matched_events": 203,
+      "matched_dates": 78,
+      "match_rate": 0.8638297872340426,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": true,
+        "every_source_year_full_match_rate_ge_0_75": false
+      },
+      "support_gate_pass": false
+    },
+    "EARLY_SOURCE_ONLY": {
+      "mode": "EARLY_SOURCE_ONLY",
+      "defined_events": 235,
+      "eligible_events": 234,
+      "matched_events": 230,
+      "matched_dates": 81,
+      "match_rate": 0.9787234042553191,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": true,
+        "every_source_year_full_match_rate_ge_0_75": true
+      },
+      "support_gate_pass": true
+    }
+  },
+  "event_context_sha256": "6a8dc881e632265322d1f71483b964ad9b2f5b766ebdea78826b90663d8915c3",
+  "control_blocks_sha256": "4ce8d27fba446cc783a20123c51256a50557304848f14863033845fa352844cb",
+  "notes": [
+    "The prior PREOUTCOME v1 matching covariates are superseded for execution because they could include the contact-minute bar after t0.",
+    "All local matching covariates in this audit end strictly before m0, the contact-minute start.",
+    "EARLY_AVAILABLE uses only session-open-to-m0 executed-price range when a treated event lacks 30 full pre-contact minutes; minute-0 events with no prehistory are not made eligible by that mode.",
+    "EARLY_SOURCE_ONLY is diagnostic only.",
+    "No reaction endpoint or post-contact price is used."
+  ]
+}
