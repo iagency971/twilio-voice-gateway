@@ -1,0 +1,17 @@
+{
+  "version": "XAU_CORE_TEMPORAL_STACK_INTEGRITY_V1_ANNUAL",
+  "year": 2022,
+  "stack_parity_pass": true,
+  "canonical_core_event_set_pass": true,
+  "core_events": 17,
+  "core_classification_violations": 1,
+  "missing_causal_doz_events": 1,
+  "missing_causal_objective_events": 0,
+  "events_with_any_future_member_after_confirmation": 1,
+  "future_member_rows": 2,
+  "future_doz_member_rows": 2,
+  "future_objective_member_rows": 0,
+  "temporal_stack_integrity_pass": false,
+  "new_market_data_spend": 0,
+  "pnl_inspected_or_used": false
+}
