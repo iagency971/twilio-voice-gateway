@@ -1,13 +1,13 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V17",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V18",
   "workflows": {
-    "xau-comex-dev-rank1-native-n1-recover.yml": {
+    "xau-comex-dev-rank1-native-n2-quote.yml": {
       "found": true,
-      "run_id": 32205624009,
+      "run_id": 32207478972,
       "event": "push",
       "status": "in_progress",
       "conclusion": null,
-      "head_sha": "825615f8a1fb635b63af44f9eb1564ee7b9e49bb",
+      "head_sha": "6bf03b32aa679ad05baa427bd0d73ef26a0513a8",
       "jobs_total": 1,
       "by_status": {
         "in_progress": 1
@@ -17,43 +17,20 @@
       },
       "jobs": [
         {
-          "id": 95928236334,
-          "name": "recover",
+          "id": 95933399868,
+          "name": "screen-and-quote",
           "status": "in_progress",
           "conclusion": null
         }
       ]
     },
-    "xau-comex-dev-rank1-native-n1-acquire.yml": {
+    "xau-comex-dev-rank1-native-n1-recover.yml": {
       "found": true,
-      "run_id": 32204581441,
-      "event": "push",
-      "status": "completed",
-      "conclusion": "failure",
-      "head_sha": "78efa13f5107b7846488964684f6260653f44ee0",
-      "jobs_total": 1,
-      "by_status": {
-        "completed": 1
-      },
-      "by_conclusion": {
-        "failure": 1
-      },
-      "jobs": [
-        {
-          "id": 95925176317,
-          "name": "acquire-and-quote-n2",
-          "status": "completed",
-          "conclusion": "failure"
-        }
-      ]
-    },
-    "xau-comex-dev-rank1-native-n1-quote.yml": {
-      "found": true,
-      "run_id": 32203734731,
+      "run_id": 32205624009,
       "event": "push",
       "status": "completed",
       "conclusion": "success",
-      "head_sha": "56e7af8cf91df404af49f18631e6703d36bf6b52",
+      "head_sha": "825615f8a1fb635b63af44f9eb1564ee7b9e49bb",
       "jobs_total": 1,
       "by_status": {
         "completed": 1
@@ -63,8 +40,8 @@
       },
       "jobs": [
         {
-          "id": 95922691677,
-          "name": "quote",
+          "id": 95928236334,
+          "name": "recover",
           "status": "completed",
           "conclusion": "success"
         }
