@@ -1,0 +1,12 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_PREPRO_READINESS_TRIGGER_V1",
+  "date": "2026-08-19",
+  "purpose": "zero-outcome file and mapping readiness audit before Pro protocol review",
+  "market_data_api_calls_authorized": false,
+  "market_data_download_authorized": false,
+  "reaction_outcome_computation_authorized": false,
+  "mfe_mae_computation_authorized": false,
+  "dev_rank2_opened": false,
+  "retro_confirm_opened": false,
+  "locked_comex_test_opened": false
+}
