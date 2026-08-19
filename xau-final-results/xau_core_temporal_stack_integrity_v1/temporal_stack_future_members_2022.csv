@@ -1,0 +1,3 @@
+source_year,event_id,stack_id,representative_contact_time,confirmation_time,entry_time,member_zone_id,member_family,member_variant,member_known_time,member_contact_time,member_contact_idx,confirm_idx,entry_idx,core_classification_violation
+2022,5dcbc6fbe6dcc88b61360af7,STACK_00121712,2022-06-22T07:13:00+00:00,2022-06-22T07:13:00+00:00,2022-06-22T07:14:00+00:00,DOZ_BASE_00003083,DISPLACEMENT_ORIGIN,DOZ_BASE,2022-06-22T07:15:00+00:00,2022-06-22T07:15:00+00:00,773715,773713,773714,True
+2022,5dcbc6fbe6dcc88b61360af7,STACK_00121712,2022-06-22T07:13:00+00:00,2022-06-22T07:13:00+00:00,2022-06-22T07:14:00+00:00,DOZ_LAST_00003081,DISPLACEMENT_ORIGIN,DOZ_LAST,2022-06-22T07:15:00+00:00,2022-06-22T07:15:00+00:00,773715,773713,773714,True
