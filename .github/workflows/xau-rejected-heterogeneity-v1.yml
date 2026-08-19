@@ -81,8 +81,10 @@ jobs:
           path: /tmp/rejected_annual
           merge-multiple: true
       - name: Aggregate rejected-strategy heterogeneity
+        env:
+          PYTHONPATH: xau-multiyear/scripts
         run: |
-          python xau-multiyear/scripts/aggregate_xau_rejected_heterogeneity_v1.py \
+          python xau-multiyear/scripts/aggregate_xau_rejected_heterogeneity_v1_1.py \
             --annual-dir /tmp/rejected_annual \
             --multiyear-summary xau-final-results/phase_c_vantage_raw_2011_2025/multiyear_summary.csv \
             --out /tmp/rejected_final
