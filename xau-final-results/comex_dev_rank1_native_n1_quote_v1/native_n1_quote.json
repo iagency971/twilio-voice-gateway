@@ -1,0 +1,36 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N1_QUOTE_V1_1",
+  "authorization": "METADATA_ONLY",
+  "download_performed": false,
+  "market_data_download_performed": false,
+  "dataset": "GLBX.MDP3",
+  "schema": "ohlcv-1m",
+  "source_registry_version_required": "COMEX_DEV_RANK1_NATIVE_SOURCE_LEVELS_V1_1",
+  "source_registry_sha256": "63b2478c134e694fc40dd496b0f3d32feb015c3865885101816ec8a699d43d28",
+  "edge_override_file_sha256": "e277b8caafa53372ab1b9aa80d6b66629f865b5fd7735a1447835f7e13fdfcf7",
+  "calendar_edge_override_count": 1,
+  "calendar_edge_overrides_used": [
+    "2018-12-31"
+  ],
+  "source_levels": 368,
+  "source_sessions": 92,
+  "source_requests": 92,
+  "unique_market_requests": 92,
+  "exact_n1_cost_usd": 0.44266127050299997,
+  "source_request_manifest_sha256": "239bbc31346c12980f3c5851947ef5a2a37aa037819c4521814f49414846882f",
+  "market_request_manifest_sha256": "4e9e8dceb57c291925da98ed214368c346d85f0f3da6fb95d37de3b16c533ff1",
+  "next_session_rule": "first later GC auction research date with positive-volume M1 records in already-owned GC.n.0 continuous context; one frozen calendar-only right-edge override 2018-12-31->2019-01-02 because owned context ends 2019-01-01; source price/outcome never used",
+  "raw_instrument_rule": "same source_instrument_id that created terminal VWAP/POC/VAH/VAL; no continuous/cross-contract substitution",
+  "screening_rule": "N1 OHLCV-1m can only eliminate impossible minutes; M1 crossing never confirms contact",
+  "n2_rule": "exact raw trades only candidate minutes, quoted only after authorized N1 is downloaded; first exact trade at contact_tick_price is contact",
+  "locked_blocks_opened": false,
+  "dev_rank2_opened": false,
+  "retro_confirm_opened": false,
+  "locked_comex_test_opened": false,
+  "notes": [
+    "This workflow performs metadata.get_cost only.",
+    "No Databento get_range or batch download is called.",
+    "No N1 download is authorized by this manifest.",
+    "No N2 trade-tape quote is possible until N1 reveals candidate minutes."
+  ]
+}
