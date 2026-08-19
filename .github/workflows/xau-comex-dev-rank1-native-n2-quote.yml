@@ -1,0 +1,128 @@
+name: XAU COMEX DEV_RANK1 Native N2 Quote Only
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - 'xau-recovery/NATIVE_N2_QUOTE_TRIGGER.json'
+
+permissions:
+  actions: read
+  contents: write
+
+env:
+  DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+
+jobs:
+  screen-and-quote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+
+      - run: python -m pip install pandas==2.2.3 numpy pyarrow databento requests
+
+      - name: Download complete N1 artifact only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n1-raw-complete-v1
+          path: /tmp/n1
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32205624009
+
+      - name: Technical pandas nullable-int patch only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('xau-multiyear/scripts/build_quote_comex_native_n2.py')
+          s=p.read_text()
+          old1='df["low_tick"] = np.rint(df.low.to_numpy(float) * 10.0).astype("Int64")'
+          old2='df["high_tick"] = np.rint(df.high.to_numpy(float) * 10.0).astype("Int64")'
+          new1='df["low_tick"] = pd.Series(np.rint(df.low.to_numpy(float) * 10.0), index=df.index).astype("Int64")'
+          new2='df["high_tick"] = pd.Series(np.rint(df.high.to_numpy(float) * 10.0), index=df.index).astype("Int64")'
+          assert old1 in s and old2 in s
+          s=s.replace(old1,new1).replace(old2,new2)
+          p.write_text(s)
+          print('PANDAS_NULLABLE_INT_PATCH_APPLIED')
+          PY
+
+      - name: Hard QA N1 completion before screening
+        run: |
+          python - <<'PY'
+          import json,glob
+          z=json.load(open('/tmp/n1/ACQUISITION_COMPLETE.json'))
+          s=json.load(open('/tmp/n1/acquisition_summary.json'))
+          assert z['version']=='COMEX_DEV_RANK1_NATIVE_N1_ACQUISITION_COMPLETE_V1'
+          assert z['complete'] is True and z['requests']==92
+          assert z['worst_case_total_cost_usd'] <= 0.45 + 1e-12
+          assert z['n2_download_authorized'] is False
+          assert s['complete'] is True and s['completed_request_markers']==92
+          assert s['records_downloaded_total']==121251
+          assert len(glob.glob('/tmp/n1/*.dbn.zst'))==92
+          print('N1_COMPLETE_INPUT_QA_OK')
+          PY
+
+      - name: Screen N1 and quote exact N2 candidate tape only
+        run: |
+          python xau-multiyear/scripts/build_quote_comex_native_n2.py \
+            --source-levels xau-final-results/comex_dev_rank1_native_source_levels_v1/native_source_levels.csv \
+            --source-requests xau-final-results/comex_dev_rank1_native_n1_quote_v1/native_n1_source_request_manifest.csv \
+            --n1-root /tmp/n1 \
+            --out /tmp/n2_quote
+          cp xau-multiyear/scripts/build_quote_comex_native_n2.py /tmp/n2_quote/build_quote_comex_native_n2_runtime.py
+
+      - name: Hard QA N2 remains metadata-only
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          z=json.load(open('/tmp/n2_quote/native_n2_quote.json'))
+          assert z['version']=='COMEX_DEV_RANK1_NATIVE_N2_QUOTE_V1'
+          assert z['authorization']=='N2_DOWNLOAD_NOT_AUTHORIZED'
+          assert z['market_data_download_performed'] is False
+          assert z['n2_download_performed'] is False
+          assert z['n1_complete'] is True
+          assert z['source_levels']==368 and z['source_sessions']==92
+          assert z['levels_no_exact_contact_by_n1_screen'] + z['levels_requiring_n2'] == 368
+          assert z['candidate_level_minute_rows'] >= z['unique_candidate_minutes'] >= 0
+          assert z['n2_merged_market_requests'] >= 0
+          assert z['exact_n2_cost_usd'] >= 0
+          assert z['dev_rank2_opened'] is False
+          assert z['retro_confirm_opened'] is False
+          assert z['locked_comex_test_opened'] is False
+          x=pd.read_csv('/tmp/n2_quote/native_n1_level_screen.csv')
+          assert len(x)==368 and x.level_id.nunique()==368
+          print('NATIVE_N2_QUOTE_ONLY_QA_OK', z['levels_requiring_n2'], z['unique_candidate_minutes'], z['n2_merged_market_requests'], z['exact_n2_cost_usd'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-quote-v1
+          path: /tmp/n2_quote/
+          retention-days: 90
+
+      - name: Publish N1 screen and N2 metadata quote
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          src=pathlib.Path('/tmp/n2_quote');root='xau-final-results/comex_dev_rank1_native_n2_quote_v1'
+          names=['native_n2_quote.json','native_n1_level_screen.csv','native_n2_candidate_level_minutes.csv','native_n2_market_request_manifest.csv','build_quote_comex_native_n2_runtime.py']
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for name in names:
+              p=src/name;dst=f'{root}/{name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{dst}";payload=base64.b64encode(p.read_bytes()).decode()
+              for attempt in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':f'publish native N2 quote-only result {name} [skip ci]','content':payload,'branch':os.environ['BRANCH']}
+                  if sha:body['sha']=sha
+                  r=requests.put(u,headers=h,json=body)
+                  if r.status_code in (200,201):break
+                  if r.status_code not in (409,422):r.raise_for_status()
+                  time.sleep(min(10,1+attempt))
+              else:raise SystemExit(f'could not publish {dst}')
+          PY
