@@ -1,0 +1,190 @@
+name: XAU COMEX DEV_RANK1 Native N2 Stage1 Recovery
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - 'xau-recovery/NATIVE_N2_STAGE1_RECORD_COUNT_RECOVERY.json'
+
+concurrency:
+  group: xau-comex-dev-rank1-native-n2-stage1-recovery
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: write
+
+env:
+  DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+
+jobs:
+  recover-analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+
+      - run: python -m pip install pandas==2.2.3 numpy pyarrow databento requests
+
+      - name: Download original partial Stage1 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage1-raw-v1
+          path: /tmp/stage1_raw
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32211294671
+
+      - name: Download original exact Stage1 gate
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage1-gate-v1
+          path: /tmp/stage1_gate
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32211294671
+
+      - name: Audit recovery scope — no market-data call
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('xau-recovery/NATIVE_N2_STAGE1_RECORD_COUNT_RECOVERY.json'))
+          a=json.load(open('xau-authorizations/NATIVE_N2_STAGE1_0_36.json'))
+          f=json.load(open('/tmp/stage1_raw/FAILED_ATTEMPT.json'))
+          assert p['version']=='COMEX_DEV_RANK1_NATIVE_N2_STAGE1_RECORD_COUNT_RECOVERY_PLAN_V1'
+          assert p['original_run_id']==32211294671
+          assert p['original_authorization']==a['authorization']=='OK NATIVE N2 STAGE1, plafond 0,36 $'
+          assert p['hard_cap_usd']==a['hard_cap_usd']==0.36
+          assert p['salvaged_market_request_id']==f['market_request_id']=='2cfd24baa84c7f1542ff12c8'
+          assert p['salvaged_paid_request_replayed'] is False
+          assert p['remaining_stage1_only'] is True
+          assert p['stage2_download_authorized'] is False
+          print('N2_STAGE1_RECOVERY_SCOPE_QA_OK')
+          PY
+
+      - name: Salvage first raw file and acquire only remaining Stage1 requests
+        run: |
+          python xau-multiyear/scripts/recover_comex_native_n2_stage1_record_count.py \
+            --gate /tmp/stage1_gate/gate.json \
+            --market-requests xau-final-results/comex_dev_rank1_native_n2_stage1_quote_v1/native_n2_stage1_market_request_manifest.csv \
+            --root /tmp/stage1_raw
+
+      - name: Preserve recovery artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage1-recovery-v1
+          path: /tmp/stage1_raw/
+          retention-days: 90
+          if-no-files-found: warn
+
+      - name: Finalize 214-request Stage1 completeness
+        run: |
+          python xau-multiyear/scripts/acquire_comex_native_n2_stage1.py finalize \
+            --market-requests xau-final-results/comex_dev_rank1_native_n2_stage1_quote_v1/native_n2_stage1_market_request_manifest.csv \
+            --root /tmp/stage1_raw \
+            --out /tmp/stage1_final
+          cp -a /tmp/stage1_final/. /tmp/stage1_raw/
+
+      - name: Hard QA complete Stage1 under original 0.36 USD cap
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/stage1_raw/RECOVERY_COMPLETE.json'))
+          s=json.load(open('/tmp/stage1_final/acquisition_summary.json'))
+          c=json.load(open('/tmp/stage1_final/ACQUISITION_COMPLETE.json'))
+          q=json.load(open('/tmp/stage1_raw/RECOVERED_PREVIOUS_QA_FAILURE.json'))
+          assert r['completed_requests']==214 and r['paid_replay_of_salvaged_request'] is False
+          assert s['complete'] is True and s['completed_request_markers']==214
+          assert c['complete'] is True and c['requests']==214
+          assert float(s['confirmed_success_cost_upper_bound_usd']) <= 0.36 + 1e-12
+          assert q['paid_market_request_replayed'] is False and q['raw_records']==37
+          assert c['n2_stage2_download_authorized'] is False
+          print('N2_STAGE1_RECOVERY_COMPLETE_QA_OK',s['records_downloaded_total'],s['confirmed_success_cost_upper_bound_usd'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage1-complete-v1
+          path: /tmp/stage1_raw/
+          retention-days: 90
+
+      - name: Publish compact complete Stage1 state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          root='xau-final-results/comex_dev_rank1_native_n2_stage1_acquisition_v1'
+          files=[pathlib.Path('/tmp/stage1_raw/RECOVERY_GATE.json'),pathlib.Path('/tmp/stage1_raw/RECOVERED_PREVIOUS_QA_FAILURE.json'),pathlib.Path('/tmp/stage1_raw/RECOVERY_COMPLETE.json'),pathlib.Path('/tmp/stage1_final/acquisition_summary.json'),pathlib.Path('/tmp/stage1_final/ACQUISITION_COMPLETE.json')]
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for p in files:
+              dst=f'{root}/{p.name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{dst}";payload=base64.b64encode(p.read_bytes()).decode()
+              for attempt in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':f'publish native N2 Stage1 recovered state {p.name} [skip ci]','content':payload,'branch':os.environ['BRANCH']}
+                  if sha:body['sha']=sha
+                  z=requests.put(u,headers=h,json=body)
+                  if z.status_code in (200,201):break
+                  if z.status_code not in (409,422):z.raise_for_status()
+                  time.sleep(min(10,1+attempt))
+              else:raise SystemExit(f'publish failed {dst}')
+          PY
+
+      - name: Resolve Stage1 exact contacts and quote Stage2 only
+        run: |
+          python xau-multiyear/scripts/analyze_comex_native_n2_stage1_quote_stage2.py \
+            --stage1-level-manifest xau-final-results/comex_dev_rank1_native_n2_stage1_quote_v1/native_n2_stage1_level_manifest.csv \
+            --all-candidate-minutes xau-final-results/comex_dev_rank1_native_n2_quote_v1/native_n2_candidate_level_minutes.csv \
+            --stage1-market-manifest xau-final-results/comex_dev_rank1_native_n2_stage1_quote_v1/native_n2_stage1_market_request_manifest.csv \
+            --stage1-root /tmp/stage1_raw \
+            --out /tmp/stage2_quote
+
+      - name: Hard QA Stage2 quote-only
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          z=json.load(open('/tmp/stage2_quote/native_n2_stage1_resolution_stage2_quote.json'))
+          assert z['stage1_acquisition_complete'] is True and z['stage1_levels']==243
+          assert z['stage1_resolved_exact_contact'] + z['stage1_unresolved_total']==243
+          assert z['stage2_authorization']=='METADATA_ONLY_STAGE2_DOWNLOAD_NOT_AUTHORIZED'
+          assert z['stage2_market_data_download_performed'] is False
+          assert z['full_n2_union_download_performed'] is False
+          r=pd.read_csv('/tmp/stage2_quote/native_n2_stage1_resolution.csv')
+          assert len(r)==243 and r.level_id.nunique()==243
+          print('N2_STAGE1_RESOLUTION_STAGE2_QUOTE_QA_OK',z['stage1_resolved_exact_contact'],z['stage2_levels'],z['exact_stage2_cost_usd'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage1-resolution-stage2-quote-v1
+          path: /tmp/stage2_quote/
+          retention-days: 90
+
+      - name: Publish Stage1 resolution and Stage2 metadata quote
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          src=pathlib.Path('/tmp/stage2_quote');root='xau-final-results/comex_dev_rank1_native_n2_stage1_resolution_stage2_quote_v1'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for p in sorted(src.iterdir()):
+              if not p.is_file():continue
+              dst=f'{root}/{p.name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{dst}";payload=base64.b64encode(p.read_bytes()).decode()
+              for attempt in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':f'publish native N2 Stage1 resolution and Stage2 quote {p.name} [skip ci]','content':payload,'branch':os.environ['BRANCH']}
+                  if sha:body['sha']=sha
+                  z=requests.put(u,headers=h,json=body)
+                  if z.status_code in (200,201):break
+                  if z.status_code not in (409,422):z.raise_for_status()
+                  time.sleep(min(10,1+attempt))
+              else:raise SystemExit(f'publish failed {dst}')
+          PY
