@@ -1,0 +1,33 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N1_502_RECOVERY_PLAN_V1",
+  "original_authorization": "OK NATIVE N1, plafond 0,45 $",
+  "original_authorization_file": "xau-authorizations/NATIVE_N1_0_45.json",
+  "original_run_id": 32204581441,
+  "original_job_id": 95925176317,
+  "hard_cap_usd": 0.45,
+  "original_full_quote_usd": 0.442661270503,
+  "existing_completed_requests": 16,
+  "existing_success_cost_upper_bound_usd": 0.07492505014,
+  "existing_records_downloaded": 20523,
+  "failed_request_id": "2c5c189b29c97a8ba504a54a",
+  "failed_request_source_date": "2016-03-15",
+  "failed_request_next_date": "2016-03-16",
+  "failed_request_error": "Databento BentoServerError HTTP 502 with empty message; no DBN file and no request marker produced",
+  "possible_prior_failed_attempt_reserve_usd": 0.004954114556,
+  "missing_requests_including_failed": 76,
+  "frozen_missing_quote_usd": 0.367736220363,
+  "frozen_worst_case_full_completion_usd": 0.447615385059,
+  "frozen_remaining_margin_usd": 0.002384614941,
+  "replay_existing_successes": false,
+  "market_data_retry_policy": "The failed 502 request may receive one recovery attempt because its entire prior quote is reserved inside the original 0.45 USD cap. Every other missing request receives at most one market-data attempt. On any further market-data exception, stop and preserve partial state; do not retry automatically.",
+  "n2_download_authorized": false,
+  "dev_rank2_authorized": false,
+  "retro_confirm_authorized": false,
+  "locked_comex_test_authorized": false,
+  "notes": [
+    "This is a technical resume of the same user-authorized NATIVE N1 scope, not a new data scope or a higher budget.",
+    "All 16 successful files from run 32204581441 must be SHA-validated and reused without replay.",
+    "The prior failed request is conservatively reserved at its full quoted amount, so even full N1 completion remains below 0.45 USD.",
+    "N2 remains quote-only after N1 completion and requires a separate financial authorization before any trades download."
+  ]
+}
