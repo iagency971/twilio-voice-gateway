@@ -1,0 +1,577 @@
+{
+  "overall_classes": [
+    0,
+    1
+  ],
+  "outer": [
+    {
+      "outer_year": 2011,
+      "train_classes": [
+        0,
+        1
+      ],
+      "test_classes": [
+        0,
+        1
+      ],
+      "train_events": 26145,
+      "test_events": 3982,
+      "inner": [
+        {
+          "validation_year": 2012,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22759
+        },
+        {
+          "validation_year": 2013,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22214
+        },
+        {
+          "validation_year": 2014,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22341
+        },
+        {
+          "validation_year": 2015,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22470
+        },
+        {
+          "validation_year": 2016,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22321
+        },
+        {
+          "validation_year": 2017,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22639
+        },
+        {
+          "validation_year": 2018,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22126
+        }
+      ]
+    },
+    {
+      "outer_year": 2012,
+      "train_classes": [
+        0,
+        1
+      ],
+      "test_classes": [
+        0,
+        1
+      ],
+      "train_events": 26741,
+      "test_events": 3386,
+      "inner": [
+        {
+          "validation_year": 2011,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22759
+        },
+        {
+          "validation_year": 2013,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22810
+        },
+        {
+          "validation_year": 2014,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22937
+        },
+        {
+          "validation_year": 2015,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 23066
+        },
+        {
+          "validation_year": 2016,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22917
+        },
+        {
+          "validation_year": 2017,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 23235
+        },
+        {
+          "validation_year": 2018,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22722
+        }
+      ]
+    },
+    {
+      "outer_year": 2013,
+      "train_classes": [
+        0,
+        1
+      ],
+      "test_classes": [
+        0,
+        1
+      ],
+      "train_events": 26196,
+      "test_events": 3931,
+      "inner": [
+        {
+          "validation_year": 2011,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22214
+        },
+        {
+          "validation_year": 2012,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22810
+        },
+        {
+          "validation_year": 2014,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22392
+        },
+        {
+          "validation_year": 2015,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22521
+        },
+        {
+          "validation_year": 2016,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22372
+        },
+        {
+          "validation_year": 2017,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22690
+        },
+        {
+          "validation_year": 2018,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22177
+        }
+      ]
+    },
+    {
+      "outer_year": 2014,
+      "train_classes": [
+        0,
+        1
+      ],
+      "test_classes": [
+        0,
+        1
+      ],
+      "train_events": 26323,
+      "test_events": 3804,
+      "inner": [
+        {
+          "validation_year": 2011,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22341
+        },
+        {
+          "validation_year": 2012,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22937
+        },
+        {
+          "validation_year": 2013,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22392
+        },
+        {
+          "validation_year": 2015,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22648
+        },
+        {
+          "validation_year": 2016,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22499
+        },
+        {
+          "validation_year": 2017,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22817
+        },
+        {
+          "validation_year": 2018,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22304
+        }
+      ]
+    },
+    {
+      "outer_year": 2015,
+      "train_classes": [
+        0,
+        1
+      ],
+      "test_classes": [
+        0,
+        1
+      ],
+      "train_events": 26452,
+      "test_events": 3675,
+      "inner": [
+        {
+          "validation_year": 2011,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22470
+        },
+        {
+          "validation_year": 2012,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 23066
+        },
+        {
+          "validation_year": 2013,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22521
+        },
+        {
+          "validation_year": 2014,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22648
+        },
+        {
+          "validation_year": 2016,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22628
+        },
+        {
+          "validation_year": 2017,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22946
+        },
+        {
+          "validation_year": 2018,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22433
+        }
+      ]
+    },
+    {
+      "outer_year": 2016,
+      "train_classes": [
+        0,
+        1
+      ],
+      "test_classes": [
+        0,
+        1
+      ],
+      "train_events": 26303,
+      "test_events": 3824,
+      "inner": [
+        {
+          "validation_year": 2011,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22321
+        },
+        {
+          "validation_year": 2012,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22917
+        },
+        {
+          "validation_year": 2013,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22372
+        },
+        {
+          "validation_year": 2014,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22499
+        },
+        {
+          "validation_year": 2015,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22628
+        },
+        {
+          "validation_year": 2017,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22797
+        },
+        {
+          "validation_year": 2018,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22284
+        }
+      ]
+    },
+    {
+      "outer_year": 2017,
+      "train_classes": [
+        0,
+        1
+      ],
+      "test_classes": [
+        0,
+        1
+      ],
+      "train_events": 26621,
+      "test_events": 3506,
+      "inner": [
+        {
+          "validation_year": 2011,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22639
+        },
+        {
+          "validation_year": 2012,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 23235
+        },
+        {
+          "validation_year": 2013,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22690
+        },
+        {
+          "validation_year": 2014,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22817
+        },
+        {
+          "validation_year": 2015,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22946
+        },
+        {
+          "validation_year": 2016,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22797
+        },
+        {
+          "validation_year": 2018,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22602
+        }
+      ]
+    },
+    {
+      "outer_year": 2018,
+      "train_classes": [
+        0,
+        1
+      ],
+      "test_classes": [
+        0,
+        1
+      ],
+      "train_events": 26108,
+      "test_events": 4019,
+      "inner": [
+        {
+          "validation_year": 2011,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22126
+        },
+        {
+          "validation_year": 2012,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22722
+        },
+        {
+          "validation_year": 2013,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22177
+        },
+        {
+          "validation_year": 2014,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22304
+        },
+        {
+          "validation_year": 2015,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22433
+        },
+        {
+          "validation_year": 2016,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22284
+        },
+        {
+          "validation_year": 2017,
+          "inner_train_classes": [
+            0,
+            1
+          ],
+          "inner_train_events": 22602
+        }
+      ]
+    }
+  ],
+  "identifiable": true
+}
