@@ -1,5 +1,5 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V9",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V10",
   "workflows": {
     "xau-comex-dev-rank1-vantage-outcomes.yml": {
       "found": true,
@@ -10,23 +10,25 @@
       "head_sha": "575b107b67a90fe97e70db610ec3ef68e216fda7",
       "jobs_total": 8,
       "by_status": {
+        "completed": 3,
         "in_progress": 4,
-        "queued": 4
+        "queued": 1
       },
       "by_conclusion": {
-        "NONE": 8
+        "success": 3,
+        "NONE": 5
       },
       "jobs": [
         {
           "id": 95917872602,
           "name": "annual (2013)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95917872626,
           "name": "annual (2017)",
-          "status": "queued",
+          "status": "in_progress",
           "conclusion": null
         },
         {
@@ -38,7 +40,7 @@
         {
           "id": 95917872638,
           "name": "annual (2015)",
-          "status": "queued",
+          "status": "in_progress",
           "conclusion": null
         },
         {
@@ -50,19 +52,19 @@
         {
           "id": 95917872687,
           "name": "annual (2014)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95917872701,
           "name": "annual (2011)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95917872706,
           "name": "annual (2016)",
-          "status": "queued",
+          "status": "in_progress",
           "conclusion": null
         }
       ]
