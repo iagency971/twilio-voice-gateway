@@ -1,0 +1,8 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_EXPANDED_CONTROL_FEASIBILITY_TRIGGER_V1",
+  "purpose": "zero-outcome zero-spend feasibility of expanding control pool from already-owned GC.n.0 M1 context",
+  "post_anchor_outcomes_read": false,
+  "reaction_outcomes_computed": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false
+}
