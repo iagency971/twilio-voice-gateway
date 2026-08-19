@@ -1,0 +1,51 @@
+name: XAU Rejected Heterogeneity V1 Preflight 2011
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-rejected-heterogeneity-preflight.yml'
+permissions:
+  contents: write
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest
+      - name: Frozen engine tests
+        env:
+          PYTHONPATH: xau-multiyear/src
+        run: python -m pytest -q xau-multiyear/tests/test_vantage_overlay.py xau-multiyear/tests/test_entries_v1.py xau-multiyear/tests/test_entries_v2.py
+      - name: Rehydrate canonical 2011 input
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2010-01 --to-month 2012-01 --out /tmp/xau_rejected_2011.csv
+      - name: Reconstruct full Phase-C grid and assert parity
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python xau-multiyear/scripts/run_xau_rejected_heterogeneity_annual_v1.py /tmp/xau_rejected_2011.csv \
+            --year 2011 \
+            --expected-annual-summary xau-final-results/phase_c_vantage_raw_2011_2025/annual/2011_summary.csv \
+            --out /tmp/rejected_2011
+      - name: Publish status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests,pathlib
+          p=json.load(open('/tmp/rejected_2011/parity_2011.json'))
+          payload=json.dumps({'status':'PREFLIGHT_PASS','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'year':2011,'parity_pass':p['pass'],'expected_cells':p['expected_cells'],'actual_cells':p['actual_cells']},indent=2).encode()
+          path='xau-final-results/xau_rejected_heterogeneity_v1/PREFLIGHT_STATUS.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+          body={'message':'publish rejected heterogeneity preflight status [skip ci]','content':base64.b64encode(payload).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-rejected-heterogeneity-preflight-2011
+          path: /tmp/rejected_2011
+          retention-days: 7
