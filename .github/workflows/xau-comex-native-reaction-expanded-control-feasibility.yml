@@ -12,7 +12,7 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,9 +34,9 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32205624009
-      - name: Run expanded-control feasibility — ZERO OUTCOME / ZERO MARKET API
+      - name: Run vectorized expanded-control feasibility — ZERO OUTCOME / ZERO MARKET API
         run: |
-          python xau-multiyear/scripts/audit_comex_native_reaction_expanded_controls.py \
+          python xau-multiyear/scripts/audit_comex_native_reaction_expanded_controls_v2.py \
             --context-root /tmp/context \
             --n1-root /tmp/n1 \
             --n1-market-manifest xau-final-results/comex_dev_rank1_native_n1_quote_v1/native_n1_market_request_manifest.csv \
@@ -49,6 +49,7 @@ jobs:
           python - <<'PY'
           import json
           z=json.load(open('/tmp/audit/expanded_control_feasibility.json'))
+          assert z['version']=='COMEX_DEV_RANK1_NATIVE_REACTION_EXPANDED_CONTROL_FEASIBILITY_V2'
           assert z['post_anchor_outcomes_read'] is False
           assert z['reaction_outcomes_computed'] is False
           assert z['mfe_mae_computed'] is False
@@ -59,7 +60,7 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: comex-dev-rank1-native-reaction-expanded-control-feasibility-v1
+          name: comex-dev-rank1-native-reaction-expanded-control-feasibility-v2
           path: /tmp/audit/
           retention-days: 90
       - name: Publish compact expanded-control feasibility
@@ -75,7 +76,7 @@ jobs:
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
           for name in names:
               p=src/name;dst=f'{root}/{name}';u=f'{base}/contents/{dst}';old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
-              body={'message':f'publish expanded native control feasibility {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              body={'message':f'publish expanded native control feasibility V2 {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
               if sha:body['sha']=sha
               r=requests.put(u,headers=h,json=body);r.raise_for_status()
           PY
