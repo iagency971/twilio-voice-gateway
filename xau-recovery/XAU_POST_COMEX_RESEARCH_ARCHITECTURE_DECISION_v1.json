@@ -1,79 +1,20 @@
 {
-  "version": "XAU_POST_COMEX_RESEARCH_ARCHITECTURE_DECISION_V1",
-  "date": "2026-08-19",
-  "decision": "PIVOT_TO_PRICE_ONLY_CORE_PLUS_NEW_SECOND_MOTOR",
-  "new_market_data_spend_authorized": false,
-  "core": {
-    "status": "FROZEN_BENCHMARK_NOT_LIVE_READY",
-    "strategy_family": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY+CLEAN_REJECTION+STRUCTURAL",
-    "historical_panel": "2011-2025",
-    "reference_rr": 1.5,
-    "trades": 304,
-    "average_trades_per_year": 20.2666666667,
-    "primary_weighted_net_r_per_trade": 0.27992,
-    "primary_positive_years": 13,
-    "primary_active_years": 15,
-    "stress_weighted_net_r_per_trade": 0.18961,
-    "stress_positive_years": 12,
-    "rr_selection_authorized": false
-  },
-  "comex_existing_poi": {
-    "status": "CLOSED_NO_GO",
-    "feature_group_verdicts_no_go": 18,
-    "feature_group_verdicts_total": 18,
-    "rescue_in_dev_rank2_authorized": false
-  },
-  "comex_native_rejection": {
-    "status": "CLOSED_NO_GO",
-    "matched_events": 227,
-    "matched_dates": 81,
-    "theta_nrb15": -0.01778503489907026,
-    "bootstrap_ci95_lower": -0.03899457780258087,
-    "bootstrap_ci95_upper": 0.0012119706857348835,
-    "raw_reaction_balance_ticks": -3.6211934156379595,
-    "decision": "NO_GO_DEV_RANK2_NATIVE_REACTION"
-  },
-  "comex_continuation_hypothesis": {
-    "status": "PARKED_HYPOTHESIS_GENERATION_ONLY",
-    "old_w5_theta": -0.01488316660018305,
-    "old_w5_holm_p": 0.04451910961780764,
-    "old_227_outcomes_allowed_for_confirmation_or_tuning": false,
-    "new_independent_outcomes_required": true,
-    "next_priority": false
-  },
-  "next_experiment": {
-    "name": "XAU_PRICE_ONLY_M5_FREQUENCY_EXTENSION_V1",
-    "status": "AUTHORIZED_FOR_PREREGISTRATION_AND_ZERO_NEW_DATA_DEVELOPMENT",
-    "only_structural_change": "ADD_5MIN_TO_DISPLACEMENT_ORIGIN_TIMEFRAMES",
-    "frozen_existing_doz_timeframes": ["15min", "30min", "1h"],
-    "new_incremental_doz_timeframe": "5min",
-    "doz_displacement_quantile": 0.90,
-    "doz_efficiency_min": 0.60,
-    "doz_base_max_bars": 5,
-    "stack_overlap_threshold": 0.50,
-    "sample": "DOZ_OBJECTIVE_ONLY",
-    "entry_model": "CLEAN_REJECTION",
-    "risk_rule": "STRUCTURAL",
-    "horizon_minutes": 120,
-    "target_r_surface": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
-    "single_rr_selection_allowed": false,
-    "new_session_filter_allowed": false,
-    "new_direction_filter_allowed": false,
-    "new_fvg_filter_allowed": false,
-    "new_score_allowed": false,
-    "new_comex_filter_allowed": false,
-    "m5_incremental_duplicates_of_core_excluded": true,
-    "historical_2011_2025_status": "DEVELOPMENT_FALSIFICATION_ONLY",
-    "utility_min_incremental_distinct_trades_15y": 304,
-    "overall_pass_requires_edge_and_utility": true,
-    "future_prospective_confirmation_required": true
-  },
-  "forbidden_after_m5_outcomes": [
-    "TRY_M3_M10_M20_AS_RESCUE_ON_SAME_PANEL",
-    "SELECT_BEST_RR_POST_HOC",
-    "ADD_SESSION_OR_DIRECTION_FILTER_POST_HOC",
-    "ADD_COMEX_FILTER_POST_HOC",
-    "RELABEL_HISTORICAL_DEVELOPMENT_AS_PROSPECTIVE_CONFIRMATION"
-  ],
-  "authority_memo": "xau-multiyear/docs/PRO_DECISION_MEMO_XAU_RESEARCH_ARCHITECTURE_POST_COMEX_2026-08-19.md"
+  "version": "XAU_POST_COMEX_RESEARCH_ARCHITECTURE_DECISION_V1_INVALIDATED",
+  "date_corrected": "2026-08-19",
+  "status": "INVALIDATED_PREPRO_NOT_AUTHORITY",
+  "reason": "CREATED_IN_TRES_ELEVE_BUT_INCORRECTLY_ATTRIBUTED_TO_PRO",
+  "original_commit": "d44bc48b323ec0f91eea0a4770189648a8752d57",
+  "original_decision": "PIVOT_TO_PRICE_ONLY_CORE_PLUS_NEW_SECOND_MOTOR",
+  "original_m5_proposal": "XAU_PRICE_ONLY_M5_FREQUENCY_EXTENSION_V1",
+  "original_m5_authorization_withdrawn": true,
+  "experiment_launched_under_invalid_decision": false,
+  "new_market_data_spend_under_invalid_decision": 0,
+  "superseded_by": {
+    "memo": "xau-multiyear/docs/PRO_DECISION_MEMO_XAU_CORE_VALIDATION_FIRST_2026-08-19.md",
+    "machine_readable_decision": "xau-recovery/XAU_POST_COMEX_PRO_DECISION_v2.json",
+    "actual_pro_decision": "CONDITIONAL_CONTINUE_CORE_VALIDATION_FIRST",
+    "authorized_next_experiment": "XAU_CORE_EVIDENCE_AUDIT_V1",
+    "m5_status": "NOT_AUTHORIZED_AT_THIS_GATE",
+    "comex_continuation_status": "PARKED_HYPOTHESIS_GENERATION_ONLY"
+  }
 }
