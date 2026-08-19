@@ -1,68 +1,69 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V8",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V9",
   "workflows": {
     "xau-comex-dev-rank1-vantage-outcomes.yml": {
       "found": true,
-      "run_id": 32201658095,
+      "run_id": 32202096973,
       "event": "push",
-      "status": "completed",
-      "conclusion": "failure",
-      "head_sha": "3751ab7c155996d9f6ee891fcb29a2ac7b68a2c6",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "575b107b67a90fe97e70db610ec3ef68e216fda7",
       "jobs_total": 8,
       "by_status": {
-        "completed": 8
+        "in_progress": 4,
+        "queued": 4
       },
       "by_conclusion": {
-        "failure": 8
+        "NONE": 8
       },
       "jobs": [
         {
-          "id": 95916579438,
-          "name": "annual (2011)",
-          "status": "completed",
-          "conclusion": "failure"
-        },
-        {
-          "id": 95916579453,
-          "name": "annual (2016)",
-          "status": "completed",
-          "conclusion": "failure"
-        },
-        {
-          "id": 95916579479,
-          "name": "annual (2017)",
-          "status": "completed",
-          "conclusion": "failure"
-        },
-        {
-          "id": 95916579526,
+          "id": 95917872602,
           "name": "annual (2013)",
-          "status": "completed",
-          "conclusion": "failure"
+          "status": "in_progress",
+          "conclusion": null
         },
         {
-          "id": 95916579532,
-          "name": "annual (2012)",
-          "status": "completed",
-          "conclusion": "failure"
+          "id": 95917872626,
+          "name": "annual (2017)",
+          "status": "queued",
+          "conclusion": null
         },
         {
-          "id": 95916579533,
-          "name": "annual (2014)",
-          "status": "completed",
-          "conclusion": "failure"
-        },
-        {
-          "id": 95916579544,
+          "id": 95917872629,
           "name": "annual (2018)",
-          "status": "completed",
-          "conclusion": "failure"
+          "status": "queued",
+          "conclusion": null
         },
         {
-          "id": 95916579613,
+          "id": 95917872638,
           "name": "annual (2015)",
-          "status": "completed",
-          "conclusion": "failure"
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 95917872652,
+          "name": "annual (2012)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95917872687,
+          "name": "annual (2014)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95917872701,
+          "name": "annual (2011)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95917872706,
+          "name": "annual (2016)",
+          "status": "queued",
+          "conclusion": null
         }
       ]
     },
