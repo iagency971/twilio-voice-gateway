@@ -7,7 +7,30 @@ on:
 permissions:
   contents: write
 jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish TEMPORAL_INTEGRITY_RUNNING marker
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          path='xau-final-results/xau_core_temporal_stack_integrity_v1/RUN_STATUS.json'
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+          data=json.dumps({'status':'TEMPORAL_INTEGRITY_RUNNING','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'source_commit':os.environ.get('GITHUB_SHA'),'pnl_inspected_or_used':False},indent=2).encode()
+          body={'message':'mark temporal stack integrity audit running [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+          if sha:body['sha']=sha
+          r=requests.put(u,headers=h,json=body);r.raise_for_status()
+          PY
+
   annual:
+    needs: precheck
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -103,7 +126,7 @@ jobs:
           BRANCH: agent/xau-core-evidence-audit-v1
         run: |
           python - <<'PY'
-          import base64,os,pathlib,requests,time
+          import base64,json,os,pathlib,requests,time
           out=pathlib.Path('/tmp/stack_integrity_final')
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
           root='xau-final-results/xau_core_temporal_stack_integrity_v1'
@@ -120,6 +143,8 @@ jobs:
               raise RuntimeError(path)
           for p in out.iterdir():
               if p.is_file():put(f'{root}/{p.name}',p.read_bytes())
+          status={'status':'COMPLETE','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'source_commit':os.environ.get('GITHUB_SHA')}
+          put(f'{root}/RUN_STATUS.json',json.dumps(status,indent=2).encode())
           PY
       - uses: actions/upload-artifact@v4
         with:
