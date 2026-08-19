@@ -1,0 +1,8 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_FALLBACK_TRIGGER_V1",
+  "purpose": "zero-outcome audit of source-session final-30m volatility fallback for early J+1 contacts",
+  "post_contact_values_used_for_matching": false,
+  "reaction_outcomes_computed": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false
+}
