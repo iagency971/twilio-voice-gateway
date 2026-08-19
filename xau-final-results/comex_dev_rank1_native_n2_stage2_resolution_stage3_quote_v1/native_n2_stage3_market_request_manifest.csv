@@ -1,0 +1,2 @@
+market_request_id,request_type,eligible_next_research_date,source_instrument_id,dataset,schema,symbols,stype_in,start,end,candidate_minute_count,cost_usd
+05b9848a89d1a46721585e99,NATIVE_N2_STAGE3_EXACT_TRADES,2012-09-07,118951,GLBX.MDP3,trades,118951,instrument_id,2012-09-07T12:30:00+00:00,2012-09-07T12:31:00+00:00,1,0.024528264999
