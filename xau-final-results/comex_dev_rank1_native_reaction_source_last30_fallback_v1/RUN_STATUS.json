@@ -1,0 +1,92 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_STATUS_V1",
+  "run_id": 32262335702,
+  "status": "in_progress",
+  "conclusion": null,
+  "head_sha": "d9251dae0e6abdc727a8cb8237d16473928322e1",
+  "jobs": [
+    {
+      "id": 96098316673,
+      "name": "audit",
+      "status": "in_progress",
+      "conclusion": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python -m pip install pandas==2.2.3 numpy databento requests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Download already-owned source raw artifacts \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Recover early source artifact 06610 explicitly",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Recover early source artifact 010384 explicitly",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Locate already-paid pilot raw artifact \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Download already-paid pilot raw \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Download already-owned GC.n.0 M1 context \u2014 GitHub only",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "Download owned N1 raw M1 blocks \u2014 GitHub only",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Source-last30 early fallback audit \u2014 ZERO OUTCOME / ZERO MARKET API",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Hard guard \u2014 no treated contact-minute matching / no outcome / no spend",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Publish compact source-last30 fallback audit",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    }
+  ]
+}
