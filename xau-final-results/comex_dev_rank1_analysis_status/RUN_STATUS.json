@@ -1,5 +1,5 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V13",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V14",
   "workflows": {
     "xau-comex-dev-rank1-net-r.yml": {
       "found": true,
@@ -356,11 +356,11 @@
     },
     "xau-comex-dev-rank1-native-n1-quote.yml": {
       "found": true,
-      "run_id": 32203391613,
+      "run_id": 32203734731,
       "event": "push",
       "status": "in_progress",
       "conclusion": null,
-      "head_sha": "b36a9dde4906d404e38f933385f19e13fcce8b0c",
+      "head_sha": "56e7af8cf91df404af49f18631e6703d36bf6b52",
       "jobs_total": 1,
       "by_status": {
         "in_progress": 1
@@ -370,7 +370,7 @@
       },
       "jobs": [
         {
-          "id": 95921679321,
+          "id": 95922691677,
           "name": "quote",
           "status": "in_progress",
           "conclusion": null
