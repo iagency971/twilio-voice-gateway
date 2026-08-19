@@ -1,0 +1,72 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_FALLBACK_V1",
+  "post_contact_values_used_for_matching": false,
+  "post_anchor_outcomes_read": false,
+  "reaction_outcomes_computed": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "source_sessions": 92,
+  "source_last30_all_positive": false,
+  "parity_summary": {
+    "n1_blocks": 92,
+    "stable_same_iid_blocks": 85,
+    "stable_blocks_exact_parity": 85,
+    "stable_parity_all_pass": true
+  },
+  "support": {
+    "PRIOR_CLOSE_ONLY": {
+      "defined_events": 235,
+      "eligible_events": 234,
+      "matched_events": 227,
+      "matched_dates": 81,
+      "match_rate": 0.9659574468085106,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": true,
+        "every_source_year_full_match_rate_ge_0_75": true
+      },
+      "support_gate_pass": true
+    },
+    "BAR_OPEN_FALLBACK": {
+      "defined_events": 235,
+      "eligible_events": 234,
+      "matched_events": 227,
+      "matched_dates": 81,
+      "match_rate": 0.9659574468085106,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": true,
+        "every_source_year_full_match_rate_ge_0_75": true
+      },
+      "support_gate_pass": true
+    }
+  },
+  "control_structure": {
+    "PRIOR_CLOSE_ONLY": {
+      "control_rows": 2293182,
+      "blocks": 1739,
+      "reserved_non_dev_rank1_dates": 261,
+      "bar_open_fallback": false
+    },
+    "BAR_OPEN_FALLBACK": {
+      "control_rows": 2294986,
+      "blocks": 1739,
+      "reserved_non_dev_rank1_dates": 261,
+      "bar_open_fallback": true
+    }
+  },
+  "source_last30_sha256": "3d762b8184c5bd2f6e67ab9219aea864553ffc495530c0af3da823ae59403c52",
+  "event_context_sha256": "1423dd287928481391be47301017cb1a73680a24cd9dc6e6211a039949e1118b",
+  "notes": [
+    "Mature contacts use J+1 local 30m range ending strictly before contact-minute start m0.",
+    "Early contacts use source-session final-30m range, fully known before J+1, plus full source-session range.",
+    "PRIOR_CLOSE_ONLY retains the Pro pseudo-approach control rule exactly.",
+    "BAR_OPEN_FALLBACK changes only control pseudo-approach when no prior different M1 close exists; it uses the already-completed control minute open relative to its close before the post-anchor W15 outcome and requires Pro approval if adopted.",
+    "No contact-minute value from the treated event is used in matching.",
+    "No W15 reaction outcome is read or computed."
+  ]
+}
