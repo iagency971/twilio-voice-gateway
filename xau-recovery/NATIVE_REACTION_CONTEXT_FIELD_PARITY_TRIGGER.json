@@ -1,0 +1,7 @@
+{
+  "version": "NATIVE_REACTION_CONTEXT_FIELD_PARITY_TRIGGER_V1",
+  "purpose": "Diagnose GC.n.0 versus canonical N1 parity by timestamp/instrument/OHLC/volume without reading reaction outcomes or calling market data APIs.",
+  "post_anchor_outcomes_authorized": false,
+  "market_data_download_authorized": false,
+  "created_date": "2026-08-19"
+}
