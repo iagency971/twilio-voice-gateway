@@ -1,0 +1,2 @@
+level_id,source_research_date,eligible_next_research_date,source_instrument_id,level_type,contact_tick_price,stage3_candidate_minute_start_utc,stage3_market_request_id,stage3_trade_records_in_candidate_minute,stage3_exact_tick_trade_count,stage3_exact_contact,stage3_first_exact_contact_time_utc,candidate_minutes_total,final_resolution
+1223ab410b28e74ebbed372e,2012-09-06,2012-09-07,118951,VAL,1702.0,2012-09-07T12:30:00+00:00,05b9848a89d1a46721585e99,4694,7,True,2012-09-07T12:30:00.554000+00:00,3,RESOLVED_CONTACT_STAGE3
