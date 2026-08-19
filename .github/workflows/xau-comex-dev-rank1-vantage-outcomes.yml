@@ -1,4 +1,4 @@
-# trigger-once: comex-dev-rank1-vantage-outcomes-2026-08-18
+# trigger-once: comex-dev-rank1-vantage-outcomes-import-fix-2026-08-18
 name: XAU COMEX DEV_RANK1 Vantage Outcomes
 
 on:
