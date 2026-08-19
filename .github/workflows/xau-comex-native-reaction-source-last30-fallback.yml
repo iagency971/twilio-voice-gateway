@@ -19,6 +19,7 @@ jobs:
         with:
           ref: agent/xau-comex-acquisition-plan
       - run: python -m pip install pandas==2.2.3 numpy databento requests
+
       - name: Download already-owned source raw artifacts — GitHub only
         uses: actions/download-artifact@v4
         with:
@@ -28,6 +29,7 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32179377819
+
       - name: Recover early source artifact 06610 explicitly
         uses: actions/download-artifact@v4
         with:
@@ -36,6 +38,7 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32179377819
+
       - name: Recover early source artifact 010384 explicitly
         uses: actions/download-artifact@v4
         with:
@@ -44,6 +47,7 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32179377819
+
       - name: Locate already-paid pilot raw artifact — GitHub only
         id: pilot
         env:
@@ -51,14 +55,20 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           python - <<'PY' >> "$GITHUB_OUTPUT"
-          import os,requests
-          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}";runs=requests.get(f"{base}/actions/workflows/xau-comex-v4-pilot12-metadata.yml/runs",headers=h,params={'branch':'agent/xau-comex-acquisition-plan','status':'success','per_page':50}).json().get('workflow_runs',[]);found=None
+          import os, requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          runs=requests.get(f"{base}/actions/workflows/xau-comex-v4-pilot12-metadata.yml/runs",headers=h,params={'branch':'agent/xau-comex-acquisition-plan','status':'success','per_page':50}).json().get('workflow_runs',[])
+          found=None
           for r in runs:
               arts=requests.get(f"{base}/actions/runs/{r['id']}/artifacts",headers=h,params={'per_page':100}).json().get('artifacts',[])
-              if any(x['name']=='comex-v4-pilot12-raw-and-qa' and not x.get('expired') for x in arts):found=r['id'];break
-          if not found:raise SystemExit('pilot raw artifact not found')
+              if any(x['name']=='comex-v4-pilot12-raw-and-qa' and not x.get('expired') for x in arts):
+                  found=r['id']; break
+          if not found:
+              raise SystemExit('pilot raw artifact not found')
           print(f'run_id={found}')
           PY
+
       - name: Download already-paid pilot raw — GitHub only
         uses: actions/download-artifact@v4
         with:
@@ -67,6 +77,7 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: ${{ steps.pilot.outputs.run_id }}
+
       - name: Download already-owned GC.n.0 M1 context — GitHub only
         uses: actions/download-artifact@v4
         with:
@@ -75,6 +86,7 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32179377819
+
       - name: Download owned N1 raw M1 blocks — GitHub only
         uses: actions/download-artifact@v4
         with:
@@ -83,6 +95,7 @@ jobs:
           github-token: ${{ github.token }}
           repository: iagency971/twilio-voice-gateway
           run-id: 32205624009
+
       - name: Source-last30 early fallback audit — ZERO OUTCOME / ZERO MARKET API
         run: |
           python xau-multiyear/scripts/audit_comex_native_reaction_source_last30_fallback.py \
@@ -99,6 +112,25 @@ jobs:
             --n1-market-manifest xau-final-results/comex_dev_rank1_native_n1_quote_v1/native_n1_market_request_manifest.csv \
             --events xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome/treated_event_causal_context.csv \
             --out /tmp/audit
+
+      - name: Publish ZERO-OUTCOME diagnostic before hard guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64, os, pathlib, requests
+          p=pathlib.Path('/tmp/audit/source_last30_fallback.json')
+          dst='xau-final-results/comex_dev_rank1_native_reaction_source_last30_fallback_diagnostic_v1/source_last30_fallback.json'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"; u=f'{base}/contents/{dst}'
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+          body={'message':'publish source-last30 zero-outcome diagnostic [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          PY
+
       - name: Hard guard — no treated contact-minute matching / no outcome / no spend
         run: |
           python - <<'PY'
@@ -113,11 +145,13 @@ jobs:
           assert z['parity_summary']['stable_parity_all_pass'] is True
           print('SOURCE_LAST30_FALLBACK_ZERO_OUTCOME_OK',z['support'])
           PY
+
       - uses: actions/upload-artifact@v4
         with:
           name: comex-dev-rank1-native-reaction-source-last30-fallback-v1
           path: /tmp/audit/
           retention-days: 90
+
       - name: Publish compact source-last30 fallback audit
         env:
           GH_TOKEN: ${{ github.token }}
@@ -125,13 +159,14 @@ jobs:
           BRANCH: agent/xau-comex-acquisition-plan
         run: |
           python - <<'PY'
-          import base64,os,pathlib,requests
-          src=pathlib.Path('/tmp/audit');root='xau-final-results/comex_dev_rank1_native_reaction_source_last30_fallback_v1'
+          import base64, os, pathlib, requests
+          src=pathlib.Path('/tmp/audit'); root='xau-final-results/comex_dev_rank1_native_reaction_source_last30_fallback_v1'
           names=['source_last30_fallback.json','source_last30_provenance.csv','event_source_last30_context.csv','continuous_vs_raw_n1_parity.csv','support_prior_close_only.csv','support_prior_close_only_by_year.csv','blocks_prior_close_only.csv','support_bar_open_fallback.csv','support_bar_open_fallback_by_year.csv','blocks_bar_open_fallback.csv']
-          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}; base=f"https://api.github.com/repos/{os.environ['REPO']}"
           for name in names:
-              p=src/name;dst=f'{root}/{name}';u=f'{base}/contents/{dst}';old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+              p=src/name; dst=f'{root}/{name}'; u=f'{base}/contents/{dst}'
+              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
               body={'message':f'publish source-last30 fallback audit {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
-              if sha:body['sha']=sha
-              r=requests.put(u,headers=h,json=body);r.raise_for_status()
+              if sha: body['sha']=sha
+              r=requests.put(u,headers=h,json=body); r.raise_for_status()
           PY
