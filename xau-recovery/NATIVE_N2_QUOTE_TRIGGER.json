@@ -1,0 +1,19 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_QUOTE_TRIGGER_V1",
+  "n1_complete_run_id": 32205624009,
+  "n1_complete_artifact_id": 9349552038,
+  "n1_complete_artifact_name": "comex-dev-rank1-native-n1-raw-complete-v1",
+  "n1_requests": 92,
+  "n1_records": 121251,
+  "n1_confirmed_success_cost_upper_bound_usd": 0.442661270503,
+  "n1_possible_prior_502_reserve_usd": 0.004954114556,
+  "n1_worst_case_total_cost_usd": 0.447615385059,
+  "n1_hard_cap_usd": 0.45,
+  "authorization": "QUOTE_ONLY",
+  "n2_download_authorized": false,
+  "dev_rank2_authorized": false,
+  "retro_confirm_authorized": false,
+  "locked_comex_test_authorized": false,
+  "screening_rule": "M1 low/high spanning the frozen contact tick creates only a candidate minute; M1 never confirms contact.",
+  "next_action": "metadata.get_cost only for deduplicated exact-trades candidate intervals; publish result and stop before any N2 download"
+}
