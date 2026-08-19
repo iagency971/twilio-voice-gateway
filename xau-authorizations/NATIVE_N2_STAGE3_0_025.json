@@ -1,0 +1,15 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE3_AUTH_V1",
+  "authorization": "OK NATIVE N2 STAGE3, plafond 0,025 $",
+  "hard_cap_usd": 0.025,
+  "exact_frozen_quote_usd": 0.024528264999,
+  "stage3_levels": 1,
+  "stage3_market_requests": 1,
+  "stage3_level_manifest_sha256": "1472c3d0fae9cc1de56635d1009abeff998b80ebbb186e0dd9bdd694f76b2a6e",
+  "stage3_market_request_manifest_sha256": "eed47cb6427563ec10a5d3c930d7d550d4a09108888b1830af184e693d237f28",
+  "one_shot": true,
+  "later_stage_download_authorized": false,
+  "dev_rank2_authorized": false,
+  "retro_confirm_authorized": false,
+  "locked_comex_test_authorized": false
+}
