@@ -1,0 +1,12 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE3_ACQUISITION_COMPLETE_V1",
+  "complete": true,
+  "requests": 1,
+  "confirmed_success_cost_upper_bound_usd": 0.024528264999,
+  "hard_cap_usd": 0.025,
+  "later_stage_download_authorized": false,
+  "dev_rank2_opened": false,
+  "retro_confirm_opened": false,
+  "locked_comex_test_opened": false,
+  "summary_sha256": "9eae9a04892caadbf20c908084e228d8a75941ca6c38f0f1d5a20578e31b3e97"
+}
