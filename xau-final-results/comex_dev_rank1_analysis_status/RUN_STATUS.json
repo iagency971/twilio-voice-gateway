@@ -1,6 +1,52 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V14",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V15",
   "workflows": {
+    "xau-comex-dev-rank1-native-n1-acquire.yml": {
+      "found": true,
+      "run_id": 32204581441,
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "78efa13f5107b7846488964684f6260653f44ee0",
+      "jobs_total": 1,
+      "by_status": {
+        "in_progress": 1
+      },
+      "by_conclusion": {
+        "NONE": 1
+      },
+      "jobs": [
+        {
+          "id": 95925176317,
+          "name": "acquire-and-quote-n2",
+          "status": "in_progress",
+          "conclusion": null
+        }
+      ]
+    },
+    "xau-comex-dev-rank1-native-n1-quote.yml": {
+      "found": true,
+      "run_id": 32203734731,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "56e7af8cf91df404af49f18631e6703d36bf6b52",
+      "jobs_total": 1,
+      "by_status": {
+        "completed": 1
+      },
+      "by_conclusion": {
+        "success": 1
+      },
+      "jobs": [
+        {
+          "id": 95922691677,
+          "name": "quote",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
     "xau-comex-dev-rank1-net-r.yml": {
       "found": true,
       "run_id": 32202482592,
@@ -351,29 +397,6 @@
           "name": "aggregate",
           "status": "completed",
           "conclusion": "success"
-        }
-      ]
-    },
-    "xau-comex-dev-rank1-native-n1-quote.yml": {
-      "found": true,
-      "run_id": 32203734731,
-      "event": "push",
-      "status": "in_progress",
-      "conclusion": null,
-      "head_sha": "56e7af8cf91df404af49f18631e6703d36bf6b52",
-      "jobs_total": 1,
-      "by_status": {
-        "in_progress": 1
-      },
-      "by_conclusion": {
-        "NONE": 1
-      },
-      "jobs": [
-        {
-          "id": 95922691677,
-          "name": "quote",
-          "status": "in_progress",
-          "conclusion": null
         }
       ]
     }
