@@ -1,0 +1,87 @@
+# trigger-once: comex-native-n1-metadata-only-2026-08-18
+name: XAU COMEX DEV_RANK1 Native N1 Quote
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-dev-rank1-native-n1-quote.yml']
+
+permissions:
+  actions: read
+  contents: write
+
+env:
+  DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+
+jobs:
+  quote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 numpy databento requests
+      - name: Download already-owned N0 M1 context only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-n0_ohlcv_1m_context_20100606_20190101
+          path: /tmp/context
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Build native N1 manifest and get exact metadata quote only
+        run: |
+          set -euo pipefail
+          DBN=$(find /tmp/context -type f -name '*.dbn.zst' | head -n 1)
+          test -n "$DBN"
+          python xau-multiyear/scripts/build_quote_comex_native_n1.py \
+            --source-levels xau-final-results/comex_dev_rank1_native_source_levels_v1/native_source_levels.csv \
+            --context-dbn "$DBN" \
+            --out /tmp/native_n1
+      - name: Hard QA — metadata only, no download
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          z=json.load(open('/tmp/native_n1/native_n1_quote.json'))
+          assert z['version']=='COMEX_DEV_RANK1_NATIVE_N1_QUOTE_V1'
+          assert z['authorization']=='METADATA_ONLY'
+          assert z['download_performed'] is False
+          assert z['market_data_download_performed'] is False
+          assert z['source_levels']==368 and z['source_sessions']==92
+          assert z['source_requests']==92
+          assert z['unique_market_requests']>0
+          assert z['exact_n1_cost_usd']>=0
+          x=pd.read_csv('/tmp/native_n1/native_n1_source_request_manifest.csv',dtype={'source_instrument_id':str})
+          assert len(x)==92 and x.source_research_date.nunique()==92
+          assert (x.eligible_next_research_date.astype(str)>x.source_research_date.astype(str)).all()
+          assert set(x.schema)=={'ohlcv-1m'} and set(x.stype_in)=={'instrument_id'}
+          print('NATIVE_N1_METADATA_QUOTE_QA_OK',z['exact_n1_cost_usd'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n1-quote-v1
+          path: /tmp/native_n1/
+          retention-days: 90
+      - name: Publish quote and request manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          src=pathlib.Path('/tmp/native_n1');root='xau-final-results/comex_dev_rank1_native_n1_quote_v1'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for name in ['native_n1_quote.json','native_n1_source_request_manifest.csv','native_n1_market_request_manifest.csv','owned_n0_session_calendar.csv']:
+              p=src/name;dst=f'{root}/{name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{dst}";payload=base64.b64encode(p.read_bytes()).decode()
+              for attempt in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':f'publish native N1 metadata quote {name} [skip ci]','content':payload,'branch':os.environ['BRANCH']}
+                  if sha:body['sha']=sha
+                  r=requests.put(u,headers=h,json=body)
+                  if r.status_code in (200,201):break
+                  if r.status_code not in (409,422):r.raise_for_status()
+                  time.sleep(min(10,1+attempt))
+              else:raise SystemExit(f'could not publish {dst}')
+          PY
