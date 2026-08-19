@@ -1,5 +1,5 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V6",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V7",
   "workflows": {
     "xau-comex-dev-rank1-fill-models.yml": {
       "found": true,
@@ -56,163 +56,162 @@
     },
     "xau-comex-dev-rank1-fill-parallel-recovery.yml": {
       "found": true,
-      "run_id": 32198892635,
+      "run_id": 32200920575,
       "event": "push",
-      "status": "queued",
+      "status": "in_progress",
       "conclusion": null,
       "jobs_total": 24,
       "by_status": {
-        "completed": 8,
-        "in_progress": 8,
-        "queued": 8
+        "completed": 16,
+        "in_progress": 8
       },
       "by_conclusion": {
-        "success": 8,
-        "NONE": 16
+        "success": 16,
+        "NONE": 8
       },
       "jobs": [
         {
-          "id": 95908358998,
-          "name": "fold (RECLAIM_PULLBACK, B0, 2013)",
+          "id": 95914388991,
+          "name": "fold (PASSIVE_TOUCH, B1, 2014)",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "id": 95908359004,
-          "name": "fold (RECLAIM_PULLBACK, B1, 2014)",
-          "status": "in_progress",
-          "conclusion": null
-        },
-        {
-          "id": 95908359015,
-          "name": "fold (RECLAIM_PULLBACK, B1, 2012)",
-          "status": "in_progress",
-          "conclusion": null
-        },
-        {
-          "id": 95908359016,
-          "name": "fold (RECLAIM_PULLBACK, B0, 2017)",
+          "id": 95914388993,
+          "name": "fold (PASSIVE_TOUCH, B0, 2018)",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "id": 95908359032,
-          "name": "fold (RECLAIM_PULLBACK, B0, 2011)",
+          "id": 95914389021,
+          "name": "fold (PASSIVE_TOUCH, B0, 2017)",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "id": 95908359038,
-          "name": "fold (RECLAIM_PULLBACK, B0, 2018)",
+          "id": 95914389022,
+          "name": "fold (PASSIVE_TOUCH, B0, 2012)",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "id": 95908359104,
-          "name": "fold (RECLAIM_PULLBACK, B1, 2016)",
-          "status": "in_progress",
-          "conclusion": null
-        },
-        {
-          "id": 95908359106,
-          "name": "fold (RECLAIM_PULLBACK, B0, 2014)",
+          "id": 95914389026,
+          "name": "fold (PASSIVE_TOUCH, B0, 2015)",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "id": 95908359111,
-          "name": "fold (RECLAIM_PULLBACK, B1, 2015)",
-          "status": "in_progress",
-          "conclusion": null
-        },
-        {
-          "id": 95908359143,
-          "name": "fold (RECLAIM_PULLBACK, B1, 2013)",
-          "status": "in_progress",
-          "conclusion": null
-        },
-        {
-          "id": 95908359148,
-          "name": "fold (RECLAIM_PULLBACK, B1, 2017)",
-          "status": "in_progress",
-          "conclusion": null
-        },
-        {
-          "id": 95908359162,
-          "name": "fold (RECLAIM_PULLBACK, B2, 2011)",
-          "status": "queued",
-          "conclusion": null
-        },
-        {
-          "id": 95908359173,
-          "name": "fold (RECLAIM_PULLBACK, B0, 2015)",
+          "id": 95914389027,
+          "name": "fold (PASSIVE_TOUCH, B0, 2014)",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "id": 95908359174,
-          "name": "fold (RECLAIM_PULLBACK, B0, 2016)",
+          "id": 95914389047,
+          "name": "fold (PASSIVE_TOUCH, B1, 2015)",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "id": 95908359183,
-          "name": "fold (RECLAIM_PULLBACK, B2, 2012)",
-          "status": "queued",
-          "conclusion": null
-        },
-        {
-          "id": 95908359197,
-          "name": "fold (RECLAIM_PULLBACK, B1, 2011)",
-          "status": "in_progress",
-          "conclusion": null
-        },
-        {
-          "id": 95908359227,
-          "name": "fold (RECLAIM_PULLBACK, B0, 2012)",
+          "id": 95914389066,
+          "name": "fold (PASSIVE_TOUCH, B1, 2012)",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "id": 95908359234,
-          "name": "fold (RECLAIM_PULLBACK, B1, 2018)",
+          "id": 95914389069,
+          "name": "fold (PASSIVE_TOUCH, B2, 2011)",
           "status": "in_progress",
           "conclusion": null
         },
         {
-          "id": 95908359951,
-          "name": "fold (RECLAIM_PULLBACK, B2, 2015)",
-          "status": "queued",
+          "id": 95914389077,
+          "name": "fold (PASSIVE_TOUCH, B0, 2013)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95914389087,
+          "name": "fold (PASSIVE_TOUCH, B1, 2013)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95914389094,
+          "name": "fold (PASSIVE_TOUCH, B0, 2016)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95914389104,
+          "name": "fold (PASSIVE_TOUCH, B1, 2017)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95914389108,
+          "name": "fold (PASSIVE_TOUCH, B1, 2018)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95914389137,
+          "name": "fold (PASSIVE_TOUCH, B1, 2016)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95914389144,
+          "name": "fold (PASSIVE_TOUCH, B1, 2011)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95914389157,
+          "name": "fold (PASSIVE_TOUCH, B2, 2012)",
+          "status": "in_progress",
           "conclusion": null
         },
         {
-          "id": 95908359966,
-          "name": "fold (RECLAIM_PULLBACK, B2, 2014)",
-          "status": "queued",
+          "id": 95914389160,
+          "name": "fold (PASSIVE_TOUCH, B0, 2011)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 95914389913,
+          "name": "fold (PASSIVE_TOUCH, B2, 2015)",
+          "status": "in_progress",
           "conclusion": null
         },
         {
-          "id": 95908359972,
-          "name": "fold (RECLAIM_PULLBACK, B2, 2016)",
-          "status": "queued",
+          "id": 95914389935,
+          "name": "fold (PASSIVE_TOUCH, B2, 2014)",
+          "status": "in_progress",
           "conclusion": null
         },
         {
-          "id": 95908359992,
-          "name": "fold (RECLAIM_PULLBACK, B2, 2013)",
-          "status": "queued",
+          "id": 95914389948,
+          "name": "fold (PASSIVE_TOUCH, B2, 2013)",
+          "status": "in_progress",
           "conclusion": null
         },
         {
-          "id": 95908360072,
-          "name": "fold (RECLAIM_PULLBACK, B2, 2017)",
-          "status": "queued",
+          "id": 95914389959,
+          "name": "fold (PASSIVE_TOUCH, B2, 2016)",
+          "status": "in_progress",
           "conclusion": null
         },
         {
-          "id": 95908360102,
-          "name": "fold (RECLAIM_PULLBACK, B2, 2018)",
-          "status": "queued",
+          "id": 95914390164,
+          "name": "fold (PASSIVE_TOUCH, B2, 2017)",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "id": 95914390184,
+          "name": "fold (PASSIVE_TOUCH, B2, 2018)",
+          "status": "in_progress",
           "conclusion": null
         }
       ]
