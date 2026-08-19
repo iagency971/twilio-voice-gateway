@@ -1,0 +1,7 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_TRIGGER_V1",
+  "purpose": "outcome-blind control-support sensitivity only",
+  "post_anchor_outcomes_read": false,
+  "reaction_outcomes_computed": false,
+  "market_data_api_called": false
+}
