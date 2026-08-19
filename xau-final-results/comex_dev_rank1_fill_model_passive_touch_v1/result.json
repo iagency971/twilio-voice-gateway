@@ -31,9 +31,9 @@
   "comparisons": [
     {
       "comparison": "B1_vs_B0",
-      "family_balanced_event_logloss_improvement": -0.013534472440153489,
-      "population_event_logloss_improvement": -0.012214786073611705,
-      "session_balanced_logloss_improvement": -0.01170594424091742,
+      "family_balanced_event_logloss_improvement": -0.013534166954381588,
+      "population_event_logloss_improvement": -0.012214431992533803,
+      "session_balanced_logloss_improvement": -0.011705581018855438,
       "year_deltas": [
         {
           "year": 2011,
@@ -43,7 +43,7 @@
         },
         {
           "year": 2012,
-          "logloss_improvement": 0.002879680849962818,
+          "logloss_improvement": 0.0028796933416281867,
           "fill": 2073,
           "nonfill": 1366
         },
@@ -55,7 +55,7 @@
         },
         {
           "year": 2014,
-          "logloss_improvement": -0.03381457301860802,
+          "logloss_improvement": -0.03381305645366928,
           "fill": 2221,
           "nonfill": 1636
         },
@@ -67,7 +67,7 @@
         },
         {
           "year": 2016,
-          "logloss_improvement": -0.004359905421610688,
+          "logloss_improvement": -0.004358328590485683,
           "fill": 2333,
           "nonfill": 1523
         },
@@ -79,16 +79,16 @@
         },
         {
           "year": 2018,
-          "logloss_improvement": -0.030301887108101555,
+          "logloss_improvement": -0.0303022047667314,
           "fill": 2358,
           "nonfill": 1697
         }
       ],
       "positive_years": 1,
       "cluster_bootstrap_95": {
-        "lo": -0.02714975535880354,
-        "median": -0.012754253842855445,
-        "hi": -0.0008867400340904246,
+        "lo": -0.027149632241167912,
+        "median": -0.012753487632117644,
+        "hi": -0.000886166760941684,
         "n": 2000
       },
       "bootstrap_excludes_zero_positive": false,
@@ -96,9 +96,9 @@
     },
     {
       "comparison": "B2_vs_B1",
-      "family_balanced_event_logloss_improvement": -0.046337275921357834,
-      "population_event_logloss_improvement": -0.017874887857488586,
-      "session_balanced_logloss_improvement": -0.017640740233655028,
+      "family_balanced_event_logloss_improvement": -0.04633219244529274,
+      "population_event_logloss_improvement": -0.017874574788542597,
+      "session_balanced_logloss_improvement": -0.01764044940104481,
       "year_deltas": [
         {
           "year": 2011,
@@ -108,19 +108,19 @@
         },
         {
           "year": 2012,
-          "logloss_improvement": -0.04736423339275164,
+          "logloss_improvement": -0.04736424588441701,
           "fill": 2073,
           "nonfill": 1366
         },
         {
           "year": 2013,
-          "logloss_improvement": -0.06489419483702918,
+          "logloss_improvement": -0.06484836088948098,
           "fill": 2498,
           "nonfill": 1510
         },
         {
           "year": 2014,
-          "logloss_improvement": -0.015524590349486722,
+          "logloss_improvement": -0.01552628148377333,
           "fill": 2221,
           "nonfill": 1636
         },
@@ -132,7 +132,7 @@
         },
         {
           "year": 2016,
-          "logloss_improvement": -0.02215323975280703,
+          "logloss_improvement": -0.02215249831361943,
           "fill": 2333,
           "nonfill": 1523
         },
@@ -144,16 +144,16 @@
         },
         {
           "year": 2018,
-          "logloss_improvement": -0.002143766777426559,
+          "logloss_improvement": -0.0021436182409290128,
           "fill": 2358,
           "nonfill": 1697
         }
       ],
       "positive_years": 1,
       "cluster_bootstrap_95": {
-        "lo": -0.08744508726237367,
-        "median": -0.04381871947550642,
-        "hi": -0.01362344604041113,
+        "lo": -0.0874405023328534,
+        "median": -0.04381241509447048,
+        "hi": -0.01360636800751359,
         "n": 2000
       },
       "bootstrap_excludes_zero_positive": false,
