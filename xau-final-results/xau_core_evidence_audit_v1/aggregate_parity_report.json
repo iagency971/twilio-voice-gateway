@@ -1,0 +1,226 @@
+{
+  "pass": true,
+  "annual_parity_all_pass": true,
+  "unique_core_events": 304,
+  "expected_core_events": 304,
+  "all_rr_and_scenario_event_sets_identical": true,
+  "duplicate_event_ids_primary_rr15": 0,
+  "rr_checks": [
+    {
+      "target_r": 0.5,
+      "pass": true,
+      "metrics": {
+        "trades": {
+          "actual": 304.0,
+          "expected": 304.0,
+          "tol": 0,
+          "pass": true
+        },
+        "primary_mean": {
+          "actual": 0.1204309591347527,
+          "expected": 0.1204309591347527,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "primary_positive_years": {
+          "actual": 11.0,
+          "expected": 11.0,
+          "tol": 0,
+          "pass": true
+        },
+        "stress_mean": {
+          "actual": 0.08615651906619402,
+          "expected": 0.086156519066194,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "stress_positive_years": {
+          "actual": 11.0,
+          "expected": 11.0,
+          "tol": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "target_r": 1.0,
+      "pass": true,
+      "metrics": {
+        "trades": {
+          "actual": 304.0,
+          "expected": 304.0,
+          "tol": 0,
+          "pass": true
+        },
+        "primary_mean": {
+          "actual": 0.2576623461717653,
+          "expected": 0.2576623461717652,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "primary_positive_years": {
+          "actual": 14.0,
+          "expected": 14.0,
+          "tol": 0,
+          "pass": true
+        },
+        "stress_mean": {
+          "actual": 0.1595235238528789,
+          "expected": 0.1595235238528788,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "stress_positive_years": {
+          "actual": 12.0,
+          "expected": 12.0,
+          "tol": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "target_r": 1.5,
+      "pass": true,
+      "metrics": {
+        "trades": {
+          "actual": 304.0,
+          "expected": 304.0,
+          "tol": 0,
+          "pass": true
+        },
+        "primary_mean": {
+          "actual": 0.2799181676273291,
+          "expected": 0.2799181676273291,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "primary_positive_years": {
+          "actual": 13.0,
+          "expected": 13.0,
+          "tol": 0,
+          "pass": true
+        },
+        "stress_mean": {
+          "actual": 0.189605214805733,
+          "expected": 0.1896052148057329,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "stress_positive_years": {
+          "actual": 12.0,
+          "expected": 12.0,
+          "tol": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "target_r": 2.0,
+      "pass": true,
+      "metrics": {
+        "trades": {
+          "actual": 304.0,
+          "expected": 304.0,
+          "tol": 0,
+          "pass": true
+        },
+        "primary_mean": {
+          "actual": 0.2884902240267216,
+          "expected": 0.2884902240267216,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "primary_positive_years": {
+          "actual": 11.0,
+          "expected": 11.0,
+          "tol": 0,
+          "pass": true
+        },
+        "stress_mean": {
+          "actual": 0.21081602724111145,
+          "expected": 0.2108160272411114,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "stress_positive_years": {
+          "actual": 10.0,
+          "expected": 10.0,
+          "tol": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "target_r": 2.5,
+      "pass": true,
+      "metrics": {
+        "trades": {
+          "actual": 304.0,
+          "expected": 304.0,
+          "tol": 0,
+          "pass": true
+        },
+        "primary_mean": {
+          "actual": 0.26651281125963794,
+          "expected": 0.266512811259638,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "primary_positive_years": {
+          "actual": 11.0,
+          "expected": 11.0,
+          "tol": 0,
+          "pass": true
+        },
+        "stress_mean": {
+          "actual": 0.18596988267408016,
+          "expected": 0.1859698826740801,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "stress_positive_years": {
+          "actual": 11.0,
+          "expected": 11.0,
+          "tol": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "target_r": 3.0,
+      "pass": true,
+      "metrics": {
+        "trades": {
+          "actual": 304.0,
+          "expected": 304.0,
+          "tol": 0,
+          "pass": true
+        },
+        "primary_mean": {
+          "actual": 0.30978890849641955,
+          "expected": 0.3097889084964196,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "primary_positive_years": {
+          "actual": 12.0,
+          "expected": 12.0,
+          "tol": 0,
+          "pass": true
+        },
+        "stress_mean": {
+          "actual": 0.20773932181923543,
+          "expected": 0.2077393218192354,
+          "tol": 1e-10,
+          "pass": true
+        },
+        "stress_positive_years": {
+          "actual": 11.0,
+          "expected": 11.0,
+          "tol": 0,
+          "pass": true
+        }
+      }
+    }
+  ]
+}
