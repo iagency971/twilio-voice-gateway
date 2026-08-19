@@ -1,0 +1,13 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE3_ACQUISITION_SUMMARY_V1",
+  "complete": true,
+  "expected_requests": 1,
+  "completed_request_markers": 1,
+  "decoded_trade_records_total": 4694,
+  "raw_bytes_total": 37801,
+  "confirmed_success_cost_upper_bound_usd": 0.024528264999,
+  "hard_cap_usd": 0.025,
+  "hard_cap_respected": true,
+  "stage3_market_data_download_performed": true,
+  "later_stage_market_data_download_performed": false
+}
