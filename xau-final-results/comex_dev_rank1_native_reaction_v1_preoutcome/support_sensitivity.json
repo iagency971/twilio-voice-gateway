@@ -1,12 +1,13 @@
 {
-  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_V1_2",
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_V1_3",
   "post_anchor_outcomes_read": false,
   "reaction_outcomes_computed": false,
   "market_data_api_called": false,
   "market_data_download_performed": false,
+  "year_definition": "source_research_date calendar year (DEV_RANK1 sampling stratum), not J+1 contact calendar year",
   "scenarios": [
     {
-      "scenario": "BASELINE_PRO",
+      "scenario": "BASELINE_PRO_SOURCE_YEAR",
       "K": 5,
       "time_bin_minutes": 30,
       "ratio_caliper": [
@@ -14,22 +15,23 @@
         2.0
       ],
       "early_fallback": false,
+      "source_year_tolerance": 0,
       "defined_events": 235,
       "event_eligible": 180,
-      "matched_events": 100,
-      "matched_dates": 54,
-      "match_rate": 0.425531914893617,
+      "matched_events": 101,
+      "matched_dates": 55,
+      "match_rate": 0.4297872340425532,
       "support_gate_pass": false,
       "criteria": {
         "matched_events_ge_160": false,
         "matched_dates_ge_60": false,
-        "every_year_matched_dates_ge_5": false,
+        "every_source_year_matched_dates_ge_5": false,
         "defined_contact_full_match_rate_ge_0_85": false,
-        "every_year_full_match_rate_ge_0_75": false
+        "every_source_year_full_match_rate_ge_0_75": false
       }
     },
     {
-      "scenario": "EARLY_FALLBACK_K5_BIN30",
+      "scenario": "EARLY_K5_BIN30",
       "K": 5,
       "time_bin_minutes": 30,
       "ratio_caliper": [
@@ -37,22 +39,23 @@
         2.0
       ],
       "early_fallback": true,
+      "source_year_tolerance": 0,
       "defined_events": 235,
       "event_eligible": 234,
-      "matched_events": 100,
-      "matched_dates": 54,
-      "match_rate": 0.425531914893617,
+      "matched_events": 101,
+      "matched_dates": 55,
+      "match_rate": 0.4297872340425532,
       "support_gate_pass": false,
       "criteria": {
         "matched_events_ge_160": false,
         "matched_dates_ge_60": false,
-        "every_year_matched_dates_ge_5": false,
+        "every_source_year_matched_dates_ge_5": false,
         "defined_contact_full_match_rate_ge_0_85": false,
-        "every_year_full_match_rate_ge_0_75": false
+        "every_source_year_full_match_rate_ge_0_75": false
       }
     },
     {
-      "scenario": "EARLY_FALLBACK_K4_BIN30",
+      "scenario": "EARLY_K4_BIN30",
       "K": 4,
       "time_bin_minutes": 30,
       "ratio_caliper": [
@@ -60,22 +63,23 @@
         2.0
       ],
       "early_fallback": true,
+      "source_year_tolerance": 0,
       "defined_events": 235,
       "event_eligible": 234,
-      "matched_events": 117,
-      "matched_dates": 59,
-      "match_rate": 0.4978723404255319,
+      "matched_events": 118,
+      "matched_dates": 60,
+      "match_rate": 0.502127659574468,
       "support_gate_pass": false,
       "criteria": {
         "matched_events_ge_160": false,
-        "matched_dates_ge_60": false,
-        "every_year_matched_dates_ge_5": false,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": false,
         "defined_contact_full_match_rate_ge_0_85": false,
-        "every_year_full_match_rate_ge_0_75": false
+        "every_source_year_full_match_rate_ge_0_75": false
       }
     },
     {
-      "scenario": "EARLY_FALLBACK_K3_BIN30",
+      "scenario": "EARLY_K3_BIN30",
       "K": 3,
       "time_bin_minutes": 30,
       "ratio_caliper": [
@@ -83,22 +87,23 @@
         2.0
       ],
       "early_fallback": true,
+      "source_year_tolerance": 0,
       "defined_events": 235,
       "event_eligible": 234,
-      "matched_events": 146,
-      "matched_dates": 65,
-      "match_rate": 0.6212765957446809,
+      "matched_events": 150,
+      "matched_dates": 66,
+      "match_rate": 0.6382978723404256,
       "support_gate_pass": false,
       "criteria": {
         "matched_events_ge_160": false,
         "matched_dates_ge_60": true,
-        "every_year_matched_dates_ge_5": false,
+        "every_source_year_matched_dates_ge_5": true,
         "defined_contact_full_match_rate_ge_0_85": false,
-        "every_year_full_match_rate_ge_0_75": false
+        "every_source_year_full_match_rate_ge_0_75": false
       }
     },
     {
-      "scenario": "EARLY_FALLBACK_K5_BIN60",
+      "scenario": "EARLY_K5_BIN60",
       "K": 5,
       "time_bin_minutes": 60,
       "ratio_caliper": [
@@ -106,68 +111,23 @@
         2.0
       ],
       "early_fallback": true,
+      "source_year_tolerance": 0,
       "defined_events": 235,
       "event_eligible": 234,
-      "matched_events": 121,
-      "matched_dates": 59,
-      "match_rate": 0.5148936170212766,
-      "support_gate_pass": false,
-      "criteria": {
-        "matched_events_ge_160": false,
-        "matched_dates_ge_60": false,
-        "every_year_matched_dates_ge_5": false,
-        "defined_contact_full_match_rate_ge_0_85": false,
-        "every_year_full_match_rate_ge_0_75": false
-      }
-    },
-    {
-      "scenario": "EARLY_FALLBACK_K5_BIN30_WIDE",
-      "K": 5,
-      "time_bin_minutes": 30,
-      "ratio_caliper": [
-        0.4,
-        2.5
-      ],
-      "early_fallback": true,
-      "defined_events": 235,
-      "event_eligible": 234,
-      "matched_events": 134,
-      "matched_dates": 61,
-      "match_rate": 0.5702127659574469,
+      "matched_events": 125,
+      "matched_dates": 60,
+      "match_rate": 0.5319148936170213,
       "support_gate_pass": false,
       "criteria": {
         "matched_events_ge_160": false,
         "matched_dates_ge_60": true,
-        "every_year_matched_dates_ge_5": false,
+        "every_source_year_matched_dates_ge_5": false,
         "defined_contact_full_match_rate_ge_0_85": false,
-        "every_year_full_match_rate_ge_0_75": false
+        "every_source_year_full_match_rate_ge_0_75": false
       }
     },
     {
-      "scenario": "EARLY_FALLBACK_K5_BIN60_WIDE",
-      "K": 5,
-      "time_bin_minutes": 60,
-      "ratio_caliper": [
-        0.4,
-        2.5
-      ],
-      "early_fallback": true,
-      "defined_events": 235,
-      "event_eligible": 234,
-      "matched_events": 158,
-      "matched_dates": 66,
-      "match_rate": 0.6723404255319149,
-      "support_gate_pass": false,
-      "criteria": {
-        "matched_events_ge_160": false,
-        "matched_dates_ge_60": true,
-        "every_year_matched_dates_ge_5": false,
-        "defined_contact_full_match_rate_ge_0_85": false,
-        "every_year_full_match_rate_ge_0_75": false
-      }
-    },
-    {
-      "scenario": "EARLY_FALLBACK_K4_BIN60",
+      "scenario": "EARLY_K4_BIN60",
       "K": 4,
       "time_bin_minutes": 60,
       "ratio_caliper": [
@@ -175,24 +135,265 @@
         2.0
       ],
       "early_fallback": true,
+      "source_year_tolerance": 0,
       "defined_events": 235,
       "event_eligible": 234,
-      "matched_events": 143,
-      "matched_dates": 64,
-      "match_rate": 0.6085106382978723,
+      "matched_events": 147,
+      "matched_dates": 65,
+      "match_rate": 0.625531914893617,
       "support_gate_pass": false,
       "criteria": {
         "matched_events_ge_160": false,
         "matched_dates_ge_60": true,
-        "every_year_matched_dates_ge_5": false,
+        "every_source_year_matched_dates_ge_5": true,
         "defined_contact_full_match_rate_ge_0_85": false,
-        "every_year_full_match_rate_ge_0_75": false
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "EARLY_K3_BIN60",
+      "K": 3,
+      "time_bin_minutes": 60,
+      "ratio_caliper": [
+        0.5,
+        2.0
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 0,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 176,
+      "matched_dates": 68,
+      "match_rate": 0.7489361702127659,
+      "support_gate_pass": false,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": false,
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "EARLY_K5_BIN30_WIDE",
+      "K": 5,
+      "time_bin_minutes": 30,
+      "ratio_caliper": [
+        0.4,
+        2.5
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 0,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 135,
+      "matched_dates": 62,
+      "match_rate": 0.574468085106383,
+      "support_gate_pass": false,
+      "criteria": {
+        "matched_events_ge_160": false,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": false,
+        "defined_contact_full_match_rate_ge_0_85": false,
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "EARLY_K4_BIN30_WIDE",
+      "K": 4,
+      "time_bin_minutes": 30,
+      "ratio_caliper": [
+        0.4,
+        2.5
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 0,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 155,
+      "matched_dates": 66,
+      "match_rate": 0.6595744680851063,
+      "support_gate_pass": false,
+      "criteria": {
+        "matched_events_ge_160": false,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": false,
+        "defined_contact_full_match_rate_ge_0_85": false,
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "EARLY_K3_BIN30_WIDE",
+      "K": 3,
+      "time_bin_minutes": 30,
+      "ratio_caliper": [
+        0.4,
+        2.5
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 0,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 168,
+      "matched_dates": 69,
+      "match_rate": 0.7148936170212766,
+      "support_gate_pass": false,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": false,
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "EARLY_K5_BIN60_WIDE",
+      "K": 5,
+      "time_bin_minutes": 60,
+      "ratio_caliper": [
+        0.4,
+        2.5
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 0,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 162,
+      "matched_dates": 67,
+      "match_rate": 0.6893617021276596,
+      "support_gate_pass": false,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": false,
+        "defined_contact_full_match_rate_ge_0_85": false,
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "EARLY_K4_BIN60_WIDE",
+      "K": 4,
+      "time_bin_minutes": 60,
+      "ratio_caliper": [
+        0.4,
+        2.5
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 0,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 184,
+      "matched_dates": 70,
+      "match_rate": 0.7829787234042553,
+      "support_gate_pass": false,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": false,
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "EARLY_K3_BIN60_WIDE",
+      "K": 3,
+      "time_bin_minutes": 60,
+      "ratio_caliper": [
+        0.4,
+        2.5
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 0,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 203,
+      "matched_dates": 74,
+      "match_rate": 0.8638297872340426,
+      "support_gate_pass": false,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": true,
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "ADJYEAR_EARLY_K5_BIN30",
+      "K": 5,
+      "time_bin_minutes": 30,
+      "ratio_caliper": [
+        0.5,
+        2.0
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 1,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 152,
+      "matched_dates": 67,
+      "match_rate": 0.6468085106382979,
+      "support_gate_pass": false,
+      "criteria": {
+        "matched_events_ge_160": false,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": false,
+        "every_source_year_full_match_rate_ge_0_75": false
+      }
+    },
+    {
+      "scenario": "ADJYEAR_EARLY_K5_BIN60",
+      "K": 5,
+      "time_bin_minutes": 60,
+      "ratio_caliper": [
+        0.5,
+        2.0
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 1,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 206,
+      "matched_dates": 76,
+      "match_rate": 0.8765957446808511,
+      "support_gate_pass": true,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": true,
+        "every_source_year_full_match_rate_ge_0_75": true
+      }
+    },
+    {
+      "scenario": "ADJYEAR_EARLY_K5_BIN60_WIDE",
+      "K": 5,
+      "time_bin_minutes": 60,
+      "ratio_caliper": [
+        0.4,
+        2.5
+      ],
+      "early_fallback": true,
+      "source_year_tolerance": 1,
+      "defined_events": 235,
+      "event_eligible": 234,
+      "matched_events": 223,
+      "matched_dates": 80,
+      "match_rate": 0.948936170212766,
+      "support_gate_pass": true,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": true,
+        "every_source_year_full_match_rate_ge_0_75": true
       }
     }
   ],
   "notes": [
-    "Only pre-anchor/source covariates and already-frozen +-60 contact exclusion flags are used.",
-    "No W5/W15/W60/SC reaction endpoint is read or computed.",
-    "Early fallback applies only for treated minute-of-session <30; it drops unavailable J+1 pre30/pre5 matching symmetrically for event/control while retaining same year, time bin, approach sign, source-range caliper and +-60 exclusion."
+    "Only source/pre-anchor covariates and frozen +-60 contact exclusion flags are used.",
+    "No reaction endpoint is read or computed.",
+    "Adjacent-year scenarios are diagnostic only and are NOT protocol recommendations."
   ]
 }
