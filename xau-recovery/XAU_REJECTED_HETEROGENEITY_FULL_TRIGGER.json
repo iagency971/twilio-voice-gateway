@@ -1,0 +1,13 @@
+{
+  "version": "XAU_REJECTED_HETEROGENEITY_FULL_TRIGGER_V1",
+  "protocol_freeze_commit": "ad8f87bada89026da4ad0b10b9ecea625817fec8",
+  "preflight_run_id": 32309643436,
+  "preflight_year": 2011,
+  "preflight_parity_pass": true,
+  "preflight_expected_cells": 864,
+  "preflight_actual_cells": 864,
+  "annual_adapter": "MEMBER_ZONE_ID_TO_ZONE_ID_ONLY",
+  "aggregation_classifier": "STRICT_TRUE_FALSE_PARSE",
+  "new_paid_market_data_spend": 0,
+  "purpose": "HYPOTHESIS_GENERATION_ONLY"
+}
