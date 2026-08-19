@@ -1,0 +1,128 @@
+name: XAU Core Temporal Stack Integrity V1 2011-2025
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-core-temporal-stack-integrity-v1.yml'
+permissions:
+  contents: write
+jobs:
+  annual:
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Resolve annual dates
+        id: dates
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+      - name: Rehydrate exact canonical annual input
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_stack_integrity_${{ matrix.year }}.csv
+      - name: Run outcome-independent temporal membership audit
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python xau-multiyear/scripts/audit_xau_core_temporal_stack_integrity_v1.py /tmp/xau_stack_integrity_${{ matrix.year }}.csv \
+            --year ${{ matrix.year }} \
+            --canonical-ledger xau-final-results/xau_core_evidence_audit_v1/core_trade_ledger.csv \
+            --out /tmp/stack_integrity_${{ matrix.year }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-core-stack-integrity-${{ matrix.year }}
+          path: /tmp/stack_integrity_${{ matrix.year }}
+          retention-days: 7
+
+  aggregate:
+    if: always()
+    needs: annual
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: xau-core-stack-integrity-*
+          path: /tmp/stack_integrity_all
+          merge-multiple: true
+      - name: Aggregate temporal integrity verdict
+        run: |
+          python - <<'PY'
+          import json,pathlib,pandas as pd
+          root=pathlib.Path('/tmp/stack_integrity_all')
+          ss=sorted(root.glob('temporal_stack_summary_*.json'))
+          if len(ss)!=15: raise RuntimeError(f'expected 15 annual summaries, got {len(ss)}')
+          summaries=[json.load(open(p)) for p in ss]
+          vfiles=sorted(root.glob('temporal_stack_violations_*.csv'))
+          ffiles=sorted(root.glob('temporal_stack_future_members_*.csv'))
+          violations=[]; futures=[]
+          for p in vfiles:
+              d=pd.read_csv(p)
+              if len(d): violations.append(d)
+          for p in ffiles:
+              d=pd.read_csv(p)
+              if len(d): futures.append(d)
+          v=pd.concat(violations,ignore_index=True) if violations else pd.DataFrame()
+          f=pd.concat(futures,ignore_index=True) if futures else pd.DataFrame()
+          total_events=sum(x['core_events'] for x in summaries)
+          total_viol=sum(x['core_classification_violations'] for x in summaries)
+          verdict='TEMPORAL_STACK_INTEGRITY_PASS' if total_viol==0 and total_events==304 else 'TEMPORAL_STACK_INTEGRITY_FAIL_CORE_CLASSIFICATION_LOOKAHEAD'
+          out=pathlib.Path('/tmp/stack_integrity_final'); out.mkdir(parents=True,exist_ok=True)
+          json.dump({
+              'version':'XAU_CORE_TEMPORAL_STACK_INTEGRITY_V1_VERDICT',
+              'terminal_verdict':verdict,
+              'core_events':total_events,
+              'expected_core_events':304,
+              'core_classification_violations':total_viol,
+              'missing_causal_doz_events':sum(x['missing_causal_doz_events'] for x in summaries),
+              'missing_causal_objective_events':sum(x['missing_causal_objective_events'] for x in summaries),
+              'events_with_any_future_member_after_confirmation':sum(x['events_with_any_future_member_after_confirmation'] for x in summaries),
+              'future_member_rows':sum(x['future_member_rows'] for x in summaries),
+              'future_doz_member_rows':sum(x['future_doz_member_rows'] for x in summaries),
+              'future_objective_member_rows':sum(x['future_objective_member_rows'] for x in summaries),
+              'annual_summaries':summaries,
+              'pnl_inspected_or_used':False,
+              'new_market_data_spend':0,
+              'prior_core_external_replication_pass_suspended': verdict!='TEMPORAL_STACK_INTEGRITY_PASS'
+          },open(out/'temporal_stack_integrity_verdict.json','w'),indent=2)
+          v.to_csv(out/'temporal_stack_integrity_violations.csv',index=False)
+          f.to_csv(out/'temporal_stack_future_members.csv',index=False)
+          print(verdict,'events',total_events,'violations',total_viol)
+          PY
+      - name: Publish temporal integrity outputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          out=pathlib.Path('/tmp/stack_integrity_final')
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          root='xau-final-results/xau_core_temporal_stack_integrity_v1'
+          def put(path,data):
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              for a in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+                  b={'message':f'publish temporal stack integrity {pathlib.Path(path).name} [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+                  if sha:b['sha']=sha
+                  r=requests.put(u,headers=h,json=b)
+                  if r.status_code in (200,201):return
+                  if r.status_code not in (409,422):r.raise_for_status()
+                  time.sleep(1+a)
+              raise RuntimeError(path)
+          for p in out.iterdir():
+              if p.is_file():put(f'{root}/{p.name}',p.read_bytes())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-core-temporal-stack-integrity-v1-final
+          path: /tmp/stack_integrity_final
+          retention-days: 14
