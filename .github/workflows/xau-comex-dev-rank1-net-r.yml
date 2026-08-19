@@ -1,4 +1,4 @@
-# trigger-once: comex-dev-rank1-net-r-surface-2026-08-18
+# trigger-once: comex-dev-rank1-net-r-surface-complete-outcomes-2026-08-18
 name: XAU COMEX DEV_RANK1 Net-R Surface
 
 on:
@@ -49,7 +49,6 @@ jobs:
                           have=artifacts(r['id'])
                           if expected.issubset(have):return r['id']
                   if not wait:break
-                  # Fail early only if the newest relevant run has completed unsuccessfully.
                   if runs and runs[0].get('status')=='completed' and runs[0].get('conclusion') not in (None,'success'):
                       raise SystemExit(f"latest {workflow} failed: {runs[0].get('conclusion')} run={runs[0]['id']}")
                   time.sleep(20)
