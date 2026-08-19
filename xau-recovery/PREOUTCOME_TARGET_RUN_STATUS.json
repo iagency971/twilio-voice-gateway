@@ -131,5 +131,7 @@
         }
       ]
     }
-  ]
+  ],
+  "failed_job_log_job_id": 96173525111,
+  "failed_job_log_chars": 352040
 }
