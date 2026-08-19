@@ -1,5 +1,5 @@
 {
-  "version": "COMEX_DEV_RANK1_NATIVE_SOURCE_LEVELS_V1",
+  "version": "COMEX_DEV_RANK1_NATIVE_SOURCE_LEVELS_V1_1",
   "market_data_api_calls": false,
   "analytical_sessions": 96,
   "source_sessions_with_primary_levels": 92,
@@ -17,7 +17,8 @@
     "VAH",
     "VAL"
   ],
-  "contact_rule": "future primary contact requires first exact GC trade at level tick in next auction session on same raw instrument; no M1 crossing substitution",
+  "contact_tick_rule": "round exact level_price to nearest GC 0.10 tick for first-contact detection; exact VWAP remains stored separately",
+  "contact_rule": "future primary contact requires first exact GC trade at contact_tick_price in next auction session on same raw instrument; no M1 crossing substitution",
   "hvn_lvn_status": "not instantiated here; secondary definitions retained but local-extrema tie convention not expanded post-acquisition",
   "outcomes_used_to_create_levels": false
 }
