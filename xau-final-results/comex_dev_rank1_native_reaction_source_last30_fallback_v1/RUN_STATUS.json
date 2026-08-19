@@ -1,12 +1,12 @@
 {
   "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_STATUS_V1",
-  "run_id": 32278975008,
+  "run_id": 32281165686,
   "status": "in_progress",
   "conclusion": null,
-  "head_sha": "2c4212a692d922bcc95c8edda5e6b1426584dff5",
+  "head_sha": "97aa676af1427964e0c617370752c91a60136236",
   "jobs": [
     {
-      "id": 96152960036,
+      "id": 96160030379,
       "name": "audit",
       "status": "in_progress",
       "conclusion": null,
@@ -43,27 +43,27 @@
         },
         {
           "name": "Locate already-paid pilot raw artifact \u2014 GitHub only",
-          "status": "completed",
-          "conclusion": "success"
+          "status": "in_progress",
+          "conclusion": null
         },
         {
           "name": "Download already-paid pilot raw \u2014 GitHub only",
-          "status": "completed",
-          "conclusion": "success"
+          "status": "pending",
+          "conclusion": null
         },
         {
           "name": "Download already-owned GC.n.0 M1 context \u2014 GitHub only",
-          "status": "completed",
-          "conclusion": "success"
+          "status": "pending",
+          "conclusion": null
         },
         {
           "name": "Download owned N1 raw M1 blocks \u2014 GitHub only",
-          "status": "completed",
-          "conclusion": "success"
+          "status": "pending",
+          "conclusion": null
         },
         {
           "name": "Source-last30 early fallback audit \u2014 ZERO OUTCOME / ZERO MARKET API",
-          "status": "in_progress",
+          "status": "pending",
           "conclusion": null
         },
         {
