@@ -1,0 +1,2 @@
+source_research_date,eligible_next_research_date,reason,evidence_primary,evidence_secondary
+2018-12-31,2019-01-02,"Owned GC.n.0 M1 context ends at 2019-01-01; New Year's Day 2019 is the calendar boundary. The next COMEX/NYMEX auction trade date is Jan 2, with the New Year's holiday schedule spanning Dec 31-Jan 2.","CME/NYMEX published New Year's schedule pattern: NYMEX/COMEX closed Jan 1 and reopen 18:00 ET for Jan 2 trade date","AMP Futures 2018-12-21 notice sourced from CME Globex Control Center: CME Group New Years Holiday Trading Schedule Dec 31 2018-Jan 2 2019"
