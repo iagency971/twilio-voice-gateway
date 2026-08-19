@@ -1,7 +1,8 @@
 {
-  "status": "RUNNING",
+  "status": "PREFLIGHT_PASS",
   "workflow_run_id": "32309643436",
-  "source_commit": "f6da3a0d0b3766f986e40a7dbe62a1ac57d0a86c",
   "year": 2011,
-  "adapter": "MEMBER_ZONE_ID_TO_ZONE_ID_ONLY"
+  "parity_pass": true,
+  "expected_cells": 864,
+  "actual_cells": 864
 }
