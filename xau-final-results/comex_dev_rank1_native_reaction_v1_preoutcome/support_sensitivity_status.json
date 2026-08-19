@@ -1,0 +1,52 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_STATUS_V1",
+  "run_id": 32258952994,
+  "status": "in_progress",
+  "conclusion": null,
+  "head_sha": "9a9995a85d36e2e132d522f903cde2a66b948d96",
+  "jobs": [
+    {
+      "id": 96087285874,
+      "name": "sensitivity",
+      "status": "in_progress",
+      "conclusion": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python -m pip install pandas==2.2.3 numpy",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "Outcome-blind support-only sensitivity",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Hard zero-outcome guard",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Publish support sensitivity",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    }
+  ]
+}
