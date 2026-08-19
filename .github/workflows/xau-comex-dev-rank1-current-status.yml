@@ -1,0 +1,38 @@
+# one-shot status snapshot 2026-08-18
+name: XAU COMEX DEV_RANK1 Current Status
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-dev-rank1-current-status.yml']
+permissions:
+  actions: read
+  contents: write
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - name: Snapshot relevant workflow runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          names=['xau-comex-dev-rank1-vantage-outcomes.yml','xau-comex-dev-rank1-net-r.yml']
+          out={'version':'COMEX_DEV_RANK1_WORKFLOW_STATUS_SNAPSHOT_V1','workflows':{}}
+          for w in names:
+              r=requests.get(f'{base}/actions/workflows/{w}/runs',headers=h,params={'branch':os.environ['BRANCH'],'per_page':5});r.raise_for_status()
+              out['workflows'][w]=[{'id':x['id'],'status':x['status'],'conclusion':x['conclusion'],'event':x['event'],'head_sha':x['head_sha'],'created_at':x['created_at'],'updated_at':x['updated_at']} for x in r.json().get('workflow_runs',[])[:5]]
+          data=json.dumps(out,indent=2).encode();path='xau-final-results/comex_dev_rank1_current_workflow_status/status.json';u=f"{base}/contents/{path}"
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+          body={'message':'publish DEV_RANK1 workflow status snapshot [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+          if sha:body['sha']=sha
+          z=requests.put(u,headers=h,json=body);z.raise_for_status();print(json.dumps(out,indent=2))
+          PY
