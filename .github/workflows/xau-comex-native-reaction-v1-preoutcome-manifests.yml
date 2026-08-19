@@ -1,0 +1,189 @@
+name: XAU COMEX Native Reaction V1 Preoutcome Manifests
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - 'xau-recovery/NATIVE_REACTION_V1_PREOUTCOME_TRIGGER.json'
+
+concurrency:
+  group: xau-comex-native-reaction-v1-preoutcome
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+
+      - run: python -m pip install pandas==2.2.3 numpy databento requests
+
+      - name: Download canonical source-session raw artifacts — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          pattern: comex-dev-rank1-dual-*
+          path: /tmp/source_new
+          merge-multiple: true
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+
+      - name: Recover early source artifact 06610 explicitly
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-06610cec170650590cd663ca
+          path: /tmp/source_new
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+
+      - name: Recover early source artifact 010384 explicitly
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-01038430e355d65828fbe711
+          path: /tmp/source_new
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+
+      - name: Locate already-paid pilot raw artifact — GitHub only
+        id: pilot
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import os,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          runs=requests.get(f"{base}/actions/workflows/xau-comex-v4-pilot12-metadata.yml/runs",headers=h,params={'branch':'agent/xau-comex-acquisition-plan','status':'success','per_page':50}).json().get('workflow_runs',[])
+          found=None
+          for r in runs:
+              arts=requests.get(f"{base}/actions/runs/{r['id']}/artifacts",headers=h,params={'per_page':100}).json().get('artifacts',[])
+              if any(x['name']=='comex-v4-pilot12-raw-and-qa' and not x.get('expired') for x in arts):
+                  found=r['id'];break
+          if not found: raise SystemExit('pilot raw artifact not found')
+          print(f'run_id={found}')
+          PY
+
+      - name: Download already-paid pilot raw — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-v4-pilot12-raw-and-qa
+          path: /tmp/source_pilot
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ steps.pilot.outputs.run_id }}
+
+      - name: Download owned N1 complete J+1 M1 artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n1-raw-complete-v1
+          path: /tmp/n1
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32205624009
+
+      - name: Download owned N2 Stage1 complete artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage1-complete-v1
+          path: /tmp/n2_stage1
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32211696605
+
+      - name: Download owned N2 Stage2 complete artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage2-raw-complete-v1
+          path: /tmp/n2_stage2
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32250737768
+
+      - name: Download owned N2 Stage3 complete artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage3-raw-complete-v1
+          path: /tmp/n2_stage3
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32251356108
+
+      - name: Build outcome-blind source-range, event-context and control manifests
+        run: |
+          python xau-multiyear/scripts/build_comex_native_reaction_v1_preoutcome_manifests.py \
+            --final-status xau-final-results/comex_dev_rank1_native_n2_final_contact_classification_v1/native_368_contact_status_final.csv \
+            --source-levels xau-final-results/comex_dev_rank1_native_source_levels_v1/native_source_levels.csv \
+            --dual-requests xau-final-results/comex_dev_rank1_dual_manifest_v1/dev_rank1_dual_requests.csv \
+            --sessions xau-final-results/comex_dev_rank1_gate_v1/corrected_primary_sessions.csv \
+            --mapping xau-final-results/comex_dev_rank1_gate_v1/frozen_session_mapping_all.csv \
+            --routing xau-final-results/comex_dev_rank1_dual_routing_qa_v1/dual_session_routing_qa.csv \
+            --n1-market-manifest xau-final-results/comex_dev_rank1_native_n1_quote_v1/native_n1_market_request_manifest.csv \
+            --stage1-resolution xau-final-results/comex_dev_rank1_native_n2_stage1_resolution_stage2_quote_v1/native_n2_stage1_resolution.csv \
+            --stage2-resolution xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_n2_stage2_resolution.csv \
+            --stage3-resolution xau-final-results/comex_dev_rank1_native_n2_final_contact_classification_v1/native_n2_stage3_resolution.csv \
+            --source-new-root /tmp/source_new \
+            --source-pilot-root /tmp/source_pilot \
+            --n1-root /tmp/n1 \
+            --stage1-root /tmp/n2_stage1 \
+            --stage2-root /tmp/n2_stage2 \
+            --stage3-root /tmp/n2_stage3 \
+            --out /tmp/preoutcome
+
+      - name: Hard guard — zero post-anchor outcomes / zero market-data API
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          z=json.load(open('/tmp/preoutcome/preoutcome_manifest_qa.json'))
+          assert z['reaction_outcomes_computed'] is False
+          assert z['mfe_mae_computed'] is False
+          assert z['post_anchor_outcomes_read'] is False
+          assert z['market_data_api_called'] is False
+          assert z['market_data_download_performed'] is False
+          assert z['native_levels']==368 and z['exact_contacts']==238 and z['source_sessions']==92
+          assert z['source_range_provenance_pass'] is True
+          s=pd.read_csv('/tmp/preoutcome/source_session_range_provenance.csv')
+          e=pd.read_csv('/tmp/preoutcome/treated_event_causal_context.csv')
+          assert len(s)==92 and len(e)==238
+          assert not e.post_anchor_reaction_values_read.astype(bool).any()
+          print('NATIVE_REACTION_V1_PREOUTCOME_QA',z['support_gate_pass'],z['decision_if_frozen_now'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-reaction-v1-preoutcome-manifests
+          path: /tmp/preoutcome/
+          retention-days: 90
+
+      - name: Publish outcome-blind manifests and hashes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          src=pathlib.Path('/tmp/preoutcome');root='xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome'
+          names=['preoutcome_manifest_qa.json','source_session_range_provenance.csv','treated_event_causal_context.csv','control_candidate_universe.csv.gz','matched_control_manifest.csv','treated_event_support.csv','support_by_year.csv']
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          for name in names:
+              p=src/name;dst=f'{root}/{name}';u=f'{base}/contents/{dst}';payload=base64.b64encode(p.read_bytes()).decode()
+              for attempt in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':f'publish native reaction v1 preoutcome {name} [skip ci]','content':payload,'branch':os.environ['BRANCH']}
+                  if sha:body['sha']=sha
+                  q=requests.put(u,headers=h,json=body)
+                  if q.status_code in (200,201):break
+                  if q.status_code not in (409,422):q.raise_for_status()
+                  time.sleep(min(10,1+attempt))
+              else:raise SystemExit(f'could not publish {dst}')
+          PY
