@@ -1,4 +1,4 @@
-# trigger-once: native-n1-recovery-status-2026-08-18
+# trigger-once: native-n2-quote-status-2026-08-18
 name: XAU COMEX DEV_RANK1 Analysis Status
 
 on:
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: agent/xau-comex-acquisition-plan
-      - name: Query native N1 recovery workflow — GitHub only
+      - name: Query native N2 quote workflow — GitHub only
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -27,20 +27,20 @@ jobs:
           python - <<'PY'
           import base64,json,os,requests
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
-          names=['xau-comex-dev-rank1-native-n1-recover.yml','xau-comex-dev-rank1-native-n1-acquire.yml','xau-comex-dev-rank1-native-n1-quote.yml']
-          out={'version':'COMEX_DEV_RANK1_ANALYSIS_STATUS_V17','workflows':{}}
+          names=['xau-comex-dev-rank1-native-n2-quote.yml','xau-comex-dev-rank1-native-n1-recover.yml']
+          out={'version':'COMEX_DEV_RANK1_ANALYSIS_STATUS_V18','workflows':{}}
           for wf in names:
               rs=requests.get(f"{base}/actions/workflows/{wf}/runs",headers=h,params={'branch':os.environ['BRANCH'],'per_page':5}).json().get('workflow_runs',[])
               if not rs:out['workflows'][wf]={'found':False};continue
               r=rs[0];jobs=[]
-              for page in range(1,6):
+              for page in range(1,4):
                   z=requests.get(f"{base}/actions/runs/{r['id']}/jobs",headers=h,params={'per_page':100,'page':page}).json().get('jobs',[]);jobs+=z
                   if len(z)<100:break
               d={'found':True,'run_id':r['id'],'event':r['event'],'status':r['status'],'conclusion':r.get('conclusion'),'head_sha':r.get('head_sha'),'jobs_total':len(jobs),'by_status':{},'by_conclusion':{},'jobs':[{'id':j['id'],'name':j['name'],'status':j['status'],'conclusion':j.get('conclusion')} for j in jobs]}
               for j in jobs:
                   d['by_status'][j['status']]=d['by_status'].get(j['status'],0)+1;c=str(j.get('conclusion') or 'NONE');d['by_conclusion'][c]=d['by_conclusion'].get(c,0)+1
               out['workflows'][wf]=d
-          raw=(json.dumps(out,indent=2)+'\n').encode();path='xau-final-results/comex_dev_rank1_analysis_status/RUN_STATUS.json';u=f"{base}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':'publish native N1 recovery status [skip ci]','content':base64.b64encode(raw).decode(),'branch':os.environ['BRANCH']}
+          raw=(json.dumps(out,indent=2)+'\n').encode();path='xau-final-results/comex_dev_rank1_analysis_status/RUN_STATUS.json';u=f"{base}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':'publish native N2 quote status [skip ci]','content':base64.b64encode(raw).decode(),'branch':os.environ['BRANCH']}
           if sha:body['sha']=sha
           q=requests.put(u,headers=h,json=body);q.raise_for_status();print(json.dumps(out,indent=2))
           PY
