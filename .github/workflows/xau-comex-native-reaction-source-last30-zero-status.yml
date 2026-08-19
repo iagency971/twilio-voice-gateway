@@ -1,0 +1,38 @@
+name: XAU COMEX Native Reaction Source Last30 Zero Status
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths: ['.github/workflows/xau-comex-native-reaction-source-last30-zero-status.yml']
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - name: Query source-last30 zero QA run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"; wf='xau-comex-native-reaction-source-last30-zero-qa.yml'
+          rs=requests.get(f"{base}/actions/workflows/{wf}/runs",headers=h,params={'branch':os.environ['BRANCH'],'per_page':5}).json().get('workflow_runs',[])
+          if not rs: raise SystemExit('no zero-QA run found')
+          r=rs[0]; jobs=requests.get(f"{base}/actions/runs/{r['id']}/jobs",headers=h,params={'per_page':100}).json().get('jobs',[])
+          out={'version':'COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_ZERO_STATUS_V1','run_id':r['id'],'status':r['status'],'conclusion':r.get('conclusion'),'head_sha':r.get('head_sha'),'jobs':[{'id':j['id'],'name':j['name'],'status':j['status'],'conclusion':j.get('conclusion'),'steps':[{'name':s['name'],'status':s['status'],'conclusion':s.get('conclusion')} for s in j.get('steps',[])]} for j in jobs]}
+          raw=(json.dumps(out,indent=2)+'\n').encode(); dst='xau-final-results/comex_dev_rank1_native_reaction_source_last30_zero_qa_v1/RUN_STATUS.json'; u=f'{base}/contents/{dst}'; old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+          body={'message':'publish source-last30 zero-QA status [skip ci]','content':base64.b64encode(raw).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          q=requests.put(u,headers=h,json=body); q.raise_for_status(); print(json.dumps(out,indent=2))
+          PY
