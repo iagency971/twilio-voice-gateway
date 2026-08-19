@@ -1,0 +1,10 @@
+{
+  "version": "XAU_REJECTED_HETEROGENEITY_V1_TRIGGER",
+  "status": "AUTHORIZED_HYPOTHESIS_GENERATION_ONLY",
+  "protocol": "xau-multiyear/docs/XAU_REJECTED_STRATEGY_HETEROGENEITY_PROTOCOL_v1.md",
+  "protocol_freeze_commit": "ad8f87bada89026da4ad0b10b9ecea625817fec8",
+  "historical_period": "2011-2025",
+  "new_paid_market_data_spend": 0,
+  "production_filter_authorized": false,
+  "rejected_strategy_rescue_authorized": false
+}
