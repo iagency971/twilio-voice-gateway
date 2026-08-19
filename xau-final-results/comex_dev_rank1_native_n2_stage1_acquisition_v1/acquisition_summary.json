@@ -1,0 +1,16 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE1_ACQUISITION_SUMMARY_V1",
+  "complete": true,
+  "expected_requests": 214,
+  "completed_request_markers": 214,
+  "missing_request_ids": [],
+  "extra_request_ids": [],
+  "records_downloaded_total": 71981,
+  "raw_bytes_total": 835725,
+  "confirmed_success_cost_upper_bound_usd": 0.352496802811,
+  "hard_cap_usd": 0.36,
+  "hard_cap_respected": true,
+  "n2_stage1_market_data_download_performed": true,
+  "n2_later_stage_download_performed": false,
+  "full_n2_union_download_performed": false
+}
