@@ -1,10 +1,11 @@
 {
-  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_FALLBACK_TRIGGER_V2",
-  "purpose": "rerun zero-outcome PRIOR_CLOSE_ONLY support after field-level parity diagnosis confirmed roll mismatches are confined to contexts where GC.n.0 does not equal the frozen raw iid",
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_FALLBACK_TRIGGER_V3",
+  "purpose": "rerun current zero-outcome PRIOR_CLOSE_ONLY source-last30 audit with pre-guard diagnostic publication; confirm support and provenance without any reaction outcome or market-data API",
   "post_contact_values_used_for_matching": false,
   "reaction_outcomes_computed": false,
   "market_data_api_called": false,
   "market_data_download_performed": false,
-  "parity_policy": "require exact OHLCV only among canonical N1 comparison blocks where continuous context has the same single frozen raw instrument_id; expanded controls themselves require same stable underlying instrument_id across source and next sessions",
+  "parity_policy": "require exact OHLCV among canonical N1 comparison blocks where continuous context has the same single frozen raw instrument_id; expanded controls require same stable underlying instrument_id across source and next sessions",
+  "preferred_variant": "PRIOR_CLOSE_ONLY",
   "created_date": "2026-08-19"
 }
