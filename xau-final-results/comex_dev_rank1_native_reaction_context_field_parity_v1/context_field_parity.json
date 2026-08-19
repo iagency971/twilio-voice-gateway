@@ -1,0 +1,43 @@
+{
+  "authorization": "ZERO_OUTCOME_ZERO_MARKET_API_DIAGNOSTIC",
+  "context_duplicate_timestamp_rows": 0,
+  "context_only_timestamps": 422,
+  "databento_api_calls": 0,
+  "field_mismatch_rows": {
+    "close": 6160,
+    "high": 6094,
+    "instrument_id": 6475,
+    "low": 6232,
+    "open": 6131,
+    "volume": 6412
+  },
+  "full_ohlcv_exact_blocks": 85,
+  "full_ohlcv_parity_all_pass": false,
+  "joined_rows": 118745,
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "matching_exact_blocks": 85,
+  "matching_field_mismatch_rows": 6475,
+  "matching_field_parity_all_pass": false,
+  "matching_fields": [
+    "instrument_id",
+    "open",
+    "high",
+    "low",
+    "close"
+  ],
+  "n1_blocks": 92,
+  "n1_duplicate_timestamp_rows": 0,
+  "n1_only_timestamps": 2506,
+  "notes": [
+    "Timestamp is the one-to-one join key and is audited via left/right-only counts and duplicate checks.",
+    "Matching-field parity is instrument_id + OHLC. Volume is reported separately because the frozen matching design does not use volume.",
+    "No post-anchor reaction field is read or computed by this diagnostic."
+  ],
+  "post_anchor_outcomes_read": false,
+  "reaction_outcomes_computed": false,
+  "timestamp_sets_all_exact": false,
+  "version": "COMEX_NATIVE_REACTION_CONTEXT_FIELD_PARITY_V1",
+  "volume_only_mismatch_rows": 0,
+  "volume_used_by_matching": false
+}
