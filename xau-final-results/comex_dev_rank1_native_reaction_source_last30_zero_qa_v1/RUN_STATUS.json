@@ -1,0 +1,82 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_ZERO_STATUS_V1",
+  "run_id": 32263213194,
+  "status": "in_progress",
+  "conclusion": null,
+  "head_sha": "0209bfe1e1f4fddd97ba4d1c51a9e39434800e14",
+  "jobs": [
+    {
+      "id": 96101250568,
+      "name": "audit",
+      "status": "in_progress",
+      "conclusion": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python -m pip install pandas==2.2.3 numpy databento requests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Download already-owned source raw artifacts \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Recover early source artifact 06610 explicitly",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Recover early source artifact 010384 explicitly",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Locate already-paid pilot raw artifact \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Download already-paid pilot raw \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Audit nonpositive source last30 windows \u2014 ZERO OUTCOME",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Hard guard \u2014 no reaction outcomes / no market API",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "Publish source-last30 zero QA",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    }
+  ]
+}
