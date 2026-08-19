@@ -1,4 +1,4 @@
-# trigger-once: native-source-levels-2026-08-18-artifact-fix
+# trigger-once: native-source-levels-v1-1-tick-rounding-2026-08-18
 name: XAU COMEX DEV_RANK1 Native Source Levels
 
 on:
@@ -77,9 +77,23 @@ jobs:
             --mapping xau-final-results/comex_dev_rank1_gate_v1/frozen_session_mapping_all.csv \
             --routing xau-final-results/comex_dev_rank1_dual_routing_qa_v1/dual_session_routing_qa.csv \
             --out /tmp/native
+      - name: Validate GC tick contact registry
+        run: |
+          python - <<'PY'
+          import json,pandas as pd,numpy as np
+          x=pd.read_csv('/tmp/native/native_source_levels.csv')
+          m=json.load(open('/tmp/native/native_source_manifest.json'))
+          assert m['version']=='COMEX_DEV_RANK1_NATIVE_SOURCE_LEVELS_V1_1'
+          assert len(x)==368 and x.source_research_date.nunique()==92
+          assert 'contact_tick_price' in x.columns
+          q=pd.to_numeric(x.contact_tick_price,errors='raise')
+          assert np.allclose(q*10,np.round(q*10),atol=1e-8)
+          assert set(x.level_type)=={'VWAP','POC','VAH','VAL'}
+          print('NATIVE_REGISTRY_V1_1_OK',len(x),x.source_research_date.nunique())
+          PY
       - uses: actions/upload-artifact@v4
         with:
-          name: comex-dev-rank1-native-source-levels-v1
+          name: comex-dev-rank1-native-source-levels-v1-1
           path: /tmp/native/
           retention-days: 90
       - name: Publish source registry
@@ -92,7 +106,7 @@ jobs:
           import base64,os,pathlib,requests
           src=pathlib.Path('/tmp/native');root='xau-final-results/comex_dev_rank1_native_source_levels_v1';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
           for name in ['native_source_levels.csv','native_source_manifest.json']:
-              p=src/name;path=f'{root}/{name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish DEV_RANK1 native source levels {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              p=src/name;path=f'{root}/{name}';u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish DEV_RANK1 native source levels V1.1 {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
               if sha:body['sha']=sha
               r=requests.put(u,headers=h,json=body);r.raise_for_status()
           PY
