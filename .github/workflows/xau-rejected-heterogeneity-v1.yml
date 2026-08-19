@@ -1,0 +1,119 @@
+name: XAU Rejected Strategy Heterogeneity V1 2011-2025
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - 'xau-recovery/XAU_REJECTED_HETEROGENEITY_FULL_TRIGGER.json'
+permissions:
+  contents: write
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest
+      - name: Frozen engine tests
+        env:
+          PYTHONPATH: xau-multiyear/src
+        run: python -m pytest -q xau-multiyear/tests/test_vantage_overlay.py xau-multiyear/tests/test_entries_v1.py xau-multiyear/tests/test_entries_v2.py
+      - name: Publish RUNNING marker
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          payload=json.dumps({'status':'RUNNING','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'source_commit':os.environ.get('GITHUB_SHA'),'protocol':'XAU_REJECTED_STRATEGY_HETEROGENEITY_PROTOCOL_v1'},indent=2).encode()
+          path='xau-final-results/xau_rejected_heterogeneity_v1/RUN_STATUS.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+          body={'message':'mark rejected heterogeneity running [skip ci]','content':base64.b64encode(payload).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          PY
+
+  annual:
+    needs: precheck
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Resolve annual dates
+        id: dates
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+      - name: Rehydrate canonical annual input
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_rejected_${{ matrix.year }}.csv
+      - name: Reconstruct full Phase-C grid, parity and causal-clean subgroups
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python xau-multiyear/scripts/run_xau_rejected_heterogeneity_annual_v1.py /tmp/xau_rejected_${{ matrix.year }}.csv \
+            --year ${{ matrix.year }} \
+            --expected-annual-summary xau-final-results/phase_c_vantage_raw_2011_2025/annual/${{ matrix.year }}_summary.csv \
+            --out /tmp/rejected_${{ matrix.year }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-rejected-heterogeneity-year-${{ matrix.year }}
+          path: /tmp/rejected_${{ matrix.year }}
+          retention-days: 7
+
+  aggregate:
+    needs: annual
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: xau-rejected-heterogeneity-year-*
+          path: /tmp/rejected_annual
+          merge-multiple: true
+      - name: Aggregate rejected-strategy heterogeneity
+        run: |
+          python xau-multiyear/scripts/aggregate_xau_rejected_heterogeneity_v1.py \
+            --annual-dir /tmp/rejected_annual \
+            --multiyear-summary xau-final-results/phase_c_vantage_raw_2011_2025/multiyear_summary.csv \
+            --out /tmp/rejected_final
+      - name: Publish final outputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,pathlib,requests,time
+          root='xau-final-results/xau_rejected_heterogeneity_v1'; out=pathlib.Path('/tmp/rejected_final')
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          def put(path,data,msg):
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              for a in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':msg,'content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+                  if sha: body['sha']=sha
+                  r=requests.put(u,headers=h,json=body)
+                  if r.status_code in (200,201): return
+                  if r.status_code not in (409,422): r.raise_for_status()
+                  time.sleep(1+a)
+              raise RuntimeError(path)
+          for p in sorted(out.iterdir()):
+              if p.is_file(): put(f'{root}/{p.name}',p.read_bytes(),f'publish rejected heterogeneity {p.name} [skip ci]')
+          status={'status':'COMPLETE','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'source_commit':os.environ.get('GITHUB_SHA'),'new_paid_market_data_spend':0}
+          put(f'{root}/RUN_STATUS.json',json.dumps(status,indent=2).encode(),'mark rejected heterogeneity complete [skip ci]')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-rejected-heterogeneity-v1-final
+          path: /tmp/rejected_final
+          retention-days: 14
