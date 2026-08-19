@@ -1,0 +1,135 @@
+name: XAU Preoutcome Source Last30 Reconcile Probe
+
+on:
+  push:
+    branches: [agent/xau-preoutcome-status]
+    paths:
+      - 'xau-recovery/PREOUTCOME_SOURCE_LAST30_RECONCILE_TRIGGER.json'
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-preoutcome-status
+      - run: python -m pip install pandas==2.2.3 numpy databento requests
+      - name: Download current already-owned source raw artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: comex-dev-rank1-dual-*
+          path: /tmp/source
+          merge-multiple: true
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Recover early source artifact 06610 explicitly
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-06610cec170650590cd663ca
+          path: /tmp/source
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Recover early source artifact 010384 explicitly
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-01038430e355d65828fbe711
+          path: /tmp/source
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Locate and download already-paid pilot raw
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import os,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          runs=requests.get(f"{base}/actions/workflows/xau-comex-v4-pilot12-metadata.yml/runs",headers=h,params={'branch':'agent/xau-comex-acquisition-plan','status':'success','per_page':50}).json().get('workflow_runs',[])
+          found=None
+          for r in runs:
+              arts=requests.get(f"{base}/actions/runs/{r['id']}/artifacts",headers=h,params={'per_page':100}).json().get('artifacts',[])
+              if any(x['name']=='comex-v4-pilot12-raw-and-qa' and not x.get('expired') for x in arts): found=r['id'];break
+          if not found: raise SystemExit('pilot raw artifact not found')
+          open('/tmp/pilot_run','w').write(str(found))
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          name: comex-v4-pilot12-raw-and-qa
+          path: /tmp/pilot
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ steps.pilot.outputs.run_id }}
+        id: impossible_dynamic
+        continue-on-error: true
+      - name: Download pilot with REST after locating
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import io,os,requests,zipfile,pathlib
+          run=int(open('/tmp/pilot_run').read())
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          arts=requests.get(f"{base}/actions/runs/{run}/artifacts",headers=h,params={'per_page':100}).json()['artifacts']
+          a=next(x for x in arts if x['name']=='comex-v4-pilot12-raw-and-qa' and not x.get('expired'))
+          r=requests.get(a['archive_download_url'],headers=h);r.raise_for_status()
+          pathlib.Path('/tmp/pilot').mkdir(parents=True,exist_ok=True)
+          zipfile.ZipFile(io.BytesIO(r.content)).extractall('/tmp/pilot')
+          PY
+      - name: Download original guarded zero-QA artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-reaction-source-last30-zero-qa-v1
+          path: /tmp/original_zero_qa
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32263559201
+      - name: Re-run current zero QA and compare full original artifact
+        run: |
+          python xau-multiyear/scripts/audit_comex_native_reaction_source_last30_zero_qa.py \
+            --source-new-root /tmp/source \
+            --source-pilot-root /tmp/pilot \
+            --dual-requests xau-final-results/comex_dev_rank1_dual_manifest_v1/dev_rank1_dual_requests.csv \
+            --sessions xau-final-results/comex_dev_rank1_gate_v1/corrected_primary_sessions.csv \
+            --mapping xau-final-results/comex_dev_rank1_gate_v1/frozen_session_mapping_all.csv \
+            --routing xau-final-results/comex_dev_rank1_dual_routing_qa_v1/dual_session_routing_qa.csv \
+            --source-levels xau-final-results/comex_dev_rank1_native_source_levels_v1/native_source_levels.csv \
+            --events xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome/treated_event_causal_context.csv \
+            --out /tmp/current_zero_qa
+          python - <<'PY'
+          import json,pandas as pd,pathlib,hashlib
+          cur=pd.read_csv('/tmp/current_zero_qa/source_last30_all_sessions.csv')
+          old=pd.read_csv('/tmp/original_zero_qa/source_last30_all_sessions.csv')
+          keys=['source_research_date','source_candidate_key','source_instrument_id','source_raw_file','last30_trade_records','source_last30_range_ticks','source_last30_positive','source_last30_missing','source_last30_flat']
+          cur=cur[[c for c in keys if c in cur.columns]].copy();old=old[[c for c in keys if c in old.columns]].copy()
+          cur['source_research_date']=cur.source_research_date.astype(str);old['source_research_date']=old.source_research_date.astype(str)
+          m=old.merge(cur,on='source_research_date',how='outer',suffixes=('_original','_current'),indicator=True)
+          diff=m[(m['_merge']!='both') | (m.filter(regex='source_last30_positive').astype(str).nunique(axis=1)>1) | (m.filter(regex='source_raw_file').astype(str).nunique(axis=1)>1) | (m.filter(regex='last30_trade_records').astype(str).nunique(axis=1)>1)].copy()
+          watch=sorted(set(['2011-07-04','2011-11-24','2012-11-23','2013-12-25','2014-06-13','2015-04-01']))
+          out={
+            'current_summary':json.load(open('/tmp/current_zero_qa/source_last30_zero_qa.json')),
+            'original_summary':json.load(open('/tmp/original_zero_qa/source_last30_zero_qa.json')),
+            'watch_rows':m[m.source_research_date.isin(watch)].fillna('').to_dict('records'),
+            'differing_rows':diff.fillna('').to_dict('records'),
+            'current_files':sorted([p.name for p in pathlib.Path('/tmp/source').rglob('*.dbn.zst')])[:10],
+          }
+          pathlib.Path('xau-recovery/PREOUTCOME_SOURCE_LAST30_RECONCILE.json').write_text(json.dumps(out,indent=2,default=str))
+          print(json.dumps(out,indent=2,default=str))
+          PY
+      - name: Publish compact reconcile diagnostic
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add xau-recovery/PREOUTCOME_SOURCE_LAST30_RECONCILE.json
+          git commit -m 'publish source-last30 provenance reconcile diagnostic [skip ci]'
+          git push origin HEAD:agent/xau-preoutcome-status
