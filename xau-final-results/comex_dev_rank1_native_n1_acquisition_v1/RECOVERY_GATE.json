@@ -1,0 +1,15 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N1_RECOVERY_GATE_V1",
+  "original_authorization": "OK NATIVE N1, plafond 0,45 $",
+  "hard_cap_usd": 0.45,
+  "existing_completed_requests": 16,
+  "existing_success_cost_upper_bound_usd": 0.07492505014,
+  "failed_request_id_reserved": "2c5c189b29c97a8ba504a54a",
+  "possible_prior_failed_attempt_reserve_usd": 0.004954114556,
+  "missing_requests": 76,
+  "current_missing_exact_quote_usd": 0.367736220363,
+  "worst_case_full_completion_usd": 0.447615385059,
+  "remaining_margin_after_full_completion_usd": 0.0023846149410000073,
+  "market_data_download_performed_in_recovery_gate": false,
+  "note": "Prior 502 is conservatively reserved at its full quote even though no DBN file/marker was produced. No already-successful request may be replayed."
+}
