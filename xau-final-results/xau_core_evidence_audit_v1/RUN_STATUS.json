@@ -1,6 +1,7 @@
 {
-  "status": "AGGREGATION_FAILED",
-  "workflow_run_id": "32298780353",
-  "source_commit": "e323b6b4eb654c16dda1a68559b1e52d4f5cea31",
-  "aggregate_step_outcome": "failure"
+  "status": "REPAIR_RUNNING",
+  "workflow_run_id": "32304252091",
+  "source_commit": "bd9aab04e28b0da2cbdb4789be16dabec861122e",
+  "repair": "2012_JSON_INF_SERIALIZATION_ONLY",
+  "original_audit_run_id": "32298780353"
 }
