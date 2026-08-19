@@ -1,0 +1,7 @@
+{
+  "version": "NATIVE_REACTION_PREOUTCOME_FINAL_TRIGGER_V1",
+  "date": "2026-08-19",
+  "purpose": "Regenerate and freeze repaired COMEX native reaction control universe outcome-blind",
+  "reaction_outcomes_authorized": false,
+  "market_data_api_authorized": false
+}
