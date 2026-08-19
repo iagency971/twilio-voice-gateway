@@ -1,0 +1,51 @@
+name: XAU Preoutcome Final Status Probe V2
+
+on:
+  push:
+    branches: [agent/xau-preoutcome-status]
+    paths:
+      - 'xau-recovery/PREOUTCOME_FINAL_STATUS_V2_TRIGGER.json'
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-preoutcome-status
+      - name: Inspect target final-preoutcome workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import json,os,pathlib,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          workflow='xau-comex-native-reaction-preoutcome-final.yml'
+          runs=requests.get(f"{base}/actions/workflows/{workflow}/runs",headers=h,params={'branch':'agent/xau-comex-acquisition-plan','per_page':5}).json().get('workflow_runs',[])
+          out={'target_workflow':workflow,'runs':[]};tail=''
+          for r in runs:
+              jobs=requests.get(f"{base}/actions/runs/{r['id']}/jobs",headers=h,params={'per_page':100}).json().get('jobs',[])
+              row={k:r.get(k) for k in ['id','run_number','head_sha','status','conclusion','created_at','updated_at','run_started_at','html_url']}
+              row['jobs']=[{'id':j.get('id'),'name':j.get('name'),'status':j.get('status'),'conclusion':j.get('conclusion'),'steps':[{'name':s.get('name'),'status':s.get('status'),'conclusion':s.get('conclusion')} for s in j.get('steps',[])]} for j in jobs]
+              out['runs'].append(row)
+              if not tail and r.get('conclusion')=='failure':
+                  bad=[j for j in jobs if j.get('conclusion')=='failure']
+                  if bad:
+                      resp=requests.get(f"{base}/actions/jobs/{bad[0]['id']}/logs",headers=h,allow_redirects=True);resp.raise_for_status();tail=resp.text[-50000:]
+          pathlib.Path('xau-recovery/PREOUTCOME_FINAL_STATUS_V2.json').write_text(json.dumps(out,indent=2))
+          pathlib.Path('xau-recovery/PREOUTCOME_FINAL_FAILED_LOG_V2.txt').write_text(tail)
+          print(json.dumps(out,indent=2));print(tail[-12000:])
+          PY
+      - name: Publish probe
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add xau-recovery/PREOUTCOME_FINAL_STATUS_V2.json xau-recovery/PREOUTCOME_FINAL_FAILED_LOG_V2.txt
+          git commit -m 'publish final preoutcome status probe v2 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-preoutcome-status
