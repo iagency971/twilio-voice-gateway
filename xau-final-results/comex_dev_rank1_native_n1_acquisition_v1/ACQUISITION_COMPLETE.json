@@ -1,0 +1,14 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N1_ACQUISITION_COMPLETE_V1",
+  "complete": true,
+  "requests": 92,
+  "confirmed_success_cost_upper_bound_usd": 0.442661270503,
+  "possible_prior_failed_attempt_reserve_usd": 0.004954114556,
+  "worst_case_total_cost_usd": 0.447615385059,
+  "hard_cap_usd": 0.45,
+  "summary_sha256": "de1ac5a8c5bf131148828e07c0eb4a72df92de17aea610c65fb1104d774b758e",
+  "n2_download_authorized": false,
+  "dev_rank2_opened": false,
+  "retro_confirm_opened": false,
+  "locked_comex_test_opened": false
+}
