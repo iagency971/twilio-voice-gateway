@@ -1,0 +1,32 @@
+{
+  "version": "XAU_CORE_EVIDENCE_AUDIT_V1",
+  "protocol": "xau-multiyear/docs/XAU_CORE_EVIDENCE_AUDIT_PROTOCOL_v1_1.md",
+  "core_events": 304,
+  "ledger_rows": 7296,
+  "ledger_sha256": "68429360f2e35af2b3fb7710833e3554676deec38413d9396ad687adb44d7030",
+  "annual_input_sha256": {
+    "2011": "95b6feb69ccea4dfa91e37ee1e608b03364e8a8f1efcba57594e298f08e55c92",
+    "2012": "471a77fc4caff8677735645a01f3258a1c7fe140e2a5b94f021775aedd1e6722",
+    "2013": "3c8231839910a72255492927c87abc713c17b5f39710944352b91a2da3507823",
+    "2014": "ca4a8fcbcc4a255a768911cd2131bb6608091db094dbde5a317171c1944d3d8d",
+    "2015": "3988a27e0eb55295cf0b8ee158cd34620fb61895c44e4375a3abbce32b451c7c",
+    "2016": "eaa11559a0aafc9f45e81aec5a75b77ae23f43dc74bdb4873efa1ae78974108b",
+    "2017": "fe9514849196a076e8a3aea70753ea22a5747b53943c8960e6f1cafd524cca7c",
+    "2018": "352fcebfc96e52675a63151d9e8551ab2b46d4bebb223a195b4283382604dcfb",
+    "2019": "416c6410ac7d2ceb4bef04574c4ba45faf9fa6037472d713bf131e8dc63384a1",
+    "2020": "4d689086065897a3b086fe2140faf50c7af2bdf24088ace67d3c32c7e6c28cfd",
+    "2021": "d144f0f80399719bdcf1790765ac78729fcc655f1e7c29742e3a51f4c21a0e10",
+    "2022": "c2af60534d9ebd1a65c688b29b9b13d4a89ec14e87ba8fd12c9ad76d4f263cc7",
+    "2023": "cac367b6ea40bba75ed305311c7df264d3d2f4e62dbc1f8f9b341dbdad92a6f6",
+    "2024": "f37ebd308818b271aa1aa93d95058211d4d527cf054b9fffd0e586da1763b012",
+    "2025": "3ecb55f401c64ff34526f71d0ecf0e52a6d385e2d5a2f86c960a6cbacd9ab376"
+  },
+  "canonical_input_rehydration": true,
+  "new_research_market_information": false,
+  "new_market_data_spend": 0,
+  "runtime_commit": "484d7b6272556c161c72f68889bd8b4cf1ddbfbb",
+  "date_cluster_bootstrap_draws": 20000,
+  "date_cluster_bootstrap_seed": 20260821,
+  "moving_block_bootstrap_draws": 20000,
+  "moving_block_bootstrap_seed": 20260822
+}
