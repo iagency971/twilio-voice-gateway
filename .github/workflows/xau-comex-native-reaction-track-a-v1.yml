@@ -1,0 +1,131 @@
+name: XAU COMEX Native Reaction Track A V1
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - 'xau-recovery/NATIVE_REACTION_TRACK_A_V1_TRIGGER.json'
+
+concurrency:
+  group: xau-comex-native-reaction-track-a-v1
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+          fetch-depth: 0
+
+      - run: python -m pip install pandas==2.2.3 numpy databento requests
+
+      - name: Download owned canonical N1 M1 artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n1-raw-complete-v1
+          path: /tmp/n1
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32205624009
+
+      - name: Download owned stable-IID GC.n.0 M1 context — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-n0_ohlcv_1m_context_20100606_20190101
+          path: /tmp/context
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+
+      - name: Execute frozen Track-A reaction analysis — NO MARKET API / NO NEW SPEND
+        run: |
+          python xau-multiyear/scripts/run_comex_native_reaction_track_a_v1.py \
+            --preoutcome-root xau-final-results/comex_dev_rank1_native_reaction_preoutcome_final_v1 \
+            --n1-manifest xau-final-results/comex_dev_rank1_native_n1_quote_v1/native_n1_market_request_manifest.csv \
+            --n1-root /tmp/n1 \
+            --context-root /tmp/context \
+            --protocol xau-multiyear/docs/COMEX_DEV_RANK1_NATIVE_REACTION_PROTOCOL_v1.md \
+            --script xau-multiyear/scripts/run_comex_native_reaction_track_a_v1.py \
+            --workflow .github/workflows/xau-comex-native-reaction-track-a-v1.yml \
+            --out /tmp/track_a_v1
+
+      - name: Hard guard Track A execution
+        run: |
+          python - <<'PY'
+          import json, pandas as pd
+          root='/tmp/track_a_v1'
+          g=json.load(open(root+'/outcome_execution_guard.json'))
+          d=json.load(open(root+'/track_a_decision.json'))
+          assert g['freeze_sha_verified_before_outcomes'] is True
+          assert g['all_frozen_generated_artifact_hashes_verified_before_outcomes'] is True
+          assert g['frozen_matching_regenerated_before_outcomes'] is True
+          assert g['frozen_matching_exact_identity_pass'] is True
+          assert g['support_gate_pass_before_outcomes'] is True
+          assert g['w15_opened'] is True and g['reaction_outcomes_computed'] is True
+          assert g['market_data_api_called'] is False
+          assert g['market_data_download_performed'] is False
+          assert g['new_market_data_spend'] == 0
+          assert g['mfe_mae_computed'] is False
+          assert g['order_dependent_metric_computed'] is False
+          assert g['xauusd_economic_mapping_computed'] is False
+          assert g['dev_rank2_executed'] is False and g['confirm_executed'] is False and g['locked_test_executed'] is False
+          assert d['matched_events'] == 227 and d['matched_treated_dates'] == 81
+          assert d['primary_bootstrap']['valid_replicates'] == 20000 and d['primary_bootstrap']['seed'] == 20260819
+          assert d['primary_signflip']['draws'] == 50000 and d['primary_signflip']['seed'] == 20260820
+          assert d['decision'] in {'OPEN_DEV_RANK2_NATIVE_REACTION','NO_GO_DEV_RANK2_NATIVE_REACTION','STOP_AND_REPAIR_DESIGN'}
+          p=pd.read_csv(root+'/primary_date_effects.csv')
+          assert len(p)==81
+          print('TRACK_A_HARD_GUARD_OK', d['decision'], d['B_primary_effect_gate'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-reaction-track-a-v1
+          path: /tmp/track_a_v1/
+          retention-days: 90
+
+      - name: Publish Track-A results atomically
+        id: publish
+        run: |
+          root='xau-final-results/comex_dev_rank1_native_reaction_track_a_v1'
+          rm -rf "$root"
+          mkdir -p "$root"
+          cp -a /tmp/track_a_v1/. "$root/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$root"
+          git commit -m 'publish frozen COMEX native reaction Track A results [skip ci]'
+          git push origin HEAD:agent/xau-comex-acquisition-plan
+          echo "result_commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Record exact Track-A result publication commit
+        run: |
+          root='xau-final-results/comex_dev_rank1_native_reaction_track_a_v1'
+          python - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path('xau-final-results/comex_dev_rank1_native_reaction_track_a_v1')
+          p=root/'track_a_result_manifest.json'
+          z={
+            'version':'COMEX_DEV_RANK1_NATIVE_REACTION_TRACK_A_PUBLICATION_V1',
+            'result_publication_commit_sha':os.environ['RESULT_COMMIT'],
+            'track_a_result_manifest_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+            'decision':json.load(open(root/'track_a_decision.json'))['decision'],
+            'market_data_api_called':False,
+            'market_data_download_performed':False,
+            'new_market_data_spend':0,
+            'dev_rank2_executed':False,
+          }
+          (root/'RESULT_PUBLICATION.json').write_text(json.dumps(z,indent=2))
+          PY
+          git add "$root/RESULT_PUBLICATION.json"
+          git commit -m 'record Track A result publication commit [skip ci]'
+          git push origin HEAD:agent/xau-comex-acquisition-plan
+        env:
+          RESULT_COMMIT: ${{ steps.publish.outputs.result_commit }}
