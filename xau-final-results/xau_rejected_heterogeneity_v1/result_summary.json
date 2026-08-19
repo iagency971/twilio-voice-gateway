@@ -1,0 +1,16 @@
+{
+  "version": "XAU_REJECTED_STRATEGY_HETEROGENEITY_V1_RESULT",
+  "annual_parity_all_pass": true,
+  "architecture_status_counts": {
+    "FULLY_REJECTED": 32,
+    "PARTIALLY_SURVIVING": 2,
+    "VALIDATED_REFERENCE": 1
+  },
+  "candidate_rows": 2712,
+  "repeated_hypothesis_signals": 87,
+  "robust_hypothesis_signals": 135,
+  "architectures_with_any_signal": 27,
+  "production_filter_authorized": false,
+  "rejected_strategy_rescue_authorized": false,
+  "new_paid_market_data_spend": 0
+}
