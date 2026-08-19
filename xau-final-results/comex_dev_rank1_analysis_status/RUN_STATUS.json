@@ -1,13 +1,13 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V22",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V23",
   "workflows": {
-    "xau-comex-dev-rank1-native-n2-stage2-acquire.yml": {
+    "xau-comex-dev-rank1-native-n2-stage3-acquire.yml": {
       "found": true,
-      "run_id": 32250737768,
+      "run_id": 32251356108,
       "event": "push",
       "status": "in_progress",
       "conclusion": null,
-      "head_sha": "32d430a30778da33107473bdfacd734d8786c4ca",
+      "head_sha": "09bde3d401ed17ff3b00bcef9c4ee507a39d6031",
       "jobs_total": 1,
       "by_status": {
         "in_progress": 1
@@ -17,20 +17,20 @@
       },
       "jobs": [
         {
-          "id": 96060883922,
+          "id": 96062878256,
           "name": "acquire-analyze",
           "status": "in_progress",
           "conclusion": null
         }
       ]
     },
-    "xau-comex-dev-rank1-native-n2-stage1-recover.yml": {
+    "xau-comex-dev-rank1-native-n2-stage2-acquire.yml": {
       "found": true,
-      "run_id": 32211696605,
+      "run_id": 32250737768,
       "event": "push",
       "status": "completed",
       "conclusion": "success",
-      "head_sha": "09058890f7a5f135f4b3a6438758d3bb6acfcb3d",
+      "head_sha": "32d430a30778da33107473bdfacd734d8786c4ca",
       "jobs_total": 1,
       "by_status": {
         "completed": 1
@@ -40,8 +40,8 @@
       },
       "jobs": [
         {
-          "id": 95945498270,
-          "name": "recover-analyze",
+          "id": 96060883922,
+          "name": "acquire-analyze",
           "status": "completed",
           "conclusion": "success"
         }
