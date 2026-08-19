@@ -1,12 +1,12 @@
 {
   "version": "COMEX_DEV_RANK1_NATIVE_REACTION_EXPANDED_CONTROL_STATUS_V1",
-  "run_id": 32260447841,
+  "run_id": 32260889447,
   "status": "in_progress",
   "conclusion": null,
-  "head_sha": "7e9cb0b708275cfc04d09a4c185a426695a4d8bf",
+  "head_sha": "07f630640161f5bfa2acfb1c8623729a853cc58b",
   "jobs": [
     {
-      "id": 96092178964,
+      "id": 96093608651,
       "name": "audit",
       "status": "in_progress",
       "conclusion": null,
@@ -37,7 +37,7 @@
           "conclusion": "success"
         },
         {
-          "name": "Run expanded-control feasibility \u2014 ZERO OUTCOME / ZERO MARKET API",
+          "name": "Run vectorized expanded-control feasibility \u2014 ZERO OUTCOME / ZERO MARKET API",
           "status": "in_progress",
           "conclusion": null
         },
