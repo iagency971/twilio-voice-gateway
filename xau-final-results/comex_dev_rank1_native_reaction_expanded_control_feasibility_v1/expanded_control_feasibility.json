@@ -1,0 +1,67 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_EXPANDED_CONTROL_FEASIBILITY_V2",
+  "post_anchor_outcomes_read": false,
+  "reaction_outcomes_computed": false,
+  "mfe_mae_computed": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "continuous_context_request_id": "n0_ohlcv_1m_context_20100606_20190101",
+  "continuous_context_raw_sha256": "7fe546d5cac2a1ef8dd2fa6837a5c1760e3349e10ed6eabaaa569282a4fbb959",
+  "continuous_context_records": 2925190,
+  "continuous_context_unique_instrument_ids": 43,
+  "parity_summary": {
+    "n1_blocks": 92,
+    "stable_same_iid_blocks": 85,
+    "stable_blocks_exact_parity": 85,
+    "stable_parity_all_pass": true
+  },
+  "session_stage_counts": {
+    "DEV_RANK1": 96,
+    "DEV_RANK2": 96,
+    "CONFIRM": 95,
+    "LOCKED_TEST": 70
+  },
+  "reserved_non_dev_rank1_dates": 261,
+  "generic_stable_same_iid_blocks": 1727,
+  "generic_control_candidates": 2283497,
+  "existing_control_candidates": 101714,
+  "combined_control_candidates": 2385211,
+  "strict_pro_support": {
+    "defined_events": 235,
+    "event_eligible": 180,
+    "full_k5_matched_events": 175,
+    "full_k5_matched_dates": 74,
+    "full_match_rate": 0.7446808510638298,
+    "criteria": {
+      "matched_events_ge_160": true,
+      "matched_dates_ge_60": true,
+      "every_source_year_matched_dates_ge_5": true,
+      "defined_contact_full_match_rate_ge_0_85": false,
+      "every_source_year_full_match_rate_ge_0_75": false
+    },
+    "support_gate_pass": false
+  },
+  "early_fallback_support": {
+    "defined_events": 235,
+    "event_eligible": 234,
+    "full_k5_matched_events": 229,
+    "full_k5_matched_dates": 81,
+    "full_match_rate": 0.9744680851063829,
+    "criteria": {
+      "matched_events_ge_160": true,
+      "matched_dates_ge_60": true,
+      "every_source_year_matched_dates_ge_5": true,
+      "defined_contact_full_match_rate_ge_0_85": true,
+      "every_source_year_full_match_rate_ge_0_75": true
+    },
+    "support_gate_pass": true
+  },
+  "expanded_blocks_sha256": "006364d4b7a4fea3efc5d725fae25485987f9a87c99348d918ed5990d0c7622f",
+  "notes": [
+    "Vendor continuous-contract prices are original and unadjusted; this audit additionally requires a constant underlying instrument_id across source J and J+1 and raw-N1 parity where directly testable.",
+    "Any source or next date explicitly reserved for non-DEV_RANK1 is excluded.",
+    "No post-anchor reaction outcome is read or computed.",
+    "Strict support preserves original Pro K5/exact-source-year/30-minute-bin/approach/0.5-2 calipers.",
+    "Early fallback is a sensitivity only and requires Pro approval before freezing."
+  ]
+}
