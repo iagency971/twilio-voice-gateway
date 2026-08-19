@@ -1,7 +1,7 @@
 {
-  "status": "REPAIR_RUNNING",
-  "workflow_run_id": "32304252091",
-  "source_commit": "bd9aab04e28b0da2cbdb4789be16dabec861122e",
+  "status": "COMPLETE",
+  "workflow_run_id": "32304086115",
+  "source_commit": "484d7b6272556c161c72f68889bd8b4cf1ddbfbb",
   "repair": "2012_JSON_INF_SERIALIZATION_ONLY",
   "original_audit_run_id": "32298780353"
 }
