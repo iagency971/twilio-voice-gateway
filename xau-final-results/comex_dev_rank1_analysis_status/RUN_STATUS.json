@@ -1,22 +1,19 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V10",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V11",
   "workflows": {
     "xau-comex-dev-rank1-vantage-outcomes.yml": {
       "found": true,
       "run_id": 32202096973,
       "event": "push",
-      "status": "queued",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "head_sha": "575b107b67a90fe97e70db610ec3ef68e216fda7",
       "jobs_total": 8,
       "by_status": {
-        "completed": 3,
-        "in_progress": 4,
-        "queued": 1
+        "completed": 8
       },
       "by_conclusion": {
-        "success": 3,
-        "NONE": 5
+        "success": 8
       },
       "jobs": [
         {
@@ -28,26 +25,26 @@
         {
           "id": 95917872626,
           "name": "annual (2017)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95917872629,
           "name": "annual (2018)",
-          "status": "queued",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95917872638,
           "name": "annual (2015)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95917872652,
           "name": "annual (2012)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         },
         {
           "id": 95917872687,
@@ -64,50 +61,54 @@
         {
           "id": 95917872706,
           "name": "annual (2016)",
-          "status": "in_progress",
-          "conclusion": null
+          "status": "completed",
+          "conclusion": "success"
         }
       ]
     },
     "xau-comex-dev-rank1-net-r.yml": {
       "found": true,
-      "run_id": 32201866643,
+      "run_id": 32202482592,
       "event": "push",
-      "status": "completed",
-      "conclusion": "failure",
-      "head_sha": "1a08f459045be990269d5fda4c81e2427d9d9154",
-      "jobs_total": 4,
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "bf1eb3edd201ea10ba0bcf5c78b587a9349f852c",
+      "jobs_total": 1,
       "by_status": {
-        "completed": 4
+        "in_progress": 1
       },
       "by_conclusion": {
-        "failure": 1,
-        "skipped": 3
+        "NONE": 1
       },
       "jobs": [
         {
-          "id": 95917181800,
+          "id": 95918997052,
           "name": "prepare",
-          "status": "completed",
-          "conclusion": "failure"
-        },
+          "status": "in_progress",
+          "conclusion": null
+        }
+      ]
+    },
+    "xau-comex-dev-rank1-native-source-levels.yml": {
+      "found": true,
+      "run_id": 32202328191,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "6f33d991a6c1b253f8a27f6eda0f28744012471b",
+      "jobs_total": 1,
+      "by_status": {
+        "completed": 1
+      },
+      "by_conclusion": {
+        "success": 1
+      },
+      "jobs": [
         {
-          "id": 95917239789,
-          "name": "touch_next_open",
+          "id": 95918549213,
+          "name": "build",
           "status": "completed",
-          "conclusion": "skipped"
-        },
-        {
-          "id": 95917239826,
-          "name": "structural",
-          "status": "completed",
-          "conclusion": "skipped"
-        },
-        {
-          "id": 95917239979,
-          "name": "aggregate",
-          "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         }
       ]
     }
