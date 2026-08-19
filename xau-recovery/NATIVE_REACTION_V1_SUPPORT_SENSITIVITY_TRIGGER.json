@@ -3,5 +3,6 @@
   "purpose": "outcome-blind control-support sensitivity only",
   "post_anchor_outcomes_read": false,
   "reaction_outcomes_computed": false,
-  "market_data_api_called": false
+  "market_data_api_called": false,
+  "trigger_nonce": "2026-08-19T13:31:00Z"
 }
