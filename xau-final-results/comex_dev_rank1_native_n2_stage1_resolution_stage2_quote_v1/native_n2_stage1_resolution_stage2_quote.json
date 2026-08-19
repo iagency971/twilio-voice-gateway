@@ -1,0 +1,31 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE1_RESOLUTION_STAGE2_QUOTE_V1",
+  "stage1_acquisition_complete": true,
+  "stage1_levels": 243,
+  "stage1_resolved_exact_contact": 231,
+  "stage1_exact_contact_rate": 0.9506172839506173,
+  "stage1_unresolved_total": 12,
+  "stage1_resolved_no_contact_exhausted": 5,
+  "stage2_levels": 7,
+  "stage2_unique_candidate_minutes": 7,
+  "stage2_merged_market_requests": 7,
+  "exact_stage2_cost_usd": 0.001557111741,
+  "stage2_authorization": "METADATA_ONLY_STAGE2_DOWNLOAD_NOT_AUTHORIZED",
+  "stage2_market_data_download_performed": false,
+  "full_n2_union_download_performed": false,
+  "stage1_resolution_sha256": "3b3efaa5ff156cfcf43f62c032668f135df6d607e7ebc4a7aef18afc8db57a6c",
+  "stage1_resolution_by_type_sha256": "82fed7c61027e20557ad7201697dd75862841e4e952c8456de9df9cacda53a26",
+  "stage2_level_manifest_sha256": "23f27d7c5861d1fba7889d1149423aac0aea3f0f1a5fd2fa757b65479b64f2cb",
+  "stage2_market_request_manifest_sha256": "46597c127a09c0b05a59e01114759c30585db1a978ecb75d2098958266cd6fca",
+  "sequential_freeze": "COMEX_DEV_RANK1_NATIVE_N2_SEQUENTIAL_ACQUISITION_FREEZE_v1.md",
+  "contact_rule": "first chronological raw GC trade in tested candidate minute whose price equals frozen contact_tick_price on 0.10 GC tick",
+  "dev_rank2_opened": false,
+  "retro_confirm_opened": false,
+  "locked_comex_test_opened": false,
+  "notes": [
+    "Stage1 exact trades are outcome data for contact confirmation only.",
+    "Stage2 population is mechanical: candidate rank 2 only for levels not resolved in Stage1.",
+    "Stage2 uses metadata.get_cost only; no Stage2 timeseries.get_range call is present.",
+    "A new explicit financial authorization is required before any Stage2 market-data download."
+  ]
+}
