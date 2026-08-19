@@ -1,0 +1,18 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N1_ACQUISITION_SUMMARY_V1_1_RECOVERY",
+  "complete": true,
+  "expected_requests": 92,
+  "completed_request_markers": 92,
+  "original_run_completed": 16,
+  "recovery_completed": 76,
+  "records_downloaded_total": 121251,
+  "confirmed_success_cost_upper_bound_usd": 0.442661270503,
+  "possible_prior_failed_attempt_reserve_usd": 0.004954114556,
+  "worst_case_total_cost_usd": 0.447615385059,
+  "hard_cap_usd": 0.45,
+  "hard_cap_respected": true,
+  "market_data_download_performed": true,
+  "n2_download_performed": false,
+  "original_failure": "502 BentoServerError on first missing request; no raw file or marker produced",
+  "failed_request_id_reserved": "2c5c189b29c97a8ba504a54a"
+}
