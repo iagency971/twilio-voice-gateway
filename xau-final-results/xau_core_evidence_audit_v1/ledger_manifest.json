@@ -3,7 +3,7 @@
   "protocol": "xau-multiyear/docs/XAU_CORE_EVIDENCE_AUDIT_PROTOCOL_v1_1.md",
   "core_events": 304,
   "ledger_rows": 7296,
-  "ledger_sha256": "68429360f2e35af2b3fb7710833e3554676deec38413d9396ad687adb44d7030",
+  "ledger_sha256": "77dee6fa4c98c58f3367ca81e03a33ed801fc5bc5af85bea5c97f1b324354a3d",
   "annual_input_sha256": {
     "2011": "95b6feb69ccea4dfa91e37ee1e608b03364e8a8f1efcba57594e298f08e55c92",
     "2012": "471a77fc4caff8677735645a01f3258a1c7fe140e2a5b94f021775aedd1e6722",
@@ -24,7 +24,7 @@
   "canonical_input_rehydration": true,
   "new_research_market_information": false,
   "new_market_data_spend": 0,
-  "runtime_commit": "484d7b6272556c161c72f68889bd8b4cf1ddbfbb",
+  "runtime_commit": "bd9aab04e28b0da2cbdb4789be16dabec861122e",
   "date_cluster_bootstrap_draws": 20000,
   "date_cluster_bootstrap_seed": 20260821,
   "moving_block_bootstrap_draws": 20000,
