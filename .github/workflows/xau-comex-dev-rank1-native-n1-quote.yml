@@ -1,4 +1,4 @@
-# trigger-once: comex-native-n1-metadata-only-2026-08-18
+# trigger-once: comex-native-n1-metadata-only-run-2026-08-18
 name: XAU COMEX DEV_RANK1 Native N1 Quote
 
 on:
