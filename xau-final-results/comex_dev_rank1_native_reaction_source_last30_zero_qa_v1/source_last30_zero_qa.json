@@ -1,0 +1,30 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_ZERO_QA_V1",
+  "post_contact_values_used_for_matching": false,
+  "post_anchor_outcomes_read": false,
+  "reaction_outcomes_computed": false,
+  "mfe_mae_computed": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "source_sessions_total": 92,
+  "source_last30_positive_sessions": 91,
+  "source_last30_nonpositive_sessions": 1,
+  "source_last30_missing_sessions": 1,
+  "source_last30_flat_sessions": 0,
+  "affected_contact_events": 1,
+  "affected_defined_approach_events": 1,
+  "affected_source_years": [2013],
+  "nonpositive_source_dates": ["2013-12-25"],
+  "origin_run_id": 32263559201,
+  "origin_job_id": 96101250568,
+  "origin_artifact_id": 9352159692,
+  "origin_artifact_digest": "sha256:9ffe36231b805cf6e75b568ef35558e61ca9ae1a2894611401bc8799fa05433d",
+  "publication_note": "The original workflow calculation, hard zero-outcome guard, and artifact upload all succeeded. Its final GitHub contents publication step failed with HTTP 422 after those successful steps; this compact canonical JSON reproduces the exact guarded result emitted by that run.",
+  "notes": [
+    "This QA reads only the already-owned source-session raw tape and frozen event timestamps/context.",
+    "It does not read or compute any post-contact reaction endpoint.",
+    "A zero range with positive trade count would be a genuinely flat final-30-minute executed-price window, not missing data.",
+    "The sole nonpositive case, 2013-12-25, is a missing final-30-minute trade window, not a flat window.",
+    "That missing fallback covariate affects exactly one exact-contact event with defined approach and must not be imputed from post-contact data."
+  ]
+}
