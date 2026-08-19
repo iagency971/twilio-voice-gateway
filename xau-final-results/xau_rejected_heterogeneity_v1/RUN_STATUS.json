@@ -1,7 +1,6 @@
 {
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "workflow_run_id": "32311173525",
   "source_commit": "a4d4bb003eb96ac7b2d572e010e193ca55e591ec",
-  "protocol": "XAU_REJECTED_STRATEGY_HETEROGENEITY_PROTOCOL_v1",
-  "adapter": "MEMBER_ZONE_ID_TO_ZONE_ID_ONLY"
+  "new_paid_market_data_spend": 0
 }
