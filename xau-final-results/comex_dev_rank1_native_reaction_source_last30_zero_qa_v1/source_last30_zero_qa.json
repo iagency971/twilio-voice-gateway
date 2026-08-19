@@ -1,5 +1,6 @@
 {
-  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_ZERO_QA_V1",
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_ZERO_QA_V1_CORRECTED_CANONICAL",
+  "correction_date": "2026-08-19",
   "post_contact_values_used_for_matching": false,
   "post_anchor_outcomes_read": false,
   "reaction_outcomes_computed": false,
@@ -7,24 +8,50 @@
   "market_data_api_called": false,
   "market_data_download_performed": false,
   "source_sessions_total": 92,
-  "source_last30_positive_sessions": 91,
-  "source_last30_nonpositive_sessions": 1,
-  "source_last30_missing_sessions": 1,
+  "source_last30_positive_sessions": 87,
+  "source_last30_nonpositive_sessions": 5,
+  "source_last30_missing_sessions": 5,
   "source_last30_flat_sessions": 0,
-  "affected_contact_events": 1,
-  "affected_defined_approach_events": 1,
-  "affected_source_years": [2013],
-  "nonpositive_source_dates": ["2013-12-25"],
-  "origin_run_id": 32263559201,
-  "origin_job_id": 96101250568,
-  "origin_artifact_id": 9352159692,
-  "origin_artifact_digest": "sha256:9ffe36231b805cf6e75b568ef35558e61ca9ae1a2894611401bc8799fa05433d",
-  "publication_note": "The original workflow calculation, hard zero-outcome guard, and artifact upload all succeeded. Its final GitHub contents publication step failed with HTTP 422 after those successful steps; this compact canonical JSON reproduces the exact guarded result emitted by that run.",
+  "affected_contact_events": 11,
+  "affected_defined_approach_events": 11,
+  "affected_early_fallback_events": 3,
+  "affected_early_fallback_source_dates": [
+    "2011-07-04",
+    "2011-11-24"
+  ],
+  "affected_source_years": [2011, 2012, 2014, 2015],
+  "nonpositive_source_dates": [
+    "2011-07-04",
+    "2011-11-24",
+    "2012-11-23",
+    "2014-06-13",
+    "2015-04-01"
+  ],
+  "historical_full_artifact": {
+    "workflow_run_id": 32263213194,
+    "job_id": 96101250568,
+    "artifact_id": 9369117804,
+    "artifact_name": "comex-dev-rank1-native-reaction-source-last30-zero-qa-v1",
+    "artifact_digest": "sha256:6b7166a3ead461c8d1dc72b4313d641395c51bb3fb075977774817a3b00b6a16",
+    "head_sha": "0209bfe1e1f4fddd97ba4d1c51a9e39434800e14",
+    "source_last30_zero_qa_json_sha256": "ddffde11a7f3a34bc6a78ce85127dd97b3ed311095c992db7b9c4efc53425154",
+    "source_last30_all_sessions_csv_sha256": "cddd92b044e97d6b052b8df2bf03c60fc01632fa4e29ce65e74b886c568669de",
+    "source_last30_nonpositive_sessions_csv_sha256": "3c6b8e33c3b196e1c6ce91486c07f19ff4b1889413bb81e1fa909e05b459ccc5",
+    "source_last30_nonpositive_affected_contacts_csv_sha256": "5008cfd25c18a5b7e61fd84828245e3e6568128134d570c7889a3116945f6661"
+  },
+  "correction_reason": "The previously published compact JSON did not reproduce its cited guarded source artifact. It named a non-resolvable run/artifact and reported 91 positive / 1 missing on 2013-12-25. The recoverable full guarded artifact tied to the cited job_id, and a fresh zero-outcome reconstruction from the already-owned source raw artifacts, both report 87 positive / 5 missing / 0 flat with the five dates listed here.",
+  "pro_rule_application": {
+    "no_imputation": true,
+    "early_event_with_missing_source_last30": "FALLBACK_COVARIATE_MISSING_SOURCE_LAST30",
+    "early_event_primary_control_eligible": false,
+    "mature_event_uses_source_last30": false,
+    "support_must_be_recomputed_outcome_blind": true,
+    "w15_remains_closed_until_final_support_freeze_passes": true
+  },
   "notes": [
-    "This QA reads only the already-owned source-session raw tape and frozen event timestamps/context.",
-    "It does not read or compute any post-contact reaction endpoint.",
-    "A zero range with positive trade count would be a genuinely flat final-30-minute executed-price window, not missing data.",
-    "The sole nonpositive case, 2013-12-25, is a missing final-30-minute trade window, not a flat window.",
-    "That missing fallback covariate affects exactly one exact-contact event with defined approach and must not be imputed from post-contact data."
+    "This correction is provenance-only and outcome-blind.",
+    "No reaction endpoint, MFE/MAE, NRB, terminal displacement, family/year/session ranking, profitability result, or XAUUSD mapping was read or computed.",
+    "Only three defined-approach contacts among the eleven contacts sourced from the five missing-window dates occur before session minute 30 and therefore actually require the source-last30 fallback.",
+    "The no-imputation rule approved by Pro applies mechanically to every such early event."
   ]
 }
