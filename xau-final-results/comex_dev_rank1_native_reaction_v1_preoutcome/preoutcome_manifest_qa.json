@@ -1,0 +1,56 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_V1_PREOUTCOME_MANIFEST_QA",
+  "reaction_outcomes_computed": false,
+  "mfe_mae_computed": false,
+  "post_anchor_outcomes_read": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false,
+  "native_levels": 368,
+  "exact_contacts": 238,
+  "source_sessions": 92,
+  "source_range_provenance_pass": true,
+  "control_candidate_rows": 101714,
+  "defined_approach_contacts": 235,
+  "primary_eligible_events": 180,
+  "full_k5_matched_events": 100,
+  "full_k5_matched_treated_dates": 54,
+  "defined_contact_full_match_rate": 0.425531914893617,
+  "support_criteria": {
+    "matched_events_ge_160": false,
+    "matched_dates_ge_60": false,
+    "every_year_matched_dates_ge_5": false,
+    "defined_contact_full_match_rate_ge_0_85": false,
+    "every_year_full_match_rate_ge_0_75": false
+  },
+  "support_gate_pass": false,
+  "decision_if_frozen_now": "STOP_AND_REPAIR_DESIGN",
+  "hashes_sha256": {
+    "source_session_range_provenance.csv": "6b77541bf3a0970fac9e75499b3ea36bf412aac2c937d22b444c184d5a4fc6cb",
+    "treated_event_causal_context.csv": "009791c415c78487c4e874a37efd8a8198a7d5ae299e6a3c41ba8ba3d49c3f48",
+    "control_candidate_universe.csv.gz": "2e34c4209d7c2b7df7d1b00b64cfa421dbbe482ac45bf8910b0d4396c1f1e883",
+    "matched_control_manifest.csv": "e5aa6e38b5335b310a58834e692628d3fef51f1a58e2678cef6f3751ce45e817",
+    "treated_event_support.csv": "5f8de30627bfabf2281f24ed13ef5932b27531faca765fddda6965041f26fc1f",
+    "support_by_year.csv": "c04bfec40089ed2faaf32ef4e69932307eb59e31ce95578cda687da6dfed192e"
+  },
+  "fixed_parameters": {
+    "K_controls": 5,
+    "contact_exclusion_minutes": 60,
+    "time_bin_minutes": 30,
+    "pre_anchor_range_minutes": 30,
+    "pre_anchor_move_minutes": 5,
+    "source_range_ratio_caliper": [
+      0.5,
+      2.0
+    ],
+    "pre30_range_ratio_caliper": [
+      0.5,
+      2.0
+    ]
+  },
+  "notes": [
+    "Only source-session and pre-anchor/control-selection data were decoded.",
+    "No W5/W15/W60/session-close reaction endpoint was computed or inspected.",
+    "Exact N2 raw was used only to determine causal approach before t0 where available.",
+    "Control universe excludes anchors within plus/minus 60 wall-clock minutes of known native exact contacts."
+  ]
+}
