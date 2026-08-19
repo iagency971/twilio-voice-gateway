@@ -1,0 +1,66 @@
+name: XAU Core Temporal Stack Integrity 2022 Preflight
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-core-temporal-stack-integrity-2022-preflight.yml'
+permissions:
+  contents: write
+jobs:
+  audit2022:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish 2022 preflight running marker
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          path='xau-final-results/xau_core_temporal_stack_integrity_v1/PREFLIGHT_2022_STATUS.json'
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}";h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json'}
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+          data=json.dumps({'status':'RUNNING','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'source_commit':os.environ.get('GITHUB_SHA'),'pnl_inspected_or_used':False},indent=2).encode()
+          b={'message':'mark 2022 temporal integrity preflight running [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+          if sha:b['sha']=sha
+          r=requests.put(u,headers=h,json=b);r.raise_for_status()
+          PY
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Rehydrate exact 2022 canonical window
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2021-01 --to-month 2023-01 --out /tmp/xau_stack_integrity_2022.csv
+      - name: Audit 2022 temporal membership
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python xau-multiyear/scripts/audit_xau_core_temporal_stack_integrity_v1.py /tmp/xau_stack_integrity_2022.csv \
+            --year 2022 \
+            --canonical-ledger xau-final-results/xau_core_evidence_audit_v1/core_trade_ledger.csv \
+            --out /tmp/stack_integrity_2022
+      - name: Publish 2022 result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,pathlib,requests
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json'};root='xau-final-results/xau_core_temporal_stack_integrity_v1'
+          def put(name,data):
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{root}/{name}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+              b={'message':f'publish 2022 temporal integrity {name} [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+              if sha:b['sha']=sha
+              r=requests.put(u,headers=h,json=b);r.raise_for_status()
+          p=pathlib.Path('/tmp/stack_integrity_2022')
+          for n in ['temporal_stack_summary_2022.json','temporal_stack_violations_2022.csv','temporal_stack_future_members_2022.csv']:
+              put(n,(p/n).read_bytes())
+          s=json.load(open(p/'temporal_stack_summary_2022.json'))
+          put('PREFLIGHT_2022_STATUS.json',json.dumps({'status':'COMPLETE','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'summary':s},indent=2).encode())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-core-temporal-stack-integrity-2022-preflight
+          path: /tmp/stack_integrity_2022
+          retention-days: 7
