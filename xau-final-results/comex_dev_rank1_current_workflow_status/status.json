@@ -1,0 +1,27 @@
+{
+  "version": "COMEX_DEV_RANK1_WORKFLOW_STATUS_SNAPSHOT_V1",
+  "workflows": {
+    "xau-comex-dev-rank1-vantage-outcomes.yml": [
+      {
+        "id": 32201658095,
+        "status": "completed",
+        "conclusion": "failure",
+        "event": "push",
+        "head_sha": "3751ab7c155996d9f6ee891fcb29a2ac7b68a2c6",
+        "created_at": "2026-08-19T00:32:54Z",
+        "updated_at": "2026-08-19T00:35:42Z"
+      }
+    ],
+    "xau-comex-dev-rank1-net-r.yml": [
+      {
+        "id": 32201866643,
+        "status": "completed",
+        "conclusion": "failure",
+        "event": "push",
+        "head_sha": "1a08f459045be990269d5fda4c81e2427d9d9154",
+        "created_at": "2026-08-19T00:36:11Z",
+        "updated_at": "2026-08-19T00:36:31Z"
+      }
+    ]
+  }
+}
