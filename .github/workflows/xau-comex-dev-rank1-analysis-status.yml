@@ -1,4 +1,4 @@
-# trigger-once: reclaim-fill-recovery-status-2026-08-18
+# trigger-once: passive-touch-fill-recovery-status-2026-08-18
 name: XAU COMEX DEV_RANK1 Analysis Status
 
 on:
@@ -28,7 +28,7 @@ jobs:
           import base64,json,os,requests
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
           names=['xau-comex-dev-rank1-fill-models.yml','xau-comex-dev-rank1-fill-parallel-recovery.yml']
-          out={'version':'COMEX_DEV_RANK1_ANALYSIS_STATUS_V6','workflows':{}}
+          out={'version':'COMEX_DEV_RANK1_ANALYSIS_STATUS_V7','workflows':{}}
           for wf in names:
               rs=requests.get(f"{base}/actions/workflows/{wf}/runs",headers=h,params={'branch':os.environ['BRANCH'],'per_page':5}).json().get('workflow_runs',[])
               if not rs:out['workflows'][wf]={'found':False};continue
@@ -40,7 +40,7 @@ jobs:
               for j in jobs:
                   out['workflows'][wf]['by_status'][j['status']]=out['workflows'][wf]['by_status'].get(j['status'],0)+1
                   c=str(j.get('conclusion') or 'NONE');out['workflows'][wf]['by_conclusion'][c]=out['workflows'][wf]['by_conclusion'].get(c,0)+1
-          raw=(json.dumps(out,indent=2)+'\n').encode();path='xau-final-results/comex_dev_rank1_analysis_status/RUN_STATUS.json';u=f"{base}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':'publish DEV_RANK1 reclaim recovery status [skip ci]','content':base64.b64encode(raw).decode(),'branch':os.environ['BRANCH']}
+          raw=(json.dumps(out,indent=2)+'\n').encode();path='xau-final-results/comex_dev_rank1_analysis_status/RUN_STATUS.json';u=f"{base}/contents/{path}";old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':'publish DEV_RANK1 passive fill recovery status [skip ci]','content':base64.b64encode(raw).decode(),'branch':os.environ['BRANCH']}
           if sha:body['sha']=sha
           q=requests.put(u,headers=h,json=body);q.raise_for_status();print(json.dumps(out,indent=2))
           PY
