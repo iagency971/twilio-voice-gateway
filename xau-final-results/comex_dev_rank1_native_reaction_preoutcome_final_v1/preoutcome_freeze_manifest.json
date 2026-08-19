@@ -1,0 +1,143 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_PREOUTCOME_FREEZE_MANIFEST_V1",
+  "generation_git_commit_sha": "6af339ba52b1398af0fafd52b3e251e09754529a",
+  "frozen_contact_status_sha256": "8a825b0bc1deba51959b78ab6e62206fe49232e76329558e83949bf6d3d4151a",
+  "context_artifact_raw_sha256": "7fe546d5cac2a1ef8dd2fa6837a5c1760e3349e10ed6eabaaa569282a4fbb959",
+  "context_marker_sha256": "7fe546d5cac2a1ef8dd2fa6837a5c1760e3349e10ed6eabaaa569282a4fbb959",
+  "input_repo_sha256": {
+    "xau-multiyear/docs/COMEX_DEV_RANK1_NATIVE_REACTION_PROTOCOL_v1.md": "ee77aaf57a0fdc72c8146c2e0938a22e0b8173b9b8d011216c639e18a1ebd97b",
+    "xau-multiyear/docs/PRO_DECISION_MEMO_COMEX_NATIVE_REACTION_PROTOCOL_2026-08-19.md": "ea2b59152405a28dc227d440ff6261a0fe224cf98a48fdf313168180dc8df5e2",
+    "xau-multiyear/docs/PRO_DECISION_MEMO_COMEX_NATIVE_REACTION_CONTROL_SUPPORT_REPAIR_2026-08-19.md": "2f641c0d192ecda72dd483ec5920d33a3ba424bbbcba822683aa9ff5d47f4457",
+    "xau-multiyear/scripts/build_comex_native_reaction_preoutcome_final_v1.py": "880193d8d6aeadc520381d3465ce5c846f1f43ec4d642e87f1df568b1fb42a2b",
+    ".github/workflows/xau-comex-native-reaction-preoutcome-final.yml": "78b4c369bd1d6c0faf46ead354c1b31c5ad88fb56ab319574f7d8143b8975651",
+    "xau-final-results/comex_dev_rank1_native_n2_final_contact_classification_v1/native_368_contact_status_final.csv": "8a825b0bc1deba51959b78ab6e62206fe49232e76329558e83949bf6d3d4151a",
+    "xau-final-results/comex_dev_rank1_native_source_levels_v1/native_source_levels.csv": "63b2478c134e694fc40dd496b0f3d32feb015c3865885101816ec8a699d43d28",
+    "xau-final-results/comex_dev_rank1_gate_v1/corrected_primary_sessions.csv": "6df34e2dc51b4868bb315729d93fad4d5c6afcba0ed9fca059259bc938511696",
+    "xau-final-results/comex_dev_rank1_gate_v1/frozen_session_mapping_all.csv": "e5a75ef474966418a51f41ed3908855d1f430b57370bce799f6d589ab1883a3b",
+    "xau-final-results/comex_dev_rank1_dual_routing_qa_v1/dual_session_routing_qa.csv": "b8dcdbdaea3e66813227b4851753465f2e20bf9335667bc37fbffbe8801117c5",
+    "xau-final-results/comex_dev_rank1_native_n1_quote_v1/native_n1_market_request_manifest.csv": "4e9e8dceb57c291925da98ed214368c346d85f0f3da6fb95d37de3b16c533ff1",
+    "xau-final-results/comex_dev_rank1_native_n2_stage1_resolution_stage2_quote_v1/native_n2_stage1_resolution.csv": "3b3efaa5ff156cfcf43f62c032668f135df6d607e7ebc4a7aef18afc8db57a6c",
+    "xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_n2_stage2_resolution.csv": "6413ffab97b027813e83c4f2e2759cf83f19a01b1b59dfe243c07d6a7ba2ab4b",
+    "xau-final-results/comex_dev_rank1_native_n2_final_contact_classification_v1/native_n2_stage3_resolution.csv": "0c1ad21192c8eaf9c73dda860662d7cb10a4f79c81e38a01b4b11d5ae712258d",
+    "xau-final-results/comex_dev_rank1_native_reaction_source_last30_zero_qa_v1/source_last30_zero_qa.json": "381647246fc0c5cda47542d1ff51460f33005ad4116abf2d89cee80e34d7afbf"
+  },
+  "generated_output_sha256": {
+    "source_session_causal_provenance.csv": "4d884af2c2c37af6961af10c26bfff35adbecc34d68163b5c361e67268d300ac",
+    "source_last30_reconciliation.json": "0c59662b81b04b96d1948f85efba4ae41115510083cc092b8b910cf1a662adb3",
+    "treated_event_causal_context_final.csv": "6237826cbb6acf06541b21d9244e9f8a42a53562da580582b93226b37613d0c9",
+    "session_adjacency_manifest.csv": "8f9087ab3c61b6ec116b38609b10071fce68a6daf3496bf22ecb7cd419f9f47e",
+    "reserved_date_exclusions.csv": "ab3d4fad9a01a64a8432a666fd9ae06929cc7d3407edbfbe30c5eda3334a798c",
+    "control_block_provenance.csv": "efb9cef0e30def3c072d343e09af3b64aa7f948066145de303209b93a392e9c5",
+    "continuous_vs_raw_n1_parity.csv": "c45a1ed898691bba325860c0fd61d15e56a6b9520d41c895eafa4c9818b752d0",
+    "control_candidate_universe_2011.csv.gz": "a6437eaaeeadd4be5a8bc051ec119e7c2b656c5bd99752c10d070f79660d53ed",
+    "control_candidate_universe_2012.csv.gz": "702c91cc82542b45016ba7ebe40e6edd329948e8fd2c826ae0dba8bf173ad791",
+    "control_candidate_universe_2013.csv.gz": "7d53e7e5145c2874c528822a183312543e142a6a4c23cb06a925b7600500422f",
+    "control_candidate_universe_2014.csv.gz": "594ca113ac6cf10b4c42d0935e368b66bef4acf67935de51718861d85ae13706",
+    "control_candidate_universe_2015.csv.gz": "81ebd1e2e8f6a440870c26990c31ae95fc9e2646ee9762eea51f29a89a69b897",
+    "control_candidate_universe_2016.csv.gz": "7e7fe55529316aabca782110f98663fd1b676626b05617f8b8ea3d5c8367f253",
+    "control_candidate_universe_2017.csv.gz": "24ff2838f912b6ee1956b04fb8e2b219d02071d0bf5b3211e46decf271b1756e",
+    "control_candidate_universe_2018.csv.gz": "edb8541d96322cfd6fd779397195d00f27db0806a3b76a05e81f3d5cd637bec6",
+    "matched_control_manifest.csv": "a6c10b70f53811f4df36cff3a779ee68ff851b0ab65f973b25496081210fed8b",
+    "treated_event_support.csv": "f7b21e9515d9070fa9a757861bef8f5adeef805da8a15deda083b13526a20a37",
+    "matching_filter_counts.csv": "2430916f1480bccf1e7414fc3d35e9045d76249aa18c983634d29ba3df17e71b",
+    "support_by_year.csv": "a0aa1278175c13168a09596edd5a81a5bf724842d2303c21086986eb9c6b6981",
+    "support_by_date.csv": "fba01860a5dda34ca87bf96133bcbacad9ecad7f73ddc207ee7c5c6b43d5ab47",
+    "control_date_reuse.csv": "b2336d21b54c00e10ce2179264658f4537150fdb10724d20bde1df116bf92667",
+    "preoutcome_guard.json": "248db39e5238992433f24946baeed37ea6ab06d3f8f94362f3d2c7b64bd42f3c"
+  },
+  "control_universe_shards": [
+    "control_candidate_universe_2011.csv.gz",
+    "control_candidate_universe_2012.csv.gz",
+    "control_candidate_universe_2013.csv.gz",
+    "control_candidate_universe_2014.csv.gz",
+    "control_candidate_universe_2015.csv.gz",
+    "control_candidate_universe_2016.csv.gz",
+    "control_candidate_universe_2017.csv.gz",
+    "control_candidate_universe_2018.csv.gz"
+  ],
+  "source_last30_reconciliation": {
+    "source_sessions_total": 92,
+    "source_last30_positive_sessions": 87,
+    "source_last30_missing_sessions": 5,
+    "source_last30_flat_sessions": 0,
+    "nonpositive_source_dates": [
+      "2011-07-04",
+      "2011-11-24",
+      "2012-11-23",
+      "2014-06-13",
+      "2015-04-01"
+    ],
+    "expected_zero_qa_sha256": "381647246fc0c5cda47542d1ff51460f33005ad4116abf2d89cee80e34d7afbf",
+    "expected_source_sessions_total": 92,
+    "expected_positive_sessions": 87,
+    "expected_missing_sessions": 5,
+    "expected_flat_sessions": 0,
+    "expected_nonpositive_source_dates": [
+      "2011-07-04",
+      "2011-11-24",
+      "2012-11-23",
+      "2014-06-13",
+      "2015-04-01"
+    ],
+    "canonical_zero_qa_version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_ZERO_QA_V1_CORRECTED_CANONICAL",
+    "expected_affected_early_fallback_events": 3,
+    "reconciliation_pass": true
+  },
+  "parity_summary": {
+    "n1_blocks": 92,
+    "stable_same_iid_blocks": 85,
+    "stable_blocks_exact_parity": 85,
+    "stable_parity_all_pass": true
+  },
+  "support": {
+    "defined_events": 235,
+    "eligible_events": 231,
+    "matched_events": 227,
+    "matched_dates": 81,
+    "match_rate": 0.9659574468085106,
+    "criteria": {
+      "matched_events_ge_160": true,
+      "matched_dates_ge_60": true,
+      "every_source_year_matched_dates_ge_5": true,
+      "defined_contact_full_match_rate_ge_0_85": true,
+      "every_source_year_full_match_rate_ge_0_75": true
+    },
+    "support_gate_pass": true,
+    "max_control_date_reuse_rows": 8,
+    "unique_control_source_dates_used": 751
+  },
+  "hard_guards": {
+    "version": "COMEX_DEV_RANK1_NATIVE_REACTION_PREOUTCOME_FINAL_GUARD_V1",
+    "post_contact_values_used_for_matching": false,
+    "post_anchor_outcomes_read": false,
+    "reaction_outcomes_computed": false,
+    "mfe_mae_computed": false,
+    "market_data_api_called": false,
+    "market_data_download_performed": false,
+    "bar_open_fallback_used": false,
+    "source_last30_reconciliation_pass": true,
+    "stable_parity_all_pass": true,
+    "stable_same_iid_blocks": 85,
+    "stable_blocks_exact_parity": 85,
+    "support": {
+      "defined_events": 235,
+      "eligible_events": 231,
+      "matched_events": 227,
+      "matched_dates": 81,
+      "match_rate": 0.9659574468085106,
+      "criteria": {
+        "matched_events_ge_160": true,
+        "matched_dates_ge_60": true,
+        "every_source_year_matched_dates_ge_5": true,
+        "defined_contact_full_match_rate_ge_0_85": true,
+        "every_source_year_full_match_rate_ge_0_75": true
+      },
+      "support_gate_pass": true,
+      "max_control_date_reuse_rows": 8,
+      "unique_control_source_dates_used": 751
+    },
+    "support_gate_status": "SUPPORT_GATE_REPAIRED_AND_PASS",
+    "reaction_outcome_execution_authorized_by_this_run": false
+  },
+  "outcomes_opened": false
+}

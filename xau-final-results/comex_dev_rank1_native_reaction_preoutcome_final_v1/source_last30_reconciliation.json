@@ -1,0 +1,28 @@
+{
+  "source_sessions_total": 92,
+  "source_last30_positive_sessions": 87,
+  "source_last30_missing_sessions": 5,
+  "source_last30_flat_sessions": 0,
+  "nonpositive_source_dates": [
+    "2011-07-04",
+    "2011-11-24",
+    "2012-11-23",
+    "2014-06-13",
+    "2015-04-01"
+  ],
+  "expected_zero_qa_sha256": "381647246fc0c5cda47542d1ff51460f33005ad4116abf2d89cee80e34d7afbf",
+  "expected_source_sessions_total": 92,
+  "expected_positive_sessions": 87,
+  "expected_missing_sessions": 5,
+  "expected_flat_sessions": 0,
+  "expected_nonpositive_source_dates": [
+    "2011-07-04",
+    "2011-11-24",
+    "2012-11-23",
+    "2014-06-13",
+    "2015-04-01"
+  ],
+  "canonical_zero_qa_version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_ZERO_QA_V1_CORRECTED_CANONICAL",
+  "expected_affected_early_fallback_events": 3,
+  "reconciliation_pass": true
+}
