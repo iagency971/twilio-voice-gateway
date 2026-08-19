@@ -3,5 +3,6 @@
   "purpose": "outcome-blind diagnostic of control-support bottlenecks only",
   "post_anchor_outcomes_read": false,
   "reaction_outcomes_computed": false,
-  "market_data_api_called": false
+  "market_data_api_called": false,
+  "trigger_nonce": "2026-08-19T13:28:00Z"
 }
