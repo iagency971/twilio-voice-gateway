@@ -1,0 +1,122 @@
+name: XAU COMEX Native Reaction PRE-PRO Readiness
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - 'xau-recovery/NATIVE_REACTION_PREPRO_READINESS_TRIGGER.json'
+
+concurrency:
+  group: xau-comex-native-reaction-prepro-readiness
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+
+      - run: python -m pip install pandas==2.2.3
+
+      - name: Download owned N1 complete artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n1-raw-complete-v1
+          path: /tmp/n1
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32205624009
+
+      - name: Download owned N2 Stage1 complete artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage1-complete-v1
+          path: /tmp/n2_stage1
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32211696605
+
+      - name: Download owned N2 Stage2 complete artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage2-raw-complete-v1
+          path: /tmp/n2_stage2
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32250737768
+
+      - name: Download owned N2 Stage3 complete artifact — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage3-raw-complete-v1
+          path: /tmp/n2_stage3
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32251356108
+
+      - name: Zero-outcome data-readiness audit
+        run: |
+          python xau-multiyear/scripts/audit_comex_native_reaction_prepro_readiness.py \
+            --final-status xau-final-results/comex_dev_rank1_native_n2_final_contact_classification_v1/native_368_contact_status_final.csv \
+            --stage1-resolution xau-final-results/comex_dev_rank1_native_n2_stage1_resolution_stage2_quote_v1/native_n2_stage1_resolution.csv \
+            --stage2-resolution xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_n2_stage2_resolution.csv \
+            --stage3-resolution xau-final-results/comex_dev_rank1_native_n2_final_contact_classification_v1/native_n2_stage3_resolution.csv \
+            --n1-root /tmp/n1 \
+            --stage1-root /tmp/n2_stage1 \
+            --stage2-root /tmp/n2_stage2 \
+            --stage3-root /tmp/n2_stage3 \
+            --out /tmp/readiness
+
+      - name: Hard guard — no reaction outcomes and no market-data API
+        run: |
+          python - <<'PY'
+          import json
+          z=json.load(open('/tmp/readiness/readiness.json'))
+          assert z['ready_for_pro_method_review'] is True
+          assert z['reaction_outcomes_computed'] is False
+          assert z['mfe_mae_computed'] is False
+          assert z['market_data_api_called'] is False
+          assert z['market_data_download_performed'] is False
+          assert z['native_levels']==368 and z['exact_contact_events']==238
+          assert z['contacts_with_unique_n1_session_coverage']==238
+          assert z['contacts_with_n2_contact_raw_present']==238
+          assert z['n2_raw_integrity_failures']==0
+          assert z['n2_contact_interval_failures']==0
+          print('PREPRO_REACTION_READINESS_QA_OK')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-reaction-prepro-readiness-v0-9
+          path: /tmp/readiness/
+          retention-days: 90
+
+      - name: Publish compact readiness state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          src=pathlib.Path('/tmp/readiness');root='xau-final-results/comex_dev_rank1_native_reaction_prepro_readiness_v0_9'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          for name in ['readiness.json','contact_data_inventory.csv']:
+              p=src/name;dst=f'{root}/{name}';u=f'{base}/contents/{dst}';payload=base64.b64encode(p.read_bytes()).decode()
+              for attempt in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':f'publish native reaction PRE-PRO readiness {name} [skip ci]','content':payload,'branch':os.environ['BRANCH']}
+                  if sha:body['sha']=sha
+                  q=requests.put(u,headers=h,json=body)
+                  if q.status_code in (200,201):break
+                  if q.status_code not in (409,422):q.raise_for_status()
+                  time.sleep(min(10,1+attempt))
+              else:raise SystemExit(f'could not publish {dst}')
+          PY
