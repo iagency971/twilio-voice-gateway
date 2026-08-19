@@ -1,0 +1,165 @@
+name: XAU COMEX DEV_RANK1 Native N2 Stage3 One-Shot
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - 'xau-authorizations/NATIVE_N2_STAGE3_0_025.json'
+
+concurrency:
+  group: xau-comex-dev-rank1-native-n2-stage3-one-shot
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: write
+
+env:
+  DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+
+jobs:
+  acquire-analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+
+      - run: python -m pip install pandas==2.2.3 numpy pyarrow databento requests
+
+      - name: Global exact pre-download hard gate — Stage3 only
+        run: |
+          python xau-multiyear/scripts/acquire_analyze_comex_native_n2_stage3.py gate \
+            --quote xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_n2_stage2_resolution_stage3_quote.json \
+            --market-requests xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_n2_stage3_market_request_manifest.csv \
+            --level-manifest xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_n2_stage3_level_manifest.csv \
+            --authorization xau-authorizations/NATIVE_N2_STAGE3_0_025.json \
+            --completion-marker xau-final-results/comex_dev_rank1_native_n2_stage3_acquisition_v1/ACQUISITION_COMPLETE.json \
+            --out /tmp/stage3_gate
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage3-gate-v1
+          path: /tmp/stage3_gate/
+          retention-days: 90
+
+      - name: Stage3 exact trades acquisition — no paid retry
+        run: |
+          python xau-multiyear/scripts/acquire_analyze_comex_native_n2_stage3.py acquire \
+            --gate /tmp/stage3_gate/gate.json \
+            --out /tmp/stage3_raw
+
+      - name: Preserve raw or partial Stage3 artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage3-raw-v1
+          path: /tmp/stage3_raw/
+          retention-days: 90
+          if-no-files-found: warn
+
+      - name: Finalize Stage3 completeness
+        run: |
+          python xau-multiyear/scripts/acquire_analyze_comex_native_n2_stage3.py finalize \
+            --market-requests xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_n2_stage3_market_request_manifest.csv \
+            --root /tmp/stage3_raw \
+            --out /tmp/stage3_raw
+
+      - name: Hard QA Stage3 completion and cap
+        run: |
+          python - <<'PY'
+          import json
+          s=json.load(open('/tmp/stage3_raw/acquisition_summary.json'))
+          z=json.load(open('/tmp/stage3_raw/ACQUISITION_COMPLETE.json'))
+          assert s['complete'] is True and s['completed_request_markers']==1
+          assert z['complete'] is True and z['requests']==1
+          assert s['confirmed_success_cost_upper_bound_usd'] <= 0.025 + 1e-15
+          assert z['confirmed_success_cost_upper_bound_usd'] <= 0.025 + 1e-15
+          assert s['later_stage_market_data_download_performed'] is False
+          assert z['later_stage_download_authorized'] is False
+          print('NATIVE_N2_STAGE3_COMPLETE_QA_OK',s['decoded_trade_records_total'],s['confirmed_success_cost_upper_bound_usd'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-stage3-raw-complete-v1
+          path: /tmp/stage3_raw/
+          retention-days: 90
+
+      - name: Publish compact Stage3 acquisition state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          base=f"https://api.github.com/repos/{os.environ['REPO']}";root='xau-final-results/comex_dev_rank1_native_n2_stage3_acquisition_v1'
+          files=[('/tmp/stage3_gate/gate.json','PRE_DOWNLOAD_GATE.json'),('/tmp/stage3_raw/acquisition_summary.json','acquisition_summary.json'),('/tmp/stage3_raw/ACQUISITION_COMPLETE.json','ACQUISITION_COMPLETE.json')]
+          for src,name in files:
+              p=pathlib.Path(src);dst=f'{root}/{name}';u=f'{base}/contents/{dst}';payload=base64.b64encode(p.read_bytes()).decode()
+              for attempt in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':f'publish native N2 Stage3 state {name} [skip ci]','content':payload,'branch':os.environ['BRANCH']}
+                  if sha:body['sha']=sha
+                  r=requests.put(u,headers=h,json=body)
+                  if r.status_code in (200,201):break
+                  if r.status_code not in (409,422):r.raise_for_status()
+                  time.sleep(min(10,1+attempt))
+              else: raise SystemExit(f'could not publish {dst}')
+          PY
+
+      - name: Resolve final Stage3 contact and close 368 classification
+        run: |
+          python xau-multiyear/scripts/acquire_analyze_comex_native_n2_stage3.py analyze-final \
+            --root /tmp/stage3_raw \
+            --stage3-level-manifest xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_n2_stage3_level_manifest.csv \
+            --status-after-stage2 xau-final-results/comex_dev_rank1_native_n2_stage2_resolution_stage3_quote_v1/native_368_contact_status_after_stage2.csv \
+            --out /tmp/stage3_final
+
+      - name: Hard QA final 368 classification
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          z=json.load(open('/tmp/stage3_final/native_n2_final_contact_classification.json'))
+          a=pd.read_csv('/tmp/stage3_final/native_368_contact_status_final.csv')
+          b=pd.read_csv('/tmp/stage3_final/native_368_contact_status_by_type_final.csv')
+          assert z['native_levels_total']==368 and z['all_368_classified'] is True
+          assert z['exact_contacts_final']+z['resolved_no_contact_final']==368
+          assert len(a)==368 and a.level_id.nunique()==368 and len(b)==4
+          assert not a.final_resolution.astype(str).str.contains('UNRESOLVED').any()
+          assert z['later_stage_market_data_download_performed'] is False
+          print('NATIVE_N2_FINAL_368_QA_OK',json.dumps(z,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n2-final-contact-classification-v1
+          path: /tmp/stage3_final/
+          retention-days: 90
+
+      - name: Publish final native contact classification
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests,time
+          src=pathlib.Path('/tmp/stage3_final');root='xau-final-results/comex_dev_rank1_native_n2_final_contact_classification_v1'
+          names=['native_n2_final_contact_classification.json','native_n2_stage3_resolution.csv','native_368_contact_status_final.csv','native_368_contact_status_by_type_final.csv']
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          for name in names:
+              p=src/name;dst=f'{root}/{name}';u=f'{base}/contents/{dst}';payload=base64.b64encode(p.read_bytes()).decode()
+              for attempt in range(12):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+                  body={'message':f'publish final native N2 contact classification {name} [skip ci]','content':payload,'branch':os.environ['BRANCH']}
+                  if sha:body['sha']=sha
+                  r=requests.put(u,headers=h,json=body)
+                  if r.status_code in (200,201):break
+                  if r.status_code not in (409,422):r.raise_for_status()
+                  time.sleep(min(10,1+attempt))
+              else: raise SystemExit(f'could not publish {dst}')
+          PY
