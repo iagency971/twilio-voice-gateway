@@ -20,7 +20,7 @@ jobs:
         run: |
           python - <<'PY'
           import base64,json,os,requests
-          payload=json.dumps({'status':'RUNNING','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'source_commit':os.environ.get('GITHUB_SHA'),'year':2011},indent=2).encode()
+          payload=json.dumps({'status':'RUNNING','workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'source_commit':os.environ.get('GITHUB_SHA'),'year':2011,'adapter':'MEMBER_ZONE_ID_TO_ZONE_ID_ONLY'},indent=2).encode()
           path='xau-final-results/xau_rejected_heterogeneity_v1/PREFLIGHT_STATUS.json'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
           old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
@@ -39,7 +39,7 @@ jobs:
         env:
           PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
         run: |
-          python xau-multiyear/scripts/run_xau_rejected_heterogeneity_annual_v1.py /tmp/xau_rejected_2011.csv \
+          python xau-multiyear/scripts/run_xau_rejected_heterogeneity_annual_v1_1.py /tmp/xau_rejected_2011.csv \
             --year 2011 \
             --expected-annual-summary xau-final-results/phase_c_vantage_raw_2011_2025/annual/2011_summary.csv \
             --out /tmp/rejected_2011
