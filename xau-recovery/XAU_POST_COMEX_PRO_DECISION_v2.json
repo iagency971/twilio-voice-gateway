@@ -29,6 +29,15 @@
     "canonical_trade_ledger_currently_persisted": false,
     "portfolio_concurrency_rule_currently_validated": false
   },
+  "canonical_baseline": {
+    "historical_result_branch": "agent/xau-multiyear-research",
+    "annual_runner_source_commit": "6efa3789458a6584054fb3ee923dfccca2e15e9d",
+    "multiyear_manifest_blob_sha": "b82e0835355ff322e0c645c35ddd8f6776be5e6d",
+    "survivors_blob_sha": "8f80031ccc0a2e6ab48b32a154cfd76387295ca3",
+    "runner_blob_sha": "ac99a1be6dd4b8638b176192809b2a23978fd70a",
+    "declared_surface_cells": 210,
+    "declared_survivors": 8
+  },
   "comex_existing_poi": {
     "status": "CLOSED_NO_GO",
     "feature_group_verdicts_no_go": 18,
@@ -72,6 +81,7 @@
     ]
   },
   "xau_core_evidence_audit_v1": {
+    "protocol": "xau-multiyear/docs/XAU_CORE_EVIDENCE_AUDIT_PROTOCOL_v1.md",
     "new_market_data_required": false,
     "new_signal_parameters_allowed": false,
     "required_outputs": [
