@@ -27,68 +27,54 @@ jobs:
           root=Path('xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome')
           C=pd.read_csv(root/'control_candidate_universe.csv.gz',compression='gzip')
           E=pd.read_csv(root/'treated_event_causal_context.csv')
-          for col in ['source_range_ticks','pre30_range_ticks','pre5_signed_move_norm','anchor_minute_of_session','away_sign']:
+          num=['source_range_ticks','pre30_range_ticks','pre5_signed_move_norm','anchor_minute_of_session','away_sign','year']
+          for col in num:
               C[col]=pd.to_numeric(C[col],errors='coerce'); E[col]=pd.to_numeric(E[col],errors='coerce')
-          E['t0']=pd.to_datetime(E.t0_utc,utc=True)
-          C['anchor_time']=pd.to_datetime(C.anchor_time_utc,utc=True)
-          # Exact-contact timestamps by source/retest block for outcome-blind contamination exclusion.
-          contacts={d:list(g.t0) for d,g in E.groupby(E.source_research_date.astype(str))}
-          def exclusion_ok(row,minutes):
-              ts=contacts.get(str(row.control_source_research_date),[])
-              return all(abs((row.anchor_time-t).total_seconds()) > minutes*60 for t in ts)
-          # Cache exclusion flags only from contact timestamps, never reaction outcomes.
-          C['excl60_ok']=[exclusion_ok(r,60) for r in C.itertuples(index=False)]
-          def ratio_ok(a,b,lo,hi):
-              return np.isfinite(a) and np.isfinite(b) and a>0 and b>0 and lo <= a/b <= hi
+          def b(v): return str(v).strip().lower()=='true' if not isinstance(v,(bool,np.bool_)) else bool(v)
+          def ratio_ok(a,b0,lo,hi): return np.isfinite(a) and np.isfinite(b0) and a>0 and b0>0 and lo<=a/b0<=hi
+          C['_excl60_ok']=~C['excluded_native_contact_pm60'].map(b)
+          C['_w15']=C['w15_complete'].map(b)
+          C['_pre30']=C['pre30_complete'].map(b)
           scenarios=[
-            dict(name='BASELINE_PRO',K=5,bin=30,lo=.5,hi=2.0,early=False),
-            dict(name='EARLY_FALLBACK_K5_BIN30',K=5,bin=30,lo=.5,hi=2.0,early=True),
-            dict(name='EARLY_FALLBACK_K4_BIN30',K=4,bin=30,lo=.5,hi=2.0,early=True),
-            dict(name='EARLY_FALLBACK_K3_BIN30',K=3,bin=30,lo=.5,hi=2.0,early=True),
-            dict(name='EARLY_FALLBACK_K5_BIN60',K=5,bin=60,lo=.5,hi=2.0,early=True),
-            dict(name='EARLY_FALLBACK_K5_BIN30_WIDE',K=5,bin=30,lo=.4,hi=2.5,early=True),
-            dict(name='EARLY_FALLBACK_K5_BIN60_WIDE',K=5,bin=60,lo=.4,hi=2.5,early=True),
-            dict(name='EARLY_FALLBACK_K4_BIN60',K=4,bin=60,lo=.5,hi=2.0,early=True),
+            {'name':'BASELINE_PRO','K':5,'bin':30,'lo':.5,'hi':2.0,'early':False},
+            {'name':'EARLY_FALLBACK_K5_BIN30','K':5,'bin':30,'lo':.5,'hi':2.0,'early':True},
+            {'name':'EARLY_FALLBACK_K4_BIN30','K':4,'bin':30,'lo':.5,'hi':2.0,'early':True},
+            {'name':'EARLY_FALLBACK_K3_BIN30','K':3,'bin':30,'lo':.5,'hi':2.0,'early':True},
+            {'name':'EARLY_FALLBACK_K5_BIN60','K':5,'bin':60,'lo':.5,'hi':2.0,'early':True},
+            {'name':'EARLY_FALLBACK_K5_BIN30_WIDE','K':5,'bin':30,'lo':.4,'hi':2.5,'early':True},
+            {'name':'EARLY_FALLBACK_K5_BIN60_WIDE','K':5,'bin':60,'lo':.4,'hi':2.5,'early':True},
+            {'name':'EARLY_FALLBACK_K4_BIN60','K':4,'bin':60,'lo':.5,'hi':2.0,'early':True}
           ]
           summaries=[]; yearly=[]
           for sc in scenarios:
-              rows=[]
-              for e in E.itertuples(index=False):
-                  defined=int(e.away_sign) in (-1,1)
-                  w15=bool(e.w15_complete)
-                  early=bool(float(e.anchor_minute_of_session)<30)
-                  base_cov=np.isfinite(e.source_range_ticks)
-                  normal_cov=bool(e.pre30_complete) and np.isfinite(e.pre30_range_ticks) and np.isfinite(e.pre5_signed_move_norm)
-                  event_eligible=defined and w15 and base_cov and (normal_cov or (sc['early'] and early))
-                  dates=0
-                  if event_eligible:
-                      q=C[(C.year.astype(int)==int(e.year)) & (C.control_source_research_date.astype(str)!=str(e.source_research_date))].copy()
-                      q=q[(q.away_sign.astype(float)==float(e.away_sign)) & q.excl60_ok.astype(bool) & q.w15_complete.astype(bool)]
-                      q=q[(np.floor(q.anchor_minute_of_session/sc['bin']).astype(int)==int(math.floor(float(e.anchor_minute_of_session)/sc['bin'])))]
-                      q=q[q.source_range_ticks.map(lambda x: ratio_ok(float(x),float(e.source_range_ticks),sc['lo'],sc['hi']))]
+              rr=[]
+              for e in E.to_dict('records'):
+                  defined=int(e['away_sign']) in (-1,1)
+                  early=float(e['anchor_minute_of_session'])<30
+                  normal_cov=b(e['pre30_complete']) and np.isfinite(e['pre30_range_ticks']) and np.isfinite(e['pre5_signed_move_norm'])
+                  eligible=defined and b(e['w15_complete']) and np.isfinite(e['source_range_ticks']) and (normal_cov or (sc['early'] and early))
+                  n_dates=0
+                  if eligible:
+                      q=C[(C['year'].astype(int)==int(e['year'])) & (C['control_source_research_date'].astype(str)!=str(e['source_research_date']))].copy()
+                      q=q[(q['away_sign'].astype(float)==float(e['away_sign'])) & q['_excl60_ok'] & q['_w15']]
+                      event_bin=int(math.floor(float(e['anchor_minute_of_session'])/sc['bin']))
+                      q=q[np.floor(q['anchor_minute_of_session']/sc['bin']).astype(int)==event_bin]
+                      q=q[q['source_range_ticks'].map(lambda x: ratio_ok(float(x),float(e['source_range_ticks']),sc['lo'],sc['hi']))]
                       if not (sc['early'] and early):
-                          q=q[q.pre30_complete.astype(bool) & q.pre30_range_ticks.notna() & q.pre5_signed_move_norm.notna()]
-                          q=q[q.pre30_range_ticks.map(lambda x: ratio_ok(float(x),float(e.pre30_range_ticks),sc['lo'],sc['hi']))]
-                      # Early fallback intentionally omits unavailable J+1 pre30/pre5 covariates for both event/control;
-                      # exact same year/bin/approach and source-range caliper remain mandatory.
-                      dates=int(q.control_source_research_date.astype(str).nunique())
-                  rows.append(dict(year=int(e.year),date=str(e.source_research_date),defined=defined,event_eligible=event_eligible,dates=dates,matched=event_eligible and dates>=sc['K']))
-              R=pd.DataFrame(rows)
-              defined_n=int(R.defined.sum()); matched=int(R.matched.sum()); matched_dates=int(R.loc[R.matched,'date'].nunique())
+                          q=q[q['_pre30'] & q['pre30_range_ticks'].notna() & q['pre5_signed_move_norm'].notna()]
+                          q=q[q['pre30_range_ticks'].map(lambda x: ratio_ok(float(x),float(e['pre30_range_ticks']),sc['lo'],sc['hi']))]
+                      n_dates=int(q['control_source_research_date'].astype(str).nunique())
+                  rr.append({'year':int(e['year']),'date':str(e['source_research_date']),'defined':defined,'event_eligible':eligible,'eligible_dates':n_dates,'matched':eligible and n_dates>=sc['K']})
+              R=pd.DataFrame(rr); D=R[R['defined']]
+              defined_n=int(len(D)); matched=int(D['matched'].sum()); matched_dates=int(D.loc[D['matched'],'date'].nunique())
               ystats=[]
-              for y,g in R[R.defined].groupby('year'):
-                  yn=int(len(g)); ym=int(g.matched.sum()); yd=int(g.loc[g.matched,'date'].nunique()); rate=ym/yn if yn else 0
-                  ystats.append(dict(scenario=sc['name'],year=int(y),defined_events=yn,matched_events=ym,match_rate=rate,matched_dates=yd))
-              crit={
-                'matched_events_ge_160':matched>=160,
-                'matched_dates_ge_60':matched_dates>=60,
-                'every_year_matched_dates_ge_5':all(x['matched_dates']>=5 for x in ystats),
-                'defined_contact_full_match_rate_ge_0_85':(matched/defined_n if defined_n else 0)>=.85,
-                'every_year_full_match_rate_ge_0_75':all(x['match_rate']>=.75 for x in ystats),
-              }
-              summaries.append(dict(scenario=sc['name'],K=sc['K'],time_bin_minutes=sc['bin'],ratio_caliper=[sc['lo'],sc['hi']],early_fallback=sc['early'],defined_events=defined_n,event_eligible=int(R.event_eligible.sum()),matched_events=matched,matched_dates=matched_dates,match_rate=matched/defined_n if defined_n else 0,support_gate_pass=all(crit.values()),criteria=crit))
+              for y,g in D.groupby('year'):
+                  ym=int(g['matched'].sum()); yn=int(len(g)); yd=int(g.loc[g['matched'],'date'].nunique())
+                  ystats.append({'scenario':sc['name'],'year':int(y),'defined_events':yn,'matched_events':ym,'match_rate':ym/yn if yn else 0,'matched_dates':yd})
+              crit={'matched_events_ge_160':matched>=160,'matched_dates_ge_60':matched_dates>=60,'every_year_matched_dates_ge_5':all(x['matched_dates']>=5 for x in ystats),'defined_contact_full_match_rate_ge_0_85':(matched/defined_n if defined_n else 0)>=.85,'every_year_full_match_rate_ge_0_75':all(x['match_rate']>=.75 for x in ystats)}
+              summaries.append({'scenario':sc['name'],'K':sc['K'],'time_bin_minutes':sc['bin'],'ratio_caliper':[sc['lo'],sc['hi']],'early_fallback':sc['early'],'defined_events':defined_n,'event_eligible':int(D['event_eligible'].sum()),'matched_events':matched,'matched_dates':matched_dates,'match_rate':matched/defined_n if defined_n else 0,'support_gate_pass':all(crit.values()),'criteria':crit})
               yearly.extend(ystats)
-          out={'version':'COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_V1','post_anchor_outcomes_read':False,'reaction_outcomes_computed':False,'market_data_api_called':False,'market_data_download_performed':False,'scenarios':summaries,'notes':['Sensitivity uses only causal pre-anchor covariates and known contact timestamps for exclusion.','No W5/W15/W60/SC reaction value is read or computed.','Early fallback applies only when treated minute-of-session < 30 and omits unavailable J+1 pre30/pre5 matching for both treated event and controls while retaining same year/bin/approach/source-range caliper.']}
+          out={'version':'COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_V1_1','post_anchor_outcomes_read':False,'reaction_outcomes_computed':False,'market_data_api_called':False,'market_data_download_performed':False,'scenarios':summaries,'notes':['Only pre-anchor/source covariates and already-frozen +-60 contact exclusion flags are used.','No W5/W15/W60/SC reaction endpoint is read or computed.','Early fallback applies only for treated minute-of-session <30; it drops unavailable J+1 pre30/pre5 matching symmetrically for event/control while retaining same year, time bin, approach sign, source-range caliper and +-60 exclusion.']}
           Path('/tmp/support_sensitivity.json').write_text(json.dumps(out,indent=2))
           pd.DataFrame(yearly).to_csv('/tmp/support_sensitivity_by_year.csv',index=False)
           print(json.dumps(out,indent=2))
@@ -109,7 +95,7 @@ jobs:
           BRANCH: agent/xau-comex-acquisition-plan
         run: |
           python - <<'PY'
-          import base64,os,requests,pathlib,time
+          import base64,os,requests,pathlib
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}";root='xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome'
           for src,name in [('/tmp/support_sensitivity.json','support_sensitivity.json'),('/tmp/support_sensitivity_by_year.csv','support_sensitivity_by_year.csv')]:
               p=pathlib.Path(src);dst=f'{root}/{name}';u=f'{base}/contents/{dst}';old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
