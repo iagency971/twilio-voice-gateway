@@ -1,0 +1,17 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE1_QUOTE_TRIGGER_V1",
+  "authorization": "QUOTE_ONLY",
+  "sequential_freeze": "xau-multiyear/docs/COMEX_DEV_RANK1_NATIVE_N2_SEQUENTIAL_ACQUISITION_FREEZE_v1.md",
+  "full_n2_quote_version": "COMEX_DEV_RANK1_NATIVE_N2_QUOTE_V1",
+  "full_n2_quote_usd": 3.637339174767,
+  "levels_requiring_n2": 243,
+  "stage1_level_rows": 243,
+  "stage1_unique_candidate_minutes": 222,
+  "stage1_merged_requests_expected": 214,
+  "n2_stage1_download_authorized": false,
+  "n2_full_download_authorized": false,
+  "dev_rank2_authorized": false,
+  "retro_confirm_authorized": false,
+  "locked_comex_test_authorized": false,
+  "next_action": "metadata.get_cost only for frozen Stage1 first-candidate exact-trades intervals; publish quote and stop"
+}
