@@ -1,0 +1,8 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_REACTION_PRECONTACT_CONTROL_REPAIR_TRIGGER_V1",
+  "purpose": "zero-outcome audit of strictly pre-contact matching covariates and expanded controls",
+  "post_contact_values_used_for_matching": false,
+  "reaction_outcomes_computed": false,
+  "market_data_api_called": false,
+  "market_data_download_performed": false
+}
