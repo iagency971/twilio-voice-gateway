@@ -1,12 +1,12 @@
 {
   "version": "COMEX_DEV_RANK1_NATIVE_REACTION_SOURCE_LAST30_STATUS_V1",
-  "run_id": 32262335702,
+  "run_id": 32278975008,
   "status": "in_progress",
   "conclusion": null,
-  "head_sha": "d9251dae0e6abdc727a8cb8237d16473928322e1",
+  "head_sha": "2c4212a692d922bcc95c8edda5e6b1426584dff5",
   "jobs": [
     {
-      "id": 96098316673,
+      "id": 96152960036,
       "name": "audit",
       "status": "in_progress",
       "conclusion": null,
@@ -53,16 +53,21 @@
         },
         {
           "name": "Download already-owned GC.n.0 M1 context \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Download owned N1 raw M1 blocks \u2014 GitHub only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Source-last30 early fallback audit \u2014 ZERO OUTCOME / ZERO MARKET API",
           "status": "in_progress",
           "conclusion": null
         },
         {
-          "name": "Download owned N1 raw M1 blocks \u2014 GitHub only",
-          "status": "pending",
-          "conclusion": null
-        },
-        {
-          "name": "Source-last30 early fallback audit \u2014 ZERO OUTCOME / ZERO MARKET API",
+          "name": "Publish ZERO-OUTCOME diagnostic before hard guard",
           "status": "pending",
           "conclusion": null
         },
