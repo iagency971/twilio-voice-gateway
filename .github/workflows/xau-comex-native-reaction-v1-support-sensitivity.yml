@@ -27,36 +27,35 @@ jobs:
           root=Path('xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome')
           C=pd.read_csv(root/'control_candidate_universe.csv.gz',compression='gzip')
           E=pd.read_csv(root/'treated_event_causal_context.csv')
-          num=['source_range_ticks','pre30_range_ticks','pre5_signed_move_norm','anchor_minute_of_session','away_sign','year']
-          for col in num:
+          for col in ['source_range_ticks','pre30_range_ticks','pre5_signed_move_norm','anchor_minute_of_session','away_sign']:
               C[col]=pd.to_numeric(C[col],errors='coerce'); E[col]=pd.to_numeric(E[col],errors='coerce')
+          E['_source_year']=pd.to_datetime(E['source_research_date']).dt.year
+          C['_source_year']=pd.to_datetime(C['control_source_research_date']).dt.year
           def b(v): return str(v).strip().lower()=='true' if not isinstance(v,(bool,np.bool_)) else bool(v)
           def ratio_ok(a,b0,lo,hi): return np.isfinite(a) and np.isfinite(b0) and a>0 and b0>0 and lo<=a/b0<=hi
           def rmask(series,b0,lo,hi): return series.map(lambda x: ratio_ok(float(x),float(b0),lo,hi)).astype(bool)
           C['_excl60_ok']=~C['excluded_native_contact_pm60'].map(b)
-          C['_w15']=C['w15_complete'].map(b)
-          C['_pre30']=C['pre30_complete'].map(b)
-          scenarios=[
-            {'name':'BASELINE_PRO','K':5,'bin':30,'lo':.5,'hi':2.0,'early':False},
-            {'name':'EARLY_FALLBACK_K5_BIN30','K':5,'bin':30,'lo':.5,'hi':2.0,'early':True},
-            {'name':'EARLY_FALLBACK_K4_BIN30','K':4,'bin':30,'lo':.5,'hi':2.0,'early':True},
-            {'name':'EARLY_FALLBACK_K3_BIN30','K':3,'bin':30,'lo':.5,'hi':2.0,'early':True},
-            {'name':'EARLY_FALLBACK_K5_BIN60','K':5,'bin':60,'lo':.5,'hi':2.0,'early':True},
-            {'name':'EARLY_FALLBACK_K5_BIN30_WIDE','K':5,'bin':30,'lo':.4,'hi':2.5,'early':True},
-            {'name':'EARLY_FALLBACK_K5_BIN60_WIDE','K':5,'bin':60,'lo':.4,'hi':2.5,'early':True},
-            {'name':'EARLY_FALLBACK_K4_BIN60','K':4,'bin':60,'lo':.5,'hi':2.0,'early':True}
-          ]
+          C['_w15']=C['w15_complete'].map(b); C['_pre30']=C['pre30_complete'].map(b)
+          scenarios=[]
+          def add(name,K,binm,lo=.5,hi=2.0,early=True,year_tol=0): scenarios.append({'name':name,'K':K,'bin':binm,'lo':lo,'hi':hi,'early':early,'year_tol':year_tol})
+          add('BASELINE_PRO_SOURCE_YEAR',5,30,early=False)
+          add('EARLY_K5_BIN30',5,30); add('EARLY_K4_BIN30',4,30); add('EARLY_K3_BIN30',3,30)
+          add('EARLY_K5_BIN60',5,60); add('EARLY_K4_BIN60',4,60); add('EARLY_K3_BIN60',3,60)
+          add('EARLY_K5_BIN30_WIDE',5,30,.4,2.5); add('EARLY_K4_BIN30_WIDE',4,30,.4,2.5); add('EARLY_K3_BIN30_WIDE',3,30,.4,2.5)
+          add('EARLY_K5_BIN60_WIDE',5,60,.4,2.5); add('EARLY_K4_BIN60_WIDE',4,60,.4,2.5); add('EARLY_K3_BIN60_WIDE',3,60,.4,2.5)
+          add('ADJYEAR_EARLY_K5_BIN30',5,30,year_tol=1); add('ADJYEAR_EARLY_K5_BIN60',5,60,year_tol=1); add('ADJYEAR_EARLY_K5_BIN60_WIDE',5,60,.4,2.5,year_tol=1)
           summaries=[]; yearly=[]
           for sc in scenarios:
               rr=[]
               for e in E.to_dict('records'):
-                  defined=int(e['away_sign']) in (-1,1)
-                  early=float(e['anchor_minute_of_session'])<30
+                  defined=int(e['away_sign']) in (-1,1); early=float(e['anchor_minute_of_session'])<30
                   normal_cov=b(e['pre30_complete']) and np.isfinite(e['pre30_range_ticks']) and np.isfinite(e['pre5_signed_move_norm'])
                   eligible=defined and b(e['w15_complete']) and np.isfinite(e['source_range_ticks']) and (normal_cov or (sc['early'] and early))
                   n_dates=0
                   if eligible:
-                      q=C.loc[(C['year'].astype(int)==int(e['year'])) & (C['control_source_research_date'].astype(str)!=str(e['source_research_date']))].copy()
+                      sy=int(e['_source_year'])
+                      q=C.loc[(C['_source_year']-sy).abs()<=sc['year_tol']].copy()
+                      q=q.loc[q['control_source_research_date'].astype(str)!=str(e['source_research_date'])]
                       q=q.loc[(q['away_sign'].astype(float)==float(e['away_sign'])) & q['_excl60_ok'] & q['_w15']]
                       event_bin=int(math.floor(float(e['anchor_minute_of_session'])/sc['bin']))
                       q=q.loc[np.floor(q['anchor_minute_of_session']/sc['bin']).astype(int)==event_bin]
@@ -65,29 +64,22 @@ jobs:
                           q=q.loc[q['_pre30'] & q['pre30_range_ticks'].notna() & q['pre5_signed_move_norm'].notna()]
                           q=q.loc[rmask(q['pre30_range_ticks'],e['pre30_range_ticks'],sc['lo'],sc['hi'])]
                       n_dates=int(q['control_source_research_date'].astype(str).nunique())
-                  rr.append({'year':int(e['year']),'date':str(e['source_research_date']),'defined':defined,'event_eligible':eligible,'eligible_dates':n_dates,'matched':eligible and n_dates>=sc['K']})
+                  rr.append({'source_year':int(e['_source_year']),'date':str(e['source_research_date']),'defined':defined,'event_eligible':eligible,'eligible_dates':n_dates,'matched':eligible and n_dates>=sc['K']})
               R=pd.DataFrame(rr); D=R.loc[R['defined']]
-              defined_n=int(len(D)); matched=int(D['matched'].sum()); matched_dates=int(D.loc[D['matched'],'date'].nunique())
-              ystats=[]
-              for y,g in D.groupby('year'):
-                  ym=int(g['matched'].sum()); yn=int(len(g)); yd=int(g.loc[g['matched'],'date'].nunique())
-                  ystats.append({'scenario':sc['name'],'year':int(y),'defined_events':yn,'matched_events':ym,'match_rate':ym/yn if yn else 0,'matched_dates':yd})
-              crit={'matched_events_ge_160':matched>=160,'matched_dates_ge_60':matched_dates>=60,'every_year_matched_dates_ge_5':all(x['matched_dates']>=5 for x in ystats),'defined_contact_full_match_rate_ge_0_85':(matched/defined_n if defined_n else 0)>=.85,'every_year_full_match_rate_ge_0_75':all(x['match_rate']>=.75 for x in ystats)}
-              summaries.append({'scenario':sc['name'],'K':sc['K'],'time_bin_minutes':sc['bin'],'ratio_caliper':[sc['lo'],sc['hi']],'early_fallback':sc['early'],'defined_events':defined_n,'event_eligible':int(D['event_eligible'].sum()),'matched_events':matched,'matched_dates':matched_dates,'match_rate':matched/defined_n if defined_n else 0,'support_gate_pass':all(crit.values()),'criteria':crit})
-              yearly.extend(ystats)
-          out={'version':'COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_V1_2','post_anchor_outcomes_read':False,'reaction_outcomes_computed':False,'market_data_api_called':False,'market_data_download_performed':False,'scenarios':summaries,'notes':['Only pre-anchor/source covariates and already-frozen +-60 contact exclusion flags are used.','No W5/W15/W60/SC reaction endpoint is read or computed.','Early fallback applies only for treated minute-of-session <30; it drops unavailable J+1 pre30/pre5 matching symmetrically for event/control while retaining same year, time bin, approach sign, source-range caliper and +-60 exclusion.']}
-          Path('/tmp/support_sensitivity.json').write_text(json.dumps(out,indent=2))
-          pd.DataFrame(yearly).to_csv('/tmp/support_sensitivity_by_year.csv',index=False)
-          print(json.dumps(out,indent=2))
+              defined_n=len(D); matched=int(D['matched'].sum()); matched_dates=int(D.loc[D['matched'],'date'].nunique())
+              ys=[]
+              for y,g in D.groupby('source_year'):
+                  ym=int(g['matched'].sum()); yn=len(g); yd=int(g.loc[g['matched'],'date'].nunique()); ys.append({'scenario':sc['name'],'source_year':int(y),'defined_events':int(yn),'matched_events':ym,'match_rate':ym/yn if yn else 0,'matched_dates':yd})
+              crit={'matched_events_ge_160':matched>=160,'matched_dates_ge_60':matched_dates>=60,'every_source_year_matched_dates_ge_5':all(x['matched_dates']>=5 for x in ys),'defined_contact_full_match_rate_ge_0_85':(matched/defined_n if defined_n else 0)>=.85,'every_source_year_full_match_rate_ge_0_75':all(x['match_rate']>=.75 for x in ys)}
+              summaries.append({'scenario':sc['name'],'K':sc['K'],'time_bin_minutes':sc['bin'],'ratio_caliper':[sc['lo'],sc['hi']],'early_fallback':sc['early'],'source_year_tolerance':sc['year_tol'],'defined_events':int(defined_n),'event_eligible':int(D['event_eligible'].sum()),'matched_events':matched,'matched_dates':matched_dates,'match_rate':matched/defined_n if defined_n else 0,'support_gate_pass':all(crit.values()),'criteria':crit}); yearly.extend(ys)
+          out={'version':'COMEX_DEV_RANK1_NATIVE_REACTION_V1_SUPPORT_SENSITIVITY_V1_3','post_anchor_outcomes_read':False,'reaction_outcomes_computed':False,'market_data_api_called':False,'market_data_download_performed':False,'year_definition':'source_research_date calendar year (DEV_RANK1 sampling stratum), not J+1 contact calendar year','scenarios':summaries,'notes':['Only source/pre-anchor covariates and frozen +-60 contact exclusion flags are used.','No reaction endpoint is read or computed.','Adjacent-year scenarios are diagnostic only and are NOT protocol recommendations.']}
+          Path('/tmp/support_sensitivity.json').write_text(json.dumps(out,indent=2)); pd.DataFrame(yearly).to_csv('/tmp/support_sensitivity_by_year.csv',index=False); print(json.dumps(out,indent=2))
           PY
       - name: Hard zero-outcome guard
         run: |
           python - <<'PY'
           import json
-          z=json.load(open('/tmp/support_sensitivity.json'))
-          assert z['post_anchor_outcomes_read'] is False and z['reaction_outcomes_computed'] is False
-          assert z['market_data_api_called'] is False and z['market_data_download_performed'] is False
-          print('SUPPORT_SENSITIVITY_ZERO_OUTCOME_OK')
+          z=json.load(open('/tmp/support_sensitivity.json')); assert not z['post_anchor_outcomes_read'] and not z['reaction_outcomes_computed'] and not z['market_data_api_called'] and not z['market_data_download_performed']; print('SUPPORT_SENSITIVITY_ZERO_OUTCOME_OK')
           PY
       - name: Publish support sensitivity
         env:
@@ -99,8 +91,7 @@ jobs:
           import base64,os,requests,pathlib
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}";root='xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome'
           for src,name in [('/tmp/support_sensitivity.json','support_sensitivity.json'),('/tmp/support_sensitivity_by_year.csv','support_sensitivity_by_year.csv')]:
-              p=pathlib.Path(src);dst=f'{root}/{name}';u=f'{base}/contents/{dst}';old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
-              body={'message':f'publish outcome-blind support sensitivity {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              p=pathlib.Path(src);dst=f'{root}/{name}';u=f'{base}/contents/{dst}';old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None;body={'message':f'publish outcome-blind support sensitivity {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']};
               if sha:body['sha']=sha
-              r=requests.put(u,headers=h,json=body);r.raise_for_status()
+              requests.put(u,headers=h,json=body).raise_for_status()
           PY
