@@ -1,0 +1,26 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_FINAL_CONTACT_CLASSIFICATION_V1",
+  "native_levels_total": 368,
+  "all_368_classified": true,
+  "exact_contacts_final": 238,
+  "resolved_no_contact_final": 130,
+  "exact_contact_rate_final": 0.6467391304347826,
+  "stage3_exact_contact": true,
+  "stage3_exact_tick_trade_count": 7,
+  "stage3_first_exact_contact_time_utc": "2012-09-07T12:30:00.554000+00:00",
+  "stage3_final_resolution": "RESOLVED_CONTACT_STAGE3",
+  "stage3_acquisition_cost_upper_bound_usd": 0.024528264999,
+  "stage3_hard_cap_usd": 0.025,
+  "later_stage_market_data_download_performed": false,
+  "native_368_status_final_sha256": "8a825b0bc1deba51959b78ab6e62206fe49232e76329558e83949bf6d3d4151a",
+  "native_368_by_type_final_sha256": "f7bec939057e5e554743603371de63cdcd592d086bd9d668dc8a9427484dd1f7",
+  "stage3_resolution_sha256": "0c1ad21192c8eaf9c73dda860662d7cb10a4f79c81e38a01b4b11d5ae712258d",
+  "dev_rank2_opened": false,
+  "retro_confirm_opened": false,
+  "locked_comex_test_opened": false,
+  "notes": [
+    "Stage3 was the final candidate minute for the sole unresolved level.",
+    "No Stage4 exists under the frozen sequential protocol for this level.",
+    "This closes exact-contact classification only; reaction-edge analysis is a separate step."
+  ]
+}
