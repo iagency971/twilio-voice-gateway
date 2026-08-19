@@ -1,0 +1,81 @@
+name: XAU COMEX Native Reaction Precontact Control Repair
+
+on:
+  push:
+    branches: [agent/xau-comex-acquisition-plan]
+    paths:
+      - 'xau-recovery/NATIVE_REACTION_PRECONTACT_CONTROL_REPAIR_TRIGGER.json'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-comex-acquisition-plan
+      - run: python -m pip install pandas==2.2.3 numpy databento
+      - name: Download already-owned GC.n.0 M1 context — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-dual-n0_ohlcv_1m_context_20100606_20190101
+          path: /tmp/context
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32179377819
+      - name: Download owned N1 raw M1 blocks — GitHub only
+        uses: actions/download-artifact@v4
+        with:
+          name: comex-dev-rank1-native-n1-raw-complete-v1
+          path: /tmp/n1
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32205624009
+      - name: Build strict-precontact covariates and support — ZERO OUTCOME
+        run: |
+          python xau-multiyear/scripts/audit_comex_native_reaction_precontact_control_repair.py \
+            --context-root /tmp/context \
+            --n1-root /tmp/n1 \
+            --n1-market-manifest xau-final-results/comex_dev_rank1_native_n1_quote_v1/native_n1_market_request_manifest.csv \
+            --events xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome/treated_event_causal_context.csv \
+            --source-ranges xau-final-results/comex_dev_rank1_native_reaction_v1_preoutcome/source_session_range_provenance.csv \
+            --sessions xau-final-results/comex_dev_rank1_gate_v1/corrected_primary_sessions.csv \
+            --out /tmp/audit
+      - name: Hard guard — no post-contact matching / no outcomes / no spend
+        run: |
+          python - <<'PY'
+          import json
+          z=json.load(open('/tmp/audit/precontact_control_repair.json'))
+          assert z['post_contact_values_used_for_matching'] is False
+          assert z['post_anchor_outcomes_read'] is False
+          assert z['reaction_outcomes_computed'] is False
+          assert z['market_data_api_called'] is False
+          assert z['market_data_download_performed'] is False
+          assert z['parity_summary']['stable_parity_all_pass'] is True
+          print('PRECONTACT_CONTROL_REPAIR_ZERO_OUTCOME_OK',z['support'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comex-dev-rank1-native-reaction-precontact-control-repair-v1
+          path: /tmp/audit/
+          retention-days: 90
+      - name: Publish compact precontact repair audit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-comex-acquisition-plan
+        run: |
+          python - <<'PY'
+          import base64,os,pathlib,requests
+          src=pathlib.Path('/tmp/audit');root='xau-final-results/comex_dev_rank1_native_reaction_precontact_control_repair_v1'
+          names=['precontact_control_repair.json','continuous_vs_raw_n1_parity.csv','treated_event_strict_precontact_context.csv','control_block_manifest.csv','support_strict.csv','support_strict_by_year.csv','support_early_available.csv','support_early_available_by_year.csv','support_early_source_only.csv','support_early_source_only_by_year.csv']
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};base=f"https://api.github.com/repos/{os.environ['REPO']}"
+          for name in names:
+              p=src/name;dst=f'{root}/{name}';u=f'{base}/contents/{dst}';old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']});sha=old.json().get('sha') if old.status_code==200 else None
+              body={'message':f'publish strict-precontact control repair {name} [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if sha:body['sha']=sha
+              r=requests.put(u,headers=h,json=body);r.raise_for_status()
+          PY
