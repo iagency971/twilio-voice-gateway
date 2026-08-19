@@ -1,0 +1,29 @@
+{
+  "version": "XAU_CORE_EVIDENCE_AUDIT_V1_VERDICT",
+  "terminal_verdict": "CORE_INTERNAL_AUDIT_PASS_FOR_EXTERNAL_REPLICATION",
+  "gates": {
+    "A_integrity": true,
+    "B_broad_rr_statistical": true,
+    "C_temporal": true,
+    "D_concentration": true,
+    "E_portfolio": true,
+    "primary_cells_passing_B": 6,
+    "stress_cells_pf_ge_1_20": 6,
+    "temporal_pass_by_rr": {
+      "0.5": true,
+      "1.0": true,
+      "1.5": true,
+      "2.0": true,
+      "2.5": true,
+      "3.0": true
+    }
+  },
+  "aggregate_parity_pass": true,
+  "core_events": 304,
+  "live_ready": false,
+  "external_replication_authorized": true,
+  "m5_authorized": false,
+  "comex_continuation_authorized": false,
+  "new_market_data_spend": 0,
+  "diagnostic_subgroups_can_rescue_verdict": false
+}
