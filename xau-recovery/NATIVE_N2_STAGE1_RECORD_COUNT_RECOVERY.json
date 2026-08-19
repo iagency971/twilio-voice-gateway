@@ -1,0 +1,19 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE1_RECORD_COUNT_RECOVERY_PLAN_V1",
+  "original_run_id": 32211294671,
+  "original_authorization": "OK NATIVE N2 STAGE1, plafond 0,36 $",
+  "hard_cap_usd": 0.36,
+  "root_cause": "Databento metadata.get_record_count is not exact for 1-2 minute ranges and may over-report; equality to decoded trade rows was an invalid QA condition",
+  "salvaged_market_request_id": "2cfd24baa84c7f1542ff12c8",
+  "salvaged_metadata_record_count_estimate": 204,
+  "salvaged_raw_trade_rows": 37,
+  "salvaged_request_cost_usd": 0.000255346298,
+  "salvaged_paid_request_replayed": false,
+  "remaining_stage1_requests_before_requote": 213,
+  "remaining_stage1_only": true,
+  "stage2_download_authorized": false,
+  "full_n2_union_authorized": false,
+  "dev_rank2_authorized": false,
+  "retro_confirm_authorized": false,
+  "locked_comex_test_authorized": false
+}
