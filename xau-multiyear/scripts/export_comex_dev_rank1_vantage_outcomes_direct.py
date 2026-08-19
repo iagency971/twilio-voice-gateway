@@ -3,12 +3,12 @@ from __future__ import annotations
 
 import argparse, json, sys
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-sys.path.insert(0, str(ROOT / 'scripts'))
 
 from rzr.config import ResearchConfig
 from rzr.io import load_ohlc_csv
@@ -17,8 +17,9 @@ from rzr.entries_v2 import build_entry
 from rzr.entries_v1 import simulate_one, TARGET_RS
 from rzr.entries_s1 import apply_volatility_floor
 from rzr.vantage_overlay import apply_fixed_spread_overlay
-import build_comex_dev_rank1_event_features as feat
 
+NY = ZoneInfo('America/New_York')
+FAMILIES = ['DISPLACEMENT_ORIGIN','OBJECTIVE_LIQUIDITY','MEMORY','FVG']
 STRUCTURAL_MODELS = [
     'PASSIVE_TOUCH', 'CLEAN_REJECTION', 'FAILED_AUCTION',
     'ACCEPTANCE_RETEST', 'RECLAIM_PULLBACK'
@@ -36,9 +37,29 @@ def utc_series(s):
     return pd.to_datetime(s, utc=True)
 
 
+def xau_day_key(s):
+    z = pd.to_datetime(s, utc=True).dt.tz_convert(NY)
+    base = z.dt.normalize().dt.tz_localize(None)
+    return (base + pd.to_timedelta((z.dt.hour >= 17).astype(int), unit='D')).dt.date.astype(str)
+
+
+def family_signature(v):
+    s = str(v) if pd.notna(v) else ''
+    return '+'.join(f for f in FAMILIES if f in s) or 'OTHER'
+
+
+def family_stack(sig):
+    return {
+        'DISPLACEMENT_ORIGIN':'DOZ_ONLY',
+        'OBJECTIVE_LIQUIDITY':'OBJECTIVE_ONLY',
+        'MEMORY':'MEMORY_ONLY',
+        'FVG':'FVG_ONLY',
+    }.get(sig, 'CONFLUENCE' if '+' in sig else 'OTHER')
+
+
 def family_fields(v):
-    sig = feat.family_signature(v)
-    return sig, feat.family_stack(sig)
+    sig = family_signature(v)
+    return sig, family_stack(sig)
 
 
 def selected_events(events_path: str, sessions_path: str, bars: pd.DataFrame, year: int) -> pd.DataFrame:
@@ -59,16 +80,15 @@ def selected_events(events_path: str, sessions_path: str, bars: pd.DataFrame, ye
 
     e = e[pd.to_numeric(e.year, errors='coerce').eq(int(year))].copy()
     e['contact_time'] = utc_series(e.contact_time)
-    e['research_trading_date'] = feat.xau_day_key(e.contact_time)
+    e['research_trading_date'] = xau_day_key(e.contact_time)
     e = e[e.research_trading_date.isin(dates)].copy().reset_index(drop=True)
     if e.empty:
         raise SystemExit(f'no DEV_RANK1 canonical events for {year}')
     if e.event_uid.astype(str).duplicated().any():
         raise SystemExit('duplicate event_uid in selected canonical events')
 
-    # The canonical event was originally built on the same Dukascopy M1 timeline,
-    # but contact_idx referred to a much larger annual input. Re-anchor it exactly
-    # to the frozen two-year XAU window used for this economic replay.
+    # Canonical contact_idx belonged to the original annual research input.
+    # Re-anchor the unchanged contact timestamp exactly to this frozen replay window.
     loc = bars.index.get_indexer(pd.DatetimeIndex(e.contact_time))
     bad = np.flatnonzero(loc < 0)
     if len(bad):
@@ -171,7 +191,7 @@ def main():
 
     primary = r[r.scenario.eq('S11_C6_PRIMARY')]
     manifest = {
-        'version':'COMEX_DEV_RANK1_VANTAGE_OUTCOMES_DIRECT_V1',
+        'version':'COMEX_DEV_RANK1_VANTAGE_OUTCOMES_DIRECT_V1_1',
         'market_data_api_calls':False,
         'databento_calls':False,
         'year':int(a.year),
@@ -192,6 +212,7 @@ def main():
         'horizon_minutes':120,
         'net_r_surface_freeze':'COMEX_DEV_RANK1_NET_R_SURFACE_FREEZE_v1.md',
         'decision_population_freeze':'COMEX_DEV_RANK1_ENTRY_DECISION_POPULATIONS_FREEZE_v1.md',
+        'orchestration_fix_from_v1':'removed import of Databento-dependent feature helper; duplicated only frozen deterministic day/family helpers; no scientific rule changed',
         'note':'Canonical raw eligibility is not used as the economic fill truth; entries are rebuilt on the frozen Vantage execution overlay.'
     }
     (out/'manifest.json').write_text(json.dumps(manifest, indent=2))
