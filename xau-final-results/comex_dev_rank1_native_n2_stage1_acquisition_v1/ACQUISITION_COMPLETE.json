@@ -1,0 +1,15 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE1_ACQUISITION_COMPLETE_V1",
+  "complete": true,
+  "requests": 214,
+  "market_request_manifest_sha256": "a370ab81430de8cb6652d21a9d9fc264a7ba0cc8b329e48c6d97da707f4cb90f",
+  "records_downloaded_total": 71981,
+  "confirmed_success_cost_upper_bound_usd": 0.352496802811,
+  "hard_cap_usd": 0.36,
+  "summary_sha256": "f124d92d10a243bf952baeca74cacbdf6698fc768db47e53297601ce2a512dc7",
+  "n2_stage2_download_authorized": false,
+  "full_n2_union_download_authorized": false,
+  "dev_rank2_opened": false,
+  "retro_confirm_opened": false,
+  "locked_comex_test_opened": false
+}
