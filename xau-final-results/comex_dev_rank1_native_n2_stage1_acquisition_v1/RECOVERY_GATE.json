@@ -1,0 +1,11 @@
+{
+  "version": "COMEX_DEV_RANK1_NATIVE_N2_STAGE1_RECOVERY_GATE_V1",
+  "existing_completed_requests": 1,
+  "missing_requests": 213,
+  "existing_success_cost_upper_bound_usd": 0.000255346298,
+  "remaining_exact_quote_usd": 0.352241456513,
+  "conservative_completion_upper_bound_usd": 0.352496802811,
+  "hard_cap_usd": 0.36,
+  "record_count_semantics": "metadata record count is an estimate for these 1-2 minute ranges and is not used as post-download equality QA",
+  "paid_replay_of_salvaged_request": false
+}
