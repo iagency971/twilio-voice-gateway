@@ -167,12 +167,16 @@ def reconcile_source_last30(prov: pd.DataFrame, zero_qa_path: str) -> dict:
         "expected_flat_sessions": int(z["source_last30_flat_sessions"]),
         "expected_nonpositive_source_dates": list(map(str, z["nonpositive_source_dates"])),
     }
+    expected_dates = ["2011-07-04", "2011-11-24", "2012-11-23", "2014-06-13", "2015-04-01"]
+    summary["canonical_zero_qa_version"] = str(z.get("version", ""))
+    summary["expected_affected_early_fallback_events"] = int(z.get("affected_early_fallback_events", -1))
     ok = (
-        summary["source_sessions_total"] == 92 == summary["expected_source_sessions_total"] and
-        summary["source_last30_positive_sessions"] == 91 == summary["expected_positive_sessions"] and
-        summary["source_last30_missing_sessions"] == 1 == summary["expected_missing_sessions"] and
-        summary["source_last30_flat_sessions"] == 0 == summary["expected_flat_sessions"] and
-        summary["nonpositive_source_dates"] == ["2013-12-25"] == summary["expected_nonpositive_source_dates"]
+        summary["source_sessions_total"] == summary["expected_source_sessions_total"] == 92 and
+        summary["source_last30_positive_sessions"] == summary["expected_positive_sessions"] == 87 and
+        summary["source_last30_missing_sessions"] == summary["expected_missing_sessions"] == 5 and
+        summary["source_last30_flat_sessions"] == summary["expected_flat_sessions"] == 0 and
+        summary["nonpositive_source_dates"] == summary["expected_nonpositive_source_dates"] == expected_dates and
+        summary["expected_affected_early_fallback_events"] == 3
     )
     summary["reconciliation_pass"] = bool(ok)
     if not ok:
@@ -341,9 +345,19 @@ def build_events(args, final: pd.DataFrame, n1: dict, prov: pd.DataFrame) -> pd.
         raise SystemExit("treated-event cardinality mismatch")
     if int(E.approach_defined.sum()) != 235:
         raise SystemExit(f"expected 235 defined approaches, got {int(E.approach_defined.sum())}")
-    bad = E[(E.matching_branch == "EARLY_SOURCE_LAST30") & E.approach_defined & ~E.source_last30_positive]
-    if len(bad) != 1 or str(bad.iloc[0].source_research_date) != "2013-12-25":
-        raise SystemExit(f"expected sole early missing source-last30 event on 2013-12-25, got {bad[['level_id','source_research_date']].to_dict('records')}")
+    bad = E[(E.matching_branch == "EARLY_SOURCE_LAST30") & E.approach_defined & ~E.source_last30_positive].copy()
+    expected_bad = {
+        ("8b282f806357a5b0d94b6359", "2011-07-04"),
+        ("3fbeb0c82e6201099ba1b73d", "2011-11-24"),
+        ("e300d541f2330b5cd3245ce1", "2011-11-24"),
+    }
+    got_bad = set(zip(bad.level_id.astype(str), bad.source_research_date.astype(str)))
+    if got_bad != expected_bad:
+        raise SystemExit(f"early missing source-last30 set mismatch: expected={sorted(expected_bad)} got={sorted(got_bad)}")
+    if bad.primary_control_eligible.map(pb).any():
+        raise SystemExit("early missing source-last30 event incorrectly marked primary-control eligible")
+    if not bad.primary_control_exclusion_reason.astype(str).eq("FALLBACK_COVARIATE_MISSING_SOURCE_LAST30").all():
+        raise SystemExit("early missing source-last30 exclusion reason mismatch")
     return E
 
 
@@ -699,7 +713,7 @@ def main():
     (out / "preoutcome_freeze_manifest.json").write_text(json.dumps(freeze, indent=2))
     (out / "preoutcome_freeze_manifest.sha256").write_text(sha256_file(out / "preoutcome_freeze_manifest.json") + "  preoutcome_freeze_manifest.json\n")
 
-    summary = f"""# CHECKPOINT — COMEX native reaction final pre-outcome build\n\nDate: 2026-08-19\nGeneration commit: `{freeze['generation_git_commit_sha']}`\n\n- outcome-blind build: PASS\n- source-last30 reconciliation: PASS (91 positive / 1 missing / 0 flat; sole missing `2013-12-25`)\n- stable-IID context parity: {parity_summary['stable_blocks_exact_parity']}/{parity_summary['stable_same_iid_blocks']} exact\n- defined-approach events: {support_summary['defined_events']}\n- eligible events: {support_summary['eligible_events']}\n- K=5 matched events: {support_summary['matched_events']}\n- matched treated dates: {support_summary['matched_dates']}\n- full-match rate: {support_summary['match_rate']:.12%}\n- support gate: `{'SUPPORT_GATE_REPAIRED_AND_PASS' if support_summary['support_gate_pass'] else 'STOP_AND_REPAIR_DESIGN'}`\n\nNo W5/W15/W60/SC, NRB, MFE/MAE, terminal displacement, family/year/session reaction ranking, profitability or XAUUSD mapping was computed or inspected. This build does **not** itself authorize outcome execution; final publication/freeze commit must be recorded separately.\n"""
+    summary = f"""# CHECKPOINT — COMEX native reaction final pre-outcome build\n\nDate: 2026-08-19\nGeneration commit: `{freeze['generation_git_commit_sha']}`\n\n- outcome-blind build: PASS\n- source-last30 reconciliation: PASS ({reconciliation['source_last30_positive_sessions']} positive / {reconciliation['source_last30_missing_sessions']} missing / {reconciliation['source_last30_flat_sessions']} flat; missing dates: {', '.join(reconciliation['nonpositive_source_dates'])})\n- stable-IID context parity: {parity_summary['stable_blocks_exact_parity']}/{parity_summary['stable_same_iid_blocks']} exact\n- defined-approach events: {support_summary['defined_events']}\n- eligible events: {support_summary['eligible_events']}\n- K=5 matched events: {support_summary['matched_events']}\n- matched treated dates: {support_summary['matched_dates']}\n- full-match rate: {support_summary['match_rate']:.12%}\n- support gate: `{'SUPPORT_GATE_REPAIRED_AND_PASS' if support_summary['support_gate_pass'] else 'STOP_AND_REPAIR_DESIGN'}`\n\nNo W5/W15/W60/SC, NRB, MFE/MAE, terminal displacement, family/year/session reaction ranking, profitability or XAUUSD mapping was computed or inspected. This build does **not** itself authorize outcome execution; final publication/freeze commit must be recorded separately.\n"""
     (out / "PREOUTCOME_BUILD_SUMMARY.md").write_text(summary)
 
     print(json.dumps({"guard": guard, "freeze_manifest_sha256": sha256_file(out / "preoutcome_freeze_manifest.json")}, indent=2))
