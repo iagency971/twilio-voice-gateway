@@ -1,5 +1,5 @@
 {
-  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V15",
+  "version": "COMEX_DEV_RANK1_ANALYSIS_STATUS_V16",
   "workflows": {
     "xau-comex-dev-rank1-native-n1-acquire.yml": {
       "found": true,
