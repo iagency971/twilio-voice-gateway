@@ -1,0 +1,113 @@
+{
+  "version": "XAU_POST_COMEX_PRO_DECISION_V2",
+  "date": "2026-08-19",
+  "review_mode": "ACTUAL_PRO_AFTER_USER_SWITCH",
+  "supersedes": [
+    "xau-multiyear/docs/PRO_DECISION_MEMO_XAU_RESEARCH_ARCHITECTURE_POST_COMEX_2026-08-19.md",
+    "xau-recovery/XAU_POST_COMEX_RESEARCH_ARCHITECTURE_DECISION_v1.json"
+  ],
+  "decision": "CONDITIONAL_CONTINUE_CORE_VALIDATION_FIRST",
+  "live_ready": false,
+  "new_market_data_spend_authorized": false,
+  "authorized_next_experiment": "XAU_CORE_EVIDENCE_AUDIT_V1",
+  "core": {
+    "status": "HISTORICAL_CANDIDATE_NOT_VALIDATED_STRATEGY",
+    "strategy_family": "DISPLACEMENT_ORIGIN+OBJECTIVE_LIQUIDITY+CLEAN_REJECTION+STRUCTURAL",
+    "doz_timeframes": ["15min", "30min", "1h"],
+    "historical_panel": "2011-2025",
+    "trades": 304,
+    "average_trades_per_year": 20.2666666667,
+    "rr_surface": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+    "reference_rr_descriptive_only": 1.5,
+    "primary_reference_net_r": 0.2799181676273291,
+    "primary_reference_positive_years": 13,
+    "primary_reference_active_years": 15,
+    "stress_reference_net_r": 0.18960521480573295,
+    "stress_reference_positive_years": 12,
+    "independent_pnl_confirmation": false,
+    "historical_broker_tick_replay": false,
+    "canonical_trade_ledger_currently_persisted": false,
+    "portfolio_concurrency_rule_currently_validated": false
+  },
+  "comex_existing_poi": {
+    "status": "CLOSED_NO_GO",
+    "feature_group_verdicts_no_go": 18,
+    "feature_group_verdicts_total": 18,
+    "dev_rank2_rescue_authorized": false
+  },
+  "comex_native_rejection": {
+    "status": "CLOSED_NO_GO",
+    "matched_events": 227,
+    "matched_dates": 81,
+    "theta_nrb15": -0.01778503489907026,
+    "bootstrap_ci95_lower": -0.03899457780258087,
+    "bootstrap_ci95_upper": 0.0012119706857348835,
+    "raw_reaction_balance_ticks": -3.6211934156379595,
+    "decision": "NO_GO_DEV_RANK2_NATIVE_REACTION"
+  },
+  "comex_continuation": {
+    "status": "PARKED_HYPOTHESIS_GENERATION_ONLY",
+    "old_w5_theta": -0.01488316660018305,
+    "old_w5_holm_p": 0.04451910961780764,
+    "old_227_outcomes_allowed_for_tuning_or_confirmation": false,
+    "independent_new_outcomes_required": true,
+    "new_spend_authorized": false
+  },
+  "m5_frequency_extension": {
+    "status": "NOT_AUTHORIZED_AT_THIS_GATE",
+    "reasons": [
+      "CORE_NOT_INDEPENDENTLY_VALIDATED",
+      "SAME_HEAVILY_EXPLORED_2011_2025_PANEL",
+      "304_INCREMENTAL_TRADES_WOULD_STILL_BE_ONLY_ABOUT_40_5_TOTAL_TRADES_PER_YEAR",
+      "ADDING_M5_BEFORE_CONTACT_STACK_COLLAPSE_CAN_MUTATE_FROZEN_CORE_EVENT_IDENTITY",
+      "UTILITY_THRESHOLD_NOT_ALIGNED_WITH_NEAR_DAILY_PROJECT_GOAL"
+    ],
+    "future_reconsideration_requires": [
+      "CORE_INTERNAL_AUDIT_PASS",
+      "INDEPENDENT_FEED_OR_BROKER_REPLICATION_PASS",
+      "SEPARATELY_GENERATED_M5_ARM",
+      "EXACT_CORE_PARITY_ASSERTION",
+      "POST_GENERATION_DEDUPLICATION",
+      "UTILITY_GATE_ALIGNED_WITH_ACTUAL_USER_CADENCE"
+    ]
+  },
+  "xau_core_evidence_audit_v1": {
+    "new_market_data_required": false,
+    "new_signal_parameters_allowed": false,
+    "required_outputs": [
+      "CANONICAL_HASHED_TRADE_LEDGER",
+      "AGGREGATE_PARITY_REPORT",
+      "DATE_CLUSTER_BOOTSTRAP",
+      "THREE_MONTH_MOVING_BLOCK_BOOTSTRAP",
+      "LEAVE_ONE_YEAR_OUT_REPORT",
+      "BEST_TRADE_CONCENTRATION_REPORT",
+      "DRAWDOWN_AND_LOSING_STREAK_REPORT",
+      "CONCURRENCY_REPORT",
+      "SINGLE_POSITION_REPLAY",
+      "FINAL_MACHINE_READABLE_VERDICT"
+    ],
+    "date_cluster_bootstrap_draws": 20000,
+    "date_cluster_bootstrap_seed": 20260821,
+    "moving_block_bootstrap_draws": 20000,
+    "moving_block_bootstrap_seed": 20260822,
+    "moving_block_length_months": 3,
+    "decision_mapping": {
+      "all_integrity_statistical_temporal_concentration_portfolio_gates_pass": "CORE_INTERNAL_AUDIT_PASS_FOR_EXTERNAL_REPLICATION",
+      "integrity_or_parity_failure": "CORE_RESULT_INVALID_REPAIR_REQUIRED",
+      "other_gate_failure": "CORE_HISTORICAL_CANDIDATE_NO_GO_FOR_EXTERNAL_REPLICATION"
+    }
+  },
+  "forbidden_until_core_audit_verdict": [
+    "RUN_M5_FREQUENCY_EXTENSION",
+    "TRY_M3_M10_M20_RESCUE",
+    "ADD_SESSION_DIRECTION_FVG_TREND_OR_SCORE_FILTER",
+    "SELECT_SINGLE_RR_FROM_HISTORICAL_MAXIMUM",
+    "OPEN_COMEX_CONTINUATION_OUTCOMES",
+    "BUY_NEW_MARKET_DATA",
+    "START_PROP_FIRM_CHALLENGE_FROM_THIS_CANDIDATE",
+    "CALL_CORE_LIVE_READY"
+  ],
+  "authority_memo": "xau-multiyear/docs/PRO_DECISION_MEMO_XAU_CORE_VALIDATION_FIRST_2026-08-19.md",
+  "recommended_execution_mode": "TRES_ELEVE",
+  "return_to_pro_after": "FROZEN_XAU_CORE_EVIDENCE_AUDIT_V1_VERDICT_OR_PARITY_DEFECT"
+}
