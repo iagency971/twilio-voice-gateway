@@ -1,0 +1,43 @@
+{
+  "all_gates_pass": false,
+  "authorization_sha256": "0e6b6aad964d237786ff463c849f4ceeed27803d31c7aafcd6680834994e7f3c",
+  "event_manifest_sha256": "39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb",
+  "events": 498,
+  "gates": {
+    "A_integrity": true,
+    "B_primary_broad_rr": false,
+    "C_stress": false,
+    "D_temporal": false,
+    "E_concentration": false,
+    "F_single_position_portfolio": false
+  },
+  "human_protocol_sha256": "0cae1aa3b2c086311d65a3520ddd35afcdf3edfe7b2c55f6cd8b5cdfea80dd13",
+  "ledger_rows": 11952,
+  "new_market_data_spend": 0,
+  "post_outcome_rescue_forbidden": true,
+  "preoutcome_freeze_sha256": "7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197",
+  "primary_endpoint": "CAUSAL_CORE_RR_SURFACE_MEAN_NET_R",
+  "primary_surface": {
+    "N": 498,
+    "date_cluster_ci95_lower": -0.15157992195684347,
+    "date_cluster_ci95_upper": 0.029720028866735682,
+    "date_equal_weight_surface_mean_net_R_diagnostic": -0.06395458227972983,
+    "draws": 20000,
+    "scenario": "S11_C6_PRIMARY",
+    "seed": 20260821,
+    "surface_mean_net_R": -0.062272429028931146
+  },
+  "protocol_sha256": "f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda",
+  "status": "CAUSAL_CORE_OUTCOME_V1_1_NO_GO",
+  "stress_surface": {
+    "N": 498,
+    "date_cluster_ci95_lower": -0.17848085757949145,
+    "date_cluster_ci95_upper": 0.0019203970221044297,
+    "date_equal_weight_surface_mean_net_R_diagnostic": -0.08696584552643397,
+    "draws": 20000,
+    "scenario": "S18_C9_STRESS",
+    "seed": 20260821,
+    "surface_mean_net_R": -0.08946993490993257
+  },
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_RESULT_V1_1"
+}
