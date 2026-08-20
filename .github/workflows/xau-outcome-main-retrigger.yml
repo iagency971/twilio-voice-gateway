@@ -21,14 +21,23 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           python - <<'PY'
-          import base64,os,requests
-          path='.github/workflows/xau-core-causal-confluence-outcome-v1-1.yml'
+          import base64,json,os,requests
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
-          r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); r.raise_for_status()
+          repo=os.environ['REPO']; branch=os.environ['BRANCH']; run_id=os.environ['RUN_ID']
+          path='.github/workflows/xau-core-causal-confluence-outcome-v1-1.yml'
+          u=f"https://api.github.com/repos/{repo}/contents/{path}"
+          r=requests.get(u,headers=h,params={'ref':branch}); r.raise_for_status()
           old=r.json(); data=base64.b64decode(old['content'])
-          marker=f"\n# exact-binding technical retrigger {os.environ['RUN_ID']}\n".encode()
-          body={'message':'retrigger frozen XAU outcome V1.1 after exact binding','content':base64.b64encode(data+marker).decode(),'branch':os.environ['BRANCH'],'sha':old['sha']}
+          marker=f"\n# exact-binding technical retrigger {run_id}\n".encode()
+          body={'message':'retrigger frozen XAU outcome V1.1 after exact binding','content':base64.b64encode(data+marker).decode(),'branch':branch,'sha':old['sha']}
           q=requests.put(u,headers=h,json=body); q.raise_for_status()
+          mpath='xau-final-results/xau_core_causal_confluence_outcome_v1_1/MAIN_RETRIGGER_PASS.json'
+          mu=f"https://api.github.com/repos/{repo}/contents/{mpath}"
+          m=requests.get(mu,headers=h,params={'ref':branch})
+          payload=(json.dumps({'status':'MAIN_RETRIGGER_PASS','workflow_run_id':run_id},indent=2,sort_keys=True)+'\n').encode()
+          mb={'message':'publish main outcome retrigger marker [skip ci]','content':base64.b64encode(payload).decode(),'branch':branch}
+          if m.status_code==200: mb['sha']=m.json()['sha']
+          elif m.status_code!=404: m.raise_for_status()
+          z=requests.put(mu,headers=h,json=mb); z.raise_for_status()
           print('MAIN_WORKFLOW_RETRIGGERED')
           PY
