@@ -64,7 +64,7 @@ jobs:
           echo "Sparse data size:"
           du -sh plaintext_csv || true
 
-      - name: Apply technical Pandas row-access correction
+      - name: Apply technical/categorical corrections without changing the signal
         shell: bash
         run: |
           python - <<'PY'
@@ -76,8 +76,12 @@ jobs:
               'pd.Timestamp(entry_bar.dt)': 'pd.Timestamp(entry_bar["dt"])',
               'str(entry_bar.dt)': 'str(entry_bar["dt"])',
               'str(exit_bar.dt)': 'str(exit_bar["dt"])',
+              'joint[(a, b)] = sorted(set(volume[a]).intersection(volume[b]))':
+              'joint[(a, b)] = sorted(d for d in set(volume[a]).intersection(volume[b]) if d.weekday() < 5 and float(volume[a].get(d, 0.0)) > 0 and float(volume[b].get(d, 0.0)) > 0)',
           }
           for old, new in replacements.items():
+              if old not in s:
+                  print(f'WARNING replacement source not found: {old}')
               s = s.replace(old, new)
           p.write_text(s)
           PY
@@ -86,6 +90,7 @@ jobs:
         shell: bash
         run: |
           set +e
+          rm -rf mnq-propf/results/london_b_causal_v1
           mkdir -p mnq-propf/results/london_b_causal_v1
           python mnq-propf/run_london_b_causal_repair_v1.py \
             --source-root /tmp/MNQ_DATA/plaintext_csv \
