@@ -1,0 +1,388 @@
+[
+  {
+    "symbol": "NAS100",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      }
+    ]
+  },
+  {
+    "symbol": "US30",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      }
+    ]
+  },
+  {
+    "symbol": "SPX500",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      }
+    ]
+  },
+  {
+    "symbol": "US2000",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      }
+    ]
+  },
+  {
+    "symbol": "GER40",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      }
+    ]
+  },
+  {
+    "symbol": "GER30",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      }
+    ]
+  },
+  {
+    "symbol": "UK100",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      }
+    ]
+  },
+  {
+    "symbol": "XAUUSD",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 404,
+        "bytes": 196
+      }
+    ]
+  },
+  {
+    "symbol": "GBPUSD",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 200,
+        "bytes": 155275,
+        "columns": [
+          "DateTime",
+          "BidOpen",
+          "BidHigh",
+          "BidLow",
+          "BidClose",
+          "AskOpen",
+          "AskHigh",
+          "AskLow",
+          "AskClose"
+        ],
+        "rows_sample": 3
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 200,
+        "bytes": 153742,
+        "columns": [
+          "DateTime",
+          "BidOpen",
+          "BidHigh",
+          "BidLow",
+          "BidClose",
+          "AskOpen",
+          "AskHigh",
+          "AskLow",
+          "AskClose"
+        ],
+        "rows_sample": 3
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 200,
+        "bytes": 99844,
+        "columns": [
+          "DateTime",
+          "BidOpen",
+          "BidHigh",
+          "BidLow",
+          "BidClose",
+          "AskOpen",
+          "AskHigh",
+          "AskLow",
+          "AskClose"
+        ],
+        "rows_sample": 3
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 200,
+        "bytes": 111926,
+        "columns": [
+          "DateTime",
+          "BidOpen",
+          "BidHigh",
+          "BidLow",
+          "BidClose",
+          "AskOpen",
+          "AskHigh",
+          "AskLow",
+          "AskClose"
+        ],
+        "rows_sample": 3
+      }
+    ]
+  },
+  {
+    "symbol": "USDJPY",
+    "checks": [
+      {
+        "year": 2016,
+        "week": 10,
+        "status": 200,
+        "bytes": 156173,
+        "columns": [
+          "DateTime",
+          "BidOpen",
+          "BidHigh",
+          "BidLow",
+          "BidClose",
+          "AskOpen",
+          "AskHigh",
+          "AskLow",
+          "AskClose"
+        ],
+        "rows_sample": 3
+      },
+      {
+        "year": 2020,
+        "week": 10,
+        "status": 200,
+        "bytes": 157346,
+        "columns": [
+          "DateTime",
+          "BidOpen",
+          "BidHigh",
+          "BidLow",
+          "BidClose",
+          "AskOpen",
+          "AskHigh",
+          "AskLow",
+          "AskClose"
+        ],
+        "rows_sample": 3
+      },
+      {
+        "year": 2024,
+        "week": 10,
+        "status": 200,
+        "bytes": 108013,
+        "columns": [
+          "DateTime",
+          "BidOpen",
+          "BidHigh",
+          "BidLow",
+          "BidClose",
+          "AskOpen",
+          "AskHigh",
+          "AskLow",
+          "AskClose"
+        ],
+        "rows_sample": 3
+      },
+      {
+        "year": 2026,
+        "week": 10,
+        "status": 200,
+        "bytes": 111029,
+        "columns": [
+          "DateTime",
+          "BidOpen",
+          "BidHigh",
+          "BidLow",
+          "BidClose",
+          "AskOpen",
+          "AskHigh",
+          "AskLow",
+          "AskClose"
+        ],
+        "rows_sample": 3
+      }
+    ]
+  }
+]
