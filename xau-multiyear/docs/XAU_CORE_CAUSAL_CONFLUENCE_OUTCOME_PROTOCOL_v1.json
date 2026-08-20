@@ -1,0 +1,362 @@
+{
+  "authorization_status": "CAUSAL_CORE_OUTCOME_V1_AUTHORIZED",
+  "decision": "A_AUTHORIZE_PNL_OPEN",
+  "execution": {
+    "commission_and_net_r": {
+      "additional_fee_or_slippage": "none in V1",
+      "commission": "subtract exactly one round-turn commission per completed or timed-out trade",
+      "commission_r": "commission_round_turn_usd / (100 * risk_price_usd_per_oz)",
+      "gross_r_long": "(exit_price - entry_price) / risk_price",
+      "gross_r_short": "(entry_price - exit_price) / risk_price",
+      "net_r": "gross_r - commission_r",
+      "spread": "embedded once in scenario BID/ASK path"
+    },
+    "direction": {
+      "RESISTANCE": "SHORT",
+      "SUPPORT": "LONG",
+      "source_field": "anchor_side"
+    },
+    "entry_time": {
+      "maximum_wait_after_confirmation": "already frozen in event manifest: first valid opening quote among confirm_time + 1, +2, or +3 minutes",
+      "on_missing_or_mismatch": "hard fail; never drop or delay the event after outcome authorization",
+      "required_quote": "finite source open_bid and open_ask with open_ask >= open_bid",
+      "reselection_forbidden": true,
+      "source": "frozen event entry_time"
+    },
+    "event_ordering": {
+      "all_timestamps_utc": true,
+      "chronological": [
+        "entry_time",
+        "confluence_time",
+        "event_id"
+      ]
+    },
+    "execution_scenarios": {
+      "S10_C6": {
+        "commission_round_turn_usd_per_100oz_lot": 6.0,
+        "role": "sensitivity",
+        "spread_usd_per_oz": 0.1
+      },
+      "S11_C6_PRIMARY": {
+        "commission_round_turn_usd_per_100oz_lot": 6.0,
+        "role": "primary",
+        "spread_usd_per_oz": 0.11
+      },
+      "S12_C6": {
+        "commission_round_turn_usd_per_100oz_lot": 6.0,
+        "role": "sensitivity",
+        "spread_usd_per_oz": 0.12
+      },
+      "S18_C9_STRESS": {
+        "commission_round_turn_usd_per_100oz_lot": 9.0,
+        "role": "stress",
+        "spread_usd_per_oz": 0.18
+      }
+    },
+    "horizon": {
+      "bar_starts_monitored": "entry_time <= bar_start < entry_time + 120 minutes",
+      "elapsed_wall_clock_minutes": 120,
+      "missing_quote_at_deadline": "wait only until the first valid source opening BID/ASK quote at or after the deadline; execute TIME at its scenario open unless the opening quote has already crossed stop or target",
+      "normal_timeout": "market exit at first valid executable scenario quote at or after entry_time + 120 minutes",
+      "reason_for_clarification": "with BAR_START_UTC M1 bars, this implements exactly 120 elapsed minutes and prevents row-count or inclusive-endpoint drift"
+    },
+    "intrabar_and_gap_rules": {
+      "entry_bar_included": true,
+      "gap_beyond_target": "TP at target with no favorable price improvement",
+      "long_gap_beyond_stop": "SL at scenario bid open, which may be worse than stop",
+      "same_bar_stop_and_target": "SL wins",
+      "short_gap_beyond_stop": "SL at scenario ask open, which may be worse than stop",
+      "subsequent_bar_order": [
+        "evaluate adverse opening gap",
+        "evaluate stop and target range touches",
+        "if both range-touched, assign SL",
+        "otherwise assign the single touched boundary"
+      ]
+    },
+    "population": "exactly the 498 frozen event rows",
+    "risk": {
+      "contract_oz_per_standard_lot": 100.0,
+      "invalid_action": "hard fail; no event deletion",
+      "long_1R_price": "entry_price - stop_price",
+      "required": "finite and strictly positive for every event and scenario",
+      "short_1R_price": "stop_price - entry_price"
+    },
+    "scenario_quotes": {
+      "additional_slippage_usd": 0.0,
+      "ask_ohlc": "source_mid_ohlc + spread_usd_per_oz / 2",
+      "bid_ohlc": "source_mid_ohlc - spread_usd_per_oz / 2",
+      "double_count_source_spread_forbidden": true,
+      "long_entry_price": "scenario ask open at frozen entry_time",
+      "long_exit_path": "scenario bid OHLC",
+      "short_entry_price": "scenario bid open at frozen entry_time",
+      "short_exit_path": "scenario ask OHLC",
+      "spread_is_already_in_quote_path": true
+    },
+    "sigma60": {
+      "causality": "uses only pre-entry information because implementation is shifted by one M1",
+      "function": "rzr.features.robust_sigma60",
+      "invalid_value_action": "hard fail; event may not be removed",
+      "value": "sigma60 at frozen entry_time from frozen annual mid input"
+    },
+    "structural_stop": {
+      "alternative_stop_comparison_forbidden": true,
+      "buffer_formula": "max(2 * scenario_spread_usd_per_oz, 0.10 * sigma60_at_entry)",
+      "geometry": "frozen anchor_lower / anchor_upper only",
+      "long_stop": "anchor_lower - buffer",
+      "pair_geometry_not_used": true,
+      "short_stop": "anchor_upper + buffer",
+      "single_rule_only": true
+    },
+    "targets": {
+      "best_rr_selection_forbidden": true,
+      "long_target": "entry_price + RR * risk_price",
+      "rr_surface": [
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0
+      ],
+      "same_498_events_all_rr": true,
+      "short_target": "entry_price - RR * risk_price"
+    }
+  },
+  "gates": {
+    "A_integrity": {
+      "all_required": true,
+      "conditions": [
+        "freeze manifest SHA-256 exact",
+        "event manifest SHA-256 exact",
+        "event_count == 498",
+        "event IDs and rows exact",
+        "annual input hashes exact",
+        "same events for all four scenarios and six RR",
+        "all frozen preoutcome causal violation counters remain zero",
+        "shuffle identity remains PASS",
+        "no post-freeze population mutation"
+      ]
+    },
+    "B_primary_broad_rr": {
+      "all_required": true,
+      "minimum_passing_rr_cells": 4,
+      "rr_cell_requirements": {
+        "bootstrap_mean_ci95_lower_strictly_greater_than": 0.0,
+        "mean_net_r_min": 0.1,
+        "pf_net_min": 1.25
+      },
+      "surface_bootstrap_ci95_lower_strictly_greater_than": 0.0,
+      "surface_mean_net_r_min": 0.1
+    },
+    "C_stress": {
+      "all_six_rr_mean_net_r_strictly_positive": true,
+      "minimum_rr_cells_pf_ge_1_20": 4,
+      "stress_surface_mean_net_r_strictly_positive": true
+    },
+    "D_temporal": {
+      "annual_contribution_share_definition": "abs(annual sum net_R) / sum(abs(all annual sums net_R))",
+      "annual_positive_definition": "annual sum net_R > 0",
+      "evaluate_each_rr": true,
+      "minimum_rrs_passing": 4,
+      "per_rr_requirements": {
+        "all_15_leave_one_year_out_primary_means_strictly_positive": true,
+        "max_abs_annual_contribution_share_primary": 0.35,
+        "max_abs_annual_contribution_share_stress": 0.35,
+        "primary_positive_years_min": 10,
+        "stress_positive_years_min": 8
+      },
+      "rr15_must_pass": true
+    },
+    "E_concentration": {
+      "mean_net_r_after_removing_top_strictly_positive": true,
+      "rr": 1.5,
+      "scenarios": [
+        "S11_C6_PRIMARY",
+        "S18_C9_STRESS"
+      ],
+      "tie_break": [
+        "net_R descending",
+        "entry_time ascending",
+        "event_id ascending"
+      ],
+      "top_count_rule": "ceil(N * 0.05)",
+      "top_fraction": 0.05,
+      "top_share_total_positive_r_max": 0.5
+    },
+    "F_single_position_portfolio": {
+      "ordering": [
+        "entry_time",
+        "confluence_time",
+        "event_id"
+      ],
+      "primary_mean_net_r_strictly_positive": true,
+      "primary_pf_net_strictly_greater_than": 1.1,
+      "rr": 1.5,
+      "rule": "select earliest event; ignore every later entry with entry_time <= active exit_time; continue after exit",
+      "selected_trade_count": "mandatory diagnostic, no post-outcome threshold",
+      "stress_mean_net_r_greater_than_or_equal_to": 0.0,
+      "unresolved_sequencing_ambiguity": false
+    }
+  },
+  "governance": {
+    "comex_continuation_authorized": false,
+    "exact_deterministic_reproduction_after_open": "allowed; rules and population may not change",
+    "fail_action": "close this core as an economic candidate on 2011-2025; subgroup tables may generate new independently preregistered hypotheses only",
+    "m5_authorized": false,
+    "one_canonical_outcome_open": true,
+    "pass_authorizes": "external broker/feed replication and prospective validation only",
+    "pass_is_live_ready": false,
+    "prop_firm_challenge_authorized": false,
+    "retry_before_any_outcome_read": "allowed only for infrastructure failure with identical hashes and code"
+  },
+  "issued_date_utc": "2026-08-20",
+  "mandatory_diagnostics": {
+    "all_scenarios_all_rr": [
+      "N",
+      "mean_net_R",
+      "sum_net_R",
+      "PF",
+      "TP_pct",
+      "SL_pct",
+      "TIME_pct",
+      "same_bar_ambiguity_pct",
+      "date_cluster_CI95"
+    ],
+    "no_drawdown_or_losing_streak_pass_fail_threshold": true,
+    "rr15_primary_and_stress": [
+      "max_drawdown_R",
+      "longest_losing_streak",
+      "best_1_5_10pct_contribution",
+      "mean_after_removing_best_5pct",
+      "single_position_selected_trades",
+      "single_position_skipped_overlaps"
+    ]
+  },
+  "market_data": {
+    "actual_bid_ask_role": [
+      "preoutcome quote-presence causality",
+      "preoutcome zone-width/provenance construction",
+      "verification that entry_time has valid opening BID and ASK"
+    ],
+    "annual_input_hashes": "read from and verify against frozen preoutcome manifest",
+    "canonical_input_rehydration": true,
+    "execution_cost_overlay_role": "scenario-standardized synthetic BID/ASK around frozen source mid OHLC; actual source spread is not added again",
+    "m1_timestamp_semantics": "BAR_START_UTC",
+    "mid_ohlc_definition": "stored source mid OHLC, originally arithmetic mean of matching BID and ASK OHLC fields",
+    "new_market_data_spend": 0,
+    "new_research_market_information": false,
+    "source": "same already-used public Dukascopy XAUUSD M1 BID/ASK monthly files"
+  },
+  "outcome_blind_review": true,
+  "pnl_inspected_during_authorization": false,
+  "post_outcome_prohibitions": [
+    "no LONG-only or SHORT-only rescue",
+    "no SAME_SIDE-only rescue",
+    "no session, NY_AM, London, or session-transition rescue",
+    "no M15, M30, or H1 rescue",
+    "no zone-age rescue",
+    "no DOZ_BODY, DOZ_LAST, or DOZ_BASE rescue",
+    "no objective-liquidity subtype rescue",
+    "no single-RR rescue",
+    "no year exclusion",
+    "no combination of diagnostic dimensions",
+    "no cost, stop, horizon, entry, target or ambiguity-rule change",
+    "diagnostic subgroups are HYPOTHESIS_GENERATION only"
+  ],
+  "preflight_integrity": {
+    "annual_input_sha256_must_match_freeze_manifest": true,
+    "event_rows_and_event_ids_must_match_exactly": true,
+    "fail_closed": true,
+    "hard_fail_status": "CAUSAL_CORE_OUTCOME_V1_INVALID_BINDING_ABORT",
+    "no_event_reselection_or_recomputation": true,
+    "required_zero_fields": [
+      "all_zone_information_time_violations",
+      "m1_formation_bar_contact_violations",
+      "memory_prefix_invariance_violations",
+      "zone_width_information_violations",
+      "entry_open_quote_causality_violations",
+      "doz_provenance_violations",
+      "event_doz_provenance_violations",
+      "prefix_invariance_violations",
+      "timing_integrity_violations",
+      "duplicate_event_ids"
+    ],
+    "same_events_all_scenarios_and_rr": true,
+    "shuffle_identity_required": true,
+    "support_gate_required": true
+  },
+  "preoutcome_binding": {
+    "active_years": 15,
+    "annual_event_counts": {
+      "2011": 34,
+      "2012": 28,
+      "2013": 25,
+      "2014": 22,
+      "2015": 41,
+      "2016": 49,
+      "2017": 43,
+      "2018": 57,
+      "2019": 52,
+      "2020": 27,
+      "2021": 29,
+      "2022": 20,
+      "2023": 37,
+      "2024": 18,
+      "2025": 16
+    },
+    "branch": "agent/xau-core-evidence-audit-v1",
+    "event_count": 498,
+    "event_manifest_path": "xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/causal_core_preoutcome_full_m1_events_2011_2025.csv",
+    "event_manifest_sha256": "39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb",
+    "freeze_artifact_commit_sha": "b1882c5873c638cd1f5fb92ffcf7d42fe87f5e86",
+    "freeze_manifest_path": "xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/preoutcome_full_m1_information_set_freeze_manifest.json",
+    "freeze_manifest_sha256": "7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197",
+    "preoutcome_source_commit_sha": "106a0252e8292dd2dd690a7e336d9f493420ccc1",
+    "prior_invalidated_freeze_sha256": "71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162",
+    "repository": "iagency971/twilio-voice-gateway",
+    "side_relation_counts": {
+      "OPPOSITE_SIDE": 2,
+      "SAME_SIDE": 496
+    },
+    "workflow_run_id": "32360173450"
+  },
+  "primary_endpoint": {
+    "best_rr_selection": false,
+    "date_cluster_bootstrap": {
+      "ci": "percentile 2.5% and 97.5%",
+      "draws": 20000,
+      "resample_rule": "sample dates with replacement; carry every event on a selected date with the date's multiplicity; recompute event-weighted surface mean",
+      "rng": "NumPy default_rng / PCG64",
+      "seed": 20260821,
+      "unit": "unique 17:00-New-York trading date"
+    },
+    "equal_weight_events": true,
+    "equal_weight_rr": true,
+    "event_level_surface_score": "arithmetic mean of the six net_R values for the same frozen event",
+    "name": "CAUSAL_CORE_RR_SURFACE_MEAN_NET_R",
+    "point_estimate": "arithmetic mean of the 498 event-level surface scores",
+    "scenario": "S11_C6_PRIMARY",
+    "trading_date_definition": "America/New_York trading date with 17:00 boundary derived from entry_time"
+  },
+  "protocol_name": "XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1",
+  "secondary_endpoints": {
+    "moving_block_bootstrap": {
+      "block_length_months": 3,
+      "circular_blocks": true,
+      "draws": 20000,
+      "months": "2011-01 through 2025-12",
+      "rng": "NumPy default_rng / PCG64",
+      "role": "secondary diagnostic only",
+      "seed": 20260822
+    },
+    "per_rr_cells": "mean net_R, PF, percentile date-cluster CI for each scenario and RR",
+    "rr15_role": "descriptive only for temporal, concentration, drawdown and portfolio diagnostics; not primary"
+  },
+  "terminal_statuses": {
+    "authorized": "CAUSAL_CORE_OUTCOME_V1_AUTHORIZED",
+    "fail": "CAUSAL_CORE_OUTCOME_V1_NO_GO",
+    "integrity_abort": "CAUSAL_CORE_OUTCOME_V1_INVALID_BINDING_ABORT",
+    "pass": "CAUSAL_CORE_OUTCOME_V1_PASS_FOR_EXTERNAL_REPLICATION"
+  },
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_V1"
+}
