@@ -1,0 +1,3 @@
+scenario,target_r,independent_trades,selected_trades,skipped_overlapping_entries,same_minute_exit_entry_skips,mean_net_R,sum_net_R,pf_net,unresolved_sequencing_ambiguity
+S11_C6_PRIMARY,1.5,498,493,5,0,-0.07241113463954318,-35.69868937729479,0.8716842941925542,False
+S18_C9_STRESS,1.5,498,493,5,0,-0.09199809398540826,-45.35506033480627,0.8375577192138893,False
