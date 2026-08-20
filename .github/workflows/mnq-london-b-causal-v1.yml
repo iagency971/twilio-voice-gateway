@@ -64,6 +64,24 @@ jobs:
           echo "Sparse data size:"
           du -sh plaintext_csv || true
 
+      - name: Apply technical Pandas row-access correction
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('mnq-propf/run_london_b_causal_repair_v1.py')
+          s = p.read_text()
+          replacements = {
+              'pd.Timestamp(r.dt)': 'pd.Timestamp(r["dt"])',
+              'pd.Timestamp(entry_bar.dt)': 'pd.Timestamp(entry_bar["dt"])',
+              'str(entry_bar.dt)': 'str(entry_bar["dt"])',
+              'str(exit_bar.dt)': 'str(exit_bar["dt"])',
+          }
+          for old, new in replacements.items():
+              s = s.replace(old, new)
+          p.write_text(s)
+          PY
+
       - name: Run frozen causal pre-2025 test
         shell: bash
         run: |
