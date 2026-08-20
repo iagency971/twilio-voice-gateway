@@ -1,0 +1,4 @@
+{
+  "status": "QQQ_FORMED_OPENMOVE_V1_INVALID_ABORT",
+  "error": "AttributeError('Can only use .dt accessor with datetimelike values')"
+}

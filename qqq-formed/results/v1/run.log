@@ -1,0 +1,23 @@
+{
+  "status": "QQQ_FORMED_OPENMOVE_V1_INVALID_ABORT",
+  "error": "AttributeError('Can only use .dt accessor with datetimelike values')"
+}
+Traceback (most recent call last):
+  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/qqq-formed/run_qqq_formed_openmove_v1.py", line 215, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/qqq-formed/run_qqq_formed_openmove_v1.py", line 166, in main
+    r=simulate_trade(g,float(f.prior_atr14),bp)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/qqq-formed/run_qqq_formed_openmove_v1.py", line 114, in simulate_trade
+    exit_px=stop; exit_dt=b.dt; reason='SL'; break
+                          ^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/generic.py", line 6194, in __getattr__
+    return object.__getattribute__(self, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/accessor.py", line 230, in __get__
+    return self._accessor(obj)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/indexes/accessors.py", line 698, in __new__
+    raise AttributeError("Can only use .dt accessor with datetimelike values")
+AttributeError: Can only use .dt accessor with datetimelike values. Did you mean: 'at'?

@@ -1,0 +1,24 @@
+{
+  "sources": [
+    {
+      "tag": "HIST",
+      "url": "https://raw.githubusercontent.com/lvrusu/QQQ_price_data/main/QQQ5m_regular_raw_01_01_2000_to_04_10_2024.csv",
+      "bytes": 29388042,
+      "rows_normalized": 484774,
+      "dt_min": "2000-01-03 09:30:00",
+      "dt_max": "2024-10-03 15:55:00"
+    },
+    {
+      "tag": "EXT",
+      "url": "https://raw.githubusercontent.com/lvrusu/QQQ_price_data/main/QQQ5m_Ext_J_23_to_Mar_20a_2026.csv",
+      "bytes": 9106330,
+      "rows_normalized": 154315,
+      "dt_min": "2023-01-03 04:00:00",
+      "dt_max": "2026-03-20 19:55:00"
+    }
+  ],
+  "combined_rows_rth": 513244,
+  "dt_min": "2000-01-03 09:30:00",
+  "dt_max": "2026-03-20 15:55:00",
+  "duplicates_after_merge": 0
+}
