@@ -1,4 +1,4 @@
-# retrigger: outcome-blind causal repair v1
+# retrigger: outcome-blind causal repair v1 after synthetic test fix
 name: XAU Core Causal Confluence Preoutcome Repair V1
 
 on:
