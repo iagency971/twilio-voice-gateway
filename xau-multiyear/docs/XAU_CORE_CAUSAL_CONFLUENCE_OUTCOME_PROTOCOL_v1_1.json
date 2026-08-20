@@ -339,7 +339,7 @@
       "resample_rule": "sample dates with replacement; carry every event on a selected date with the date's multiplicity; recompute the event-weighted surface mean",
       "rng": "NumPy default_rng / PCG64",
       "seed": 20260821,
-      "unit": "unique 17:00-New_York trading date"
+      "unit": "unique 17:00-New-York trading date"
     },
     "date_equal_weight_surface_mean": "mandatory secondary diagnostic only; never changes the primary verdict",
     "date_role_clarification": "trading date is the dependence cluster for inference; the primary point estimate remains event-weighted to preserve mean R per trade",
