@@ -1,0 +1,29 @@
+{
+  "active_year": true,
+  "clean_rejection_events": 44,
+  "contaminated_pairs": 91,
+  "deduplicated_pairs": 396,
+  "direct_pairs_before_contamination": 713,
+  "duplicate_event_ids": 0,
+  "emitted_events": 226,
+  "entry_candidates": 44,
+  "event_manifest_sha256": "1fc278c7ef6ef89817170de63e64402f653c1b9efc68a1abe022662f83907bfe",
+  "input_sha256": "416c6410ac7d2ceb4bef04574c4ba45faf9fa6037472d713bf131e8dc63384a1",
+  "new_market_data_spend": 0,
+  "no_next_active_entry": 0,
+  "pnl_inspected_or_used": false,
+  "qualifying_pairs": 622,
+  "raw_contacts": 223353,
+  "raw_contacts_by_family": {
+    "DISPLACEMENT_ORIGIN": 8564,
+    "FVG": 205057,
+    "MEMORY": 2708,
+    "OBJECTIVE_LIQUIDITY": 7024
+  },
+  "shuffle_identity_pass": true,
+  "target_year_emitted_confluences": 109,
+  "timing_integrity_violations": 0,
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_ANNUAL_V1",
+  "year": 2019
+}
