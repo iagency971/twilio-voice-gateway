@@ -5,7 +5,7 @@ effective_date,from,to,decision_date,current_rth_volume,next_rth_volume,reason
 2020-03-12,MNQ 03-20,MNQ 06-20,,,,current_contract_missing
 2020-06-11,MNQ 06-20,MNQ 09-20,,,,current_contract_missing
 2020-09-10,MNQ 09-20,MNQ 12-20,,,,current_contract_missing
-2020-12-07,MNQ 12-20,MNQ 03-21,2020-12-06,1.0,2.0,prior_rth_volume_cross
+2020-12-10,MNQ 12-20,MNQ 03-21,,,,current_contract_missing
 2021-03-11,MNQ 03-21,MNQ 06-21,,,,current_contract_missing
 2021-06-10,MNQ 06-21,MNQ 09-21,,,,current_contract_missing
 2021-09-09,MNQ 09-21,MNQ 12-21,,,,current_contract_missing
@@ -13,7 +13,7 @@ effective_date,from,to,decision_date,current_rth_volume,next_rth_volume,reason
 2022-03-10,MNQ 03-22,MNQ 06-22,,,,current_contract_missing
 2022-06-09,MNQ 06-22,MNQ 09-22,,,,current_contract_missing
 2022-12-08,MNQ 09-22,MNQ 03-23,,,,current_contract_missing
-2023-03-13,MNQ 03-23,MNQ 06-23,2023-03-12,0.0,1.0,prior_rth_volume_cross
+2023-03-13,MNQ 03-23,MNQ 06-23,,,,current_contract_missing
 2023-06-12,MNQ 06-23,MNQ 09-23,,,,current_contract_missing
 2023-12-07,MNQ 09-23,MNQ 03-24,,,,current_contract_missing
 2024-03-11,MNQ 03-24,MNQ 06-24,,,,current_contract_missing

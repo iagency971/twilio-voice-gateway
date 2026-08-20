@@ -1,6 +1,139 @@
 {
-  "status": "MNQ_LONDON_B_CAUSAL_REPAIR_V1_INVALID_ABORT",
-  "error": "AttributeError('Can only use .dt accessor with datetimelike values')",
-  "2025_opened": false,
-  "2026_opened": false
+  "status": "MNQ_LONDON_B_CAUSAL_REPAIR_V1_PRE2025_NO_GO",
+  "data_boundary": {
+    "start": "2019-05-01",
+    "end": "2024-12-31",
+    "2025_opened": false,
+    "2026_opened": false
+  },
+  "contracts_discovered": [
+    "MNQ 06-19",
+    "MNQ 09-19",
+    "MNQ 12-19",
+    "MNQ 03-20",
+    "MNQ 06-20",
+    "MNQ 09-20",
+    "MNQ 12-20",
+    "MNQ 03-21",
+    "MNQ 06-21",
+    "MNQ 09-21",
+    "MNQ 12-21",
+    "MNQ 03-22",
+    "MNQ 06-22",
+    "MNQ 09-22",
+    "MNQ 03-23",
+    "MNQ 06-23",
+    "MNQ 09-23",
+    "MNQ 03-24",
+    "MNQ 06-24",
+    "MNQ 09-24",
+    "MNQ 03-25"
+  ],
+  "selected_dates": 1276,
+  "roll_count": 20,
+  "london_15m_bars": 27813,
+  "feature_rows": 27380,
+  "primary": {
+    "n": 210,
+    "mean": -4.4071428571428575,
+    "sum": -925.5,
+    "t_stat": -1.6335156697213717,
+    "win_rate": 0.41904761904761906,
+    "pf": 0.7222805701425357,
+    "max_dd_points": 1277.75
+  },
+  "stress": {
+    "n": 210,
+    "mean": -6.4071428571428575,
+    "sum": -1345.5,
+    "t_stat": -2.3748193772124315,
+    "win_rate": 0.4095238095238095,
+    "pf": 0.6241357636706474,
+    "max_dd_points": 1637.75
+  },
+  "annual": [
+    {
+      "year": 2022,
+      "scenario": "PRIMARY",
+      "n": 71,
+      "mean": -2.6161971830985915,
+      "sum": -185.75,
+      "t_stat": -0.5312091524737608,
+      "win_rate": 0.43661971830985913,
+      "pf": 0.8405237175359519,
+      "max_dd_points": 476.75
+    },
+    {
+      "year": 2022,
+      "scenario": "STRESS",
+      "n": 71,
+      "mean": -4.616197183098592,
+      "sum": -327.75,
+      "t_stat": -0.9373017481737558,
+      "win_rate": 0.43661971830985913,
+      "pf": 0.7366941152841936,
+      "max_dd_points": 588.75
+    },
+    {
+      "year": 2023,
+      "scenario": "PRIMARY",
+      "n": 62,
+      "mean": -8.060483870967742,
+      "sum": -499.75,
+      "t_stat": -2.1107556100713705,
+      "win_rate": 0.3870967741935484,
+      "pf": 0.4907006369426752,
+      "max_dd_points": 530.25
+    },
+    {
+      "year": 2023,
+      "scenario": "STRESS",
+      "n": 62,
+      "mean": -10.060483870967742,
+      "sum": -623.75,
+      "t_stat": -2.634484865997033,
+      "win_rate": 0.3709677419354839,
+      "pf": 0.41086186540731995,
+      "max_dd_points": 642.25
+    },
+    {
+      "year": 2024,
+      "scenario": "PRIMARY",
+      "n": 77,
+      "mean": -3.116883116883117,
+      "sum": -240.0,
+      "t_stat": -0.6314423998537573,
+      "win_rate": 0.42857142857142855,
+      "pf": 0.797724399494311,
+      "max_dd_points": 301.25
+    },
+    {
+      "year": 2024,
+      "scenario": "STRESS",
+      "n": 77,
+      "mean": -5.116883116883117,
+      "sum": -394.0,
+      "t_stat": -1.036617939759918,
+      "win_rate": 0.4155844155844156,
+      "pf": 0.69128305582762,
+      "max_dd_points": 425.25
+    }
+  ],
+  "gates": {
+    "combined_n_ge_60": true,
+    "combined_mean_ge_2pt": false,
+    "combined_t_ge_2": false,
+    "combined_pf_ge_1_30": false,
+    "year_2022_positive": false,
+    "year_2023_positive": false,
+    "year_2024_positive": false,
+    "stress_mean_positive": false,
+    "stress_pf_gt_1_10": false
+  },
+  "notes": [
+    "Public GMM feature set retained, but GMM/scaler fit causally on prior years only.",
+    "Regime label mapping learned on training realized-volatility means only.",
+    "No cross-session entry; exact four-bar/60-minute hold; feature reset on roll.",
+    "2025/2026 are not read or calculated in this stage."
+  ]
 }
