@@ -1,0 +1,12 @@
+{
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_TIMEFRAME_INVALIDATION_V1",
+  "status": "INVALIDATED_PREOUTCOME_M1_START_TIMESTAMP_RESAMPLE_ALIGNMENT",
+  "reason": "Dukascopy M1 timestamps are bar-start timestamps, while the DOZ HTF resampler used closed=right. The complete M15/M30/H1 DOZ universe must be rebuilt with closed=left,label=right before any P&L is opened.",
+  "invalidated_preoutcome_freeze_manifest_sha256": "5792ee3aba012c46ae0e44868b80fd5b0e3acd630a3595ae4d21056663143075",
+  "invalidated_event_manifest_sha256": "e14180106c659262c7345f428db1dacb1c0aa9e92c770aefef8692d4c1038f28",
+  "invalidated_artifact_freeze_commit_sha": "a259c80f5fdcc008cfdc33b63bd674f2c99a2341",
+  "pnl_open_prohibited": true,
+  "pnl_inspected_or_used_before_invalidation": false,
+  "replacement_protocol": "xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_TIMEFRAME_ALIGNMENT_REPAIR_PROTOCOL_v1.md",
+  "corrected_resample": "xau-multiyear/src/rzr/resample.py"
+}
