@@ -1,0 +1,12 @@
+{
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_INVALIDATION_V1",
+  "status": "INVALIDATED_PREOUTCOME_FUTURE_BEHAVIOR_RECLASSIFICATION",
+  "reason": "Final behavior_v2 classification can revoke an already-observable CLEAN_REJECTION after later post-entry breach/reclaim information. No P&L may be opened from this freeze.",
+  "invalidated_preoutcome_freeze_manifest_sha256": "106fa7d8efc1006f53c9dd4b130e3031549fcadfa6e425fbe5068b0299c6606b",
+  "invalidated_event_manifest_sha256": "7595d18257af70341ad0c1288d40d1fea65cc84b56d48bc29c5b420f034aaaf5",
+  "invalidated_artifact_freeze_commit_sha": "97cb99bf340affbc6003fa731232f215c86a7656",
+  "pnl_open_prohibited": true,
+  "pnl_inspected_or_used_before_invalidation": false,
+  "replacement_protocol": "xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_PROTOCOL_v1.md",
+  "replacement_builder": "xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_repair_v1.py"
+}
