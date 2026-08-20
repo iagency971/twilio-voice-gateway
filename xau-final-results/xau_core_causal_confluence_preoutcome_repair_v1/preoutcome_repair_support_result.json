@@ -1,0 +1,40 @@
+{
+  "active_years": 15,
+  "annual_entry_counts": {
+    "2011": 46,
+    "2012": 49,
+    "2013": 56,
+    "2014": 52,
+    "2015": 72,
+    "2016": 55,
+    "2017": 58,
+    "2018": 79,
+    "2019": 53,
+    "2020": 36,
+    "2021": 49,
+    "2022": 26,
+    "2023": 39,
+    "2024": 33,
+    "2025": 33
+  },
+  "duplicate_event_ids": 0,
+  "entry_candidates": 736,
+  "invalidated_prior_event_manifest_sha256": "7595d18257af70341ad0c1288d40d1fea65cc84b56d48bc29c5b420f034aaaf5",
+  "invalidated_prior_freeze_sha256": "106fa7d8efc1006f53c9dd4b130e3031549fcadfa6e425fbe5068b0299c6606b",
+  "minimum_required_active_years": 12,
+  "minimum_required_candidates": 200,
+  "new_market_data_spend": 0,
+  "outcome_execution_authorized_by_this_workflow": false,
+  "pnl_inspected_or_used": false,
+  "prefix_invariance_violations": 0,
+  "shuffle_identity_all_pass": true,
+  "side_relation_counts": {
+    "OPPOSITE_SIDE": 7,
+    "SAME_SIDE": 729
+  },
+  "status": "CAUSAL_CORE_PREOUTCOME_REPAIRED_READY_FOR_PNL",
+  "support_gate_pass": true,
+  "timing_integrity_violations": 0,
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_V1_RESULT"
+}
