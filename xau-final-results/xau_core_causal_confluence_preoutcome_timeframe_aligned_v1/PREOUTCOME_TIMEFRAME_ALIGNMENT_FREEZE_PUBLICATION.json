@@ -1,0 +1,12 @@
+{
+  "invalidated_prior_freeze_sha256": "5792ee3aba012c46ae0e44868b80fd5b0e3acd630a3595ae4d21056663143075",
+  "mandatory_stop": "STOP_BEFORE_PNL",
+  "new_market_data_spend": 0,
+  "pnl_inspected_or_used": false,
+  "status": "CAUSAL_CORE_PREOUTCOME_TIMEFRAME_ALIGNED_READY_FOR_PNL",
+  "timeframe_aligned_artifact_freeze_commit_sha": "dd7e848ff5f35cc2e63729f341ec50a92fc2303e",
+  "timeframe_aligned_freeze_manifest_sha256": "71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162",
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_TIMEFRAME_ALIGNMENT_PUBLICATION_V1",
+  "workflow_run_id": "32328016859"
+}
