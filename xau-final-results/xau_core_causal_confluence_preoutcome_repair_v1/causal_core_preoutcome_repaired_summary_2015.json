@@ -1,0 +1,33 @@
+{
+  "active_year": true,
+  "causal_clean_rejection_triggers": 72,
+  "contaminated_pairs": 112,
+  "deduplicated_pairs": 556,
+  "direct_pairs_before_contamination": 949,
+  "duplicate_event_ids": 0,
+  "emitted_events": 281,
+  "entry_candidates": 72,
+  "event_manifest_sha256": "121f3303dc727db07a83328fb746cf0e3b7a9ef25c3f09a660c59761c888ddbe",
+  "input_sha256": "3988a27e0eb55295cf0b8ee158cd34620fb61895c44e4375a3abbce32b451c7c",
+  "new_market_data_spend": 0,
+  "no_next_active_entry": 0,
+  "pnl_inspected_or_used": false,
+  "prefix_invariance_violations": 0,
+  "qualifying_pairs": 837,
+  "raw_contacts": 230008,
+  "raw_contacts_by_family": {
+    "DISPLACEMENT_ORIGIN": 8353,
+    "FVG": 212396,
+    "MEMORY": 2320,
+    "OBJECTIVE_LIQUIDITY": 6939
+  },
+  "shuffle_identity_pass": true,
+  "side_relation_counts": {
+    "SAME_SIDE": 72
+  },
+  "target_year_emitted_confluences": 138,
+  "timing_integrity_violations": 0,
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_ANNUAL_V1",
+  "year": 2015
+}
