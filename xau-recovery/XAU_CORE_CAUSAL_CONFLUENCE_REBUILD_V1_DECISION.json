@@ -1,0 +1,19 @@
+{
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_REBUILD_V1_DECISION",
+  "date": "2026-08-19",
+  "decision": "CONTINUE_CAUSAL_REPAIR_FIRST",
+  "priority_experiment": "XAU_CORE_CAUSAL_CONFLUENCE_REBUILD_V1",
+  "protocol": "xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_REBUILD_PROTOCOL_v1.md",
+  "preoutcome_builder": "xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_v1.py",
+  "current_stage": "PREOUTCOME_EVENT_REBUILD_ONLY",
+  "outcome_execution_authorized_now": false,
+  "external_replication_authorized_now": false,
+  "live_or_prop_authorized": false,
+  "m5_authorized": false,
+  "comex_continuation_authorized": false,
+  "subgroup_promotion_authorized": false,
+  "paid_market_data_authorized": false,
+  "new_market_data_spend": 0,
+  "mandatory_stop": "STOP_AFTER_PREOUTCOME_SUPPORT_FREEZE_BEFORE_PNL",
+  "fallback_if_causal_core_fails": "PURE_DOZ_SESSION_TRANSFER_LONDON_TO_NYAM_V1_NOT_AUTHORIZED_UNTIL_CORE_FAIL"
+}
