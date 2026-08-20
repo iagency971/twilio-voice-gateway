@@ -1,0 +1,44 @@
+{
+  "active_year": true,
+  "causal_clean_rejection_triggers": 44,
+  "contaminated_pairs": 48,
+  "deduplicated_pairs": 260,
+  "direct_pairs_before_contamination": 466,
+  "doz_known_time_semantics": "HTF_BAR_CLOSE_BOUNDARY",
+  "doz_provenance_missing": 0,
+  "doz_provenance_violations": 0,
+  "doz_zones_by_tf": {
+    "15min": 4344,
+    "1h": 1275,
+    "30min": 2370
+  },
+  "doz_zones_total": 7989,
+  "emitted_events": 158,
+  "entry_candidates": 44,
+  "event_doz_provenance_violations": 0,
+  "event_manifest_sha256": "4209623f8d491e767976916cd671c1aaec4613980211d72ddae0e6c8dbecbcbd",
+  "input_sha256": "cac367b6ea40bba75ed305311c7df264d3d2f4e62dbc1f8f9b341dbdad92a6f6",
+  "m1_timestamp_semantics": "BAR_START_UTC",
+  "new_market_data_spend": 0,
+  "no_next_active_entry": 0,
+  "pnl_inspected_or_used": false,
+  "prefix_invariance_violations": 0,
+  "qualifying_pairs": 418,
+  "raw_contacts": 216046,
+  "raw_contacts_by_family": {
+    "DISPLACEMENT_ORIGIN": 7799,
+    "FVG": 199166,
+    "MEMORY": 1899,
+    "OBJECTIVE_LIQUIDITY": 7182
+  },
+  "resample_closed": "left",
+  "resample_label": "right",
+  "shuffle_identity_pass": true,
+  "side_relation_counts": {
+    "SAME_SIDE": 44
+  },
+  "timing_integrity_violations": 0,
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_TIMEFRAME_ALIGNED_ANNUAL_V1",
+  "year": 2023
+}
