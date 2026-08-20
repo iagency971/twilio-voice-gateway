@@ -77,36 +77,36 @@ def simulate_day(day: pd.DataFrame, side: int, sc: dict):
         entry=float(b1.open)*(1-slip); stop=float(b0.high); risk=stop-entry
         if risk<=0: return None
         target=entry-10*risk
-    bars=day[(day.dt>=b1.dt)&(day.dt.dt.strftime('%H:%M')<='15:55')].copy()
+    bars=day[(day.dt>=b1['dt'])&(day.dt.dt.strftime('%H:%M')<='15:55')].copy()
     exit_px=None; reason=None; exit_dt=None
     for _,b in bars.iterrows():
         o,h,l,c=map(float,[b.open,b.high,b.low,b.close])
         if side==1:
             if o<=stop:
-                exit_px=o*(1-slip); reason='SL_GAP'; exit_dt=b.dt; break
+                exit_px=o*(1-slip); reason='SL_GAP'; exit_dt=b['dt']; break
             if o>=target:
-                exit_px=target*(1-slip); reason='TP_GAP_CAPPED'; exit_dt=b.dt; break
+                exit_px=target*(1-slip); reason='TP_GAP_CAPPED'; exit_dt=b['dt']; break
             hit_sl=l<=stop; hit_tp=h>=target
             if hit_sl:
-                exit_px=stop*(1-slip); reason='SL' if not hit_tp else 'SL_AMBIG'; exit_dt=b.dt; break
+                exit_px=stop*(1-slip); reason='SL' if not hit_tp else 'SL_AMBIG'; exit_dt=b['dt']; break
             if hit_tp:
-                exit_px=target*(1-slip); reason='TP'; exit_dt=b.dt; break
+                exit_px=target*(1-slip); reason='TP'; exit_dt=b['dt']; break
         else:
             if o>=stop:
-                exit_px=o*(1+slip); reason='SL_GAP'; exit_dt=b.dt; break
+                exit_px=o*(1+slip); reason='SL_GAP'; exit_dt=b['dt']; break
             if o<=target:
-                exit_px=target*(1+slip); reason='TP_GAP_CAPPED'; exit_dt=b.dt; break
+                exit_px=target*(1+slip); reason='TP_GAP_CAPPED'; exit_dt=b['dt']; break
             hit_sl=h>=stop; hit_tp=l<=target
             if hit_sl:
-                exit_px=stop*(1+slip); reason='SL' if not hit_tp else 'SL_AMBIG'; exit_dt=b.dt; break
+                exit_px=stop*(1+slip); reason='SL' if not hit_tp else 'SL_AMBIG'; exit_dt=b['dt']; break
             if hit_tp:
-                exit_px=target*(1+slip); reason='TP'; exit_dt=b.dt; break
+                exit_px=target*(1+slip); reason='TP'; exit_dt=b['dt']; break
     if exit_px is None:
-        b=eod.iloc[0]; exit_dt=b.dt; reason='TIME'
+        b=eod.iloc[0]; exit_dt=b['dt']; reason='TIME'
         exit_px=float(b.close)*(1-slip if side==1 else 1+slip)
     gross_R=side*(exit_px-entry)/risk
     commission_R=(2*sc['commission_side'])/risk
-    return {'entry_time':str(b1.dt),'exit_time':str(exit_dt),'side':'LONG' if side==1 else 'SHORT',
+    return {'entry_time':str(b1['dt']),'exit_time':str(exit_dt),'side':'LONG' if side==1 else 'SHORT',
             'entry':entry,'stop':stop,'target':target,'risk_price':risk,'exit':exit_px,'exit_reason':reason,
             'gross_R':gross_R,'commission_R':commission_R,'net_R':gross_R-commission_R}
 
@@ -173,4 +173,4 @@ def main():
     print(json.dumps(res,indent=2,allow_nan=False))
 
 if __name__=='__main__': main()
-# retrigger after workflow registration; trading logic unchanged
+# technical timestamp-access fix only; frozen trading logic unchanged
