@@ -1,0 +1,71 @@
+{
+  "files": [
+    {
+      "bytes": 19023,
+      "path": "annual_contribution.csv",
+      "sha256": "2c41a9ee3067f3fab47590fd240d57e537ad08a3d1dfe198e63f5d3355b382bf"
+    },
+    {
+      "bytes": 399513,
+      "path": "causal_core_outcome_v1_1_ledger_2011_2025.csv.gz",
+      "sha256": "342bd28c48f8f362cc76d34501c7e94b3b16bf6644c89b18653c403eec107819"
+    },
+    {
+      "bytes": 604,
+      "path": "cell_identity.csv",
+      "sha256": "4c7cb3766bfcac10ed8bc025415a1fd3a969aeee9c7a9a6edf295ad94e80d43a"
+    },
+    {
+      "bytes": 4700,
+      "path": "cell_metrics.csv",
+      "sha256": "63462a924c8b1506003292e595d4842aeb72829e5b516109b8bac93e344d2360"
+    },
+    {
+      "bytes": 640,
+      "path": "concentration_rr15.csv",
+      "sha256": "59b22c4b7d8ba9fc8d29405fb3b3727ce4d091160a9b1b36c9d36cf87bd29722"
+    },
+    {
+      "bytes": 2039,
+      "path": "date_cluster_bootstrap_summary.csv",
+      "sha256": "1ea975200a0f4a104030fc5e3e21922a60857e96fd0c70ea63acce2503f38877"
+    },
+    {
+      "bytes": 135,
+      "path": "drawdown_losing_streak_rr15.csv",
+      "sha256": "1e81d28a37330f80f0cb658af864ce966aaa74bd5fc8da22a4bba9e35691d0c9"
+    },
+    {
+      "bytes": 15697,
+      "path": "leave_one_year_out.csv",
+      "sha256": "7abc2df76e81a30d9b7e35fe4034aa23d408d0ce595b2d67705fb1b782665c72"
+    },
+    {
+      "bytes": 1332,
+      "path": "moving_block_bootstrap_summary.csv",
+      "sha256": "5c1cec2d05d8f718c33ec5743d2a25291657cbb9471adbd6827faf9319549361"
+    },
+    {
+      "bytes": 1672,
+      "path": "outcome_result_v1_1.json",
+      "sha256": "582cce13c9f9659163bea1677cb8671cd4697f8d6f8be27b712970f795dffee9"
+    },
+    {
+      "bytes": 361,
+      "path": "single_position_replay_rr15.csv",
+      "sha256": "dd4d2c7cc69eb053a783a7b4ec7313ad59561132c6519d9248fd72b06a82991b"
+    },
+    {
+      "bytes": 374,
+      "path": "surface_metrics.csv",
+      "sha256": "356c3101bd070f251c8991caee49c4e71d636ca7eea2bccfddd8e68491151a86"
+    },
+    {
+      "bytes": 513,
+      "path": "temporal_gate_by_rr.csv",
+      "sha256": "cc23f066842b08264101775b922554215c5a9c71cf8d92befd9d7f108599a7db"
+    }
+  ],
+  "status": "CAUSAL_CORE_OUTCOME_V1_1_NO_GO",
+  "version": "XAU_CORE_OUTCOME_V1_1_ARTIFACT_MANIFEST"
+}
