@@ -1,0 +1,10 @@
+{
+  "all_15_input_hashes_verified_before_claim": true,
+  "event_count": 498,
+  "event_manifest_sha256": "39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb",
+  "freeze_manifest_sha256": "7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197",
+  "protocol_sha256": "f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda",
+  "status": "OUTCOME_READ_CLAIMED",
+  "version": "XAU_CORE_OUTCOME_V1_1_OPEN_CLAIM",
+  "workflow_run_id": "32404036471"
+}
