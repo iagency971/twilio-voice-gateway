@@ -159,7 +159,7 @@ def main():
         'primary_mean_ge_0_10':pm['mean'] is not None and pm['mean']>=0.10,
         'primary_pf_ge_1_25':pm['pf'] is not None and pm['pf']>=1.25,
         'subperiod_A_positive':p['subperiod_A']['mean'] is not None and p['subperiod_A']['mean']>0 and p['subperiod_A']['pf'] is not None and p['subperiod_A']['pf']>1.05,
-        'subperiod_B_positive':p['subperiod_B']['mean'] is not None and p['subperiod_B']['mean']>0 and p['subperiod_B']['pf'] is not None and p['subperiod_B']['pf']>1.05,
+        'subperiod_B_positive':p['subperiod_B']['mean'] is not None and p['subperiod_B']['pf'] is not None and p['subperiod_B']['mean']>0 and p['subperiod_B']['pf']>1.05,
         'primary_dd_le_15R':pm['max_dd'] is not None and pm['max_dd']<=15.0,
         'remove_top5_remaining_mean_positive':p['concentration']['remaining_mean'] is not None and p['concentration']['remaining_mean']>0,
         'stress_mean_positive':sm['mean'] is not None and sm['mean']>0,
@@ -173,3 +173,4 @@ def main():
     print(json.dumps(res,indent=2,allow_nan=False))
 
 if __name__=='__main__': main()
+# retrigger after workflow registration; trading logic unchanged
