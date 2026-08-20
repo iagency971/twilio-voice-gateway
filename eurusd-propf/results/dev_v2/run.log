@@ -1,0 +1,55 @@
+downloaded/probed 50/371 weeks
+downloaded/probed 100/371 weeks
+downloaded/probed 150/371 weeks
+downloaded/probed 200/371 weeks
+downloaded/probed 250/371 weeks
+downloaded/probed 300/371 weeks
+downloaded/probed 350/371 weeks
+{
+  "status": "EURUSD_PROPF_DEV_V2_FAIL_QUALITY_GATE",
+  "n_candidates": 96,
+  "n_robust": 7,
+  "selected": {
+    "engine": "SESSION_TURN",
+    "entry_minute": 1305,
+    "q": 2.0,
+    "rr": 1.5,
+    "time_exit": "1600",
+    "robust": true,
+    "score": 0.7184860428248248,
+    "train_n": 42,
+    "train_mean": 0.09037736123497533,
+    "train_pf": 1.159375908907002,
+    "train_dd": 9.068393288831713,
+    "train_pos_years": 3,
+    "val_n": 37,
+    "val_mean": 0.08083599537664274,
+    "val_pf": 1.1399693629834136,
+    "val_dd": 5.895958837787538,
+    "val_pos_years": 1,
+    "all_n": 80,
+    "all_mean": 0.07126333393863096,
+    "all_pf": 1.1232099737070493
+  },
+  "selected_all_metrics": {
+    "n": 80,
+    "mean": 0.07126333393863096,
+    "sum": 5.7010667150904775,
+    "pf": 1.1232099737070493,
+    "max_dd": 9.068393288831713,
+    "positive_years": 4,
+    "active_years": 8,
+    "losing_streak": 4,
+    "annual": {
+      "2012": 0.2594594594596682,
+      "2013": 0.39574536254478954,
+      "2014": -4.237305205929863,
+      "2015": 7.37794955579437,
+      "2016": -2.5375316340323844,
+      "2017": 8.53428532659668,
+      "2018": -3.005821863628514,
+      "2019": -1.0857142857142679
+    }
+  },
+  "quality_gate": false
+}
