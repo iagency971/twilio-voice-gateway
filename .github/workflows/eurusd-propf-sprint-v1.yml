@@ -5,12 +5,13 @@ on:
     branches:
       - agent/eurusd-propf-sprint-v1
     paths:
-      - 'eurusd-propf/**'
+      - 'eurusd-propf/run_eurusd_propf_sprint_v1.py'
+      - 'eurusd-propf/docs/**'
       - '.github/workflows/eurusd-propf-sprint-v1.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   backtest:
@@ -18,6 +19,8 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: agent/eurusd-propf-sprint-v1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -30,6 +33,18 @@ jobs:
         run: |
           if [ -f eurusd-propf/results/v1/RESULT.json ]; then
             cat eurusd-propf/results/v1/RESULT.json
+          fi
+      - name: Persist result on branch
+        if: always()
+        run: |
+          if [ -f eurusd-propf/results/v1/RESULT.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add eurusd-propf/results/v1
+            if ! git diff --cached --quiet; then
+              git commit -m "Publish EURUSD prop-firm sprint v1 result [skip ci]"
+              git push origin HEAD:agent/eurusd-propf-sprint-v1
+            fi
           fi
       - name: Upload research artifact
         if: always()
