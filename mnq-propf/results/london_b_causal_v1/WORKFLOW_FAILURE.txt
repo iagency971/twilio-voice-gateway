@@ -1,0 +1,1 @@
+MNQ_LONDON_B_CAUSAL_V1_FAILURE exit_code=1

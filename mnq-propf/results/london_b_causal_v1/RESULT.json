@@ -1,0 +1,6 @@
+{
+  "status": "MNQ_LONDON_B_CAUSAL_REPAIR_V1_INVALID_ABORT",
+  "error": "AttributeError('Can only use .dt accessor with datetimelike values')",
+  "2025_opened": false,
+  "2026_opened": false
+}
