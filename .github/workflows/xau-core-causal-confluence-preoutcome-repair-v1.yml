@@ -1,0 +1,307 @@
+name: XAU Core Causal Confluence Preoutcome Repair V1
+
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-core-causal-confluence-preoutcome-repair-v1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest==8.3.5
+      - name: Compile repaired builder and run causal unit tests
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python -m py_compile xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_repair_v1.py
+          python xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_repair_v1.py --self-test
+          pytest -q xau-multiyear/tests/test_causal_confluence_preoutcome_repair_v1.py
+      - name: Assert preoutcome builder cannot reach final behavior or PnL code
+        run: |
+          python - <<'PY'
+          import ast, pathlib
+          p=pathlib.Path('xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_repair_v1.py')
+          t=ast.parse(p.read_text())
+          banned={'simulate_one','simulate_surface','build_entry','classify_behavior_v2'}
+          hits=[]
+          for n in ast.walk(t):
+              if isinstance(n,ast.Name) and n.id in banned: hits.append(n.id)
+              if isinstance(n,ast.Attribute) and n.attr in banned: hits.append(n.attr)
+          if hits:
+              raise SystemExit(f'forbidden preoutcome dependency reference: {sorted(set(hits))}')
+          print('NO_FINAL_BEHAVIOR_OR_PNL_REFERENCE_PASS')
+          PY
+      - name: Verify prior freeze invalidation binding
+        run: |
+          python - <<'PY'
+          import json
+          p='xau-final-results/xau_core_causal_confluence_preoutcome_v1/INVALIDATED_PREOUTCOME_FUTURE_BEHAVIOR_RECLASSIFICATION.json'
+          j=json.load(open(p))
+          assert j['status']=='INVALIDATED_PREOUTCOME_FUTURE_BEHAVIOR_RECLASSIFICATION'
+          assert j['invalidated_preoutcome_freeze_manifest_sha256']=='106fa7d8efc1006f53c9dd4b130e3031549fcadfa6e425fbe5068b0299c6606b'
+          assert j['invalidated_event_manifest_sha256']=='7595d18257af70341ad0c1288d40d1fea65cc84b56d48bc29c5b420f034aaaf5'
+          assert j['pnl_open_prohibited'] is True
+          print('PRIOR_FREEZE_INVALIDATION_BINDING_PASS')
+          PY
+      - name: Publish REPAIR_RUNNING marker
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          path='xau-final-results/xau_core_causal_confluence_preoutcome_repair_v1/RUN_STATUS.json'
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+          data=json.dumps({
+              'status':'CAUSAL_CORE_PREOUTCOME_REPAIR_RUNNING',
+              'workflow_run_id':os.environ.get('GITHUB_RUN_ID'),
+              'source_commit':os.environ.get('GITHUB_SHA'),
+              'pnl_inspected_or_used':False,
+              'tp_sl_exit_simulated':False,
+              'new_market_data_spend':0
+          },indent=2).encode()
+          body={'message':'mark causal preoutcome repair running [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          PY
+
+  annual:
+    needs: precheck
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Resolve annual replay dates
+        id: dates
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+      - name: Rehydrate exact already-used public annual input
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_causal_repair_${{ matrix.year }}.csv
+      - name: Build repaired causal confluence support only
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_repair_v1.py \
+            /tmp/xau_causal_repair_${{ matrix.year }}.csv \
+            --year ${{ matrix.year }} \
+            --out /tmp/causal_repair_${{ matrix.year }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-causal-repair-${{ matrix.year }}
+          path: /tmp/causal_repair_${{ matrix.year }}
+          retention-days: 14
+
+  aggregate:
+    if: always()
+    needs: annual
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: xau-causal-repair-*
+          path: /tmp/causal_repair_all
+          merge-multiple: true
+      - name: Aggregate and freeze repaired preoutcome support
+        env:
+          SOURCE_COMMIT: ${{ github.sha }}
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib
+          import pandas as pd
+          from pandas.errors import EmptyDataError
+
+          root=pathlib.Path('/tmp/causal_repair_all')
+          out=pathlib.Path('/tmp/causal_repair_final'); out.mkdir(parents=True,exist_ok=True)
+          summaries=sorted(root.glob('causal_core_preoutcome_repaired_summary_*.json'))
+          if len(summaries)!=15:
+              raise RuntimeError(f'expected 15 repaired annual summaries, got {len(summaries)}')
+          ss=[json.load(open(p)) for p in summaries]
+          years=sorted(int(x['year']) for x in ss)
+          if years!=list(range(2011,2026)):
+              raise RuntimeError(f'annual year coverage mismatch: {years}')
+
+          frames=[]
+          for p in sorted(root.glob('causal_core_preoutcome_repaired_events_*.csv')):
+              try: d=pd.read_csv(p)
+              except EmptyDataError: continue
+              if len(d): frames.append(d)
+          ev=pd.concat(frames,ignore_index=True) if frames else pd.DataFrame()
+          if len(ev):
+              ev=ev.sort_values(['source_year','entry_time','event_id'],kind='mergesort').reset_index(drop=True)
+          event_path=out/'causal_core_preoutcome_repaired_events_2011_2025.csv'
+          ev.to_csv(event_path,index=False)
+
+          duplicate_ids=int(ev['event_id'].duplicated().sum()) if len(ev) else 0
+          total=int(len(ev))
+          active_years=int(sum(bool(x['active_year']) for x in ss))
+          timing_viol=int(sum(int(x['timing_integrity_violations']) for x in ss))
+          prefix_viol=int(sum(int(x['prefix_invariance_violations']) for x in ss))
+          shuffle_all=all(bool(x['shuffle_identity_pass']) for x in ss)
+          annual_counts={str(x['year']):int(x['entry_candidates']) for x in ss}
+          side_counts={}
+          for x in ss:
+              for k,v in x.get('side_relation_counts',{}).items():
+                  side_counts[k]=side_counts.get(k,0)+int(v)
+          support_pass=bool(total>=200 and active_years>=12 and timing_viol==0 and prefix_viol==0 and duplicate_ids==0 and shuffle_all)
+          status='CAUSAL_CORE_PREOUTCOME_REPAIRED_READY_FOR_PNL' if support_pass else 'CAUSAL_CORE_PREOUTCOME_REPAIR_SUPPORT_FAIL'
+
+          def sha(path):
+              h=hashlib.sha256()
+              with open(path,'rb') as f:
+                  for c in iter(lambda:f.read(1024*1024),b''): h.update(c)
+              return h.hexdigest()
+
+          deps={
+              'repair_protocol':'xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_PROTOCOL_v1.md',
+              'repaired_builder':'xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_repair_v1.py',
+              'base_pair_builder':'xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_v1.py',
+              'repair_tests':'xau-multiyear/tests/test_causal_confluence_preoutcome_repair_v1.py',
+              'zones':'xau-multiyear/src/rzr/zones.py',
+              'contacts':'xau-multiyear/src/rzr/contacts.py',
+              'entries_v1':'xau-multiyear/src/rzr/entries_v1.py',
+              'config':'xau-multiyear/src/rzr/config.py',
+              'resample':'xau-multiyear/src/rzr/resample.py',
+              'acquisition':'xau-multiyear/scripts/acquire_dukascopy_window.py',
+              'prior_freeze_invalidation':'xau-final-results/xau_core_causal_confluence_preoutcome_v1/INVALIDATED_PREOUTCOME_FUTURE_BEHAVIOR_RECLASSIFICATION.json'
+          }
+          dep_hashes={k:{'path':v,'sha256':sha(pathlib.Path(v))} for k,v in deps.items()}
+
+          summary={
+              'version':'XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_V1_RESULT',
+              'status':status,
+              'support_gate_pass':support_pass,
+              'entry_candidates':total,
+              'active_years':active_years,
+              'annual_entry_counts':annual_counts,
+              'side_relation_counts':side_counts,
+              'timing_integrity_violations':timing_viol,
+              'prefix_invariance_violations':prefix_viol,
+              'duplicate_event_ids':duplicate_ids,
+              'shuffle_identity_all_pass':shuffle_all,
+              'minimum_required_candidates':200,
+              'minimum_required_active_years':12,
+              'invalidated_prior_freeze_sha256':'106fa7d8efc1006f53c9dd4b130e3031549fcadfa6e425fbe5068b0299c6606b',
+              'invalidated_prior_event_manifest_sha256':'7595d18257af70341ad0c1288d40d1fea65cc84b56d48bc29c5b420f034aaaf5',
+              'pnl_inspected_or_used':False,
+              'tp_sl_exit_simulated':False,
+              'new_market_data_spend':0,
+              'outcome_execution_authorized_by_this_workflow':False
+          }
+          json.dump(summary,open(out/'preoutcome_repair_support_result.json','w'),indent=2,sort_keys=True)
+
+          manifest={
+              'version':'XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_FREEZE_MANIFEST_V1',
+              'status':status,
+              'source_commit':os.environ.get('SOURCE_COMMIT'),
+              'workflow_run_id':os.environ.get('WORKFLOW_RUN_ID'),
+              'event_manifest':{'path':event_path.name,'sha256':sha(event_path),'rows':total},
+              'annual_artifacts':[
+                  {
+                      'year':int(x['year']),
+                      'event_rows':int(x['entry_candidates']),
+                      'event_manifest_sha256':x['event_manifest_sha256'],
+                      'input_sha256':x['input_sha256'],
+                      'shuffle_identity_pass':bool(x['shuffle_identity_pass']),
+                      'timing_integrity_violations':int(x['timing_integrity_violations']),
+                      'prefix_invariance_violations':int(x['prefix_invariance_violations'])
+                  } for x in ss
+              ],
+              'dependency_hashes':dep_hashes,
+              'support_gate_pass':support_pass,
+              'invalidated_prior_freeze_sha256':'106fa7d8efc1006f53c9dd4b130e3031549fcadfa6e425fbe5068b0299c6606b',
+              'invalidated_prior_event_manifest_sha256':'7595d18257af70341ad0c1288d40d1fea65cc84b56d48bc29c5b420f034aaaf5',
+              'pnl_inspected_or_used':False,
+              'tp_sl_exit_simulated':False,
+              'new_market_data_spend':0,
+              'mandatory_stop':'STOP_BEFORE_PNL'
+          }
+          mp=out/'preoutcome_repair_freeze_manifest.json'
+          json.dump(manifest,open(mp,'w'),indent=2,sort_keys=True)
+          msha=sha(mp)
+          (out/'preoutcome_repair_freeze_manifest.sha256').write_text(msha+'  preoutcome_repair_freeze_manifest.json\n')
+
+          for p in summaries: (out/p.name).write_bytes(p.read_bytes())
+          for p in sorted(root.glob('causal_core_preoutcome_repaired_events_*.csv')): (out/p.name).write_bytes(p.read_bytes())
+
+          ck=f'''# CHECKPOINT — XAU CORE CAUSAL CONFLUENCE PREOUTCOME REPAIR V1\n\nStatus: **{status}**\n\n- repaired causal CLEAN_REJECTION entry candidates: **{total}**\n- active target years: **{active_years}/15**\n- timing-integrity violations: **{timing_viol}**\n- prefix-invariance violations: **{prefix_viol}**\n- duplicate event IDs: **{duplicate_ids}**\n- shuffle identity: **{'PASS' if shuffle_all else 'FAIL'}**\n- support gate: **{'PASS' if support_pass else 'FAIL'}**\n- side relations: `{side_counts}`\n- P&L inspected/used: **false**\n- TP/SL/exit simulated: **false**\n- new market-data spend: **0**\n\nAnnual candidate counts: `{annual_counts}`\n\nPrior invalidated freeze: `106fa7d8efc1006f53c9dd4b130e3031549fcadfa6e425fbe5068b0299c6606b`\n\nRepaired freeze manifest SHA-256: `{msha}`\n\n## Governance\n\nThis checkpoint freezes only the repaired causal event population and support. No strategy P&L has been opened. Mandatory next action: **STOP_BEFORE_PNL** and return this freeze for review.\n'''
+          (out/'CHECKPOINT_XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_V1.md').write_text(ck)
+          print(json.dumps(summary,indent=2))
+          PY
+      - name: Publish repaired frozen preoutcome artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,hashlib,json,os,pathlib,requests,time
+          out=pathlib.Path('/tmp/causal_repair_final')
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          root='xau-final-results/xau_core_causal_confluence_preoutcome_repair_v1'
+          last_commit=None
+          def put(path,data):
+              global last_commit
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              for a in range(15):
+                  old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+                  b={'message':f'publish causal repair {pathlib.Path(path).name} [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+                  if sha: b['sha']=sha
+                  r=requests.put(u,headers=h,json=b)
+                  if r.status_code in (200,201):
+                      last_commit=r.json().get('commit',{}).get('sha'); return
+                  if r.status_code not in (409,422): r.raise_for_status()
+                  time.sleep(1+a)
+              raise RuntimeError(path)
+          for p in sorted(out.iterdir(),key=lambda x:x.name):
+              if p.is_file(): put(f'{root}/{p.name}',p.read_bytes())
+          manifest=json.load(open(out/'preoutcome_repair_freeze_manifest.json'))
+          msha=hashlib.sha256((out/'preoutcome_repair_freeze_manifest.json').read_bytes()).hexdigest()
+          publication={
+              'version':'XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_PUBLICATION_V1',
+              'status':manifest['status'],
+              'workflow_run_id':manifest['workflow_run_id'],
+              'preoutcome_repair_freeze_manifest_sha256':msha,
+              'preoutcome_repair_artifact_freeze_commit_sha':last_commit,
+              'invalidated_prior_freeze_sha256':manifest['invalidated_prior_freeze_sha256'],
+              'mandatory_stop':'STOP_BEFORE_PNL',
+              'pnl_inspected_or_used':False,
+              'tp_sl_exit_simulated':False,
+              'new_market_data_spend':0
+          }
+          put(f'{root}/PREOUTCOME_REPAIR_FREEZE_PUBLICATION.json',json.dumps(publication,indent=2,sort_keys=True).encode())
+          status={
+              'status':'COMPLETE_PREOUTCOME_REPAIR_ONLY',
+              'scientific_status':manifest['status'],
+              'workflow_run_id':manifest['workflow_run_id'],
+              'pnl_inspected_or_used':False,
+              'tp_sl_exit_simulated':False,
+              'new_market_data_spend':0
+          }
+          put(f'{root}/RUN_STATUS.json',json.dumps(status,indent=2,sort_keys=True).encode())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-core-causal-confluence-preoutcome-repair-v1-final
+          path: /tmp/causal_repair_final
+          retention-days: 14
