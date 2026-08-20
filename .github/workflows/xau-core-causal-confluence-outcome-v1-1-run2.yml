@@ -1,0 +1,232 @@
+name: XAU Core Causal Confluence Outcome V1.1 Run2
+
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-core-causal-confluence-outcome-v1-1-run2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-core-evidence-audit-v1
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Verify exact V1.1 binding, freeze and executor before outcomes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,hashlib,json,os,pathlib,requests,pandas as pd
+          expected={
+            'xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json':'f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda',
+            'xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.md':'0cae1aa3b2c086311d65a3520ddd35afcdf3edfe7b2c55f6cd8b5cdfea80dd13',
+            'xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/OUTCOME_OPEN_AUTHORIZATION_V1_1.json':'0e6b6aad964d237786ff463c849f4ceeed27803d31c7aafcd6680834994e7f3c',
+            'xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/preoutcome_full_m1_information_set_freeze_manifest.json':'7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197',
+            'xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/causal_core_preoutcome_full_m1_events_2011_2025.csv':'39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb',
+          }
+          def sha(p): return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+          for p,h in expected.items():
+              got=sha(p)
+              if got!=h: raise SystemExit(f'BINDING_FAIL {p} {got} != {h}')
+          f=json.load(open('xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/preoutcome_full_m1_information_set_freeze_manifest.json'))
+          s=json.load(open('xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/preoutcome_full_m1_information_set_support_result.json'))
+          a=json.load(open('xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/OUTCOME_OPEN_AUTHORIZATION_V1_1.json'))
+          assert f['status']=='CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_READY_FOR_PNL'
+          assert int(f['event_manifest']['rows'])==498
+          assert s['support_gate_pass'] is True and s['shuffle_identity_all_pass'] is True
+          for k in ['all_zone_information_time_violations','m1_formation_bar_contact_violations','memory_prefix_invariance_violations','zone_width_information_violations','entry_open_quote_causality_violations','doz_provenance_violations','event_doz_provenance_violations','prefix_invariance_violations','timing_integrity_violations','duplicate_event_ids']:
+              assert int(s[k])==0,(k,s[k])
+          e=pd.read_csv('xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/causal_core_preoutcome_full_m1_events_2011_2025.csv')
+          assert len(e)==498 and e['event_id'].duplicated().sum()==0
+          assert a['status']=='CAUSAL_CORE_OUTCOME_V1_1_AUTHORIZED' and a['outcome_execution_authorized'] is True and int(a['outcome_open_limit'])==1
+          # No prior claim/open from another run.
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for path in ['xau-final-results/xau_core_causal_confluence_outcome_v1_1/OUTCOME_READ_CLAIM_V1_1.json','xau-final-results/xau_core_causal_confluence_outcome_v1_1/OUTCOME_OPENED_V1_1.json']:
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
+              if r.status_code==200: raise SystemExit(f'PRIOR_OUTCOME_CLAIM_OR_OPEN_EXISTS {path}')
+              if r.status_code!=404: r.raise_for_status()
+          marker={'status':'OUTCOME_V1_1_RUN2_PRECHECK_PASS','workflow_run_id':os.environ['GITHUB_RUN_ID']}
+          path='xau-final-results/xau_core_causal_confluence_outcome_v1_1/RUN2_PRECHECK_PASS.json'
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
+          body={'message':'publish XAU outcome V1.1 Run2 precheck [skip ci]','content':base64.b64encode((json.dumps(marker,indent=2,sort_keys=True)+'\n').encode()).decode(),'branch':os.environ['BRANCH']}
+          if old.status_code==200: body['sha']=old.json()['sha']
+          elif old.status_code!=404: old.raise_for_status()
+          q=requests.put(u,headers=h,json=body); q.raise_for_status()
+          print(json.dumps(marker,indent=2,sort_keys=True))
+          PY
+      - name: Compile and self-test frozen executor
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python -m py_compile xau-multiyear/scripts/run_xau_core_causal_confluence_outcome_v1_1.py
+          python -m py_compile xau-multiyear/scripts/aggregate_xau_core_causal_confluence_outcome_v1_1.py
+          python xau-multiyear/scripts/run_xau_core_causal_confluence_outcome_v1_1.py --self-test
+
+  verify_inputs:
+    needs: precheck
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-core-evidence-audit-v1
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - id: dates
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+      - name: Rehydrate and verify exact frozen annual input only
+        run: |
+          python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_verify_${{ matrix.year }}.csv
+          python - <<'PY'
+          import hashlib,json,pathlib
+          y=int('${{ matrix.year }}')
+          f=json.load(open('xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/preoutcome_full_m1_information_set_freeze_manifest.json'))
+          a=next(x for x in f['annual_artifacts'] if int(x['year'])==y)
+          p=pathlib.Path(f'/tmp/xau_verify_{y}.csv'); h=hashlib.sha256(p.read_bytes()).hexdigest()
+          if h!=a['input_sha256']: raise SystemExit(f'INPUT_HASH_FAIL {y} {h} != {a["input_sha256"]}')
+          pathlib.Path(f'/tmp/input_verify_{y}.json').write_text(json.dumps({'year':y,'input_sha256':h,'pass':True},indent=2,sort_keys=True)+'\n')
+          print(f'INPUT_HASH_PASS {y} {h}')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-outcome-v1-1-run2-input-${{ matrix.year }}
+          path: /tmp/input_verify_${{ matrix.year }}.json
+          retention-days: 14
+
+  claim_open:
+    needs: verify_inputs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-core-evidence-audit-v1
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: xau-outcome-v1-1-run2-input-*
+          path: /tmp/input_checks
+          merge-multiple: true
+      - name: Atomically claim the unique authorized outcome opening
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,hashlib,json,os,pathlib,requests
+          checks=[json.load(open(p)) for p in pathlib.Path('/tmp/input_checks').glob('input_verify_*.json')]
+          assert len(checks)==15 and sorted(int(x['year']) for x in checks)==list(range(2011,2026)) and all(x['pass'] for x in checks)
+          machine=pathlib.Path('xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json')
+          assert hashlib.sha256(machine.read_bytes()).hexdigest()=='f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda'
+          path='xau-final-results/xau_core_causal_confluence_outcome_v1_1/OUTCOME_READ_CLAIM_V1_1.json'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
+          if old.status_code==200:
+              prior=json.loads(base64.b64decode(old.json()['content']))
+              if str(prior.get('workflow_run_id'))!=str(os.environ['GITHUB_RUN_ID']): raise SystemExit(f'UNIQUE_OUTCOME_OPEN_ALREADY_CLAIMED {prior}')
+              print('SAME_RUN_CLAIM_PASS'); raise SystemExit(0)
+          if old.status_code!=404: old.raise_for_status()
+          claim={'version':'XAU_CORE_OUTCOME_V1_1_OPEN_CLAIM','status':'OUTCOME_READ_CLAIMED','workflow_run_id':os.environ['GITHUB_RUN_ID'],'event_count':498,'freeze_manifest_sha256':'7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197','event_manifest_sha256':'39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb','protocol_sha256':'f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda','all_15_input_hashes_verified_before_claim':True}
+          body={'message':'claim unique XAU outcome V1.1 opening [skip ci]','content':base64.b64encode((json.dumps(claim,indent=2,sort_keys=True)+'\n').encode()).decode(),'branch':os.environ['BRANCH']}
+          q=requests.put(u,headers=h,json=body); q.raise_for_status(); print(json.dumps(claim,indent=2,sort_keys=True))
+          PY
+
+  annual_outcome:
+    needs: claim_open
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-core-evidence-audit-v1
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Verify unique claim belongs to this run
+        run: |
+          python - <<'PY'
+          import json,os
+          j=json.load(open('xau-final-results/xau_core_causal_confluence_outcome_v1_1/OUTCOME_READ_CLAIM_V1_1.json'))
+          assert str(j['workflow_run_id'])==str(os.environ['GITHUB_RUN_ID']) and j['status']=='OUTCOME_READ_CLAIMED'
+          PY
+      - id: dates
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+      - name: Execute frozen annual outcome slice
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_outcome_${{ matrix.year }}.csv
+          python xau-multiyear/scripts/run_xau_core_causal_confluence_outcome_v1_1.py /tmp/xau_outcome_${{ matrix.year }}.csv --year ${{ matrix.year }} --events xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/causal_core_preoutcome_full_m1_events_${{ matrix.year }}.csv --freeze-manifest xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/preoutcome_full_m1_information_set_freeze_manifest.json --protocol xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json --out /tmp/outcome_${{ matrix.year }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-outcome-v1-1-run2-${{ matrix.year }}
+          path: /tmp/outcome_${{ matrix.year }}
+          retention-days: 14
+
+  aggregate:
+    needs: annual_outcome
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-core-evidence-audit-v1
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: xau-outcome-v1-1-run2-*
+          path: /tmp/outcome_all
+          merge-multiple: true
+      - name: Aggregate ledger and irreversible gates A-F
+        run: |
+          python xau-multiyear/scripts/aggregate_xau_core_causal_confluence_outcome_v1_1.py --root /tmp/outcome_all --freeze-manifest xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/preoutcome_full_m1_information_set_freeze_manifest.json --event-manifest xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/causal_core_preoutcome_full_m1_events_2011_2025.csv --support-result xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/preoutcome_full_m1_information_set_support_result.json --protocol xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json --human-protocol xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.md --authorization xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/OUTCOME_OPEN_AUTHORIZATION_V1_1.json --out /tmp/outcome_final
+      - name: Publish terminal result to repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,hashlib,json,os,pathlib,requests
+          root=pathlib.Path('/tmp/outcome_final'); result=json.load(open(root/'outcome_result_v1_1.json'))
+          def sha(p): return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+          publication={'version':'XAU_CORE_OUTCOME_V1_1_PUBLICATION','status':result['status'],'workflow_run_id':os.environ['GITHUB_RUN_ID'],'event_count':498,'preoutcome_freeze_sha256':'7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197','event_manifest_sha256':'39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb','protocol_sha256':'f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda','authorization_sha256':'0e6b6aad964d237786ff463c849f4ceeed27803d31c7aafcd6680834994e7f3c','executor_sha256':sha('xau-multiyear/scripts/run_xau_core_causal_confluence_outcome_v1_1.py'),'aggregator_sha256':sha('xau-multiyear/scripts/aggregate_xau_core_causal_confluence_outcome_v1_1.py'),'outcome_result_sha256':sha(root/'outcome_result_v1_1.json'),'outcome_artifact_manifest_sha256':sha(root/'outcome_artifact_manifest_v1_1.json'),'post_outcome_rescue_forbidden':True}
+          (root/'OUTCOME_OPENED_V1_1.json').write_text(json.dumps(publication,indent=2,sort_keys=True)+'\n')
+          (root/'RUN_STATUS.json').write_text(json.dumps({'status':result['status'],'workflow_run_id':os.environ['GITHUB_RUN_ID'],'terminal':True},indent=2,sort_keys=True)+'\n')
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}; dest='xau-final-results/xau_core_causal_confluence_outcome_v1_1'
+          for p in sorted(root.iterdir(),key=lambda x:x.name):
+              if not p.is_file(): continue
+              path=f'{dest}/{p.name}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"; old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
+              body={'message':'publish canonical XAU outcome V1.1 [skip ci]','content':base64.b64encode(p.read_bytes()).decode(),'branch':os.environ['BRANCH']}
+              if old.status_code==200: body['sha']=old.json()['sha']
+              elif old.status_code!=404: old.raise_for_status()
+              q=requests.put(u,headers=h,json=body); q.raise_for_status()
+          print(json.dumps(publication,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-core-causal-confluence-outcome-v1-1-run2-final
+          path: /tmp/outcome_final
+          retention-days: 30
