@@ -1,0 +1,16 @@
+{
+  "source_url": "https://raw.githubusercontent.com/lvrusu/QQQ_price_data/main/QQQ5m_Ext_J_23_to_Mar_20a_2026.csv",
+  "download_bytes": 9106330,
+  "original_columns": [
+    "unique_id",
+    "ds",
+    "Open",
+    "High",
+    "Low",
+    "Close"
+  ],
+  "rows_retained": 139626,
+  "dt_min": "2023-04-25 04:00:00",
+  "dt_max": "2026-03-20 19:55:00",
+  "duplicate_dt_after_dedupe": 0
+}
