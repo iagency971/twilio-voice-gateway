@@ -1,0 +1,33 @@
+{
+  "active_years": 15,
+  "annual_entry_counts": {
+    "2011": 37,
+    "2012": 38,
+    "2013": 44,
+    "2014": 45,
+    "2015": 57,
+    "2016": 40,
+    "2017": 52,
+    "2018": 69,
+    "2019": 44,
+    "2020": 24,
+    "2021": 38,
+    "2022": 21,
+    "2023": 29,
+    "2024": 26,
+    "2025": 26
+  },
+  "duplicate_event_ids": 0,
+  "entry_candidates": 590,
+  "minimum_required_active_years": 12,
+  "minimum_required_candidates": 200,
+  "new_market_data_spend": 0,
+  "outcome_execution_authorized_by_this_workflow": false,
+  "pnl_inspected_or_used": false,
+  "shuffle_identity_all_pass": true,
+  "status": "CAUSAL_CORE_PREOUTCOME_FROZEN_READY_FOR_PNL",
+  "support_gate_pass": true,
+  "timing_integrity_violations": 0,
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_V1_RESULT"
+}
