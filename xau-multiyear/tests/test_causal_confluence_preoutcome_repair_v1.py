@@ -22,7 +22,7 @@ def rec(side="SUPPORT"):
         "contact_idx": 0,
         "side": side,
         "lower": 99.0,
-        "upper": 100.0,
+        "upper": 101.0 if side == "RESISTANCE" else 100.0,
         "approach_direction": -1 if side == "SUPPORT" else 1,
     }
 
@@ -87,7 +87,7 @@ def test_no_reclaim_in_window_has_no_trigger():
 def test_resistance_trigger_is_symmetric():
     d = bars([
         [100.5, 100.8, 99.5, 100.3],
-        [100.3, 100.5, 98.7, 98.8],
+        [99.7, 99.8, 98.7, 98.8],
     ])
     assert causal_clean_rejection_trigger_minutes(d, rec(side="RESISTANCE")) == 1.0
 
