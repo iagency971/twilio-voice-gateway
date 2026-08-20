@@ -1,0 +1,70 @@
+{
+  "status": "NQ_V12_ORB_JULY_HOLDOUT_V1_INCONCLUSIVE_LOW_N",
+  "data": {
+    "rows": 51955,
+    "utc_min": "2026-02-02 14:30:00+00:00",
+    "utc_max": "2026-07-31 20:14:00+00:00",
+    "holdout_start": "2026-07-06",
+    "holdout_end": "2026-07-31",
+    "rth_days": 129,
+    "holdout_rth_days": 20,
+    "holdout_dates": [
+      "2026-07-06",
+      "2026-07-07",
+      "2026-07-08",
+      "2026-07-09",
+      "2026-07-10",
+      "2026-07-13",
+      "2026-07-14",
+      "2026-07-15",
+      "2026-07-16",
+      "2026-07-17",
+      "2026-07-20",
+      "2026-07-21",
+      "2026-07-22",
+      "2026-07-23",
+      "2026-07-24",
+      "2026-07-27",
+      "2026-07-28",
+      "2026-07-29",
+      "2026-07-30",
+      "2026-07-31"
+    ]
+  },
+  "data_qa": {
+    "overlap_15m_bars": 508,
+    "median_abs_close_diff": 0.0,
+    "pct_close_within_0_50": 0.952755905511811,
+    "median_max_ohlc_diff": 0.0,
+    "pct_all_ohlc_within_1pt": 0.9625984251968503,
+    "median_getdata_to_axb_volume_ratio": 1.0,
+    "pass": true
+  },
+  "summaries": {
+    "PRIMARY": {
+      "n": 0,
+      "mean_R": null,
+      "sum_R": 0.0,
+      "pf": null,
+      "win_rate": null,
+      "max_dd_R": null,
+      "sum_points": 0.0,
+      "mean_points": null
+    },
+    "STRESS": {
+      "n": 0,
+      "mean_R": null,
+      "sum_R": 0.0,
+      "pf": null,
+      "win_rate": null,
+      "max_dd_R": null,
+      "sum_points": 0.0,
+      "mean_points": null
+    }
+  },
+  "gates": {
+    "n_ge_5": false
+  },
+  "freeze_note": "Rules frozen before opening July 6-31 outcomes; external strategy repository had no commits after July 4, 2026.",
+  "interpretation": "A PASS is a short prospective holdout signal only, not live-trading authorization."
+}

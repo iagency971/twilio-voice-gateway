@@ -1,0 +1,9 @@
+{
+  "overlap_15m_bars": 508,
+  "median_abs_close_diff": 0.0,
+  "pct_close_within_0_50": 0.952755905511811,
+  "median_max_ohlc_diff": 0.0,
+  "pct_all_ohlc_within_1pt": 0.9625984251968503,
+  "median_getdata_to_axb_volume_ratio": 1.0,
+  "pass": true
+}
