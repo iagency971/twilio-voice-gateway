@@ -1,0 +1,12 @@
+{
+  "full_m1_artifact_freeze_commit_sha": "b1882c5873c638cd1f5fb92ffcf7d42fe87f5e86",
+  "full_m1_freeze_manifest_sha256": "7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197",
+  "invalidated_prior_freeze_sha256": "71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162",
+  "mandatory_stop": "STOP_BEFORE_PNL",
+  "new_market_data_spend": 0,
+  "pnl_inspected_or_used": false,
+  "status": "CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_READY_FOR_PNL",
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_FULL_M1_INFORMATION_SET_PUBLICATION_V1",
+  "workflow_run_id": "32360173450"
+}
