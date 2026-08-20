@@ -1,0 +1,32 @@
+name: XAU Outcome Actions Smoke
+
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-outcome-actions-smoke.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish smoke marker
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          path='xau-final-results/xau_core_causal_confluence_outcome_v1_1/ACTIONS_SMOKE_PASS.json'
+          data=json.dumps({'status':'ACTIONS_SMOKE_PASS','workflow_run_id':os.environ['GITHUB_RUN_ID']},indent=2,sort_keys=True).encode()+b'\n'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          r=requests.put(u,headers=h,json={'message':'publish Actions smoke marker [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']})
+          r.raise_for_status()
+          print(data.decode())
+          PY
