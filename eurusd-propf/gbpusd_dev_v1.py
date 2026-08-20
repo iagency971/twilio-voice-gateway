@@ -37,3 +37,4 @@ v3.load_dev=load_gbpusd_dev
 
 if __name__=='__main__':
     v3.main()
+# retrigger after GBPUSD DEV V2 completion; no trading logic changed
