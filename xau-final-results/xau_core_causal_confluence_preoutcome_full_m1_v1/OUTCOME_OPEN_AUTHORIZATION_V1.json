@@ -1,0 +1,53 @@
+{
+  "bootstrap_seeds": {
+    "date_cluster_20000": 20260821,
+    "three_month_moving_block_20000": 20260822
+  },
+  "decision": "A_AUTHORIZE_PNL_OPEN",
+  "fail_status": "CAUSAL_CORE_OUTCOME_V1_NO_GO",
+  "hard_fail_status": "CAUSAL_CORE_OUTCOME_V1_INVALID_BINDING_ABORT",
+  "issued_date_utc": "2026-08-20",
+  "mandatory_executor_behavior": {
+    "no_post_outcome_rule_change": true,
+    "no_subgroup_rescue": true,
+    "same_498_events_all_scenarios_and_rr": true,
+    "stop_after_terminal_verdict": true,
+    "use_exact_protocol": true,
+    "verify_all_bindings_before_reading_any_outcome_bar": true
+  },
+  "not_authorized": [
+    "live trading",
+    "prop-firm challenge",
+    "M5 extension",
+    "COMEX continuation",
+    "new market-data purchase",
+    "parameter search",
+    "post-hoc subgroup rescue"
+  ],
+  "outcome_execution_authorized": true,
+  "outcome_open_limit": 1,
+  "pass_status": "CAUSAL_CORE_OUTCOME_V1_PASS_FOR_EXTERNAL_REPLICATION",
+  "pnl_inspected_or_used_during_authorization": false,
+  "preoutcome_binding": {
+    "active_years": 15,
+    "event_count": 498,
+    "event_manifest_sha256": "39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb",
+    "freeze_artifact_commit_sha": "b1882c5873c638cd1f5fb92ffcf7d42fe87f5e86",
+    "freeze_manifest_sha256": "7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197",
+    "source_commit_sha": "106a0252e8292dd2dd690a7e336d9f493420ccc1",
+    "workflow_run_id": "32360173450"
+  },
+  "primary_endpoint": "CAUSAL_CORE_RR_SURFACE_MEAN_NET_R",
+  "protocol_binding": {
+    "human_protocol_commit_sha": "165995acc62a890d33c95ab114c2cebdb1516e94",
+    "human_protocol_path": "xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1.md",
+    "human_protocol_sha256": "9c7691c0de10784e87c411b8a28e3b081e9920818ba1edd5428024cb905a67af",
+    "machine_protocol_commit_sha": "c7ac60d865a735013e5f4fbd9aeb230441010481",
+    "machine_protocol_path": "xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1.json",
+    "machine_protocol_sha256": "112f25ed646ea9695e48268a08e87f74bea3c841b5f788f32a98371b74a86786"
+  },
+  "required_preflight_status": "CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_READY_FOR_PNL",
+  "status": "CAUSAL_CORE_OUTCOME_V1_AUTHORIZED",
+  "tp_sl_exit_simulated_during_authorization": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_AUTHORIZATION_V1"
+}
