@@ -1,0 +1,49 @@
+name: EURUSD PropF DEV V3
+
+on:
+  push:
+    branches: [agent/eurusd-propf-sprint-v1]
+    paths:
+      - 'eurusd-propf/dev_research_v3_asian_london.py'
+      - '.github/workflows/eurusd-propf-dev-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  dev-v3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/eurusd-propf-sprint-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy requests tzdata
+      - name: Run DEV-only Asian-London research
+        shell: bash
+        run: |
+          set +e
+          mkdir -p eurusd-propf/results/dev_v3
+          python eurusd-propf/dev_research_v3_asian_london.py --out eurusd-propf/results/dev_v3 --workers 10 2>&1 | tee eurusd-propf/results/dev_v3/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > eurusd-propf/results/dev_v3/exit_code.txt
+          if [ "$code" -ne 0 ]; then echo "DEV_V3_WORKFLOW_FAILURE exit_code=$code" > eurusd-propf/results/dev_v3/WORKFLOW_FAILURE.txt; fi
+          exit 0
+      - name: Persist results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eurusd-propf/results/dev_v3
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish EURUSD DEV V3 result [skip ci]"
+            git push origin HEAD:agent/eurusd-propf-sprint-v1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eurusd-propf-dev-v3
+          path: eurusd-propf/results/dev_v3
+          retention-days: 14
