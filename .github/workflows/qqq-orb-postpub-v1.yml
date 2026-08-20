@@ -33,3 +33,4 @@ jobs:
           git add qqq-propf/results/postpub_v1
           git commit -m "Publish QQQ ORB post-publication V1 result [skip ci]" || true
           git push origin HEAD:agent/qqq-propf-orb-postpub-v1
+# technical retrigger 2026-08-20; frozen trading protocol unchanged
