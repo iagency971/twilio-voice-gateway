@@ -1,0 +1,17 @@
+{
+  "protocol": "EURUSD_PROPF_SPRINT_V1",
+  "data": {
+    "rows_retained": 2555441,
+    "utc_min": "2012-01-02 07:00:00+00:00",
+    "utc_max": "2026-08-14 17:30:00+00:00",
+    "ok_week_files": 743,
+    "ny_valid_days": 3676,
+    "london_valid_days": 3667
+  },
+  "dev": {
+    "selected_A": null,
+    "selected_B": null,
+    "selected_portfolio": null
+  },
+  "status": "EURUSD_PROPF_SPRINT_V1_DEV_NO_GO"
+}
