@@ -1,0 +1,342 @@
+name: XAU Core Causal Confluence Full M1 Information Set Repair V1
+
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-core-causal-confluence-full-m1-information-set-repair-v1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0 pytest==8.3.5
+      - name: Compile and run all causal preoutcome tests
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python -m py_compile xau-multiyear/src/rzr/full_m1_zones_v1.py
+          python -m py_compile xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_full_m1_v1.py
+          python xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_full_m1_v1.py --self-test
+          pytest -q \
+            xau-multiyear/tests/test_full_m1_information_set_repair_v1.py \
+            xau-multiyear/tests/test_timeframe_alignment_repair_v1.py \
+            xau-multiyear/tests/test_causal_confluence_preoutcome_repair_v1.py
+      - name: Assert preoutcome builder cannot reach PnL or final behavior code
+        run: |
+          python - <<'PY'
+          import ast,pathlib
+          files=[
+            pathlib.Path('xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_full_m1_v1.py'),
+            pathlib.Path('xau-multiyear/src/rzr/full_m1_zones_v1.py'),
+          ]
+          banned={'simulate_one','simulate_surface','build_entry','classify_behavior_v2'}
+          hits=[]
+          for p in files:
+              t=ast.parse(p.read_text())
+              for n in ast.walk(t):
+                  if isinstance(n,ast.Name) and n.id in banned: hits.append((str(p),n.id))
+                  if isinstance(n,ast.Attribute) and n.attr in banned: hits.append((str(p),n.attr))
+          if hits:
+              raise SystemExit(f'forbidden preoutcome dependency reference: {hits}')
+          print('NO_FINAL_BEHAVIOR_OR_PNL_REFERENCE_PASS')
+          PY
+      - name: Verify invalidated 766-event freeze binding
+        run: |
+          python - <<'PY'
+          import json
+          p='xau-final-results/xau_core_causal_confluence_preoutcome_timeframe_aligned_v1/INVALIDATED_PREOUTCOME_NON_DOZ_M1_INFORMATION_SET_AND_ENTRY_ACTIVITY.json'
+          j=json.load(open(p))
+          assert j['status']=='INVALIDATED_PREOUTCOME_NON_DOZ_M1_INFORMATION_SET_AND_ENTRY_ACTIVITY'
+          assert j['invalidated_preoutcome_freeze_manifest_sha256']=='71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162'
+          assert j['invalidated_event_manifest_sha256']=='dfd2b5e83d524e188f7482764b7bc05e04cbbbcd8fc6aa72fa61e5798f4d7724'
+          assert j['pnl_open_prohibited'] is True
+          assert j['pnl_inspected_or_used_before_invalidation'] is False
+          print('PRIOR_766_FREEZE_INVALIDATION_BINDING_PASS')
+          PY
+      - name: Publish FULL_M1_REPAIR_RUNNING marker
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64,json,os,requests
+          path='xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/RUN_STATUS.json'
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+          data=json.dumps({
+              'status':'CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_REPAIR_RUNNING',
+              'workflow_run_id':os.environ.get('GITHUB_RUN_ID'),
+              'source_commit':os.environ.get('GITHUB_SHA'),
+              'pnl_inspected_or_used':False,
+              'tp_sl_exit_simulated':False,
+              'new_market_data_spend':0
+          },indent=2).encode()
+          body={'message':'mark full M1 repair running [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+          if sha: body['sha']=sha
+          r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          PY
+
+  annual:
+    needs: precheck
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        year: [2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - name: Resolve annual replay dates
+        id: dates
+        shell: bash
+        run: |
+          Y=${{ matrix.year }}
+          echo "from=$((Y-1))-01" >> "$GITHUB_OUTPUT"
+          echo "to=$((Y+1))-01" >> "$GITHUB_OUTPUT"
+      - name: Rehydrate exact already-used public annual input
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month ${{ steps.dates.outputs.from }} --to-month ${{ steps.dates.outputs.to }} --out /tmp/xau_full_m1_${{ matrix.year }}.csv
+      - name: Build full-M1-information-set causal support only
+        env:
+          PYTHONPATH: xau-multiyear/src:xau-multiyear/scripts
+        run: |
+          python xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_full_m1_v1.py \
+            /tmp/xau_full_m1_${{ matrix.year }}.csv \
+            --year ${{ matrix.year }} \
+            --out /tmp/full_m1_${{ matrix.year }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-full-m1-${{ matrix.year }}
+          path: /tmp/full_m1_${{ matrix.year }}
+          retention-days: 14
+
+  aggregate:
+    if: always()
+    needs: annual
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pandas==2.2.3 numpy==2.3.5 requests==2.31.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: xau-full-m1-*
+          path: /tmp/full_m1_all
+          merge-multiple: true
+      - name: Aggregate and freeze full-M1 preoutcome support
+        env:
+          SOURCE_COMMIT: ${{ github.sha }}
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          import pandas as pd
+          from pandas.errors import EmptyDataError
+
+          root=pathlib.Path('/tmp/full_m1_all')
+          out=pathlib.Path('/tmp/full_m1_final'); out.mkdir(parents=True,exist_ok=True)
+          prov_out=out/'provenance'; prov_out.mkdir(parents=True,exist_ok=True)
+          summaries=sorted(root.glob('causal_core_preoutcome_full_m1_summary_*.json'))
+          if len(summaries)!=15:
+              raise RuntimeError(f'expected 15 annual summaries, got {len(summaries)}')
+          ss=[json.load(open(p)) for p in summaries]
+          years=sorted(int(x['year']) for x in ss)
+          if years!=list(range(2011,2026)):
+              raise RuntimeError(f'annual year coverage mismatch: {years}')
+
+          frames=[]
+          annual_event_paths=[]
+          for p in sorted(root.glob('causal_core_preoutcome_full_m1_events_*.csv')):
+              annual_event_paths.append(p)
+              try: d=pd.read_csv(p)
+              except EmptyDataError: continue
+              if len(d): frames.append(d)
+          if len(annual_event_paths)!=15:
+              raise RuntimeError(f'expected 15 annual event manifests, got {len(annual_event_paths)}')
+          ev=pd.concat(frames,ignore_index=True) if frames else pd.DataFrame()
+          if len(ev):
+              ev=ev.sort_values(['source_year','entry_time','event_id'],kind='mergesort').reset_index(drop=True)
+          event_path=out/'causal_core_preoutcome_full_m1_events_2011_2025.csv'
+          ev.to_csv(event_path,index=False)
+
+          def isum(k): return int(sum(int(x.get(k,0)) for x in ss))
+          duplicate_ids=int(ev['event_id'].duplicated().sum()) if len(ev) else 0
+          total=int(len(ev))
+          active_years=int(sum(bool(x['active_year']) for x in ss))
+          shuffle_all=all(bool(x['shuffle_identity_pass']) for x in ss)
+          annual_counts={str(x['year']):int(x['entry_candidates']) for x in ss}
+          side_counts={}
+          for x in ss:
+              for k,v in x.get('side_relation_counts',{}).items(): side_counts[k]=side_counts.get(k,0)+int(v)
+
+          gates={
+              'all_zone_information_time_violations':isum('all_zone_information_time_violations'),
+              'm1_formation_bar_contact_violations':isum('m1_formation_bar_contact_violations'),
+              'memory_prefix_invariance_violations':isum('memory_prefix_invariance_violations'),
+              'zone_width_information_violations':isum('zone_width_information_violations'),
+              'entry_open_quote_causality_violations':isum('entry_open_quote_causality_violations'),
+              'doz_provenance_violations':isum('doz_provenance_violations'),
+              'event_doz_provenance_violations':isum('event_doz_provenance_violations'),
+              'prefix_invariance_violations':isum('prefix_invariance_violations'),
+              'timing_integrity_violations':isum('timing_integrity_violations'),
+          }
+          support_pass=bool(
+              total>=200 and active_years>=12 and duplicate_ids==0 and shuffle_all
+              and all(v==0 for v in gates.values())
+          )
+          status='CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_READY_FOR_PNL' if support_pass else 'CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_SUPPORT_FAIL'
+
+          def sha(path):
+              h=hashlib.sha256()
+              with open(path,'rb') as f:
+                  for c in iter(lambda:f.read(1024*1024),b''): h.update(c)
+              return h.hexdigest()
+
+          provenance_artifacts=[]
+          for x in ss:
+              y=int(x['year']); p=root/f'causal_full_m1_zone_contact_provenance_{y}.csv.gz'
+              if not p.exists(): raise RuntimeError(f'missing provenance manifest {y}')
+              if sha(p)!=x['zone_contact_provenance_manifest_sha256']:
+                  raise RuntimeError(f'provenance hash mismatch {y}')
+              shutil.copy2(p,prov_out/p.name)
+              provenance_artifacts.append({
+                  'year':y,'rows':int(x['zone_contact_provenance_manifest_rows']),
+                  'sha256':sha(p),'path':f'provenance/{p.name}'
+              })
+
+          deps={
+              'full_m1_protocol':'xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_FULL_M1_INFORMATION_SET_REPAIR_PROTOCOL_v1.md',
+              'full_m1_zone_generator':'xau-multiyear/src/rzr/full_m1_zones_v1.py',
+              'full_m1_builder':'xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_full_m1_v1.py',
+              'full_m1_tests':'xau-multiyear/tests/test_full_m1_information_set_repair_v1.py',
+              'corrected_resample':'xau-multiyear/src/rzr/resample.py',
+              'legacy_doz_generator':'xau-multiyear/src/rzr/zones.py',
+              'contacts':'xau-multiyear/src/rzr/contacts.py',
+              'base_pair_builder':'xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_v1.py',
+              'irreversible_trigger_builder':'xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_repair_v1.py',
+              'timeframe_alignment_builder':'xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_timeframe_aligned_v1.py',
+              'entries_v1_timing_dependency':'xau-multiyear/src/rzr/entries_v1.py',
+              'features':'xau-multiyear/src/rzr/features.py',
+              'config':'xau-multiyear/src/rzr/config.py',
+              'acquisition':'xau-multiyear/scripts/acquire_dukascopy_window.py',
+              'prior_freeze_invalidation':'xau-final-results/xau_core_causal_confluence_preoutcome_timeframe_aligned_v1/INVALIDATED_PREOUTCOME_NON_DOZ_M1_INFORMATION_SET_AND_ENTRY_ACTIVITY.json'
+          }
+          dep_hashes={k:{'path':v,'sha256':sha(pathlib.Path(v))} for k,v in deps.items()}
+
+          summary={
+              'version':'XAU_CORE_CAUSAL_CONFLUENCE_FULL_M1_INFORMATION_SET_V1_RESULT',
+              'status':status,'support_gate_pass':support_pass,
+              'entry_candidates':total,'active_years':active_years,
+              'annual_entry_counts':annual_counts,'side_relation_counts':side_counts,
+              'contacted_relevant_zones_across_annual_replays':isum('contacted_relevant_zones'),
+              'generated_relevant_zones_across_annual_replays':isum('generated_relevant_zones'),
+              **gates,
+              'duplicate_event_ids':duplicate_ids,'shuffle_identity_all_pass':shuffle_all,
+              'minimum_required_candidates':200,'minimum_required_active_years':12,
+              'm1_timestamp_semantics':'BAR_START_UTC',
+              'invalidated_prior_freeze_sha256':'71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162',
+              'invalidated_prior_event_manifest_sha256':'dfd2b5e83d524e188f7482764b7bc05e04cbbbcd8fc6aa72fa61e5798f4d7724',
+              'pnl_inspected_or_used':False,'tp_sl_exit_simulated':False,'new_market_data_spend':0,
+              'outcome_execution_authorized_by_this_workflow':False
+          }
+          json.dump(summary,open(out/'preoutcome_full_m1_information_set_support_result.json','w'),indent=2,sort_keys=True)
+
+          manifest={
+              'version':'XAU_CORE_CAUSAL_CONFLUENCE_FULL_M1_INFORMATION_SET_FREEZE_MANIFEST_V1',
+              'status':status,'source_commit':os.environ.get('SOURCE_COMMIT'),'workflow_run_id':os.environ.get('WORKFLOW_RUN_ID'),
+              'event_manifest':{'path':event_path.name,'sha256':sha(event_path),'rows':total},
+              'annual_artifacts':[
+                  {
+                      'year':int(x['year']),'event_rows':int(x['entry_candidates']),
+                      'event_manifest_sha256':x['event_manifest_sha256'],'input_sha256':x['input_sha256'],
+                      'zone_contact_provenance_manifest_rows':int(x['zone_contact_provenance_manifest_rows']),
+                      'zone_contact_provenance_manifest_sha256':x['zone_contact_provenance_manifest_sha256'],
+                      'all_zone_information_time_violations':int(x['all_zone_information_time_violations']),
+                      'm1_formation_bar_contact_violations':int(x['m1_formation_bar_contact_violations']),
+                      'memory_prefix_invariance_violations':int(x['memory_prefix_invariance_violations']),
+                      'zone_width_information_violations':int(x['zone_width_information_violations']),
+                      'entry_open_quote_causality_violations':int(x['entry_open_quote_causality_violations']),
+                      'doz_provenance_violations':int(x['doz_provenance_violations']),
+                      'event_doz_provenance_violations':int(x['event_doz_provenance_violations']),
+                      'prefix_invariance_violations':int(x['prefix_invariance_violations']),
+                      'timing_integrity_violations':int(x['timing_integrity_violations']),
+                      'shuffle_identity_pass':bool(x['shuffle_identity_pass'])
+                  } for x in ss
+              ],
+              'provenance_artifacts':provenance_artifacts,
+              'dependency_hashes':dep_hashes,'support_gate_pass':support_pass,
+              **gates,
+              'invalidated_prior_freeze_sha256':'71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162',
+              'invalidated_prior_event_manifest_sha256':'dfd2b5e83d524e188f7482764b7bc05e04cbbbcd8fc6aa72fa61e5798f4d7724',
+              'pnl_inspected_or_used':False,'tp_sl_exit_simulated':False,'new_market_data_spend':0,
+              'mandatory_stop':'STOP_BEFORE_PNL'
+          }
+          mp=out/'preoutcome_full_m1_information_set_freeze_manifest.json'
+          json.dump(manifest,open(mp,'w'),indent=2,sort_keys=True)
+          msha=sha(mp)
+          (out/'preoutcome_full_m1_information_set_freeze_manifest.sha256').write_text(msha+'  preoutcome_full_m1_information_set_freeze_manifest.json\n')
+
+          for p in summaries: shutil.copy2(p,out/p.name)
+          for p in annual_event_paths: shutil.copy2(p,out/p.name)
+
+          ck=f'''# CHECKPOINT — XAU CORE CAUSAL CONFLUENCE FULL M1 INFORMATION-SET REPAIR V1\n\nStatus: **{status}**\n\n- full-M1 causal entry candidates: **{total}**\n- active target years: **{active_years}/15**\n- contacted relevant zones audited: **{summary['contacted_relevant_zones_across_annual_replays']}**\n- all-zone information-time violations: **{gates['all_zone_information_time_violations']}**\n- M1 formation-bar contact violations: **{gates['m1_formation_bar_contact_violations']}**\n- Memory prefix-invariance violations: **{gates['memory_prefix_invariance_violations']}**\n- zone-width information violations: **{gates['zone_width_information_violations']}**\n- entry open-quote causality violations: **{gates['entry_open_quote_causality_violations']}**\n- DOZ provenance violations: **{gates['doz_provenance_violations']}**\n- event DOZ provenance violations: **{gates['event_doz_provenance_violations']}**\n- CLEAN_REJECTION prefix-invariance violations: **{gates['prefix_invariance_violations']}**\n- timing-integrity violations: **{gates['timing_integrity_violations']}**\n- duplicate event IDs: **{duplicate_ids}**\n- shuffle identity: **{'PASS' if shuffle_all else 'FAIL'}**\n- support gate: **{'PASS' if support_pass else 'FAIL'}**\n- P&L inspected/used: **false**\n- TP/SL/exit simulated: **false**\n- new market-data spend: **0**\n\nAnnual candidate counts: `{annual_counts}`\n\nPrior invalidated freeze: `71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162`\n\nFull-M1 freeze manifest SHA-256: `{msha}`\n\n## Governance\n\nThis checkpoint freezes only the full-M1-information-set causal event population and provenance. No strategy P&L has been opened. Mandatory next action: **STOP_BEFORE_PNL** and return this freeze for Pro review.\n'''
+          (out/'CHECKPOINT_XAU_CORE_CAUSAL_CONFLUENCE_FULL_M1_INFORMATION_SET_REPAIR_V1.md').write_text(ck)
+          json.dump({'status':'COMPLETE_PREOUTCOME_FULL_M1_INFORMATION_SET_ONLY','scientific_status':status,'workflow_run_id':os.environ.get('WORKFLOW_RUN_ID'),'pnl_inspected_or_used':False,'tp_sl_exit_simulated':False,'new_market_data_spend':0},open(out/'RUN_STATUS.json','w'),indent=2,sort_keys=True)
+          print(json.dumps(summary,indent=2,sort_keys=True))
+          PY
+      - name: Publish frozen preoutcome artifacts and publication binding
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import base64,hashlib,json,os,pathlib,requests
+          root=pathlib.Path('/tmp/full_m1_final')
+          dest='xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          def put(rel,data,msg):
+              path=f'{dest}/{rel}'; u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); sha=old.json().get('sha') if old.status_code==200 else None
+              body={'message':msg,'content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+              if sha: body['sha']=sha
+              r=requests.put(u,headers=h,json=body); r.raise_for_status(); return r.json()['commit']['sha']
+          publish=[]
+          publish += sorted(root.glob('causal_core_preoutcome_full_m1_events_*.csv'))
+          publish += sorted(root.glob('causal_core_preoutcome_full_m1_summary_*.json'))
+          publish += [root/'causal_core_preoutcome_full_m1_events_2011_2025.csv',root/'preoutcome_full_m1_information_set_support_result.json',root/'preoutcome_full_m1_information_set_freeze_manifest.json',root/'preoutcome_full_m1_information_set_freeze_manifest.sha256',root/'CHECKPOINT_XAU_CORE_CAUSAL_CONFLUENCE_FULL_M1_INFORMATION_SET_REPAIR_V1.md',root/'RUN_STATUS.json']
+          # dedupe aggregate event path if glob matched it
+          seen=set(); ordered=[]
+          for p in publish:
+              if p.name in seen or not p.exists(): continue
+              seen.add(p.name); ordered.append(p)
+          last=None
+          for p in ordered:
+              last=put(p.name,p.read_bytes(),'publish full M1 preoutcome freeze [skip ci]')
+          msha=(root/'preoutcome_full_m1_information_set_freeze_manifest.sha256').read_text().split()[0]
+          publication={
+              'version':'XAU_CORE_CAUSAL_CONFLUENCE_FULL_M1_INFORMATION_SET_PUBLICATION_V1',
+              'status':json.load(open(root/'preoutcome_full_m1_information_set_support_result.json'))['status'],
+              'full_m1_artifact_freeze_commit_sha':last,
+              'full_m1_freeze_manifest_sha256':msha,
+              'invalidated_prior_freeze_sha256':'71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162',
+              'workflow_run_id':os.environ['WORKFLOW_RUN_ID'],
+              'mandatory_stop':'STOP_BEFORE_PNL','pnl_inspected_or_used':False,'tp_sl_exit_simulated':False,'new_market_data_spend':0
+          }
+          data=json.dumps(publication,indent=2,sort_keys=True).encode()
+          (root/'PREOUTCOME_FULL_M1_INFORMATION_SET_FREEZE_PUBLICATION.json').write_bytes(data)
+          put('PREOUTCOME_FULL_M1_INFORMATION_SET_FREEZE_PUBLICATION.json',data,'publish full M1 preoutcome freeze binding [skip ci]')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-core-causal-confluence-full-m1-information-set-v1-final
+          path: /tmp/full_m1_final
+          retention-days: 14
