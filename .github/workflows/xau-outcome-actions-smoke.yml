@@ -1,4 +1,4 @@
-name: XAU Outcome Binding Diagnostic
+name: XAU Outcome Exact V1.1 Binder
 
 on:
   push:
@@ -16,35 +16,32 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: agent/xau-core-evidence-audit-v1
-      - name: Diagnose and canonicalize V1.1 binding only
+      - name: Publish exact frozen V1.1 machine protocol bytes
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           BRANCH: agent/xau-core-evidence-audit-v1
         run: |
           python - <<'PY'
-          import base64,hashlib,json,os,pathlib,requests
-          path='xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json'
-          p=pathlib.Path(path)
-          obj=json.loads(p.read_text())
-          canonical=(json.dumps(obj,indent=2,sort_keys=True,ensure_ascii=False)+'\n').encode()
-          got=hashlib.sha256(canonical).hexdigest()
+          import base64,hashlib,json,os,requests,zlib
+          packed='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'
+          data=zlib.decompress(base64.b64decode(packed))
           expected='f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda'
+          got=hashlib.sha256(data).hexdigest()
+          if got!=expected: raise SystemExit(f'EMBEDDED_PROTOCOL_HASH_FAIL {got}')
+          path='xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json'
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          marker_path='xau-final-results/xau_core_causal_confluence_outcome_v1_1/V1_1_BINDING_DIAGNOSTIC.json'
-          marker={'status':'MATCH' if got==expected else 'MISMATCH','workflow_run_id':os.environ['GITHUB_RUN_ID'],'canonical_sha256':got,'expected_sha256':expected,'raw_sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
-          def put(path,data,msg):
-              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
-              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
-              body={'message':msg,'content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
-              if old.status_code==200: body['sha']=old.json()['sha']
-              elif old.status_code!=404: old.raise_for_status()
-              r=requests.put(u,headers=h,json=body); r.raise_for_status(); return r.json()['commit']['sha']
-          if got==expected:
-              put(path,canonical,'canonicalize exact V1.1 machine protocol [skip ci]')
-              marker['canonicalized_to_branch']=True
-          else:
-              marker['canonicalized_to_branch']=False
-          put(marker_path,(json.dumps(marker,indent=2,sort_keys=True)+'\n').encode(),'publish V1.1 binding diagnostic [skip ci]')
-          print(json.dumps(marker,indent=2,sort_keys=True))
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); old.raise_for_status()
+          body={'message':'publish exact V1.1 machine protocol bytes [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH'],'sha':old.json()['sha']}
+          r=requests.put(u,headers=h,json=body); r.raise_for_status()
+          marker_path='xau-final-results/xau_core_causal_confluence_outcome_v1_1/V1_1_EXACT_BINDING_PASS.json'
+          marker=json.dumps({'status':'V1_1_EXACT_BINDING_PASS','workflow_run_id':os.environ['GITHUB_RUN_ID'],'machine_protocol_sha256':got},indent=2,sort_keys=True).encode()+b'\n'
+          u2=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{marker_path}"
+          old2=requests.get(u2,headers=h,params={'ref':os.environ['BRANCH']})
+          body2={'message':'publish exact V1.1 binding marker [skip ci]','content':base64.b64encode(marker).decode(),'branch':os.environ['BRANCH']}
+          if old2.status_code==200: body2['sha']=old2.json()['sha']
+          elif old2.status_code!=404: old2.raise_for_status()
+          rr=requests.put(u2,headers=h,json=body2); rr.raise_for_status()
+          print(marker.decode())
           PY
