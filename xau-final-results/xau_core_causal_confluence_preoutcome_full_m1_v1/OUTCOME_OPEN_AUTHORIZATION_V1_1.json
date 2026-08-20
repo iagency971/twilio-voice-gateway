@@ -1,0 +1,63 @@
+{
+  "bootstrap_seeds": {
+    "date_cluster_20000": 20260821,
+    "three_month_moving_block_20000": 20260822
+  },
+  "decision": "A_AUTHORIZE_PNL_OPEN",
+  "issued_date_utc": "2026-08-20",
+  "mandatory_executor_behavior": {
+    "no_post_outcome_rule_change": true,
+    "no_subgroup_rescue": true,
+    "reject_v1_protocol": true,
+    "same_498_events_all_scenarios_and_rr": true,
+    "sigma60_source_must_be_frozen_confluence_time": true,
+    "stop_after_terminal_verdict": true,
+    "use_exact_v1_1_protocol": true,
+    "verify_all_bindings_before_reading_any_outcome_bar": true
+  },
+  "not_authorized": [
+    "live trading",
+    "prop-firm challenge",
+    "M5 extension",
+    "COMEX continuation",
+    "new market-data purchase",
+    "parameter search",
+    "post-hoc subgroup rescue"
+  ],
+  "outcome_execution_authorized": true,
+  "outcome_open_limit": 1,
+  "pnl_inspected_or_used_during_authorization": false,
+  "preoutcome_binding": {
+    "active_years": 15,
+    "event_count": 498,
+    "event_manifest_sha256": "39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb",
+    "freeze_artifact_commit_sha": "b1882c5873c638cd1f5fb92ffcf7d42fe87f5e86",
+    "freeze_manifest_sha256": "7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197",
+    "source_commit_sha": "106a0252e8292dd2dd690a7e336d9f493420ccc1",
+    "workflow_run_id": "32360173450"
+  },
+  "primary_endpoint": "CAUSAL_CORE_RR_SURFACE_MEAN_NET_R",
+  "protocol_binding": {
+    "human_protocol_path": "XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.md",
+    "human_protocol_sha256": "0cae1aa3b2c086311d65a3520ddd35afcdf3edfe7b2c55f6cd8b5cdfea80dd13",
+    "machine_protocol_path": "XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json",
+    "machine_protocol_sha256": "f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda"
+  },
+  "required_preflight_status": "CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_READY_FOR_PNL",
+  "status": "CAUSAL_CORE_OUTCOME_V1_1_AUTHORIZED",
+  "superseded_before_outcome": {
+    "authorization_sha256": "7286b2151d38a1dfe8f179e5835204578a68bdaa8f7706b50a35539512effdbe",
+    "human_protocol_sha256": "9c7691c0de10784e87c411b8a28e3b081e9920818ba1edd5428024cb905a67af",
+    "machine_protocol_sha256": "112f25ed646ea9695e48268a08e87f74bea3c841b5f788f32a98371b74a86786",
+    "status": "CAUSAL_CORE_OUTCOME_V1_SUPERSEDED_BEFORE_OUTCOME"
+  },
+  "terminal_statuses": {
+    "authorized": "CAUSAL_CORE_OUTCOME_V1_1_AUTHORIZED",
+    "fail": "CAUSAL_CORE_OUTCOME_V1_1_NO_GO",
+    "integrity_abort": "CAUSAL_CORE_OUTCOME_V1_1_INVALID_BINDING_ABORT",
+    "pass": "CAUSAL_CORE_OUTCOME_V1_1_PASS_FOR_EXTERNAL_REPLICATION",
+    "superseded_v1": "CAUSAL_CORE_OUTCOME_V1_SUPERSEDED_BEFORE_OUTCOME"
+  },
+  "tp_sl_exit_simulated_during_authorization": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_AUTHORIZATION_V1_1"
+}
