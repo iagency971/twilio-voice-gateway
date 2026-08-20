@@ -1,0 +1,97 @@
+name: MNQ London B Causal V1
+
+on:
+  push:
+    branches: [agent/mnq-london-b-causal-v1]
+    paths:
+      - 'mnq-propf/**'
+      - '.github/workflows/mnq-london-b-causal-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  causal-pre2025:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/mnq-london-b-causal-v1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas numpy scikit-learn
+
+      - name: Sparse clone public MNQ Last data
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --filter=blob:none --no-checkout https://github.com/mbytes21/MNQ_DATA.git /tmp/MNQ_DATA
+          cd /tmp/MNQ_DATA
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /plaintext_csv/MNQ 06-19/*.Last.csv
+          /plaintext_csv/MNQ 09-19/*.Last.csv
+          /plaintext_csv/MNQ 12-19/*.Last.csv
+          /plaintext_csv/MNQ 03-20/*.Last.csv
+          /plaintext_csv/MNQ 06-20/*.Last.csv
+          /plaintext_csv/MNQ 09-20/*.Last.csv
+          /plaintext_csv/MNQ 12-20/*.Last.csv
+          /plaintext_csv/MNQ 03-21/*.Last.csv
+          /plaintext_csv/MNQ 06-21/*.Last.csv
+          /plaintext_csv/MNQ 09-21/*.Last.csv
+          /plaintext_csv/MNQ 12-21/*.Last.csv
+          /plaintext_csv/MNQ 03-22/*.Last.csv
+          /plaintext_csv/MNQ 06-22/*.Last.csv
+          /plaintext_csv/MNQ 09-22/*.Last.csv
+          /plaintext_csv/MNQ 12-22/*.Last.csv
+          /plaintext_csv/MNQ 03-23/*.Last.csv
+          /plaintext_csv/MNQ 06-23/*.Last.csv
+          /plaintext_csv/MNQ 09-23/*.Last.csv
+          /plaintext_csv/MNQ 12-23/*.Last.csv
+          /plaintext_csv/MNQ 03-24/*.Last.csv
+          /plaintext_csv/MNQ 06-24/*.Last.csv
+          /plaintext_csv/MNQ 09-24/*.Last.csv
+          /plaintext_csv/MNQ 12-24/*.Last.csv
+          /plaintext_csv/MNQ 03-25/*.Last.csv
+          EOF
+          git checkout main
+          echo "Sparse data size:"
+          du -sh plaintext_csv || true
+
+      - name: Run frozen causal pre-2025 test
+        shell: bash
+        run: |
+          set +e
+          mkdir -p mnq-propf/results/london_b_causal_v1
+          python mnq-propf/run_london_b_causal_repair_v1.py \
+            --source-root /tmp/MNQ_DATA/plaintext_csv \
+            --out mnq-propf/results/london_b_causal_v1 \
+            2>&1 | tee mnq-propf/results/london_b_causal_v1/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > mnq-propf/results/london_b_causal_v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "MNQ_LONDON_B_CAUSAL_V1_FAILURE exit_code=$code" > mnq-propf/results/london_b_causal_v1/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+
+      - name: Print result
+        if: always()
+        run: |
+          if [ -f mnq-propf/results/london_b_causal_v1/RESULT.json ]; then
+            cat mnq-propf/results/london_b_causal_v1/RESULT.json
+          fi
+
+      - name: Publish result to research branch
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- mnq-propf/results/london_b_causal_v1
+          git commit -m "Publish MNQ London B causal pre-2025 result [skip ci]" || true
+          git push origin HEAD:agent/mnq-london-b-causal-v1
