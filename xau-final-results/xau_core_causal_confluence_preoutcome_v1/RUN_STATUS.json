@@ -1,7 +1,7 @@
 {
-  "status": "CAUSAL_CORE_PREOUTCOME_RUNNING",
+  "status": "COMPLETE_PREOUTCOME_ONLY",
+  "scientific_status": "CAUSAL_CORE_PREOUTCOME_FROZEN_READY_FOR_PNL",
   "workflow_run_id": "32316206044",
-  "source_commit": "d090537ec0bb7b5a5fb1cbd48dc3041b29405899",
   "pnl_inspected_or_used": false,
   "tp_sl_exit_simulated": false,
   "new_market_data_spend": 0
