@@ -33,3 +33,4 @@ jobs:
           git add eurusd-propf/results/gbpusd_dev_v1
           git commit -m "Publish GBPUSD DEV V1 result [skip ci]" || true
           git push origin HEAD:agent/eurusd-propf-sprint-v1
+# retrigger 2026-08-20
