@@ -1,23 +1,266 @@
 {
-  "status": "QQQ_FORMED_OPENMOVE_V1_INVALID_ABORT",
-  "error": "AttributeError('Can only use .dt accessor with datetimelike values')"
+  "status": "QQQ_FORMED_OPENMOVE_V1_NO_GO",
+  "data": {
+    "sources": [
+      {
+        "tag": "HIST",
+        "url": "https://raw.githubusercontent.com/lvrusu/QQQ_price_data/main/QQQ5m_regular_raw_01_01_2000_to_04_10_2024.csv",
+        "bytes": 29388042,
+        "rows_normalized": 484774,
+        "dt_min": "2000-01-03 09:30:00",
+        "dt_max": "2024-10-03 15:55:00"
+      },
+      {
+        "tag": "EXT",
+        "url": "https://raw.githubusercontent.com/lvrusu/QQQ_price_data/main/QQQ5m_Ext_J_23_to_Mar_20a_2026.csv",
+        "bytes": 9106330,
+        "rows_normalized": 154315,
+        "dt_min": "2023-01-03 04:00:00",
+        "dt_max": "2026-03-20 19:55:00"
+      }
+    ],
+    "combined_rows_rth": 513244,
+    "dt_min": "2000-01-03 09:30:00",
+    "dt_max": "2026-03-20 15:55:00",
+    "duplicates_after_merge": 0
+  },
+  "daily_complete_sessions": 6533,
+  "daily_rejected_count": 59,
+  "skips": {
+    "missing_trade_bars": 42,
+    "not_bullish": 3344,
+    "features_unavailable": 95,
+    "trend_filter": 803
+  },
+  "positive_oos_full_years_2018_2025": 6,
+  "oos_full_year_totals": {
+    "2018": 94.48634189774366,
+    "2019": 73.76757788446183,
+    "2020": 52.58506616259639,
+    "2021": 88.66167672063179,
+    "2022": -10.940666175413256,
+    "2023": 14.829238798880201,
+    "2024": -33.32854559815113,
+    "2025": 6.674365500608677
+  },
+  "summary": {
+    "SOURCE_COST": {
+      "BACKGROUND": {
+        "n": 607,
+        "mean": -0.3673674440823319,
+        "sum": -222.99203855797546,
+        "pf": 0.6563576331548098,
+        "win_rate": 0.054365733113673806,
+        "max_dd": 289.16038229504176,
+        "losing_streak": 78,
+        "avg_win": 12.90652290847044,
+        "avg_loss": -1.130500513131533
+      },
+      "SOURCE_IS_PROXY": {
+        "n": 841,
+        "mean": 0.2175316822819351,
+        "sum": 182.94414479910742,
+        "pf": 1.209576727396331,
+        "win_rate": 0.11652794292508918,
+        "max_dd": 109.30078876750491,
+        "losing_streak": 45,
+        "avg_win": 10.77414476153384,
+        "avg_loss": -1.174861429113336
+      },
+      "SOURCE_OOS_PROXY_FULL_YEARS": {
+        "n": 830,
+        "mean": 0.3454639219172991,
+        "sum": 286.73505519135824,
+        "pf": 1.341744721350585,
+        "win_rate": 0.11204819277108434,
+        "max_dd": 94.62573451781299,
+        "losing_streak": 46,
+        "avg_win": 12.105031479761381,
+        "avg_loss": -1.1384435175392813
+      },
+      "RECENT_FULL_YEARS": {
+        "n": 350,
+        "mean": -0.033785546567606406,
+        "sum": -11.824941298662242,
+        "pf": 0.9676515397748653,
+        "win_rate": 0.08285714285714285,
+        "max_dd": 94.6257345178133,
+        "losing_streak": 46,
+        "avg_win": 12.197374951263331,
+        "avg_loss": -1.1387813547828625
+      },
+      "PARTIAL_2026": {
+        "n": 30,
+        "mean": -0.18327466677411428,
+        "sum": -5.498240003223429,
+        "pf": 0.819691471667509,
+        "win_rate": 0.1,
+        "max_dd": 14.498439282821625,
+        "losing_streak": 13,
+        "avg_win": 8.331756834619755,
+        "avg_loss": -1.1293892780400998
+      },
+      "SOURCE_OOS_PROXY_ALL": {
+        "n": 860,
+        "mean": 0.32701955254434273,
+        "sum": 281.23681518813476,
+        "pf": 1.3234367820322166,
+        "win_rate": 0.11162790697674418,
+        "max_dd": 94.62573451781299,
+        "losing_streak": 46,
+        "avg_win": 11.987116647100706,
+        "avg_loss": -1.1381235378711163
+      }
+    },
+    "DOUBLE_COST": {
+      "BACKGROUND": {
+        "n": 607,
+        "mean": -0.49795323498611166,
+        "sum": -302.2576136365698,
+        "pf": 0.5824101666383361,
+        "win_rate": 0.054365733113673806,
+        "max_dd": 353.0332265745713,
+        "losing_streak": 78,
+        "avg_win": 12.774453801164501,
+        "avg_loss": -1.2610010262630633
+      },
+      "SOURCE_IS_PROXY": {
+        "n": 841,
+        "mean": 0.04128079324275015,
+        "sum": 34.71714711715288,
+        "pf": 1.0345884033377029,
+        "win_rate": 0.11533888228299644,
+        "max_dd": 160.2435865894922,
+        "losing_streak": 45,
+        "avg_win": 10.705559929207372,
+        "avg_loss": -1.3490889328171536
+      },
+      "SOURCE_OOS_PROXY_FULL_YEARS": {
+        "n": 830,
+        "mean": 0.20658268238041388,
+        "sum": 171.46362637574353,
+        "pf": 1.182201911297828,
+        "win_rate": 0.11204819277108434,
+        "max_dd": 120.61268082497307,
+        "losing_streak": 46,
+        "avg_win": 11.9626606971054,
+        "avg_loss": -1.276884421241599
+      },
+      "RECENT_FULL_YEARS": {
+        "n": 350,
+        "mean": -0.17288793902447017,
+        "sum": -60.510778658564554,
+        "pf": 0.8524478702975843,
+        "win_rate": 0.08285714285714285,
+        "max_dd": 120.61268082497307,
+        "losing_streak": 46,
+        "avg_win": 12.05471900386323,
+        "avg_loss": -1.2775627095657267
+      },
+      "PARTIAL_2026": {
+        "n": 30,
+        "mean": -0.3129326402989669,
+        "sum": -9.387979208969007,
+        "pf": 0.7237775206877887,
+        "win_rate": 0.1,
+        "max_dd": 15.996878565643247,
+        "losing_streak": 13,
+        "avg_win": 8.199680601732142,
+        "avg_loss": -1.258778556080201
+      },
+      "SOURCE_OOS_PROXY_ALL": {
+        "n": 860,
+        "mean": 0.18846005484508663,
+        "sum": 162.0756471667745,
+        "pf": 1.1662227656303557,
+        "win_rate": 0.11162790697674418,
+        "max_dd": 122.10500378966469,
+        "losing_streak": 46,
+        "avg_win": 11.845067569124984,
+        "avg_loss": -1.276244554279089
+      }
+    },
+    "HARD_STRESS": {
+      "BACKGROUND": {
+        "n": 607,
+        "mean": -0.7591248167936709,
+        "sum": -460.7887637937583,
+        "pf": 0.4726669385179598,
+        "win_rate": 0.05271828665568369,
+        "max_dd": 480.77891513363033,
+        "losing_streak": 78,
+        "avg_win": 12.906905414397722,
+        "avg_loss": -1.5196691079208442
+      },
+      "SOURCE_IS_PROXY": {
+        "n": 841,
+        "mean": -0.3112209848356199,
+        "sum": -261.7368482467563,
+        "pf": 0.7931468184308043,
+        "win_rate": 0.11533888228299644,
+        "max_dd": 283.87046272602646,
+        "losing_streak": 45,
+        "avg_win": 10.346286863709004,
+        "avg_loss": -1.7007078951969485
+      },
+      "SOURCE_OOS_PROXY_FULL_YEARS": {
+        "n": 830,
+        "mean": -0.07117979669335633,
+        "sum": -59.07923125548575,
+        "pf": 0.9484080824374678,
+        "win_rate": 0.11204819277108434,
+        "max_dd": 194.51433589504757,
+        "losing_streak": 46,
+        "avg_win": 11.677919131793436,
+        "avg_loss": -1.5537662286462346
+      },
+      "RECENT_FULL_YEARS": {
+        "n": 350,
+        "mean": -0.45109272393819766,
+        "sum": -157.88245337836918,
+        "pf": 0.6837260563662471,
+        "win_rate": 0.08285714285714285,
+        "max_dd": 193.51407116572506,
+        "losing_streak": 46,
+        "avg_win": 11.769407109063026,
+        "avg_loss": -1.5551254191314547
+      },
+      "PARTIAL_2026": {
+        "n": 30,
+        "mean": -0.5722485873486719,
+        "sum": -17.16745762046016,
+        "pf": 0.58101625393487,
+        "win_rate": 0.1,
+        "max_dd": 18.99375713128649,
+        "losing_streak": 13,
+        "avg_win": 7.935528135956915,
+        "avg_loss": -1.517557112160404
+      },
+      "SOURCE_OOS_PROXY_ALL": {
+        "n": 860,
+        "mean": -0.08865894055342549,
+        "sum": -76.24668887594592,
+        "pf": 0.9357164616950414,
+        "win_rate": 0.11162790697674418,
+        "max_dd": 211.6817935155077,
+        "losing_streak": 46,
+        "avg_win": 11.560969413173543,
+        "avg_loss": -1.552486587095034
+      }
+    }
+  },
+  "gates": {
+    "is_mean_positive": true,
+    "is_pf_ge_1_15": true,
+    "oos_n_ge_500": true,
+    "oos_mean_positive": true,
+    "oos_pf_ge_1_15": true,
+    "oos_positive_years_ge_6_of_8": true,
+    "oos_dd_le_20R": false,
+    "double_cost_oos_mean_positive": true,
+    "double_cost_oos_pf_gt_1_05": true,
+    "recent_2023_2025_mean_nonnegative": false,
+    "recent_2023_2025_pf_ge_1": false
+  },
+  "interpretation": "QQQ 5m cross-source proxy replication only; not NQ/US100 live validation."
 }
-Traceback (most recent call last):
-  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/qqq-formed/run_qqq_formed_openmove_v1.py", line 215, in <module>
-    if __name__=='__main__': main()
-                             ^^^^^^
-  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/qqq-formed/run_qqq_formed_openmove_v1.py", line 166, in main
-    r=simulate_trade(g,float(f.prior_atr14),bp)
-      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/qqq-formed/run_qqq_formed_openmove_v1.py", line 114, in simulate_trade
-    exit_px=stop; exit_dt=b.dt; reason='SL'; break
-                          ^^^^
-  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/generic.py", line 6194, in __getattr__
-    return object.__getattribute__(self, name)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/accessor.py", line 230, in __get__
-    return self._accessor(obj)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/indexes/accessors.py", line 698, in __new__
-    raise AttributeError("Can only use .dt accessor with datetimelike values")
-AttributeError: Can only use .dt accessor with datetimelike values. Did you mean: 'at'?
