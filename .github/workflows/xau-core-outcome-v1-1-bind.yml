@@ -1,0 +1,75 @@
+name: XAU Core Outcome V1.1 Exact Binding
+
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-core-outcome-v1-1-bind.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  bind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install requests==2.31.0
+      - name: Canonicalize and verify exact V1.1 binding before outcomes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, os, pathlib, requests
+
+          machine=pathlib.Path('xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json')
+          human=pathlib.Path('xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.md')
+          auth=pathlib.Path('xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/OUTCOME_OPEN_AUTHORIZATION_V1_1.json')
+          expected={
+            str(machine):'f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda',
+            str(human):'0cae1aa3b2c086311d65a3520ddd35afcdf3edfe7b2c55f6cd8b5cdfea80dd13',
+            str(auth):'0e6b6aad964d237786ff463c849f4ceeed27803d31c7aafcd6680834994e7f3c',
+          }
+
+          obj=json.loads(machine.read_text())
+          canonical=(json.dumps(obj,indent=2,sort_keys=True,ensure_ascii=False)+'\n').encode()
+          got=hashlib.sha256(canonical).hexdigest()
+          if got!=expected[str(machine)]:
+              raise SystemExit(f'MACHINE_PROTOCOL_SEMANTIC_BINDING_MISMATCH got={got}')
+
+          for p in (human,auth):
+              h=hashlib.sha256(p.read_bytes()).hexdigest()
+              if h!=expected[str(p)]:
+                  raise SystemExit(f'BINDING_MISMATCH {p} got={h}')
+
+          repo=os.environ['REPO']; branch=os.environ['BRANCH']
+          headers={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          def put(path,data,msg):
+              u=f'https://api.github.com/repos/{repo}/contents/{path}'
+              old=requests.get(u,headers=headers,params={'ref':branch}); old.raise_for_status()
+              body={'message':msg,'content':base64.b64encode(data).decode(),'branch':branch,'sha':old.json()['sha']}
+              r=requests.put(u,headers=headers,json=body); r.raise_for_status(); return r.json()['commit']['sha']
+
+          commit=put(str(machine),canonical,'canonicalize exact outcome V1.1 machine binding [skip ci]')
+          marker={
+            'version':'XAU_CORE_OUTCOME_V1_1_BINDING',
+            'status':'BOUND_EXACT_BEFORE_OUTCOME',
+            'workflow_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'binding_commit_sha':commit,
+            'machine_protocol_sha256':expected[str(machine)],
+            'human_protocol_sha256':expected[str(human)],
+            'authorization_sha256':expected[str(auth)],
+            'pnl_inspected_or_used':False,
+            'tp_sl_exit_simulated':False,
+          }
+          path='xau-final-results/xau_core_causal_confluence_preoutcome_full_m1_v1/V1_1_BINDING_COMPLETE.json'
+          u=f'https://api.github.com/repos/{repo}/contents/{path}'
+          old=requests.get(u,headers=headers,params={'ref':branch})
+          body={'message':'publish exact V1.1 binding marker [skip ci]','content':base64.b64encode((json.dumps(marker,indent=2,sort_keys=True)+'\n').encode()).decode(),'branch':branch}
+          if old.status_code==200: body['sha']=old.json()['sha']
+          elif old.status_code!=404: old.raise_for_status()
+          r=requests.put(u,headers=headers,json=body); r.raise_for_status()
+          print(json.dumps(marker,indent=2,sort_keys=True))
+          PY
