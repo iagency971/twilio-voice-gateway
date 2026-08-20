@@ -1,0 +1,44 @@
+{
+  "active_year": true,
+  "causal_clean_rejection_triggers": 38,
+  "contaminated_pairs": 71,
+  "deduplicated_pairs": 353,
+  "direct_pairs_before_contamination": 637,
+  "doz_known_time_semantics": "HTF_BAR_CLOSE_BOUNDARY",
+  "doz_provenance_missing": 0,
+  "doz_provenance_violations": 0,
+  "doz_zones_by_tf": {
+    "15min": 4398,
+    "1h": 1233,
+    "30min": 2298
+  },
+  "doz_zones_total": 7929,
+  "emitted_events": 213,
+  "entry_candidates": 38,
+  "event_doz_provenance_violations": 0,
+  "event_manifest_sha256": "de94c44962c38284820dd6f42cd06dc4736c6327c1cced5f62827daf5983cbca",
+  "input_sha256": "4d689086065897a3b086fe2140faf50c7af2bdf24088ace67d3c32c7e6c28cfd",
+  "m1_timestamp_semantics": "BAR_START_UTC",
+  "new_market_data_spend": 0,
+  "no_next_active_entry": 0,
+  "pnl_inspected_or_used": false,
+  "prefix_invariance_violations": 0,
+  "qualifying_pairs": 566,
+  "raw_contacts": 215800,
+  "raw_contacts_by_family": {
+    "DISPLACEMENT_ORIGIN": 7670,
+    "FVG": 197365,
+    "MEMORY": 3258,
+    "OBJECTIVE_LIQUIDITY": 7507
+  },
+  "resample_closed": "left",
+  "resample_label": "right",
+  "shuffle_identity_pass": true,
+  "side_relation_counts": {
+    "SAME_SIDE": 38
+  },
+  "timing_integrity_violations": 0,
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_TIMEFRAME_ALIGNED_ANNUAL_V1",
+  "year": 2020
+}
