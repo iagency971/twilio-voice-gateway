@@ -1,4 +1,4 @@
-name: XAU Outcome Actions Smoke
+name: XAU Outcome Binding Diagnostic
 
 on:
   push:
@@ -14,19 +14,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Publish smoke marker
+        with:
+          ref: agent/xau-core-evidence-audit-v1
+      - name: Diagnose and canonicalize V1.1 binding only
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           BRANCH: agent/xau-core-evidence-audit-v1
         run: |
           python - <<'PY'
-          import base64,json,os,requests
-          path='xau-final-results/xau_core_causal_confluence_outcome_v1_1/ACTIONS_SMOKE_PASS.json'
-          data=json.dumps({'status':'ACTIONS_SMOKE_PASS','workflow_run_id':os.environ['GITHUB_RUN_ID']},indent=2,sort_keys=True).encode()+b'\n'
+          import base64,hashlib,json,os,pathlib,requests
+          path='xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_OUTCOME_PROTOCOL_v1_1.json'
+          p=pathlib.Path(path)
+          obj=json.loads(p.read_text())
+          canonical=(json.dumps(obj,indent=2,sort_keys=True,ensure_ascii=False)+'\n').encode()
+          got=hashlib.sha256(canonical).hexdigest()
+          expected='f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda'
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
-          r=requests.put(u,headers=h,json={'message':'publish Actions smoke marker [skip ci]','content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']})
-          r.raise_for_status()
-          print(data.decode())
+          marker_path='xau-final-results/xau_core_causal_confluence_outcome_v1_1/V1_1_BINDING_DIAGNOSTIC.json'
+          marker={'status':'MATCH' if got==expected else 'MISMATCH','workflow_run_id':os.environ['GITHUB_RUN_ID'],'canonical_sha256':got,'expected_sha256':expected,'raw_sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+          def put(path,data,msg):
+              u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              old=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']})
+              body={'message':msg,'content':base64.b64encode(data).decode(),'branch':os.environ['BRANCH']}
+              if old.status_code==200: body['sha']=old.json()['sha']
+              elif old.status_code!=404: old.raise_for_status()
+              r=requests.put(u,headers=h,json=body); r.raise_for_status(); return r.json()['commit']['sha']
+          if got==expected:
+              put(path,canonical,'canonicalize exact V1.1 machine protocol [skip ci]')
+              marker['canonicalized_to_branch']=True
+          else:
+              marker['canonicalized_to_branch']=False
+          put(marker_path,(json.dumps(marker,indent=2,sort_keys=True)+'\n').encode(),'publish V1.1 binding diagnostic [skip ci]')
+          print(json.dumps(marker,indent=2,sort_keys=True))
           PY
