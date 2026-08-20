@@ -1,0 +1,201 @@
+{
+  "annual_artifacts": [
+    {
+      "event_manifest_sha256": "07a394d8bec8e60d4c78615951048332bde8ef1765cbb78735774ecddb16d35e",
+      "event_rows": 46,
+      "input_sha256": "95b6feb69ccea4dfa91e37ee1e608b03364e8a8f1efcba57594e298f08e55c92",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2011
+    },
+    {
+      "event_manifest_sha256": "ab8c12b4fc75a6e5c959863af4e8ff5f02069b6150a7f1baee210460a9bdd82a",
+      "event_rows": 49,
+      "input_sha256": "471a77fc4caff8677735645a01f3258a1c7fe140e2a5b94f021775aedd1e6722",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2012
+    },
+    {
+      "event_manifest_sha256": "327406305addd6cbde3e17cd7def89d82363770480059665d893c457dd7fed1f",
+      "event_rows": 56,
+      "input_sha256": "3c8231839910a72255492927c87abc713c17b5f39710944352b91a2da3507823",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2013
+    },
+    {
+      "event_manifest_sha256": "4a8288abeee69ba27abdc79de952fc2cdbacd481822b6fe4d42500a4e19cb487",
+      "event_rows": 52,
+      "input_sha256": "ca4a8fcbcc4a255a768911cd2131bb6608091db094dbde5a317171c1944d3d8d",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2014
+    },
+    {
+      "event_manifest_sha256": "121f3303dc727db07a83328fb746cf0e3b7a9ef25c3f09a660c59761c888ddbe",
+      "event_rows": 72,
+      "input_sha256": "3988a27e0eb55295cf0b8ee158cd34620fb61895c44e4375a3abbce32b451c7c",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2015
+    },
+    {
+      "event_manifest_sha256": "bf147d06922077fa747667c4af1bdffa04b34cdde56fd251198dd92e62054f17",
+      "event_rows": 55,
+      "input_sha256": "eaa11559a0aafc9f45e81aec5a75b77ae23f43dc74bdb4873efa1ae78974108b",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2016
+    },
+    {
+      "event_manifest_sha256": "f4101ef9fe6ed1a8affd2f6e2ac44669fe1ef90c16c25997c59f7cfc4d6f50d0",
+      "event_rows": 58,
+      "input_sha256": "fe9514849196a076e8a3aea70753ea22a5747b53943c8960e6f1cafd524cca7c",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2017
+    },
+    {
+      "event_manifest_sha256": "99c6dbd1e8dbbb2d369062b7739e19993cabe05a91cc38b3d3b9bd2ef9dad1e0",
+      "event_rows": 79,
+      "input_sha256": "352fcebfc96e52675a63151d9e8551ab2b46d4bebb223a195b4283382604dcfb",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2018
+    },
+    {
+      "event_manifest_sha256": "f12192f50ea63b6ca9b67a1aa0790384dd7b4ee446ca0e444499ed1534582476",
+      "event_rows": 53,
+      "input_sha256": "416c6410ac7d2ceb4bef04574c4ba45faf9fa6037472d713bf131e8dc63384a1",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2019
+    },
+    {
+      "event_manifest_sha256": "009c680af4afcead05f01b570899c1d29d66fd5c5d59f7dfeec0b6b60a25d92a",
+      "event_rows": 36,
+      "input_sha256": "4d689086065897a3b086fe2140faf50c7af2bdf24088ace67d3c32c7e6c28cfd",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2020
+    },
+    {
+      "event_manifest_sha256": "e2628947fac51623e8266aa3dbcb94bdd3cb2a908393a5350b05766dbc33c871",
+      "event_rows": 49,
+      "input_sha256": "d144f0f80399719bdcf1790765ac78729fcc655f1e7c29742e3a51f4c21a0e10",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2021
+    },
+    {
+      "event_manifest_sha256": "b8ff3e9db4f7ab8ada69f964e4347573f3c516f8988689d91eb21818673fadd9",
+      "event_rows": 26,
+      "input_sha256": "c2af60534d9ebd1a65c688b29b9b13d4a89ec14e87ba8fd12c9ad76d4f263cc7",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2022
+    },
+    {
+      "event_manifest_sha256": "1dc9130540400496465d4886f16efc9a97653bba32c5ac1566cdd76e7a34c1f7",
+      "event_rows": 39,
+      "input_sha256": "cac367b6ea40bba75ed305311c7df264d3d2f4e62dbc1f8f9b341dbdad92a6f6",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2023
+    },
+    {
+      "event_manifest_sha256": "8ef291418c832583519851b1bb2131cc56b7a047f53a999f853d6e8e5ad59d20",
+      "event_rows": 33,
+      "input_sha256": "f37ebd308818b271aa1aa93d95058211d4d527cf054b9fffd0e586da1763b012",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2024
+    },
+    {
+      "event_manifest_sha256": "3bdf1841de71e4128cb720a709d37b3006e4de347aca9156859e7d4ccbff81d3",
+      "event_rows": 33,
+      "input_sha256": "3ecb55f401c64ff34526f71d0ecf0e52a6d385e2d5a2f86c960a6cbacd9ab376",
+      "prefix_invariance_violations": 0,
+      "shuffle_identity_pass": true,
+      "timing_integrity_violations": 0,
+      "year": 2025
+    }
+  ],
+  "dependency_hashes": {
+    "acquisition": {
+      "path": "xau-multiyear/scripts/acquire_dukascopy_window.py",
+      "sha256": "f9ad8f7647247324de101af279f28b9f1f6c0fdc62b57b2a9b5d100f17588fbd"
+    },
+    "base_pair_builder": {
+      "path": "xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_v1.py",
+      "sha256": "ca3879bc292330a8d06e0f4baf12c5c1501d74f9f18b4fe385db2916d59da1f5"
+    },
+    "config": {
+      "path": "xau-multiyear/src/rzr/config.py",
+      "sha256": "66992718ca5e5091d9ea9bff693d9c9b8371971f5a5ac6fb1576eb29d9535908"
+    },
+    "contacts": {
+      "path": "xau-multiyear/src/rzr/contacts.py",
+      "sha256": "fd6453a5a8fc279bf2d4b643e1b283e9de613ff90abf05ad8a70ded25c6f3eeb"
+    },
+    "entries_v1": {
+      "path": "xau-multiyear/src/rzr/entries_v1.py",
+      "sha256": "ca14a2c8f7e24d6f7db7e48c3365fc22ff4a235bc76d558aa0124dfd39271e84"
+    },
+    "prior_freeze_invalidation": {
+      "path": "xau-final-results/xau_core_causal_confluence_preoutcome_v1/INVALIDATED_PREOUTCOME_FUTURE_BEHAVIOR_RECLASSIFICATION.json",
+      "sha256": "1c84b2bddd8a5106e6a7dfa6a5ff40e56370f26780185ef5678a8bb8eb8eeb05"
+    },
+    "repair_protocol": {
+      "path": "xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_PROTOCOL_v1.md",
+      "sha256": "d44489ab069acfd14c3d0c24185f688af48f0349a0318c8a72ba1b9ca9dcd8d8"
+    },
+    "repair_tests": {
+      "path": "xau-multiyear/tests/test_causal_confluence_preoutcome_repair_v1.py",
+      "sha256": "73b4a41c8c6d64d7c8b993a8d8ab5847570a8376640a2af40e15e142a2205490"
+    },
+    "repaired_builder": {
+      "path": "xau-multiyear/scripts/build_xau_core_causal_confluence_preoutcome_repair_v1.py",
+      "sha256": "dd0be21344ba47e40377c5f4bf6237563e2bbb48a1c6624cb528e1d8109bf831"
+    },
+    "resample": {
+      "path": "xau-multiyear/src/rzr/resample.py",
+      "sha256": "35f263bd988a4d4d36e3c0c0b1a16adf62be4c2966e5aca425f9a002587b51f4"
+    },
+    "zones": {
+      "path": "xau-multiyear/src/rzr/zones.py",
+      "sha256": "fbbfdcede3d39eae66dc85827348958c821560eef533bfd3254c50735d87ba82"
+    }
+  },
+  "event_manifest": {
+    "path": "causal_core_preoutcome_repaired_events_2011_2025.csv",
+    "rows": 736,
+    "sha256": "e14180106c659262c7345f428db1dacb1c0aa9e92c770aefef8692d4c1038f28"
+  },
+  "invalidated_prior_event_manifest_sha256": "7595d18257af70341ad0c1288d40d1fea65cc84b56d48bc29c5b420f034aaaf5",
+  "invalidated_prior_freeze_sha256": "106fa7d8efc1006f53c9dd4b130e3031549fcadfa6e425fbe5068b0299c6606b",
+  "mandatory_stop": "STOP_BEFORE_PNL",
+  "new_market_data_spend": 0,
+  "pnl_inspected_or_used": false,
+  "source_commit": "991cf8d622423b8b107eb38c684c58df3fc9610e",
+  "status": "CAUSAL_CORE_PREOUTCOME_REPAIRED_READY_FOR_PNL",
+  "support_gate_pass": true,
+  "tp_sl_exit_simulated": false,
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_REPAIR_FREEZE_MANIFEST_V1",
+  "workflow_run_id": "32322864345"
+}
