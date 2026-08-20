@@ -336,7 +336,7 @@
     "date_cluster_bootstrap": {
       "ci": "percentile 2.5% and 97.5%",
       "draws": 20000,
-      "resample_rule": "sample dates with replacement; carry every event on a selected date with the date's multiplicity; recompute the event-weighted surface mean",
+      "resample_rule": "sample dates with replacement; carry every event on a selected date with that date's multiplicity; recompute the event-weighted surface mean",
       "rng": "NumPy default_rng / PCG64",
       "seed": 20260821,
       "unit": "unique 17:00-New-York trading date"
