@@ -1,0 +1,34 @@
+name: XAU Outcome Main Retrigger
+
+on:
+  push:
+    branches: [agent/xau-core-evidence-audit-v1]
+    paths:
+      - '.github/workflows/xau-outcome-main-retrigger.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  retrigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Touch frozen main workflow after exact V1.1 binding
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-core-evidence-audit-v1
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import base64,os,requests
+          path='.github/workflows/xau-core-causal-confluence-outcome-v1-1.yml'
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          u=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          r=requests.get(u,headers=h,params={'ref':os.environ['BRANCH']}); r.raise_for_status()
+          old=r.json(); data=base64.b64decode(old['content'])
+          marker=f"\n# exact-binding technical retrigger {os.environ['RUN_ID']}\n".encode()
+          body={'message':'retrigger frozen XAU outcome V1.1 after exact binding','content':base64.b64encode(data+marker).decode(),'branch':os.environ['BRANCH'],'sha':old['sha']}
+          q=requests.put(u,headers=h,json=body); q.raise_for_status()
+          print('MAIN_WORKFLOW_RETRIGGERED')
+          PY
