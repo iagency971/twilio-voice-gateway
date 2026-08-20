@@ -1,0 +1,8 @@
+{
+  "status": "CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_REPAIR_RUNNING",
+  "workflow_run_id": "32359337928",
+  "source_commit": "0c4883a2d436c2c04672899a6c09cea6e9636934",
+  "pnl_inspected_or_used": false,
+  "tp_sl_exit_simulated": false,
+  "new_market_data_spend": 0
+}
