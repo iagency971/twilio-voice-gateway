@@ -1,4 +1,5 @@
 name: XAU Core Causal Confluence Full M1 Information Set Repair V1
+# Technical retrigger only: O(log n) opening-quote lookup optimization; no scientific rule changed.
 
 on:
   push:
