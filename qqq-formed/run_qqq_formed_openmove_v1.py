@@ -12,9 +12,9 @@ URLS = [
     ('EXT', 'https://raw.githubusercontent.com/lvrusu/QQQ_price_data/main/QQQ5m_Ext_J_23_to_Mar_20a_2026.csv', 1),
 ]
 SCENARIOS = {
-    'SOURCE_COST': 0.5,   # bp per side
-    'DOUBLE_COST': 1.0,   # bp per side
-    'HARD_STRESS': 2.0,   # bp per side
+    'SOURCE_COST': 0.5,
+    'DOUBLE_COST': 1.0,
+    'HARD_STRESS': 2.0,
 }
 WINDOWS = {
     'BACKGROUND': ('2000-01-01','2010-01-01'),
@@ -64,7 +64,7 @@ def load_data(out: Path):
     d=d.sort_values(['dt','priority']).drop_duplicates('dt',keep='last').sort_values('dt').reset_index(drop=True)
     d['date']=d.dt.dt.normalize()
     d['minute']=d.dt.dt.hour*60+d.dt.dt.minute
-    d=d[(d.minute>=570)&(d.minute<=955)].copy()  # 09:30 through 15:55 local timestamp
+    d=d[(d.minute>=570)&(d.minute<=955)].copy()
     result={'sources':diag,'combined_rows_rth':int(len(d)),'dt_min':str(d.dt.min()),'dt_max':str(d.dt.max()),
             'duplicates_after_merge':int(d.dt.duplicated().sum())}
     (out/'data_diagnostics.json').write_text(json.dumps(result,indent=2))
@@ -76,7 +76,7 @@ def build_daily(d: pd.DataFrame, out: Path):
     for date,g in d.groupby('date',sort=True):
         g=g.sort_values('minute').drop_duplicates('minute',keep='last')
         mins=g.minute.astype(int).tolist()
-        if not mins or mins[0]!=570 or mins[-1]<775:  # at least through 12:55 on early-close days
+        if not mins or mins[0]!=570 or mins[-1]<775:
             rejected.append({'date':str(date.date()),'reason':'bad_session_bounds','n':len(mins)}); continue
         expected=list(range(570,mins[-1]+1,5))
         if mins!=expected:
@@ -109,14 +109,14 @@ def simulate_trade(g: pd.DataFrame, prior_atr: float, bp_side: float):
     for k,(_,b) in enumerate(bars.iterrows()):
         o,h,l,c=map(float,[b.open,b.high,b.low,b.close])
         if k>0 and o<=stop:
-            exit_px=o; exit_dt=b.dt; reason='SL_GAP'; break
+            exit_px=o; exit_dt=b['dt']; reason='SL_GAP'; break
         if l<=stop:
-            exit_px=stop; exit_dt=b.dt; reason='SL'; break
+            exit_px=stop; exit_dt=b['dt']; reason='SL'; break
     if exit_px is None:
-        exit_px=float(eod.close); exit_dt=eod.dt; reason='TIME'
+        exit_px=float(eod.close); exit_dt=eod['dt']; reason='TIME'
     gross=(exit_px-entry)/dist
     cost=((bp_side/10000.0)*entry+(bp_side/10000.0)*exit_px)/dist
-    return {'entry_time':str(b1.dt),'exit_time':str(exit_dt),'entry':entry,'stop':stop,'stop_dist':dist,
+    return {'entry_time':str(b1['dt']),'exit_time':str(exit_dt),'entry':entry,'stop':stop,'stop_dist':dist,
             'exit':exit_px,'exit_reason':reason,'gross_R':gross,'cost_R':cost,'net_R':gross-cost}
 
 
@@ -171,17 +171,18 @@ def main():
                 rows.append(r)
         tr=pd.DataFrame(rows)
         if tr.empty: raise RuntimeError('no trades after rules')
+        tr['date']=pd.to_datetime(tr['date'])
         tr.to_csv(out/'trades.csv',index=False)
         summary={}; annual=[]
         for sc in SCENARIOS:
             x=tr[tr.scenario.eq(sc)].copy()
             wm={k:window_metrics(x,*v) for k,v in WINDOWS.items()}
             summary[sc]=wm
-            for y,g in x.assign(year=x.date.dt.year).groupby('year'):
+            for y,g in x.assign(year=x['date'].dt.year).groupby('year'):
                 mm=metrics(g); mm.update({'scenario':sc,'year':int(y)}); annual.append(mm)
         pd.DataFrame(annual).to_csv(out/'annual_metrics.csv',index=False)
         src=tr[tr.scenario.eq('SOURCE_COST')].copy()
-        annual_src=src.assign(year=src.date.dt.year).groupby('year').net_R.sum()
+        annual_src=src.assign(year=src['date'].dt.year).groupby('year').net_R.sum()
         full_years=annual_src[(annual_src.index>=2018)&(annual_src.index<=2025)]
         pos_full=int((full_years>0).sum())
         is_m=summary['SOURCE_COST']['SOURCE_IS_PROXY']
