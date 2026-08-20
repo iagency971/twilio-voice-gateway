@@ -1,0 +1,15 @@
+{
+  "aggregator_sha256": "143e992b3602ec5e2689d5d4ed3ddb32defdb37edb36eeccf7d51924e40a4e74",
+  "authorization_sha256": "0e6b6aad964d237786ff463c849f4ceeed27803d31c7aafcd6680834994e7f3c",
+  "event_count": 498,
+  "event_manifest_sha256": "39ed2f7eac7465d46344bef85d64d3b897f0b56af66448e537fba1bfff315aeb",
+  "executor_sha256": "9f27ca034aa23c81aca020713a4ea521305902c297ab299057bdf2cb4dce1268",
+  "outcome_artifact_manifest_sha256": "ee9e117782d66a78d6df69a830c4d651369ea30ad4c7f50f6ce23de65630c625",
+  "outcome_result_sha256": "582cce13c9f9659163bea1677cb8671cd4697f8d6f8be27b712970f795dffee9",
+  "post_outcome_rescue_forbidden": true,
+  "preoutcome_freeze_sha256": "7a46a6847e8b574afa3576714349dbeaa8ec4d7ae2b1a39f4356a03e68fa4197",
+  "protocol_sha256": "f72ec721c1fd754140dec9aba46173ee6f7b42873b8a7553470a14e382314eda",
+  "status": "CAUSAL_CORE_OUTCOME_V1_1_NO_GO",
+  "version": "XAU_CORE_OUTCOME_V1_1_PUBLICATION",
+  "workflow_run_id": "32404036471"
+}
