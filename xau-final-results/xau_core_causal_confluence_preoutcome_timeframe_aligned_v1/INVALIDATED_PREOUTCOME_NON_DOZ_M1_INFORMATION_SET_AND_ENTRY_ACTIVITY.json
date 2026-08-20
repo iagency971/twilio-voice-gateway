@@ -1,0 +1,12 @@
+{
+  "version": "XAU_CORE_CAUSAL_CONFLUENCE_PREOUTCOME_FULL_M1_INVALIDATION_V1",
+  "status": "INVALIDATED_PREOUTCOME_NON_DOZ_M1_INFORMATION_SET_AND_ENTRY_ACTIVITY",
+  "reason": "The timeframe-aligned freeze correctly repairs DOZ HTF provenance but does not yet make all M1-derived inclusion/exclusion zones and entry-minute selection fully causal. FVG/Memory/round-number availability, Memory multi-scale deduplication, activation-width spread timing, and entry opening-quote eligibility must be repaired before any P&L is opened.",
+  "invalidated_preoutcome_freeze_manifest_sha256": "71f3f68e918ffa2188a8fb2ce4d1c620a0aac87bef3e56b679bd318f90c65162",
+  "invalidated_event_manifest_sha256": "dfd2b5e83d524e188f7482764b7bc05e04cbbbcd8fc6aa72fa61e5798f4d7724",
+  "invalidated_artifact_freeze_commit_sha": "dd7e848ff5f35cc2e63729f341ec50a92fc2303e",
+  "pnl_open_prohibited": true,
+  "pnl_inspected_or_used_before_invalidation": false,
+  "replacement_protocol": "xau-multiyear/docs/XAU_CORE_CAUSAL_CONFLUENCE_FULL_M1_INFORMATION_SET_REPAIR_PROTOCOL_v1.md",
+  "new_market_data_spend": 0
+}
