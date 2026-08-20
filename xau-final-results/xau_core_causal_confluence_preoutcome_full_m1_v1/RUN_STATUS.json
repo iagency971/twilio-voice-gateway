@@ -1,8 +1,8 @@
 {
-  "status": "CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_REPAIR_RUNNING",
-  "workflow_run_id": "32360173450",
-  "source_commit": "106a0252e8292dd2dd690a7e336d9f493420ccc1",
+  "new_market_data_spend": 0,
   "pnl_inspected_or_used": false,
+  "scientific_status": "CAUSAL_CORE_PREOUTCOME_FULL_M1_INFORMATION_SET_READY_FOR_PNL",
+  "status": "COMPLETE_PREOUTCOME_FULL_M1_INFORMATION_SET_ONLY",
   "tp_sl_exit_simulated": false,
-  "new_market_data_spend": 0
+  "workflow_run_id": "32360173450"
 }
