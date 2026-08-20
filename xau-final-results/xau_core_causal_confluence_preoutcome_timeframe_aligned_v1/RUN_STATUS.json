@@ -1,0 +1,8 @@
+{
+  "status": "CAUSAL_CORE_PREOUTCOME_TIMEFRAME_ALIGNMENT_REPAIR_RUNNING",
+  "workflow_run_id": "32328016859",
+  "source_commit": "7f2425f26c9c1083a2e6c13849785461b3d61383",
+  "pnl_inspected_or_used": false,
+  "tp_sl_exit_simulated": false,
+  "new_market_data_spend": 0
+}
