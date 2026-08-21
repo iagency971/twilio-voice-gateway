@@ -1,0 +1,210 @@
+{
+  "status": "NQ_2022_BREAKOUT_FULL_OOS_V1_NO_GO",
+  "external_engine_commit": "c5ed61a8cf61c57e2e612d7c7e080c7ec76c8ce1",
+  "data_entry_cutoff_ct": "2026-04-08 23:59:59",
+  "evaluation_cash_days": 56,
+  "primary_trades_per_5_trading_days": 6.25,
+  "positive_feb_mar_apr_months": 0,
+  "scenarios": {
+    "PRIMARY": {
+      "metrics": {
+        "n": 70,
+        "mean_R": -0.06767857142857141,
+        "sum_R": -4.737499999999999,
+        "pf": 0.8855261568201042,
+        "win_rate": 0.34285714285714286,
+        "avg_win_R": 1.5269791666666668,
+        "avg_loss_R": -0.8996739130434781,
+        "max_dd_R": 19.519999999999996,
+        "losing_streak": 9
+      },
+      "diagnostics": {
+        "by_direction": {
+          "long": {
+            "n": 36,
+            "mean_R": -0.26,
+            "sum_R": -9.36,
+            "pf": 0.6567656765676566,
+            "win_rate": 0.25,
+            "avg_win_R": 1.99,
+            "avg_loss_R": -1.0100000000000002,
+            "max_dd_R": 16.249999999999996,
+            "losing_streak": 8
+          },
+          "short": {
+            "n": 34,
+            "mean_R": 0.1359558823529412,
+            "sum_R": 4.6225000000000005,
+            "pf": 1.3274884874247257,
+            "win_rate": 0.4411764705882353,
+            "avg_win_R": 1.2491666666666668,
+            "avg_loss_R": -0.7428947368421052,
+            "max_dd_R": 4.844999999999999,
+            "losing_streak": 7
+          }
+        },
+        "by_month": {
+          "2026-01": {
+            "n": 10,
+            "mean_R": 0.53325,
+            "sum_R": 5.3325000000000005,
+            "pf": 2.3199257425742577,
+            "win_rate": 0.6,
+            "avg_win_R": 1.5620833333333335,
+            "avg_loss_R": -1.01,
+            "max_dd_R": 1.01,
+            "losing_streak": 1
+          },
+          "2026-02": {
+            "n": 22,
+            "mean_R": -0.1827272727272727,
+            "sum_R": -4.02,
+            "pf": 0.7202991824665159,
+            "win_rate": 0.2727272727272727,
+            "avg_win_R": 1.7254166666666668,
+            "avg_loss_R": -0.89828125,
+            "max_dd_R": 7.3325,
+            "losing_streak": 9
+          },
+          "2026-03": {
+            "n": 35,
+            "mean_R": -0.0862857142857143,
+            "sum_R": -3.0200000000000005,
+            "pf": 0.8485646232919641,
+            "win_rate": 0.34285714285714286,
+            "avg_win_R": 1.4102083333333333,
+            "avg_loss_R": -0.8670652173913046,
+            "max_dd_R": 12.187499999999996,
+            "losing_streak": 7
+          },
+          "2026-04": {
+            "n": 3,
+            "mean_R": -1.01,
+            "sum_R": -3.0300000000000002,
+            "pf": 0.0,
+            "win_rate": 0.0,
+            "avg_win_R": null,
+            "avg_loss_R": -1.01,
+            "max_dd_R": 3.0300000000000002,
+            "losing_streak": 3
+          }
+        },
+        "exit_reasons": {
+          "stop": 38,
+          "eod_short": 16,
+          "target": 16
+        },
+        "remove_best_5pct_mean_R": -0.1923863636363636
+      },
+      "round_turn_cost_usd": 20.0
+    },
+    "STRESS": {
+      "metrics": {
+        "n": 70,
+        "mean_R": -0.0801785714285714,
+        "sum_R": -5.612499999999998,
+        "pf": 0.8662416587225928,
+        "win_rate": 0.34285714285714286,
+        "avg_win_R": 1.5144791666666668,
+        "avg_loss_R": -0.9121739130434784,
+        "max_dd_R": 20.020000000000003,
+        "losing_streak": 9
+      },
+      "diagnostics": {
+        "by_direction": {
+          "long": {
+            "n": 36,
+            "mean_R": -0.2725000000000001,
+            "sum_R": -9.810000000000002,
+            "pf": 0.6446617766911165,
+            "win_rate": 0.25,
+            "avg_win_R": 1.9775,
+            "avg_loss_R": -1.0225,
+            "max_dd_R": 16.562500000000004,
+            "losing_streak": 8
+          },
+          "short": {
+            "n": 34,
+            "mean_R": 0.12345588235294117,
+            "sum_R": 4.1975,
+            "pf": 1.2924577599721305,
+            "win_rate": 0.4411764705882353,
+            "avg_win_R": 1.2366666666666668,
+            "avg_loss_R": -0.7553947368421052,
+            "max_dd_R": 4.982500000000001,
+            "losing_streak": 7
+          }
+        },
+        "by_month": {
+          "2026-01": {
+            "n": 10,
+            "mean_R": 0.52075,
+            "sum_R": 5.2075000000000005,
+            "pf": 2.2732273838630808,
+            "win_rate": 0.6,
+            "avg_win_R": 1.5495833333333333,
+            "avg_loss_R": -1.0225,
+            "max_dd_R": 1.0225,
+            "losing_streak": 1
+          },
+          "2026-02": {
+            "n": 22,
+            "mean_R": -0.19522727272727272,
+            "sum_R": -4.295,
+            "pf": 0.7052667696002745,
+            "win_rate": 0.2727272727272727,
+            "avg_win_R": 1.7129166666666666,
+            "avg_loss_R": -0.91078125,
+            "max_dd_R": 7.4825,
+            "losing_streak": 9
+          },
+          "2026-03": {
+            "n": 35,
+            "mean_R": -0.09878571428571427,
+            "sum_R": -3.4574999999999996,
+            "pf": 0.8290904597132968,
+            "win_rate": 0.34285714285714286,
+            "avg_win_R": 1.397708333333333,
+            "avg_loss_R": -0.8795652173913046,
+            "max_dd_R": 12.537500000000003,
+            "losing_streak": 7
+          },
+          "2026-04": {
+            "n": 3,
+            "mean_R": -1.0225,
+            "sum_R": -3.0675,
+            "pf": 0.0,
+            "win_rate": 0.0,
+            "avg_win_R": null,
+            "avg_loss_R": -1.0225,
+            "max_dd_R": 3.0675,
+            "losing_streak": 3
+          }
+        },
+        "exit_reasons": {
+          "stop": 38,
+          "eod_short": 16,
+          "target": 16
+        },
+        "remove_best_5pct_mean_R": -0.20488636363636364
+      },
+      "round_turn_cost_usd": 45.0
+    }
+  },
+  "gates": {
+    "primary_n_ge_25": true,
+    "primary_trades_per_5d_ge_2": true,
+    "primary_mean_R_ge_0_10": false,
+    "primary_pf_ge_1_30": false,
+    "primary_positive_feb_mar_apr_ge_2": false,
+    "primary_max_dd_R_le_8": false,
+    "stress_mean_R_positive": false,
+    "stress_pf_ge_1_15": false
+  },
+  "notes": [
+    "Author's corrected executable engine used directly; no reimplementation of strategy logic.",
+    "Full Globex source retained for overnight long exits.",
+    "Entries after 2026-04-08 excluded from evaluation to avoid sample-end force-close bias.",
+    "Diagnostics are not rescue filters and cannot change this verdict."
+  ]
+}

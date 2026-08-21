@@ -1,0 +1,13 @@
+{
+  "url": "https://raw.githubusercontent.com/axb0306/cme-futures-ohlc/main/NQ/NQ_1min_20260120_20260415.csv",
+  "sha256": "583cd788b035c4b5ca612f8bb0e3e366d627348851c04d68bca295a5db116f61",
+  "bytes": 4840158,
+  "rows_1m": 83919,
+  "utc_min": "2026-01-20 15:56:00+00:00",
+  "utc_max": "2026-04-15 23:29:00+00:00",
+  "ct_min": "2026-01-20 09:56:00",
+  "ct_max": "2026-04-15 18:29:00",
+  "duplicate_ct_timestamps": 0,
+  "cash_trading_days_total": 61,
+  "cash_trading_days_to_cutoff": 56
+}
