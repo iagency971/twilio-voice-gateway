@@ -1,0 +1,4 @@
+{
+  "status": "FOMC_SEP_RELIEF_RALLY_V1_INVALID_ABORT",
+  "error": "RuntimeError(\"SPY datetime column unresolved. columns=['Unnamed: 0', 'Open', 'High', 'Low', 'Close', 'Volume']\")"
+}
