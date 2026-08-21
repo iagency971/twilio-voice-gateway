@@ -1,0 +1,162 @@
+{
+  "status": "NQ_BREAKOUT_SHORT_OOS2_V1_NO_GO",
+  "oos2_start": "2026-04-16",
+  "oos2_end": "2026-07-31",
+  "evaluation_cash_days": 77,
+  "primary_trades_per_5d": 2.792207792207792,
+  "positive_may_jun_jul": 2,
+  "scenarios": {
+    "PRIMARY": {
+      "metrics": {
+        "n": 43,
+        "mean_R": 0.006423255813955771,
+        "sum_R": 0.27620000000009814,
+        "pf": 1.0131599008957546,
+        "win_rate": 0.4186046511627907,
+        "max_dd_R": 5.218799999999899,
+        "losing_streak": 6,
+        "avg_win_R": 1.1813444444444494,
+        "avg_loss_R": -0.8395199999999998
+      },
+      "diagnostics": {
+        "by_month": {
+          "2026-04": {
+            "n": 5,
+            "mean_R": -0.292,
+            "sum_R": -1.46,
+            "pf": 0.5768115942028985,
+            "win_rate": 0.2,
+            "max_dd_R": 2.02,
+            "losing_streak": 2,
+            "avg_win_R": 1.99,
+            "avg_loss_R": -0.8625
+          },
+          "2026-05": {
+            "n": 6,
+            "mean_R": 0.16416666666666668,
+            "sum_R": 0.9850000000000001,
+            "pf": 1.4876237623762376,
+            "win_rate": 0.6666666666666666,
+            "max_dd_R": 2.02,
+            "losing_streak": 2,
+            "avg_win_R": 0.75125,
+            "avg_loss_R": -1.01
+          },
+          "2026-06": {
+            "n": 18,
+            "mean_R": 0.15330555555555594,
+            "sum_R": 2.759500000000007,
+            "pf": 1.3005827569304516,
+            "win_rate": 0.3333333333333333,
+            "max_dd_R": 4.857999999999992,
+            "losing_streak": 6,
+            "avg_win_R": 1.99,
+            "avg_loss_R": -0.765041666666666
+          },
+          "2026-07": {
+            "n": 14,
+            "mean_R": -0.14344999999999344,
+            "sum_R": -2.0082999999999083,
+            "pf": 0.6831084812623419,
+            "win_rate": 0.5,
+            "max_dd_R": 4.57,
+            "losing_streak": 2,
+            "avg_win_R": 0.6184571428571559,
+            "avg_loss_R": -0.9053571428571427
+          }
+        },
+        "exit_reasons": {
+          "stop": 19,
+          "eod_short": 15,
+          "target": 9
+        },
+        "remove_best_5pct_mean_R": -0.14234499999999753
+      },
+      "round_turn_cost_usd": 20.0
+    },
+    "STRESS": {
+      "metrics": {
+        "n": 43,
+        "mean_R": -0.006076744186044164,
+        "sum_R": -0.26129999999989906,
+        "pf": 0.9877326823314054,
+        "win_rate": 0.4186046511627907,
+        "max_dd_R": 5.581299999999899,
+        "losing_streak": 6,
+        "avg_win_R": 1.1688444444444497,
+        "avg_loss_R": -0.8520199999999997
+      },
+      "diagnostics": {
+        "by_month": {
+          "2026-04": {
+            "n": 5,
+            "mean_R": -0.3045,
+            "sum_R": -1.5225,
+            "pf": 0.5650000000000001,
+            "win_rate": 0.2,
+            "max_dd_R": 2.045,
+            "losing_streak": 2,
+            "avg_win_R": 1.9775,
+            "avg_loss_R": -0.875
+          },
+          "2026-05": {
+            "n": 6,
+            "mean_R": 0.1516666666666667,
+            "sum_R": 0.9100000000000001,
+            "pf": 1.4449877750611249,
+            "win_rate": 0.6666666666666666,
+            "max_dd_R": 2.045,
+            "losing_streak": 2,
+            "avg_win_R": 0.73875,
+            "avg_loss_R": -1.0225
+          },
+          "2026-06": {
+            "n": 18,
+            "mean_R": 0.140805555555556,
+            "sum_R": 2.534500000000008,
+            "pf": 1.2716360323669693,
+            "win_rate": 0.3333333333333333,
+            "max_dd_R": 5.020499999999992,
+            "losing_streak": 6,
+            "avg_win_R": 1.9774999999999998,
+            "avg_loss_R": -0.7775416666666661
+          },
+          "2026-07": {
+            "n": 14,
+            "mean_R": -0.15594999999999345,
+            "sum_R": -2.1832999999999085,
+            "pf": 0.6601867704280298,
+            "win_rate": 0.5,
+            "max_dd_R": 4.7075,
+            "losing_streak": 2,
+            "avg_win_R": 0.6059571428571559,
+            "avg_loss_R": -0.9178571428571428
+          }
+        },
+        "exit_reasons": {
+          "stop": 19,
+          "eod_short": 15,
+          "target": 9
+        },
+        "remove_best_5pct_mean_R": -0.1548449999999975
+      },
+      "round_turn_cost_usd": 45.0
+    }
+  },
+  "gates": {
+    "primary_n_ge_25": true,
+    "primary_trades_per_5d_ge_1_5": true,
+    "primary_mean_R_ge_0_10": false,
+    "primary_pf_ge_1_30": false,
+    "primary_positive_may_jun_jul_ge_2": true,
+    "primary_max_dd_R_le_8": true,
+    "stress_mean_R_positive": false,
+    "stress_pf_ge_1_15": false
+  },
+  "notes": [
+    "New SHORT-only architecture frozen after Jan-Apr development diagnostic and before OOS2 calculation.",
+    "Jan-Apr performance is not counted as validation for this architecture.",
+    "No long positions or long-signal occupancy exist in this new architecture.",
+    "OOS2 may not be used for rescue tuning after this result."
+  ]
+}
