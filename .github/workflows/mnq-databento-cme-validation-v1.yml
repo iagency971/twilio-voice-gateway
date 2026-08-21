@@ -1,10 +1,5 @@
 name: MNQ 12-Model Databento CME Validation V1
 on:
-  push:
-    branches: [agent/mnq-databento-cme-validation-v1]
-    paths:
-      - 'mnq-databento/**'
-      - '.github/workflows/mnq-databento-cme-validation-v1.yml'
   workflow_dispatch:
 permissions:
   contents: write
