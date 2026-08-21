@@ -4,12 +4,12 @@ Status before outcomes: `PREOUTCOME_FROZEN`
 Branch: `agent/nq-2022-breakout-short-oos-v1`
 
 ## Why SHORT-only
-The externally published 2022-rule strategy allows LONG positions to remain open up to five sessions, which requires complete Globex overnight data. Our independent 2026 GetData source is RTH/extended cash-session data and cannot safely observe overnight long stops/targets. SHORT positions in the published rules are always force-closed by the same-session close, so the SHORT engine can be replicated without hidden overnight path assumptions.
+The externally published 2022-rule strategy allows LONG positions to remain open up to five sessions, which requires complete Globex overnight data. Our independent 2026 GetData source is RTH/extended cash-session data and cannot safely observe overnight long stops/targets. SHORT positions in the published rules are always closed within the same simulated session, so the SHORT engine can be replicated without hidden overnight path assumptions.
 
 This restriction is based on data observability before outcome inspection, not on short-side performance.
 
 ## Frozen external rules
-Source reference: giovannibrusco/nq-intraday-breakout, rules asserted written in early 2022.
+Source reference: giovannibrusco/nq-intraday-breakout, rules asserted written in early 2022. Where README wording and executable code differ, this protocol follows the repository's corrected executable engine (`SimFlags()` + `entry_mode='stop'`).
 
 - Instrument: NQ.
 - Resample source 1-minute data to 5-minute bars, left-labelled.
@@ -22,7 +22,7 @@ Source reference: giovannibrusco/nq-intraday-breakout, rules asserted written in
 - Maximum 2 entries per trading day.
 - No exit on the entry bar because OHLC ordering is unknowable.
 - Gap-aware stop/target fills on subsequent bars.
-- Force SHORT flat at last available RTH bar of the day.
+- Exact corrected-code convention: the source engine defines its per-day `session_close_bar` as the last bar inside `window_start..trade_end`; therefore SHORT is force-closed at the 15:30 ET bar, not 15:55/16:00. This is reproduced exactly rather than reinterpreting the README wording.
 - No DOW, month, volatility, trend, news, or discretionary filters.
 - No parameter sweep or rescue filter.
 
