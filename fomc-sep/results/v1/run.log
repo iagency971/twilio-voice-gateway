@@ -1,15 +1,34 @@
 {
   "status": "FOMC_SEP_RELIEF_RALLY_V1_INVALID_ABORT",
-  "error": "AttributeError(\"'DatetimeIndex' object has no attribute 'eq'\")"
+  "error": "ValueError('Out of range float values are not JSON compliant: inf')"
 }
 Traceback (most recent call last):
+  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/fomc-sep/compat_runner.py", line 11, in <module>
+    exec(compile(source, str(path), "exec"), {"__name__": "__main__", "__file__": str(path)})
   File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/fomc-sep/run_v1.py", line 137, in <module>
     if __name__=="__main__":main()
                             ^^^^^^
-  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/fomc-sep/run_v1.py", line 129, in main
-    es_res={sc:es_event(es,cost) for sc,cost in {"PRIMARY":30.0,"STRESS":55.0}.items()}
-               ^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/fomc-sep/run_v1.py", line 108, in es_event
-    g=d[d.index.normalize().eq(day)]
-        ^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'DatetimeIndex' object has no attribute 'eq'
+  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/fomc-sep/run_v1.py", line 134, in main
+    (out/"RESULT.json").write_text(json.dumps(obj,indent=2,allow_nan=False));print(json.dumps(obj,indent=2,allow_nan=False))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  [Previous line repeated 1 more time]
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/json/encoder.py", line 398, in _iterencode_dict
+    yield _floatstr(value)
+          ^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/json/encoder.py", line 240, in floatstr
+    raise ValueError(
+ValueError: Out of range float values are not JSON compliant: inf
