@@ -1,0 +1,31 @@
+name: MGC Window Cost Sample V1
+on:
+  push:
+    branches: [agent/mgc-macro-event-research-v1]
+    paths: ['mgc-macro/window_cost_sample_probe.py','mgc-macro/WINDOW_COST_SAMPLE_TRIGGER.txt','.github/workflows/mgc-window-cost-sample-v1.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/mgc-macro-event-research-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas databento
+      - run: python mgc-macro/window_cost_sample_probe.py
+      - name: Publish estimate
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- mgc-macro/results/window_cost_sample_probe
+          git commit -m "Publish sampled MGC window cost estimate [skip ci]" || true
+          git push origin HEAD:agent/mgc-macro-event-research-v1
