@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Triggered after explicit user authorization: GO CME 20 (2026-08-21).
 import json, os
 from pathlib import Path
 import databento as db
