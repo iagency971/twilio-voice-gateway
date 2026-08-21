@@ -1,0 +1,57 @@
+name: NQ Noise Area Prop-Firm V1
+
+on:
+  push:
+    branches: [agent/nq-noise-area-propf-v1]
+    paths:
+      - 'nq-noise-area/**'
+      - '.github/workflows/nq-noise-area-propf-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/nq-noise-area-propf-v1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas numpy requests
+
+      - name: Run frozen NQ Noise Area test
+        shell: bash
+        run: |
+          set +e
+          mkdir -p nq-noise-area/results/v1
+          python nq-noise-area/run_nq_noise_area_propf_v1.py 2>&1 | tee nq-noise-area/results/v1/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > nq-noise-area/results/v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "NQ_NOISE_AREA_PROPF_V1_FAILURE exit_code=$code" > nq-noise-area/results/v1/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+
+      - name: Print result
+        if: always()
+        run: |
+          if [ -f nq-noise-area/results/v1/RESULT.json ]; then
+            cat nq-noise-area/results/v1/RESULT.json
+          fi
+
+      - name: Publish result to research branch
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- nq-noise-area/results/v1
+          git commit -m "Publish NQ Noise Area prop-firm V1 result [skip ci]" || true
+          git push origin HEAD:agent/nq-noise-area-propf-v1
