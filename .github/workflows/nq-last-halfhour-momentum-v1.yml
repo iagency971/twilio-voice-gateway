@@ -1,0 +1,48 @@
+name: NQ Last Half-Hour Momentum V1
+
+on:
+  push:
+    branches: [agent/nq-last-halfhour-momentum-v1]
+    paths:
+      - 'nq-last-halfhour/**'
+      - '.github/workflows/nq-last-halfhour-momentum-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/nq-last-halfhour-momentum-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install --upgrade pip pandas numpy requests
+      - name: Run frozen test
+        shell: bash
+        run: |
+          set +e
+          mkdir -p nq-last-halfhour/results/v1
+          python nq-last-halfhour/run_v1.py 2>&1 | tee nq-last-halfhour/results/v1/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > nq-last-halfhour/results/v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then echo "NQ_LAST_HALFHOUR_V1_FAILURE exit_code=$code" > nq-last-halfhour/results/v1/WORKFLOW_FAILURE.txt; fi
+          exit 0
+      - name: Print result
+        if: always()
+        run: |
+          if [ -f nq-last-halfhour/results/v1/RESULT.json ]; then cat nq-last-halfhour/results/v1/RESULT.json; fi
+      - name: Publish result
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- nq-last-halfhour/results/v1
+          git commit -m "Publish NQ last-halfhour momentum V1 result [skip ci]" || true
+          git push origin HEAD:agent/nq-last-halfhour-momentum-v1
