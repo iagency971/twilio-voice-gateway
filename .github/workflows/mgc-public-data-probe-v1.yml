@@ -2,7 +2,7 @@ name: MGC Public Data Probe V1
 on:
   push:
     branches: [agent/mgc-macro-event-research-v1]
-    paths: ['mgc-macro/**','.github/workflows/mgc-public-data-probe-v1.yml']
+    paths: ['mgc-macro/data_probe.py','mgc-macro/DATA_PROBE_TRIGGER.txt','.github/workflows/mgc-public-data-probe-v1.yml']
   workflow_dispatch:
 permissions:
   contents: write
