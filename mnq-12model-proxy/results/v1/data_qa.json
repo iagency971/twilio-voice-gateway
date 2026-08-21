@@ -1,0 +1,9 @@
+{
+  "getdata_sha": "232fbc18375e6475dbe3b99e6e1504da69c58a962aa7a358b14f4e2b61cf229d",
+  "bytes": 3256589,
+  "rows": 51955,
+  "min": "2026-02-02 09:30:00",
+  "max": "2026-07-31 16:14:00",
+  "evaluation_rth_days": 45,
+  "known_unrepaired_anomaly": "2026-06-16"
+}
