@@ -1,0 +1,129 @@
+{
+  "status": "NQ_NOISE_AREA_PROPF_V1_NO_GO",
+  "signal": {
+    "lookback_days": 14,
+    "check_minutes_et": [
+      "10:00",
+      "10:30",
+      "11:00",
+      "11:30",
+      "12:00",
+      "12:30",
+      "13:00",
+      "13:30",
+      "14:00",
+      "14:30",
+      "15:00",
+      "15:30"
+    ],
+    "exit_mode": "final_vwap_and_band",
+    "direction": "long_and_short_with_flips",
+    "fixed_contracts": 1,
+    "point_value_usd": 20.0
+  },
+  "costs": {
+    "PRIMARY": {
+      "slip_ticks_side": 1.0,
+      "commission_side_usd": 2.5
+    },
+    "STRESS": {
+      "slip_ticks_side": 2.0,
+      "commission_side_usd": 2.5
+    }
+  },
+  "summaries": {
+    "PRIMARY": {
+      "full": {
+        "n": 97,
+        "mean_net_points": 4.948453608247423,
+        "sum_net_points": 480.0,
+        "sum_net_usd": 9600.0,
+        "pf": 1.1021548284118117,
+        "win_rate": 0.3711340206185567,
+        "avg_win_usd": 2877.0833333333335,
+        "avg_loss_usd": -1540.5737704918033,
+        "max_dd_usd": 17050.0,
+        "losing_streak": 6
+      },
+      "recent_may_jul": {
+        "n": 56,
+        "mean_net_points": 6.183035714285714,
+        "sum_net_points": 346.25,
+        "sum_net_usd": 6925.0,
+        "pf": 1.1173629353444623,
+        "win_rate": 0.39285714285714285,
+        "avg_win_usd": 2996.818181818182,
+        "avg_loss_usd": -1735.4411764705883,
+        "max_dd_usd": 17050.0,
+        "losing_streak": 6
+      },
+      "july": {
+        "n": 19,
+        "mean_net_points": -35.921052631578945,
+        "sum_net_points": -682.5,
+        "sum_net_usd": -13650.0,
+        "pf": 0.44489629930866204,
+        "win_rate": 0.2631578947368421,
+        "avg_win_usd": 2188.0,
+        "avg_loss_usd": -1756.4285714285713,
+        "max_dd_usd": 17050.0,
+        "losing_streak": 6
+      }
+    },
+    "STRESS": {
+      "full": {
+        "n": 97,
+        "mean_net_points": 4.448453608247423,
+        "sum_net_points": 431.5,
+        "sum_net_usd": 8630.0,
+        "pf": 1.0912406829835597,
+        "win_rate": 0.3711340206185567,
+        "avg_win_usd": 2867.0833333333335,
+        "avg_loss_usd": -1550.5737704918033,
+        "max_dd_usd": 17200.0,
+        "losing_streak": 6
+      },
+      "recent_may_jul": {
+        "n": 56,
+        "mean_net_points": 5.683035714285714,
+        "sum_net_points": 318.25,
+        "sum_net_usd": 6365.0,
+        "pf": 1.107254191591541,
+        "win_rate": 0.39285714285714285,
+        "avg_win_usd": 2986.818181818182,
+        "avg_loss_usd": -1745.4411764705883,
+        "max_dd_usd": 17200.0,
+        "losing_streak": 6
+      },
+      "july": {
+        "n": 19,
+        "mean_net_points": -36.421052631578945,
+        "sum_net_points": -692.0,
+        "sum_net_usd": -13840.0,
+        "pf": 0.4403558431055398,
+        "win_rate": 0.2631578947368421,
+        "avg_win_usd": 2178.0,
+        "avg_loss_usd": -1766.4285714285713,
+        "max_dd_usd": 17200.0,
+        "losing_streak": 6
+      }
+    }
+  },
+  "positive_primary_months": 3,
+  "gates": {
+    "primary_n_ge_30": true,
+    "primary_mean_positive": true,
+    "primary_pf_ge_1_20": false,
+    "primary_positive_months_ge_3": true,
+    "primary_max_dd_le_5000": false,
+    "recent_may_jul_mean_nonnegative": true,
+    "stress_mean_positive": true,
+    "stress_pf_gt_1_05": true
+  },
+  "notes": [
+    "No parameter optimisation on NQ 2026 sample.",
+    "Strict 14-prior-session sigma requirement; current day excluded.",
+    "Fixed one-contract NQ is used only for edge viability; prop-firm sizing is stage 2 after PASS.",
+    "Signals evaluated at completed 30-minute checks; adverse slippage charged on each transaction side."
+  ]
+}
