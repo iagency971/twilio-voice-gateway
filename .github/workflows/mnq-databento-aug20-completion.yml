@@ -5,6 +5,7 @@ on:
     branches: [agent/mnq-databento-cme-validation-v1]
     paths:
       - 'mnq-databento/run_aug20_cme_completion.py'
+      - 'mnq-databento/trigger_aug20_completion.txt'
       - '.github/workflows/mnq-databento-aug20-completion.yml'
   workflow_dispatch:
 
