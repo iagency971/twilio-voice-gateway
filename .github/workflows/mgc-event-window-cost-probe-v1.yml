@@ -1,0 +1,32 @@
+name: MGC Event Window Cost Probe V1
+on:
+  push:
+    branches: [agent/mgc-macro-event-research-v1]
+    paths: ['mgc-macro/event_window_cost_probe.py','mgc-macro/EVENT_COST_TRIGGER.txt','.github/workflows/mgc-event-window-cost-probe-v1.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/mgc-macro-event-research-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas databento
+      - name: Estimate event windows only — no time series
+        run: python mgc-macro/event_window_cost_probe.py
+      - name: Publish event-window estimate
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- mgc-macro/results/event_window_cost_probe
+          git commit -m "Publish MGC event-window cost estimate [skip ci]" || true
+          git push origin HEAD:agent/mgc-macro-event-research-v1
