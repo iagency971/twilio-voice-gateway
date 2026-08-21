@@ -1,0 +1,11 @@
+{
+  "url": "https://raw.githubusercontent.com/axb0306/cme-futures-ohlc/main/NQ/NQ_1min_20260120_20260415.csv",
+  "sha256": "583cd788b035c4b5ca612f8bb0e3e366d627348851c04d68bca295a5db116f61",
+  "bytes": 4840158,
+  "rows_rth": 23524,
+  "min": "2026-01-20 10:56:00-05:00",
+  "max": "2026-04-15 15:59:00-04:00",
+  "days": 61,
+  "median_rows_day": 390.0,
+  "days_ge380": 59
+}
