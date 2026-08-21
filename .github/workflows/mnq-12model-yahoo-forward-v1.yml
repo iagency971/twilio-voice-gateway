@@ -1,0 +1,38 @@
+name: MNQ 12-Model Yahoo Forward V1
+on:
+  push:
+    branches: [agent/mnq-12model-yahoo-forward-v1]
+    paths: ['mnq-12model-yahoo/**','.github/workflows/mnq-12model-yahoo-forward-v1.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  forward:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/mnq-12model-yahoo-forward-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install --upgrade pip pandas numpy requests yfinance matplotlib tabulate python-dotenv ib_insync
+      - name: Run frozen forward test
+        shell: bash
+        run: |
+          set +e
+          mkdir -p mnq-12model-yahoo/results/v1
+          python mnq-12model-yahoo/run_v1.py 2>&1 | tee mnq-12model-yahoo/results/v1/run.log
+          code=${PIPESTATUS[0]}; echo "$code" > mnq-12model-yahoo/results/v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then echo "MNQ_12MODEL_YAHOO_FAILURE exit_code=$code" > mnq-12model-yahoo/results/v1/WORKFLOW_FAILURE.txt; fi
+          exit 0
+      - name: Publish
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- mnq-12model-yahoo/results/v1
+          git commit -m "Publish MNQ 12-model Yahoo forward V1 [skip ci]" || true
+          git push origin HEAD:agent/mnq-12model-yahoo-forward-v1
