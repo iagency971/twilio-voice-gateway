@@ -1,0 +1,67 @@
+{
+  "status": "PROXY_NO_GO_DO_NOT_BUY_CME_DATA",
+  "source_status": "PROXY_ONLY_NOT_CME",
+  "results": {
+    "NON_EIA": {
+      "PRIMARY": {
+        "n": 99,
+        "mean": -0.11498989898989793,
+        "sum": -11.383999999999896,
+        "pf": 0.5964980682664044,
+        "win_rate": 0.46464646464646464,
+        "max_dd": 12.811999999999895
+      },
+      "STRESS": {
+        "n": 99,
+        "mean": -0.1349898989898979,
+        "sum": -13.363999999999894,
+        "pf": 0.543470091893556,
+        "win_rate": 0.46464646464646464,
+        "max_dd": 14.41199999999994
+      },
+      "remove_best_mean": -0.179840425531914
+    },
+    "EIA": {
+      "PRIMARY": {
+        "n": 25,
+        "mean": -0.11260000000000049,
+        "sum": -2.8150000000000124,
+        "pf": 0.5593989669744869,
+        "win_rate": 0.4,
+        "max_dd": 4.1840000000000215
+      },
+      "STRESS": {
+        "n": 25,
+        "mean": -0.13260000000000047,
+        "sum": -3.315000000000012,
+        "pf": 0.5044102257437583,
+        "win_rate": 0.4,
+        "max_dd": 4.504000000000021
+      },
+      "remove_best_mean": -0.22663636363636408
+    }
+  },
+  "non_eia_gates": {
+    "n_ge80": true,
+    "mean_positive": false,
+    "pf_ge1_05": false,
+    "stress_mean_positive": false,
+    "remove_best5_nonnegative": false
+  },
+  "eia_gates": {
+    "n_ge18": true,
+    "mean_positive": false,
+    "pf_ge1_15": false,
+    "stress_mean_positive": false,
+    "remove_best10_nonnegative": false
+  },
+  "excluded_shifted_eia_sessions": [
+    "2026-02-19",
+    "2026-05-28"
+  ],
+  "notes": [
+    "Rules frozen before proxy outcomes.",
+    "No post-result rescue or filter permitted.",
+    "Proxy outcomes cannot validate CL; they only decide whether official CME data is worth buying."
+  ]
+}

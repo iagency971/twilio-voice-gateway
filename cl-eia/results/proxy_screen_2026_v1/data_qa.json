@@ -1,0 +1,9 @@
+{
+  "url": "https://raw.githubusercontent.com/getdata-finance/usoil-1m-ohlcv-commodities-historical-data/main/USOIL_1m.csv",
+  "sha256": "c3591137244c60e6a429b754561c3ba71de866a9d2d520fb21836f8c4eed4689",
+  "bytes": 10958317,
+  "rows": 176824,
+  "min": "2026-02-01 18:01:00-05:00",
+  "max": "2026-07-31 16:44:00-04:00",
+  "duplicates": 0
+}
