@@ -24,7 +24,7 @@ jobs:
         run: |
           set +e
           mkdir -p mnq-12model-yahoo/results/v1
-          python mnq-12model-yahoo/run_v1.py 2>&1 | tee mnq-12model-yahoo/results/v1/run.log
+          python mnq-12model-yahoo/compat_runner.py 2>&1 | tee mnq-12model-yahoo/results/v1/run.log
           code=${PIPESTATUS[0]}; echo "$code" > mnq-12model-yahoo/results/v1/exit_code.txt
           if [ "$code" -ne 0 ]; then echo "MNQ_12MODEL_YAHOO_FAILURE exit_code=$code" > mnq-12model-yahoo/results/v1/WORKFLOW_FAILURE.txt; fi
           exit 0
