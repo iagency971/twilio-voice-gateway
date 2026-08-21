@@ -1,0 +1,52 @@
+{
+  "estimated_original_download_cost_usd": 0.294231325388,
+  "additional_paid_data_request_for_v1_1": false,
+  "rows": 80594,
+  "min_datetime_et": "2026-05-31 20:00:00",
+  "max_datetime_et": "2026-08-20 13:39:00",
+  "duplicate_timestamps": 0,
+  "ohlc_consistency_violations": 0,
+  "expected_aug_rth_dates": 13,
+  "observed_aug_rth_dates": 13,
+  "missing_aug_rth_dates": [],
+  "median_aug_rth_bars": 390.0,
+  "min_aug_rth_bars": 390,
+  "price_min": 27201.5,
+  "price_max": 30968.0,
+  "plausible_nq_scale": true,
+  "adjacent_minute_jump_gt250_count": 1,
+  "adjacent_minute_jump_times_et": [
+    "2026-06-16 20:00:00"
+  ],
+  "roll_mapping_intervals": [
+    {
+      "d0": "2026-06-12",
+      "d1": "2026-06-17",
+      "s": "42004058"
+    },
+    {
+      "d0": "2026-06-17",
+      "d1": "2026-06-21",
+      "s": "42004177"
+    }
+  ],
+  "roll_raw_symbols": {
+    "42004058": [
+      {
+        "d0": "2026-06-12",
+        "d1": "2026-06-17",
+        "s": "NQM6"
+      }
+    ],
+    "42004177": [
+      {
+        "d0": "2026-06-17",
+        "d1": "2026-06-21",
+        "s": "NQU6"
+      }
+    ]
+  },
+  "all_large_jumps_exactly_verified_roll_boundaries": true,
+  "confirmatory_aug3_19_large_jump_count": 0,
+  "pass": true
+}

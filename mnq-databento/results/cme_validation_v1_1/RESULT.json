@@ -1,0 +1,416 @@
+{
+  "status": "CME_AUGUST_CONFIRMATORY_NO_GO",
+  "protocol": "PROTOCOL_CME_VALIDATION_V1_1_ROLL_QA_AMENDMENT",
+  "external_repo": "https://github.com/s-k-28/nq-es-trader-5k-payout.git",
+  "external_commit": "d472d6b442764c2adafbba4bbeb96881c100e3e0",
+  "official_data": "Databento GLBX.MDP3 NQ.v.0 ohlcv-1m",
+  "original_download_estimated_cost_usd": 0.294231325388,
+  "additional_paid_cost_v1_1_usd": 0.0,
+  "data_qa": {
+    "estimated_original_download_cost_usd": 0.294231325388,
+    "additional_paid_data_request_for_v1_1": false,
+    "rows": 80594,
+    "min_datetime_et": "2026-05-31 20:00:00",
+    "max_datetime_et": "2026-08-20 13:39:00",
+    "duplicate_timestamps": 0,
+    "ohlc_consistency_violations": 0,
+    "expected_aug_rth_dates": 13,
+    "observed_aug_rth_dates": 13,
+    "missing_aug_rth_dates": [],
+    "median_aug_rth_bars": 390.0,
+    "min_aug_rth_bars": 390,
+    "price_min": 27201.5,
+    "price_max": 30968.0,
+    "plausible_nq_scale": true,
+    "adjacent_minute_jump_gt250_count": 1,
+    "adjacent_minute_jump_times_et": [
+      "2026-06-16 20:00:00"
+    ],
+    "roll_mapping_intervals": [
+      {
+        "d0": "2026-06-12",
+        "d1": "2026-06-17",
+        "s": "42004058"
+      },
+      {
+        "d0": "2026-06-17",
+        "d1": "2026-06-21",
+        "s": "42004177"
+      }
+    ],
+    "roll_raw_symbols": {
+      "42004058": [
+        {
+          "d0": "2026-06-12",
+          "d1": "2026-06-17",
+          "s": "NQM6"
+        }
+      ],
+      "42004177": [
+        {
+          "d0": "2026-06-17",
+          "d1": "2026-06-21",
+          "s": "NQU6"
+        }
+      ]
+    },
+    "all_large_jumps_exactly_verified_roll_boundaries": true,
+    "confirmatory_aug3_19_large_jump_count": 0,
+    "pass": true
+  },
+  "evaluation_start": "2026-08-03 00:00:00",
+  "evaluation_end": "2026-08-19 23:59:59",
+  "observed_august_rth_days": 13,
+  "trades_per_day": 3.6153846153846154,
+  "scenarios": {
+    "PRIMARY": {
+      "full": {
+        "n": 47,
+        "mean": 0.1188638833464934,
+        "sum": 5.58660251728519,
+        "pf": 1.2413281791009263,
+        "win_rate": 0.40425531914893614,
+        "max_dd": 5.090274268265677,
+        "losing_streak": 4
+      },
+      "by_half": {
+        "Aug03_11": {
+          "n": 18,
+          "mean": 0.11005955519771776,
+          "sum": 1.9810719935589198,
+          "pf": 1.2010395700233247,
+          "win_rate": 0.3888888888888889,
+          "max_dd": 4.319476247436773,
+          "losing_streak": 4
+        },
+        "Aug12_19": {
+          "n": 29,
+          "mean": 0.12432863874918171,
+          "sum": 3.6055305237262694,
+          "pf": 1.2711891650498968,
+          "win_rate": 0.41379310344827586,
+          "max_dd": 5.090274268265677,
+          "losing_streak": 4
+        }
+      },
+      "by_model": {
+        "ema_rev": {
+          "n": 2,
+          "mean": 0.1460005947071067,
+          "sum": 0.2920011894142134,
+          "pf": 1.2723805561334165,
+          "win_rate": 0.5,
+          "max_dd": 1.0720338983050848,
+          "losing_streak": 1
+        },
+        "kalman_mom": {
+          "n": 4,
+          "mean": 0.04716237491373365,
+          "sum": 0.1886494996549346,
+          "pf": 1.0825897177581159,
+          "win_rate": 0.25,
+          "max_dd": 2.2841765873015873,
+          "losing_streak": 3
+        },
+        "or_rev": {
+          "n": 5,
+          "mean": 1.2950563369630974,
+          "sum": 6.475281684815487,
+          "pf": 7.033194180229691,
+          "win_rate": 0.8,
+          "max_dd": 1.0732758620689653,
+          "losing_streak": 1
+        },
+        "ou_lunch": {
+          "n": 6,
+          "mean": -0.4297232247850404,
+          "sum": -2.578339348710242,
+          "pf": 0.41776382845158744,
+          "win_rate": 0.16666666666666666,
+          "max_dd": 2.578339348710242,
+          "losing_streak": 3
+        },
+        "ou_rev": {
+          "n": 10,
+          "mean": -0.35561337841355,
+          "sum": -3.5561337841355,
+          "pf": 0.4630637071396121,
+          "win_rate": 0.2,
+          "max_dd": 5.062624168750886,
+          "losing_streak": 4
+        },
+        "pm_mom": {
+          "n": 6,
+          "mean": 0.19211894313154224,
+          "sum": 1.1527136587892535,
+          "pf": 1.5197623328559087,
+          "win_rate": 0.5,
+          "max_dd": 2.217770673098803,
+          "losing_streak": 3
+        },
+        "sweep": {
+          "n": 1,
+          "mean": -1.0537974683544302,
+          "sum": -1.0537974683544302,
+          "pf": 0.0,
+          "win_rate": 0.0,
+          "max_dd": 1.0537974683544302,
+          "losing_streak": 1
+        },
+        "trend": {
+          "n": 9,
+          "mean": 0.2449865922562344,
+          "sum": 2.2048793303061096,
+          "pf": 1.5117563103500624,
+          "win_rate": 0.4444444444444444,
+          "max_dd": 3.1843285946579307,
+          "losing_streak": 3
+        },
+        "vwap_rev": {
+          "n": 2,
+          "mean": 0.9189664502164503,
+          "sum": 1.8379329004329006,
+          "pf": 1e+99,
+          "win_rate": 1.0,
+          "max_dd": 0.0,
+          "losing_streak": 0
+        },
+        "vwap_scalp": {
+          "n": 2,
+          "mean": 0.3117074275362319,
+          "sum": 0.6234148550724637,
+          "pf": 8.040920716112534,
+          "win_rate": 0.5,
+          "max_dd": 0.08854166666666663,
+          "losing_streak": 1
+        }
+      },
+      "by_direction": {
+        "long": {
+          "n": 41,
+          "mean": 0.14351591414838571,
+          "sum": 5.884152480083815,
+          "pf": 1.3124894502406441,
+          "win_rate": 0.4146341463414634,
+          "max_dd": 5.090274268265677,
+          "losing_streak": 4
+        },
+        "short": {
+          "n": 6,
+          "mean": -0.049591660466437405,
+          "sum": -0.29754996279862445,
+          "pf": 0.9311143421670175,
+          "win_rate": 0.3333333333333333,
+          "max_dd": 4.319476247436773,
+          "losing_streak": 4
+        }
+      },
+      "remove_best_10pct_mean": -0.17127433519417107,
+      "removed_best_n": 5
+    },
+    "STRESS": {
+      "full": {
+        "n": 47,
+        "mean": 0.04541182422385784,
+        "sum": 2.1343557385213185,
+        "pf": 1.0847896407540567,
+        "win_rate": 0.40425531914893614,
+        "max_dd": 6.0843647267310885,
+        "losing_streak": 4
+      },
+      "by_half": {
+        "Aug03_11": {
+          "n": 18,
+          "mean": 0.03791124085652515,
+          "sum": 0.6824023354174527,
+          "pf": 1.0640270263347067,
+          "win_rate": 0.3888888888888889,
+          "max_dd": 4.744016322941873,
+          "losing_streak": 4
+        },
+        "Aug12_19": {
+          "n": 29,
+          "mean": 0.05006735872771956,
+          "sum": 1.4519534031038672,
+          "pf": 1.100035863381029,
+          "win_rate": 0.41379310344827586,
+          "max_dd": 6.0843647267310885,
+          "losing_streak": 4
+        }
+      },
+      "by_model": {
+        "ema_rev": {
+          "n": 2,
+          "mean": 0.0770145703241153,
+          "sum": 0.1540291406482306,
+          "pf": 1.1351333724646187,
+          "win_rate": 0.5,
+          "max_dd": 1.1398305084745763,
+          "losing_streak": 1
+        },
+        "kalman_mom": {
+          "n": 4,
+          "mean": -0.04144183488612824,
+          "sum": -0.16576733954451295,
+          "pf": 0.9350349027970416,
+          "win_rate": 0.25,
+          "max_dd": 2.5516369047619047,
+          "losing_streak": 3
+        },
+        "or_rev": {
+          "n": 5,
+          "mean": 1.2229752722323048,
+          "sum": 6.114876361161524,
+          "pf": 6.35340119165839,
+          "win_rate": 0.8,
+          "max_dd": 1.1422413793103452,
+          "losing_streak": 1
+        },
+        "ou_lunch": {
+          "n": 6,
+          "mean": -0.5090349229784473,
+          "sum": -3.054209537870684,
+          "pf": 0.3678524787506331,
+          "win_rate": 0.16666666666666666,
+          "max_dd": 3.054209537870684,
+          "losing_streak": 3
+        },
+        "ou_rev": {
+          "n": 10,
+          "mean": -0.427249499273362,
+          "sum": -4.27249499273362,
+          "pf": 0.4073691602678318,
+          "win_rate": 0.2,
+          "max_dd": 5.667446915810543,
+          "losing_streak": 4
+        },
+        "pm_mom": {
+          "n": 6,
+          "mean": 0.1144888598835088,
+          "sum": 0.6869331593010528,
+          "pf": 1.2835366668308208,
+          "win_rate": 0.5,
+          "max_dd": 2.4227313066035587,
+          "losing_streak": 3
+        },
+        "sweep": {
+          "n": 1,
+          "mean": -1.1044303797468353,
+          "sum": -1.1044303797468353,
+          "pf": 0.0,
+          "win_rate": 0.0,
+          "max_dd": 1.1044303797468353,
+          "losing_streak": 1
+        },
+        "trend": {
+          "n": 9,
+          "mean": 0.18561206811338327,
+          "sum": 1.6705086130204494,
+          "pf": 1.3632514362489823,
+          "win_rate": 0.4444444444444444,
+          "max_dd": 3.3578143308065718,
+          "losing_streak": 3
+        },
+        "vwap_rev": {
+          "n": 2,
+          "mean": 0.8258928571428572,
+          "sum": 1.6517857142857144,
+          "pf": 1e+99,
+          "win_rate": 1.0,
+          "max_dd": 0.0,
+          "losing_streak": 0
+        },
+        "vwap_scalp": {
+          "n": 2,
+          "mean": 0.22656250000000003,
+          "sum": 0.45312500000000006,
+          "pf": 3.6363636363636376,
+          "win_rate": 0.5,
+          "max_dd": 0.17187499999999994,
+          "losing_streak": 1
+        }
+      },
+      "by_direction": {
+        "long": {
+          "n": 41,
+          "mean": 0.06985068053611743,
+          "sum": 2.8638779019808145,
+          "pf": 1.1393465055157947,
+          "win_rate": 0.4146341463414634,
+          "max_dd": 6.08436472673109,
+          "losing_streak": 4
+        },
+        "short": {
+          "n": 6,
+          "mean": -0.12158702724324932,
+          "sum": -0.7295221634594959,
+          "pf": 0.842100230495051,
+          "win_rate": 0.3333333333333333,
+          "max_dd": 4.62015977443609,
+          "losing_streak": 4
+        }
+      }
+    }
+  },
+  "jun_jul_diagnostic_only": {
+    "n": 127,
+    "PRIMARY": {
+      "n": 127,
+      "mean": 0.099451979410781,
+      "sum": 12.630401385169188,
+      "pf": 1.2009924788986788,
+      "win_rate": 0.3464566929133858,
+      "max_dd": 11.343560758176677,
+      "losing_streak": 8
+    },
+    "STRESS": {
+      "n": 127,
+      "mean": 0.022687704330156093,
+      "sum": 2.881338449929824,
+      "pf": 1.0415909735754358,
+      "win_rate": 0.3464566929133858,
+      "max_dd": 15.277061826440876,
+      "losing_streak": 8
+    },
+    "by_month_primary": {
+      "2026-06": {
+        "n": 55,
+        "mean": -0.010586864038217696,
+        "sum": -0.5822775221019733,
+        "pf": 0.9807068687889169,
+        "win_rate": 0.3090909090909091,
+        "max_dd": 11.255019091510011,
+        "losing_streak": 7
+      },
+      "2026-07": {
+        "n": 72,
+        "mean": 0.183509429267655,
+        "sum": 13.212678907271162,
+        "pf": 1.404557176334244,
+        "win_rate": 0.375,
+        "max_dd": 4.715908118357843,
+        "losing_streak": 6
+      }
+    }
+  },
+  "gates": {
+    "data_qa_pass": true,
+    "n_ge_25": true,
+    "trades_per_day_ge_1_5": true,
+    "primary_mean_ge_0_10R": true,
+    "primary_pf_ge_1_25": false,
+    "aug03_11_positive": true,
+    "aug12_19_positive": true,
+    "primary_max_dd_le_7R": true,
+    "remove_best_10pct_mean_nonnegative": false,
+    "stress_mean_positive": true,
+    "stress_pf_ge_1_10": false
+  },
+  "notes": [
+    "Official Databento CME data is authoritative for the verdict.",
+    "The single Jun16 20:00 ET discontinuity is the verified NQM6->NQU6 unadjusted continuous roll.",
+    "No comparable discontinuity exists in Aug3-Aug19.",
+    "The pinned May31 external strategy is unchanged.",
+    "No model/direction/date rescue is permitted after this result."
+  ]
+}
