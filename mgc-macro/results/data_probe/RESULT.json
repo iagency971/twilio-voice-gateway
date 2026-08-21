@@ -1,0 +1,22 @@
+{
+  "status": "MGC_PUBLIC_DATA_PROBE_ONLY",
+  "external_commit": "d472d6b442764c2adafbba4bbeb96881c100e3e0",
+  "rows": 38060,
+  "columns": [
+    "datetime",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "symbol",
+    "dt"
+  ],
+  "min_datetime": "2026-03-22 22:00:00+00:00",
+  "max_datetime": "2026-05-01 20:59:00+00:00",
+  "unique_dates": 35,
+  "price_min": 4128.5,
+  "price_max": 4914.0,
+  "median_volume": 167.0,
+  "outcomes_opened": false
+}
