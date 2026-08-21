@@ -1,0 +1,10 @@
+{
+  "yahoo_getdata_overlap_days": 0,
+  "yahoo_getdata_overlap_minute_bars": 0,
+  "median_abs_close_diff": null,
+  "pct_close_within_1pt": null,
+  "true_mnq_overlap_days": 0,
+  "median_true_entry_abs_diff": null,
+  "median_true_exit_abs_diff": null,
+  "pass": false
+}

@@ -1,0 +1,1 @@
+MNQ_12MODEL_YAHOO_FAILURE exit_code=1
