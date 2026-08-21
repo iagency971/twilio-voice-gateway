@@ -1,0 +1,66 @@
+name: NQ 2022 Breakout Full OOS V1
+
+on:
+  push:
+    branches: [agent/nq-2022-breakout-full-oos-v1]
+    paths:
+      - 'nq-2022-breakout-full/**'
+      - '.github/workflows/nq-2022-breakout-full-oos-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/nq-2022-breakout-full-oos-v1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas numpy requests
+
+      - name: Checkout pinned external engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone https://github.com/giovannibrusco/nq-intraday-breakout.git /tmp/nq-intraday-breakout
+          cd /tmp/nq-intraday-breakout
+          git checkout c5ed61a8cf61c57e2e612d7c7e080c7ec76c8ce1
+          python -m pip install -e .
+
+      - name: Run frozen independent OOS test
+        shell: bash
+        run: |
+          set +e
+          mkdir -p nq-2022-breakout-full/results/v1
+          python nq-2022-breakout-full/run_full_oos_v1.py 2>&1 | tee nq-2022-breakout-full/results/v1/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > nq-2022-breakout-full/results/v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "NQ_2022_BREAKOUT_FULL_OOS_V1_FAILURE exit_code=$code" > nq-2022-breakout-full/results/v1/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+
+      - name: Print result
+        if: always()
+        run: |
+          if [ -f nq-2022-breakout-full/results/v1/RESULT.json ]; then
+            cat nq-2022-breakout-full/results/v1/RESULT.json
+          fi
+
+      - name: Publish result
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- nq-2022-breakout-full/results/v1
+          git commit -m "Publish NQ 2022 breakout full OOS result [skip ci]" || true
+          git push origin HEAD:agent/nq-2022-breakout-full-oos-v1
