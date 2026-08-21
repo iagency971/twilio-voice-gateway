@@ -1,0 +1,378 @@
+{
+  "status": "EVENT_MANIFEST_V1_FROZEN_NO_MARKET_OUTCOMES",
+  "start": "2021-09-01",
+  "end": "2026-08-19",
+  "rows": 44,
+  "counts": {
+    "FOMC": 40,
+    "NFP": 2,
+    "CPI": 2
+  },
+  "duplicate_event_type_date": 0,
+  "fomc_expected_count": 40,
+  "fomc_actual_count": 40,
+  "bls_scrape_pages": [
+    {
+      "url": "https://www.bls.gov/schedule/2021/01_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/02_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/03_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/04_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/05_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/06_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/07_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/08_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/09_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/10_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/11_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2021/12_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/01_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/02_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/03_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/04_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/05_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/06_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/07_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/08_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/09_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/10_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/11_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2022/12_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/01_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/02_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/03_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/04_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/05_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/06_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/07_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/08_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/09_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/10_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/11_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2023/12_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/01_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/02_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/03_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/04_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/05_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/06_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/07_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/08_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/09_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/10_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/11_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2024/12_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/01_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/02_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/03_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/04_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/05_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/06_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/07_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/08_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/09_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/10_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/11_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2025/12_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/01_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/02_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/03_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/04_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/05_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/06_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/07_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/08_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/09_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/10_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+      "status": 403,
+      "events": 0
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/12_sched_list.htm",
+      "status": 403,
+      "events": 0
+    }
+  ],
+  "lapse_overrides_applied": true,
+  "market_outcomes_opened": false
+}
