@@ -1,0 +1,52 @@
+name: NQ Breakout Short OOS2 V1
+
+on:
+  push:
+    branches: [agent/nq-breakout-short-oos2-v1]
+    paths:
+      - 'nq-breakout-short-oos2/**'
+      - '.github/workflows/nq-breakout-short-oos2-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/nq-breakout-short-oos2-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas numpy requests
+      - name: Run frozen OOS2
+        shell: bash
+        run: |
+          set +e
+          mkdir -p nq-breakout-short-oos2/results/v1
+          python nq-breakout-short-oos2/run_oos2.py 2>&1 | tee nq-breakout-short-oos2/results/v1/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > nq-breakout-short-oos2/results/v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "NQ_BREAKOUT_SHORT_OOS2_V1_FAILURE exit_code=$code" > nq-breakout-short-oos2/results/v1/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+      - name: Print result
+        if: always()
+        run: |
+          if [ -f nq-breakout-short-oos2/results/v1/RESULT.json ]; then
+            cat nq-breakout-short-oos2/results/v1/RESULT.json
+          fi
+      - name: Publish result
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- nq-breakout-short-oos2/results/v1
+          git commit -m "Publish NQ breakout short OOS2 result [skip ci]" || true
+          git push origin HEAD:agent/nq-breakout-short-oos2-v1
