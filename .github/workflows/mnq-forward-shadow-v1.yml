@@ -30,7 +30,7 @@ jobs:
         run: |
           set +e
           mkdir -p mnq-forward-shadow/results
-          python mnq-forward-shadow/run_daily_shadow_v1.py 2>&1 | tee mnq-forward-shadow/results/run.log
+          python mnq-forward-shadow/compat_runner.py 2>&1 | tee mnq-forward-shadow/results/run.log
           code=${PIPESTATUS[0]}
           echo "$code" > mnq-forward-shadow/results/exit_code.txt
           if [ "$code" -ne 0 ]; then echo "MNQ_FORWARD_SHADOW_FAILURE exit_code=$code" > mnq-forward-shadow/results/WORKFLOW_FAILURE.txt; fi
