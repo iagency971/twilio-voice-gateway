@@ -1,0 +1,45 @@
+name: MNQ 12-Model Databento CME Validation V1
+on:
+  push:
+    branches: [agent/mnq-databento-cme-validation-v1]
+    paths:
+      - 'mnq-databento/**'
+      - '.github/workflows/mnq-databento-cme-validation-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/mnq-databento-cme-validation-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas numpy databento matplotlib tabulate python-dotenv ib_insync
+      - name: Run frozen official CME validation
+        shell: bash
+        run: |
+          set +e
+          mkdir -p mnq-databento/results/cme_validation_v1
+          python mnq-databento/run_cme_validation_v1.py 2>&1 | tee mnq-databento/results/cme_validation_v1/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > mnq-databento/results/cme_validation_v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "CME_VALIDATION_WORKFLOW_FAILURE exit_code=$code" > mnq-databento/results/cme_validation_v1/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+      - name: Publish frozen results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- mnq-databento/results/cme_validation_v1
+          git commit -m "Publish official CME validation V1 [skip ci]" || true
+          git push origin HEAD:agent/mnq-databento-cme-validation-v1
