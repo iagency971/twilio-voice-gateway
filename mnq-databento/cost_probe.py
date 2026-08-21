@@ -12,7 +12,7 @@ params={
   'schema':'ohlcv-1m',
   'stype_in':'continuous',
   'start':'2026-06-01T00:00:00Z',
-  'end':'2026-08-21T00:00:00Z',
+  'end':'2026-08-20T17:40:00Z',
 }
 try:
     cost=float(client.metadata.get_cost(**params))
