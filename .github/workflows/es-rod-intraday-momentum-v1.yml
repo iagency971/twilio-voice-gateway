@@ -1,0 +1,37 @@
+name: ES ROD Intraday Momentum V1
+on:
+  push:
+    branches: [agent/es-rod-intraday-momentum-v1]
+    paths: ['es-rod/**','.github/workflows/es-rod-intraday-momentum-v1.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/es-rod-intraday-momentum-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy requests
+      - name: Run frozen test
+        shell: bash
+        run: |
+          set +e
+          mkdir -p es-rod/results/v1
+          python es-rod/run_v1.py 2>&1 | tee es-rod/results/v1/run.log
+          code=${PIPESTATUS[0]}; echo "$code" > es-rod/results/v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then echo "ES_ROD_V1_FAILURE exit_code=$code" > es-rod/results/v1/WORKFLOW_FAILURE.txt; fi
+          exit 0
+      - name: Publish
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- es-rod/results/v1
+          git commit -m "Publish ES rROD result [skip ci]" || true
+          git push origin HEAD:agent/es-rod-intraday-momentum-v1
