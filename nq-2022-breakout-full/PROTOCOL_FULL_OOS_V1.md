@@ -8,7 +8,8 @@ Replicate the externally published NQ opening-range breakout strategy with the a
 
 ## External strategy provenance
 Source: `giovannibrusco/nq-intraday-breakout`.
-The repository states that the rules were written in MultiCharts in early 2022 and were not changed thereafter; its published historical data ends in April 2025.
+Pinned engine commit: `c5ed61a8cf61c57e2e612d7c7e080c7ec76c8ce1` (2026-07-28 audit/rebuild merge).
+The repository states that the rules were written in MultiCharts in early 2022 and were not changed thereafter; its published historical data ends in April 2025. The pinned 2026 repository audit still uses that historical sample and therefore does not include the independent 2026 source opened here.
 
 We use the repository's corrected conventions (`SimFlags()` defaults) and conservative `entry_mode='stop'`, not the more optimistic legacy close-fill convention.
 
