@@ -23,7 +23,7 @@ jobs:
         run: |
           set +e
           mkdir -p fomc-sep/results/v1
-          python fomc-sep/run_v1.py 2>&1 | tee fomc-sep/results/v1/run.log
+          python fomc-sep/compat_runner.py 2>&1 | tee fomc-sep/results/v1/run.log
           code=${PIPESTATUS[0]}; echo "$code" > fomc-sep/results/v1/exit_code.txt
           if [ "$code" -ne 0 ]; then echo "FOMC_SEP_V1_FAILURE exit_code=$code" > fomc-sep/results/v1/WORKFLOW_FAILURE.txt; fi
           exit 0
