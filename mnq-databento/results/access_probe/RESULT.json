@@ -1,0 +1,5 @@
+{
+  "status": "DATABENTO_API_KEY_PRESENT",
+  "secret_value_exposed": false,
+  "note": "This probe records only whether the GitHub Actions secret exists; it never prints or persists the key."
+}
