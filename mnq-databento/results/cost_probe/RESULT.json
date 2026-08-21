@@ -1,0 +1,17 @@
+{
+  "status": "DATABENTO_COST_ESTIMATE_FAILED",
+  "request": {
+    "dataset": "GLBX.MDP3",
+    "symbols": [
+      "NQ.v.0"
+    ],
+    "schema": "ohlcv-1m",
+    "stype_in": "continuous",
+    "start": "2026-06-01T00:00:00Z",
+    "end": "2026-08-21T00:00:00Z"
+  },
+  "error_type": "BentoClientError",
+  "error": "422 dataset_unavailable_range\nPart or all of your request for dataset 'GLBX.MDP3' requires a subscription and/or license to access. Try again with an end time before 2026-08-20T17:47:39.368719000Z.\ndocumentation: https://databento.com/pricing#cme",
+  "data_downloaded": false,
+  "secret_exposed": false
+}
