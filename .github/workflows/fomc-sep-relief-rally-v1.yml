@@ -1,0 +1,37 @@
+name: FOMC SEP Relief Rally V1
+on:
+  push:
+    branches: [agent/fomc-sep-relief-rally-v1]
+    paths: ['fomc-sep/**','.github/workflows/fomc-sep-relief-rally-v1.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/fomc-sep-relief-rally-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy requests
+      - name: Run frozen event test
+        shell: bash
+        run: |
+          set +e
+          mkdir -p fomc-sep/results/v1
+          python fomc-sep/run_v1.py 2>&1 | tee fomc-sep/results/v1/run.log
+          code=${PIPESTATUS[0]}; echo "$code" > fomc-sep/results/v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then echo "FOMC_SEP_V1_FAILURE exit_code=$code" > fomc-sep/results/v1/WORKFLOW_FAILURE.txt; fi
+          exit 0
+      - name: Publish
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- fomc-sep/results/v1
+          git commit -m "Publish FOMC SEP relief rally V1 result [skip ci]" || true
+          git push origin HEAD:agent/fomc-sep-relief-rally-v1
