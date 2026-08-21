@@ -1,0 +1,34 @@
+{
+  "request": {
+    "dataset": "GLBX.MDP3",
+    "symbols": [
+      "NQ.v.0"
+    ],
+    "schema": "ohlcv-1m",
+    "stype_in": "continuous",
+    "start": "2026-06-01T00:00:00Z",
+    "end": "2026-08-20T17:40:00Z"
+  },
+  "estimated_cost_usd": 0.294231325388,
+  "rows": 80594,
+  "min_datetime_et": "2026-05-31 20:00:00",
+  "max_datetime_et": "2026-08-20 13:39:00",
+  "duplicate_timestamps": 0,
+  "ohlc_consistency_violations": 0,
+  "expected_aug_rth_dates": 13,
+  "observed_aug_rth_dates": 13,
+  "missing_aug_rth_dates": [],
+  "median_aug_rth_bars": 390.0,
+  "min_aug_rth_bars": 390,
+  "price_min": 27201.5,
+  "price_max": 30968.0,
+  "plausible_nq_scale": true,
+  "isolated_intraday_jump_gt250pt_count": 1,
+  "isolated_intraday_jump_samples": [
+    {
+      "datetime": "2026-06-16 20:00:00",
+      "close": 30343.25
+    }
+  ],
+  "pass": false
+}

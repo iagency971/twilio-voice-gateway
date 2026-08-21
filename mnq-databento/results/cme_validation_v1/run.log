@@ -1,0 +1,2 @@
+/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/mnq-databento/run_cme_validation_v1.py:240: BentoWarning: The streaming request contained one or more days which have reduced quality: 2026-07-30 (degraded). See: https://databento.com/docs/api-reference-historical/metadata/metadata-get-dataset-condition
+  store = client.timeseries.get_range(**REQUEST)
