@@ -1,4 +1,311 @@
 {
-  "status": "MNQ_12MODEL_YAHOO_V1_INVALID_ABORT",
-  "error": "RuntimeError('External run failed rc=1: Traceback (most recent call last):\\n  File \"/tmp/mnq12yahoo/external/run_multi.py\", line 115, in <module>\\n    main()\\n  File \"/tmp/mnq12yahoo/external/run_multi.py\", line 99, in main\\n    m.df.to_csv(args.csv, index=False)\\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/generic.py\", line 3976, in to_csv\\n    return DataFrameRenderer(formatter).to_csv(\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/io/formats/format.py\", line 1025, in to_csv\\n    csv_formatter.save()\\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/io/formats/csvs.py\", line 251, in save\\n    with get_handle(\\n         ^^^^^^^^^^^\\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/io/common.py\", line 797, in get_handle\\n    check_parent_directory(str(handle))\\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/io/common.py\", line 656, in check_parent_directory\\n    raise OSError(rf\"Cannot save file into a non-existent directory: \\'{parent}\\'\")\\nOSError: Cannot save file into a non-existent directory: \\'mnq-12model-yahoo/results/v1\\'\\n')"
+  "status": "MNQ_12MODEL_YAHOO_V1_DATA_QA_FAIL_NO_ECONOMIC_INTERPRETATION",
+  "external_commit": "d472d6b442764c2adafbba4bbeb96881c100e3e0",
+  "data_qa": {
+    "yahoo_getdata_overlap_days": 0,
+    "yahoo_getdata_overlap_minute_bars": 0,
+    "median_abs_close_diff": null,
+    "pct_close_within_1pt": null,
+    "true_mnq_overlap_days": 0,
+    "median_true_entry_abs_diff": null,
+    "median_true_exit_abs_diff": null,
+    "pass": false
+  },
+  "evaluation_start": "2026-08-03 00:00:00",
+  "evaluation_end": "2026-08-20 23:59:59",
+  "observed_august_rth_days": 14,
+  "scenarios": {
+    "PRIMARY": {
+      "full": {
+        "n": 51,
+        "mean": 0.37646439168141577,
+        "sum": 19.199683975752205,
+        "pf": 2.1334581061350266,
+        "win_rate": 0.5098039215686274,
+        "max_dd": 5.2129740288436395,
+        "losing_streak": 4
+      },
+      "by_half": {
+        "Aug03_11": {
+          "n": 11,
+          "mean": 1.1366088990830234,
+          "sum": 12.502697889913257,
+          "pf": 11.30404279243791,
+          "win_rate": 0.7272727272727273,
+          "max_dd": 1.2133779082409228,
+          "losing_streak": 3
+        },
+        "Aug12_20": {
+          "n": 40,
+          "mean": 0.1674246521459737,
+          "sum": 6.696986085838948,
+          "pf": 1.4258637338183833,
+          "win_rate": 0.45,
+          "max_dd": 5.21297402884365,
+          "losing_streak": 4
+        }
+      },
+      "by_model": {
+        "ema_rev": {
+          "n": 2,
+          "mean": 0.6215435914118412,
+          "sum": 1.2430871828236825,
+          "pf": 16.502028397565937,
+          "win_rate": 0.5,
+          "max_dd": 0.08018867924528306,
+          "losing_streak": 1
+        },
+        "kalman_mom": {
+          "n": 5,
+          "mean": 0.9716641402937988,
+          "sum": 4.858320701468994,
+          "pf": 5.106828183220049,
+          "win_rate": 0.6,
+          "max_dd": 1.088541666666667,
+          "losing_streak": 1
+        },
+        "or_rev": {
+          "n": 5,
+          "mean": 0.8929084702185037,
+          "sum": 4.464542351092518,
+          "pf": 3.079867119384466,
+          "win_rate": 0.6,
+          "max_dd": 2.1465517241379306,
+          "losing_streak": 2
+        },
+        "ou_lunch": {
+          "n": 6,
+          "mean": 0.44779469044473924,
+          "sum": 2.6867681426684356,
+          "pf": 3.185506140069959,
+          "win_rate": 0.5,
+          "max_dd": 1.15608153638814,
+          "losing_streak": 2
+        },
+        "ou_rev": {
+          "n": 12,
+          "mean": 0.09318335076135631,
+          "sum": 1.1182002091362757,
+          "pf": 1.2451730717091158,
+          "win_rate": 0.4166666666666667,
+          "max_dd": 2.8347917867079775,
+          "losing_streak": 3
+        },
+        "pm_mom": {
+          "n": 7,
+          "mean": 0.2546037682563364,
+          "sum": 1.782226377794355,
+          "pf": 1.8173372000803967,
+          "win_rate": 0.5714285714285714,
+          "max_dd": 1.1189334637964774,
+          "losing_streak": 2
+        },
+        "trend": {
+          "n": 8,
+          "mean": 0.09437315737703761,
+          "sum": 0.7549852590163009,
+          "pf": 1.172940589165263,
+          "win_rate": 0.375,
+          "max_dd": 4.365575846944949,
+          "losing_streak": 5
+        },
+        "vwap_rev": {
+          "n": 3,
+          "mean": 0.33257575757575736,
+          "sum": 0.9977272727272721,
+          "pf": 1.9019003595274775,
+          "win_rate": 0.6666666666666666,
+          "max_dd": 1.1062500000000002,
+          "losing_streak": 1
+        },
+        "vwap_scalp": {
+          "n": 3,
+          "mean": 0.43127549300812335,
+          "sum": 1.29382647902437,
+          "pf": 15.91705822875157,
+          "win_rate": 0.6666666666666666,
+          "max_dd": 0.08673469387755095,
+          "losing_streak": 1
+        }
+      },
+      "by_direction": {
+        "long": {
+          "n": 49,
+          "mean": 0.3412525007394668,
+          "sum": 16.721372536233872,
+          "pf": 1.9914392014281503,
+          "win_rate": 0.5102040816326531,
+          "max_dd": 5.139698166774675,
+          "losing_streak": 4
+        },
+        "short": {
+          "n": 2,
+          "mean": 1.239155719759168,
+          "sum": 2.478311439518336,
+          "pf": 34.82166199813258,
+          "win_rate": 0.5,
+          "max_dd": 0.0732758620689653,
+          "losing_streak": 1
+        }
+      },
+      "remove_best_10pct_mean": 0.10356389649749534,
+      "removed_best_n": 6
+    },
+    "STRESS": {
+      "full": {
+        "n": 51,
+        "mean": 0.299592546328503,
+        "sum": 15.279219862753653,
+        "pf": 1.8142835217241229,
+        "win_rate": 0.5098039215686274,
+        "max_dd": 6.188379459677673,
+        "losing_streak": 4
+      },
+      "by_half": {
+        "Aug03_11": {
+          "n": 11,
+          "mean": 1.063073465911782,
+          "sum": 11.693808125029602,
+          "pf": 9.268825911585871,
+          "win_rate": 0.7272727272727273,
+          "max_dd": 1.4142041748206138,
+          "losing_streak": 3
+        },
+        "Aug12_20": {
+          "n": 40,
+          "mean": 0.08963529344310125,
+          "sum": 3.5854117377240504,
+          "pf": 1.2066543487859989,
+          "win_rate": 0.45,
+          "max_dd": 6.188379459677671,
+          "losing_streak": 4
+        }
+      },
+      "by_model": {
+        "ema_rev": {
+          "n": 2,
+          "mean": 0.5493249837345477,
+          "sum": 1.0986499674690955,
+          "pf": 8.057993730407528,
+          "win_rate": 0.5,
+          "max_dd": 0.1556603773584906,
+          "losing_streak": 1
+        },
+        "kalman_mom": {
+          "n": 5,
+          "mean": 0.8857240831115056,
+          "sum": 4.428620415557528,
+          "pf": 4.26785211294022,
+          "win_rate": 0.6,
+          "max_dd": 1.171875,
+          "losing_streak": 1
+        },
+        "or_rev": {
+          "n": 5,
+          "mean": 0.8210611869020884,
+          "sum": 4.105305934510442,
+          "pf": 2.7970395788800424,
+          "win_rate": 0.6,
+          "max_dd": 2.2844827586206904,
+          "losing_streak": 2
+        },
+        "ou_lunch": {
+          "n": 6,
+          "mean": 0.37170161919877276,
+          "sum": 2.2302097151926366,
+          "pf": 2.5431593804813413,
+          "win_rate": 0.5,
+          "max_dd": 1.3029818059299192,
+          "losing_streak": 2
+        },
+        "ou_rev": {
+          "n": 12,
+          "mean": 0.016884295059845143,
+          "sum": 0.20261154071814172,
+          "pf": 1.0398157423667511,
+          "win_rate": 0.4166666666666667,
+          "max_dd": 3.402613250450562,
+          "losing_streak": 3
+        },
+        "pm_mom": {
+          "n": 7,
+          "mean": 0.17890545829395932,
+          "sum": 1.2523382080577152,
+          "pf": 1.5328110089730405,
+          "win_rate": 0.5714285714285714,
+          "max_dd": 1.2308708414872798,
+          "losing_streak": 2
+        },
+        "trend": {
+          "n": 8,
+          "mean": 0.027806481377481318,
+          "sum": 0.22245185101985054,
+          "pf": 1.0472332300164617,
+          "win_rate": 0.375,
+          "max_dd": 4.7096472323049,
+          "losing_streak": 5
+        },
+        "vwap_rev": {
+          "n": 3,
+          "mean": 0.2356060606060605,
+          "sum": 0.7068181818181816,
+          "pf": 1.5859632595383888,
+          "win_rate": 0.6666666666666666,
+          "max_dd": 1.20625,
+          "losing_streak": 1
+        },
+        "vwap_scalp": {
+          "n": 3,
+          "mean": 0.34407134947002055,
+          "sum": 1.0322140484100617,
+          "pf": 7.130725863284005,
+          "win_rate": 0.6666666666666666,
+          "max_dd": 0.16836734693877548,
+          "losing_streak": 1
+        }
+      },
+      "by_direction": {
+        "long": {
+          "n": 49,
+          "mean": 0.26394624497895425,
+          "sum": 12.933366003968759,
+          "pf": 1.6945296077632062,
+          "win_rate": 0.5102040816326531,
+          "max_dd": 6.046138080367326,
+          "losing_streak": 4
+        },
+        "short": {
+          "n": 2,
+          "mean": 1.1729269293924467,
+          "sum": 2.3458538587848934,
+          "pf": 17.492063492063494,
+          "win_rate": 0.5,
+          "max_dd": 0.14224137931034475,
+          "losing_streak": 1
+        }
+      },
+      "remove_best_10pct_mean": 0.026735687105309304,
+      "removed_best_n": 6
+    }
+  },
+  "gates": {
+    "data_qa_pass": false,
+    "n_ge_25": true,
+    "trades_per_day_ge_1_5": true,
+    "primary_mean_ge_0_10R": true,
+    "primary_pf_ge_1_25": true,
+    "aug03_11_positive": true,
+    "aug12_20_positive": true,
+    "primary_max_dd_le_7R": true,
+    "remove_best_10pct_mean_nonnegative": true,
+    "stress_mean_positive": true,
+    "stress_pf_ge_1_10": true
+  },
+  "trades_per_day": 3.642857142857143,
+  "notes": [
+    "August 3-20 outcomes were not used to modify the pinned May-31 ensemble before this run.",
+    "Yahoo is independently parity-gated against late-July GetData and true MNQ ledger before economic interpretation.",
+    "External trade logic is unchanged; only additional friction is subtracted after the fact.",
+    "No post-outcome model/direction/date rescue is permitted on August results."
+  ]
 }

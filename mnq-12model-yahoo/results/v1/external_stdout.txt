@@ -1,19 +1,81 @@
-NQ: 24,465 bars  (2026-07-28 00:09:00 -> 2026-08-20 21:24:00)
+NQ: 24,418 bars  (2026-07-28 00:09:00 -> 2026-08-20 21:27:00)
 Auto-detected history file: /tmp/mnq12yahoo/external/data/Dataset_NQ_1min_2022_2025.csv
 Prepended 0 historical bars for regime warmup
-Combined: 24,465 bars  (2026-07-28 00:09:00 -> 2026-08-20 21:24:00)
+Combined: 24,418 bars  (2026-07-28 00:09:00 -> 2026-08-20 21:27:00)
 Daily bars: 271
 Scanning models...
   ema_rev: 3 signals
   kalman_mom: 10 signals
   or_rev: 7 signals
   ou_lunch: 13 signals
-  ou_rev: 19 signals
+  ou_rev: 22 signals
   pd_rev: 1 signals
   pm_mom: 15 signals
   trend: 19 signals
   vwap_rev: 5 signals
-  vwap_scalp: 9 signals
-  total: 101 signals
+  vwap_scalp: 10 signals
+  total: 105 signals
 Simulating...
-  60 trades
+  58 trades
+Trades -> /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/mnq-12model-yahoo/results/v1/external_trades.csv
+
+=================================================================
+  MULTI-MODEL NQ STRATEGY — BACKTEST RESULTS
+=================================================================
+Metric            Value
+----------------  -------
+Total Trades      58
+Trading Days      18
+Trades/Day        3.2
+Win Rate          51.7%
+Avg Win (R)       1.45
+Avg Loss (R)      -0.61
+Expectancy (R)    0.452
+Profit Factor     2.53
+Total R           26.2
+Max Drawdown (R)  -4.2
+Avg Risk (ticks)  53.5
+Total PnL ($)     $26,237
+
+--- By Model ---
+  ema_rev    2 trades  50% WR  avg +0.69R  total +1.4R
+  kalman_mom    7 trades  57% WR  avg +0.84R  total +5.9R
+  or_rev    6 trades  50% WR  avg +0.80R  total +4.8R
+  ou_lunch    6 trades  50% WR  avg +0.52R  total +3.1R
+  ou_rev   12 trades  42% WR  avg +0.17R  total +2.0R
+  pm_mom    9 trades  67% WR  avg +0.51R  total +4.5R
+  trend     9 trades  44% WR  avg +0.29R  total +2.6R
+  vwap_rev    3 trades  67% WR  avg +0.43R  total +1.3R
+  vwap_scalp    4 trades  50% WR  avg +0.14R  total +0.6R
+
+--- By Setup Type ---
+  ema_rev_long                 2 trades  50% WR  avg +0.69R
+  kalman_mom_long              7 trades  57% WR  avg +0.84R
+  or_rev_long                  6 trades  50% WR  avg +0.80R
+  ou_lunch_long                6 trades  50% WR  avg +0.52R
+  ou_rev_long                 12 trades  42% WR  avg +0.17R
+  pm_mom_long                  9 trades  67% WR  avg +0.51R
+  trend_cont_long              7 trades  43% WR  avg -0.00R
+  trend_cont_short             2 trades  50% WR  avg +1.31R
+  vwap_rev_long                3 trades  67% WR  avg +0.43R
+  vwap_scalp_long              4 trades  50% WR  avg +0.14R
+
+--- By Exit ---
+  stop                 15 trades  avg -1.00R
+  trail                43 trades  avg +0.96R
+
+--- Monthly ---
+  2026-07    +3.1R    7 trades  57% WR
+  2026-08   +23.1R   51 trades  51% WR
+=================================================================
+
+================================================================================
+  TOPSTEP 50K — FUNDED PAYOUT PROJECTION
+  Eval: 20 MNQ | TopStep 50K Express
+  Payout cap: $2K max, ≤50% balance, 5 green days ($150+)
+================================================================================
+
+  --- Per-account funded performance (65 trading days, biweekly payouts) ---
+   MNQ   Surv     Avg$     Med$     P75$     P90$   AvgN
+
+Funded projection skipped: 'survived_pct'
