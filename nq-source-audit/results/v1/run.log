@@ -1,0 +1,38 @@
+{
+  "status": "GETDATA_FUTURES_PARITY_FAIL",
+  "source_integrity": {
+    "getdata_sha_current": "232fbc18375e6475dbe3b99e6e1504da69c58a962aa7a358b14f4e2b61cf229d",
+    "getdata_sha_expected_from_original_test": "232fbc18375e6475dbe3b99e6e1504da69c58a962aa7a358b14f4e2b61cf229d",
+    "getdata_same_snapshot": true,
+    "getdata_bytes": 3256589,
+    "true_mnq_trade_log_sha": "84baa0cf35e989f866d4a231600fbc6d0e7e6d94dbc9a6885d38ea8542f9575f",
+    "true_mnq_trade_log_bytes": 239211
+  },
+  "coverage": {
+    "getdata_days": 41,
+    "true_mnq_days": 39,
+    "overlap_days": 39,
+    "start": "2026-06-01",
+    "end": "2026-07-27"
+  },
+  "price_parity": {
+    "median_abs_entry_diff": 0.25,
+    "median_abs_exit_diff": 0.25,
+    "entry_within_0_5pt": 0.8974358974358975,
+    "entry_within_1pt": 0.9743589743589743,
+    "entry_within_2pt": 0.9743589743589743,
+    "exit_within_0_5pt": 0.8461538461538461,
+    "exit_within_1pt": 0.9230769230769231,
+    "exit_within_2pt": 0.9743589743589743,
+    "median_signed_entry_diff": -0.25,
+    "median_signed_exit_diff": 0.0,
+    "p95_abs_entry_diff": 0.75,
+    "p95_abs_exit_diff": 1.5250000000000004
+  },
+  "direction_parity": {
+    "agreement": 0.9743589743589743,
+    "matches": 38,
+    "mismatches": 1
+  },
+  "interpretation": "Price parity is insufficient for futures validation; do not use GetData as a holdout source."
+}
