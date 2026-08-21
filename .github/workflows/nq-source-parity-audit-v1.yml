@@ -1,0 +1,36 @@
+name: NQ Source Parity Audit V1
+on:
+  push:
+    branches: [agent/nq-source-parity-audit-v1]
+    paths: ['nq-source-audit/**','.github/workflows/nq-source-parity-audit-v1.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/nq-source-parity-audit-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy requests
+      - name: Run audit
+        shell: bash
+        run: |
+          set +e
+          mkdir -p nq-source-audit/results/v1
+          python nq-source-audit/run_v1.py 2>&1 | tee nq-source-audit/results/v1/run.log
+          code=${PIPESTATUS[0]}; echo "$code" > nq-source-audit/results/v1/exit_code.txt
+          exit 0
+      - name: Publish
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- nq-source-audit/results/v1
+          git commit -m "Publish NQ source parity audit V1 [skip ci]" || true
+          git push origin HEAD:agent/nq-source-parity-audit-v1
