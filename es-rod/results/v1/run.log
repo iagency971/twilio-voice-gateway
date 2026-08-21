@@ -1,0 +1,120 @@
+{
+  "status": "ES_ROD_INTRADAY_MOMENTUM_V1_NO_GO",
+  "results": {
+    "PRIMARY": {
+      "full": {
+        "n": 59,
+        "mean": -1.3838983050847464,
+        "sum": -81.65000000000003,
+        "pf": 0.755392450569203,
+        "win_rate": 0.4406779661016949,
+        "max_dd": 131.59999999999997,
+        "losing_streak": 8
+      },
+      "monthly": {
+        "2026-01": {
+          "n": 8,
+          "mean": -7.0375000000000005,
+          "sum": -56.300000000000004,
+          "pf": 0.11268715524034673,
+          "win_rate": 0.125,
+          "max_dd": 63.10000000000001,
+          "losing_streak": 6
+        },
+        "2026-02": {
+          "n": 19,
+          "mean": 0.28157894736842054,
+          "sum": 5.349999999999991,
+          "pf": 1.0606232294617564,
+          "win_rate": 0.47368421052631576,
+          "max_dd": 24.700000000000003,
+          "losing_streak": 2
+        },
+        "2026-03": {
+          "n": 22,
+          "mean": -1.4295454545454553,
+          "sum": -31.450000000000017,
+          "pf": 0.7496019108280255,
+          "win_rate": 0.5,
+          "max_dd": 44.35000000000001,
+          "losing_streak": 3
+        },
+        "2026-04": {
+          "n": 10,
+          "mean": 0.07499999999999885,
+          "sum": 0.7499999999999885,
+          "pf": 1.0132743362831858,
+          "win_rate": 0.5,
+          "max_dd": 42.4,
+          "losing_streak": 2
+        }
+      },
+      "round_turn_cost_usd": 30.0
+    },
+    "STRESS": {
+      "full": {
+        "n": 59,
+        "mean": -1.8838983050847458,
+        "sum": -111.15,
+        "pf": 0.6827005423922352,
+        "win_rate": 0.4406779661016949,
+        "max_dd": 157.09999999999988,
+        "losing_streak": 8
+      },
+      "monthly": {
+        "2026-01": {
+          "n": 8,
+          "mean": -7.5375000000000005,
+          "sum": -60.300000000000004,
+          "pf": 0.09932785660941001,
+          "win_rate": 0.125,
+          "max_dd": 66.10000000000001,
+          "losing_streak": 6
+        },
+        "2026-02": {
+          "n": 19,
+          "mean": -0.21842105263157943,
+          "sum": -4.150000000000009,
+          "pf": 0.9554959785522787,
+          "win_rate": 0.47368421052631576,
+          "max_dd": 28.2,
+          "losing_streak": 2
+        },
+        "2026-03": {
+          "n": 22,
+          "mean": -1.9295454545454553,
+          "sum": -42.45000000000002,
+          "pf": 0.6762013729977118,
+          "win_rate": 0.5,
+          "max_dd": 52.350000000000016,
+          "losing_streak": 3
+        },
+        "2026-04": {
+          "n": 10,
+          "mean": -0.42500000000000115,
+          "sum": -4.2500000000000115,
+          "pf": 0.927966101694915,
+          "win_rate": 0.5,
+          "max_dd": 44.400000000000006,
+          "losing_streak": 2
+        }
+      },
+      "round_turn_cost_usd": 55.0
+    }
+  },
+  "positive_feb_mar_apr": 2,
+  "gates": {
+    "n_ge45": true,
+    "mean_positive": false,
+    "pf_ge1_15": false,
+    "positive_feb_mar_apr_ge2": true,
+    "max_dd_le100pts": false,
+    "win_rate_ge52pct": false,
+    "stress_mean_positive": false,
+    "stress_pf_ge1_05": false
+  },
+  "notes": [
+    "Final rROD-family test; no gamma/news/volatility rescue filters permitted after result.",
+    "Direct ES source only; no CFD proxy."
+  ]
+}
