@@ -1,0 +1,59 @@
+name: MNQ Forward Shadow Daily Schedule
+
+on:
+  schedule:
+    # Weekdays after the US cash close. 23:30 UTC = 19:30 ET during EDT
+    # and 18:30 ET during EST, leaving ample time for the completed RTH session
+    # to be available from the zero-cost Yahoo proxy.
+    - cron: '30 23 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mnq-forward-shadow-v1
+  cancel-in-progress: false
+
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout frozen forward branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/mnq-12model-forward-shadow-v1
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install
+        run: python -m pip install --upgrade pip pandas numpy yfinance matplotlib tabulate python-dotenv ib_insync
+
+      - name: Run zero-cost frozen shadow
+        shell: bash
+        run: |
+          set +e
+          mkdir -p mnq-forward-shadow/results
+          python mnq-forward-shadow/compat_runner.py 2>&1 | tee mnq-forward-shadow/results/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > mnq-forward-shadow/results/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "MNQ_FORWARD_SHADOW_FAILURE exit_code=$code" > mnq-forward-shadow/results/WORKFLOW_FAILURE.txt
+          else
+            rm -f mnq-forward-shadow/results/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+
+      - name: Publish ledger and summary to frozen forward branch
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- mnq-forward-shadow/results
+          git commit -m "Update prospective MNQ shadow ledger [skip ci]" || true
+          git push origin HEAD:agent/mnq-12model-forward-shadow-v1
