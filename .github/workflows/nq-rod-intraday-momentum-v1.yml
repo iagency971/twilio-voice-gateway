@@ -1,0 +1,48 @@
+name: NQ ROD Intraday Momentum V1
+
+on:
+  push:
+    branches: [agent/nq-rod-intraday-momentum-v1]
+    paths:
+      - 'nq-rod/**'
+      - '.github/workflows/nq-rod-intraday-momentum-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/nq-rod-intraday-momentum-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install --upgrade pip pandas numpy requests
+      - name: Run frozen rROD test
+        shell: bash
+        run: |
+          set +e
+          mkdir -p nq-rod/results/v1
+          python nq-rod/run_v1.py 2>&1 | tee nq-rod/results/v1/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > nq-rod/results/v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then echo "NQ_ROD_V1_FAILURE exit_code=$code" > nq-rod/results/v1/WORKFLOW_FAILURE.txt; fi
+          exit 0
+      - name: Print result
+        if: always()
+        run: |
+          if [ -f nq-rod/results/v1/RESULT.json ]; then cat nq-rod/results/v1/RESULT.json; fi
+      - name: Publish result
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- nq-rod/results/v1
+          git commit -m "Publish NQ rROD intraday momentum V1 result [skip ci]" || true
+          git push origin HEAD:agent/nq-rod-intraday-momentum-v1
