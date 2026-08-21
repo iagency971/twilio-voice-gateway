@@ -1,0 +1,27 @@
+name: MNQ Databento Access Probe
+on:
+  push:
+    branches: [agent/mnq-databento-cme-validation-v1]
+    paths: ['mnq-databento/access_probe.py','.github/workflows/mnq-databento-access-probe.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: agent/mnq-databento-cme-validation-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python mnq-databento/access_probe.py
+      - name: Publish probe status only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- mnq-databento/results/access_probe/RESULT.json
+          git commit -m "Publish Databento access probe [skip ci]" || true
+          git push origin HEAD:agent/mnq-databento-cme-validation-v1
