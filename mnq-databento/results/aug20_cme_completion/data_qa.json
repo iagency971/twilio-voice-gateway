@@ -1,0 +1,13 @@
+{
+  "status": "AUG20_CME_DATA_COMPLETION_QA",
+  "estimated_incremental_cost_usd": 0.000511109829,
+  "tail_rows": 140,
+  "tail_min_datetime_et": "2026-08-20 13:40:00",
+  "tail_max_datetime_et": "2026-08-20 15:59:00",
+  "aug20_rth_rows_after_merge": 390,
+  "aug20_rth_first": "2026-08-20 09:30:00",
+  "aug20_rth_last": "2026-08-20 15:59:00",
+  "duplicates_after_merge": 0,
+  "ohlc_violations_aug20": 0,
+  "pass": true
+}

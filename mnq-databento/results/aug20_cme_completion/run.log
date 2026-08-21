@@ -1,0 +1,152 @@
+{
+  "status": "CME_AUG20_DIAGNOSTIC_REMEASUREMENT_COMPLETE",
+  "classification": "POST_CONFIRMATORY_DIAGNOSTIC_ONLY_DOES_NOT_CHANGE_AUG3_19_NO_GO",
+  "external_repo": "https://github.com/s-k-28/nq-es-trader-5k-payout.git",
+  "external_commit": "d472d6b442764c2adafbba4bbeb96881c100e3e0",
+  "official_data": "Databento GLBX.MDP3 NQ.v.0 ohlcv-1m",
+  "incremental_request": {
+    "dataset": "GLBX.MDP3",
+    "symbols": [
+      "NQ.v.0"
+    ],
+    "schema": "ohlcv-1m",
+    "stype_in": "continuous",
+    "start": "2026-08-20T17:40:00Z",
+    "end": "2026-08-20T20:00:00Z"
+  },
+  "incremental_cost_usd": 0.000511109829,
+  "data_qa": {
+    "status": "AUG20_CME_DATA_COMPLETION_QA",
+    "estimated_incremental_cost_usd": 0.000511109829,
+    "tail_rows": 140,
+    "tail_min_datetime_et": "2026-08-20 13:40:00",
+    "tail_max_datetime_et": "2026-08-20 15:59:00",
+    "aug20_rth_rows_after_merge": 390,
+    "aug20_rth_first": "2026-08-20 09:30:00",
+    "aug20_rth_last": "2026-08-20 15:59:00",
+    "duplicates_after_merge": 0,
+    "ohlc_violations_aug20": 0,
+    "pass": true
+  },
+  "PRIMARY": {
+    "n": 8,
+    "mean": -0.2995224465880574,
+    "sum": -2.396179572704459,
+    "pf": 0.46656485729017944,
+    "win_rate": 0.25,
+    "max_dd": 3.712217308553516,
+    "losing_streak": 4
+  },
+  "STRESS": {
+    "n": 8,
+    "mean": -0.37874107820584313,
+    "sum": -3.029928625646745,
+    "pf": 0.3885131524303849,
+    "win_rate": 0.25,
+    "max_dd": 4.270494663382594,
+    "losing_streak": 4
+  },
+  "trades": [
+    {
+      "entry_time": "2026-08-20 10:51:00",
+      "exit_time": "2026-08-20 10:53:00",
+      "direction": "long",
+      "model": "pd_rev",
+      "tag": "pd_pdl_long",
+      "reason": "trail",
+      "risk_ticks": 53.0,
+      "total_r": 1.3915094339622642,
+      "primary_r": 1.3160377358490567,
+      "stress_r": 1.2405660377358492
+    },
+    {
+      "entry_time": "2026-08-20 11:25:00",
+      "exit_time": "2026-08-20 11:25:00",
+      "direction": "long",
+      "model": "or_rev",
+      "tag": "or_rev_long",
+      "reason": "stop",
+      "risk_ticks": 55.0,
+      "total_r": -1.0045454545454546,
+      "primary_r": -1.0772727272727274,
+      "stress_r": -1.1500000000000001
+    },
+    {
+      "entry_time": "2026-08-20 11:37:00",
+      "exit_time": "2026-08-20 11:38:00",
+      "direction": "long",
+      "model": "ou_lunch",
+      "tag": "ou_lunch_long",
+      "reason": "trail",
+      "risk_ticks": 58.0,
+      "total_r": -0.0043103448275862,
+      "primary_r": -0.07327586206896551,
+      "stress_r": -0.1422413793103448
+    },
+    {
+      "entry_time": "2026-08-20 12:16:00",
+      "exit_time": "2026-08-20 12:18:00",
+      "direction": "long",
+      "model": "ou_lunch",
+      "tag": "ou_lunch_long",
+      "reason": "trail",
+      "risk_ticks": 42.0,
+      "total_r": 0.875,
+      "primary_r": 0.7797619047619048,
+      "stress_r": 0.6845238095238095
+    },
+    {
+      "entry_time": "2026-08-20 13:51:00",
+      "exit_time": "2026-08-20 13:54:00",
+      "direction": "long",
+      "model": "pm_mom",
+      "tag": "pm_mom_long",
+      "reason": "stop",
+      "risk_ticks": 70.0,
+      "total_r": -1.0035714285714286,
+      "primary_r": -1.0607142857142857,
+      "stress_r": -1.1178571428571429
+    },
+    {
+      "entry_time": "2026-08-20 14:05:00",
+      "exit_time": "2026-08-20 14:05:00",
+      "direction": "long",
+      "model": "vwap_rev",
+      "tag": "vwap_rev_long",
+      "reason": "stop",
+      "risk_ticks": 42.0,
+      "total_r": -1.005952380952381,
+      "primary_r": -1.1011904761904763,
+      "stress_r": -1.1964285714285714
+    },
+    {
+      "entry_time": "2026-08-20 14:16:00",
+      "exit_time": "2026-08-20 14:18:00",
+      "direction": "short",
+      "model": "trend",
+      "tag": "trend_cont_short",
+      "reason": "trail",
+      "risk_ticks": 58.0,
+      "total_r": -0.0043103448275862,
+      "primary_r": -0.07327586206896551,
+      "stress_r": -0.1422413793103448
+    },
+    {
+      "entry_time": "2026-08-20 14:27:00",
+      "exit_time": "2026-08-20 14:29:00",
+      "direction": "short",
+      "model": "trend",
+      "tag": "trend_cont_short",
+      "reason": "stop",
+      "risk_ticks": 40.0,
+      "total_r": -1.00625,
+      "primary_r": -1.1062500000000002,
+      "stress_r": -1.20625
+    }
+  ],
+  "notes": [
+    "Aug20 was already observed on Yahoo before this CME completion, so this is diagnostic remeasurement, not new forward evidence.",
+    "No model, direction, threshold, stop, target, time window, or weighting was changed.",
+    "The prior CME Aug3-Aug19 confirmatory NO_GO remains unchanged."
+  ]
+}
