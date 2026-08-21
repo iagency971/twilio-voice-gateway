@@ -1,0 +1,58 @@
+{
+  "status": "MGC_WINDOW_SAMPLE_COST_ESTIMATE_OK",
+  "sample_windows": [
+    {
+      "type": "MACRO",
+      "date": "2022-03-10",
+      "minutes": 20.0,
+      "cost_usd": 7.301569e-05,
+      "cost_per_minute": 3.6507845e-06
+    },
+    {
+      "type": "FOMC",
+      "date": "2022-03-16",
+      "minutes": 25.0,
+      "cost_usd": 9.1269612e-05,
+      "cost_per_minute": 3.6507844800000003e-06
+    },
+    {
+      "type": "MACRO",
+      "date": "2024-03-12",
+      "minutes": 20.0,
+      "cost_usd": 7.301569e-05,
+      "cost_per_minute": 3.6507845e-06
+    },
+    {
+      "type": "FOMC",
+      "date": "2024-03-20",
+      "minutes": 25.0,
+      "cost_usd": 9.1269612e-05,
+      "cost_per_minute": 3.6507844800000003e-06
+    },
+    {
+      "type": "MACRO",
+      "date": "2026-03-11",
+      "minutes": 20.0,
+      "cost_usd": 7.301569e-05,
+      "cost_per_minute": 3.6507845e-06
+    },
+    {
+      "type": "FOMC",
+      "date": "2026-03-18",
+      "minutes": 25.0,
+      "cost_usd": 9.1269612e-05,
+      "cost_per_minute": 3.6507844800000003e-06
+    }
+  ],
+  "weighted_cost_per_minute_usd": 3.650784488888889e-06,
+  "frozen_event_counts": {
+    "FOMC": 40,
+    "CPI_NFP": 118
+  },
+  "estimated_requested_minutes": 3360,
+  "extrapolated_total_cost_usd": 0.012266635882666667,
+  "full_range_estimate_usd": 6.254315897822,
+  "data_downloaded": false,
+  "secret_exposed": false,
+  "note": "Runtime downloader must exact-cost all frozen windows before any paid time-series request and abort if user-authorized cap would be exceeded."
+}
