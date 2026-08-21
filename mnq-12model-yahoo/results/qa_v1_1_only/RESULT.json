@@ -1,0 +1,19 @@
+{
+  "mode": "V1.1 bridged QA only on exact archived Yahoo snapshot",
+  "overlap_days": 4,
+  "overlap_bars": 1560,
+  "median_abs_close_diff": 0.0,
+  "pct_close_within_1pt": 0.9243589743589744,
+  "median_max_ohlc_abs_diff": 0.5,
+  "pct_max_ohlc_within_2pt": 0.9384615384615385,
+  "prior_bridge_true_mnq": {
+    "overlap_days": 39,
+    "median_entry_diff": 0.25,
+    "median_exit_diff": 0.25,
+    "entry_within1": 0.9743589744,
+    "exit_within2": 0.9743589744,
+    "direction_agreement": 0.9743589744,
+    "known_anomaly": "2026-06-16"
+  },
+  "pass": false
+}
