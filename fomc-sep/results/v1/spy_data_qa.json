@@ -1,0 +1,20 @@
+{
+  "url": "https://raw.githubusercontent.com/BrianWeiss1/StockList/main/5min_data_SPY_2015_to_2024.csv",
+  "sha256": "f4e3812aef3f868fe7473348fbdac6dddc39a8a6e43b620da4366c9db22e14f5",
+  "bytes": 27826562,
+  "columns": [
+    "Unnamed: 0",
+    "Open",
+    "High",
+    "Low",
+    "Close",
+    "Volume"
+  ],
+  "tz_mode": "naive_assumed_ET_after_anchor_QA",
+  "rows": 436252,
+  "min": "2015-01-05 04:00:00",
+  "max": "2024-04-30 20:00:00",
+  "total_days": 2327,
+  "days_with_0930_and_1555": 2326,
+  "anchor_fraction": 0.9995702621400946
+}

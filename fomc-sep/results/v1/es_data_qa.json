@@ -1,0 +1,8 @@
+{
+  "url": "https://raw.githubusercontent.com/axb0306/cme-futures-ohlc/main/ES/ES_1min_20260120_20260415.csv",
+  "sha256": "e24e9a02d5e69e075b48965eb83e14f0a49c5355c298362a468af067f160ccfb",
+  "bytes": 4540566,
+  "rows": 83924,
+  "min": "2026-01-20 10:58:00-05:00",
+  "max": "2026-04-15 19:29:00-04:00"
+}
