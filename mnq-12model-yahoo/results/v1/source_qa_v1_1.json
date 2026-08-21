@@ -1,0 +1,20 @@
+{
+  "mode": "bridged_recent_price_parity_v1_1",
+  "yahoo_getdata_overlap_days": 4,
+  "yahoo_getdata_overlap_minute_bars": 1560,
+  "median_abs_close_diff": 0.0,
+  "pct_close_within_1pt": 0.9243589743589744,
+  "median_max_ohlc_abs_diff": 0.5,
+  "pct_max_ohlc_within_2pt": 0.9384615384615385,
+  "bridge_prior_true_mnq_evidence": {
+    "overlap_days": 39,
+    "median_abs_entry_diff": 0.25,
+    "median_abs_exit_diff": 0.25,
+    "pct_entries_within_1pt": 0.9743589743589743,
+    "pct_exits_within_1pt": 0.9230769230769231,
+    "pct_exits_within_2pt": 0.9743589743589743,
+    "direction_agreement": 0.9743589743589743,
+    "known_anomaly": "2026-06-16"
+  },
+  "pass": false
+}
