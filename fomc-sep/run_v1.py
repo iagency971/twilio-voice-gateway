@@ -45,6 +45,8 @@ def normalize_spy(raw: bytes, out: Path) -> pd.DataFrame:
         d["__dt__"]=d[lk["date"]].astype(str)+" "+d[lk["time"]].astype(str); dt="__dt__"
     elif dt is not None and str(dt).strip().lower()=="date" and "time" in lk:
         d["__dt__"]=d[dt].astype(str)+" "+d[lk["time"]].astype(str); dt="__dt__"
+    if dt is None and len(d.columns) > 0 and str(d.columns[0]).strip().lower().startswith("unnamed"):
+        dt=d.columns[0]
     if dt is None:
         raise RuntimeError(f"SPY datetime column unresolved. columns={orig}")
 
@@ -56,7 +58,6 @@ def normalize_spy(raw: bytes, out: Path) -> pd.DataFrame:
 
     oo,hh,ll,cc=[col(k) for k in ["open","high","low","close"]]
     ts=pd.to_datetime(d[dt],errors="coerce")
-    # If parsed strings carry UTC/offset, normalize to NY. Otherwise retain wall-clock and treat as ET after session QA.
     if isinstance(ts.dtype, pd.DatetimeTZDtype):
         ts=ts.dt.tz_convert(TZ).dt.tz_localize(None)
         tz_mode="aware_converted_to_ET"
@@ -64,7 +65,6 @@ def normalize_spy(raw: bytes, out: Path) -> pd.DataFrame:
         tz_mode="naive_assumed_ET_after_anchor_QA"
     z=pd.DataFrame({"dt":ts,"open":pd.to_numeric(d[oo],errors="coerce"),"high":pd.to_numeric(d[hh],errors="coerce"),"low":pd.to_numeric(d[ll],errors="coerce"),"close":pd.to_numeric(d[cc],errors="coerce")}).dropna().sort_values("dt").drop_duplicates("dt",keep="last")
     z["date"]=z.dt.dt.normalize(); z["minute"]=z.dt.dt.hour*60+z.dt.dt.minute
-    # QA: regular-session 5m anchors must overwhelmingly exist around 09:30 and 15:55.
     counts=z[z.minute.isin([570,955])].groupby("date").minute.nunique()
     anchor_days=int((counts>=2).sum()); total_days=int(z.date.nunique())
     qa={"url":SPY_URL,"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"columns":orig,"tz_mode":tz_mode,"rows":int(len(z)),"min":str(z.dt.min()),"max":str(z.dt.max()),"total_days":total_days,"days_with_0930_and_1555":anchor_days,"anchor_fraction":anchor_days/max(total_days,1)}
