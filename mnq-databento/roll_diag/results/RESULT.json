@@ -1,0 +1,52 @@
+{
+  "status": "FREE_SYMBOLOGY_ROLL_DIAGNOSTIC",
+  "data_timeseries_requested": false,
+  "additional_paid_data_cost_usd": 0.0,
+  "continuous_mapping_status": 0,
+  "continuous_mapping_message": "OK",
+  "continuous_mapping_intervals": [
+    {
+      "d0": "2026-06-12",
+      "d1": "2026-06-17",
+      "s": "42004058"
+    },
+    {
+      "d0": "2026-06-17",
+      "d1": "2026-06-21",
+      "s": "42004177"
+    }
+  ],
+  "instrument_id_to_raw_symbol": {
+    "42004058": [
+      {
+        "d0": "2026-06-12",
+        "d1": "2026-06-17",
+        "s": "NQM6"
+      }
+    ],
+    "42004177": [
+      {
+        "d0": "2026-06-17",
+        "d1": "2026-06-21",
+        "s": "NQU6"
+      }
+    ]
+  },
+  "large_intraday_jumps": [
+    {
+      "prev_datetime_et": "2026-06-16 19:59:00",
+      "datetime_et": "2026-06-16 20:00:00",
+      "datetime_utc": "2026-06-17 00:00:00+00:00",
+      "utc_date": "2026-06-17",
+      "prev_close": 30012.75,
+      "current_open": 30330.5,
+      "current_close": 30343.25,
+      "prevclose_to_open_gap_points": 317.75,
+      "prevclose_to_close_gap_points": 330.5,
+      "coincides_with_mapping_start_date": true
+    }
+  ],
+  "large_jump_count": 1,
+  "all_large_jumps_coincide_with_mapping_change": true,
+  "confirmatory_aug3_19_large_jump_count": 0
+}
