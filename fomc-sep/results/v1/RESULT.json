@@ -1,4 +1,163 @@
 {
-  "status": "FOMC_SEP_RELIEF_RALLY_V1_INVALID_ABORT",
-  "error": "ValueError('Out of range float values are not JSON compliant: inf')"
+  "status": "FOMC_SEP_RELIEF_RALLY_V1_NO_GO_OR_INCONCLUSIVE",
+  "spy": {
+    "PRIMARY": {
+      "metrics": {
+        "n": 16,
+        "mean": 0.0009517701238431335,
+        "median": 0.001364506047341596,
+        "sum": 0.015228321981490135,
+        "pf": 1.4702011387175937,
+        "win_rate": 0.625
+      },
+      "annual": {
+        "2020": {
+          "n": 3,
+          "mean": 5.1877118687867204e-05,
+          "median": 0.0007383050390352477,
+          "sum": 0.0001556313560636016,
+          "pf": 1.0604773921433348,
+          "win_rate": 0.6666666666666666
+        },
+        "2021": {
+          "n": 4,
+          "mean": 0.0028653863895062364,
+          "median": 0.0037588433093483703,
+          "sum": 0.011461545558024946,
+          "pf": 3.1610792035396065,
+          "win_rate": 0.75
+        },
+        "2022": {
+          "n": 4,
+          "mean": -0.0030011777634154297,
+          "median": 0.0003476274496191701,
+          "sum": -0.012004711053661719,
+          "pf": 0.3481705634937676,
+          "win_rate": 0.5
+        },
+        "2023": {
+          "n": 4,
+          "mean": 0.002247014166429534,
+          "median": 0.001318490310583265,
+          "sum": 0.008988056665718136,
+          "pf": 2.475175789181365,
+          "win_rate": 0.5
+        },
+        "2024": {
+          "n": 1,
+          "mean": 0.006627799455345174,
+          "median": 0.006627799455345174,
+          "sum": 0.006627799455345174,
+          "pf": 1e+99,
+          "win_rate": 1.0
+        }
+      },
+      "missing_events": [
+        "2024-06-12",
+        "2024-09-18",
+        "2024-12-18"
+      ],
+      "remove_best_2_mean": -0.0003273363545739982,
+      "best_2": [
+        0.009247480176001166,
+        0.010563550769524954
+      ]
+    },
+    "STRESS": {
+      "metrics": {
+        "n": 16,
+        "mean": 0.0006517701238431332,
+        "median": 0.0010645060473415961,
+        "sum": 0.010428321981490131,
+        "pf": 1.3034416253562295,
+        "win_rate": 0.5625
+      },
+      "annual": {
+        "2020": {
+          "n": 3,
+          "mean": -0.00024812288131213274,
+          "median": 0.00043830503903524764,
+          "sum": -0.0007443686439363982,
+          "pf": 0.7409432610403025,
+          "win_rate": 0.6666666666666666
+        },
+        "2021": {
+          "n": 4,
+          "mean": 0.0025653863895062357,
+          "median": 0.0034588433093483695,
+          "sum": 0.010261545558024943,
+          "pf": 2.774245601591727,
+          "win_rate": 0.5
+        },
+        "2022": {
+          "n": 4,
+          "mean": -0.00330117776341543,
+          "median": 4.762744961917019e-05,
+          "sum": -0.01320471105366172,
+          "pf": 0.30563470582376584,
+          "win_rate": 0.5
+        },
+        "2023": {
+          "n": 4,
+          "mean": 0.0019470141664295337,
+          "median": 0.0010184903105832646,
+          "sum": 0.007788056665718135,
+          "pf": 2.1636345555791183,
+          "win_rate": 0.5
+        },
+        "2024": {
+          "n": 1,
+          "mean": 0.006327799455345173,
+          "median": 0.006327799455345173,
+          "sum": 0.006327799455345173,
+          "pf": 1e+99,
+          "win_rate": 1.0
+        }
+      },
+      "missing_events": [
+        "2024-06-12",
+        "2024-09-18",
+        "2024-12-18"
+      ],
+      "remove_best_2_mean": -0.0006273363545739993,
+      "best_2": [
+        0.008947480176001166,
+        0.010263550769524954
+      ]
+    }
+  },
+  "spy_positive_years": 4,
+  "es_2026_03_18_spotcheck": {
+    "PRIMARY": {
+      "present": true,
+      "entry": 6728.25,
+      "exit": 6698.25,
+      "gross_points": -30.0,
+      "net_points": -30.6,
+      "net_usd": -1530.0
+    },
+    "STRESS": {
+      "present": true,
+      "entry": 6728.25,
+      "exit": 6698.25,
+      "gross_points": -30.0,
+      "net_points": -31.1,
+      "net_usd": -1555.0
+    }
+  },
+  "gates": {
+    "events_present_ge18": false,
+    "primary_mean_gt10bps": false,
+    "primary_pf_ge1_30": true,
+    "positive_years_ge4_of5": true,
+    "median_positive": true,
+    "stress_mean_positive": true,
+    "stress_pf_ge1_10": true,
+    "remove_best2_mean_nonnegative": false
+  },
+  "notes": [
+    "Rules/dates frozen before calculation.",
+    "SPY 2020-2024 is the primary post-publication persistence test; the single ES 2026 event is descriptive only.",
+    "No rescue filter permitted on these opened events."
+  ]
 }
