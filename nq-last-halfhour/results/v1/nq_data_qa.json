@@ -1,0 +1,10 @@
+{
+  "url": "https://raw.githubusercontent.com/getdata-finance/nq-1m-ohlcv-stocks-historical-data/main/NQ_1m.csv",
+  "sha256": "232fbc18375e6475dbe3b99e6e1504da69c58a962aa7a358b14f4e2b61cf229d",
+  "bytes": 3256589,
+  "rows_rth": 50080,
+  "min": "2026-02-02 09:30:00-05:00",
+  "max": "2026-07-31 15:59:00-04:00",
+  "days": 129,
+  "duplicates": 0
+}
