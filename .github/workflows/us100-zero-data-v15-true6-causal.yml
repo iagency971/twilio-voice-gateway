@@ -1,0 +1,51 @@
+name: US100 Zero-Data True Six Causal V15
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us100-zero-data-v15-true6-causal
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ftmo-zero-data-us100-research-v1
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy requests matplotlib tabulate python-dotenv
+      - name: Run frozen V15 true-six causal rerun
+        shell: bash
+        run: |
+          set +e
+          mkdir -p us100-zero-data/results/v15_true6_causal_rerun
+          python us100-zero-data/run_v15_true6_causal_rerun.py 2>&1 | tee us100-zero-data/results/v15_true6_causal_rerun/RUN_LOG.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" > us100-zero-data/results/v15_true6_causal_rerun/EXIT_CODE.txt
+          if [ "$code" -ne 0 ]; then
+            echo "V15_FAILURE exit_code=$code" > us100-zero-data/results/v15_true6_causal_rerun/WORKFLOW_FAILURE.txt
+          else
+            rm -f us100-zero-data/results/v15_true6_causal_rerun/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+      - name: Publish V15 result
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- us100-zero-data/results/v15_true6_causal_rerun
+          git commit -m "Publish V15 true-six causal rerun results [skip ci]" || true
+          git pull --rebase origin agent/ftmo-zero-data-us100-research-v1 || true
+          git push origin HEAD:agent/ftmo-zero-data-us100-research-v1
