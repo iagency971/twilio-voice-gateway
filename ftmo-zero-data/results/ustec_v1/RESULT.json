@@ -1,0 +1,1171 @@
+{
+  "status": "USTEC_V1_DEV_VALIDATION_COMPLETE_2025_UNOPENED",
+  "hard_constraint": "ZERO_PAID_EXTERNAL_DATA_REQUIRED_LIVE",
+  "data_source": "Public GitHub CSV; repository identifies OHLC source as IC Markets USTEC M1",
+  "partitions": {
+    "DEV": "2021-2023",
+    "VALIDATION": "2024",
+    "OOS_2025": "SEALED_NOT_DOWNLOADED"
+  },
+  "data_qa": {
+    "2021": {
+      "year": 2021,
+      "rows": 351668,
+      "first": "2021-01-04 01:00:00",
+      "last": "2021-12-30 23:59:00",
+      "duplicates": 0,
+      "bad_ohlc": 0,
+      "spread_mean": 2.0,
+      "spread_median": 2.0,
+      "spread_p95": 2.0,
+      "open_anchor_days": 257
+    },
+    "2022": {
+      "year": 2022,
+      "rows": 353966,
+      "first": "2022-01-03 01:00:00",
+      "last": "2022-12-30 23:59:00",
+      "duplicates": 0,
+      "bad_ohlc": 0,
+      "spread_mean": 2.0,
+      "spread_median": 2.0,
+      "spread_p95": 2.0,
+      "open_anchor_days": 258
+    },
+    "2023": {
+      "year": 2023,
+      "rows": 352344,
+      "first": "2023-01-03 01:00:00",
+      "last": "2023-12-29 23:59:00",
+      "duplicates": 0,
+      "bad_ohlc": 0,
+      "spread_mean": 2.0,
+      "spread_median": 2.0,
+      "spread_p95": 2.0,
+      "open_anchor_days": 257
+    },
+    "2024": {
+      "year": 2024,
+      "rows": 353522,
+      "first": "2024-01-02 01:00:00",
+      "last": "2024-12-30 23:59:00",
+      "duplicates": 0,
+      "bad_ohlc": 0,
+      "spread_mean": 2.0,
+      "spread_median": 2.0,
+      "spread_p95": 2.0,
+      "open_anchor_days": 258
+    }
+  },
+  "candidate_count": 16,
+  "dev_results": {
+    "CONT_OR15_RR1.0_BUF00": {
+      "primary": {
+        "n": 771,
+        "mean": 0.025848881726151754,
+        "sum": 19.929487810863,
+        "pf": 1.0583105959590744,
+        "win_rate": 0.5188067444876784,
+        "max_dd": 21.09671930822251
+      },
+      "stress": {
+        "n": 771,
+        "mean": -0.008993435764102485,
+        "sum": -6.933938974123016,
+        "pf": 0.9804025052363167,
+        "win_rate": 0.5045395590142672,
+        "max_dd": 35.39607209509095
+      },
+      "yearly": {
+        "2021": {
+          "n": 256,
+          "mean": 0.1266441291954605,
+          "sum": 32.42089707403789,
+          "pf": 1.3346325737694498,
+          "win_rate": 0.5859375,
+          "max_dd": 5.341249894398942
+        },
+        "2022": {
+          "n": 258,
+          "mean": 0.0030966033429106776,
+          "sum": 0.7989236624709548,
+          "pf": 1.006610312812291,
+          "win_rate": 0.49224806201550386,
+          "max_dd": 14.490484844476581
+        },
+        "2023": {
+          "n": 257,
+          "mean": -0.051713357687337876,
+          "sum": -13.290332925645835,
+          "pf": 0.8928512912422898,
+          "win_rate": 0.4785992217898833,
+          "max_dd": 19.74787584970668
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.051713357687337876,
+      "remove_best10_mean": -0.08379583288475756,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "CONT",
+        "orb_min": 15,
+        "rr": 1.0,
+        "buffer_frac": 0.0,
+        "fail_bars": 5
+      },
+      "name": "CONT_OR15_RR1.0_BUF00",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "CONT_OR15_RR1.0_BUF05": {
+      "primary": {
+        "n": 770,
+        "mean": 0.013128239202969532,
+        "sum": 10.10874418628654,
+        "pf": 1.029704331208695,
+        "win_rate": 0.5116883116883116,
+        "max_dd": 22.443192055961788
+      },
+      "stress": {
+        "n": 770,
+        "mean": -0.01841857485461945,
+        "sum": -14.182302638056978,
+        "pf": 0.9595531544989809,
+        "win_rate": 0.5,
+        "max_dd": 35.812407942997915
+      },
+      "yearly": {
+        "2021": {
+          "n": 256,
+          "mean": 0.10869829170008075,
+          "sum": 27.82676267522067,
+          "pf": 1.2873127432998825,
+          "win_rate": 0.578125,
+          "max_dd": 6.92822151224705
+        },
+        "2022": {
+          "n": 258,
+          "mean": -0.0066189541598399475,
+          "sum": -1.7076901732387064,
+          "pf": 0.9858068167172342,
+          "win_rate": 0.49224806201550386,
+          "max_dd": 18.170135397331208
+        },
+        "2023": {
+          "n": 256,
+          "mean": -0.06254034498318525,
+          "sum": -16.010328315695425,
+          "pf": 0.8699855425616568,
+          "win_rate": 0.46484375,
+          "max_dd": 22.44319205596179
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.06254034498318525,
+      "remove_best10_mean": -0.09652417866336714,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "CONT",
+        "orb_min": 15,
+        "rr": 1.0,
+        "buffer_frac": 0.05,
+        "fail_bars": 5
+      },
+      "name": "CONT_OR15_RR1.0_BUF05",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "CONT_OR15_RR1.5_BUF00": {
+      "primary": {
+        "n": 771,
+        "mean": 0.051775124654336625,
+        "sum": 39.91862110849354,
+        "pf": 1.1056963363294352,
+        "win_rate": 0.4604409857328145,
+        "max_dd": 17.902131387234945
+      },
+      "stress": {
+        "n": 771,
+        "mean": 0.02669439801541298,
+        "sum": 20.581380869883407,
+        "pf": 1.053806913191343,
+        "win_rate": 0.45395590142671854,
+        "max_dd": 19.268774903413554
+      },
+      "yearly": {
+        "2021": {
+          "n": 256,
+          "mean": 0.13951996298770522,
+          "sum": 35.71711052485254,
+          "pf": 1.3270479208995507,
+          "win_rate": 0.5234375,
+          "max_dd": 6.177180023975376
+        },
+        "2022": {
+          "n": 258,
+          "mean": 0.026542180516658624,
+          "sum": 6.847882573297925,
+          "pf": 1.051072097903508,
+          "win_rate": 0.43410852713178294,
+          "max_dd": 16.024338444157657
+        },
+        "2023": {
+          "n": 257,
+          "mean": -0.010297167274929686,
+          "sum": -2.646371989656929,
+          "pf": 0.9803067157637798,
+          "win_rate": 0.42412451361867703,
+          "max_dd": 17.90213138723496
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.010297167274929686,
+      "remove_best10_mean": -0.11122854096898561,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": true,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_m0_05": true,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": true,
+        "stress_pf_ge_1_05": true
+      },
+      "candidate": {
+        "family": "CONT",
+        "orb_min": 15,
+        "rr": 1.5,
+        "buffer_frac": 0.0,
+        "fail_bars": 5
+      },
+      "name": "CONT_OR15_RR1.5_BUF00",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "CONT_OR15_RR1.5_BUF05": {
+      "primary": {
+        "n": 770,
+        "mean": 0.04836192867166571,
+        "sum": 37.238685077182595,
+        "pf": 1.1007056429803306,
+        "win_rate": 0.461038961038961,
+        "max_dd": 17.34714586038183
+      },
+      "stress": {
+        "n": 770,
+        "mean": 0.024677145892168448,
+        "sum": 19.001402336969704,
+        "pf": 1.0507289007707297,
+        "win_rate": 0.45584415584415583,
+        "max_dd": 19.472145223534007
+      },
+      "yearly": {
+        "2021": {
+          "n": 256,
+          "mean": 0.14816437147712413,
+          "sum": 37.93007909814378,
+          "pf": 1.3577444122506324,
+          "win_rate": 0.53125,
+          "max_dd": 6.551064823537474
+        },
+        "2022": {
+          "n": 258,
+          "mean": 0.04073378725583869,
+          "sum": 10.509317112006382,
+          "pf": 1.0816541314928263,
+          "win_rate": 0.4496124031007752,
+          "max_dd": 16.28178461984918
+        },
+        "2023": {
+          "n": 256,
+          "mean": -0.04375277786315456,
+          "sum": -11.200711132967568,
+          "pf": 0.9170604197225051,
+          "win_rate": 0.40234375,
+          "max_dd": 17.34714586038183
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.04375277786315456,
+      "remove_best10_mean": -0.11293119036481662,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_m0_05": true,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": true,
+        "stress_pf_ge_1_05": true
+      },
+      "candidate": {
+        "family": "CONT",
+        "orb_min": 15,
+        "rr": 1.5,
+        "buffer_frac": 0.05,
+        "fail_bars": 5
+      },
+      "name": "CONT_OR15_RR1.5_BUF05",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "CONT_OR30_RR1.0_BUF00": {
+      "primary": {
+        "n": 740,
+        "mean": 0.043457544897005325,
+        "sum": 32.15858322378394,
+        "pf": 1.1136689856829174,
+        "win_rate": 0.5310810810810811,
+        "max_dd": 11.207811418559324
+      },
+      "stress": {
+        "n": 740,
+        "mean": 0.011874767539938536,
+        "sum": 8.787327979554517,
+        "pf": 1.0301046974056545,
+        "win_rate": 0.5175675675675676,
+        "max_dd": 13.070785733524723
+      },
+      "yearly": {
+        "2021": {
+          "n": 244,
+          "mean": 0.035749180986384764,
+          "sum": 8.722800160677883,
+          "pf": 1.0943186635323843,
+          "win_rate": 0.5327868852459017,
+          "max_dd": 11.207811418559324
+        },
+        "2022": {
+          "n": 246,
+          "mean": 0.06606166520141327,
+          "sum": 16.251169639547662,
+          "pf": 1.176229012948368,
+          "win_rate": 0.540650406504065,
+          "max_dd": 9.934177322115751
+        },
+        "2023": {
+          "n": 250,
+          "mean": 0.028738453694233602,
+          "sum": 7.1846134235584005,
+          "pf": 1.0731512339140046,
+          "win_rate": 0.52,
+          "max_dd": 10.152328558672584
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.028738453694233602,
+      "remove_best10_mean": -0.06282495011443856,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_m0_05": true,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": true,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "CONT",
+        "orb_min": 30,
+        "rr": 1.0,
+        "buffer_frac": 0.0,
+        "fail_bars": 5
+      },
+      "name": "CONT_OR30_RR1.0_BUF00",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "CONT_OR30_RR1.0_BUF05": {
+      "primary": {
+        "n": 727,
+        "mean": 0.0456766412452692,
+        "sum": 33.206918185310705,
+        "pf": 1.1228689369890608,
+        "win_rate": 0.5378266850068776,
+        "max_dd": 10.543654253719456
+      },
+      "stress": {
+        "n": 727,
+        "mean": 0.022261404457846225,
+        "sum": 16.184041040854204,
+        "pf": 1.0586289943341407,
+        "win_rate": 0.530949105914718,
+        "max_dd": 11.049135953888563
+      },
+      "yearly": {
+        "2021": {
+          "n": 237,
+          "mean": 0.03582668265227656,
+          "sum": 8.490923788589544,
+          "pf": 1.0971856304171763,
+          "win_rate": 0.5358649789029536,
+          "max_dd": 9.793797807642932
+        },
+        "2022": {
+          "n": 243,
+          "mean": 0.07462678862471407,
+          "sum": 18.13430963580552,
+          "pf": 1.2044533173027543,
+          "win_rate": 0.551440329218107,
+          "max_dd": 7.8334151588994
+        },
+        "2023": {
+          "n": 247,
+          "mean": 0.02664649700775567,
+          "sum": 6.581684760915651,
+          "pf": 1.069870565365685,
+          "win_rate": 0.5263157894736842,
+          "max_dd": 10.543654253719456
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.02664649700775567,
+      "remove_best10_mean": -0.060845690848148844,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_m0_05": true,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": true,
+        "stress_pf_ge_1_05": true
+      },
+      "candidate": {
+        "family": "CONT",
+        "orb_min": 30,
+        "rr": 1.0,
+        "buffer_frac": 0.05,
+        "fail_bars": 5
+      },
+      "name": "CONT_OR30_RR1.0_BUF05",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "CONT_OR30_RR1.5_BUF00": {
+      "primary": {
+        "n": 740,
+        "mean": 0.05610309211996588,
+        "sum": 41.51628816877475,
+        "pf": 1.1381139581207942,
+        "win_rate": 0.4972972972972973,
+        "max_dd": 10.706600937198127
+      },
+      "stress": {
+        "n": 740,
+        "mean": 0.023478301631282728,
+        "sum": 17.373943207149217,
+        "pf": 1.056808968150042,
+        "win_rate": 0.4891891891891892,
+        "max_dd": 11.497121232668256
+      },
+      "yearly": {
+        "2021": {
+          "n": 244,
+          "mean": 0.060959901794569955,
+          "sum": 14.874216037875069,
+          "pf": 1.158556587101819,
+          "win_rate": 0.5081967213114754,
+          "max_dd": 8.236461387081379
+        },
+        "2022": {
+          "n": 246,
+          "mean": 0.040270480126264364,
+          "sum": 9.906538111061034,
+          "pf": 1.0959138858099442,
+          "win_rate": 0.491869918699187,
+          "max_dd": 10.706600937198125
+        },
+        "2023": {
+          "n": 250,
+          "mean": 0.06694213607935458,
+          "sum": 16.735534019838646,
+          "pf": 1.1616982549321109,
+          "win_rate": 0.492,
+          "max_dd": 8.909387120549663
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.040270480126264364,
+      "remove_best10_mean": -0.10432989764448272,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": true,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_m0_05": true,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": true,
+        "stress_pf_ge_1_05": true
+      },
+      "candidate": {
+        "family": "CONT",
+        "orb_min": 30,
+        "rr": 1.5,
+        "buffer_frac": 0.0,
+        "fail_bars": 5
+      },
+      "name": "CONT_OR30_RR1.5_BUF00",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "CONT_OR30_RR1.5_BUF05": {
+      "primary": {
+        "n": 727,
+        "mean": 0.07218238274711074,
+        "sum": 52.476592257149505,
+        "pf": 1.1863448762922855,
+        "win_rate": 0.5144429160935351,
+        "max_dd": 9.0122765318727
+      },
+      "stress": {
+        "n": 727,
+        "mean": 0.039375100402698246,
+        "sum": 28.625697992761626,
+        "pf": 1.0998848834797257,
+        "win_rate": 0.5089408528198074,
+        "max_dd": 9.761604232989097
+      },
+      "yearly": {
+        "2021": {
+          "n": 237,
+          "mean": 0.0721767586627654,
+          "sum": 17.1058918030754,
+          "pf": 1.1945976256008894,
+          "win_rate": 0.5232067510548524,
+          "max_dd": 7.841379089175872
+        },
+        "2022": {
+          "n": 243,
+          "mean": 0.06971591695478387,
+          "sum": 16.940967820012478,
+          "pf": 1.1768115412523381,
+          "win_rate": 0.5185185185185185,
+          "max_dd": 8.280253316179492
+        },
+        "2023": {
+          "n": 247,
+          "mean": 0.07461430216219286,
+          "sum": 18.429732634061637,
+          "pf": 1.1882650976003013,
+          "win_rate": 0.5020242914979757,
+          "max_dd": 9.012276531872697
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.06971591695478387,
+      "remove_best10_mean": -0.08719175495848727,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": true,
+        "pf_ge_1_15": true,
+        "maxdd_le_15": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_m0_05": true,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": true,
+        "stress_pf_ge_1_05": true
+      },
+      "candidate": {
+        "family": "CONT",
+        "orb_min": 30,
+        "rr": 1.5,
+        "buffer_frac": 0.05,
+        "fail_bars": 5
+      },
+      "name": "CONT_OR30_RR1.5_BUF05",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "FAIL_OR15_RR1.0_BUF00": {
+      "primary": {
+        "n": 414,
+        "mean": -0.0821256038647343,
+        "sum": -34.0,
+        "pf": 0.8482142857142857,
+        "win_rate": 0.45893719806763283,
+        "max_dd": 36.0
+      },
+      "stress": {
+        "n": 414,
+        "mean": -0.18198170865899788,
+        "sum": -75.34042738482512,
+        "pf": 0.6938294172159722,
+        "win_rate": 0.4227053140096618,
+        "max_dd": 77.27152565072113
+      },
+      "yearly": {
+        "2021": {
+          "n": 138,
+          "mean": -0.11594202898550725,
+          "sum": -16.0,
+          "pf": 0.7922077922077922,
+          "win_rate": 0.4420289855072464,
+          "max_dd": 21.0
+        },
+        "2022": {
+          "n": 130,
+          "mean": -0.015384615384615385,
+          "sum": -2.0,
+          "pf": 0.9696969696969697,
+          "win_rate": 0.49230769230769234,
+          "max_dd": 12.0
+        },
+        "2023": {
+          "n": 146,
+          "mean": -0.1095890410958904,
+          "sum": -16.0,
+          "pf": 0.8024691358024691,
+          "win_rate": 0.4452054794520548,
+          "max_dd": 17.0
+        }
+      },
+      "positive_years": 0,
+      "worst_year_mean": -0.11594202898550725,
+      "remove_best10_mean": -0.20430107526881722,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "FAIL",
+        "orb_min": 15,
+        "rr": 1.0,
+        "buffer_frac": 0.0,
+        "fail_bars": 5
+      },
+      "name": "FAIL_OR15_RR1.0_BUF00",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "FAIL_OR15_RR1.0_BUF05": {
+      "primary": {
+        "n": 343,
+        "mean": 0.0029154518950437317,
+        "sum": 1.0,
+        "pf": 1.0058479532163742,
+        "win_rate": 0.5014577259475219,
+        "max_dd": 16.0
+      },
+      "stress": {
+        "n": 343,
+        "mean": -0.08585026031650463,
+        "sum": -29.446639288561087,
+        "pf": 0.8423588956338175,
+        "win_rate": 0.46938775510204084,
+        "max_dd": 30.417737554457066
+      },
+      "yearly": {
+        "2021": {
+          "n": 109,
+          "mean": -0.027522935779816515,
+          "sum": -3.0,
+          "pf": 0.9464285714285714,
+          "win_rate": 0.48623853211009177,
+          "max_dd": 10.0
+        },
+        "2022": {
+          "n": 113,
+          "mean": 0.13274336283185842,
+          "sum": 15.0,
+          "pf": 1.3061224489795917,
+          "win_rate": 0.5663716814159292,
+          "max_dd": 4.0
+        },
+        "2023": {
+          "n": 121,
+          "mean": -0.09090909090909091,
+          "sum": -11.0,
+          "pf": 0.8333333333333334,
+          "win_rate": 0.45454545454545453,
+          "max_dd": 16.0
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.09090909090909091,
+      "remove_best10_mean": -0.11038961038961038,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "FAIL",
+        "orb_min": 15,
+        "rr": 1.0,
+        "buffer_frac": 0.05,
+        "fail_bars": 5
+      },
+      "name": "FAIL_OR15_RR1.0_BUF05",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "FAIL_OR15_RR1.5_BUF00": {
+      "primary": {
+        "n": 414,
+        "mean": -0.08816425120773072,
+        "sum": -36.50000000000052,
+        "pf": 0.8612167300380209,
+        "win_rate": 0.3647342995169082,
+        "max_dd": 39.50000000000052
+      },
+      "stress": {
+        "n": 414,
+        "mean": -0.2129406707587049,
+        "sum": -88.15743769410383,
+        "pf": 0.69282999292706,
+        "win_rate": 0.32608695652173914,
+        "max_dd": 88.5885359599998
+      },
+      "yearly": {
+        "2021": {
+          "n": 138,
+          "mean": -0.11231884057970984,
+          "sum": -15.499999999999957,
+          "pf": 0.8258426966292142,
+          "win_rate": 0.35507246376811596,
+          "max_dd": 19.99999999999987
+        },
+        "2022": {
+          "n": 130,
+          "mean": 0.038461538461538936,
+          "sum": 5.000000000000061,
+          "pf": 1.065789473684211,
+          "win_rate": 0.4153846153846154,
+          "max_dd": 11.000000000000082
+        },
+        "2023": {
+          "n": 146,
+          "mean": -0.17808219178082624,
+          "sum": -26.00000000000063,
+          "pf": 0.734693877551014,
+          "win_rate": 0.3287671232876712,
+          "max_dd": 28.0000000000005
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.17808219178082624,
+      "remove_best10_mean": -0.2674731182795747,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "FAIL",
+        "orb_min": 15,
+        "rr": 1.5,
+        "buffer_frac": 0.0,
+        "fail_bars": 5
+      },
+      "name": "FAIL_OR15_RR1.5_BUF00",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "FAIL_OR15_RR1.5_BUF05": {
+      "primary": {
+        "n": 343,
+        "mean": 0.005830903790085936,
+        "sum": 1.999999999999476,
+        "pf": 1.0097560975609732,
+        "win_rate": 0.40233236151603496,
+        "max_dd": 18.500000000000064
+      },
+      "stress": {
+        "n": 343,
+        "mean": -0.11447128162635527,
+        "sum": -39.26364959783986,
+        "pf": 0.8243811874903865,
+        "win_rate": 0.36443148688046645,
+        "max_dd": 39.26364959783984
+      },
+      "yearly": {
+        "2021": {
+          "n": 109,
+          "mean": -0.05963302752293778,
+          "sum": -6.5000000000002185,
+          "pf": 0.9044117647058791,
+          "win_rate": 0.3761467889908257,
+          "max_dd": 10.500000000000227
+        },
+        "2022": {
+          "n": 113,
+          "mean": 0.19469026548672655,
+          "sum": 22.0000000000001,
+          "pf": 1.3728813559322048,
+          "win_rate": 0.4778761061946903,
+          "max_dd": 6.5
+        },
+        "2023": {
+          "n": 121,
+          "mean": -0.1115702479338876,
+          "sum": -13.5000000000004,
+          "pf": 0.8269230769230719,
+          "win_rate": 0.35537190082644626,
+          "max_dd": 18.500000000000068
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.1115702479338876,
+      "remove_best10_mean": -0.16396103896104414,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "FAIL",
+        "orb_min": 15,
+        "rr": 1.5,
+        "buffer_frac": 0.05,
+        "fail_bars": 5
+      },
+      "name": "FAIL_OR15_RR1.5_BUF05",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "FAIL_OR30_RR1.0_BUF00": {
+      "primary": {
+        "n": 387,
+        "mean": -0.10077519379844961,
+        "sum": -39.0,
+        "pf": 0.8169014084507042,
+        "win_rate": 0.4496124031007752,
+        "max_dd": 44.0
+      },
+      "stress": {
+        "n": 387,
+        "mean": -0.18637266492928622,
+        "sum": -72.12622132763377,
+        "pf": 0.6873314673421032,
+        "win_rate": 0.42118863049095606,
+        "max_dd": 76.49555355866879
+      },
+      "yearly": {
+        "2021": {
+          "n": 137,
+          "mean": -0.15328467153284672,
+          "sum": -21.0,
+          "pf": 0.7341772151898734,
+          "win_rate": 0.4233576642335766,
+          "max_dd": 26.0
+        },
+        "2022": {
+          "n": 116,
+          "mean": 0.034482758620689655,
+          "sum": 4.0,
+          "pf": 1.0714285714285714,
+          "win_rate": 0.5172413793103449,
+          "max_dd": 14.0
+        },
+        "2023": {
+          "n": 134,
+          "mean": -0.16417910447761194,
+          "sum": -22.0,
+          "pf": 0.717948717948718,
+          "win_rate": 0.417910447761194,
+          "max_dd": 23.0
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.16417910447761194,
+      "remove_best10_mean": -0.22413793103448276,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "FAIL",
+        "orb_min": 30,
+        "rr": 1.0,
+        "buffer_frac": 0.0,
+        "fail_bars": 5
+      },
+      "name": "FAIL_OR30_RR1.0_BUF00",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "FAIL_OR30_RR1.0_BUF05": {
+      "primary": {
+        "n": 297,
+        "mean": -0.09764309764309764,
+        "sum": -29.0,
+        "pf": 0.8220858895705522,
+        "win_rate": 0.4511784511784512,
+        "max_dd": 30.0
+      },
+      "stress": {
+        "n": 297,
+        "mean": -0.16316985646135615,
+        "sum": -48.46144736902278,
+        "pf": 0.7205222843886742,
+        "win_rate": 0.43097643097643096,
+        "max_dd": 49.43254563491876
+      },
+      "yearly": {
+        "2021": {
+          "n": 102,
+          "mean": -0.19607843137254902,
+          "sum": -20.0,
+          "pf": 0.6721311475409836,
+          "win_rate": 0.4019607843137255,
+          "max_dd": 21.0
+        },
+        "2022": {
+          "n": 93,
+          "mean": 0.03225806451612903,
+          "sum": 3.0,
+          "pf": 1.0666666666666667,
+          "win_rate": 0.5161290322580645,
+          "max_dd": 9.0
+        },
+        "2023": {
+          "n": 102,
+          "mean": -0.11764705882352941,
+          "sum": -12.0,
+          "pf": 0.7894736842105263,
+          "win_rate": 0.4411764705882353,
+          "max_dd": 12.0
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.19607843137254902,
+      "remove_best10_mean": -0.2209737827715356,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "FAIL",
+        "orb_min": 30,
+        "rr": 1.0,
+        "buffer_frac": 0.05,
+        "fail_bars": 5
+      },
+      "name": "FAIL_OR30_RR1.0_BUF05",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "FAIL_OR30_RR1.5_BUF00": {
+      "primary": {
+        "n": 387,
+        "mean": -0.062164394878149634,
+        "sum": -24.057620817843908,
+        "pf": 0.900406285107496,
+        "win_rate": 0.37467700258397935,
+        "max_dd": 32.55762081784444
+      },
+      "stress": {
+        "n": 387,
+        "mean": -0.1736074431073994,
+        "sum": -67.18608048256357,
+        "pf": 0.7430881249518347,
+        "win_rate": 0.34108527131782945,
+        "max_dd": 68.62973096352351
+      },
+      "yearly": {
+        "2021": {
+          "n": 137,
+          "mean": -0.08436219575068678,
+          "sum": -11.55762081784409,
+          "pf": 0.8664748325030038,
+          "win_rate": 0.36496350364963503,
+          "max_dd": 19.05762081784432
+        },
+        "2022": {
+          "n": 116,
+          "mean": 0.05603448275862235,
+          "sum": 6.500000000000193,
+          "pf": 1.0970149253731372,
+          "win_rate": 0.4224137931034483,
+          "max_dd": 14.499999999999995
+        },
+        "2023": {
+          "n": 134,
+          "mean": -0.1417910447761195,
+          "sum": -19.000000000000014,
+          "pf": 0.784090909090909,
+          "win_rate": 0.34328358208955223,
+          "max_dd": 21.500000000000316
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.1417910447761195,
+      "remove_best10_mean": -0.2372345425800159,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "FAIL",
+        "orb_min": 30,
+        "rr": 1.5,
+        "buffer_frac": 0.0,
+        "fail_bars": 5
+      },
+      "name": "FAIL_OR30_RR1.5_BUF00",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "FAIL_OR30_RR1.5_BUF05": {
+      "primary": {
+        "n": 297,
+        "mean": -0.08100209029577078,
+        "sum": -24.057620817843922,
+        "pf": 0.8717321071095866,
+        "win_rate": 0.367003367003367,
+        "max_dd": 27.000000000000295
+      },
+      "stress": {
+        "n": 297,
+        "mean": -0.17354354641251069,
+        "sum": -51.542433284515674,
+        "pf": 0.7430323648421742,
+        "win_rate": 0.3400673400673401,
+        "max_dd": 51.96573914532156
+      },
+      "yearly": {
+        "2021": {
+          "n": 102,
+          "mean": -0.113310008018079,
+          "sum": -11.557620817844057,
+          "pf": 0.8237028636234731,
+          "win_rate": 0.35294117647058826,
+          "max_dd": 13.057620817844054
+        },
+        "2022": {
+          "n": 93,
+          "mean": 0.07526881720430158,
+          "sum": 7.000000000000046,
+          "pf": 1.132075471698114,
+          "win_rate": 0.43010752688172044,
+          "max_dd": 13.500000000000009
+        },
+        "2023": {
+          "n": 102,
+          "mean": -0.19117647058823442,
+          "sum": -19.49999999999991,
+          "pf": 0.7173913043478273,
+          "win_rate": 0.3235294117647059,
+          "max_dd": 20.00000000000015
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.19117647058823442,
+      "remove_best10_mean": -0.25864277459867036,
+      "gates": {
+        "n_ge_180": true,
+        "mean_ge_0_05": false,
+        "pf_ge_1_15": false,
+        "maxdd_le_15": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_m0_05": false,
+        "remove_best10_mean_ge_0": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_05": false
+      },
+      "candidate": {
+        "family": "FAIL",
+        "orb_min": 30,
+        "rr": 1.5,
+        "buffer_frac": 0.05,
+        "fail_bars": 5
+      },
+      "name": "FAIL_OR30_RR1.5_BUF05",
+      "eligible": false,
+      "robustness_score": null
+    }
+  },
+  "selected_by_family": {
+    "CONT": null,
+    "FAIL": null
+  },
+  "validation": {
+    "CONT": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "FAIL": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    }
+  },
+  "oos_2025_opened": false,
+  "notes": [
+    "No 2025 URL is requested anywhere in this V1 script.",
+    "A 2024 pass is only proxy evidence; FTMO-native Free Trial/demo validation remains mandatory.",
+    "No paid market-data subscription is required by either candidate family."
+  ]
+}

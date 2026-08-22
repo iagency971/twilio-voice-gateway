@@ -1,0 +1,17 @@
+{
+  "status": "USTEC_V1_DEV_VALIDATION_COMPLETE_2025_UNOPENED",
+  "selected": {
+    "CONT": null,
+    "FAIL": null
+  },
+  "validation": {
+    "CONT": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "FAIL": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    }
+  }
+}
