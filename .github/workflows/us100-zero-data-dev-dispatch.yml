@@ -29,8 +29,17 @@ jobs:
       - name: Run frozen 2021-2024 DEV
         shell: bash
         run: |
-          set -euo pipefail
-          python us100-zero-data/run_or_family_dev_v1.py | tee /tmp/us100_or_dev.log
+          set +e
+          mkdir -p us100-zero-data/results/or_family_v1
+          python us100-zero-data/run_or_family_dev_v1.py 2>&1 | tee us100-zero-data/results/or_family_v1/RUN_LOG.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" > us100-zero-data/results/or_family_v1/EXIT_CODE.txt
+          if [ "$code" -ne 0 ]; then
+            echo "US100_OR_FAMILY_DEV_FAILURE exit_code=$code" > us100-zero-data/results/or_family_v1/WORKFLOW_FAILURE.txt
+          else
+            rm -f us100-zero-data/results/or_family_v1/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
       - name: Publish result to research branch
         if: always()
         shell: bash
