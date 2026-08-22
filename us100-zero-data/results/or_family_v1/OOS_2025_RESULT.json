@@ -1,0 +1,17 @@
+{
+  "status": "OR_FAMILY_V1_OOS_DATA_QA_FAIL",
+  "data_qa": {
+    "year": 2025,
+    "rows": 114914,
+    "first": "2025-01-02 01:00:00",
+    "last": "2025-04-30 23:59:00",
+    "duplicates": 0,
+    "ohlc_violations": 0,
+    "bad_spread": 0,
+    "candidate_sessions": 83,
+    "median_recorded_spread_points": 2.0,
+    "median_spread_price": 0.2,
+    "sha256": "ac18e3f2a9f7c5d75ff056afa57f024a14c62b940723d5fa24904808d8cd6516",
+    "pass": false
+  }
+}
