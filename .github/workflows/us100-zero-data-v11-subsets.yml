@@ -1,8 +1,6 @@
 name: US100 Zero-Data Six-Model 0.80 Robustness V13
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
