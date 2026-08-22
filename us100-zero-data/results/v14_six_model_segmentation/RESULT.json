@@ -1,0 +1,2765 @@
+{
+  "status": "V14_SEGMENTATION_DIAGNOSTIC_COMPLETE",
+  "classification": "DESCRIPTIVE_NOT_NEW_OOS_VALIDATION",
+  "candidate_models": [
+    "ema_rev",
+    "kalman_mom",
+    "open_drive",
+    "ou_rev",
+    "pd_rev",
+    "pm_mom"
+  ],
+  "risk_reference_pct": 0.8,
+  "baseline": {
+    "primary": {
+      "n": 1977,
+      "mean": 0.19911664060224252,
+      "sum": 393.6535984706335,
+      "pf": 1.5224289820761567,
+      "win_rate": 0.4764795144157815,
+      "max_dd": 10.672527430737901,
+      "losing_streak": 8
+    },
+    "stress": {
+      "n": 1977,
+      "mean": 0.18301417041387988,
+      "sum": 361.81901490824055,
+      "pf": 1.4697594164448482,
+      "win_rate": 0.4764795144157815,
+      "max_dd": 11.017062611014538,
+      "losing_streak": 8
+    },
+    "trades_per_session": 1.8390697674418606,
+    "stress_r_per_session": 0.3365758278216191,
+    "scaled_stress_dd_pct_at_080": 0.08813650088811631,
+    "implied_step1_days_at_080": 37.13873358316403
+  },
+  "direction": {
+    "long": {
+      "primary": {
+        "n": 1199,
+        "mean": 0.22121242920007508,
+        "sum": 265.23370261089,
+        "pf": 1.6239591752122648,
+        "win_rate": 0.5095913261050876,
+        "max_dd": 10.546989037668126,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 1199,
+        "mean": 0.20499775078303545,
+        "sum": 245.7923031888595,
+        "pf": 1.565538120238743,
+        "win_rate": 0.5095913261050876,
+        "max_dd": 11.010975915421668,
+        "losing_streak": 7
+      },
+      "share_of_trades": 0.6064744562468386,
+      "share_of_stress_total_r": 0.679323896924527,
+      "scaled_stress_dd_pct_at_080": 0.08808780732337335,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "short": {
+      "primary": {
+        "n": 778,
+        "mean": 0.16506413349581414,
+        "sum": 128.4198958597434,
+        "pf": 1.3910178820744628,
+        "win_rate": 0.4254498714652956,
+        "max_dd": 16.946954816612646,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 778,
+        "mean": 0.14913459089894743,
+        "sum": 116.0267117193811,
+        "pf": 1.3457237506605213,
+        "win_rate": 0.4254498714652956,
+        "max_dd": 17.79600630276028,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.39352554375316134,
+      "share_of_stress_total_r": 0.3206761030754731,
+      "scaled_stress_dd_pct_at_080": 0.14236805042208223,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    }
+  },
+  "model": {
+    "ema_rev": {
+      "primary": {
+        "n": 155,
+        "mean": 0.1518134335284735,
+        "sum": 23.531082196913395,
+        "pf": 1.3742742264901515,
+        "win_rate": 0.4258064516129032,
+        "max_dd": 9.427319556791875,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 155,
+        "mean": 0.1357572830866026,
+        "sum": 21.042378878423403,
+        "pf": 1.327268771779137,
+        "win_rate": 0.4258064516129032,
+        "max_dd": 9.983895996973954,
+        "losing_streak": 9
+      },
+      "share_of_trades": 0.07840161861406171,
+      "share_of_stress_total_r": 0.05815719465092202,
+      "scaled_stress_dd_pct_at_080": 0.07987116797579163,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "kalman_mom": {
+      "primary": {
+        "n": 374,
+        "mean": 0.2127064728077218,
+        "sum": 79.55222083008796,
+        "pf": 1.537541000688647,
+        "win_rate": 0.4385026737967914,
+        "max_dd": 13.359975087592872,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 374,
+        "mean": 0.19470187684587942,
+        "sum": 72.8185019403589,
+        "pf": 1.479710029887694,
+        "win_rate": 0.4385026737967914,
+        "max_dd": 14.442997336103101,
+        "losing_streak": 9
+      },
+      "share_of_trades": 0.18917551846231664,
+      "share_of_stress_total_r": 0.2012567027712076,
+      "scaled_stress_dd_pct_at_080": 0.11554397868882481,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "open_drive": {
+      "primary": {
+        "n": 120,
+        "mean": 0.28169395728476393,
+        "sum": 33.80327487417167,
+        "pf": 1.9079691194808697,
+        "win_rate": 0.475,
+        "max_dd": 6.621458650137026,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 120,
+        "mean": 0.2656386412982703,
+        "sum": 31.87663695579244,
+        "pf": 1.8337362660349472,
+        "win_rate": 0.475,
+        "max_dd": 6.753407441046068,
+        "losing_streak": 5
+      },
+      "share_of_trades": 0.06069802731411229,
+      "share_of_stress_total_r": 0.08810105506444028,
+      "scaled_stress_dd_pct_at_080": 0.054027259528368544,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "ou_rev": {
+      "primary": {
+        "n": 738,
+        "mean": 0.1870833622232912,
+        "sum": 138.0675213207889,
+        "pf": 1.4841930841709756,
+        "win_rate": 0.4715447154471545,
+        "max_dd": 10.086316200583418,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 738,
+        "mean": 0.17172663168711608,
+        "sum": 126.73425418509167,
+        "pf": 1.4352989572199584,
+        "win_rate": 0.4715447154471545,
+        "max_dd": 11.16039075030762,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.37329286798179057,
+      "share_of_stress_total_r": 0.35026974526817567,
+      "scaled_stress_dd_pct_at_080": 0.08928312600246097,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "pd_rev": {
+      "primary": {
+        "n": 102,
+        "mean": 0.29928651805048767,
+        "sum": 30.527224841149742,
+        "pf": 1.8479179668837602,
+        "win_rate": 0.5392156862745098,
+        "max_dd": 7.226885266941089,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 102,
+        "mean": 0.28333035038798765,
+        "sum": 28.89969573957474,
+        "pf": 1.786034850712506,
+        "win_rate": 0.5392156862745098,
+        "max_dd": 7.4249142336314975,
+        "losing_streak": 10
+      },
+      "share_of_trades": 0.051593323216995446,
+      "share_of_stress_total_r": 0.0798733470293259,
+      "scaled_stress_dd_pct_at_080": 0.05939931386905198,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "pm_mom": {
+      "primary": {
+        "n": 488,
+        "mean": 0.18068089017934794,
+        "sum": 88.1722744075218,
+        "pf": 1.4785196030157397,
+        "win_rate": 0.5163934426229508,
+        "max_dd": 8.37149261009706,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 488,
+        "mean": 0.16485153116598245,
+        "sum": 80.44754720899944,
+        "pf": 1.4279462357371944,
+        "win_rate": 0.5163934426229508,
+        "max_dd": 9.053211581606309,
+        "losing_streak": 6
+      },
+      "share_of_trades": 0.2468386444107233,
+      "share_of_stress_total_r": 0.22234195521592864,
+      "scaled_stress_dd_pct_at_080": 0.07242569265285047,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    }
+  },
+  "model_direction": {
+    "ema_rev__long": {
+      "primary": {
+        "n": 80,
+        "mean": 0.2275872681371557,
+        "sum": 18.206981450972457,
+        "pf": 1.6099659332268874,
+        "win_rate": 0.4875,
+        "max_dd": 3.424973072605168,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 80,
+        "mean": 0.21141832136304523,
+        "sum": 16.913465709043617,
+        "pf": 1.5546095037238488,
+        "win_rate": 0.4875,
+        "max_dd": 3.5185462529662694,
+        "losing_streak": 5
+      },
+      "share_of_trades": 0.04046535154274153,
+      "share_of_stress_total_r": 0.04674565186501592,
+      "scaled_stress_dd_pct_at_080": 0.028148370023730156,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "ema_rev__short": {
+      "primary": {
+        "n": 75,
+        "mean": 0.07098800994587914,
+        "sum": 5.324100745940936,
+        "pf": 1.1612286283897055,
+        "win_rate": 0.36,
+        "max_dd": 8.76681064061358,
+        "losing_streak": 12
+      },
+      "stress": {
+        "n": 75,
+        "mean": 0.05505217559173047,
+        "sum": 4.128913169379786,
+        "pf": 1.1221544303746442,
+        "win_rate": 0.36,
+        "max_dd": 9.252683826420935,
+        "losing_streak": 12
+      },
+      "share_of_trades": 0.03793626707132018,
+      "share_of_stress_total_r": 0.011411542785906104,
+      "scaled_stress_dd_pct_at_080": 0.07402147061136748,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "kalman_mom__long": {
+      "primary": {
+        "n": 226,
+        "mean": 0.15385365332937867,
+        "sum": 34.77092565243958,
+        "pf": 1.3952027787657229,
+        "win_rate": 0.4469026548672566,
+        "max_dd": 11.935669771707786,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 226,
+        "mean": 0.13580416781507734,
+        "sum": 30.691741926207477,
+        "pf": 1.3400563592045382,
+        "win_rate": 0.4469026548672566,
+        "max_dd": 12.460373586817663,
+        "losing_streak": 9
+      },
+      "share_of_trades": 0.11431461810824481,
+      "share_of_stress_total_r": 0.08482622709586196,
+      "scaled_stress_dd_pct_at_080": 0.09968298869454131,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "kalman_mom__short": {
+      "primary": {
+        "n": 148,
+        "mean": 0.3025763187678944,
+        "sum": 44.781295177648374,
+        "pf": 1.7462261957008116,
+        "win_rate": 0.42567567567567566,
+        "max_dd": 7.804879696544321,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 148,
+        "mean": 0.28464027036588796,
+        "sum": 42.126760014151415,
+        "pf": 1.6845199872721393,
+        "win_rate": 0.42567567567567566,
+        "max_dd": 8.596925156963005,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.07486090035407182,
+      "share_of_stress_total_r": 0.11643047567534562,
+      "scaled_stress_dd_pct_at_080": 0.06877540125570404,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "open_drive__long": {
+      "primary": {
+        "n": 120,
+        "mean": 0.28169395728476393,
+        "sum": 33.80327487417167,
+        "pf": 1.9079691194808697,
+        "win_rate": 0.475,
+        "max_dd": 6.621458650137026,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 120,
+        "mean": 0.2656386412982703,
+        "sum": 31.87663695579244,
+        "pf": 1.8337362660349472,
+        "win_rate": 0.475,
+        "max_dd": 6.753407441046068,
+        "losing_streak": 5
+      },
+      "share_of_trades": 0.06069802731411229,
+      "share_of_stress_total_r": 0.08810105506444028,
+      "scaled_stress_dd_pct_at_080": 0.054027259528368544,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "ou_rev__long": {
+      "primary": {
+        "n": 435,
+        "mean": 0.19780640008920478,
+        "sum": 86.04578403880407,
+        "pf": 1.5391891576475198,
+        "win_rate": 0.5057471264367817,
+        "max_dd": 6.8968610807537996,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 435,
+        "mean": 0.18251541550678702,
+        "sum": 79.39420574545235,
+        "pf": 1.4874997754609038,
+        "win_rate": 0.5057471264367817,
+        "max_dd": 7.186540489489783,
+        "losing_streak": 5
+      },
+      "share_of_trades": 0.22003034901365706,
+      "share_of_stress_total_r": 0.2194307166680756,
+      "scaled_stress_dd_pct_at_080": 0.05749232391591826,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "ou_rev__short": {
+      "primary": {
+        "n": 303,
+        "mean": 0.1716889019207419,
+        "sum": 52.0217372819848,
+        "pf": 1.414297795889409,
+        "win_rate": 0.42244224422442245,
+        "max_dd": 11.288373181716477,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 303,
+        "mean": 0.1562377836291727,
+        "sum": 47.34004843963933,
+        "pf": 1.3690281194143965,
+        "win_rate": 0.42244224422442245,
+        "max_dd": 12.405115375732331,
+        "losing_streak": 7
+      },
+      "share_of_trades": 0.15326251896813353,
+      "share_of_stress_total_r": 0.1308390286001001,
+      "scaled_stress_dd_pct_at_080": 0.09924092300585866,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "pd_rev__long": {
+      "primary": {
+        "n": 61,
+        "mean": 0.40256451441802044,
+        "sum": 24.556435379499245,
+        "pf": 2.4015120949394184,
+        "win_rate": 0.6065573770491803,
+        "max_dd": 8.124702546227489,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 61,
+        "mean": 0.3865867062076862,
+        "sum": 23.58178907866886,
+        "pf": 2.316048391972505,
+        "win_rate": 0.6065573770491803,
+        "max_dd": 8.35818669292788,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.030854830551340414,
+      "share_of_stress_total_r": 0.0651756488935479,
+      "scaled_stress_dd_pct_at_080": 0.06686549354342304,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "pd_rev__short": {
+      "primary": {
+        "n": 41,
+        "mean": 0.14562901125976818,
+        "sum": 5.9707894616504955,
+        "pf": 1.3230740039603404,
+        "win_rate": 0.43902439024390244,
+        "max_dd": 7.1661134971253535,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 41,
+        "mean": 0.1297050405098996,
+        "sum": 5.317906660905883,
+        "pf": 1.2821500416691098,
+        "win_rate": 0.43902439024390244,
+        "max_dd": 7.296550967678676,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.020738492665655032,
+      "share_of_stress_total_r": 0.014697698135778009,
+      "scaled_stress_dd_pct_at_080": 0.058372407741429405,
+      "stress_r_per_session": null,
+      "confidence": "MODERATE"
+    },
+    "pm_mom__long": {
+      "primary": {
+        "n": 277,
+        "mean": 0.2449469357942346,
+        "sum": 67.85030121500299,
+        "pf": 1.7302362110812384,
+        "win_rate": 0.5667870036101083,
+        "max_dd": 5.1137353195863655,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 277,
+        "mean": 0.22864427355124461,
+        "sum": 63.33446377369476,
+        "pf": 1.6677078818210005,
+        "win_rate": 0.5667870036101083,
+        "max_dd": 5.200390801175978,
+        "losing_streak": 5
+      },
+      "share_of_trades": 0.14011127971674253,
+      "share_of_stress_total_r": 0.17504459733758534,
+      "scaled_stress_dd_pct_at_080": 0.041603126409407824,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "pm_mom__short": {
+      "primary": {
+        "n": 211,
+        "mean": 0.09631266915885697,
+        "sum": 20.321973192518822,
+        "pf": 1.222474999691599,
+        "win_rate": 0.45023696682464454,
+        "max_dd": 8.90404674670582,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 211,
+        "mean": 0.08110466083082783,
+        "sum": 17.113083435304674,
+        "pf": 1.1837515882206855,
+        "win_rate": 0.45023696682464454,
+        "max_dd": 9.708335723766393,
+        "losing_streak": 6
+      },
+      "share_of_trades": 0.10672736469398078,
+      "share_of_stress_total_r": 0.04729735787834327,
+      "scaled_stress_dd_pct_at_080": 0.07766668579013114,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    }
+  },
+  "session_bucket": {
+    "LUNCH_1200_1330": {
+      "primary": {
+        "n": 181,
+        "mean": 0.24675067884513965,
+        "sum": 44.66187287097028,
+        "pf": 1.69718551534294,
+        "win_rate": 0.5027624309392266,
+        "max_dd": 10.45672856336072,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 181,
+        "mean": 0.22943220233333675,
+        "sum": 41.52722862233395,
+        "pf": 1.632748134641523,
+        "win_rate": 0.5027624309392266,
+        "max_dd": 10.946171640132357,
+        "losing_streak": 6
+      },
+      "share_of_trades": 0.09155285786545271,
+      "share_of_stress_total_r": 0.11477348318154451,
+      "scaled_stress_dd_pct_at_080": 0.08756937312105886,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "MORNING_1030_1200": {
+      "primary": {
+        "n": 563,
+        "mean": 0.17199275272885434,
+        "sum": 96.831919786345,
+        "pf": 1.4324100775178774,
+        "win_rate": 0.44582593250444047,
+        "max_dd": 15.282576601177587,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 563,
+        "mean": 0.1558869617892247,
+        "sum": 87.76435948733351,
+        "pf": 1.3832446298281034,
+        "win_rate": 0.44582593250444047,
+        "max_dd": 16.998484821631163,
+        "losing_streak": 9
+      },
+      "share_of_trades": 0.2847749114820435,
+      "share_of_stress_total_r": 0.24256425414676194,
+      "scaled_stress_dd_pct_at_080": 0.1359878785730493,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "OPEN_0930_1030": {
+      "primary": {
+        "n": 417,
+        "mean": 0.25327989820282615,
+        "sum": 105.6177175505785,
+        "pf": 1.6869505619806382,
+        "win_rate": 0.44844124700239807,
+        "max_dd": 7.9611695457103195,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 417,
+        "mean": 0.23726564308820766,
+        "sum": 98.93977316778259,
+        "pf": 1.6284531862473473,
+        "win_rate": 0.44844124700239807,
+        "max_dd": 8.416760517821743,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.2109256449165402,
+      "share_of_stress_total_r": 0.2734510047595876,
+      "scaled_stress_dd_pct_at_080": 0.06733408414257394,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "PM_1330_1500": {
+      "primary": {
+        "n": 807,
+        "mean": 0.18413707448910657,
+        "sum": 148.598619112709,
+        "pf": 1.484602226516828,
+        "win_rate": 0.5080545229244114,
+        "max_dd": 12.02724378797004,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 807,
+        "mean": 0.16825668372175456,
+        "sum": 135.78314376345594,
+        "pf": 1.4338948840879397,
+        "win_rate": 0.5080545229244114,
+        "max_dd": 12.487339228062464,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.40819423368740515,
+      "share_of_stress_total_r": 0.37527918149324285,
+      "scaled_stress_dd_pct_at_080": 0.0998987138244997,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "POWER_1500_1600": {
+      "primary": {
+        "n": 9,
+        "mean": -0.22850342777437171,
+        "sum": -2.0565308499693455,
+        "pf": 0.5984716984710747,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 3.070371074215955,
+        "losing_streak": 3
+      },
+      "stress": {
+        "n": 9,
+        "mean": -0.24394334807393175,
+        "sum": -2.1954901326653857,
+        "pf": 0.5789665210322089,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 3.195314939953341,
+        "losing_streak": 3
+      },
+      "share_of_trades": 0.004552352048558422,
+      "share_of_stress_total_r": -0.00606792358113676,
+      "scaled_stress_dd_pct_at_080": 0.02556251951962673,
+      "stress_r_per_session": null,
+      "confidence": "VERY_LOW"
+    }
+  },
+  "entry_hour": {
+    "9": {
+      "primary": {
+        "n": 113,
+        "mean": 0.3320651258235764,
+        "sum": 37.52335921806413,
+        "pf": 1.9869558788358626,
+        "win_rate": 0.5309734513274337,
+        "max_dd": 4.567836450676084,
+        "losing_streak": 4
+      },
+      "stress": {
+        "n": 113,
+        "mean": 0.31621332804738284,
+        "sum": 35.73210606935426,
+        "pf": 1.9194369961609254,
+        "win_rate": 0.5309734513274337,
+        "max_dd": 4.701504611639201,
+        "losing_streak": 4
+      },
+      "share_of_trades": 0.057157309054122404,
+      "share_of_stress_total_r": 0.09875684968744977,
+      "scaled_stress_dd_pct_at_080": 0.03761203689311361,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "10": {
+      "primary": {
+        "n": 580,
+        "mean": 0.18403906118742838,
+        "sum": 106.74265548870846,
+        "pf": 1.4778215221874544,
+        "win_rate": 0.41724137931034483,
+        "max_dd": 11.816517313048713,
+        "losing_streak": 12
+      },
+      "stress": {
+        "n": 580,
+        "mean": 0.16798664784500644,
+        "sum": 97.43225575010374,
+        "pf": 1.4258175052756583,
+        "win_rate": 0.41724137931034483,
+        "max_dd": 12.49888833103158,
+        "losing_streak": 12
+      },
+      "share_of_trades": 0.29337379868487606,
+      "share_of_stress_total_r": 0.26928450892724126,
+      "scaled_stress_dd_pct_at_080": 0.09999110664825264,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "11": {
+      "primary": {
+        "n": 287,
+        "mean": 0.20273039243955032,
+        "sum": 58.18362263015094,
+        "pf": 1.50041671935738,
+        "win_rate": 0.4738675958188153,
+        "max_dd": 10.565574949605393,
+        "losing_streak": 11
+      },
+      "stress": {
+        "n": 287,
+        "mean": 0.18654972416605614,
+        "sum": 53.53977083565811,
+        "pf": 1.4508155600717525,
+        "win_rate": 0.4738675958188153,
+        "max_dd": 11.265312643420835,
+        "losing_streak": 11
+      },
+      "share_of_trades": 0.14516944865958523,
+      "share_of_stress_total_r": 0.14797390029165858,
+      "scaled_stress_dd_pct_at_080": 0.09012250114736668,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "12": {
+      "primary": {
+        "n": 127,
+        "mean": 0.22319765582699358,
+        "sum": 28.346102290028185,
+        "pf": 1.6236611549418847,
+        "win_rate": 0.5039370078740157,
+        "max_dd": 10.845386488249915,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 127,
+        "mean": 0.20573763661548614,
+        "sum": 26.12867985016674,
+        "pf": 1.5612221927275838,
+        "win_rate": 0.5039370078740157,
+        "max_dd": 11.18460753973974,
+        "losing_streak": 5
+      },
+      "share_of_trades": 0.06423874557410217,
+      "share_of_stress_total_r": 0.07221477803424214,
+      "scaled_stress_dd_pct_at_080": 0.08947686031791793,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "13": {
+      "primary": {
+        "n": 508,
+        "mean": 0.1854222512036711,
+        "sum": 94.19450361146491,
+        "pf": 1.489494386483543,
+        "win_rate": 0.4921259842519685,
+        "max_dd": 17.311181739352104,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 508,
+        "mean": 0.1694031696694208,
+        "sum": 86.05681019206575,
+        "pf": 1.437789741577305,
+        "win_rate": 0.4921259842519685,
+        "max_dd": 18.36952002660636,
+        "losing_streak": 10
+      },
+      "share_of_trades": 0.2569549822964087,
+      "share_of_stress_total_r": 0.23784490766437544,
+      "scaled_stress_dd_pct_at_080": 0.14695616021285088,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "14": {
+      "primary": {
+        "n": 353,
+        "mean": 0.20033962062942268,
+        "sum": 70.7198860821862,
+        "pf": 1.532460029508736,
+        "win_rate": 0.5297450424929179,
+        "max_dd": 8.268406491007184,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 353,
+        "mean": 0.1844897516814657,
+        "sum": 65.12488234355739,
+        "pf": 1.48083123877119,
+        "win_rate": 0.5297450424929179,
+        "max_dd": 8.480497257564778,
+        "losing_streak": 6
+      },
+      "share_of_trades": 0.17855336368234698,
+      "share_of_stress_total_r": 0.17999297897616975,
+      "scaled_stress_dd_pct_at_080": 0.06784397806051823,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "15": {
+      "primary": {
+        "n": 9,
+        "mean": -0.22850342777437171,
+        "sum": -2.0565308499693455,
+        "pf": 0.5984716984710747,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 3.070371074215955,
+        "losing_streak": 3
+      },
+      "stress": {
+        "n": 9,
+        "mean": -0.24394334807393175,
+        "sum": -2.1954901326653857,
+        "pf": 0.5789665210322089,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 3.195314939953341,
+        "losing_streak": 3
+      },
+      "share_of_trades": 0.004552352048558422,
+      "share_of_stress_total_r": -0.00606792358113676,
+      "scaled_stress_dd_pct_at_080": 0.02556251951962673,
+      "stress_r_per_session": null,
+      "confidence": "VERY_LOW"
+    }
+  },
+  "weekday": {
+    "Friday": {
+      "primary": {
+        "n": 408,
+        "mean": 0.24184255460553974,
+        "sum": 98.67176227906022,
+        "pf": 1.6516060984924428,
+        "win_rate": 0.49019607843137253,
+        "max_dd": 7.450646316870511,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 408,
+        "mean": 0.22582977346629984,
+        "sum": 92.13854757425034,
+        "pf": 1.5951999839428934,
+        "win_rate": 0.49019607843137253,
+        "max_dd": 7.776777880328154,
+        "losing_streak": 7
+      },
+      "share_of_trades": 0.20637329286798178,
+      "share_of_stress_total_r": 0.25465369087254086,
+      "scaled_stress_dd_pct_at_080": 0.062214223042625236,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "Monday": {
+      "primary": {
+        "n": 371,
+        "mean": 0.2602496821282454,
+        "sum": 96.55263206957903,
+        "pf": 1.7471137069553184,
+        "win_rate": 0.5040431266846361,
+        "max_dd": 8.046446447765902,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 371,
+        "mean": 0.2439655771476994,
+        "sum": 90.51122912179648,
+        "pf": 1.6844259832338788,
+        "win_rate": 0.5040431266846361,
+        "max_dd": 8.320601634789021,
+        "losing_streak": 5
+      },
+      "share_of_trades": 0.18765806777946384,
+      "share_of_stress_total_r": 0.25015608741500406,
+      "scaled_stress_dd_pct_at_080": 0.06656481307831218,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "Thursday": {
+      "primary": {
+        "n": 372,
+        "mean": 0.22985740194021836,
+        "sum": 85.50695352176123,
+        "pf": 1.5945956831729842,
+        "win_rate": 0.5080645161290323,
+        "max_dd": 6.815112048523758,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 372,
+        "mean": 0.213986026713938,
+        "sum": 79.60280193758493,
+        "pf": 1.5425957932131666,
+        "win_rate": 0.5080645161290323,
+        "max_dd": 7.403370813593071,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.18816388467374812,
+      "share_of_stress_total_r": 0.22000723747969042,
+      "scaled_stress_dd_pct_at_080": 0.059226966508744566,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "Tuesday": {
+      "primary": {
+        "n": 424,
+        "mean": 0.04249532122164,
+        "sum": 18.01801619797536,
+        "pf": 1.102572447233267,
+        "win_rate": 0.4056603773584906,
+        "max_dd": 24.984514019228783,
+        "losing_streak": 11
+      },
+      "stress": {
+        "n": 424,
+        "mean": 0.026173356556304702,
+        "sum": 11.097503179873193,
+        "pf": 1.061735526592277,
+        "win_rate": 0.4056603773584906,
+        "max_dd": 26.799822393173844,
+        "losing_streak": 11
+      },
+      "share_of_trades": 0.2144663631765301,
+      "share_of_stress_total_r": 0.030671420579395436,
+      "scaled_stress_dd_pct_at_080": 0.21439857914539076,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "Wednesday": {
+      "primary": {
+        "n": 402,
+        "mean": 0.2360801850802428,
+        "sum": 94.90423440225761,
+        "pf": 1.6187706954163903,
+        "win_rate": 0.48258706467661694,
+        "max_dd": 6.706745310230801,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 402,
+        "mean": 0.2200719728724767,
+        "sum": 88.46893309473563,
+        "pf": 1.564542310762319,
+        "win_rate": 0.48258706467661694,
+        "max_dd": 6.933168806133253,
+        "losing_streak": 6
+      },
+      "share_of_trades": 0.20333839150227617,
+      "share_of_stress_total_r": 0.2445115636533693,
+      "scaled_stress_dd_pct_at_080": 0.055465350449066024,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    }
+  },
+  "exit_reason": {
+    "stop": {
+      "primary": {
+        "n": 656,
+        "mean": -1.0212811706027425,
+        "sum": -669.9604479153991,
+        "pf": 0.0,
+        "win_rate": 0.0,
+        "max_dd": 669.9604479153982,
+        "losing_streak": 656
+      },
+      "stress": {
+        "n": 656,
+        "mean": -1.0374953958238797,
+        "sum": -680.5969796604651,
+        "pf": 0.0,
+        "win_rate": 0.0,
+        "max_dd": 680.5969796604656,
+        "losing_streak": 656
+      },
+      "share_of_trades": 0.3318158826504805,
+      "share_of_stress_total_r": -1.881042597590037,
+      "scaled_stress_dd_pct_at_080": 5.444775837283725,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "stop_ambiguous": {
+      "primary": {
+        "n": 1,
+        "mean": -1.022435897435896,
+        "sum": -1.022435897435896,
+        "pf": 0.0,
+        "win_rate": 0.0,
+        "max_dd": 1.022435897435896,
+        "losing_streak": 1
+      },
+      "stress": {
+        "n": 1,
+        "mean": -1.0395299145299122,
+        "sum": -1.0395299145299122,
+        "pf": 0.0,
+        "win_rate": 0.0,
+        "max_dd": 1.0395299145299122,
+        "losing_streak": 1
+      },
+      "share_of_trades": 0.0005058168942842691,
+      "share_of_stress_total_r": -0.002873066012833911,
+      "scaled_stress_dd_pct_at_080": 0.008316239316239298,
+      "stress_r_per_session": null,
+      "confidence": "VERY_LOW"
+    },
+    "target": {
+      "primary": {
+        "n": 11,
+        "mean": 2.1361907405653087,
+        "sum": 23.498098146218396,
+        "pf": 1e+99,
+        "win_rate": 1.0,
+        "max_dd": 0.0,
+        "losing_streak": 0
+      },
+      "stress": {
+        "n": 11,
+        "mean": 2.119235512794522,
+        "sum": 23.311590640739745,
+        "pf": 1e+99,
+        "win_rate": 1.0,
+        "max_dd": 0.0,
+        "losing_streak": 0
+      },
+      "share_of_trades": 0.00556398583712696,
+      "share_of_stress_total_r": 0.06442887101069496,
+      "scaled_stress_dd_pct_at_080": 0.0,
+      "stress_r_per_session": null,
+      "confidence": "VERY_LOW"
+    },
+    "time_stop": {
+      "primary": {
+        "n": 3,
+        "mean": -0.539793098943933,
+        "sum": -1.619379296831799,
+        "pf": 0.0,
+        "win_rate": 0.0,
+        "max_dd": 1.619379296831799,
+        "losing_streak": 3
+      },
+      "stress": {
+        "n": 3,
+        "mean": -0.5530164444665661,
+        "sum": -1.6590493333996983,
+        "pf": 0.0,
+        "win_rate": 0.0,
+        "max_dd": 1.6590493333996983,
+        "losing_streak": 3
+      },
+      "share_of_trades": 0.0015174506828528073,
+      "share_of_stress_total_r": -0.004585301670285193,
+      "scaled_stress_dd_pct_at_080": 0.013272394667197587,
+      "stress_r_per_session": null,
+      "confidence": "VERY_LOW"
+    },
+    "trail": {
+      "primary": {
+        "n": 1306,
+        "mean": 0.7984362660291592,
+        "sum": 1042.7577634340819,
+        "pf": 13.888801312473033,
+        "win_rate": 0.7128637059724349,
+        "max_dd": 2.1287341828913213,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 1306,
+        "mean": 0.782391258174499,
+        "sum": 1021.8029831758956,
+        "pf": 12.754807046942407,
+        "win_rate": 0.7128637059724349,
+        "max_dd": 2.226817369856235,
+        "losing_streak": 7
+      },
+      "share_of_trades": 0.6605968639352554,
+      "share_of_stress_total_r": 2.8240720942624615,
+      "scaled_stress_dd_pct_at_080": 0.01781453895884988,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    }
+  },
+  "risk_quartile": {
+    "Q1_TIGHT": {
+      "primary": {
+        "n": 509,
+        "mean": 0.18768682420755917,
+        "sum": 95.53259352164761,
+        "pf": 1.4929657347130856,
+        "win_rate": 0.4656188605108055,
+        "max_dd": 6.677065870837602,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 509,
+        "mean": 0.1686587453090223,
+        "sum": 85.84730136229236,
+        "pf": 1.4314670551547153,
+        "win_rate": 0.4656188605108055,
+        "max_dd": 7.114181042382548,
+        "losing_streak": 6
+      },
+      "share_of_trades": 0.257460799190693,
+      "share_of_stress_total_r": 0.23726586449322942,
+      "scaled_stress_dd_pct_at_080": 0.05691344833906038,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "Q2": {
+      "primary": {
+        "n": 488,
+        "mean": 0.20180763445595246,
+        "sum": 98.4821256145048,
+        "pf": 1.5135282564948744,
+        "win_rate": 0.47950819672131145,
+        "max_dd": 15.369472262997757,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 488,
+        "mean": 0.18451165856620036,
+        "sum": 90.04168938030577,
+        "pf": 1.458984604473613,
+        "win_rate": 0.47950819672131145,
+        "max_dd": 16.049006830532424,
+        "losing_streak": 8
+      },
+      "share_of_trades": 0.2468386444107233,
+      "share_of_stress_total_r": 0.24885836749939988,
+      "scaled_stress_dd_pct_at_080": 0.1283920546442594,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "Q3": {
+      "primary": {
+        "n": 490,
+        "mean": 0.13229704543346918,
+        "sum": 64.8255522623999,
+        "pf": 1.32358878588169,
+        "win_rate": 0.4530612244897959,
+        "max_dd": 9.342088509744741,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 490,
+        "mean": 0.11687688874233768,
+        "sum": 57.26967548374546,
+        "pf": 1.2800971728680788,
+        "win_rate": 0.4530612244897959,
+        "max_dd": 9.618026002752803,
+        "losing_streak": 10
+      },
+      "share_of_trades": 0.24785027819929187,
+      "share_of_stress_total_r": 0.15828265824633178,
+      "scaled_stress_dd_pct_at_080": 0.07694420802202243,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    },
+    "Q4_WIDE": {
+      "primary": {
+        "n": 490,
+        "mean": 0.2751292389226147,
+        "sum": 134.8133270720812,
+        "pf": 1.8043453028225853,
+        "win_rate": 0.5081632653061224,
+        "max_dd": 8.140766315059416,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 490,
+        "mean": 0.26257214016713676,
+        "sum": 128.660348681897,
+        "pf": 1.7540910941443595,
+        "win_rate": 0.5081632653061224,
+        "max_dd": 8.248016840818972,
+        "losing_streak": 9
+      },
+      "share_of_trades": 0.24785027819929187,
+      "share_of_stress_total_r": 0.35559310976103903,
+      "scaled_stress_dd_pct_at_080": 0.06598413472655178,
+      "stress_r_per_session": null,
+      "confidence": "HIGH"
+    }
+  },
+  "period_stability_direction": {
+    "long": {
+      "2024": {
+        "primary": {
+          "n": 385,
+          "mean": 0.2369323033772242,
+          "sum": 91.21893680023132,
+          "pf": 1.7181697836527874,
+          "win_rate": 0.5012987012987012,
+          "max_dd": 6.184626967580158,
+          "losing_streak": 6
+        },
+        "stress": {
+          "n": 385,
+          "mean": 0.22079609606448242,
+          "sum": 85.00649698482573,
+          "pf": 1.6531793171459515,
+          "win_rate": 0.5012987012987012,
+          "max_dd": 6.735458640726883,
+          "losing_streak": 6
+        },
+        "share_of_trades": 0.1947395042994436,
+        "share_of_stress_total_r": 0.2349420386498589,
+        "scaled_stress_dd_pct_at_080": 0.05388366912581506,
+        "stress_r_per_session": 0.34555486579197453,
+        "confidence": "HIGH"
+      },
+      "2025": {
+        "primary": {
+          "n": 50,
+          "mean": 0.45064364183136596,
+          "sum": 22.5321820915683,
+          "pf": 2.4612571762454607,
+          "win_rate": 0.58,
+          "max_dd": 2.21493605412784,
+          "losing_streak": 4
+        },
+        "stress": {
+          "n": 50,
+          "mean": 0.4354275715918028,
+          "sum": 21.771378579590138,
+          "pf": 2.3832307279008607,
+          "win_rate": 0.58,
+          "max_dd": 2.302951939422581,
+          "losing_streak": 4
+        },
+        "share_of_trades": 0.025290844714213456,
+        "share_of_stress_total_r": 0.06017201330646342,
+        "scaled_stress_dd_pct_at_080": 0.018423615515380645,
+        "stress_r_per_session": 0.2623057660191583,
+        "confidence": "MODERATE"
+      },
+      "DEV": {
+        "primary": {
+          "n": 764,
+          "mean": 0.19827563314017072,
+          "sum": 151.48258371909043,
+          "pf": 1.5359440593039742,
+          "win_rate": 0.5091623036649214,
+          "max_dd": 10.546989037668126,
+          "losing_streak": 7
+        },
+        "stress": {
+          "n": 764,
+          "mean": 0.18195605710005713,
+          "sum": 139.01442762444364,
+          "pf": 1.4814610802821209,
+          "win_rate": 0.5091623036649214,
+          "max_dd": 11.010975915421668,
+          "losing_streak": 7
+        },
+        "share_of_trades": 0.38644410723318157,
+        "share_of_stress_total_r": 0.3842098449682047,
+        "scaled_stress_dd_pct_at_080": 0.08808780732337335,
+        "stress_r_per_session": 0.18634641772713625,
+        "confidence": "HIGH"
+      }
+    },
+    "short": {
+      "2024": {
+        "primary": {
+          "n": 119,
+          "mean": 0.05457249202120905,
+          "sum": 6.494126550523877,
+          "pf": 1.116956795870201,
+          "win_rate": 0.3865546218487395,
+          "max_dd": 8.586133253003236,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 119,
+          "mean": 0.03855475355722049,
+          "sum": 4.588015673309238,
+          "pf": 1.080933916014798,
+          "win_rate": 0.3865546218487395,
+          "max_dd": 8.917984916910413,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.06019221041982802,
+        "share_of_stress_total_r": 0.012680416131453971,
+        "scaled_stress_dd_pct_at_080": 0.0713438793352833,
+        "stress_r_per_session": 0.01865047021670422,
+        "confidence": "HIGH"
+      },
+      "2025": {
+        "primary": {
+          "n": 101,
+          "mean": 0.4254293860992209,
+          "sum": 42.96836799602131,
+          "pf": 2.0994064958319716,
+          "win_rate": 0.46534653465346537,
+          "max_dd": 4.167064096501477,
+          "losing_streak": 7
+        },
+        "stress": {
+          "n": 101,
+          "mean": 0.40997924117589235,
+          "sum": 41.407903358765125,
+          "pf": 2.037569316631176,
+          "win_rate": 0.46534653465346537,
+          "max_dd": 4.299575815524591,
+          "losing_streak": 7
+        },
+        "share_of_trades": 0.05108750632271118,
+        "share_of_stress_total_r": 0.11444369049887114,
+        "scaled_stress_dd_pct_at_080": 0.03439660652419673,
+        "stress_r_per_session": 0.49889040191283285,
+        "confidence": "HIGH"
+      },
+      "DEV": {
+        "primary": {
+          "n": 558,
+          "mean": 0.14150071919928,
+          "sum": 78.95740131319825,
+          "pf": 1.3376910308478964,
+          "win_rate": 0.4265232974910394,
+          "max_dd": 16.946954816612646,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 558,
+          "mean": 0.12550321270126655,
+          "sum": 70.03079268730673,
+          "pf": 1.2930057140142535,
+          "win_rate": 0.4265232974910394,
+          "max_dd": 17.79600630276028,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.2822458270106222,
+        "share_of_stress_total_r": 0.193551996445148,
+        "scaled_stress_dd_pct_at_080": 0.14236805042208223,
+        "stress_r_per_session": 0.09387505722159079,
+        "confidence": "HIGH"
+      }
+    }
+  },
+  "period_stability_session": {
+    "LUNCH_1200_1330": {
+      "2024": {
+        "primary": {
+          "n": 41,
+          "mean": 0.08893402145825148,
+          "sum": 3.646294879788311,
+          "pf": 1.2204354267072444,
+          "win_rate": 0.4146341463414634,
+          "max_dd": 5.136590819430616,
+          "losing_streak": 6
+        },
+        "stress": {
+          "n": 41,
+          "mean": 0.07164873189652424,
+          "sum": 2.9375980077574937,
+          "pf": 1.1732710797502033,
+          "win_rate": 0.4146341463414634,
+          "max_dd": 5.240660015187275,
+          "losing_streak": 6
+        },
+        "share_of_trades": 0.020738492665655032,
+        "share_of_stress_total_r": 0.008118970774663366,
+        "scaled_stress_dd_pct_at_080": 0.041925280121498196,
+        "stress_r_per_session": 0.011941455316087373,
+        "confidence": "MODERATE"
+      },
+      "2025": {
+        "primary": {
+          "n": 12,
+          "mean": 0.676891435549413,
+          "sum": 8.122697226592956,
+          "pf": 3.6098055518641705,
+          "win_rate": 0.5833333333333334,
+          "max_dd": 1.046641907924105,
+          "losing_streak": 2
+        },
+        "stress": {
+          "n": 12,
+          "mean": 0.6594910994800658,
+          "sum": 7.9138931937607895,
+          "pf": 3.4746409596442396,
+          "win_rate": 0.5833333333333334,
+          "max_dd": 1.082178599675804,
+          "losing_streak": 2
+        },
+        "share_of_trades": 0.006069802731411229,
+        "share_of_stress_total_r": 0.02187251876678676,
+        "scaled_stress_dd_pct_at_080": 0.008657428797406433,
+        "stress_r_per_session": 0.09534811076820228,
+        "confidence": "VERY_LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 128,
+          "mean": 0.25697563097335163,
+          "sum": 32.89288076458901,
+          "pf": 1.740721594691066,
+          "win_rate": 0.5234375,
+          "max_dd": 10.45672856336072,
+          "losing_streak": 6
+        },
+        "stress": {
+          "n": 128,
+          "mean": 0.2396541986001224,
+          "sum": 30.67573742081567,
+          "pf": 1.674515444144295,
+          "win_rate": 0.5234375,
+          "max_dd": 10.946171640132357,
+          "losing_streak": 6
+        },
+        "share_of_trades": 0.06474456246838645,
+        "share_of_stress_total_r": 0.0847819936400944,
+        "scaled_stress_dd_pct_at_080": 0.08756937312105886,
+        "stress_r_per_session": 0.04112029144881457,
+        "confidence": "HIGH"
+      }
+    },
+    "MORNING_1030_1200": {
+      "2024": {
+        "primary": {
+          "n": 143,
+          "mean": 0.114311606089254,
+          "sum": 16.346559670763323,
+          "pf": 1.2783881873506813,
+          "win_rate": 0.43356643356643354,
+          "max_dd": 8.230289261494935,
+          "losing_streak": 9
+        },
+        "stress": {
+          "n": 143,
+          "mean": 0.09831087367984619,
+          "sum": 14.058454936218006,
+          "pf": 1.234198374731074,
+          "win_rate": 0.43356643356643354,
+          "max_dd": 8.767908906170234,
+          "losing_streak": 9
+        },
+        "share_of_trades": 0.07233181588265047,
+        "share_of_stress_total_r": 0.038854936741738996,
+        "scaled_stress_dd_pct_at_080": 0.07014327124936187,
+        "stress_r_per_session": 0.05714819079763417,
+        "confidence": "HIGH"
+      },
+      "2025": {
+        "primary": {
+          "n": 49,
+          "mean": 0.7294838506988237,
+          "sum": 35.74470868424236,
+          "pf": 4.127758490037791,
+          "win_rate": 0.5714285714285714,
+          "max_dd": 5.128270718129706,
+          "losing_streak": 6
+        },
+        "stress": {
+          "n": 49,
+          "mean": 0.7138130226268002,
+          "sum": 34.97683810871321,
+          "pf": 3.9756174143342484,
+          "win_rate": 0.5714285714285714,
+          "max_dd": 5.226000789085674,
+          "losing_streak": 6
+        },
+        "share_of_trades": 0.024785027819929185,
+        "share_of_stress_total_r": 0.09666943048193181,
+        "scaled_stress_dd_pct_at_080": 0.04180800631268539,
+        "stress_r_per_session": 0.42140768805678563,
+        "confidence": "MODERATE"
+      },
+      "DEV": {
+        "primary": {
+          "n": 371,
+          "mean": 0.12059474779336747,
+          "sum": 44.74065143133933,
+          "pf": 1.2909230877605296,
+          "win_rate": 0.4339622641509434,
+          "max_dd": 15.282576601177587,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 371,
+          "mean": 0.10439101466954796,
+          "sum": 38.72906644240229,
+          "pf": 1.2463351443138333,
+          "win_rate": 0.4339622641509434,
+          "max_dd": 16.998484821631163,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.18765806777946384,
+        "share_of_stress_total_r": 0.10703988692309113,
+        "scaled_stress_dd_pct_at_080": 0.1359878785730493,
+        "stress_r_per_session": 0.051915638662737656,
+        "confidence": "HIGH"
+      }
+    },
+    "OPEN_0930_1030": {
+      "2024": {
+        "primary": {
+          "n": 110,
+          "mean": 0.09021058768863219,
+          "sum": 9.92316464574954,
+          "pf": 1.2190457505705035,
+          "win_rate": 0.39090909090909093,
+          "max_dd": 7.961169545710349,
+          "losing_streak": 6
+        },
+        "stress": {
+          "n": 110,
+          "mean": 0.07457117581765756,
+          "sum": 8.202829339942332,
+          "pf": 1.176934703236878,
+          "win_rate": 0.39090909090909093,
+          "max_dd": 8.416760517821746,
+          "losing_streak": 6
+        },
+        "share_of_trades": 0.0556398583712696,
+        "share_of_stress_total_r": 0.022671084166271963,
+        "scaled_stress_dd_pct_at_080": 0.06733408414257397,
+        "stress_r_per_session": 0.03334483471521273,
+        "confidence": "HIGH"
+      },
+      "2025": {
+        "primary": {
+          "n": 21,
+          "mean": 0.4088393583879384,
+          "sum": 8.585626526146706,
+          "pf": 2.044399190633304,
+          "win_rate": 0.5238095238095238,
+          "max_dd": 2.0434782608695645,
+          "losing_streak": 2
+        },
+        "stress": {
+          "n": 21,
+          "mean": 0.39289569657796986,
+          "sum": 8.250809628137366,
+          "pf": 1.9835575355814583,
+          "win_rate": 0.5238095238095238,
+          "max_dd": 2.0766045548654226,
+          "losing_streak": 2
+        },
+        "share_of_trades": 0.010622154779969651,
+        "share_of_stress_total_r": 0.02280369269765941,
+        "scaled_stress_dd_pct_at_080": 0.016612836438923383,
+        "stress_r_per_session": 0.09940734491731766,
+        "confidence": "LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 286,
+          "mean": 0.30457666565972824,
+          "sum": 87.10892637868227,
+          "pf": 1.8691231587851231,
+          "win_rate": 0.46503496503496505,
+          "max_dd": 6.441007782086629,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 286,
+          "mean": 0.2884130566423178,
+          "sum": 82.48613419970289,
+          "pf": 1.8032985028645057,
+          "win_rate": 0.46503496503496505,
+          "max_dd": 6.610020886768339,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.14466363176530095,
+        "share_of_stress_total_r": 0.22797622789565625,
+        "scaled_stress_dd_pct_at_080": 0.05288016709414672,
+        "stress_r_per_session": 0.11057122546877063,
+        "confidence": "HIGH"
+      }
+    },
+    "PM_1330_1500": {
+      "2024": {
+        "primary": {
+          "n": 209,
+          "mean": 0.31953686091008326,
+          "sum": 66.7832039302074,
+          "pf": 2.077496107945022,
+          "win_rate": 0.5550239234449761,
+          "max_dd": 5.106669442630661,
+          "losing_streak": 7
+        },
+        "stress": {
+          "n": 209,
+          "mean": 0.3033292132388956,
+          "sum": 63.395805566929184,
+          "pf": 1.9985389817969073,
+          "win_rate": 0.5550239234449761,
+          "max_dd": 5.341982960890881,
+          "losing_streak": 7
+        },
+        "share_of_trades": 0.10571573090541224,
+        "share_of_stress_total_r": 0.17521413456671628,
+        "scaled_stress_dd_pct_at_080": 0.04273586368712705,
+        "stress_r_per_session": 0.25770652669483407,
+        "confidence": "HIGH"
+      },
+      "2025": {
+        "primary": {
+          "n": 69,
+          "mean": 0.18909445870445774,
+          "sum": 13.047517650607583,
+          "pf": 1.4110524840035434,
+          "win_rate": 0.43478260869565216,
+          "max_dd": 9.732249058215796,
+          "losing_streak": 7
+        },
+        "stress": {
+          "n": 69,
+          "mean": 0.1744600146049839,
+          "sum": 12.03774100774389,
+          "pf": 1.3726063379983977,
+          "win_rate": 0.43478260869565216,
+          "max_dd": 10.074079659537057,
+          "losing_streak": 7
+        },
+        "share_of_trades": 0.03490136570561457,
+        "share_of_stress_total_r": 0.03327006185895656,
+        "scaled_stress_dd_pct_at_080": 0.08059263727629645,
+        "stress_r_per_session": 0.14503302418968542,
+        "confidence": "HIGH"
+      },
+      "DEV": {
+        "primary": {
+          "n": 529,
+          "mean": 0.12999602558013987,
+          "sum": 68.767897531894,
+          "pf": 1.3229773020806161,
+          "win_rate": 0.499054820415879,
+          "max_dd": 12.02724378797004,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 529,
+          "mean": 0.11408241434552527,
+          "sum": 60.349597188782866,
+          "pf": 1.2779233443873557,
+          "win_rate": 0.499054820415879,
+          "max_dd": 12.487339228062464,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.26757713707637837,
+        "share_of_stress_total_r": 0.16679498506756998,
+        "scaled_stress_dd_pct_at_080": 0.0998987138244997,
+        "stress_r_per_session": 0.08089758336297971,
+        "confidence": "HIGH"
+      }
+    },
+    "POWER_1500_1600": {
+      "2024": {
+        "primary": {
+          "n": 1,
+          "mean": 1.0138402242466094,
+          "sum": 1.0138402242466094,
+          "pf": 1e+99,
+          "win_rate": 1.0,
+          "max_dd": 0.0,
+          "losing_streak": 0
+        },
+        "stress": {
+          "n": 1,
+          "mean": 0.9998248072879552,
+          "sum": 0.9998248072879552,
+          "pf": 1e+99,
+          "win_rate": 1.0,
+          "max_dd": 0.0,
+          "losing_streak": 0
+        },
+        "share_of_trades": 0.0005058168942842691,
+        "share_of_stress_total_r": 0.002763328531922284,
+        "scaled_stress_dd_pct_at_080": 0.0,
+        "stress_r_per_session": 0.004064328484910387,
+        "confidence": "VERY_LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 8,
+          "mean": -0.38379638427699436,
+          "sum": -3.070371074215955,
+          "pf": 0.4005240025882175,
+          "win_rate": 0.25,
+          "max_dd": 3.070371074215955,
+          "losing_streak": 3
+        },
+        "stress": {
+          "n": 8,
+          "mean": -0.39941436749416764,
+          "sum": -3.195314939953341,
+          "pf": 0.38722814302379027,
+          "win_rate": 0.25,
+          "max_dd": 3.195314939953341,
+          "losing_streak": 3
+        },
+        "share_of_trades": 0.004046535154274153,
+        "share_of_stress_total_r": -0.008831252113059044,
+        "scaled_stress_dd_pct_at_080": 0.02556251951962673,
+        "stress_r_per_session": -0.004283263994575524,
+        "confidence": "VERY_LOW"
+      }
+    }
+  },
+  "period_stability_model_direction": {
+    "ema_rev__long": {
+      "2024": {
+        "primary": {
+          "n": 23,
+          "mean": 0.234982871661615,
+          "sum": 5.404606048217145,
+          "pf": 1.6538929114798884,
+          "win_rate": 0.43478260869565216,
+          "max_dd": 3.1926459006155055,
+          "losing_streak": 5
+        },
+        "stress": {
+          "n": 23,
+          "mean": 0.21916388959088207,
+          "sum": 5.040769460590288,
+          "pf": 1.5953154133224048,
+          "win_rate": 0.43478260869565216,
+          "max_dd": 3.3162559276351695,
+          "losing_streak": 5
+        },
+        "share_of_trades": 0.01163378856853819,
+        "share_of_stress_total_r": 0.013931742813098578,
+        "scaled_stress_dd_pct_at_080": 0.02653004742108136,
+        "stress_r_per_session": 0.020490932766627185,
+        "confidence": "LOW"
+      },
+      "2025": {
+        "primary": {
+          "n": 2,
+          "mean": -0.043690130088314405,
+          "sum": -0.08738026017662881,
+          "pf": 0.9141275339595332,
+          "win_rate": 0.5,
+          "max_dd": 1.0175585284280928,
+          "losing_streak": 1
+        },
+        "stress": {
+          "n": 2,
+          "mean": -0.05886805764536701,
+          "sum": -0.11773611529073402,
+          "pf": 0.8857969230432132,
+          "win_rate": 0.5,
+          "max_dd": 1.0309364548494968,
+          "losing_streak": 1
+        },
+        "share_of_trades": 0.0010116337885685382,
+        "share_of_stress_total_r": -0.00032540057442971207,
+        "scaled_stress_dd_pct_at_080": 0.008247491638795975,
+        "stress_r_per_session": -0.0014185074131413738,
+        "confidence": "VERY_LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 55,
+          "mean": 0.23435919387148982,
+          "sum": 12.88975566293194,
+          "pf": 1.6267403140878156,
+          "win_rate": 0.509090909090909,
+          "max_dd": 3.424973072605168,
+          "losing_streak": 3
+        },
+        "stress": {
+          "n": 55,
+          "mean": 0.218007861158983,
+          "sum": 11.990432363744064,
+          "pf": 1.5710316848693293,
+          "win_rate": 0.509090909090909,
+          "max_dd": 3.5185462529662694,
+          "losing_streak": 3
+        },
+        "share_of_trades": 0.0278199291856348,
+        "share_of_stress_total_r": 0.033139309626347056,
+        "scaled_stress_dd_pct_at_080": 0.028148370023730156,
+        "stress_r_per_session": 0.016072965635045663,
+        "confidence": "MODERATE"
+      }
+    },
+    "ema_rev__short": {
+      "2024": {
+        "primary": {
+          "n": 19,
+          "mean": -0.394893839406747,
+          "sum": -7.502982948728193,
+          "pf": 0.33990828301429465,
+          "win_rate": 0.15789473684210525,
+          "max_dd": 7.744713111864051,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 19,
+          "mean": -0.4120567878696517,
+          "sum": -7.8290789695233824,
+          "pf": 0.3277378915081319,
+          "win_rate": 0.15789473684210525,
+          "max_dd": 7.952430250620899,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.009610520991401113,
+        "share_of_stress_total_r": -0.02163810813400419,
+        "scaled_stress_dd_pct_at_080": 0.06361944200496719,
+        "stress_r_per_session": -0.031825524266355217,
+        "confidence": "LOW"
+      },
+      "2025": {
+        "primary": {
+          "n": 14,
+          "mean": 0.4433778851018081,
+          "sum": 6.207290391425313,
+          "pf": 2.502227011652106,
+          "win_rate": 0.5714285714285714,
+          "max_dd": 2.0465184662432323,
+          "losing_streak": 2
+        },
+        "stress": {
+          "n": 14,
+          "mean": 0.4275590589857944,
+          "sum": 5.985826825801121,
+          "pf": 2.4141947362440748,
+          "win_rate": 0.5714285714285714,
+          "max_dd": 2.081961107190457,
+          "losing_streak": 2
+        },
+        "share_of_trades": 0.0070814365199797676,
+        "share_of_stress_total_r": 0.016543704391321617,
+        "scaled_stress_dd_pct_at_080": 0.016655688857523658,
+        "stress_r_per_session": 0.07211839549157978,
+        "confidence": "VERY_LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 42,
+          "mean": 0.15761412626771,
+          "sum": 6.619793303243819,
+          "pf": 1.3777683316827791,
+          "win_rate": 0.38095238095238093,
+          "max_dd": 8.249057134378223,
+          "losing_streak": 12
+        },
+        "stress": {
+          "n": 42,
+          "mean": 0.14219441221671542,
+          "sum": 5.972165313102047,
+          "pf": 1.3332269287470488,
+          "win_rate": 0.38095238095238093,
+          "max_dd": 8.438814951047346,
+          "losing_streak": 12
+        },
+        "share_of_trades": 0.021244309559939303,
+        "share_of_stress_total_r": 0.016505946528588673,
+        "scaled_stress_dd_pct_at_080": 0.06751051960837877,
+        "stress_r_per_session": 0.008005583529627408,
+        "confidence": "MODERATE"
+      }
+    },
+    "kalman_mom__long": {
+      "2024": {
+        "primary": {
+          "n": 80,
+          "mean": 0.1010077058219975,
+          "sum": 8.0806164657598,
+          "pf": 1.2442550549170424,
+          "win_rate": 0.425,
+          "max_dd": 7.78392804824231,
+          "losing_streak": 9
+        },
+        "stress": {
+          "n": 80,
+          "mean": 0.08321709667029774,
+          "sum": 6.657367733623819,
+          "pf": 1.1963384394072967,
+          "win_rate": 0.425,
+          "max_dd": 8.08381085838889,
+          "losing_streak": 9
+        },
+        "share_of_trades": 0.04046535154274153,
+        "share_of_stress_total_r": 0.01839971770226661,
+        "scaled_stress_dd_pct_at_080": 0.06467048686711112,
+        "stress_r_per_session": 0.027062470461885445,
+        "confidence": "HIGH"
+      },
+      "2025": {
+        "primary": {
+          "n": 11,
+          "mean": 0.18632799601072067,
+          "sum": 2.0496079561179275,
+          "pf": 1.4973852297117805,
+          "win_rate": 0.5454545454545454,
+          "max_dd": 2.047707612456745,
+          "losing_streak": 2
+        },
+        "stress": {
+          "n": 11,
+          "mean": 0.16831617890927922,
+          "sum": 1.8514779680020714,
+          "pf": 1.4394910379820849,
+          "win_rate": 0.5454545454545454,
+          "max_dd": 2.084056269566646,
+          "losing_streak": 2
+        },
+        "share_of_trades": 0.00556398583712696,
+        "share_of_stress_total_r": 0.005117138380556415,
+        "scaled_stress_dd_pct_at_080": 0.016672450156533167,
+        "stress_r_per_session": 0.022306963469904476,
+        "confidence": "VERY_LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 135,
+          "mean": 0.18252371281897672,
+          "sum": 24.64070123056186,
+          "pf": 1.4852535014172785,
+          "win_rate": 0.45185185185185184,
+          "max_dd": 11.935669771707786,
+          "losing_streak": 7
+        },
+        "stress": {
+          "n": 135,
+          "mean": 0.1643177498117155,
+          "sum": 22.182896224581594,
+          "pf": 1.4254937801111873,
+          "win_rate": 0.45185185185185184,
+          "max_dd": 12.460373586817663,
+          "losing_streak": 7
+        },
+        "share_of_trades": 0.06828528072837632,
+        "share_of_stress_total_r": 0.06130937101303896,
+        "scaled_stress_dd_pct_at_080": 0.09968298869454131,
+        "stress_r_per_session": 0.029735785823835917,
+        "confidence": "HIGH"
+      }
+    },
+    "kalman_mom__short": {
+      "2024": {
+        "primary": {
+          "n": 13,
+          "mean": 0.24139741197957582,
+          "sum": 3.1381663557344854,
+          "pf": 1.4366895199918552,
+          "win_rate": 0.38461538461538464,
+          "max_dd": 3.0715665083570363,
+          "losing_streak": 3
+        },
+        "stress": {
+          "n": 13,
+          "mean": 0.22370345415756002,
+          "sum": 2.9081449040482803,
+          "pf": 1.3968440791777044,
+          "win_rate": 0.38461538461538464,
+          "max_dd": 3.126093371867159,
+          "losing_streak": 3
+        },
+        "share_of_trades": 0.0065756196256954984,
+        "share_of_stress_total_r": 0.00803756791164169,
+        "scaled_stress_dd_pct_at_080": 0.02500874697493727,
+        "stress_r_per_session": 0.011821727252228782,
+        "confidence": "VERY_LOW"
+      },
+      "2025": {
+        "primary": {
+          "n": 22,
+          "mean": 0.8788000744987978,
+          "sum": 19.33360163897355,
+          "pf": 4.703965332203685,
+          "win_rate": 0.5909090909090909,
+          "max_dd": 3.1234506901017305,
+          "losing_streak": 5
+        },
+        "stress": {
+          "n": 22,
+          "mean": 0.8604215288811496,
+          "sum": 18.929273635385293,
+          "pf": 4.513817089616918,
+          "win_rate": 0.5909090909090909,
+          "max_dd": 3.217508358750667,
+          "losing_streak": 5
+        },
+        "share_of_trades": 0.01112797167425392,
+        "share_of_stress_total_r": 0.05231696747664262,
+        "scaled_stress_dd_pct_at_080": 0.025740066870005338,
+        "stress_r_per_session": 0.2280635377757264,
+        "confidence": "LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 113,
+          "mean": 0.19742944409681712,
+          "sum": 22.309527182940336,
+          "pf": 1.4686444044021014,
+          "win_rate": 0.39823008849557523,
+          "max_dd": 7.804879696544321,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 113,
+          "mean": 0.17955169446652952,
+          "sum": 20.289341474717837,
+          "pf": 1.4155372614401662,
+          "win_rate": 0.39823008849557523,
+          "max_dd": 8.596925156963005,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.057157309054122404,
+        "share_of_stress_total_r": 0.056075940287061296,
+        "scaled_stress_dd_pct_at_080": 0.06877540125570404,
+        "stress_r_per_session": 0.02719750867924643,
+        "confidence": "HIGH"
+      }
+    },
+    "open_drive__long": {
+      "2024": {
+        "primary": {
+          "n": 36,
+          "mean": 0.2837036292206917,
+          "sum": 10.2133306519449,
+          "pf": 2.1031267706928385,
+          "win_rate": 0.5277777777777778,
+          "max_dd": 3.0786464486866185,
+          "losing_streak": 4
+        },
+        "stress": {
+          "n": 36,
+          "mean": 0.26808492922900995,
+          "sum": 9.651057452244357,
+          "pf": 2.013485101307026,
+          "win_rate": 0.5277777777777778,
+          "max_dd": 3.1385675524478494,
+          "losing_streak": 4
+        },
+        "share_of_trades": 0.018209408194233688,
+        "share_of_stress_total_r": 0.026673715461560037,
+        "scaled_stress_dd_pct_at_080": 0.025108540419582794,
+        "stress_r_per_session": 0.03923194086278194,
+        "confidence": "MODERATE"
+      },
+      "DEV": {
+        "primary": {
+          "n": 84,
+          "mean": 0.2808326693122235,
+          "sum": 23.589944222226773,
+          "pf": 1.843371079500237,
+          "win_rate": 0.4523809523809524,
+          "max_dd": 6.621458650137026,
+          "losing_streak": 5
+        },
+        "stress": {
+          "n": 84,
+          "mean": 0.26459023218509625,
+          "sum": 22.225579503548087,
+          "pf": 1.7741182104436186,
+          "win_rate": 0.4523809523809524,
+          "max_dd": 6.753407441046068,
+          "losing_streak": 5
+        },
+        "share_of_trades": 0.042488619119878605,
+        "share_of_stress_total_r": 0.06142733960288026,
+        "scaled_stress_dd_pct_at_080": 0.054027259528368544,
+        "stress_r_per_session": 0.02979300201548001,
+        "confidence": "HIGH"
+      }
+    },
+    "ou_rev__long": {
+      "2024": {
+        "primary": {
+          "n": 129,
+          "mean": 0.2692961328394984,
+          "sum": 34.73920113629529,
+          "pf": 1.8636103982361398,
+          "win_rate": 0.5193798449612403,
+          "max_dd": 4.235625415063964,
+          "losing_streak": 4
+        },
+        "stress": {
+          "n": 129,
+          "mean": 0.254188628161339,
+          "sum": 32.79033303281273,
+          "pf": 1.7966689078581468,
+          "win_rate": 0.5193798449612403,
+          "max_dd": 4.352953233732718,
+          "losing_streak": 4
+        },
+        "share_of_trades": 0.06525037936267071,
+        "share_of_stress_total_r": 0.09062633991507758,
+        "scaled_stress_dd_pct_at_080": 0.03482362586986174,
+        "stress_r_per_session": 0.13329403671875095,
+        "confidence": "HIGH"
+      },
+      "2025": {
+        "primary": {
+          "n": 19,
+          "mean": 0.697748792355353,
+          "sum": 13.257227054751707,
+          "pf": 4.201572118800335,
+          "win_rate": 0.5789473684210527,
+          "max_dd": 1.184875481652778,
+          "losing_streak": 3
+        },
+        "stress": {
+          "n": 19,
+          "mean": 0.6839369441804987,
+          "sum": 12.994801939429475,
+          "pf": 4.058922835568411,
+          "win_rate": 0.5789473684210527,
+          "max_dd": 1.257063463586289,
+          "losing_streak": 3
+        },
+        "share_of_trades": 0.009610520991401113,
+        "share_of_stress_total_r": 0.035915199047029174,
+        "scaled_stress_dd_pct_at_080": 0.010056507708690312,
+        "stress_r_per_session": 0.15656387878830694,
+        "confidence": "LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 287,
+          "mean": 0.13257615277964147,
+          "sum": 38.0493558477571,
+          "pf": 1.330240033356444,
+          "win_rate": 0.49477351916376305,
+          "max_dd": 6.8968610807537996,
+          "losing_streak": 5
+        },
+        "stress": {
+          "n": 287,
+          "mean": 0.11710477621327574,
+          "sum": 33.609070773210135,
+          "pf": 1.2861502655144583,
+          "win_rate": 0.49477351916376305,
+          "max_dd": 7.186540489489783,
+          "losing_streak": 5
+        },
+        "share_of_trades": 0.14516944865958523,
+        "share_of_stress_total_r": 0.09288917770596881,
+        "scaled_stress_dd_pct_at_080": 0.05749232391591826,
+        "stress_r_per_session": 0.045052373690630206,
+        "confidence": "HIGH"
+      }
+    },
+    "ou_rev__short": {
+      "2024": {
+        "primary": {
+          "n": 57,
+          "mean": 0.08901506278535869,
+          "sum": 5.073858578765445,
+          "pf": 1.183325168540273,
+          "win_rate": 0.42105263157894735,
+          "max_dd": 6.130628010353593,
+          "losing_streak": 6
+        },
+        "stress": {
+          "n": 57,
+          "mean": 0.07315033501622578,
+          "sum": 4.16956909592487,
+          "pf": 1.1478963895045053,
+          "win_rate": 0.42105263157894735,
+          "max_dd": 6.230154113480139,
+          "losing_streak": 6
+        },
+        "share_of_trades": 0.028831562974203338,
+        "share_of_stress_total_r": 0.011523908153313328,
+        "scaled_stress_dd_pct_at_080": 0.049841232907841114,
+        "stress_r_per_session": 0.016949467869613294,
+        "confidence": "MODERATE"
+      },
+      "2025": {
+        "primary": {
+          "n": 35,
+          "mean": 0.22302965533599542,
+          "sum": 7.806037936759839,
+          "pf": 1.5406991500819263,
+          "win_rate": 0.34285714285714286,
+          "max_dd": 6.18901948579791,
+          "losing_streak": 6
+        },
+        "stress": {
+          "n": 35,
+          "mean": 0.20845709201666748,
+          "sum": 7.295998220583362,
+          "pf": 1.4939796342038012,
+          "win_rate": 0.34285714285714286,
+          "max_dd": 6.361194688177205,
+          "losing_streak": 6
+        },
+        "share_of_trades": 0.017703591299949417,
+        "share_of_stress_total_r": 0.020164772773022088,
+        "scaled_stress_dd_pct_at_080": 0.05088955750541764,
+        "stress_r_per_session": 0.08790359301907666,
+        "confidence": "MODERATE"
+      },
+      "DEV": {
+        "primary": {
+          "n": 211,
+          "mean": 0.18550635434341,
+          "sum": 39.14184076645951,
+          "pf": 1.4690325544225566,
+          "win_rate": 0.43601895734597157,
+          "max_dd": 11.288373181716477,
+          "losing_streak": 7
+        },
+        "stress": {
+          "n": 211,
+          "mean": 0.1700212375503843,
+          "sum": 35.87448112313109,
+          "pf": 1.4204663170628458,
+          "win_rate": 0.43601895734597157,
+          "max_dd": 12.405115375732331,
+          "losing_streak": 7
+        },
+        "share_of_trades": 0.10672736469398078,
+        "share_of_stress_total_r": 0.09915034767376467,
+        "scaled_stress_dd_pct_at_080": 0.09924092300585866,
+        "stress_r_per_session": 0.048089116787039,
+        "confidence": "HIGH"
+      }
+    },
+    "pd_rev__long": {
+      "2024": {
+        "primary": {
+          "n": 18,
+          "mean": -0.4165940408463556,
+          "sum": -7.498692735234401,
+          "pf": 0.33800423367296495,
+          "win_rate": 0.16666666666666666,
+          "max_dd": 8.124702546227489,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 18,
+          "mean": -0.4328564699272992,
+          "sum": -7.791416458691386,
+          "pf": 0.32698318864334397,
+          "win_rate": 0.16666666666666666,
+          "max_dd": 8.358186692927882,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.009104704097116844,
+        "share_of_stress_total_r": -0.02153401600705628,
+        "scaled_stress_dd_pct_at_080": 0.06686549354342305,
+        "stress_r_per_session": -0.03167242462882677,
+        "confidence": "LOW"
+      },
+      "2025": {
+        "primary": {
+          "n": 4,
+          "mean": 1.415766198970208,
+          "sum": 5.663064795880832,
+          "pf": 1e+99,
+          "win_rate": 1.0,
+          "max_dd": 0.0,
+          "losing_streak": 0
+        },
+        "stress": {
+          "n": 4,
+          "mean": 1.4015049060299494,
+          "sum": 5.6060196241197975,
+          "pf": 1e+99,
+          "win_rate": 1.0,
+          "max_dd": 0.0,
+          "losing_streak": 0
+        },
+        "share_of_trades": 0.0020232675771370764,
+        "share_of_stress_total_r": 0.015493988411696708,
+        "scaled_stress_dd_pct_at_080": 0.0,
+        "stress_r_per_session": 0.06754240510987708,
+        "confidence": "VERY_LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 39,
+          "mean": 0.6767195722782773,
+          "sum": 26.392063318852813,
+          "pf": 5.260918980825417,
+          "win_rate": 0.7692307692307693,
+          "max_dd": 1.0453582757977244,
+          "losing_streak": 2
+        },
+        "stress": {
+          "n": 39,
+          "mean": 0.6606970746984732,
+          "sum": 25.767185913240453,
+          "pf": 5.063083491959425,
+          "win_rate": 0.7692307692307693,
+          "max_dd": 1.0799169621197997,
+          "losing_streak": 2
+        },
+        "share_of_trades": 0.019726858877086494,
+        "share_of_stress_total_r": 0.07121567648890749,
+        "scaled_stress_dd_pct_at_080": 0.008639335696958397,
+        "stress_r_per_session": 0.03454046369067085,
+        "confidence": "MODERATE"
+      }
+    },
+    "pd_rev__short": {
+      "2024": {
+        "primary": {
+          "n": 6,
+          "mean": 0.4717954801486422,
+          "sum": 2.8307728808918533,
+          "pf": 2.3705216291345677,
+          "win_rate": 0.5,
+          "max_dd": 2.044654334635952,
+          "losing_streak": 2
+        },
+        "stress": {
+          "n": 6,
+          "mean": 0.45608324371063874,
+          "sum": 2.7364994622638323,
+          "pf": 2.2936366958584777,
+          "win_rate": 0.5,
+          "max_dd": 2.078676684834772,
+          "losing_streak": 2
+        },
+        "share_of_trades": 0.0030349013657056147,
+        "share_of_stress_total_r": 0.007563172054287487,
+        "scaled_stress_dd_pct_at_080": 0.01662941347867818,
+        "stress_r_per_session": 0.011123981553918017,
+        "confidence": "VERY_LOW"
+      },
+      "2025": {
+        "primary": {
+          "n": 4,
+          "mean": 1.122641848102281,
+          "sum": 4.490567392409124,
+          "pf": 5.409342659213094,
+          "win_rate": 0.75,
+          "max_dd": 1.0184210526315791,
+          "losing_streak": 1
+        },
+        "stress": {
+          "n": 4,
+          "mean": 1.107668196512888,
+          "sum": 4.430672786051552,
+          "pf": 5.291390803822234,
+          "win_rate": 0.75,
+          "max_dd": 1.0324561403508774,
+          "losing_streak": 1
+        },
+        "share_of_trades": 0.0020232675771370764,
+        "share_of_stress_total_r": 0.012245549856397673,
+        "scaled_stress_dd_pct_at_080": 0.008259649122807019,
+        "stress_r_per_session": 0.05338159983194641,
+        "confidence": "VERY_LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 31,
+          "mean": -0.04356615521453167,
+          "sum": -1.3505508116504819,
+          "pf": 0.9122864588188131,
+          "win_rate": 0.3870967741935484,
+          "max_dd": 7.1661134971253535,
+          "losing_streak": 8
+        },
+        "stress": {
+          "n": 31,
+          "mean": -0.05965372862611296,
+          "sum": -1.8492655874095019,
+          "pf": 0.8822122836684012,
+          "win_rate": 0.3870967741935484,
+          "max_dd": 7.296550967678676,
+          "losing_streak": 8
+        },
+        "share_of_trades": 0.01568032372281234,
+        "share_of_stress_total_r": -0.00511102377490715,
+        "scaled_stress_dd_pct_at_080": 0.058372407741429405,
+        "stress_r_per_session": -0.002478908294114614,
+        "confidence": "MODERATE"
+      }
+    },
+    "pm_mom__long": {
+      "2024": {
+        "primary": {
+          "n": 99,
+          "mean": 0.4068674265984707,
+          "sum": 40.279875233248596,
+          "pf": 2.620504292743339,
+          "win_rate": 0.6060606060606061,
+          "max_dd": 2.2309703393517424,
+          "losing_streak": 3
+        },
+        "stress": {
+          "n": 99,
+          "mean": 0.39048874509339315,
+          "sum": 38.65838576424592,
+          "pf": 2.5154882637667377,
+          "win_rate": 0.6060606060606061,
+          "max_dd": 2.3160783654893464,
+          "losing_streak": 3
+        },
+        "share_of_trades": 0.05007587253414264,
+        "share_of_stress_total_r": 0.10684453876491239,
+        "scaled_stress_dd_pct_at_080": 0.01852862692391477,
+        "stress_r_per_session": 0.15714790961075578,
+        "confidence": "HIGH"
+      },
+      "2025": {
+        "primary": {
+          "n": 14,
+          "mean": 0.11783303892817572,
+          "sum": 1.64966254499446,
+          "pf": 1.268650592204311,
+          "win_rate": 0.5,
+          "max_dd": 2.6187365153464746,
+          "losing_streak": 3
+        },
+        "stress": {
+          "n": 14,
+          "mean": 0.10262965452353744,
+          "sum": 1.436815163329524,
+          "pf": 1.2299773868446446,
+          "win_rate": 0.5,
+          "max_dd": 2.7092024318008177,
+          "losing_streak": 3
+        },
+        "share_of_trades": 0.0070814365199797676,
+        "share_of_stress_total_r": 0.003971088041610829,
+        "scaled_stress_dd_pct_at_080": 0.021673619454406542,
+        "stress_r_per_session": 0.017311026064211133,
+        "confidence": "VERY_LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 164,
+          "mean": 0.15805343558999962,
+          "sum": 25.920763436759938,
+          "pf": 1.4186263151817458,
+          "win_rate": 0.5487804878048781,
+          "max_dd": 5.1137353195863655,
+          "losing_streak": 5
+        },
+        "stress": {
+          "n": 164,
+          "mean": 0.14170282223243486,
+          "sum": 23.239262846119317,
+          "pf": 1.3683098192191125,
+          "win_rate": 0.5487804878048781,
+          "max_dd": 5.200390801175978,
+          "losing_streak": 5
+        },
+        "share_of_trades": 0.08295397066262013,
+        "share_of_stress_total_r": 0.06422897053106215,
+        "scaled_stress_dd_pct_at_080": 0.041603126409407824,
+        "stress_r_per_session": 0.031151826871473616,
+        "confidence": "HIGH"
+      }
+    },
+    "pm_mom__short": {
+      "2024": {
+        "primary": {
+          "n": 24,
+          "mean": 0.12309632016084542,
+          "sum": 2.95431168386029,
+          "pf": 1.4085776818583167,
+          "win_rate": 0.4583333333333333,
+          "max_dd": 3.1141079040630193,
+          "losing_streak": 5
+        },
+        "stress": {
+          "n": 24,
+          "mean": 0.10845338252481829,
+          "sum": 2.602881180595639,
+          "pf": 1.3514315158503187,
+          "win_rate": 0.4583333333333333,
+          "max_dd": 3.213948037380488,
+          "losing_streak": 5
+        },
+        "share_of_trades": 0.012139605462822459,
+        "share_of_stress_total_r": 0.007193876146215657,
+        "scaled_stress_dd_pct_at_080": 0.025711584299043903,
+        "stress_r_per_session": 0.010580817807299345,
+        "confidence": "LOW"
+      },
+      "2025": {
+        "primary": {
+          "n": 26,
+          "mean": 0.19734117832513368,
+          "sum": 5.1308706364534755,
+          "pf": 1.3594022572224003,
+          "win_rate": 0.4230769230769231,
+          "max_dd": 4.603294638915979,
+          "losing_streak": 3
+        },
+        "stress": {
+          "n": 26,
+          "mean": 0.1833127650362998,
+          "sum": 4.766131890943795,
+          "pf": 1.329005032619566,
+          "win_rate": 0.4230769230769231,
+          "max_dd": 4.742819645917381,
+          "losing_streak": 3
+        },
+        "share_of_trades": 0.013151239251390997,
+        "share_of_stress_total_r": 0.013172696001487136,
+        "scaled_stress_dd_pct_at_080": 0.03794255716733905,
+        "stress_r_per_session": 0.05742327579450355,
+        "confidence": "LOW"
+      },
+      "DEV": {
+        "primary": {
+          "n": 161,
+          "mean": 0.07600491224972084,
+          "sum": 12.236790872205054,
+          "pf": 1.175216473754474,
+          "win_rate": 0.453416149068323,
+          "max_dd": 8.90404674670582,
+          "losing_streak": 6
+        },
+        "stress": {
+          "n": 161,
+          "mean": 0.06052217617245496,
+          "sum": 9.744070363765248,
+          "pf": 1.136780748020874,
+          "win_rate": 0.453416149068323,
+          "max_dd": 9.708335723766393,
+          "losing_streak": 6
+        },
+        "share_of_trades": 0.08143651997976732,
+        "share_of_stress_total_r": 0.0269307857306405,
+        "scaled_stress_dd_pct_at_080": 0.07766668579013114,
+        "stress_r_per_session": 0.013061756519792557,
+        "confidence": "HIGH"
+      }
+    }
+  },
+  "marginal_remove_direction": {
+    "long": {
+      "remaining_n": 778,
+      "stress": {
+        "n": 778,
+        "mean": 0.14913459089894743,
+        "sum": 116.0267117193811,
+        "pf": 1.3457237506605213,
+        "win_rate": 0.4254498714652956,
+        "max_dd": 17.79600630276028,
+        "losing_streak": 8
+      },
+      "stress_r_per_session": 0.10793182485523824,
+      "implied_step1_days_at_080": 115.81384838777086,
+      "delta_stress_total_r_vs_baseline": -245.79230318885945,
+      "delta_stress_pf_vs_baseline": -0.1240356657843269,
+      "delta_stress_dd_r_vs_baseline": 6.7789436917457415,
+      "delta_step1_days_vs_baseline": 78.67511480460684
+    },
+    "short": {
+      "remaining_n": 1199,
+      "stress": {
+        "n": 1199,
+        "mean": 0.20499775078303545,
+        "sum": 245.7923031888595,
+        "pf": 1.565538120238743,
+        "win_rate": 0.5095913261050876,
+        "max_dd": 11.010975915421668,
+        "losing_streak": 7
+      },
+      "stress_r_per_session": 0.22864400296638093,
+      "implied_step1_days_at_080": 54.67014152056269,
+      "delta_stress_total_r_vs_baseline": -116.02671171938104,
+      "delta_stress_pf_vs_baseline": 0.09577870379389486,
+      "delta_stress_dd_r_vs_baseline": -0.006086695592870228,
+      "delta_step1_days_vs_baseline": 17.531407937398654
+    }
+  },
+  "marginal_remove_session": {
+    "LUNCH_1200_1330": {
+      "remaining_n": 1796,
+      "stress": {
+        "n": 1796,
+        "mean": 0.17833618390083888,
+        "sum": 320.29178628590665,
+        "pf": 1.4545776638270844,
+        "win_rate": 0.47383073496659245,
+        "max_dd": 11.39128124715078,
+        "losing_streak": 9
+      },
+      "stress_r_per_session": 0.2979458477078201,
+      "implied_step1_days_at_080": 41.95393255575119,
+      "delta_stress_total_r_vs_baseline": -41.527228622333894,
+      "delta_stress_pf_vs_baseline": -0.015181752617763777,
+      "delta_stress_dd_r_vs_baseline": 0.3742186361362414,
+      "delta_step1_days_vs_baseline": 4.8151989725871545
+    },
+    "MORNING_1030_1200": {
+      "remaining_n": 1414,
+      "stress": {
+        "n": 1414,
+        "mean": 0.19381517356499797,
+        "sum": 274.0546554209071,
+        "pf": 1.5063660549905435,
+        "win_rate": 0.4886845827439887,
+        "max_dd": 9.4203407583895,
+        "losing_streak": 9
+      },
+      "stress_r_per_session": 0.25493456318223917,
+      "implied_step1_days_at_080": 49.032190237243015,
+      "delta_stress_total_r_vs_baseline": -87.76435948733342,
+      "delta_stress_pf_vs_baseline": 0.03660663854569535,
+      "delta_stress_dd_r_vs_baseline": -1.5967218526250377,
+      "delta_step1_days_vs_baseline": 11.893456654078982
+    },
+    "OPEN_0930_1030": {
+      "remaining_n": 1560,
+      "stress": {
+        "n": 1560,
+        "mean": 0.16851233444901154,
+        "sum": 262.879241740458,
+        "pf": 1.428988779649076,
+        "win_rate": 0.483974358974359,
+        "max_dd": 14.692810626605667,
+        "losing_streak": 7
+      },
+      "stress_r_per_session": 0.24453882952600742,
+      "implied_step1_days_at_080": 51.116626444270224,
+      "delta_stress_total_r_vs_baseline": -98.93977316778256,
+      "delta_stress_pf_vs_baseline": -0.04077063679577231,
+      "delta_stress_dd_r_vs_baseline": 3.675748015591129,
+      "delta_step1_days_vs_baseline": 13.977892861106191
+    },
+    "PM_1330_1500": {
+      "remaining_n": 1170,
+      "stress": {
+        "n": 1170,
+        "mean": 0.1931930522604997,
+        "sum": 226.03587114478466,
+        "pf": 1.494303262223322,
+        "win_rate": 0.4547008547008547,
+        "max_dd": 14.8905584110708,
+        "losing_streak": 10
+      },
+      "stress_r_per_session": 0.2102659266463113,
+      "implied_step1_days_at_080": 59.44852881953752,
+      "delta_stress_total_r_vs_baseline": -135.78314376345588,
+      "delta_stress_pf_vs_baseline": 0.024543845778473905,
+      "delta_stress_dd_r_vs_baseline": 3.8734958000562614,
+      "delta_step1_days_vs_baseline": 22.30979523637349
+    },
+    "POWER_1500_1600": {
+      "remaining_n": 1968,
+      "stress": {
+        "n": 1968,
+        "mean": 0.18496672004111075,
+        "sum": 364.014505040906,
+        "pf": 1.4758313352092367,
+        "win_rate": 0.4771341463414634,
+        "max_dd": 10.601138395667974,
+        "losing_streak": 8
+      },
+      "stress_r_per_session": 0.3386181442240986,
+      "implied_step1_days_at_080": 36.91473777532565,
+      "delta_stress_total_r_vs_baseline": 2.195490132665441,
+      "delta_stress_pf_vs_baseline": 0.006071918764388506,
+      "delta_stress_dd_r_vs_baseline": -0.4159242153465641,
+      "delta_step1_days_vs_baseline": -0.22399580783838502
+    }
+  },
+  "marginal_remove_model": {
+    "ema_rev": {
+      "remaining_n": 1822,
+      "stress": {
+        "n": 1822,
+        "mean": 0.1870343776233903,
+        "sum": 340.77663602981715,
+        "pf": 1.482737723573122,
+        "win_rate": 0.4807903402854007,
+        "max_dd": 10.530119931519685,
+        "losing_streak": 7
+      },
+      "stress_r_per_session": 0.317001521888202,
+      "implied_step1_days_at_080": 39.431987346762384,
+      "delta_stress_total_r_vs_baseline": -21.042378878423392,
+      "delta_stress_pf_vs_baseline": 0.012978307128273858,
+      "delta_stress_dd_r_vs_baseline": -0.48694267949485237,
+      "delta_step1_days_vs_baseline": 2.2932537635983508
+    },
+    "kalman_mom": {
+      "remaining_n": 1603,
+      "stress": {
+        "n": 1603,
+        "mean": 0.18028728195126742,
+        "sum": 289.00051296788166,
+        "pf": 1.4673169661660008,
+        "win_rate": 0.48533998752339363,
+        "max_dd": 11.711668031018476,
+        "losing_streak": 10
+      },
+      "stress_r_per_session": 0.2688376864817504,
+      "implied_step1_days_at_080": 46.49645726232116,
+      "delta_stress_total_r_vs_baseline": -72.81850194035889,
+      "delta_stress_pf_vs_baseline": -0.0024424502788473745,
+      "delta_stress_dd_r_vs_baseline": 0.6946054200039384,
+      "delta_step1_days_vs_baseline": 9.357723679157125
+    },
+    "open_drive": {
+      "remaining_n": 1857,
+      "stress": {
+        "n": 1857,
+        "mean": 0.1776749477396059,
+        "sum": 329.94237795244817,
+        "pf": 1.4507480504849193,
+        "win_rate": 0.4765751211631664,
+        "max_dd": 11.017062611014541,
+        "losing_streak": 8
+      },
+      "stress_r_per_session": 0.30692314228134715,
+      "implied_step1_days_at_080": 40.72680836996524,
+      "delta_stress_total_r_vs_baseline": -31.876636955792378,
+      "delta_stress_pf_vs_baseline": -0.019011365959928916,
+      "delta_stress_dd_r_vs_baseline": 3.552713678800501e-15,
+      "delta_step1_days_vs_baseline": 3.588074786801208
+    },
+    "ou_rev": {
+      "remaining_n": 1239,
+      "stress": {
+        "n": 1239,
+        "mean": 0.18973749856589905,
+        "sum": 235.08476072314892,
+        "pf": 1.4907015235589858,
+        "win_rate": 0.4794188861985472,
+        "max_dd": 11.546331260676475,
+        "losing_streak": 8
+      },
+      "stress_r_per_session": 0.21868349834711528,
+      "implied_step1_days_at_080": 57.160234285985354,
+      "delta_stress_total_r_vs_baseline": -126.73425418509163,
+      "delta_stress_pf_vs_baseline": 0.020942107114137576,
+      "delta_stress_dd_r_vs_baseline": 0.5292686496619368,
+      "delta_step1_days_vs_baseline": 20.02150070282132
+    },
+    "pd_rev": {
+      "remaining_n": 1875,
+      "stress": {
+        "n": 1875,
+        "mean": 0.17755697022328845,
+        "sum": 332.9193191686658,
+        "pf": 1.4539052597333475,
+        "win_rate": 0.4730666666666667,
+        "max_dd": 11.930610956642312,
+        "losing_streak": 8
+      },
+      "stress_r_per_session": 0.3096923899243403,
+      "implied_step1_days_at_080": 40.36263210424326,
+      "delta_stress_total_r_vs_baseline": -28.899695739574724,
+      "delta_stress_pf_vs_baseline": -0.0158541567115007,
+      "delta_stress_dd_r_vs_baseline": 0.913548345627774,
+      "delta_step1_days_vs_baseline": 3.223898521079228
+    },
+    "pm_mom": {
+      "remaining_n": 1489,
+      "stress": {
+        "n": 1489,
+        "mean": 0.18896673451930235,
+        "sum": 281.3714676992412,
+        "pf": 1.483259522059989,
+        "win_rate": 0.4633982538616521,
+        "max_dd": 17.02442696693346,
+        "losing_streak": 10
+      },
+      "stress_r_per_session": 0.26174090018534063,
+      "implied_step1_days_at_080": 47.75715217281158,
+      "delta_stress_total_r_vs_baseline": -80.44754720899937,
+      "delta_stress_pf_vs_baseline": 0.0135001056151407,
+      "delta_stress_dd_r_vs_baseline": 6.007364355918924,
+      "delta_step1_days_vs_baseline": 10.618418589647547
+    }
+  },
+  "notes": [
+    "Diagnostic only: aggregate 2024/2025 candidate outcomes were already observed before V14.",
+    "Any filter suggested by V14 must be validated prospectively on FTMO Free Trial/forward.",
+    "Cells with N<30 are low-confidence; N<15 very-low-confidence."
+  ]
+}
