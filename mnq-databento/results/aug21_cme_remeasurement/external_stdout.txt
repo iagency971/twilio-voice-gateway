@@ -1,0 +1,99 @@
+NQ: 82,114 bars  (2026-05-31 20:00:00 -> 2026-08-21 15:59:00)
+Auto-detected history file: /tmp/mnq_aug21_cme_remeasurement/external/data/Dataset_NQ_1min_2022_2025.csv
+Prepended 0 historical bars for regime warmup
+Combined: 82,114 bars  (2026-05-31 20:00:00 -> 2026-08-21 15:59:00)
+Daily bars: 313
+Scanning models...
+  ema_rev: 14 signals
+  kalman_mom: 40 signals
+  open_drive: 4 signals
+  or_rev: 21 signals
+  ou_lunch: 50 signals
+  ou_rev: 83 signals
+  pd_rev: 2 signals
+  pm_mom: 44 signals
+  sweep: 1 signals
+  trend: 25 signals
+  vwap_rev: 9 signals
+  vwap_scalp: 22 signals
+  total: 315 signals
+Simulating...
+  185 trades
+Trades -> /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/mnq-databento/results/aug21_cme_remeasurement/external_trades_all.csv
+
+=================================================================
+  MULTI-MODEL NQ STRATEGY — BACKTEST RESULTS
+=================================================================
+Metric            Value
+----------------  -------
+Total Trades      185
+Trading Days      60
+Trades/Day        3.1
+Win Rate          36.2%
+Avg Win (R)       1.71
+Avg Loss (R)      -0.70
+Expectancy (R)    0.173
+Profit Factor     1.39
+Total R           32.0
+Max Drawdown (R)  -10.1
+Avg Risk (ticks)  54.4
+Total PnL ($)     $31,987
+
+--- By Model ---
+  ema_rev   10 trades  20% WR  avg -0.57R  total -5.7R
+  kalman_mom   29 trades  24% WR  avg -0.07R  total -2.2R
+  open_drive    4 trades  75% WR  avg +1.26R  total +5.0R
+  or_rev   18 trades  44% WR  avg +0.49R  total +8.9R
+  ou_lunch   25 trades  20% WR  avg -0.17R  total -4.2R
+  ou_rev   40 trades  35% WR  avg +0.17R  total +6.7R
+  pd_rev    2 trades  50% WR  avg +0.19R  total +0.4R
+  pm_mom   27 trades  41% WR  avg +0.05R  total +1.4R
+  sweep     1 trades  0% WR  avg -1.00R  total -1.0R
+  trend    13 trades  38% WR  avg +0.24R  total +3.1R
+  vwap_rev    6 trades  50% WR  avg +0.28R  total +1.7R
+  vwap_scalp   10 trades  80% WR  avg +1.80R  total +18.0R
+
+--- By Setup Type ---
+  ema_rev_long                 7 trades  14% WR  avg -0.66R
+  ema_rev_short                3 trades  33% WR  avg -0.36R
+  kalman_mom_long             22 trades  32% WR  avg +0.13R
+  kalman_mom_short             7 trades  0% WR  avg -0.72R
+  open_drive_long              4 trades  75% WR  avg +1.26R
+  or_rev_long                 14 trades  57% WR  avg +0.85R
+  or_rev_short                 4 trades  0% WR  avg -0.75R
+  ou_lunch_long               15 trades  33% WR  avg +0.26R
+  ou_lunch_short              10 trades  0% WR  avg -0.80R
+  ou_rev_long                 27 trades  37% WR  avg +0.29R
+  ou_rev_short                13 trades  31% WR  avg -0.09R
+  pd_pdl_long                  2 trades  50% WR  avg +0.19R
+  pm_mom_long                 23 trades  35% WR  avg -0.05R
+  pm_mom_short                 4 trades  75% WR  avg +0.62R
+  sweep_pdl_long               1 trades  0% WR  avg -1.00R
+  trend_cont_long             10 trades  40% WR  avg +0.15R
+  trend_cont_short             3 trades  33% WR  avg +0.53R
+  vwap_rev_long                5 trades  40% WR  avg +0.00R
+  vwap_rev_short               1 trades  100% WR  avg +1.64R
+  vwap_scalp_long              4 trades  75% WR  avg +1.65R
+  vwap_scalp_short             6 trades  83% WR  avg +1.90R
+
+--- By Exit ---
+  stop                 78 trades  avg -1.00R
+  target                4 trades  avg +2.09R
+  trail               103 trades  avg +0.99R
+
+--- Monthly ---
+  2026-06    +3.7R   55 trades  31% WR
+  2026-07   +18.7R   72 trades  38% WR
+  2026-08    +9.6R   58 trades  40% WR
+=================================================================
+
+================================================================================
+  TOPSTEP 50K — FUNDED PAYOUT PROJECTION
+  Eval: 20 MNQ | TopStep 50K Express
+  Payout cap: $2K max, ≤50% balance, 5 green days ($150+)
+================================================================================
+
+  --- Per-account funded performance (65 trading days, biweekly payouts) ---
+   MNQ   Surv     Avg$     Med$     P75$     P90$   AvgN
+
+Funded projection skipped: 'survived_pct'

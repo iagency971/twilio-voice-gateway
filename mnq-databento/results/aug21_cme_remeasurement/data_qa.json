@@ -1,0 +1,15 @@
+{
+  "status": "AUG21_CME_DATA_QA",
+  "estimated_cost_usd": 0.005549192429,
+  "gap_rows": 1520,
+  "gap_min_datetime_et": "2026-08-20 13:40:00",
+  "gap_max_datetime_et": "2026-08-21 15:59:00",
+  "aug20_rth_rows_after_merge": 390,
+  "aug21_rth_rows": 390,
+  "aug21_rth_first": "2026-08-21 09:30:00",
+  "aug21_rth_last": "2026-08-21 15:59:00",
+  "duplicates_after_merge": 0,
+  "ohlc_violations_aug21": 0,
+  "aug21_adjacent_close_jump_gt250_count": 0,
+  "pass": true
+}

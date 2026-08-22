@@ -1,0 +1,17 @@
+{
+  "status": "PRE_DOWNLOAD_COST_CHECK",
+  "request": {
+    "dataset": "GLBX.MDP3",
+    "symbols": [
+      "NQ.v.0"
+    ],
+    "schema": "ohlcv-1m",
+    "stype_in": "continuous",
+    "start": "2026-08-20T17:40:00Z",
+    "end": "2026-08-21T20:00:00Z"
+  },
+  "estimated_cost_usd": 0.005549192429,
+  "max_authorized_cost_usd": 0.01,
+  "authorized": true,
+  "data_downloaded": false
+}

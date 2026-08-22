@@ -1,0 +1,94 @@
+{
+  "status": "CME_AUG21_PROSPECTIVE_REMEASUREMENT_COMPLETE",
+  "classification": "FIRST_FROZEN_FORWARD_DAY_OFFICIAL_CME_REMEASUREMENT",
+  "external_repo": "https://github.com/s-k-28/nq-es-trader-5k-payout.git",
+  "external_commit": "d472d6b442764c2adafbba4bbeb96881c100e3e0",
+  "official_data": "Databento GLBX.MDP3 NQ.v.0 ohlcv-1m",
+  "request": {
+    "dataset": "GLBX.MDP3",
+    "symbols": [
+      "NQ.v.0"
+    ],
+    "schema": "ohlcv-1m",
+    "stype_in": "continuous",
+    "start": "2026-08-20T17:40:00Z",
+    "end": "2026-08-21T20:00:00Z"
+  },
+  "cost_usd": 0.005549192429,
+  "data_qa": {
+    "status": "AUG21_CME_DATA_QA",
+    "estimated_cost_usd": 0.005549192429,
+    "gap_rows": 1520,
+    "gap_min_datetime_et": "2026-08-20 13:40:00",
+    "gap_max_datetime_et": "2026-08-21 15:59:00",
+    "aug20_rth_rows_after_merge": 390,
+    "aug21_rth_rows": 390,
+    "aug21_rth_first": "2026-08-21 09:30:00",
+    "aug21_rth_last": "2026-08-21 15:59:00",
+    "duplicates_after_merge": 0,
+    "ohlc_violations_aug21": 0,
+    "aug21_adjacent_close_jump_gt250_count": 0,
+    "pass": true
+  },
+  "PRIMARY": {
+    "n": 3,
+    "mean": 0.6897704490777867,
+    "sum": 2.06931134723336,
+    "pf": 2.928033062482488,
+    "win_rate": 0.6666666666666666,
+    "max_dd": 1.0732758620689655,
+    "losing_streak": 1
+  },
+  "STRESS": {
+    "n": 3,
+    "mean": 0.6024408580593424,
+    "sum": 1.8073225741780272,
+    "pf": 2.5822597630539708,
+    "win_rate": 0.6666666666666666,
+    "max_dd": 1.142241379310345,
+    "losing_streak": 1
+  },
+  "trades": [
+    {
+      "entry_time": "2026-08-21 10:31:00",
+      "exit_time": "2026-08-21 10:32:00",
+      "direction": "long",
+      "model": "or_rev",
+      "tag": "or_rev_long",
+      "reason": "trail",
+      "risk_ticks": 43.0,
+      "total_r": 1.691860465116279,
+      "primary_r": 1.5988372093023255,
+      "stress_r": 1.505813953488372
+    },
+    {
+      "entry_time": "2026-08-21 11:06:00",
+      "exit_time": "2026-08-21 11:08:00",
+      "direction": "short",
+      "model": "ema_rev",
+      "tag": "ema_rev_short",
+      "reason": "stop",
+      "risk_ticks": 58.0,
+      "total_r": -1.0043103448275863,
+      "primary_r": -1.0732758620689655,
+      "stress_r": -1.142241379310345
+    },
+    {
+      "entry_time": "2026-08-21 11:48:00",
+      "exit_time": "2026-08-21 11:49:00",
+      "direction": "short",
+      "model": "vwap_rev",
+      "tag": "vwap_rev_short",
+      "reason": "trail",
+      "risk_ticks": 40.0,
+      "total_r": 1.64375,
+      "primary_r": 1.54375,
+      "stress_r": 1.44375
+    }
+  ],
+  "notes": [
+    "Aug21 is genuinely prospective relative to the frozen model/rules and prior outcome review.",
+    "Yahoo proxy outcomes were not used to alter any model, direction, threshold, stop, target, time window, or weighting.",
+    "This is an official-CME remeasurement of the frozen Aug21 forward day, not a new parameter search."
+  ]
+}

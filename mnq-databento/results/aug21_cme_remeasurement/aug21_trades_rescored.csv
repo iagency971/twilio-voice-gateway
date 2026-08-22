@@ -1,0 +1,4 @@
+entry_time,exit_time,direction,model,tag,entry,exit,stop,target,reason,risk_ticks,total_r,moved_be,partial_taken,primary_r,stress_r
+2026-08-21 10:31:00,2026-08-21 10:32:00,long,or_rev,or_rev_long,29286.25,29304.4375,29275.5,29394.0,trail,43.0,1.691860465116279,True,True,1.5988372093023255,1.505813953488372
+2026-08-21 11:06:00,2026-08-21 11:08:00,short,ema_rev,ema_rev_short,29352.75,29367.3125,29367.25,29325.75,stop,58.0,-1.0043103448275863,False,False,-1.0732758620689655,-1.142241379310345
+2026-08-21 11:48:00,2026-08-21 11:49:00,short,vwap_rev,vwap_rev_short,29442.0,29425.5625,29452.0,29329.5,trail,40.0,1.64375,True,True,1.54375,1.44375
