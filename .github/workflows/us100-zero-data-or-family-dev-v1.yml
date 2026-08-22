@@ -1,0 +1,46 @@
+name: US100 Zero-Data OR Family DEV V1
+
+on:
+  push:
+    branches: [agent/ftmo-zero-data-us100-research-v1]
+    paths:
+      - 'us100-zero-data/run_or_family_dev_v1.py'
+      - 'us100-zero-data/PROTOCOL_OR_FAMILY_V1.md'
+      - 'us100-zero-data/PROTOCOL_OR_FAMILY_V1_1_SPREAD_AMENDMENT.md'
+      - '.github/workflows/us100-zero-data-or-family-dev-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us100-zero-data-or-family-dev-v1
+  cancel-in-progress: false
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ftmo-zero-data-us100-research-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas numpy requests
+      - name: Run frozen DEV only (2021-2024)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python us100-zero-data/run_or_family_dev_v1.py | tee /tmp/us100_or_dev.log
+      - name: Publish DEV results
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- us100-zero-data/results/or_family_v1
+          git commit -m "Publish frozen US100 OR-family DEV results [skip ci]" || true
+          git push origin HEAD:agent/ftmo-zero-data-us100-research-v1
