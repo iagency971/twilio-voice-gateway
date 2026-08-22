@@ -1,8 +1,6 @@
 name: US100 Zero-Data True Six Causal V15
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -33,11 +31,7 @@ jobs:
           python us100-zero-data/run_v15_true6_causal_rerun.py 2>&1 | tee us100-zero-data/results/v15_true6_causal_rerun/RUN_LOG.txt
           code=${PIPESTATUS[0]}
           echo "$code" > us100-zero-data/results/v15_true6_causal_rerun/EXIT_CODE.txt
-          if [ "$code" -ne 0 ]; then
-            echo "V15_FAILURE exit_code=$code" > us100-zero-data/results/v15_true6_causal_rerun/WORKFLOW_FAILURE.txt
-          else
-            rm -f us100-zero-data/results/v15_true6_causal_rerun/WORKFLOW_FAILURE.txt
-          fi
+          if [ "$code" -ne 0 ]; then echo "V15_FAILURE exit_code=$code" > us100-zero-data/results/v15_true6_causal_rerun/WORKFLOW_FAILURE.txt; else rm -f us100-zero-data/results/v15_true6_causal_rerun/WORKFLOW_FAILURE.txt; fi
           exit 0
       - name: Publish V15 result
         if: always()
