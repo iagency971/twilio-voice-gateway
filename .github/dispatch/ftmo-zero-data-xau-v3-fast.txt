@@ -3,3 +3,4 @@ DEV_ONLY=2021-2023
 VALIDATION_2024=NOT_OPENED
 OOS_2025=SEALED
 paid_data_required=false
+trigger_attempt=2
