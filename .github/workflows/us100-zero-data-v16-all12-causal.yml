@@ -1,8 +1,6 @@
 name: US100 Zero-Data All12 Causal V16
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
