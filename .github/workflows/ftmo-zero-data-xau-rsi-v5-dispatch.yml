@@ -1,0 +1,39 @@
+name: FTMO Zero-Data XAU RSI V5
+on:
+  push:
+    branches: [main]
+    paths: ['.github/dispatch/ftmo-zero-data-xau-rsi-v5.txt']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ftmo-zero-data-xau-rsi-v5
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: agent/ftmo-zero-data-xau-rsi-v5, fetch-depth: 1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --upgrade pip pandas numpy
+      - name: Run sealed RSI V5 audit
+        shell: bash
+        run: |
+          set +e
+          mkdir -p ftmo-zero-data/results/xau_rsi_v5
+          python ftmo-zero-data/run_xau_rsi_v5.py 2>&1 | tee ftmo-zero-data/results/xau_rsi_v5/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > ftmo-zero-data/results/xau_rsi_v5/exit_code.txt
+          if [ "$code" -ne 0 ]; then echo "XAU_RSI_V5_FAILURE exit_code=$code" > ftmo-zero-data/results/xau_rsi_v5/WORKFLOW_FAILURE.txt; else rm -f ftmo-zero-data/results/xau_rsi_v5/WORKFLOW_FAILURE.txt; fi
+          exit 0
+      - name: Publish results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- ftmo-zero-data/results/xau_rsi_v5
+          git commit -m "Publish zero-data XAU RSI V5 results [skip ci]" || true
+          git push origin HEAD:agent/ftmo-zero-data-xau-rsi-v5
