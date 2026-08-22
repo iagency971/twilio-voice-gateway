@@ -83,9 +83,13 @@ Long-only liquidity-rejection proxy:
 Stop: current signal-bar low minus `0.10 × ATR14`.
 Target: configured fixed R multiple.
 
+A previous-session-low long may be attempted at most once per New-York date.
+
 ## Family D — `SWEEP_BI`
 
 Same PDL long rule as `SWEEP_LONG`, plus symmetric short rejection of the previous-session high.
+
+A PDL long and a PDH short may each be attempted at most once per New-York date.
 
 ## Predeclared DEV grid
 
