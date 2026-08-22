@@ -1,0 +1,49 @@
+name: US100 Zero-Data 2025 OOS Dispatch
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us100-zero-data-oos-2025-v1
+  cancel-in-progress: false
+
+jobs:
+  oos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ftmo-zero-data-us100-research-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy requests
+      - name: Run sealed single-variant 2025 OOS
+        shell: bash
+        run: |
+          set +e
+          mkdir -p us100-zero-data/results/or_family_v1
+          python us100-zero-data/run_or_family_oos_2025_v1.py 2>&1 | tee us100-zero-data/results/or_family_v1/OOS_RUN_LOG.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" > us100-zero-data/results/or_family_v1/OOS_EXIT_CODE.txt
+          if [ "$code" -ne 0 ]; then
+            echo "US100_OR_FAMILY_OOS_FAILURE exit_code=$code" > us100-zero-data/results/or_family_v1/OOS_WORKFLOW_FAILURE.txt
+          else
+            rm -f us100-zero-data/results/or_family_v1/OOS_WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+      - name: Publish OOS result to research branch
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- us100-zero-data/results/or_family_v1
+          git commit -m "Publish sealed US100 OR-family 2025 OOS [skip ci]" || true
+          git push origin HEAD:agent/ftmo-zero-data-us100-research-v1
