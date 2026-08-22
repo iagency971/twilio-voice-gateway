@@ -1,1 +1,0 @@
-XAU_V3_FAST_FAILURE exit_code=1
