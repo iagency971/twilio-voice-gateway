@@ -1,8 +1,6 @@
 name: US100 Zero-Data All12 Atomic Stability V16b
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
