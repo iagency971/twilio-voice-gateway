@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/ftmo-zero-data-ustec-dispatch.yml'
+      - '.github/dispatch/ftmo-zero-data-ustec.txt'
   workflow_dispatch:
 
 permissions:
@@ -50,4 +50,3 @@ jobs:
           git add -- ftmo-zero-data/results/ustec_v1
           git commit -m "Publish zero-data USTEC V1 DEV validation [skip ci]" || true
           git push origin HEAD:agent/ftmo-zero-data-ustec-research-v1
-# trigger_attempt: 2
