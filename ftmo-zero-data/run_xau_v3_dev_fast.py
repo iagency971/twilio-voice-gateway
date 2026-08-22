@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import asdict
 from pathlib import Path
 import importlib.util
@@ -11,7 +12,9 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 SPEC = importlib.util.spec_from_file_location('xauv3', HERE / 'run_xau_v3.py')
-M = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(M)
+M = importlib.util.module_from_spec(SPEC)
+sys.modules['xauv3'] = M
+SPEC.loader.exec_module(M)
 OUT = Path('ftmo-zero-data/results/xau_v3_fast'); OUT.mkdir(parents=True, exist_ok=True)
 
 
