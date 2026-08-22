@@ -3,4 +3,4 @@ external_commit=d472d6b442764c2adafbba4bbeb96881c100e3e0
 source_commit=50052606c16d71850755e6dbdda02d43b4399c2b
 paid_data_required=false
 parameter_search=false
-trigger=1
+trigger=2
