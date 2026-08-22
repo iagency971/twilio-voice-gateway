@@ -2,14 +2,14 @@ name: MNQ Databento Cost Probe
 on:
   push:
     branches: [agent/mnq-databento-cme-validation-v1]
-    paths: ['mnq-databento/cost_probe.py','.github/workflows/mnq-databento-cost-probe.yml']
+    paths: ['mnq-databento/cost_probe.py','mnq-databento/run_aug21_cme_remeasurement.py','.github/workflows/mnq-databento-cost-probe.yml']
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
   cost:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 40
     env:
       DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
     steps:
@@ -17,12 +17,26 @@ jobs:
         with: {ref: agent/mnq-databento-cme-validation-v1}
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - run: python -m pip install --upgrade pip databento
-      - run: python mnq-databento/cost_probe.py
-      - name: Publish cost only
+      - run: python -m pip install --upgrade pip pandas numpy databento matplotlib tabulate python-dotenv ib_insync
+      - name: Run authorized Aug21 official CME remeasurement
+        shell: bash
+        run: |
+          set +e
+          mkdir -p mnq-databento/results/aug21_cme_remeasurement
+          python mnq-databento/run_aug21_cme_remeasurement.py 2>&1 | tee mnq-databento/results/aug21_cme_remeasurement/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > mnq-databento/results/aug21_cme_remeasurement/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "AUG21_CME_REMEASUREMENT_FAILURE exit_code=$code" > mnq-databento/results/aug21_cme_remeasurement/WORKFLOW_FAILURE.txt
+          else
+            rm -f mnq-databento/results/aug21_cme_remeasurement/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+      - name: Publish Aug21 CME result
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- mnq-databento/results/cost_probe/RESULT.json
-          git commit -m "Publish Databento NQ cost estimate [skip ci]" || true
+          git add -- mnq-databento/results/aug21_cme_remeasurement
+          git commit -m "Publish official CME Aug21 forward remeasurement [skip ci]" || true
           git push origin HEAD:agent/mnq-databento-cme-validation-v1
