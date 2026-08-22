@@ -1,5 +1,5 @@
 {
-  "status": "DATABENTO_AUG21_RTH_COST_ESTIMATE_OK",
+  "status": "DATABENTO_AUG21_CONTINUOUS_GAP_COST_ESTIMATE_OK",
   "request": {
     "dataset": "GLBX.MDP3",
     "symbols": [
@@ -7,10 +7,10 @@
     ],
     "schema": "ohlcv-1m",
     "stype_in": "continuous",
-    "start": "2026-08-21T13:30:00Z",
+    "start": "2026-08-20T17:40:00Z",
     "end": "2026-08-21T20:00:00Z"
   },
-  "estimated_cost_usd": 0.001423805952,
+  "estimated_cost_usd": 0.005549192429,
   "data_downloaded": false,
   "secret_exposed": false
 }
