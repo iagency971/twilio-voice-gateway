@@ -1,4 +1,0 @@
-research=ftmo-zero-data-ustec-v1
-partition=DEV_2021_2023_VALIDATION_2024
-OOS_2025=SEALED
-paid_data_required=false
