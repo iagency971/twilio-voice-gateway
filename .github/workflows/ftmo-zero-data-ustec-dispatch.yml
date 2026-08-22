@@ -1,0 +1,52 @@
+name: FTMO Zero-Data USTEC One-Shot Dispatch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ftmo-zero-data-ustec-dispatch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ftmo-zero-data-ustec-v1-dispatch
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ftmo-zero-data-ustec-research-v1
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy
+      - name: Run sealed 2021-2024 research
+        shell: bash
+        run: |
+          set +e
+          mkdir -p ftmo-zero-data/results/ustec_v1
+          python ftmo-zero-data/run_ustec_dev_validation_v1.py 2>&1 | tee ftmo-zero-data/results/ustec_v1/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > ftmo-zero-data/results/ustec_v1/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "USTEC_V1_WORKFLOW_FAILURE exit_code=$code" > ftmo-zero-data/results/ustec_v1/WORKFLOW_FAILURE.txt
+          else
+            rm -f ftmo-zero-data/results/ustec_v1/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+      - name: Publish to research branch
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- ftmo-zero-data/results/ustec_v1
+          git commit -m "Publish zero-data USTEC V1 DEV validation [skip ci]" || true
+          git push origin HEAD:agent/ftmo-zero-data-ustec-research-v1
