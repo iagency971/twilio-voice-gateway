@@ -1,0 +1,27 @@
+{
+  "status": "XAU_SESSION_V4_COMPLETE_2025_UNOPENED",
+  "selected": {
+    "ASIA_SWEEP": null,
+    "LONDON_SWEEP": null,
+    "ASIA_BREAK": null,
+    "LONDON_BREAK": null
+  },
+  "validation": {
+    "ASIA_SWEEP": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "LONDON_SWEEP": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "ASIA_BREAK": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "LONDON_BREAK": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    }
+  }
+}

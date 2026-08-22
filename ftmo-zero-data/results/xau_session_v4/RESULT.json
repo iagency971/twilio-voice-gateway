@@ -1,0 +1,1255 @@
+{
+  "status": "XAU_SESSION_V4_COMPLETE_2025_UNOPENED",
+  "hard_constraint": "ZERO_PAID_EXTERNAL_DATA_REQUIRED_LIVE",
+  "partitions": {
+    "DEV": "2021-2023",
+    "VALIDATION": "2024_GATED",
+    "OOS_2025": "SEALED_NOT_DOWNLOADED"
+  },
+  "validation_2024_economic_opened": false,
+  "oos_2025_opened": false,
+  "candidate_count": 16,
+  "data_qa": {
+    "2021": {
+      "year": 2021,
+      "m5_rows": 70666,
+      "first": "2021-01-03 19:05:00-05:00",
+      "last": "2021-12-31 16:55:00-05:00",
+      "duplicates": 0,
+      "morning_sessions": 257,
+      "price_min": 1670.488,
+      "price_max": 1959.225
+    },
+    "2022": {
+      "year": 2022,
+      "m5_rows": 70923,
+      "first": "2022-01-02 18:00:00-05:00",
+      "last": "2022-12-30 16:50:00-05:00",
+      "duplicates": 0,
+      "morning_sessions": 258,
+      "price_min": 1614.71,
+      "price_max": 2070.358
+    },
+    "2023": {
+      "year": 2023,
+      "m5_rows": 61768,
+      "first": "2023-01-02 18:05:00-05:00",
+      "last": "2023-12-29 16:50:00-05:00",
+      "duplicates": 0,
+      "morning_sessions": 201,
+      "price_min": 1804.594,
+      "price_max": 2145.135
+    }
+  },
+  "dev_sessions": 716,
+  "dev_results": {
+    "ASIA_SWEEP_THR00_RR1.5": {
+      "primary": {
+        "n": 646,
+        "mean": -0.14146780551691168,
+        "sum": -91.38820236392495,
+        "pf": 0.7785803188367493,
+        "win_rate": 0.35139318885448917,
+        "max_dd": 95.3882023639247
+      },
+      "stress": {
+        "n": 642,
+        "mean": -0.2406183509453655,
+        "sum": -154.47698130692464,
+        "pf": 0.6435480217184061,
+        "win_rate": 0.3146417445482866,
+        "max_dd": 158.47698141310497
+      },
+      "yearly": {
+        "2021": {
+          "n": 236,
+          "mean": -0.09735133839429619,
+          "sum": -22.9749158610539,
+          "pf": 0.8427722139800053,
+          "win_rate": 0.3686440677966102,
+          "max_dd": 33.73771863528665
+        },
+        "2022": {
+          "n": 207,
+          "mean": -0.19453196308581638,
+          "sum": -40.26811635876399,
+          "pf": 0.7061942599149222,
+          "win_rate": 0.32367149758454106,
+          "max_dd": 47.93683126674963
+        },
+        "2023": {
+          "n": 203,
+          "mean": -0.13864615834535496,
+          "sum": -28.14517014410706,
+          "pf": 0.7827558952784895,
+          "win_rate": 0.35960591133004927,
+          "max_dd": 33.82913251322344
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.12763715413955998,
+      "stress_r_per_session": -0.21574997389235284,
+      "positive_years": 0,
+      "worst_year_mean": -0.19453196308581638,
+      "positive_month_rate": 0.2222222222222222,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.20425453615580835,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "ASIA_SWEEP",
+        "threshold_atr": 0.0,
+        "rr": 1.5
+      },
+      "name": "ASIA_SWEEP_THR00_RR1.5",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ASIA_SWEEP_THR00_RR2.0": {
+      "primary": {
+        "n": 637,
+        "mean": -0.1297851256793015,
+        "sum": -82.67312505771505,
+        "pf": 0.809933310293587,
+        "win_rate": 0.30612244897959184,
+        "max_dd": 90.87905680951283
+      },
+      "stress": {
+        "n": 633,
+        "mean": -0.2317022411186537,
+        "sum": -146.66751862810779,
+        "pf": 0.6750642403681053,
+        "win_rate": 0.2764612954186414,
+        "max_dd": 148.76366364683037
+      },
+      "yearly": {
+        "2021": {
+          "n": 233,
+          "mean": -0.05341216898340214,
+          "sum": -12.445035373132699,
+          "pf": 0.9181920628145127,
+          "win_rate": 0.33476394849785407,
+          "max_dd": 27.326876850975715
+        },
+        "2022": {
+          "n": 204,
+          "mean": -0.2047456684253166,
+          "sum": -41.76811635876459,
+          "pf": 0.7140285445640862,
+          "win_rate": 0.2696078431372549,
+          "max_dd": 43.76811635876458
+        },
+        "2023": {
+          "n": 200,
+          "mean": -0.14229986662908886,
+          "sum": -28.459973325817774,
+          "pf": 0.7919395776723737,
+          "win_rate": 0.31,
+          "max_dd": 32.412383465330514
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.11546525846049589,
+      "stress_r_per_session": -0.20484290311188239,
+      "positive_years": 0,
+      "worst_year_mean": -0.2047456684253166,
+      "positive_month_rate": 0.3055555555555556,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.19976106026506432,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "ASIA_SWEEP",
+        "threshold_atr": 0.0,
+        "rr": 2.0
+      },
+      "name": "ASIA_SWEEP_THR00_RR2.0",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ASIA_SWEEP_THR10_RR1.5": {
+      "primary": {
+        "n": 628,
+        "mean": -0.1321021241783726,
+        "sum": -82.960133984018,
+        "pf": 0.791942977333089,
+        "win_rate": 0.35509554140127386,
+        "max_dd": 88.16606573581603
+      },
+      "stress": {
+        "n": 625,
+        "mean": -0.21929943339953462,
+        "sum": -137.06214587470913,
+        "pf": 0.6708195486002604,
+        "win_rate": 0.3232,
+        "max_dd": 141.06214598088943
+      },
+      "yearly": {
+        "2021": {
+          "n": 228,
+          "mean": -0.07121167313346459,
+          "sum": -16.236261474429927,
+          "pf": 0.8832973419846888,
+          "win_rate": 0.37719298245614036,
+          "max_dd": 28.20499600046093
+        },
+        "2022": {
+          "n": 203,
+          "mean": -0.2279217554618913,
+          "sum": -46.26811635876393,
+          "pf": 0.6624168349962923,
+          "win_rate": 0.3103448275862069,
+          "max_dd": 53.43683126674949
+        },
+        "2023": {
+          "n": 197,
+          "mean": -0.10383632563870122,
+          "sum": -20.45575615082414,
+          "pf": 0.8330898656398028,
+          "win_rate": 0.3756345177664975,
+          "max_dd": 25.387111498412516
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.11586610891622626,
+      "stress_r_per_session": -0.19142757803730326,
+      "positive_years": 0,
+      "worst_year_mean": -0.2279217554618913,
+      "positive_month_rate": 0.2777777777777778,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.2009391584951544,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "ASIA_SWEEP",
+        "threshold_atr": 0.1,
+        "rr": 1.5
+      },
+      "name": "ASIA_SWEEP_THR10_RR1.5",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ASIA_SWEEP_THR10_RR2.0": {
+      "primary": {
+        "n": 619,
+        "mean": -0.11832803986721899,
+        "sum": -73.24505667780855,
+        "pf": 0.8255941506152858,
+        "win_rate": 0.31017770597738287,
+        "max_dd": 84.45098842960644
+      },
+      "stress": {
+        "n": 617,
+        "mean": -0.2062442185414533,
+        "sum": -127.25268284007669,
+        "pf": 0.7070434364364153,
+        "win_rate": 0.2852512155591572,
+        "max_dd": 132.34882746366458
+      },
+      "yearly": {
+        "2021": {
+          "n": 225,
+          "mean": -0.025361693273373873,
+          "sum": -5.706380986509122,
+          "pf": 0.9606795550125385,
+          "win_rate": 0.3422222222222222,
+          "max_dd": 23.588222464352256
+        },
+        "2022": {
+          "n": 200,
+          "mean": -0.21884058179382293,
+          "sum": -43.76811635876459,
+          "pf": 0.6961748898199045,
+          "win_rate": 0.265,
+          "max_dd": 45.768116358764566
+        },
+        "2023": {
+          "n": 194,
+          "mean": -0.1225286563532724,
+          "sum": -23.770559332534845,
+          "pf": 0.818249913556312,
+          "win_rate": 0.31958762886597936,
+          "max_dd": 26.982522683066463
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.10229756519247005,
+      "stress_r_per_session": -0.17772721067049815,
+      "positive_years": 0,
+      "worst_year_mean": -0.21884058179382293,
+      "positive_month_rate": 0.2777777777777778,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.19341313923980352,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "ASIA_SWEEP",
+        "threshold_atr": 0.1,
+        "rr": 2.0
+      },
+      "name": "ASIA_SWEEP_THR10_RR2.0",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "LONDON_SWEEP_THR00_RR1.5": {
+      "primary": {
+        "n": 729,
+        "mean": -0.16183430117342165,
+        "sum": -117.97720555542438,
+        "pf": 0.7514811763165644,
+        "win_rate": 0.3374485596707819,
+        "max_dd": 120.19276896587333
+      },
+      "stress": {
+        "n": 727,
+        "mean": -0.27357907162350187,
+        "sum": -198.89198507028587,
+        "pf": 0.6055544315186623,
+        "win_rate": 0.29436038514442914,
+        "max_dd": 199.79788508576263
+      },
+      "yearly": {
+        "2021": {
+          "n": 253,
+          "mean": -0.2519095032826707,
+          "sum": -63.73310433051569,
+          "pf": 0.6352545525090632,
+          "win_rate": 0.2924901185770751,
+          "max_dd": 67.94866774096495
+        },
+        "2022": {
+          "n": 241,
+          "mean": -0.0514815789838584,
+          "sum": -12.407060535109874,
+          "pf": 0.9154075310099539,
+          "win_rate": 0.3775933609958506,
+          "max_dd": 28.984348747178608
+        },
+        "2023": {
+          "n": 235,
+          "mean": -0.17802996038212257,
+          "sum": -41.837040689798805,
+          "pf": 0.727125444282386,
+          "win_rate": 0.3446808510638298,
+          "max_dd": 48.02827854597038
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.16477263345729662,
+      "stress_r_per_session": -0.27778210205347187,
+      "positive_years": 0,
+      "worst_year_mean": -0.2519095032826707,
+      "positive_month_rate": 0.3055555555555556,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.2354193281508336,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "LONDON_SWEEP",
+        "threshold_atr": 0.0,
+        "rr": 1.5
+      },
+      "name": "LONDON_SWEEP_THR00_RR1.5",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "LONDON_SWEEP_THR00_RR2.0": {
+      "primary": {
+        "n": 724,
+        "mean": -0.15099716454464227,
+        "sum": -109.321947130321,
+        "pf": 0.7825059448260616,
+        "win_rate": 0.2941988950276243,
+        "max_dd": 114.25488477413353
+      },
+      "stress": {
+        "n": 720,
+        "mean": -0.2735954642079298,
+        "sum": -196.98873422970945,
+        "pf": 0.626320651205769,
+        "win_rate": 0.25555555555555554,
+        "max_dd": 201.70249967120404
+      },
+      "yearly": {
+        "2021": {
+          "n": 251,
+          "mean": -0.22526968966583374,
+          "sum": -56.54269210612427,
+          "pf": 0.6888696073595387,
+          "win_rate": 0.2589641434262948,
+          "max_dd": 65.47562974993723
+        },
+        "2022": {
+          "n": 241,
+          "mean": -0.03090598760432535,
+          "sum": -7.448343012642409,
+          "pf": 0.9530572390550142,
+          "win_rate": 0.3278008298755187,
+          "max_dd": 26.48434874717912
+        },
+        "2023": {
+          "n": 232,
+          "mean": -0.19539186211876855,
+          "sum": -45.330912011554304,
+          "pf": 0.7205963463747701,
+          "win_rate": 0.2974137931034483,
+          "max_dd": 52.02214986772595
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.15268428370156564,
+      "stress_r_per_session": -0.27512393048842104,
+      "positive_years": 0,
+      "worst_year_mean": -0.22526968966583374,
+      "positive_month_rate": 0.3333333333333333,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.2263658833518514,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "LONDON_SWEEP",
+        "threshold_atr": 0.0,
+        "rr": 2.0
+      },
+      "name": "LONDON_SWEEP_THR00_RR2.0",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "LONDON_SWEEP_THR10_RR1.5": {
+      "primary": {
+        "n": 698,
+        "mean": -0.1453373861212546,
+        "sum": -101.44549551263572,
+        "pf": 0.7739232093419843,
+        "win_rate": 0.3452722063037249,
+        "max_dd": 104.3978470518905
+      },
+      "stress": {
+        "n": 696,
+        "mean": -0.24879526064877808,
+        "sum": -173.16150141154955,
+        "pf": 0.6348589143453702,
+        "win_rate": 0.30603448275862066,
+        "max_dd": 175.11500882668497
+      },
+      "yearly": {
+        "2021": {
+          "n": 239,
+          "mean": -0.20769743570140062,
+          "sum": -49.63968713263475,
+          "pf": 0.6892335665754009,
+          "win_rate": 0.3138075313807531,
+          "max_dd": 54.59203867188984
+        },
+        "2022": {
+          "n": 233,
+          "mean": -0.08329210530090145,
+          "sum": -19.407060535110038,
+          "pf": 0.8658516215927805,
+          "win_rate": 0.3648068669527897,
+          "max_dd": 31.484348747178302
+        },
+        "2023": {
+          "n": 226,
+          "mean": -0.14335729134907482,
+          "sum": -32.39874784489091,
+          "pf": 0.7755070762512386,
+          "win_rate": 0.3584070796460177,
+          "max_dd": 34.589985701062474
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.14168365295060853,
+      "stress_r_per_session": -0.24184567236249938,
+      "positive_years": 0,
+      "worst_year_mean": -0.20769743570140062,
+      "positive_month_rate": 0.3055555555555556,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.21728546502084173,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "LONDON_SWEEP",
+        "threshold_atr": 0.1,
+        "rr": 1.5
+      },
+      "name": "LONDON_SWEEP_THR10_RR1.5",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "LONDON_SWEEP_THR10_RR2.0": {
+      "primary": {
+        "n": 693,
+        "mean": -0.13157276240424684,
+        "sum": -91.17992434614305,
+        "pf": 0.8074924550814163,
+        "win_rate": 0.30447330447330445,
+        "max_dd": 97.2191700932397
+      },
+      "stress": {
+        "n": 689,
+        "mean": -0.25128908486171253,
+        "sum": -173.13817946971994,
+        "pf": 0.6510435221815497,
+        "win_rate": 0.26705370101596515,
+        "max_dd": 178.65457746903672
+      },
+      "yearly": {
+        "2021": {
+          "n": 237,
+          "mean": -0.16720690261175303,
+          "sum": -39.62803591898547,
+          "pf": 0.7594409691965973,
+          "win_rate": 0.2869198312236287,
+          "max_dd": 49.66728166608256
+        },
+        "2022": {
+          "n": 233,
+          "mean": -0.07488559232894001,
+          "sum": -17.448343012643022,
+          "pf": 0.8886289850803377,
+          "win_rate": 0.3133047210300429,
+          "max_dd": 31.06397458683959
+        },
+        "2023": {
+          "n": 223,
+          "mean": -0.15293069692607422,
+          "sum": -34.10354541451455,
+          "pf": 0.7759907119665643,
+          "win_rate": 0.31390134529147984,
+          "max_dd": 36.794783270686054
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.12734626305327243,
+      "stress_r_per_session": -0.2418130998180446,
+      "positive_years": 0,
+      "worst_year_mean": -0.16720690261175303,
+      "positive_month_rate": 0.3055555555555556,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.20862937223279046,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "LONDON_SWEEP",
+        "threshold_atr": 0.1,
+        "rr": 2.0
+      },
+      "name": "LONDON_SWEEP_THR10_RR2.0",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ASIA_BREAK_THR00_RR1.5": {
+      "primary": {
+        "n": 723,
+        "mean": -0.15758773850770966,
+        "sum": -113.93593494107408,
+        "pf": 0.7621379228787598,
+        "win_rate": 0.33748271092669435,
+        "max_dd": 120.49999999999335
+      },
+      "stress": {
+        "n": 723,
+        "mean": -0.3146459182330565,
+        "sum": -227.48899888249983,
+        "pf": 0.5658606891555348,
+        "win_rate": 0.2752420470262794,
+        "max_dd": 233.48899888975842
+      },
+      "yearly": {
+        "2021": {
+          "n": 241,
+          "mean": -0.19475491676797388,
+          "sum": -46.935934941081705,
+          "pf": 0.7120494788890692,
+          "win_rate": 0.3236514522821577,
+          "max_dd": 53.500000000000604
+        },
+        "2022": {
+          "n": 244,
+          "mean": -0.08811475409834606,
+          "sum": -21.499999999996437,
+          "pf": 0.8612903225806681,
+          "win_rate": 0.36475409836065575,
+          "max_dd": 28.49999999999671
+        },
+        "2023": {
+          "n": 238,
+          "mean": -0.1911764705882182,
+          "sum": -45.499999999995936,
+          "pf": 0.7173913043478514,
+          "win_rate": 0.3235294117647059,
+          "max_dd": 53.4999999999973
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.15912840075569007,
+      "stress_r_per_session": -0.3177220654783517,
+      "positive_years": 0,
+      "worst_year_mean": -0.19475491676797388,
+      "positive_month_rate": 0.2222222222222222,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.22544951590593776,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "ASIA_BREAK",
+        "threshold_atr": 0.0,
+        "rr": 1.5
+      },
+      "name": "ASIA_BREAK_THR00_RR1.5",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ASIA_BREAK_THR00_RR2.0": {
+      "primary": {
+        "n": 723,
+        "mean": -0.18196710787814066,
+        "sum": -131.5622189958957,
+        "pf": 0.7494052971506748,
+        "win_rate": 0.27385892116182575,
+        "max_dd": 143.12628405481453
+      },
+      "stress": {
+        "n": 723,
+        "mean": -0.3241575110369036,
+        "sum": -234.3658804796813,
+        "pf": 0.5807408220399262,
+        "win_rate": 0.2268326417704011,
+        "max_dd": 241.7648646243809
+      },
+      "yearly": {
+        "2021": {
+          "n": 241,
+          "mean": -0.22172587112481643,
+          "sum": -53.43593494108076,
+          "pf": 0.6997981183085351,
+          "win_rate": 0.26141078838174275,
+          "max_dd": 63.999999999999446
+        },
+        "2022": {
+          "n": 244,
+          "mean": -0.13166509858531206,
+          "sum": -32.12628405481614,
+          "pf": 0.8142989360993288,
+          "win_rate": 0.29098360655737704,
+          "max_dd": 40.12628405481627
+        },
+        "2023": {
+          "n": 238,
+          "mean": -0.1932773109243647,
+          "sum": -45.9999999999988,
+          "pf": 0.7356321839080529,
+          "win_rate": 0.2689075630252101,
+          "max_dd": 56.999999999998934
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.18374611591605544,
+      "stress_r_per_session": -0.3273266487146387,
+      "positive_years": 0,
+      "worst_year_mean": -0.22172587112481643,
+      "positive_month_rate": 0.25,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.2614369883931123,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "ASIA_BREAK",
+        "threshold_atr": 0.0,
+        "rr": 2.0
+      },
+      "name": "ASIA_BREAK_THR00_RR2.0",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ASIA_BREAK_THR10_RR1.5": {
+      "primary": {
+        "n": 715,
+        "mean": -0.15384615384614247,
+        "sum": -109.99999999999187,
+        "pf": 0.7674418604651335,
+        "win_rate": 0.3384615384615385,
+        "max_dd": 115.99999999999223
+      },
+      "stress": {
+        "n": 715,
+        "mean": -0.31592725020772594,
+        "sum": -225.88798389852406,
+        "pf": 0.5647630368043851,
+        "win_rate": 0.27412587412587414,
+        "max_dd": 231.88798390578268
+      },
+      "yearly": {
+        "2021": {
+          "n": 239,
+          "mean": -0.21548117154811805,
+          "sum": -51.50000000000021,
+          "pf": 0.6859756097560963,
+          "win_rate": 0.3138075313807531,
+          "max_dd": 57.50000000000025
+        },
+        "2022": {
+          "n": 242,
+          "mean": -0.09090909090907702,
+          "sum": -21.99999999999664,
+          "pf": 0.857142857142879,
+          "win_rate": 0.36363636363636365,
+          "max_dd": 28.999999999997094
+        },
+        "2023": {
+          "n": 234,
+          "mean": -0.15598290598288467,
+          "sum": -36.49999999999501,
+          "pf": 0.7645161290322904,
+          "win_rate": 0.33760683760683763,
+          "max_dd": 46.49999999999646
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.15363128491618977,
+      "stress_r_per_session": -0.3154860110314582,
+      "positive_years": 0,
+      "worst_year_mean": -0.21548117154811805,
+      "positive_month_rate": 0.25,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.21678321678321097,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "ASIA_BREAK",
+        "threshold_atr": 0.1,
+        "rr": 1.5
+      },
+      "name": "ASIA_BREAK_THR10_RR1.5",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ASIA_BREAK_THR10_RR2.0": {
+      "primary": {
+        "n": 715,
+        "mean": -0.18339340427246645,
+        "sum": -131.1262840548135,
+        "pf": 0.7478340691253584,
+        "win_rate": 0.2727272727272727,
+        "max_dd": 141.12628405481414
+      },
+      "stress": {
+        "n": 715,
+        "mean": -0.32222095693918834,
+        "sum": -230.38798421151967,
+        "pf": 0.5833852003408326,
+        "win_rate": 0.22657342657342658,
+        "max_dd": 236.3879837122274
+      },
+      "yearly": {
+        "2021": {
+          "n": 239,
+          "mean": -0.2468619246861891,
+          "sum": -58.99999999999919,
+          "pf": 0.6703910614525185,
+          "win_rate": 0.2510460251046025,
+          "max_dd": 67.99999999999959
+        },
+        "2022": {
+          "n": 242,
+          "mean": -0.13688547130089232,
+          "sum": -33.12628405481594,
+          "pf": 0.8074053252626979,
+          "win_rate": 0.2892561983471074,
+          "max_dd": 41.12628405481608
+        },
+        "2023": {
+          "n": 234,
+          "mean": -0.16666666666665975,
+          "sum": -38.99999999999838,
+          "pf": 0.7692307692307789,
+          "win_rate": 0.2777777777777778,
+          "max_dd": 51.99999999999877
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.18313726823297977,
+      "stress_r_per_session": -0.3217709276697202,
+      "positive_years": 0,
+      "worst_year_mean": -0.2468619246861891,
+      "positive_month_rate": 0.25,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.26153846153845567,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "ASIA_BREAK",
+        "threshold_atr": 0.1,
+        "rr": 2.0
+      },
+      "name": "ASIA_BREAK_THR10_RR2.0",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "LONDON_BREAK_THR00_RR1.5": {
+      "primary": {
+        "n": 664,
+        "mean": -0.2507530120481835,
+        "sum": -166.49999999999383,
+        "pf": 0.641935483870981,
+        "win_rate": 0.2996987951807229,
+        "max_dd": 176.99999999999457
+      },
+      "stress": {
+        "n": 664,
+        "mean": -0.3652526723135692,
+        "sum": -242.52777441620998,
+        "pf": 0.5092128449750896,
+        "win_rate": 0.2545180722891566,
+        "max_dd": 243.52777401759727
+      },
+      "yearly": {
+        "2021": {
+          "n": 233,
+          "mean": -0.2918454935622242,
+          "sum": -67.99999999999824,
+          "pf": 0.5928143712574956,
+          "win_rate": 0.2832618025751073,
+          "max_dd": 76.49999999999889
+        },
+        "2022": {
+          "n": 216,
+          "mean": -0.22453703703702854,
+          "sum": -48.49999999999817,
+          "pf": 0.6744966442953143,
+          "win_rate": 0.3101851851851852,
+          "max_dd": 53.49999999999867
+        },
+        "2023": {
+          "n": 215,
+          "mean": -0.2325581395348718,
+          "sum": -49.99999999999744,
+          "pf": 0.6644295302013593,
+          "win_rate": 0.30697674418604654,
+          "max_dd": 54.99999999999811
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.23254189944133216,
+      "stress_r_per_session": -0.338725941922081,
+      "positive_years": 0,
+      "worst_year_mean": -0.2918454935622242,
+      "positive_month_rate": 0.16666666666666666,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.33358433734938886,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "LONDON_BREAK",
+        "threshold_atr": 0.0,
+        "rr": 1.5
+      },
+      "name": "LONDON_BREAK_THR00_RR1.5",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "LONDON_BREAK_THR00_RR2.0": {
+      "primary": {
+        "n": 664,
+        "mean": -0.2789504637061176,
+        "sum": -185.2231079008621,
+        "pf": 0.6310539276214423,
+        "win_rate": 0.24246987951807228,
+        "max_dd": 188.22310790086226
+      },
+      "stress": {
+        "n": 664,
+        "mean": -0.38995459779697833,
+        "sum": -258.92985293719363,
+        "pf": 0.507888364784266,
+        "win_rate": 0.2063253012048193,
+        "max_dd": 261.929852538581
+      },
+      "yearly": {
+        "2021": {
+          "n": 233,
+          "mean": -0.293844283427065,
+          "sum": -68.46571803850614,
+          "pf": 0.6132601634585315,
+          "win_rate": 0.23605150214592274,
+          "max_dd": 71.4657180385063
+        },
+        "2022": {
+          "n": 216,
+          "mean": -0.2335430354819726,
+          "sum": -50.445295664106084,
+          "pf": 0.6847169020993369,
+          "win_rate": 0.25925925925925924,
+          "max_dd": 62.319011609287955
+        },
+        "2023": {
+          "n": 215,
+          "mean": -0.30842834510813893,
+          "sum": -66.31209419824987,
+          "pf": 0.598108520010607,
+          "win_rate": 0.23255813953488372,
+          "max_dd": 70.31209419825008
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.25869149148165094,
+      "stress_r_per_session": -0.3616338728173095,
+      "positive_years": 0,
+      "worst_year_mean": -0.30842834510813893,
+      "positive_month_rate": 0.25,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.3580284248718588,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "LONDON_BREAK",
+        "threshold_atr": 0.0,
+        "rr": 2.0
+      },
+      "name": "LONDON_BREAK_THR00_RR2.0",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "LONDON_BREAK_THR10_RR1.5": {
+      "primary": {
+        "n": 653,
+        "mean": -0.24196018376721887,
+        "sum": -157.99999999999392,
+        "pf": 0.6527472527472661,
+        "win_rate": 0.30321592649310875,
+        "max_dd": 170.99999999999437
+      },
+      "stress": {
+        "n": 653,
+        "mean": -0.3507316588146777,
+        "sum": -229.02777320598454,
+        "pf": 0.5249971130230593,
+        "win_rate": 0.26033690658499237,
+        "max_dd": 230.52777328843987
+      },
+      "yearly": {
+        "2021": {
+          "n": 231,
+          "mean": -0.274891774891767,
+          "sum": -63.49999999999819,
+          "pf": 0.6128048780487915,
+          "win_rate": 0.29004329004329005,
+          "max_dd": 71.99999999999883
+        },
+        "2022": {
+          "n": 210,
+          "mean": -0.23809523809523156,
+          "sum": -49.99999999999863,
+          "pf": 0.6575342465753519,
+          "win_rate": 0.3047619047619048,
+          "max_dd": 56.499999999999055
+        },
+        "2023": {
+          "n": 212,
+          "mean": -0.20990566037734484,
+          "sum": -44.49999999999711,
+          "pf": 0.693103448275882,
+          "win_rate": 0.3160377358490566,
+          "max_dd": 52.499999999997335
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.220670391061444,
+      "stress_r_per_session": -0.31987119162847005,
+      "positive_years": 0,
+      "worst_year_mean": -0.274891774891767,
+      "positive_month_rate": 0.19444444444444445,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.3223583460949353,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "LONDON_BREAK",
+        "threshold_atr": 0.1,
+        "rr": 1.5
+      },
+      "name": "LONDON_BREAK_THR10_RR1.5",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "LONDON_BREAK_THR10_RR2.0": {
+      "primary": {
+        "n": 653,
+        "mean": -0.2554217483048082,
+        "sum": -166.79040164303973,
+        "pf": 0.6589383587097397,
+        "win_rate": 0.24961715160796324,
+        "max_dd": 171.79040164303976
+      },
+      "stress": {
+        "n": 653,
+        "mean": -0.3680731525883887,
+        "sum": -240.3517686402178,
+        "pf": 0.5316248485107369,
+        "win_rate": 0.21286370597243492,
+        "max_dd": 245.3517687226729
+      },
+      "yearly": {
+        "2021": {
+          "n": 231,
+          "mean": -0.26854117653975457,
+          "sum": -62.03301178068331,
+          "pf": 0.6435560636113299,
+          "win_rate": 0.24242424242424243,
+          "max_dd": 65.03301178068348
+        },
+        "2022": {
+          "n": 210,
+          "mean": -0.24021569363860215,
+          "sum": -50.44529566410645,
+          "pf": 0.6766327201018817,
+          "win_rate": 0.2571428571428571,
+          "max_dd": 59.31901160928803
+        },
+        "2023": {
+          "n": 212,
+          "mean": -0.2561891235766508,
+          "sum": -54.31209419824997,
+          "pf": 0.6584145018977989,
+          "win_rate": 0.25,
+          "max_dd": 63.312094198249966
+        }
+      },
+      "sessions": 716,
+      "r_per_session": -0.23294748832826778,
+      "stress_r_per_session": -0.3356868277098014,
+      "positive_years": 0,
+      "worst_year_mean": -0.26854117653975457,
+      "positive_month_rate": 0.25,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.33376779614189833,
+      "gates": {
+        "n_ge_250": true,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_gt_0": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "family": "LONDON_BREAK",
+        "threshold_atr": 0.1,
+        "rr": 2.0
+      },
+      "name": "LONDON_BREAK_THR10_RR2.0",
+      "eligible": false,
+      "robustness_score": null
+    }
+  },
+  "selected_by_family": {
+    "ASIA_SWEEP": null,
+    "LONDON_SWEEP": null,
+    "ASIA_BREAK": null,
+    "LONDON_BREAK": null
+  },
+  "validation": {
+    "ASIA_SWEEP": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "LONDON_SWEEP": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "ASIA_BREAK": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "LONDON_BREAK": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    }
+  }
+}
