@@ -1,0 +1,14 @@
+{
+  "status": "V12_PROMISING_FOR_MONTE_CARLO",
+  "selected_models": [
+    "ema_rev",
+    "kalman_mom",
+    "open_drive",
+    "ou_rev",
+    "pd_rev",
+    "pm_mom"
+  ],
+  "selected_risk_pct": 0.8,
+  "dev_step1_days": 44.607573357063956,
+  "validation_pass": true
+}
