@@ -1,4 +1,4 @@
-name: US100 Zero-Data Native 12-Model V5 Rescore
+name: US100 Zero-Data Native 12-Model V5.3 Rescore
 
 on:
   pull_request:
@@ -25,26 +25,26 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install --upgrade pip pandas numpy requests
-      - name: Rescore frozen raw 12-model ledger only
+      - name: Rescore frozen raw ledger with exact-minute key bugfix
         shell: bash
         run: |
           set +e
-          python us100-zero-data/rescore_native_12model_v5_2.py 2>&1 | tee us100-zero-data/results/native_12model_port_v5/RESCORE_LOG.txt
+          python us100-zero-data/rescore_native_12model_v5_3.py 2>&1 | tee us100-zero-data/results/native_12model_port_v5/RESCORE_LOG.txt
           code=${PIPESTATUS[0]}
           echo "$code" > us100-zero-data/results/native_12model_port_v5/RESCORE_EXIT_CODE.txt
           if [ "$code" -ne 0 ]; then
-            echo "NATIVE_12MODEL_V5_2_RESCORE_FAILURE exit_code=$code" > us100-zero-data/results/native_12model_port_v5/RESCORE_FAILURE.txt
+            echo "NATIVE_12MODEL_V5_3_RESCORE_FAILURE exit_code=$code" > us100-zero-data/results/native_12model_port_v5/RESCORE_FAILURE.txt
           else
             rm -f us100-zero-data/results/native_12model_port_v5/RESCORE_FAILURE.txt
           fi
           exit 0
-      - name: Publish V5.2 rescore
+      - name: Publish V5.3 rescore
         if: always()
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- us100-zero-data/results/native_12model_port_v5
-          git commit -m "Publish V5.2 native US100 frozen-ledger rescore [skip ci]" || true
+          git commit -m "Publish V5.3 native US100 frozen-ledger rescore [skip ci]" || true
           git pull --rebase origin agent/ftmo-zero-data-us100-research-v1 || true
           git push origin HEAD:agent/ftmo-zero-data-us100-research-v1
