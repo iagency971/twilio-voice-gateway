@@ -1,0 +1,27 @@
+{
+  "status": "XAU_V3_DEV_VALIDATION_COMPLETE_2025_UNOPENED",
+  "selected": {
+    "PB_LONG": null,
+    "PB_BI": null,
+    "SWEEP_LONG": null,
+    "SWEEP_BI": null
+  },
+  "validation": {
+    "PB_LONG": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "PB_BI": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "SWEEP_LONG": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    },
+    "SWEEP_BI": {
+      "status": "DEV_FAMILY_REJECTED_NO_VALIDATION",
+      "selected": null
+    }
+  }
+}
