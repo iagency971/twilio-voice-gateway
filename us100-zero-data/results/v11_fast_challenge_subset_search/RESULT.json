@@ -1,0 +1,612 @@
+{
+  "status": "V11_VALIDATION_NO_GO",
+  "ledger_sha256": "ff8e6f0bcac9cea7590f9b6ae614bd70cef8a1d22878cfa00ff0dcf5bd06354d",
+  "expected_raw_ledger_sha256": "c2c705318ff19aee4fb1137b7ec2102e98a848b297701b334e1b777a0d5b7d31",
+  "model_names": [
+    "ema_rev",
+    "kalman_mom",
+    "open_drive",
+    "or_rev",
+    "ou_lunch",
+    "ou_rev",
+    "pd_rev",
+    "pm_mom",
+    "sweep",
+    "trend",
+    "vwap_rev",
+    "vwap_scalp"
+  ],
+  "subsets_tested": 4095,
+  "dev_years": [
+    2021,
+    2022,
+    2023
+  ],
+  "dev_sessions": 746,
+  "eligible_subset_count": 8,
+  "top_20_eligible": [
+    {
+      "models": [
+        "ema_rev",
+        "open_drive",
+        "pd_rev"
+      ],
+      "model_count": 3,
+      "primary": {
+        "n": 251,
+        "mean": 0.27147811034105523,
+        "sum": 68.14100569560486,
+        "pf": 1.7774034454443524,
+        "win_rate": 0.4940239043824701,
+        "max_dd": 6.696566727047264,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 251,
+        "mean": 0.2554027789092635,
+        "sum": 64.10609750622514,
+        "pf": 1.7148901103813095,
+        "win_rate": 0.4940239043824701,
+        "max_dd": 7.053686715631207,
+        "losing_streak": 6
+      },
+      "trades_per_session": 0.33646112600536193,
+      "positive_years": 3,
+      "worst_year_mean": 0.17469065527946245,
+      "remove_best10_mean": 0.06193369852290352,
+      "primary_worst_day_r": -2.0441956706281843,
+      "stress_worst_day_r": -2.0778685625353734,
+      "risk_fraction": 0.0075610578529302815,
+      "risk_dollars_10k": 75.61057852930281,
+      "stress_r_per_session": 0.0859331065767093,
+      "expected_stress_daily_return_pct": 0.0006497451903085227,
+      "theoretical_stress_step1_days": 153.90648748398792,
+      "theoretical_stress_step2_days": 76.95324374199396,
+      "gates": {
+        "n_ge_250": true,
+        "primary_mean_gt_0": true,
+        "primary_pf_ge_1_20": true,
+        "stress_mean_ge_0_05": true,
+        "stress_pf_ge_1_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "remove_best10_mean_ge_0": true
+      },
+      "eligible": true
+    },
+    {
+      "models": [
+        "kalman_mom",
+        "open_drive",
+        "pd_rev"
+      ],
+      "model_count": 3,
+      "primary": {
+        "n": 402,
+        "mean": 0.23776538592768978,
+        "sum": 95.58168514293129,
+        "pf": 1.646059241188276,
+        "win_rate": 0.4626865671641791,
+        "max_dd": 10.249849110102552,
+        "losing_streak": 11
+      },
+      "stress": {
+        "n": 402,
+        "mean": 0.22043715803153846,
+        "sum": 88.61573752867847,
+        "pf": 1.584097882855932,
+        "win_rate": 0.4626865671641791,
+        "max_dd": 10.652990558562642,
+        "losing_streak": 11
+      },
+      "trades_per_session": 0.5388739946380697,
+      "positive_years": 3,
+      "worst_year_mean": 0.18279420839312122,
+      "remove_best10_mean": 0.00582382965187752,
+      "primary_worst_day_r": -2.0478468899521536,
+      "stress_worst_day_r": -2.0843016632490308,
+      "risk_fraction": 0.00500641890557813,
+      "risk_dollars_10k": 50.0641890557813,
+      "stress_r_per_session": 0.11878785191511859,
+      "expected_stress_daily_return_pct": 0.000594701747580865,
+      "theoretical_stress_step1_days": 168.15151528775763,
+      "theoretical_stress_step2_days": 84.07575764387882,
+      "gates": {
+        "n_ge_250": true,
+        "primary_mean_gt_0": true,
+        "primary_pf_ge_1_20": true,
+        "stress_mean_ge_0_05": true,
+        "stress_pf_ge_1_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "remove_best10_mean_ge_0": true
+      },
+      "eligible": true
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "pd_rev"
+      ],
+      "model_count": 4,
+      "primary": {
+        "n": 499,
+        "mean": 0.23064375572967344,
+        "sum": 115.09123410910705,
+        "pf": 1.6186521325313723,
+        "win_rate": 0.46092184368737477,
+        "max_dd": 13.207493717611058,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 499,
+        "mean": 0.21358383808722362,
+        "sum": 106.57833520552458,
+        "pf": 1.5590733438564353,
+        "win_rate": 0.46092184368737477,
+        "max_dd": 13.725567875295084,
+        "losing_streak": 10
+      },
+      "trades_per_session": 0.6689008042895442,
+      "positive_years": 3,
+      "worst_year_mean": 0.20575773472189332,
+      "remove_best10_mean": 0.005387808085815053,
+      "primary_worst_day_r": -2.0680211850235484,
+      "stress_worst_day_r": -2.1198468498033947,
+      "risk_fraction": 0.00388569229469398,
+      "risk_dollars_10k": 38.856922946939804,
+      "stress_r_per_session": 0.14286640107979168,
+      "expected_stress_daily_return_pct": 0.0005551348738464062,
+      "theoretical_stress_step1_days": 180.13640416268973,
+      "theoretical_stress_step2_days": 90.06820208134486,
+      "gates": {
+        "n_ge_250": true,
+        "primary_mean_gt_0": true,
+        "primary_pf_ge_1_20": true,
+        "stress_mean_ge_0_05": true,
+        "stress_pf_ge_1_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "remove_best10_mean_ge_0": true
+      },
+      "eligible": true
+    },
+    {
+      "models": [
+        "ema_rev",
+        "open_drive",
+        "pd_rev",
+        "vwap_rev"
+      ],
+      "model_count": 4,
+      "primary": {
+        "n": 435,
+        "mean": 0.23688711608754112,
+        "sum": 103.04589549808038,
+        "pf": 1.6209769707406112,
+        "win_rate": 0.4850574712643678,
+        "max_dd": 11.495101029528877,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 435,
+        "mean": 0.21999095303552452,
+        "sum": 95.69606457045316,
+        "pf": 1.5638912982867248,
+        "win_rate": 0.4850574712643678,
+        "max_dd": 12.342493345718218,
+        "losing_streak": 9
+      },
+      "trades_per_session": 0.5831099195710456,
+      "positive_years": 3,
+      "worst_year_mean": 0.09498629628811853,
+      "remove_best10_mean": 0.01893881760782776,
+      "primary_worst_day_r": -3.0706343932528273,
+      "stress_worst_day_r": -3.12445107382641,
+      "risk_fraction": 0.004321115016183939,
+      "risk_dollars_10k": 43.21115016183939,
+      "stress_r_per_session": 0.12827890693090235,
+      "expected_stress_daily_return_pct": 0.0005543079109987841,
+      "theoretical_stress_step1_days": 180.405146698726,
+      "theoretical_stress_step2_days": 90.202573349363,
+      "gates": {
+        "n_ge_250": true,
+        "primary_mean_gt_0": true,
+        "primary_pf_ge_1_20": true,
+        "stress_mean_ge_0_05": true,
+        "stress_pf_ge_1_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "remove_best10_mean_ge_0": true
+      },
+      "eligible": true
+    },
+    {
+      "models": [
+        "ema_rev",
+        "pd_rev",
+        "vwap_rev"
+      ],
+      "model_count": 3,
+      "primary": {
+        "n": 351,
+        "mean": 0.2263702315551385,
+        "sum": 79.45595127585361,
+        "pf": 1.575890622275086,
+        "win_rate": 0.4928774928774929,
+        "max_dd": 9.645507520957096,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 351,
+        "mean": 0.20931762127323386,
+        "sum": 73.47048506690508,
+        "pf": 1.521082985935579,
+        "win_rate": 0.4928774928774929,
+        "max_dd": 10.317482041150415,
+        "losing_streak": 6
+      },
+      "trades_per_session": 0.47050938337801607,
+      "positive_years": 3,
+      "worst_year_mean": 0.08438306838972512,
+      "remove_best10_mean": 0.005568339519979078,
+      "primary_worst_day_r": -3.0706343932528273,
+      "stress_worst_day_r": -3.12445107382641,
+      "risk_fraction": 0.005169219885299319,
+      "risk_dollars_10k": 51.692198852993194,
+      "stress_r_per_session": 0.09848590491542236,
+      "expected_stress_daily_return_pct": 0.0005090952981104993,
+      "theoretical_stress_step1_days": 196.42687797579103,
+      "theoretical_stress_step2_days": 98.21343898789551,
+      "gates": {
+        "n_ge_250": true,
+        "primary_mean_gt_0": true,
+        "primary_pf_ge_1_20": true,
+        "stress_mean_ge_0_05": true,
+        "stress_pf_ge_1_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "remove_best10_mean_ge_0": true
+      },
+      "eligible": true
+    },
+    {
+      "models": [
+        "open_drive",
+        "pd_rev",
+        "vwap_rev"
+      ],
+      "model_count": 3,
+      "primary": {
+        "n": 338,
+        "mean": 0.24714895423640423,
+        "sum": 83.53634653190463,
+        "pf": 1.653384148383545,
+        "win_rate": 0.4940828402366864,
+        "max_dd": 10.965225011978436,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 338,
+        "mean": 0.22998067128286107,
+        "sum": 77.73346689360704,
+        "pf": 1.5943537959401597,
+        "win_rate": 0.4940828402366864,
+        "max_dd": 11.570297020955799,
+        "losing_streak": 9
+      },
+      "trades_per_session": 0.45308310991957107,
+      "positive_years": 3,
+      "worst_year_mean": 0.08170114251836649,
+      "remove_best10_mean": 0.029145000567895193,
+      "primary_worst_day_r": -2.0715170470723656,
+      "stress_worst_day_r": -2.126006225794169,
+      "risk_fraction": 0.00460950425358463,
+      "risk_dollars_10k": 46.095042535846304,
+      "stress_r_per_session": 0.10420035776622928,
+      "expected_stress_daily_return_pct": 0.00048031199234847415,
+      "theoretical_stress_step1_days": 208.1980079469854,
+      "theoretical_stress_step2_days": 104.0990039734927,
+      "gates": {
+        "n_ge_250": true,
+        "primary_mean_gt_0": true,
+        "primary_pf_ge_1_20": true,
+        "stress_mean_ge_0_05": true,
+        "stress_pf_ge_1_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "remove_best10_mean_ge_0": true
+      },
+      "eligible": true
+    },
+    {
+      "models": [
+        "pd_rev",
+        "vwap_rev"
+      ],
+      "model_count": 2,
+      "primary": {
+        "n": 254,
+        "mean": 0.23600945791211753,
+        "sum": 59.94640230967785,
+        "pf": 1.6001794557403979,
+        "win_rate": 0.5078740157480315,
+        "max_dd": 9.594550453220254,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 254,
+        "mean": 0.2185349897246416,
+        "sum": 55.50788739005897,
+        "pf": 1.5437914505599606,
+        "win_rate": 0.5078740157480315,
+        "max_dd": 10.141761941036252,
+        "losing_streak": 6
+      },
+      "trades_per_session": 0.34048257372654156,
+      "positive_years": 3,
+      "worst_year_mean": 0.06324571401342809,
+      "remove_best10_mean": 0.01427165658292308,
+      "primary_worst_day_r": -2.0715170470723656,
+      "stress_worst_day_r": -2.126006225794169,
+      "risk_fraction": 0.005258783793527292,
+      "risk_dollars_10k": 52.58783793527292,
+      "stress_r_per_session": 0.07440735575074929,
+      "expected_stress_daily_return_pct": 0.0003912921965412601,
+      "theoretical_stress_step1_days": 255.56349164110006,
+      "theoretical_stress_step2_days": 127.78174582055003,
+      "gates": {
+        "n_ge_250": true,
+        "primary_mean_gt_0": true,
+        "primary_pf_ge_1_20": true,
+        "stress_mean_ge_0_05": true,
+        "stress_pf_ge_1_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "remove_best10_mean_ge_0": true
+      },
+      "eligible": true
+    },
+    {
+      "models": [
+        "open_drive",
+        "pd_rev",
+        "vwap_scalp"
+      ],
+      "model_count": 3,
+      "primary": {
+        "n": 327,
+        "mean": 0.19920503947131887,
+        "sum": 65.14004790712127,
+        "pf": 1.5768432032628985,
+        "win_rate": 0.46788990825688076,
+        "max_dd": 10.55762016436002,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 327,
+        "mean": 0.18211874530241917,
+        "sum": 59.55282971389107,
+        "pf": 1.5137604216726301,
+        "win_rate": 0.46788990825688076,
+        "max_dd": 10.887869047490431,
+        "losing_streak": 7
+      },
+      "trades_per_session": 0.4383378016085791,
+      "positive_years": 3,
+      "worst_year_mean": 0.055675943389467436,
+      "remove_best10_mean": 0.00046453783724224564,
+      "primary_worst_day_r": -3.0701493791521663,
+      "stress_worst_day_r": -3.1235965251728635,
+      "risk_fraction": 0.00489841796413103,
+      "risk_dollars_10k": 48.9841796413103,
+      "stress_r_per_session": 0.07982953044757517,
+      "expected_stress_daily_return_pct": 0.0003910384060125472,
+      "theoretical_stress_step1_days": 255.72935666270928,
+      "theoretical_stress_step2_days": 127.86467833135464,
+      "gates": {
+        "n_ge_250": true,
+        "primary_mean_gt_0": true,
+        "primary_pf_ge_1_20": true,
+        "stress_mean_ge_0_05": true,
+        "stress_pf_ge_1_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "remove_best10_mean_ge_0": true
+      },
+      "eligible": true
+    }
+  ],
+  "selected_dev": {
+    "models": [
+      "ema_rev",
+      "open_drive",
+      "pd_rev"
+    ],
+    "model_count": 3,
+    "primary": {
+      "n": 251,
+      "mean": 0.27147811034105523,
+      "sum": 68.14100569560486,
+      "pf": 1.7774034454443524,
+      "win_rate": 0.4940239043824701,
+      "max_dd": 6.696566727047264,
+      "losing_streak": 6
+    },
+    "stress": {
+      "n": 251,
+      "mean": 0.2554027789092635,
+      "sum": 64.10609750622514,
+      "pf": 1.7148901103813095,
+      "win_rate": 0.4940239043824701,
+      "max_dd": 7.053686715631207,
+      "losing_streak": 6
+    },
+    "trades_per_session": 0.33646112600536193,
+    "positive_years": 3,
+    "worst_year_mean": 0.17469065527946245,
+    "remove_best10_mean": 0.06193369852290352,
+    "primary_worst_day_r": -2.0441956706281843,
+    "stress_worst_day_r": -2.0778685625353734,
+    "risk_fraction": 0.0075610578529302815,
+    "risk_dollars_10k": 75.61057852930281,
+    "stress_r_per_session": 0.0859331065767093,
+    "expected_stress_daily_return_pct": 0.0006497451903085227,
+    "theoretical_stress_step1_days": 153.90648748398792,
+    "theoretical_stress_step2_days": 76.95324374199396,
+    "gates": {
+      "n_ge_250": true,
+      "primary_mean_gt_0": true,
+      "primary_pf_ge_1_20": true,
+      "stress_mean_ge_0_05": true,
+      "stress_pf_ge_1_12": true,
+      "positive_years_ge_2": true,
+      "worst_year_mean_ge_minus_0_05": true,
+      "remove_best10_mean_ge_0": true
+    },
+    "eligible": true
+  },
+  "validation": {
+    "2024": {
+      "year": 2024,
+      "sessions": 246,
+      "trades_per_session": 0.4146341463414634,
+      "primary": {
+        "n": 102,
+        "mean": 0.03379444997148337,
+        "sum": 3.4470338970913037,
+        "pf": 1.081522432935613,
+        "win_rate": 0.37254901960784315,
+        "max_dd": 9.214621269245566,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 102,
+        "mean": 0.017723832812585355,
+        "sum": 1.8078309468837064,
+        "pf": 1.0417241994900215,
+        "win_rate": 0.37254901960784315,
+        "max_dd": 10.2927250566711,
+        "losing_streak": 9
+      },
+      "primary_worst_day_r": -2.042292600896858,
+      "stress_worst_day_r": -2.0745155349135116,
+      "risk_fraction": 0.0075610578529302815,
+      "risk_dollars_10k": 75.61057852930281,
+      "stress_scaled_max_dd_pct": 0.07782388961779531,
+      "stress_scaled_worst_day_pct": 0.01568553197628367,
+      "primary_r_per_session": 0.0140123329150053,
+      "stress_r_per_session": 0.007348906288145148,
+      "primary_step1_days_implied": 943.858718746657,
+      "stress_step1_days_implied": 1799.677676274553,
+      "primary_step2_days_implied": 471.9293593733285,
+      "stress_step2_days_implied": 899.8388381372765,
+      "primary_path_step1": {
+        "status": "NOT_REACHED",
+        "days_to_target": null,
+        "final_return": 0.02606322271691908,
+        "max_total_dd": 0.06967228450960755,
+        "worst_intraday_from_day_start": -0.015441892507992596
+      },
+      "stress_path_step1": {
+        "status": "NOT_REACHED",
+        "days_to_target": null,
+        "final_return": 0.013669114377705438,
+        "max_total_dd": 0.07782388961779531,
+        "worst_intraday_from_day_start": -0.01568553197628367
+      },
+      "primary_path_step2": {
+        "status": "NOT_REACHED",
+        "days_to_target": null,
+        "final_return": 0.02606322271691908,
+        "max_total_dd": 0.06967228450960755,
+        "worst_intraday_from_day_start": -0.015441892507992596
+      },
+      "stress_path_step2": {
+        "status": "NOT_REACHED",
+        "days_to_target": null,
+        "final_return": 0.013669114377705438,
+        "max_total_dd": 0.07782388961779531,
+        "worst_intraday_from_day_start": -0.01568553197628367
+      }
+    },
+    "2025": {
+      "year": 2025,
+      "sessions": 83,
+      "trades_per_session": 0.2891566265060241,
+      "primary": {
+        "n": 24,
+        "mean": 0.6780642633141101,
+        "sum": 16.27354231953864,
+        "pf": 3.638365916241234,
+        "win_rate": 0.6666666666666666,
+        "max_dd": 2.057319510636825,
+        "losing_streak": 3
+      },
+      "stress": {
+        "n": 24,
+        "mean": 0.6626992966950724,
+        "sum": 15.904783120681738,
+        "pf": 3.526145513024046,
+        "win_rate": 0.6666666666666666,
+        "max_dd": 2.100991518741073,
+        "losing_streak": 3
+      },
+      "primary_worst_day_r": -1.0253868471953576,
+      "stress_worst_day_r": -1.044729206963249,
+      "risk_fraction": 0.0075610578529302815,
+      "risk_dollars_10k": 75.61057852930281,
+      "stress_scaled_max_dd_pct": 0.015885718421717106,
+      "stress_scaled_worst_day_pct": 0.007899257974495099,
+      "primary_r_per_session": 0.1960667749342005,
+      "stress_r_per_session": 0.19162389302026192,
+      "primary_step1_days_implied": 67.45488926538935,
+      "stress_step1_days_implied": 69.01885972231061,
+      "primary_step2_days_implied": 33.72744463269468,
+      "stress_step2_days_implied": 34.509429861155304,
+      "primary_path_step1": {
+        "status": "PASS",
+        "days_to_target": 19,
+        "final_return": 0.10048646504795962,
+        "max_total_dd": 0.015555511841887255,
+        "worst_intraday_from_day_start": -0.007753009273277881
+      },
+      "stress_path_step1": {
+        "status": "PASS",
+        "days_to_target": 20,
+        "final_return": 0.11067359738780463,
+        "max_total_dd": 0.015885718421717113,
+        "worst_intraday_from_day_start": -0.007899257974495099
+      },
+      "primary_path_step2": {
+        "status": "PASS",
+        "days_to_target": 9,
+        "final_return": 0.06406526520172204,
+        "max_total_dd": 0.007753009273277881,
+        "worst_intraday_from_day_start": -0.007753009273277881
+      },
+      "stress_path_step2": {
+        "status": "PASS",
+        "days_to_target": 9,
+        "final_return": 0.06297740020469197,
+        "max_total_dd": 0.007899257974495099,
+        "worst_intraday_from_day_start": -0.007899257974495099
+      }
+    },
+    "gates": {
+      "2024_stress_sum_gt_0": true,
+      "2024_stress_pf_ge_1_10": false,
+      "2025_stress_sum_gt_0": true,
+      "2025_stress_pf_ge_1_10": true,
+      "2024_scaled_dd_lt_8pct": true,
+      "2025_scaled_dd_lt_8pct": true,
+      "2024_scaled_worst_day_lt_4pct": true,
+      "2025_scaled_worst_day_lt_4pct": true,
+      "2024_stress_step1_pace_le_45": false,
+      "2025_stress_step1_pace_le_45": false
+    }
+  },
+  "pass": false
+}
