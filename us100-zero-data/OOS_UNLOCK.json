@@ -1,0 +1,40 @@
+{
+  "status": "OOS_2025_UNLOCK_FROZEN",
+  "created_before_2025_open": true,
+  "source_repo": "CodyOutcast/Academic-Paper-Data-Source",
+  "source_commit": "50052606c16d71850755e6dbdda02d43b4399c2b",
+  "dev_years": [2021, 2022, 2023, 2024],
+  "oos_year": 2025,
+  "protocol": [
+    "us100-zero-data/PROTOCOL_OR_FAMILY_V1.md",
+    "us100-zero-data/PROTOCOL_OR_FAMILY_V1_1_SPREAD_AMENDMENT.md"
+  ],
+  "dev_runner_git_blob_sha": "d0b6fc1789d876a677eeeb0f3e0027ad1554179c",
+  "selected": {
+    "family": "ORB",
+    "range_min": 30,
+    "rr": 2.0
+  },
+  "dev_primary": {
+    "n": 980,
+    "sessions": 1026,
+    "frequency": 0.9551656920077972,
+    "mean_r": 0.09398167461018365,
+    "sum_r": 92.10204111797998,
+    "pf": 1.227472061385388,
+    "win_rate": 0.49081632653061225,
+    "max_dd_r": 12.008385558741267,
+    "losing_streak": 8,
+    "positive_years": 4,
+    "median_calendar_year_expectancy": 0.10017330452813235
+  },
+  "dev_stress": {
+    "n": 980,
+    "mean_r": 0.09247207549978423,
+    "sum_r": 90.62263398978854,
+    "pf": 1.2236691509930109,
+    "max_dd_r": 12.02960553790048
+  },
+  "selection_rule": "highest median calendar-year expectancy among DEV gate passers; tie lower max DD; tie higher N",
+  "no_post_unlock_tuning": true
+}
