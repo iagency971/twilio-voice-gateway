@@ -1,0 +1,349 @@
+{
+  "status": "XAU_RSI_V5_COMPLETE_2025_UNOPENED",
+  "external_hypothesis": {
+    "repo": "olivertwigg/XAU-RSI-Reversal-50-EMA-Bot",
+    "commit": "f74adfada07a1538f2bf9f87eb9158dcd7d86a47"
+  },
+  "hard_constraint": "ZERO_PAID_EXTERNAL_DATA_REQUIRED_LIVE",
+  "partitions": {
+    "WARMUP": "2020",
+    "DEV": "2021-2023",
+    "VALIDATION": "2024_GATED",
+    "OOS_2025": "SEALED_NOT_DOWNLOADED"
+  },
+  "validation_2024_economic_opened": false,
+  "oos_2025_opened": false,
+  "dev_sessions": 708,
+  "candidate_count": 4,
+  "dev_results": {
+    "RSI63_37_TREND": {
+      "primary": {
+        "n": 1550,
+        "mean": -0.016073163726129564,
+        "sum": -24.913403775500825,
+        "pf": 0.9369012813042953,
+        "win_rate": 0.6161290322580645,
+        "max_dd": 40.65372599178822,
+        "avg_hold_min": 203.8709677419355
+      },
+      "stress": {
+        "n": 1548,
+        "mean": -0.04427272208353136,
+        "sum": -68.53417378530655,
+        "pf": 0.8320912517608329,
+        "win_rate": 0.5956072351421189,
+        "max_dd": 75.17369145072247,
+        "avg_hold_min": 202.5904392764858
+      },
+      "yearly": {
+        "2021": {
+          "n": 533,
+          "mean": 0.015581718831656039,
+          "sum": 8.305056137272668,
+          "pf": 1.069701007214154,
+          "win_rate": 0.6360225140712945,
+          "max_dd": 9.092558499612846,
+          "avg_hold_min": 205.95684803001876
+        },
+        "2022": {
+          "n": 530,
+          "mean": -0.04004717609584684,
+          "sum": -21.225003330798828,
+          "pf": 0.8601117800058726,
+          "win_rate": 0.6056603773584905,
+          "max_dd": 23.385905537124607,
+          "avg_hold_min": 190.39622641509433
+        },
+        "2023": {
+          "n": 487,
+          "mean": -0.024627220907545523,
+          "sum": -11.99345658197467,
+          "pf": 0.9032405405144368,
+          "win_rate": 0.6057494866529775,
+          "max_dd": 16.43157032114739,
+          "avg_hold_min": 216.25256673511294
+        }
+      },
+      "sessions": 708,
+      "trades_per_session": 2.189265536723164,
+      "r_per_session": -0.03518842341172433,
+      "stress_r_per_session": -0.09679968048772111,
+      "positive_years": 1,
+      "worst_year_mean": -0.04004717609584684,
+      "positive_month_rate": 0.3888888888888889,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.04012000063930102,
+      "gates": {
+        "n_ge_500": true,
+        "trades_per_session_ge_0_65": true,
+        "mean_ge_0_12": false,
+        "pf_ge_1_25": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_ge_0_03": false,
+        "stress_pf_ge_1_10": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "short_level": 63.0,
+        "long_level": 37.0,
+        "trend_filter": true
+      },
+      "name": "RSI63_37_TREND",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "RSI63_37_BI": {
+      "primary": {
+        "n": 2480,
+        "mean": -0.027822653503056318,
+        "sum": -69.00018068757967,
+        "pf": 0.8897645970483402,
+        "win_rate": 0.6084677419354839,
+        "max_dd": 78.296200334428,
+        "avg_hold_min": 211.60685483870967
+      },
+      "stress": {
+        "n": 2462,
+        "mean": -0.05646534105268099,
+        "sum": -139.0176696717006,
+        "pf": 0.7852625176142836,
+        "win_rate": 0.5877335499593827,
+        "max_dd": 139.772326497706,
+        "avg_hold_min": 208.80584890333063
+      },
+      "yearly": {
+        "2021": {
+          "n": 844,
+          "mean": -0.012555680507836894,
+          "sum": -10.596994348614338,
+          "pf": 0.9468174259957122,
+          "win_rate": 0.6267772511848341,
+          "max_dd": 16.15735088166606,
+          "avg_hold_min": 201.82464454976304
+        },
+        "2022": {
+          "n": 853,
+          "mean": -0.06461976652780149,
+          "sum": -55.12066084821467,
+          "pf": 0.7744650252849223,
+          "win_rate": 0.5744431418522861,
+          "max_dd": 57.63717059795753,
+          "avg_hold_min": 205.97303634232122
+        },
+        "2023": {
+          "n": 783,
+          "mean": -0.00419224200606727,
+          "sum": -3.282525490750672,
+          "pf": 0.9819916872112586,
+          "win_rate": 0.6257982120051085,
+          "max_dd": 16.12664302095776,
+          "avg_hold_min": 228.28863346104725
+        }
+      },
+      "sessions": 708,
+      "trades_per_session": 3.5028248587570623,
+      "r_per_session": -0.09745788232708993,
+      "stress_r_per_session": -0.1963526407792381,
+      "positive_years": 0,
+      "worst_year_mean": -0.06461976652780149,
+      "positive_month_rate": 0.3333333333333333,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.04523886226424528,
+      "gates": {
+        "n_ge_500": true,
+        "trades_per_session_ge_0_65": true,
+        "mean_ge_0_12": false,
+        "pf_ge_1_25": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_ge_0_03": false,
+        "stress_pf_ge_1_10": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "short_level": 63.0,
+        "long_level": 37.0,
+        "trend_filter": false
+      },
+      "name": "RSI63_37_BI",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "RSI70_30_TREND": {
+      "primary": {
+        "n": 813,
+        "mean": -0.01386287689858061,
+        "sum": -11.270518918546037,
+        "pf": 0.9599744093044957,
+        "win_rate": 0.5621156211562116,
+        "max_dd": 27.00059752833302,
+        "avg_hold_min": 308.95448954489547
+      },
+      "stress": {
+        "n": 816,
+        "mean": -0.04689816311323984,
+        "sum": -38.26890110040371,
+        "pf": 0.8694137259992065,
+        "win_rate": 0.5453431372549019,
+        "max_dd": 42.73054514593099,
+        "avg_hold_min": 301.4154411764706
+      },
+      "yearly": {
+        "2021": {
+          "n": 264,
+          "mean": -0.04265467303907316,
+          "sum": -11.260833682315313,
+          "pf": 0.8780590392856754,
+          "win_rate": 0.5492424242424242,
+          "max_dd": 21.374015916504028,
+          "avg_hold_min": 311.11742424242425
+        },
+        "2022": {
+          "n": 279,
+          "mean": -0.01842578887873813,
+          "sum": -5.140795097167938,
+          "pf": 0.9506601655369274,
+          "win_rate": 0.5483870967741935,
+          "max_dd": 15.127692604479613,
+          "avg_hold_min": 280.0537634408602
+        },
+        "2023": {
+          "n": 270,
+          "mean": 0.01900411059606375,
+          "sum": 5.1311098609372126,
+          "pf": 1.0603343085334385,
+          "win_rate": 0.5888888888888889,
+          "max_dd": 9.537675277828171,
+          "avg_hold_min": 336.7037037037037
+        }
+      },
+      "sessions": 708,
+      "trades_per_session": 1.1483050847457628,
+      "r_per_session": -0.015918812031844684,
+      "stress_r_per_session": -0.05405212019831032,
+      "positive_years": 1,
+      "worst_year_mean": -0.04265467303907316,
+      "positive_month_rate": 0.4722222222222222,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.05000810811705786,
+      "gates": {
+        "n_ge_500": true,
+        "trades_per_session_ge_0_65": true,
+        "mean_ge_0_12": false,
+        "pf_ge_1_25": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_ge_0_03": false,
+        "stress_pf_ge_1_10": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "short_level": 70.0,
+        "long_level": 30.0,
+        "trend_filter": true
+      },
+      "name": "RSI70_30_TREND",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "RSI70_30_BI": {
+      "primary": {
+        "n": 1420,
+        "mean": -0.0021630472528244506,
+        "sum": -3.0715270990107197,
+        "pf": 0.9936411800454783,
+        "win_rate": 0.5507042253521127,
+        "max_dd": 30.67014653161512,
+        "avg_hold_min": 319.9788732394366
+      },
+      "stress": {
+        "n": 1424,
+        "mean": -0.03376319396514744,
+        "sum": -48.07878820636995,
+        "pf": 0.9042773470676042,
+        "win_rate": 0.5330056179775281,
+        "max_dd": 59.768732927585276,
+        "avg_hold_min": 312.1488764044944
+      },
+      "yearly": {
+        "2021": {
+          "n": 464,
+          "mean": -0.00928980871650309,
+          "sum": -4.310471244457434,
+          "pf": 0.9716663197299231,
+          "win_rate": 0.5560344827586207,
+          "max_dd": 24.10055544315574,
+          "avg_hold_min": 318.6853448275862
+        },
+        "2022": {
+          "n": 499,
+          "mean": -0.0069221654303905315,
+          "sum": -3.4541605497648753,
+          "pf": 0.9809763638764559,
+          "win_rate": 0.5250501002004008,
+          "max_dd": 21.20650006828464,
+          "avg_hold_min": 302.88577154308615
+        },
+        "2023": {
+          "n": 457,
+          "mean": 0.010269375700681814,
+          "sum": 4.693104695211589,
+          "pf": 1.0314278108761201,
+          "win_rate": 0.5733041575492341,
+          "max_dd": 18.134528444016965,
+          "avg_hold_min": 339.9562363238512
+        }
+      },
+      "sessions": 708,
+      "trades_per_session": 2.005649717514124,
+      "r_per_session": -0.004338315111597062,
+      "stress_r_per_session": -0.0679078929468502,
+      "positive_years": 1,
+      "worst_year_mean": -0.00928980871650309,
+      "positive_month_rate": 0.5,
+      "active_months": 36,
+      "bootstrap_p05_mean": -0.03503158850328488,
+      "gates": {
+        "n_ge_500": true,
+        "trades_per_session_ge_0_65": true,
+        "mean_ge_0_12": false,
+        "pf_ge_1_25": false,
+        "rps_ge_0_30": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_0": false,
+        "months_ge_58": false,
+        "stress_mean_ge_0_03": false,
+        "stress_pf_ge_1_10": false,
+        "stress_rps_ge_0_12": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "short_level": 70.0,
+        "long_level": 30.0,
+        "trend_filter": false
+      },
+      "name": "RSI70_30_BI",
+      "eligible": false,
+      "robustness_score": null
+    }
+  },
+  "selected": null,
+  "validation": {
+    "status": "DEV_NO_GO_2024_NOT_OPENED",
+    "selected": null
+  }
+}
