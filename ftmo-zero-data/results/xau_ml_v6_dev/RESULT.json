@@ -1,0 +1,355 @@
+{
+  "status": "XAU_ML_V6_DEV_WALKFORWARD_COMPLETE",
+  "hard_constraint": "ZERO_PAID_EXTERNAL_DATA_REQUIRED_LIVE",
+  "partitions": {
+    "TRAIN_CONTEXT": "2020",
+    "DEV_WALK_FORWARD": "2021-2023",
+    "VALIDATION_2024": "NOT_OPENED",
+    "OOS_2025": "SEALED_NOT_OPENED"
+  },
+  "validation_2024_opened": false,
+  "oos_2025_opened": false,
+  "feature_names": [
+    "ret1_atr",
+    "ret3_atr",
+    "ret6_atr",
+    "ret12_atr",
+    "rsi14",
+    "c_ema20_atr",
+    "c_ema50_atr",
+    "ema20_50_atr",
+    "ema20_slope3_atr",
+    "body_atr",
+    "range_atr",
+    "z20",
+    "loc20",
+    "atr_pct",
+    "rstd12",
+    "tod_sin",
+    "tod_cos",
+    "dow_sin",
+    "dow_cos"
+  ],
+  "fold_diagnostics": {
+    "2021": {
+      "train_n": 26995,
+      "test_n": 26973,
+      "train_long_success_rate": 0.24048897944063716,
+      "train_short_success_rate": 0.2491202074458233,
+      "test_long_success_rate": 0.2172542913283654,
+      "test_short_success_rate": 0.23645868090312536,
+      "sessions": 254
+    },
+    "2022": {
+      "train_n": 53968,
+      "test_n": 27132,
+      "train_long_success_rate": 0.22887637118292323,
+      "train_short_success_rate": 0.2427920249036466,
+      "test_long_success_rate": 0.23864809081527347,
+      "test_short_success_rate": 0.2534645437122217,
+      "sessions": 257
+    },
+    "2023": {
+      "train_n": 81100,
+      "test_n": 15757,
+      "train_long_success_rate": 0.2321454993834772,
+      "train_short_success_rate": 0.24636251541307028,
+      "test_long_success_rate": 0.22694675382369742,
+      "test_short_success_rate": 0.2581075077743225,
+      "sessions": 140
+    }
+  },
+  "dev_sessions": 651,
+  "candidate_count": 4,
+  "dev_results": {
+    "ML55_BI": {
+      "primary": {
+        "n": 64,
+        "mean": 0.07734621099928989,
+        "sum": 4.950157503954553,
+        "pf": 1.146514854095567,
+        "win_rate": 0.4375,
+        "max_dd": 5.277649024354975
+      },
+      "stress": {
+        "n": 61,
+        "mean": -0.06419344181579174,
+        "sum": -3.9157999507632963,
+        "pf": 0.8815539014666139,
+        "win_rate": 0.4262295081967213,
+        "max_dd": 10.18245073384728
+      },
+      "yearly": {
+        "2021": {
+          "n": 54,
+          "mean": 0.1708853060798061,
+          "sum": 9.227806528309529,
+          "pf": 1.3481088187020798,
+          "win_rate": 0.48148148148148145,
+          "max_dd": 5.140545992629172
+        },
+        "2022": {
+          "n": 7,
+          "mean": -0.5396641463364215,
+          "sum": -3.7776490243549503,
+          "pf": 0.2842174599102591,
+          "win_rate": 0.14285714285714285,
+          "max_dd": 3.7776490243549503
+        },
+        "2023": {
+          "n": 3,
+          "mean": -0.16666666666667554,
+          "sum": -0.5000000000000266,
+          "pf": 0.7499999999999867,
+          "win_rate": 0.3333333333333333,
+          "max_dd": 2.0
+        }
+      },
+      "sessions": 651,
+      "trades_per_session": 0.09831029185867896,
+      "r_per_session": 0.007603928577503153,
+      "stress_r_per_session": -0.006015053687808443,
+      "worst_year_mean": -0.5396641463364215,
+      "positive_month_rate": 0.3684210526315789,
+      "active_months": 19,
+      "remove_best10_mean": -0.09736565782536644,
+      "bootstrap_p05_mean": 0.032632771232881,
+      "gates": {
+        "n_ge_500": false,
+        "tps_ge_0_65": false,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_35": false,
+        "maxdd_le_12": true,
+        "all_years_positive": false,
+        "worst_year_mean_ge_0_05": false,
+        "months_ge_60": false,
+        "remove_best10_ge_0": false,
+        "stress_mean_ge_0_05": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_15": false,
+        "bootstrap_p05_ge_0": true
+      },
+      "candidate": {
+        "threshold": 0.55,
+        "mode": "BI"
+      },
+      "name": "ML55_BI",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ML60_BI": {
+      "primary": {
+        "n": 15,
+        "mean": -0.16666666666666666,
+        "sum": -2.5,
+        "pf": 0.75,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 5.5
+      },
+      "stress": {
+        "n": 15,
+        "mean": -0.2936499363122029,
+        "sum": -4.404749044683043,
+        "pf": 0.5595250955316958,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 6.0268063238247604
+      },
+      "yearly": {
+        "2021": {
+          "n": 14,
+          "mean": -0.10714285714285714,
+          "sum": -1.5,
+          "pf": 0.8333333333333334,
+          "win_rate": 0.35714285714285715,
+          "max_dd": 4.5
+        },
+        "2022": {
+          "n": 1,
+          "mean": -1.0,
+          "sum": -1.0,
+          "pf": 0.0,
+          "win_rate": 0.0,
+          "max_dd": 1.0
+        }
+      },
+      "sessions": 651,
+      "trades_per_session": 0.02304147465437788,
+      "r_per_session": -0.0038402457757296467,
+      "stress_r_per_session": -0.006766127564797301,
+      "worst_year_mean": -1.0,
+      "positive_month_rate": 0.25,
+      "active_months": 8,
+      "remove_best10_mean": -0.4230769230769231,
+      "bootstrap_p05_mean": null,
+      "gates": {
+        "n_ge_500": false,
+        "tps_ge_0_65": false,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_35": false,
+        "maxdd_le_12": true,
+        "all_years_positive": false,
+        "worst_year_mean_ge_0_05": false,
+        "months_ge_60": false,
+        "remove_best10_ge_0": false,
+        "stress_mean_ge_0_05": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_15": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "threshold": 0.6,
+        "mode": "BI"
+      },
+      "name": "ML60_BI",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ML55_LONG": {
+      "primary": {
+        "n": 45,
+        "mean": -0.06775897085284607,
+        "sum": -3.049153688378073,
+        "pf": 0.8880934720365999,
+        "win_rate": 0.37777777777777777,
+        "max_dd": 10.801827336019555
+      },
+      "stress": {
+        "n": 42,
+        "mean": -0.2205816725594166,
+        "sum": -9.264430247495497,
+        "pf": 0.6347700911800139,
+        "win_rate": 0.38095238095238093,
+        "max_dd": 12.975086248851468
+      },
+      "yearly": {
+        "2021": {
+          "n": 39,
+          "mean": 0.07566272593902379,
+          "sum": 2.9508463116219277,
+          "pf": 1.1388808296482165,
+          "win_rate": 0.4358974358974359,
+          "max_dd": 7.301827336019449
+        },
+        "2022": {
+          "n": 5,
+          "mean": -1.0,
+          "sum": -5.0,
+          "pf": 0.0,
+          "win_rate": 0.0,
+          "max_dd": 5.0
+        },
+        "2023": {
+          "n": 1,
+          "mean": -1.0,
+          "sum": -1.0,
+          "pf": 0.0,
+          "win_rate": 0.0,
+          "max_dd": 1.0
+        }
+      },
+      "sessions": 651,
+      "trades_per_session": 0.06912442396313365,
+      "r_per_session": -0.004683799828537747,
+      "stress_r_per_session": -0.01423107564899462,
+      "worst_year_mean": -1.0,
+      "positive_month_rate": 0.35714285714285715,
+      "active_months": 14,
+      "remove_best10_mean": -0.26372884220945564,
+      "bootstrap_p05_mean": -0.28008121493419924,
+      "gates": {
+        "n_ge_500": false,
+        "tps_ge_0_65": false,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_35": false,
+        "maxdd_le_12": true,
+        "all_years_positive": false,
+        "worst_year_mean_ge_0_05": false,
+        "months_ge_60": false,
+        "remove_best10_ge_0": false,
+        "stress_mean_ge_0_05": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_15": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "threshold": 0.55,
+        "mode": "LONG"
+      },
+      "name": "ML55_LONG",
+      "eligible": false,
+      "robustness_score": null
+    },
+    "ML60_LONG": {
+      "primary": {
+        "n": 15,
+        "mean": -0.16666666666666666,
+        "sum": -2.5,
+        "pf": 0.75,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 5.5
+      },
+      "stress": {
+        "n": 15,
+        "mean": -0.2936499363122029,
+        "sum": -4.404749044683043,
+        "pf": 0.5595250955316958,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 6.0268063238247604
+      },
+      "yearly": {
+        "2021": {
+          "n": 14,
+          "mean": -0.10714285714285714,
+          "sum": -1.5,
+          "pf": 0.8333333333333334,
+          "win_rate": 0.35714285714285715,
+          "max_dd": 4.5
+        },
+        "2022": {
+          "n": 1,
+          "mean": -1.0,
+          "sum": -1.0,
+          "pf": 0.0,
+          "win_rate": 0.0,
+          "max_dd": 1.0
+        }
+      },
+      "sessions": 651,
+      "trades_per_session": 0.02304147465437788,
+      "r_per_session": -0.0038402457757296467,
+      "stress_r_per_session": -0.006766127564797301,
+      "worst_year_mean": -1.0,
+      "positive_month_rate": 0.25,
+      "active_months": 8,
+      "remove_best10_mean": -0.4230769230769231,
+      "bootstrap_p05_mean": null,
+      "gates": {
+        "n_ge_500": false,
+        "tps_ge_0_65": false,
+        "mean_ge_0_15": false,
+        "pf_ge_1_30": false,
+        "rps_ge_0_35": false,
+        "maxdd_le_12": true,
+        "all_years_positive": false,
+        "worst_year_mean_ge_0_05": false,
+        "months_ge_60": false,
+        "remove_best10_ge_0": false,
+        "stress_mean_ge_0_05": false,
+        "stress_pf_ge_1_15": false,
+        "stress_rps_ge_0_15": false,
+        "bootstrap_p05_ge_0": false
+      },
+      "candidate": {
+        "threshold": 0.6,
+        "mode": "LONG"
+      },
+      "name": "ML60_LONG",
+      "eligible": false,
+      "robustness_score": null
+    }
+  },
+  "selected": null
+}
