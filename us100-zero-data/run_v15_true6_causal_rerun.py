@@ -31,7 +31,7 @@ def remove_best10(a):
 
 def causal_resolver(signals,cooldown_bars=3):
  if not signals:return []
- # same-bar candidates are contemporaneously knowable
+ # Same-bar candidates are contemporaneously knowable.
  groups={}
  for s in signals:groups.setdefault(int(s.idx),[]).append(s)
  winners=[]
@@ -44,11 +44,13 @@ def causal_resolver(signals,cooldown_bars=3):
   if not accepted or s.idx-accepted[-1].idx>=cooldown_bars:accepted.append(s)
  return accepted
 
-def generate_arm(raw,daily,causal=False):
+def prepare_six(raw,daily):
+ """Compute frozen features and six-model pre-conflict signals exactly once.
+ Both V15 arms consume this identical prepared signal stream; only resolver differs.
+ """
  from config import Config
  from strategy.vwap import compute_vwap,compute_opening_range
  from strategy.quant import compute_all_quant_features
- from strategy.quality import filter_by_quality
  from strategy.multi import MultiModelGenerator
  from strategy.models.ema_reversion import EMAReversionModel
  from strategy.models.kalman_momentum import KalmanMomentumModel
@@ -67,9 +69,15 @@ def generate_arm(raw,daily,causal=False):
  for s in allsig:raw_model_counts[s.model]=raw_model_counts.get(s.model,0)+1
  allsig=gen._apply_atr_hybrid_wider(allsig,df); allsig=gen._filter_disabled(allsig)
  filt=[s for s in allsig if s.ts.time()<dt_time(15,30)]; filt.sort(key=lambda s:s.idx)
+ prep={'raw_model_counts':raw_model_counts,'after_time_filter':len(filt)}
+ return cfg,gen,df,filt,prep
+
+def resolve_arm(gen,df,filt,prep,causal=False):
+ from strategy.quality import filter_by_quality
  resolved=causal_resolver(filt) if causal else gen._resolve_conflicts(filt)
  final=filter_by_quality(resolved,df)
- return cfg,df,final,{'raw_model_counts':raw_model_counts,'after_time_filter':len(filt),'after_conflict':len(resolved),'after_quality':len(final)}
+ diag=dict(prep); diag.update({'after_conflict':len(resolved),'after_quality':len(final)})
+ return final,diag
 
 def rescore(trades,sp):
  rows=[]; fallback=0
@@ -109,18 +117,20 @@ def main():
   d,q=base.load_year(y); frames.append(d); sessions+=len(base.complete_rth_days(d))
  allbars=pd.concat(frames,ignore_index=True).sort_values('datetime').drop_duplicates('datetime').reset_index(drop=True)
  from data.loader import build_daily_bars
- daily=build_daily_bars(allbars[['datetime','open','high','low','close','volume']]).copy(); daily['date']=pd.to_datetime(daily['date']).dt.date
+ raw=allbars[['datetime','open','high','low','close','volume']].copy()
+ daily=build_daily_bars(raw).copy(); daily['date']=pd.to_datetime(daily['date']).dt.date
  from backtest.engine_v2 import BacktestEngineV2
- results={}; ledgers={}
+ cfg,gen,df,filt,prep=prepare_six(raw,daily)
+ results={}
  for name,causal in [('ARM_A_TRUE6_ORIGINAL_RESOLVER',False),('ARM_B_TRUE6_CAUSAL_RESOLVER',True)]:
-  cfg,df,signals,diag=generate_arm(allbars[['datetime','open','high','low','close','volume']].copy(),daily,causal)
+  signals,diag=resolve_arm(gen,df,filt,prep,causal)
   engine=BacktestEngineV2(cfg); trades=engine.run(df,signals); z,fb=rescore(trades,allbars); z.to_csv(OUT/f'{name}_TRADES.csv',index=False)
-  results[name]={'signal_diagnostics':diag,'executed_trade_count':len(z),'spread_fallback_count':fb,'summary':summarize(z,sessions)}; ledgers[name]=z
- # Prior V14 filtered-ledger benchmark
+  results[name]={'signal_diagnostics':diag,'executed_trade_count':len(z),'spread_fallback_count':fb,'summary':summarize(z,sessions)}
+ # Prior V14 filtered-ledger benchmark.
  old=pd.read_csv('us100-zero-data/results/native_12model_port_v5/TRADES_RESCORED.csv'); old['entry_time']=pd.to_datetime(old.entry_time); old=old[old.model.isin(MODELS)].copy(); old['year']=old.entry_time.dt.year
  oldsum=summarize(old,sessions)
  a=results['ARM_A_TRUE6_ORIGINAL_RESOLVER']['summary']; b=results['ARM_B_TRUE6_CAUSAL_RESOLVER']['summary']
- out={'status':'V15_TRUE6_CAUSAL_RERUN_COMPLETE','sessions':sessions,'candidate_models':list(MODELS),'prior_filtered_v14':oldsum,'arms':results,
+ out={'status':'V15_TRUE6_CAUSAL_RERUN_COMPLETE','implementation_note':'V15.1 one prepared signal pass shared by both arms; resolver logic/protocol unchanged','sessions':sessions,'candidate_models':list(MODELS),'prior_filtered_v14':oldsum,'arms':results,
       'deltas':{'armA_minus_prior_n':int(a['stress']['n']-oldsum['stress']['n']),'armA_minus_prior_stress_mean':float(a['stress']['mean']-oldsum['stress']['mean']),'armA_minus_prior_dd_r':float(a['stress']['max_dd']-oldsum['stress']['max_dd']),
                 'armB_minus_armA_n':int(b['stress']['n']-a['stress']['n']),'armB_minus_armA_stress_mean':float(b['stress']['mean']-a['stress']['mean']),'armB_minus_armA_dd_r':float(b['stress']['max_dd']-a['stress']['max_dd'])},
       'methodology_note':'Only ARM B is causally implementable as the proposed MT5 design. V15 changes no model/feature/exit parameter.'}
