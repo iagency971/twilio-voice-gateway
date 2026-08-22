@@ -15,7 +15,7 @@ OUT=ROOT/'results/v12_fastest_ftmo_subset_risk'
 EXPECTED_RAW_SHA='c2c705318ff19aee4fb1137b7ec2102e98a848b297701b334e1b777a0d5b7d31'
 DEV_YEARS=(2021,2022,2023)
 SESS={'DEV':746,'2024':246,'2025':83}
-RISKS=tuple(round(x/10000,6) for x in range(25,101,5))  # .25%..1.00%
+RISKS=tuple(round(x/10000,6) for x in range(25,101,5))
 
 
 def sha256_file(p:Path)->str:
@@ -42,23 +42,15 @@ def remove_best10(z,col='primary_r'):
  n=int(math.ceil(len(z)*.10)); rem=z.sort_values(col,ascending=False).iloc[n:]
  return float(rem[col].mean()) if len(rem) else None
 
-def worst_intraday_r(z,col):
+def path_characteristics(z,col):
+ """Risk-independent path characteristics; algebraically equivalent to replaying each fixed risk."""
+ if z.empty:return {'worst_intraday_r':0.0,'min_cumulative_r':0.0}
+ a=z.sort_values('entry_time'); vals=a[col].to_numpy(float); mincum=float(min(0.0,np.cumsum(vals).min(initial=0.0)))
  worst=0.0
- for _,g in z.sort_values('entry_time').groupby('date',sort=True):
-  cum=0.0
-  for r in g[col].to_numpy(float):
-   cum+=float(r); worst=min(worst,cum)
- return float(worst)
-
-def path_breach(z,col,risk):
- bal=0.0; peak=0.0; maxdd=0.0; worstday=0.0
- for _,g in z.sort_values('entry_time').groupby('date',sort=True):
-  ds=bal
-  for r in g[col].to_numpy(float):
-   bal += float(r)*risk; peak=max(peak,bal); maxdd=max(maxdd,peak-bal); dm=bal-ds; worstday=min(worstday,dm)
-   if dm<=-.05+1e-12:return {'breach':True,'reason':'daily','final':float(bal),'maxdd':float(maxdd),'worstday':float(worstday)}
-   if bal<=-.10+1e-12:return {'breach':True,'reason':'total','final':float(bal),'maxdd':float(maxdd),'worstday':float(worstday)}
- return {'breach':False,'reason':None,'final':float(bal),'maxdd':float(maxdd),'worstday':float(worstday)}
+ for _,g in a.groupby('date',sort=True):
+  c=np.cumsum(g[col].to_numpy(float))
+  if len(c): worst=min(worst,float(c.min()))
+ return {'worst_intraday_r':float(worst),'min_cumulative_r':mincum}
 
 def target_path(z,col,risk,target):
  bal=0.0; active=0; days=0
@@ -74,7 +66,7 @@ def target_path(z,col,risk,target):
 
 def valblock(d,year,mods,risk):
  z=d[(d.year==year)&d.model.isin(mods)].copy(); sessions=SESS[str(year)]; p=stats(z.primary_r); s=stats(z.stress_r)
- wi=worst_intraday_r(z,'stress_r'); rpd=s['sum']/sessions; daily=rpd*risk
+ ch=path_characteristics(z,'stress_r'); wi=ch['worst_intraday_r']; rpd=s['sum']/sessions; daily=rpd*risk
  return {'year':year,'sessions':sessions,'n':len(z),'trades_per_session':float(len(z)/sessions),'primary':p,'stress':s,
          'risk_fraction':risk,'risk_dollars_10k':risk*10000,'stress_worst_intraday_r':wi,
          'stress_scaled_dd_pct':s['max_dd']*risk if s['max_dd'] is not None else None,'stress_scaled_worst_intraday_pct':abs(min(0.,wi))*risk,
@@ -83,7 +75,7 @@ def valblock(d,year,mods,risk):
 
 def main():
  OUT.mkdir(parents=True,exist_ok=True)
- d=pd.read_csv(LEDGER); d['entry_time']=pd.to_datetime(d.entry_time,errors='coerce'); d['exit_time']=pd.to_datetime(d.exit_time,errors='coerce'); d=d.dropna(subset=['entry_time','model','primary_r','stress_r']).copy();
+ d=pd.read_csv(LEDGER); d['entry_time']=pd.to_datetime(d.entry_time,errors='coerce'); d['exit_time']=pd.to_datetime(d.exit_time,errors='coerce'); d=d.dropna(subset=['entry_time','model','primary_r','stress_r']).copy()
  d['year']=d.entry_time.dt.year; d['date']=d.entry_time.dt.date; d=d.sort_values(['entry_time','exit_time']).reset_index(drop=True)
  mods=tuple(sorted(d.model.unique().tolist()))
  if len(mods)!=12:raise RuntimeError(f'Expected 12 models, got {len(mods)}')
@@ -91,23 +83,24 @@ def main():
  for mask in range(1,1<<len(mods)):
   subset_count+=1; subset=tuple(mods[i] for i in range(len(mods)) if mask&(1<<i)); z=dev[dev.model.isin(subset)]
   p=stats(z.primary_r); s=stats(z.stress_r)
-  posyrs=0; worstyr=1e9; yrs={}
+  posyrs=0; worstyr=1e9
   for y in DEV_YEARS:
-   sy=stats(z[z.year==y].primary_r); yrs[str(y)]=sy
+   sy=stats(z[z.year==y].primary_r)
    if sy['sum']>0:posyrs+=1
    if sy['mean'] is not None:worstyr=min(worstyr,sy['mean'])
   q={'n_ge_200':p['n']>=200,'primary_mean_gt_0':p['mean'] is not None and p['mean']>0,'primary_pf_ge_1_15':p['pf'] is not None and p['pf']>=1.15,
      'stress_mean_ge_0_05':s['mean'] is not None and s['mean']>=.05,'stress_pf_ge_1_10':s['pf'] is not None and s['pf']>=1.10,'positive_years_ge_2':posyrs>=2,
      'worst_year_mean_ge_minus_0_10':worstyr<1e9 and worstyr>=-.10}
   if not all(q.values()):continue
-  quality_count+=1; wi=worst_intraday_r(z,'stress_r'); rb=remove_best10(z); rpd=s['sum']/SESS['DEV']
+  quality_count+=1; ch=path_characteristics(z,'stress_r'); wi=ch['worst_intraday_r']; mincum=ch['min_cumulative_r']; rb=remove_best10(z); rpd=s['sum']/SESS['DEV']
   for risk in RISKS:
-   scaleddd=s['max_dd']*risk; scaledwi=abs(min(0.,wi))*risk
+   scaleddd=s['max_dd']*risk; scaledwi=abs(min(0.,wi))*risk; scaled_min_cum=mincum*risk
    if scaleddd>=.09 or scaledwi>=.045:continue
-   path=path_breach(z,'stress_r',risk)
-   if path['breach']:continue
+   # Exact equivalent of the frozen chronological breach checks for fixed initial-account risk.
+   if scaledwi<=-.05+1e-12 or scaled_min_cum<=-.10+1e-12:continue
    daily=rpd*risk
    if daily<=0:continue
+   path={'breach':False,'reason':None,'final':float(s['sum']*risk),'maxdd':float(scaleddd),'worstday':float(wi*risk),'min_cumulative':float(scaled_min_cum)}
    pairs.append({'models':subset,'model_count':len(subset),'risk_fraction':risk,'risk_dollars_10k':risk*10000,
                  'primary':p,'stress':s,'positive_years':posyrs,'worst_year_mean':float(worstyr),'remove_best10_mean':rb,
                  'trades_per_session':float(len(z)/SESS['DEV']),'stress_r_per_session':float(rpd),'stress_worst_intraday_r':wi,
@@ -115,8 +108,9 @@ def main():
                  'implied_step1_days':float(.10/daily),'implied_step2_days':float(.05/daily)})
  def rank(x):return (x['implied_step1_days'],-x['stress']['pf'],x['risk_fraction'],x['stress']['max_dd'],x['model_count'],','.join(x['models']))
  pairs.sort(key=rank); sel=pairs[0] if pairs else None
- res={'status':'V12_NO_ADMISSIBLE_PAIR' if sel is None else 'V12_DEV_SELECTED_VALIDATION_OPENED','ledger_sha256':sha256_file(LEDGER),'expected_raw_sha':EXPECTED_RAW_SHA,
-      'models':mods,'subsets_tested':subset_count,'quality_eligible_subsets':quality_count,'admissible_subset_risk_pairs':len(pairs),'top_30_pairs':pairs[:30],'selected_dev':sel,'validation':None,'pass':False}
+ res={'status':'V12_NO_ADMISSIBLE_PAIR' if sel is None else 'V12_DEV_SELECTED_VALIDATION_OPENED','implementation_note':'V12.1 algebraic fixed-risk path acceleration; frozen V12 rules unchanged',
+      'ledger_sha256':sha256_file(LEDGER),'expected_raw_sha':EXPECTED_RAW_SHA,'models':mods,'subsets_tested':subset_count,'quality_eligible_subsets':quality_count,
+      'admissible_subset_risk_pairs':len(pairs),'top_30_pairs':pairs[:30],'selected_dev':sel,'validation':None,'pass':False}
  if sel:
   vm=tuple(sel['models']); risk=float(sel['risk_fraction']); v24=valblock(d,2024,vm,risk); v25=valblock(d,2025,vm,risk)
   gates={'2024_stress_sum_gt_0':v24['stress']['sum']>0,'2024_stress_pf_ge_1_10':v24['stress']['pf'] is not None and v24['stress']['pf']>=1.10,
