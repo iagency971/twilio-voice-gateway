@@ -1,0 +1,60 @@
+name: MNQ Aug21 CME Authorized Dispatch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/dispatch/mnq-aug21-cme.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mnq-aug21-cme-authorized
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+    steps:
+      - name: Checkout CME research branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/mnq-databento-cme-validation-v1
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas numpy databento matplotlib tabulate python-dotenv ib_insync
+
+      - name: Remeasure Aug21 on official CME
+        shell: bash
+        run: |
+          set +e
+          mkdir -p mnq-databento/results/aug21_cme_remeasurement
+          python mnq-databento/run_aug21_cme_remeasurement.py 2>&1 | tee mnq-databento/results/aug21_cme_remeasurement/run.log
+          code=${PIPESTATUS[0]}
+          echo "$code" > mnq-databento/results/aug21_cme_remeasurement/exit_code.txt
+          if [ "$code" -ne 0 ]; then
+            echo "AUG21_CME_REMEASUREMENT_FAILURE exit_code=$code" > mnq-databento/results/aug21_cme_remeasurement/WORKFLOW_FAILURE.txt
+          else
+            rm -f mnq-databento/results/aug21_cme_remeasurement/WORKFLOW_FAILURE.txt
+          fi
+          exit 0
+
+      - name: Publish result to CME research branch
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- mnq-databento/results/aug21_cme_remeasurement
+          git commit -m "Publish official CME Aug21 forward remeasurement [skip ci]" || true
+          git push origin HEAD:agent/mnq-databento-cme-validation-v1
