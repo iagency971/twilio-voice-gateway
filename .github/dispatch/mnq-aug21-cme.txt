@@ -1,3 +1,4 @@
 authorized_remeasurement=2026-08-21
 frozen_external_commit=d472d6b442764c2adafbba4bbeb96881c100e3e0
 max_cost_usd=0.01
+trigger_attempt=2
