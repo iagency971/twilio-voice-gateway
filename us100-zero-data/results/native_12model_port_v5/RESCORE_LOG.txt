@@ -1,6 +1,6 @@
 {
   "status": "NATIVE_12MODEL_PORT_V5_NO_GO",
-  "classification": "V5_2_ZERO_PAID_DATA_RESCORE_FROM_FROZEN_RAW_LEDGER",
+  "classification": "V5_3_EXACT_MINUTE_KEY_BUGFIX_FROM_FROZEN_RAW_LEDGER",
   "source_repo": "CodyOutcast/Academic-Paper-Data-Source",
   "source_commit": "50052606c16d71850755e6dbdda02d43b4399c2b",
   "external_commit": "d472d6b442764c2adafbba4bbeb96881c100e3e0",
@@ -8,8 +8,8 @@
   "raw_trade_count": 3482,
   "spread_fallback": {
     "rule": "exact required minute else same-NY-calendar-date median",
-    "fallback_trade_count": 3482,
-    "fallback_fraction": 1.0
+    "fallback_trade_count": 0,
+    "fallback_fraction": 0.0
   },
   "data_qa": {
     "2021": {
@@ -1537,7 +1537,7 @@
   },
   "pass": false,
   "notes": [
-    "No external 12-model rerun was performed in V5.2.",
+    "No external 12-model rerun was performed in V5.3.",
     "No strategy parameter or raw trade outcome was changed by the spread fallback amendment.",
     "Live architecture requires only the native US100.cash broker/FTMO feed and zero paid external market data."
   ]
