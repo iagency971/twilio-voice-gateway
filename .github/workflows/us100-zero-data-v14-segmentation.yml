@@ -1,8 +1,6 @@
 name: US100 Zero-Data Six-Model Segmentation V14
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -33,19 +31,11 @@ jobs:
           python us100-zero-data/run_v14_six_model_segmentation.py 2>&1 | tee us100-zero-data/results/v14_six_model_segmentation/RUN_LOG.txt
           code=${PIPESTATUS[0]}
           echo "$code" > us100-zero-data/results/v14_six_model_segmentation/EXIT_CODE.txt
-          if [ "$code" -ne 0 ]; then
-            echo "V14_FAILURE exit_code=$code" > us100-zero-data/results/v14_six_model_segmentation/WORKFLOW_FAILURE.txt
-          else
-            rm -f us100-zero-data/results/v14_six_model_segmentation/WORKFLOW_FAILURE.txt
-          fi
+          if [ "$code" -ne 0 ]; then echo "V14_FAILURE exit_code=$code" > us100-zero-data/results/v14_six_model_segmentation/WORKFLOW_FAILURE.txt; else rm -f us100-zero-data/results/v14_six_model_segmentation/WORKFLOW_FAILURE.txt; fi
           python us100-zero-data/run_v14b_weekday_stability.py 2>&1 | tee us100-zero-data/results/v14_six_model_segmentation/WEEKDAY_RUN_LOG.txt
           code2=${PIPESTATUS[0]}
           echo "$code2" > us100-zero-data/results/v14_six_model_segmentation/WEEKDAY_EXIT_CODE.txt
-          if [ "$code2" -ne 0 ]; then
-            echo "V14B_FAILURE exit_code=$code2" > us100-zero-data/results/v14_six_model_segmentation/WEEKDAY_FAILURE.txt
-          else
-            rm -f us100-zero-data/results/v14_six_model_segmentation/WEEKDAY_FAILURE.txt
-          fi
+          if [ "$code2" -ne 0 ]; then echo "V14B_FAILURE exit_code=$code2" > us100-zero-data/results/v14_six_model_segmentation/WEEKDAY_FAILURE.txt; else rm -f us100-zero-data/results/v14_six_model_segmentation/WEEKDAY_FAILURE.txt; fi
           exit 0
       - name: Publish V14 result
         if: always()
