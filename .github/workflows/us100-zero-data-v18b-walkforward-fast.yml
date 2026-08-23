@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: us100-zero-data-v18b-walkforward
+  group: us100-zero-data-v18-walkforward
   cancel-in-progress: true
 
 jobs:
