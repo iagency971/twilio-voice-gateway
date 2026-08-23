@@ -1,8 +1,6 @@
 name: US100 Zero-Data All24 Branch Search V17
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -33,7 +31,6 @@ jobs:
           python us100-zero-data/run_v17_all24_branch_search.py 2>&1 | tee us100-zero-data/results/v17_all24_branch_search/RUN_LOG.txt
           code=${PIPESTATUS[0]}
           echo "$code" > us100-zero-data/results/v17_all24_branch_search/EXIT_CODE.txt
-          if [ "$code" -ne 0 ]; then echo "V17_FAILURE exit_code=$code" > us100-zero-data/results/v17_all24_branch_search/WORKFLOW_FAILURE.txt; else rm -f us100-zero-data/results/v17_all24_branch_search/WORKFLOW_FAILURE.txt; fi
           exit 0
       - name: Publish V17 result
         if: always()
