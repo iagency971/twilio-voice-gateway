@@ -1,8 +1,6 @@
 name: US100 Zero-Data V17 Robustness V19
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
