@@ -1,0 +1,46 @@
+name: US100 Zero-Data Marginal Branches V20b
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us100-zero-data-v20-marginal
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ftmo-zero-data-us100-research-v1
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy requests matplotlib tabulate python-dotenv
+      - name: Run V20b cached marginal diagnostic
+        shell: bash
+        run: |
+          set +e
+          mkdir -p us100-zero-data/results/v20b_true_causal_marginal_fast
+          python us100-zero-data/run_v20b_true_causal_marginal_fast.py 2>&1 | tee us100-zero-data/results/v20b_true_causal_marginal_fast/RUN_LOG.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" > us100-zero-data/results/v20b_true_causal_marginal_fast/EXIT_CODE.txt
+          exit 0
+      - name: Publish V20b result
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- us100-zero-data/results/v20b_true_causal_marginal_fast
+          git commit -m "Publish V20b cached marginal branches [skip ci]" || true
+          git pull --rebase origin agent/ftmo-zero-data-us100-research-v1 || true
+          git push origin HEAD:agent/ftmo-zero-data-us100-research-v1
