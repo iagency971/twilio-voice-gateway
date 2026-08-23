@@ -1,8 +1,6 @@
 name: US100 Zero-Data Marginal Branches V20b
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
