@@ -1,8 +1,6 @@
 name: US100 Zero-Data Selection WalkForward V18c
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
