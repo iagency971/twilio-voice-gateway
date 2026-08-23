@@ -1,0 +1,46 @@
+name: US100 Zero-Data Selection WalkForward V18b
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us100-zero-data-v18b-walkforward
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ftmo-zero-data-us100-research-v1
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy requests matplotlib tabulate python-dotenv
+      - name: Run V18b cached walk-forward selection audit
+        shell: bash
+        run: |
+          set +e
+          mkdir -p us100-zero-data/results/v18b_selection_walkforward_fast
+          python us100-zero-data/run_v18b_selection_walkforward_fast.py 2>&1 | tee us100-zero-data/results/v18b_selection_walkforward_fast/RUN_LOG.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" > us100-zero-data/results/v18b_selection_walkforward_fast/EXIT_CODE.txt
+          exit 0
+      - name: Publish V18b result
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- us100-zero-data/results/v18b_selection_walkforward_fast
+          git commit -m "Publish V18b cached walk-forward audit [skip ci]" || true
+          git pull --rebase origin agent/ftmo-zero-data-us100-research-v1 || true
+          git push origin HEAD:agent/ftmo-zero-data-us100-research-v1
