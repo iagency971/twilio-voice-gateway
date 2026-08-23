@@ -1,0 +1,1 @@
+Trigger conservative V18e first-admissible walk-forward audit. No market-rule change.
