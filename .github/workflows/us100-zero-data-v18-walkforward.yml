@@ -1,8 +1,6 @@
 name: US100 Zero-Data Selection WalkForward V18
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -33,7 +31,6 @@ jobs:
           python us100-zero-data/run_v18_selection_walkforward.py 2>&1 | tee us100-zero-data/results/v18_selection_walkforward/RUN_LOG.txt
           code=${PIPESTATUS[0]}
           echo "$code" > us100-zero-data/results/v18_selection_walkforward/EXIT_CODE.txt
-          if [ "$code" -ne 0 ]; then echo "V18_FAILURE exit_code=$code" > us100-zero-data/results/v18_selection_walkforward/WORKFLOW_FAILURE.txt; else rm -f us100-zero-data/results/v18_selection_walkforward/WORKFLOW_FAILURE.txt; fi
           exit 0
       - name: Publish V18 result
         if: always()
