@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-24T01:51:05Z",
+  "checked_at": "2026-08-24T02:00:25Z",
   "workflows": {
     "xau-wick-zone-pro-oos-bid-recovery.yml": [
       {
@@ -101,12 +101,34 @@
     "xau-wick-zone-combined-parity.yml": [
       {
         "id": 32681005006,
-        "status": "in_progress",
-        "conclusion": null,
+        "status": "completed",
+        "conclusion": "success",
         "head_sha": "b7a5614e20554cb315333d69abc20558b004a558",
         "created_at": "2026-08-24T01:49:14Z",
-        "updated_at": "2026-08-24T01:49:17Z",
+        "updated_at": "2026-08-24T01:52:43Z",
         "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32681005006"
+      }
+    ],
+    "xau-wick-zone-actual-state-parity.yml": [
+      {
+        "id": 32681553808,
+        "status": "in_progress",
+        "conclusion": null,
+        "head_sha": "349b973a1308eb03082d7d7b905a86975b295503",
+        "created_at": "2026-08-24T01:59:29Z",
+        "updated_at": "2026-08-24T01:59:32Z",
+        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32681553808"
+      }
+    ],
+    "xau-wick-zone-r-label-parity.yml": [
+      {
+        "id": 32681405359,
+        "status": "in_progress",
+        "conclusion": null,
+        "head_sha": "73428b82ca2e40f6a60e182be5d9610219e58bfa",
+        "created_at": "2026-08-24T01:56:40Z",
+        "updated_at": "2026-08-24T01:56:43Z",
+        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32681405359"
       }
     ],
     "xau-wick-zone-finalization-monitor.yml": [
