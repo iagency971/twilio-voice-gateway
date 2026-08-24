@@ -1,0 +1,110 @@
+name: XAU Wick Zone PRO DEV Completion
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-wick-zone-pro-dev.yml'
+      - 'xau-wick-zone-pro/xau_zone_episode_dev_z4.py'
+      - 'xau-wick-zone-pro/xau_wick_zone_completion_models.py'
+
+permissions:
+  contents: write
+
+jobs:
+  dev-completion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install fixed research dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+
+      - name: Download DEV only — Dukascopy BID and ASK Jan-Jul 2024
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid /tmp/xau/ask
+          for side in bid ask; do
+            for m in 01 02 03 04 05 06 07; do
+              file="xauusd_${side}_m1_2024_${m}.csv"
+              url="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/${side}/m1/${file}"
+              echo "GET $url"
+              curl --fail --location --retry 5 --retry-delay 2 --connect-timeout 20 "$url" -o "/tmp/xau/${side}/${file}"
+            done
+          done
+
+      - name: QA and freeze DEV source hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import pandas as pd
+
+          root=Path('/tmp/xau')
+          expected_bid={
+            '01':'7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d',
+            '02':'45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f',
+            '03':'28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14',
+            '04':'ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9',
+            '05':'18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6',
+            '07':'a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52',
+          }
+          manifest={'status':'DEV_ONLY_NO_VALIDATION_OOS','source':'kevingtlin/Market-Data-Lab Dukascopy XAUUSD M1','files':[],'known_bid_hash_checks':{}}
+          for side in ('bid','ask'):
+            for m in ('01','02','03','04','05','06','07'):
+              p=root/side/f'xauusd_{side}_m1_2024_{m}.csv'
+              raw=p.read_bytes(); sha=hashlib.sha256(raw).hexdigest()
+              d=pd.read_csv(p)
+              req=['timestamp','open','high','low','close']
+              if list(d.columns)!=req: raise SystemExit(f'bad schema {p}: {list(d.columns)}')
+              if d.timestamp.duplicated().any(): raise SystemExit(f'duplicate timestamps {p}')
+              if not d.timestamp.is_monotonic_increasing: raise SystemExit(f'non-monotone timestamps {p}')
+              bad=((d.high<d[['open','close','low']].max(axis=1)) | (d.low>d[['open','close','high']].min(axis=1))).sum()
+              if bad: raise SystemExit(f'OHLC inconsistency {p}: {bad}')
+              active=int((d.high>d.low).sum())
+              manifest['files'].append({'side':side,'month':m,'file':p.name,'sha256':sha,'bytes':len(raw),'rows':int(len(d)),'active_rows':active,'flat_rows':int(len(d)-active),'first_timestamp':int(d.timestamp.iloc[0]),'last_timestamp':int(d.timestamp.iloc[-1])})
+              if side=='bid' and m in expected_bid:
+                ok=(sha==expected_bid[m]); manifest['known_bid_hash_checks'][m]=ok
+                if not ok: raise SystemExit(f'BID source hash mismatch month {m}: {sha}')
+          if not all(manifest['known_bid_hash_checks'].values()): raise SystemExit('known BID hash gate failed')
+          Path('/tmp/source_manifest.json').write_text(json.dumps(manifest,indent=2))
+          print(json.dumps(manifest,indent=2))
+          PY
+
+      - name: Build continuous Z4 BID Jan-Jul 2024
+        run: python xau-wick-zone-pro/xau_zone_episode_dev_z4.py --files /tmp/xau/bid/*.csv --output /tmp/XAUUSD_Z4_CONTINUOUS_BID.pkl --tag BID_Z4_CONTINUOUS_JAN_JUL
+
+      - name: Build continuous Z4 ASK Jan-Jul 2024
+        run: python xau-wick-zone-pro/xau_zone_episode_dev_z4.py --files /tmp/xau/ask/*.csv --output /tmp/XAUUSD_Z4_CONTINUOUS_ASK.pkl --tag ASK_Z4_CONTINUOUS_JAN_JUL
+
+      - name: Run fixed chronological DEV models
+        run: python xau-wick-zone-pro/xau_wick_zone_completion_models.py --bid-pkl /tmp/XAUUSD_Z4_CONTINUOUS_BID.pkl --ask-pkl /tmp/XAUUSD_Z4_CONTINUOUS_ASK.pkl --manifest-json /tmp/source_manifest.json --output /tmp/XAUUSD_Z4_DEV_BID_ASK_COMPLETION_v0_1_results.json
+
+      - name: Publish compact DEV evidence only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p xau-wick-zone-pro/results
+          cp /tmp/source_manifest.json xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json
+          cp /tmp/XAUUSD_Z4_CONTINUOUS_BID_summary.json xau-wick-zone-pro/results/XAUUSD_Z4_CONTINUOUS_BID_summary.json
+          cp /tmp/XAUUSD_Z4_CONTINUOUS_ASK_summary.json xau-wick-zone-pro/results/XAUUSD_Z4_CONTINUOUS_ASK_summary.json
+          cp /tmp/XAUUSD_Z4_DEV_BID_ASK_COMPLETION_v0_1_results.json xau-wick-zone-pro/results/XAUUSD_Z4_DEV_BID_ASK_COMPLETION_v0_1_results.json
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add xau-wick-zone-pro/results
+          if git diff --cached --quiet; then
+            echo 'No result change to publish.'
+          else
+            git commit -m 'publish Z4 continuous BID ASK DEV evidence [skip ci]'
+            git push origin HEAD:agent/xau-wick-zone-pro-dev
+          fi
