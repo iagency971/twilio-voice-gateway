@@ -1,0 +1,21 @@
+{
+  "status": "FROZEN_BEFORE_OOS_DATA_READ",
+  "freeze_date": "2026-08-23",
+  "primary_candidate": "P_REVISIT_240",
+  "primary_feed": "BID",
+  "oos_period_utc": ["2025-08-01", "2026-08-01"],
+  "oos_prereg_commit": "7e2811c06881482234d27b0c648e0ea8eb1f063f",
+  "validation_result": {
+    "path": "xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_RESULTS_v0_1.json",
+    "git_blob_sha": "d7a5120e58c9fa39c78d0453c417cd0694522e05",
+    "primary_gate_status": "PASS"
+  },
+  "files": {
+    "xau-wick-zone-pro/xau_zone_episode_dev_z4.py": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+    "xau-wick-zone-pro/xau_wick_zone_oos_score.py": "b9702145ec53849482dd0374af52fa506d4491b3",
+    "xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json": "c95fd545ec451968cb421f81ed6add0c508f387d"
+  },
+  "model_refit_on_validation": false,
+  "model_refit_on_oos": false,
+  "reaction_score_eligible": false
+}
