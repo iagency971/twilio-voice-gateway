@@ -1,0 +1,85 @@
+{
+  "status": "ORIGINAL_FROZEN_OOS_COMPUTE_COMPLETED_PASS_PUBLICATION_RACE_ONLY",
+  "recorded_at_utc": "2026-08-24T01:05:00Z",
+  "workflow_run": {
+    "run_id": 32677272149,
+    "job_id": 97287580188,
+    "head_sha": "de350379d2efb75ab0e812ffe08cffc4158d9c37",
+    "created_at": "2026-08-24T00:37:50Z",
+    "updated_at": "2026-08-24T01:03:51Z",
+    "workflow": ".github/workflows/xau-wick-zone-pro-oos.yml",
+    "workflow_git_blob_sha": "11a794eb0bda34298c80b1fa119e2acb0c264bcb",
+    "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32677272149"
+  },
+  "freeze_provenance": {
+    "oos_prereg_commit": "7e2811c06881482234d27b0c648e0ea8eb1f063f",
+    "z4_engine_git_blob_sha": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+    "oos_scorer_git_blob_sha": "b9702145ec53849482dd0374af52fa506d4491b3",
+    "frozen_model_params_git_blob_sha": "c95fd545ec451968cb421f81ed6add0c508f387d",
+    "validation_result_git_blob_sha": "d7a5120e58c9fa39c78d0453c417cd0694522e05"
+  },
+  "source_qa_from_original_run": {
+    "download_step": "success",
+    "qa_step": "success",
+    "source_files": 62,
+    "pre_oos_prefix_hash_checks": 38,
+    "forbidden_aug_2026_or_later_files": false
+  },
+  "original_bid_continuous_summary": {
+    "rows": 356474,
+    "landmarks": 60769,
+    "eligible_landmarks": 60961,
+    "missing_side_zone_landmarks": 192,
+    "lineages": 22371,
+    "zone_count_quantiles": {"0": 1.0, "0.5": 6.0, "0.9": 10.0, "0.95": 11.0, "0.99": 14.0, "1": 23.0},
+    "revisit_rate_full_history": 0.2929133681558823
+  },
+  "original_ask_continuous_summary": {
+    "rows": 358017,
+    "landmarks": 60783,
+    "eligible_landmarks": 60957,
+    "missing_side_zone_landmarks": 174,
+    "lineages": 22505,
+    "zone_count_quantiles": {"0": 1.0, "0.5": 6.0, "0.9": 10.0, "0.95": 11.0, "0.99": 14.0, "1": 25.0},
+    "revisit_rate_full_history": 0.29251683579271376
+  },
+  "oos_primary_result_from_original_frozen_score_step": {
+    "status": "PASS",
+    "primary_feed": "BID",
+    "primary_endpoint": "REVISIT_240_ACTIVE_M1",
+    "n_rows": 132858,
+    "landmarks": 23506,
+    "rate_unweighted": 0.29874753496214,
+    "M0_brier": 0.16864482146367638,
+    "M0GL_brier": 0.1561993590966001,
+    "delta_brier": 0.012445462367076277,
+    "M0_logloss": 0.5253853429965941,
+    "M0GL_logloss": 0.48261072277144296,
+    "delta_logloss": 0.04277462022515116,
+    "weekly_bootstrap_95_delta_brier": [0.010084629331906146, 0.01469348036914224],
+    "oos_H1_delta_brier": 0.009176417152060384,
+    "oos_H2_delta_brier": 0.0157083941007313,
+    "checks": {
+      "global_delta_brier_gt_0": true,
+      "weekly_ci_lower_gt_0": true,
+      "global_delta_logloss_ge_0": true,
+      "H1_delta_brier_ge_0": true,
+      "H2_delta_brier_ge_0": true,
+      "data_causal_qa_pass": true
+    }
+  },
+  "secondary_original_run": {
+    "ask_delta_brier": 0.012034304440775884,
+    "bid_dev_frozen_platt_oos_brier": 0.15595412515353455,
+    "bid_dev_frozen_platt_oos_logloss": 0.4875910131756277,
+    "bid_dev_frozen_platt_oos_ece10_correct_global_landmark_weights": 0.0757288000646641
+  },
+  "publication_failure": {
+    "score_step": "success",
+    "publication_step": "failure",
+    "reason": "non-fast-forward push rejected because a concurrent OOS monitor commit advanced the research branch after the frozen OOS job checkout",
+    "local_unpushed_result_commit": "2d290aa",
+    "scientific_gate_affected": false,
+    "note": "The failure occurred after all data QA, both continuous Z4 builds, and the frozen scoring step had completed successfully. This attestation records the exact stdout evidence from that immutable Actions run."
+  }
+}
