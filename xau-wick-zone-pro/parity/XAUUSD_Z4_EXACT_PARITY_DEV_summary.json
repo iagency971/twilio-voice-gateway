@@ -1,0 +1,25 @@
+{
+  "tag": "Z4_EXACT_PARITY_DEV",
+  "rows": 89093,
+  "landmarks": 13705,
+  "eligible_landmarks": 13727,
+  "missing_side_zone_landmarks": 22,
+  "lineages": 5395,
+  "zone_count_quantiles": {
+    "0": 1.0,
+    "0.5": 7.0,
+    "0.9": 11.0,
+    "0.95": 13.0,
+    "0.99": 17.0,
+    "1": 23.0
+  },
+  "age_lm_quantiles": {
+    "0.5": 24.0,
+    "0.75": 50.0,
+    "0.9": 74.0,
+    "0.95": 85.0,
+    "0.99": 97.0
+  },
+  "revisit_rate": 0.2856902338006353,
+  "runtime_sec": 47.37387466430664
+}
