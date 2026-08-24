@@ -1,0 +1,76 @@
+name: XAU Z4 Pine Combined Outcome-Blind Parity
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-wick-zone-combined-parity.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: agent/xau-wick-zone-pro-dev}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+      - name: Verify frozen references and component PASS artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json)" = "c95fd545ec451968cb421f81ed6add0c508f387d"
+          python - <<'PY'
+          import json
+          assert json.load(open('xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_GRID_STEP_RESULT_ATTESTATION_v0_1.json'))['selected_step']==0.05
+          assert json.load(open('xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_PEAK_ALGO_RESULTS_v0_1.json'))['status']=='PASS'
+          assert json.load(open('xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_LINEAGE_CAP_RESULTS_v0_1.json'))['selected_cap']==96
+          assert json.load(open('xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_GREEDY_LINEAGE_RESULTS_v0_1.json'))['status']=='PASS'
+          PY
+      - name: Download hash-locked DEV BID
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/xau/bid
+          declare -A H
+          H[01]=7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d;H[02]=45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f;H[03]=28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14;H[04]=ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9;H[05]=18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6;H[06]=f7cad6452e9666b37f6f7830bb69a61439095919bb1609daa80839fdb3a8fd39;H[07]=a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52
+          for m in 01 02 03 04 05 06 07; do f="xauusd_bid_m1_2024_${m}.csv";curl -fsSL --retry 5 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/${f}" -o "/tmp/xau/bid/${f}";test "$(sha256sum /tmp/xau/bid/${f}|awk '{print $1}')" = "${H[$m]}";done
+      - name: Exact frozen Z4 reference
+        run: python xau-wick-zone-pro/xau_zone_episode_dev_z4.py --files /tmp/xau/bid/*.csv --output /tmp/EXACT.pkl --tag COMBINED_EXACT
+      - name: Pine geometry proxy — step0.05 + box3 + explicit peak math
+        run: python xau-wick-zone-pro/xau_wick_zone_pine_full_proxy.py --step 0.05 --files /tmp/xau/bid/*.csv --output /tmp/PINE_GEOM.pkl --tag COMBINED_PINE_GEOM
+      - name: Apply greedy lineage and cap96 state
+        run: python xau-wick-zone-pro/xau_wick_zone_combined_pine_state.py --pkl /tmp/PINE_GEOM.pkl --files /tmp/xau/bid/*.csv --output /tmp/PINE_COMBINED.pkl
+      - name: Compare final combined proxy to exact Z4
+        run: |
+          python xau-wick-zone-pro/xau_wick_zone_parity_compare.py --exact-pkl /tmp/EXACT.pkl --proxy-pkl /tmp/PINE_COMBINED.pkl --frozen-json xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json --output /tmp/base.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          b=json.load(open('/tmp/base.json'));m=b['metrics']
+          c={'exact_match_ge_090':m['exact_zone_match_rate']>=.90,'proxy_match_ge_090':m['proxy_zone_match_rate']>=.90,'median_iou_ge_080':m['iou_quantiles']['0.5']>=.80,'p10_iou_ge_055':m['iou_quantiles']['0.1']>=.55,'median_center_err_le_008':m['center_err_vseg_quantiles']['0.5']<=.08,'p95_center_err_le_025':m['center_err_vseg_quantiles']['0.95']<=.25,'score_pearson_ge_098':m['score_pearson']>=.98,'score_spearman_ge_098':m['score_spearman']>=.98,'median_score_err_le_0015':m['score_abs_err_quantiles']['0.5']<=.015,'p95_score_err_le_0060':m['score_abs_err_quantiles']['0.95']<=.060,'top1_agreement_ge_085':m['top1_zone_agreement']>=.85}
+          o={'status':'PASS' if all(c.values()) else 'FAIL','scope':'OUTCOME_BLIND_COMBINED_PINE_Z4_PROXY_DEV_BID','future_outcomes_used':False,'candidate':'step0.05 + box3 + explicit peaks/P50 + greedy lineage + cap96','metrics':m,'checks':c};Path('/tmp/XAUUSD_Z4_PINE_COMBINED_PARITY_RESULTS_v0_1.json').write_text(json.dumps(o,indent=2));print(json.dumps(o,indent=2))
+          PY
+      - name: Publish retry-safe
+        env: {GH_TOKEN: '${{ github.token }}', REPO: '${{ github.repository }}', BRANCH: 'agent/xau-wick-zone-pro-dev'}
+        run: |
+          python - <<'PY'
+          import base64,json,os,time,urllib.error,urllib.parse,urllib.request
+          path='xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_COMBINED_PARITY_RESULTS_v0_1.json';src='/tmp/XAUUSD_Z4_PINE_COMBINED_PARITY_RESULTS_v0_1.json';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'};url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          for a in range(8):
+            body={'message':'publish final combined Pine Z4 parity [skip ci]','content':base64.b64encode(open(src,'rb').read()).decode(),'branch':os.environ['BRANCH']}
+            try:
+              with urllib.request.urlopen(urllib.request.Request(url+'?ref='+urllib.parse.quote(os.environ['BRANCH'],safe=''),headers=h),timeout=30) as r:body['sha']=json.load(r)['sha']
+            except urllib.error.HTTPError as e:
+              if e.code!=404:raise
+            try:
+              with urllib.request.urlopen(urllib.request.Request(url,data=json.dumps(body).encode(),headers=h,method='PUT'),timeout=60) as r:print(r.status)
+              break
+            except urllib.error.HTTPError as e:
+              if e.code not in (409,422) or a==7:raise
+              time.sleep(2+a)
+          PY
