@@ -42,7 +42,7 @@ jobs:
         run: python xau-wick-zone-pro/xau_zone_episode_dev_z4.py --files /tmp/xau/bid/*.csv --output /tmp/Z4_DEV_SCORE_MAP.pkl --tag Z4_DEV_SCORE_MAP
       - name: Freeze percentile map
         run: python xau-wick-zone-pro/xau_wick_zone_score_map.py --pkl /tmp/Z4_DEV_SCORE_MAP.pkl --frozen-json xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json --output /tmp/XAUUSD_Z4_REVISIT_SCORE_MAP_v0_1.json
-      - name: Publish race-safe
+      - name: Publish retry-safe
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -50,10 +50,23 @@ jobs:
         shell: bash
         run: |
           python - <<'PY'
-          import base64,json,os,urllib.request
+          import base64,json,os,time,urllib.error,urllib.request
           path='xau-wick-zone-pro/results/XAUUSD_Z4_REVISIT_SCORE_MAP_v0_1.json'; src='/tmp/XAUUSD_Z4_REVISIT_SCORE_MAP_v0_1.json'
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'}
-          body={'message':'publish frozen DEV Revisit Score percentile map [skip ci]','content':base64.b64encode(open(src,'rb').read()).decode(),'branch':os.environ['BRANCH']}
-          req=urllib.request.Request(f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}",data=json.dumps(body).encode(),headers=h,method='PUT')
-          with urllib.request.urlopen(req,timeout=60) as r:print(r.status)
+          url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          for attempt in range(8):
+              body={'message':'publish frozen DEV Revisit Score percentile map [skip ci]','content':base64.b64encode(open(src,'rb').read()).decode(),'branch':os.environ['BRANCH']}
+              try:
+                  req0=urllib.request.Request(url+'?ref='+os.environ['BRANCH'],headers=h)
+                  with urllib.request.urlopen(req0,timeout=30) as r: existing=json.load(r)
+                  body['sha']=existing['sha']
+              except urllib.error.HTTPError as e:
+                  if e.code!=404: raise
+              try:
+                  req=urllib.request.Request(url,data=json.dumps(body).encode(),headers=h,method='PUT')
+                  with urllib.request.urlopen(req,timeout=60) as r:
+                      print('published',r.status); break
+              except urllib.error.HTTPError as e:
+                  if e.code not in (409,422) or attempt==7: raise
+                  print('transient conflict, retry',attempt+1); time.sleep(2+attempt)
           PY
