@@ -1,0 +1,128 @@
+name: XAU Wick Zone Z4 Frozen OOS
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-wick-zone-pro-oos.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  oos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify Validation PASS and OOS freeze BEFORE OOS download
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/xau_wick_zone_oos_score.py)" = "b9702145ec53849482dd0374af52fa506d4491b3"
+          test "$(git hash-object xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json)" = "c95fd545ec451968cb421f81ed6add0c508f387d"
+          test "$(git hash-object xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_RESULTS_v0_1.json)" = "d7a5120e58c9fa39c78d0453c417cd0694522e05"
+          python - <<'PY'
+          import json
+          f=json.load(open('xau-wick-zone-pro/XAUUSD_Z4_OOS_CODE_FREEZE_v0_1.json'))
+          v=json.load(open('xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_RESULTS_v0_1.json'))
+          assert f['status']=='FROZEN_BEFORE_OOS_DATA_READ'
+          assert f['model_refit_on_validation'] is False and f['model_refit_on_oos'] is False
+          assert f['oos_period_utc']==['2025-08-01','2026-08-01']
+          assert v['primary_gate_status']=='PASS'
+          print('OOS prerequisite freeze: PASS')
+          PY
+
+      - name: Install fixed research dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+
+      - name: Download causal history through OOS end — forbid Aug 2026+
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid /tmp/xau/ask
+          for side in bid ask; do
+            for y in 2024 2025 2026; do
+              if [ "$y" = "2024" ] || [ "$y" = "2025" ]; then months="01 02 03 04 05 06 07 08 09 10 11 12"; else months="01 02 03 04 05 06 07"; fi
+              for m in $months; do
+                file="xauusd_${side}_m1_${y}_${m}.csv"
+                url="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/${side}/m1/${file}"
+                echo "GET $url"
+                curl --fail --location --retry 5 --retry-delay 2 --connect-timeout 20 "$url" -o "/tmp/xau/${side}/${file}"
+              done
+            done
+          done
+          if find /tmp/xau -type f | grep -E '2026_(08|09|10|11|12)|2027_' ; then
+            echo 'FORBIDDEN POST-OOS FILE DETECTED' >&2
+            exit 1
+          fi
+
+      - name: QA OOS source and verify all pre-OOS prefix hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import pandas as pd
+          root=Path('/tmp/xau')
+          val=json.load(open('xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_SOURCE_MANIFEST_v0_1.json'))
+          expected={(x['side'],x['year'],x['month']):x['sha256'] for x in val['files']}
+          out={'status':'OOS_SOURCE_QA_FROZEN_BOUNDARY','source':'kevingtlin/Market-Data-Lab Dukascopy XAUUSD M1','allowed_max_month':'2026-07','files':[],'prefix_hash_checks':{}}
+          for side in ('bid','ask'):
+            for p in sorted((root/side).glob('*.csv')):
+              parts=p.stem.split('_'); year=parts[-2]; month=parts[-1]
+              if year>'2026' or (year=='2026' and month>'07'): raise SystemExit(f'post-OOS file forbidden: {p}')
+              raw=p.read_bytes(); sha=hashlib.sha256(raw).hexdigest(); d=pd.read_csv(p)
+              if list(d.columns)!=['timestamp','open','high','low','close']: raise SystemExit(f'bad schema {p}')
+              if d.timestamp.duplicated().any() or not d.timestamp.is_monotonic_increasing: raise SystemExit(f'timestamp QA failed {p}')
+              bad=((d.high<d[['open','close','low']].max(axis=1)) | (d.low>d[['open','close','high']].min(axis=1))).sum()
+              if bad: raise SystemExit(f'OHLC QA failed {p}: {bad}')
+              active=int((d.high>d.low).sum()); rec={'side':side,'year':year,'month':month,'file':p.name,'sha256':sha,'bytes':len(raw),'rows':int(len(d)),'active_rows':active,'flat_rows':int(len(d)-active),'first_timestamp':int(d.timestamp.iloc[0]),'last_timestamp':int(d.timestamp.iloc[-1])}; out['files'].append(rec)
+              key=(side,year,month)
+              if key in expected:
+                ok=(sha==expected[key]); out['prefix_hash_checks'][f'{side}_{year}_{month}']=ok
+                if not ok: raise SystemExit(f'pre-OOS prefix changed {key}')
+          if not all(out['prefix_hash_checks'].values()): raise SystemExit('prefix hash gate failed')
+          Path('/tmp/XAUUSD_Z4_OOS_SOURCE_MANIFEST_v0_1.json').write_text(json.dumps(out,indent=2))
+          print('source files',len(out['files']),'prefix checks',len(out['prefix_hash_checks']))
+          PY
+
+      - name: Build continuous Z4 BID through OOS end
+        run: python xau-wick-zone-pro/xau_zone_episode_dev_z4.py --files /tmp/xau/bid/*.csv --output /tmp/XAUUSD_Z4_OOS_CONTINUOUS_BID.pkl --tag BID_Z4_OOS_JAN2024_JUL2026
+
+      - name: Build continuous Z4 ASK secondary diagnostic through OOS end
+        run: python xau-wick-zone-pro/xau_zone_episode_dev_z4.py --files /tmp/xau/ask/*.csv --output /tmp/XAUUSD_Z4_OOS_CONTINUOUS_ASK.pkl --tag ASK_Z4_OOS_JAN2024_JUL2026
+
+      - name: Score original DEV-frozen OOS models — NO refit
+        run: |
+          python xau-wick-zone-pro/xau_wick_zone_oos_score.py \
+            --bid-pkl /tmp/XAUUSD_Z4_OOS_CONTINUOUS_BID.pkl \
+            --ask-pkl /tmp/XAUUSD_Z4_OOS_CONTINUOUS_ASK.pkl \
+            --frozen-json xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json \
+            --source-manifest /tmp/XAUUSD_Z4_OOS_SOURCE_MANIFEST_v0_1.json \
+            --validation-json xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_RESULTS_v0_1.json \
+            --output /tmp/XAUUSD_Z4_OOS_RESULTS_v0_1.json
+
+      - name: Publish immutable OOS evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p xau-wick-zone-pro/oos
+          cp /tmp/XAUUSD_Z4_OOS_SOURCE_MANIFEST_v0_1.json xau-wick-zone-pro/oos/XAUUSD_Z4_OOS_SOURCE_MANIFEST_v0_1.json
+          cp /tmp/XAUUSD_Z4_OOS_CONTINUOUS_BID_summary.json xau-wick-zone-pro/oos/XAUUSD_Z4_OOS_CONTINUOUS_BID_summary.json
+          cp /tmp/XAUUSD_Z4_OOS_CONTINUOUS_ASK_summary.json xau-wick-zone-pro/oos/XAUUSD_Z4_OOS_CONTINUOUS_ASK_summary.json
+          cp /tmp/XAUUSD_Z4_OOS_RESULTS_v0_1.json xau-wick-zone-pro/oos/XAUUSD_Z4_OOS_RESULTS_v0_1.json
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add xau-wick-zone-pro/oos
+          git commit -m 'publish original DEV-frozen Z4 OOS evidence [skip ci]'
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
