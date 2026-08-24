@@ -26,7 +26,7 @@ jobs:
           def get(u):
             with urllib.request.urlopen(urllib.request.Request(u,headers=h),timeout=30) as r:return json.load(r)
           out={'checked_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'workflows':{}}
-          for wf in ['xau-wick-zone-pro-oos-bid-recovery.yml','xau-wick-zone-pine-parity.yml','xau-wick-zone-score-map.yml','xau-wick-zone-lineage-cap.yml','xau-wick-zone-finalization-monitor.yml']:
+          for wf in ['xau-wick-zone-pro-oos-bid-recovery.yml','xau-wick-zone-pine-parity.yml','xau-wick-zone-score-map.yml','xau-wick-zone-lineage-cap.yml','xau-wick-zone-lineage-cap-fast.yml','xau-wick-zone-finalization-monitor.yml']:
             q=urllib.parse.quote(os.environ['BRANCH'],safe='')
             rs=get(f"https://api.github.com/repos/{os.environ['REPO']}/actions/workflows/{wf}/runs?branch={q}&per_page=3").get('workflow_runs',[])
             out['workflows'][wf]=[{'id':r['id'],'status':r['status'],'conclusion':r.get('conclusion'),'head_sha':r.get('head_sha'),'created_at':r.get('created_at'),'updated_at':r.get('updated_at'),'html_url':r.get('html_url')} for r in rs]
