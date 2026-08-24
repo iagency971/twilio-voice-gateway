@@ -146,7 +146,10 @@ def main():
         t["key"]=t.entry_time.astype(str)+"|"+t.model.astype(str)+"|"+t.direction.astype(str)
         cols=["key","entry_time","exit_time","direction","model","tag","entry","exit","stop","target","reason","risk_ticks","total_r","primary_r","stress_r"]
         t=t[cols]
-    if LEDGER.exists(): old=pd.read_csv(LEDGER)
+    if LEDGER.exists():
+        old=pd.read_csv(LEDGER)
+        if "entry_time" in old.columns:
+            old["entry_time"]=pd.to_datetime(old["entry_time"],errors="coerce")
     else: old=pd.DataFrame(columns=t.columns if len(t) else ["key","entry_time","exit_time","direction","model","tag","entry","exit","stop","target","reason","risk_ticks","total_r","primary_r","stress_r"])
     combined=pd.concat([old,t],ignore_index=True).drop_duplicates("key",keep="first").sort_values("entry_time") if len(t) or len(old) else old
     combined.to_csv(LEDGER,index=False)
