@@ -1,0 +1,25 @@
+{
+  "tag": "BID_Z4_OOS_RECOVERY_JAN2024_JUL2026",
+  "rows": 356474,
+  "landmarks": 60769,
+  "eligible_landmarks": 60961,
+  "missing_side_zone_landmarks": 192,
+  "lineages": 22371,
+  "zone_count_quantiles": {
+    "0": 1.0,
+    "0.5": 6.0,
+    "0.9": 10.0,
+    "0.95": 11.0,
+    "0.99": 14.0,
+    "1": 23.0
+  },
+  "age_lm_quantiles": {
+    "0.5": 23.0,
+    "0.75": 48.0,
+    "0.9": 73.0,
+    "0.95": 84.0,
+    "0.99": 95.0
+  },
+  "revisit_rate": 0.2929133681558823,
+  "runtime_sec": 668.9734652042389
+}
