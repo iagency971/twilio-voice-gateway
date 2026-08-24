@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-24T01:21:36Z",
+  "checked_at": "2026-08-24T01:25:05Z",
   "workflows": {
     "xau-wick-zone-pro-oos-bid-recovery.yml": [
       {
@@ -46,12 +46,23 @@
     "xau-wick-zone-lineage-cap.yml": [
       {
         "id": 32679497170,
-        "status": "in_progress",
-        "conclusion": null,
+        "status": "completed",
+        "conclusion": "success",
         "head_sha": "00a15605cabb537269c2f989be94472b2f5e7e90",
         "created_at": "2026-08-24T01:20:55Z",
-        "updated_at": "2026-08-24T01:20:59Z",
+        "updated_at": "2026-08-24T01:24:09Z",
         "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679497170"
+      }
+    ],
+    "xau-wick-zone-lineage-cap-fast.yml": [
+      {
+        "id": 32679651960,
+        "status": "in_progress",
+        "conclusion": null,
+        "head_sha": "31d94e5d73c2a0ec80671430cb5b4632aa1af50b",
+        "created_at": "2026-08-24T01:24:00Z",
+        "updated_at": "2026-08-24T01:24:03Z",
+        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679651960"
       }
     ],
     "xau-wick-zone-finalization-monitor.yml": [
