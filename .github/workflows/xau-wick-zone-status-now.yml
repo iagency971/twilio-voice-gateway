@@ -21,7 +21,7 @@ jobs:
           BRANCH: agent/xau-wick-zone-pro-dev
         run: |
           python - <<'PY'
-          import base64,json,os,urllib.parse,urllib.request,time
+          import base64,json,os,urllib.error,urllib.parse,urllib.request,time
           h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'}
           def get(u):
             with urllib.request.urlopen(urllib.request.Request(u,headers=h),timeout=30) as r:return json.load(r)
@@ -31,11 +31,20 @@ jobs:
             rs=get(f"https://api.github.com/repos/{os.environ['REPO']}/actions/workflows/{wf}/runs?branch={q}&per_page=3").get('workflow_runs',[])
             out['workflows'][wf]=[{'id':r['id'],'status':r['status'],'conclusion':r.get('conclusion'),'head_sha':r.get('head_sha'),'created_at':r.get('created_at'),'updated_at':r.get('updated_at'),'html_url':r.get('html_url')} for r in rs]
           raw=json.dumps(out,indent=2).encode(); path='xau-wick-zone-pro/STATUS_NOW.json'; url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
-          body={'message':'publish current wick-zone workflow status [skip ci]','content':base64.b64encode(raw).decode(),'branch':os.environ['BRANCH']}
-          req=urllib.request.Request(url,data=json.dumps(body).encode(),headers=h,method='PUT')
+          body={'message':'update current wick-zone workflow status [skip ci]','content':base64.b64encode(raw).decode(),'branch':os.environ['BRANCH']}
           try:
-            with urllib.request.urlopen(req,timeout=60) as r:print(r.status)
+            existing=get(url+'?ref='+urllib.parse.quote(os.environ['BRANCH'],safe='')); body['sha']=existing['sha']
           except urllib.error.HTTPError as e:
-            if e.code!=422: raise
+            if e.code!=404:raise
+          for attempt in range(6):
+            try:
+              req=urllib.request.Request(url,data=json.dumps(body).encode(),headers=h,method='PUT')
+              with urllib.request.urlopen(req,timeout=60) as r:print(r.status)
+              break
+            except urllib.error.HTTPError as e:
+              if e.code not in (409,422) or attempt==5:raise
+              time.sleep(2+attempt)
+              try: body['sha']=get(url+'?ref='+urllib.parse.quote(os.environ['BRANCH'],safe=''))['sha']
+              except Exception: pass
           print(raw.decode())
           PY
