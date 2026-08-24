@@ -1,0 +1,66 @@
+{
+  "step": 0.1,
+  "status": "FAIL",
+  "metrics": {
+    "exact_rows": 89093,
+    "proxy_rows": 84593,
+    "matched_pairs": 81833,
+    "exact_zone_match_rate": 0.9185121165523666,
+    "proxy_zone_match_rate": 0.967373186906718,
+    "landmarks_exact": 13705,
+    "landmarks_proxy": 13710,
+    "same_zone_count_landmark_rate": 0.5425198571740873,
+    "mean_abs_zone_count_difference": 0.6253734606135685,
+    "iou_quantiles": {
+      "0.1": 0.8012625728552448,
+      "0.25": 0.9011903002789174,
+      "0.5": 0.9504935203087522,
+      "0.75": 0.9753715693384224,
+      "0.9": 0.9877958174328955,
+      "0.95": 0.992222965459998
+    },
+    "center_err_vseg_quantiles": {
+      "0.5": 0.07001166861088047,
+      "0.9": 0.22000000000025466,
+      "0.95": 0.32142857142831044,
+      "0.99": 1.812499999999704
+    },
+    "lo_err_vseg_quantiles": {
+      "0.5": 0.05877640633541502,
+      "0.9": 0.2438920081924006,
+      "0.95": 0.43186791038851824
+    },
+    "hi_err_vseg_quantiles": {
+      "0.5": 0.060280056943822956,
+      "0.9": 0.2614064682280978,
+      "0.95": 0.47384172118824236
+    },
+    "score_pearson": 0.9957403787445279,
+    "score_spearman": 0.9975762912368913,
+    "score_abs_err_quantiles": {
+      "0.5": 0.0035328670290449282,
+      "0.9": 0.024612431096155962,
+      "0.95": 0.041781824281393716,
+      "0.99": 0.10557635300499771
+    },
+    "within_landmark_spearman_median": 1.0,
+    "within_landmark_spearman_mean": 0.986568391872795,
+    "within_landmark_rank_landmarks": 12299,
+    "top1_zone_agreement": 0.8239848086473853,
+    "top1_eligible_landmarks": 13692
+  },
+  "checks": {
+    "exact_match_ge_090": true,
+    "proxy_match_ge_090": true,
+    "median_iou_ge_080": true,
+    "p10_iou_ge_055": true,
+    "median_center_err_le_008": true,
+    "p95_center_err_le_025": false,
+    "score_spearman_ge_098": true,
+    "score_pearson_ge_098": true,
+    "median_score_err_le_0015": true,
+    "p95_score_err_le_0060": true,
+    "top1_agreement_ge_085": false
+  },
+  "future_outcomes_used": false
+}
