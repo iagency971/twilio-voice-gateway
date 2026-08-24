@@ -1,13 +1,49 @@
-Traceback (most recent call last):
-  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/mnq-forward-shadow/compat_runner.py", line 43, in <module>
-    mod.main()
-  File "/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/mnq-forward-shadow/run_daily_shadow_v1.py", line 151, in main
-    combined=pd.concat([old,t],ignore_index=True).drop_duplicates("key",keep="first").sort_values("entry_time") if len(t) or len(old) else old
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/frame.py", line 8372, in sort_values
-    indexer = nargsort(
-              ^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/pandas/core/sorting.py", line 442, in nargsort
-    indexer = non_nan_idx[non_nans.argsort(kind=kind)]
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: '<' not supported between instances of 'Timestamp' and 'str'
+{
+  "status": "FORWARD_INSUFFICIENT_FOR_LIVE",
+  "latest_complete_day": "2026-08-24",
+  "primary": {
+    "n": 7,
+    "mean": 0.3344928798666868,
+    "sum": 2.3414501590668078,
+    "pf": 1.6981245139292267,
+    "win_rate": 0.42857142857142855,
+    "max_dd": 3.3539148280132953,
+    "losing_streak": 4
+  },
+  "stress": {
+    "n": 7,
+    "mean": 0.252983735727145,
+    "sum": 1.770886150090015,
+    "pf": 1.4803039872724109,
+    "win_rate": 0.42857142857142855,
+    "max_dd": 3.6870111367316905,
+    "losing_streak": 4
+  },
+  "weekly": {
+    "2026-08-15/2026-08-21": {
+      "n": 3,
+      "mean": 0.13586956521739135,
+      "sum": 0.40760869565217406,
+      "pf": 1.3421750663129974,
+      "win_rate": 0.3333333333333333,
+      "max_dd": 1.1912285136501515,
+      "losing_streak": 2
+    },
+    "2026-08-22/2026-08-28": {
+      "n": 4,
+      "mean": 0.4834603658536584,
+      "sum": 1.9338414634146337,
+      "pf": 1.8941849081724553,
+      "win_rate": 0.5,
+      "max_dd": 2.162686314363144,
+      "losing_streak": 2
+    }
+  },
+  "positive_weeks": 2,
+  "remove_best_10pct_mean": -0.03846201052590233,
+  "notes": [
+    "Yahoo NQ=F shadow proxy only; not official CME validation.",
+    "Frozen external model commit; no post-forward retuning allowed."
+  ],
+  "ledger_sha256": "bb52a38a32e9b810faee14401f3c6c0ebf61ce8a84f23d49005c528560a5e812"
+}
