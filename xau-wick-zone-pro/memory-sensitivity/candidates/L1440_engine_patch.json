@@ -1,0 +1,9 @@
+{
+  "status": "MECHANICAL_SINGLE_LOOKBACK_REPLACEMENT_PASS",
+  "lookback_active_m1": 1440,
+  "frozen_source_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+  "old_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+  "new_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+  "patched_sha256": "09ad228c447f421b29e648b1cef46ddb5523ceb9c09f29e4068230cc13ab35a9",
+  "other_source_mutations": 0
+}

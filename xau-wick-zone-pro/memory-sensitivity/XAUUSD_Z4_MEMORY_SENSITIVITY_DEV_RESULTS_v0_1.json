@@ -1,0 +1,944 @@
+{
+  "status": "DEV_MEMORY_SENSITIVITY_COMPLETE_AWAITING_TARGETED_PRO_GATE",
+  "prereg": "XAUUSD_Z4_MEMORY_LOOKBACK_SENSITIVITY_PREREG_v0_1_2026-08-24.md",
+  "candidate_set_active_m1": [
+    240,
+    360,
+    600,
+    900,
+    1440
+  ],
+  "incumbent_active_m1": 1440,
+  "BID_ROBUST_PASS_candidates": [
+    1440
+  ],
+  "DUAL_FEED_STRONG_PASS_candidates_for_Pro_review": [
+    1440
+  ],
+  "winner_selected": false,
+  "production_change_authorized": false,
+  "candidates": [
+    {
+      "status": "DEV_MEMORY_SENSITIVITY_CANDIDATE_COMPLETE_NO_PROMOTION",
+      "lookback_active_m1": 240,
+      "incumbent_control": false,
+      "scientific_endpoint": "REVISIT_240",
+      "landmark_cadence": "15-minute UTC",
+      "frozen_reference_engine_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+      "engine_patch_attestation": {
+        "status": "MECHANICAL_SINGLE_LOOKBACK_REPLACEMENT_PASS",
+        "lookback_active_m1": 240,
+        "frozen_source_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+        "old_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "new_literal": "STEP=.01; LOOKBACK=240; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "patched_sha256": "e0754f3f3fccf97ba7615587e01f1cf53af5ad77135364c882ca2c01e848193e",
+        "other_source_mutations": 0
+      },
+      "BID": {
+        "rows": 29494,
+        "landmarks": 12484,
+        "lineages": 6182,
+        "folds": {
+          "APR": {
+            "delta_brier": 0.0033721386320389457,
+            "delta_logloss": 0.0094051222117294
+          },
+          "MAY": {
+            "delta_brier": -0.0007589732688216277,
+            "delta_logloss": -0.000527121539305897
+          },
+          "JUN": {
+            "delta_brier": 0.0018314423985082984,
+            "delta_logloss": 0.00582982471025606
+          },
+          "JUL": {
+            "delta_brier": 0.0023019163624305172,
+            "delta_logloss": 0.007488701188573033
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.18642628420518353,
+          "M0GL_brier": 0.1847580222131444,
+          "delta_brier": 0.0016682619920391217,
+          "M0_logloss": 0.5548889413157114,
+          "M0GL_logloss": 0.5493805102978828,
+          "delta_logloss": 0.005508431017828608
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 12,
+          "mean_delta_brier": 0.0016002179026726104,
+          "bootstrap_95": [
+            -0.0002067120360530658,
+            0.0034481725779041197
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": false,
+          "all_four_folds_nonnegative_logloss": false,
+          "weekly_ci_lower_gt_zero": false
+        }
+      },
+      "ASK": {
+        "rows": 29591,
+        "landmarks": 12479,
+        "lineages": 6181,
+        "folds": {
+          "APR": {
+            "delta_brier": 0.003533509147277597,
+            "delta_logloss": 0.009579905079609263
+          },
+          "MAY": {
+            "delta_brier": -0.0019393716929981264,
+            "delta_logloss": -0.0029526317366196375
+          },
+          "JUN": {
+            "delta_brier": 0.0012861554483442894,
+            "delta_logloss": 0.004880378394125362
+          },
+          "JUL": {
+            "delta_brier": 0.0024026803552142095,
+            "delta_logloss": 0.007921734242972933
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.18545494150957348,
+          "M0GL_brier": 0.18415023275324888,
+          "delta_brier": 0.0013047087563246018,
+          "M0_logloss": 0.5531177323523881,
+          "M0GL_logloss": 0.5482979230417081,
+          "delta_logloss": 0.0048198093106800455
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 14,
+          "mean_delta_brier": 0.0013336161061453721,
+          "bootstrap_95": [
+            -0.00026523367691831,
+            0.002972805934409951
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": false,
+          "all_four_folds_nonnegative_logloss": false,
+          "weekly_ci_lower_gt_zero": false
+        }
+      },
+      "geometry_stability": {
+        "BID": {
+          "zone_snapshots": 29494,
+          "represented_landmarks": 12484,
+          "lineages": 6182,
+          "zones_per_represented_landmark": {
+            "mean": 2.362544056392182,
+            "median": 2.0,
+            "p90": 4.0,
+            "p95": 5.0,
+            "max": 15
+          },
+          "lineage_length_snapshots": {
+            "mean": 4.770947913296668,
+            "median": 2.0,
+            "p90": 15.0,
+            "p95": 16.0,
+            "max": 36
+          },
+          "lineage_share_ge_2": 0.6489809123261081,
+          "lineage_share_ge_4": 0.3921061145260433,
+          "lineage_share_ge_8": 0.21983176965383372,
+          "one_step_continuation_rate": 0.7904248465737632,
+          "one_step_drop_churn_rate": 0.20957515342623678,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.5424096385535335
+          },
+          "abs_width_log_change": {
+            "median": 0.017218998072518976,
+            "p95": 0.6339020157720393
+          }
+        },
+        "ASK": {
+          "zone_snapshots": 29591,
+          "represented_landmarks": 12479,
+          "lineages": 6181,
+          "zones_per_represented_landmark": {
+            "mean": 2.371263723054732,
+            "median": 2.0,
+            "p90": 4.0,
+            "p95": 5.0,
+            "max": 16
+          },
+          "lineage_length_snapshots": {
+            "mean": 4.787413039961171,
+            "median": 2.0,
+            "p90": 15.0,
+            "p95": 16.0,
+            "max": 36
+          },
+          "lineage_share_ge_2": 0.6474680472415467,
+          "lineage_share_ge_4": 0.3952434881087203,
+          "lineage_share_ge_8": 0.22083805209513024,
+          "one_step_continuation_rate": 0.7911456573166611,
+          "one_step_drop_churn_rate": 0.2088543426833389,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.54545454545438
+          },
+          "abs_width_log_change": {
+            "median": 0.01766566592120085,
+            "p95": 0.6238973420903715
+          }
+        }
+      },
+      "preregistered_flags": {
+        "BID_ROBUST_PASS": false,
+        "DUAL_FEED_STRONG_PASS": false
+      },
+      "limits": [
+        "DEV Jan-Jul 2024 only.",
+        "No candidate is promoted by this file.",
+        "Raw Brier across different zone populations is not a standalone winner criterion.",
+        "No Validation/OOS data used."
+      ]
+    },
+    {
+      "status": "DEV_MEMORY_SENSITIVITY_CANDIDATE_COMPLETE_NO_PROMOTION",
+      "lookback_active_m1": 360,
+      "incumbent_control": false,
+      "scientific_endpoint": "REVISIT_240",
+      "landmark_cadence": "15-minute UTC",
+      "frozen_reference_engine_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+      "engine_patch_attestation": {
+        "status": "MECHANICAL_SINGLE_LOOKBACK_REPLACEMENT_PASS",
+        "lookback_active_m1": 360,
+        "frozen_source_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+        "old_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "new_literal": "STEP=.01; LOOKBACK=360; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "patched_sha256": "88b18bba8fff44e32f97697eff7c684c83dbd18a9f6dbe39523a64a8743c2265",
+        "other_source_mutations": 0
+      },
+      "BID": {
+        "rows": 37244,
+        "landmarks": 13009,
+        "lineages": 6102,
+        "folds": {
+          "APR": {
+            "delta_brier": 0.005057242153901714,
+            "delta_logloss": 0.011964581174191968
+          },
+          "MAY": {
+            "delta_brier": -0.0016344888115589484,
+            "delta_logloss": -0.004192507303039217
+          },
+          "JUN": {
+            "delta_brier": -0.0031738530659888853,
+            "delta_logloss": -0.004716749059070158
+          },
+          "JUL": {
+            "delta_brier": 0.0029875583200162648,
+            "delta_logloss": 0.009496734064292855
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.18130893617255822,
+          "M0GL_brier": 0.1804120268739903,
+          "delta_brier": 0.0008969092985679217,
+          "M0_logloss": 0.5425609751688385,
+          "M0GL_logloss": 0.5392614879632855,
+          "delta_logloss": 0.0032994872055529534
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 12,
+          "mean_delta_brier": 0.0010224035606237862,
+          "bootstrap_95": [
+            -0.001206248439450639,
+            0.0031090271574337105
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": false,
+          "all_four_folds_nonnegative_logloss": false,
+          "weekly_ci_lower_gt_zero": false
+        }
+      },
+      "ASK": {
+        "rows": 37327,
+        "landmarks": 13009,
+        "lineages": 6099,
+        "folds": {
+          "APR": {
+            "delta_brier": 0.005691793529029376,
+            "delta_logloss": 0.01366773037642266
+          },
+          "MAY": {
+            "delta_brier": -0.0025133008563720527,
+            "delta_logloss": -0.0054835856996245935
+          },
+          "JUN": {
+            "delta_brier": -0.0009897421531194217,
+            "delta_logloss": 0.0005884660434789524
+          },
+          "JUL": {
+            "delta_brier": 0.002505517662667295,
+            "delta_logloss": 0.008097656106146989
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.18175495444062684,
+          "M0GL_brier": 0.1805350665816286,
+          "delta_brier": 0.0012198878589982365,
+          "M0_logloss": 0.5442430028323118,
+          "M0GL_logloss": 0.5399580916987551,
+          "delta_logloss": 0.004284911133556668
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 11,
+          "mean_delta_brier": 0.0014398478280746153,
+          "bootstrap_95": [
+            -0.0007022411014412124,
+            0.0035652342110558664
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": false,
+          "all_four_folds_nonnegative_logloss": false,
+          "weekly_ci_lower_gt_zero": false
+        }
+      },
+      "geometry_stability": {
+        "BID": {
+          "zone_snapshots": 37244,
+          "represented_landmarks": 13009,
+          "lineages": 6102,
+          "zones_per_represented_landmark": {
+            "mean": 2.8629410408178955,
+            "median": 3.0,
+            "p90": 5.0,
+            "p95": 6.0,
+            "max": 15
+          },
+          "lineage_length_snapshots": {
+            "mean": 6.10357259914782,
+            "median": 3.0,
+            "p90": 20.0,
+            "p95": 24.0,
+            "max": 47
+          },
+          "lineage_share_ge_2": 0.6728941330711242,
+          "lineage_share_ge_4": 0.421501147164864,
+          "lineage_share_ge_8": 0.2561455260570305,
+          "one_step_continuation_rate": 0.8362064335964771,
+          "one_step_drop_churn_rate": 0.16379356640352294,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.3669266055045239
+          },
+          "abs_width_log_change": {
+            "median": 0.01010594847940946,
+            "p95": 0.5540028953423057
+          }
+        },
+        "ASK": {
+          "zone_snapshots": 37327,
+          "represented_landmarks": 13009,
+          "lineages": 6099,
+          "zones_per_represented_landmark": {
+            "mean": 2.8693212391421326,
+            "median": 3.0,
+            "p90": 5.0,
+            "p95": 6.0,
+            "max": 16
+          },
+          "lineage_length_snapshots": {
+            "mean": 6.120183636661748,
+            "median": 3.0,
+            "p90": 20.0,
+            "p95": 24.0,
+            "max": 52
+          },
+          "lineage_share_ge_2": 0.6668306279717987,
+          "lineage_share_ge_4": 0.41974094113789145,
+          "lineage_share_ge_8": 0.2557796360059026,
+          "one_step_continuation_rate": 0.8366510381781648,
+          "one_step_drop_churn_rate": 0.16334896182183523,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.3626373626373135
+          },
+          "abs_width_log_change": {
+            "median": 0.010091545941418537,
+            "p95": 0.5536629341607991
+          }
+        }
+      },
+      "preregistered_flags": {
+        "BID_ROBUST_PASS": false,
+        "DUAL_FEED_STRONG_PASS": false
+      },
+      "limits": [
+        "DEV Jan-Jul 2024 only.",
+        "No candidate is promoted by this file.",
+        "Raw Brier across different zone populations is not a standalone winner criterion.",
+        "No Validation/OOS data used."
+      ]
+    },
+    {
+      "status": "DEV_MEMORY_SENSITIVITY_CANDIDATE_COMPLETE_NO_PROMOTION",
+      "lookback_active_m1": 600,
+      "incumbent_control": false,
+      "scientific_endpoint": "REVISIT_240",
+      "landmark_cadence": "15-minute UTC",
+      "frozen_reference_engine_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+      "engine_patch_attestation": {
+        "status": "MECHANICAL_SINGLE_LOOKBACK_REPLACEMENT_PASS",
+        "lookback_active_m1": 600,
+        "frozen_source_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+        "old_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "new_literal": "STEP=.01; LOOKBACK=600; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "patched_sha256": "55a8b10656109165d8f9dfe2bcba72b580721b5453470d9472f76207a6411f1b",
+        "other_source_mutations": 0
+      },
+      "BID": {
+        "rows": 50921,
+        "landmarks": 13507,
+        "lineages": 5958,
+        "folds": {
+          "APR": {
+            "delta_brier": -0.000884648054788495,
+            "delta_logloss": -0.0014199119741079569
+          },
+          "MAY": {
+            "delta_brier": 0.0005553069050205917,
+            "delta_logloss": 0.001355502187386226
+          },
+          "JUN": {
+            "delta_brier": 0.0016155919362680904,
+            "delta_logloss": 0.006300876016183732
+          },
+          "JUL": {
+            "delta_brier": 0.0022049783602918205,
+            "delta_logloss": 0.006784161705626401
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.17126571267275073,
+          "M0GL_brier": 0.17041220389905282,
+          "delta_brier": 0.0008535087736979141,
+          "M0_logloss": 0.5149382253493724,
+          "M0GL_logloss": 0.5117712605870887,
+          "delta_logloss": 0.0031669647622837305
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 11,
+          "mean_delta_brier": 0.0010182743110694276,
+          "bootstrap_95": [
+            -0.0006313059308625289,
+            0.002632622568729644
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": false,
+          "all_four_folds_nonnegative_logloss": false,
+          "weekly_ci_lower_gt_zero": false
+        }
+      },
+      "ASK": {
+        "rows": 51042,
+        "landmarks": 13517,
+        "lineages": 5982,
+        "folds": {
+          "APR": {
+            "delta_brier": -0.0008045694573536599,
+            "delta_logloss": -0.000727583120836206
+          },
+          "MAY": {
+            "delta_brier": 3.799930018758002e-05,
+            "delta_logloss": 9.587950688216829e-05
+          },
+          "JUN": {
+            "delta_brier": 0.0007150247503411311,
+            "delta_logloss": 0.004349456473452196
+          },
+          "JUL": {
+            "delta_brier": 0.0021341336088637475,
+            "delta_logloss": 0.0072418308981576085
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.1715290105975872,
+          "M0GL_brier": 0.1710123069818678,
+          "delta_brier": 0.0005167036157193994,
+          "M0_logloss": 0.516136448660118,
+          "M0GL_logloss": 0.5134452892314444,
+          "delta_logloss": 0.002691159428673595
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 12,
+          "mean_delta_brier": 0.000704419381897405,
+          "bootstrap_95": [
+            -0.0011915281382068625,
+            0.0026231973155406117
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": false,
+          "all_four_folds_nonnegative_logloss": false,
+          "weekly_ci_lower_gt_zero": false
+        }
+      },
+      "geometry_stability": {
+        "BID": {
+          "zone_snapshots": 50921,
+          "represented_landmarks": 13507,
+          "lineages": 5958,
+          "zones_per_represented_landmark": {
+            "mean": 3.7699711260827717,
+            "median": 3.0,
+            "p90": 6.0,
+            "p95": 7.0,
+            "max": 18
+          },
+          "lineage_length_snapshots": {
+            "mean": 8.546659953004363,
+            "median": 3.0,
+            "p90": 30.0,
+            "p95": 39.0,
+            "max": 75
+          },
+          "lineage_share_ge_2": 0.6861362873447465,
+          "lineage_share_ge_4": 0.46357838200738505,
+          "lineage_share_ge_8": 0.29926149714669353,
+          "one_step_continuation_rate": 0.8830299102496121,
+          "one_step_drop_churn_rate": 0.11697008975038792,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.2380952380949803
+          },
+          "abs_width_log_change": {
+            "median": 0.004845437800016094,
+            "p95": 0.41933095090987976
+          }
+        },
+        "ASK": {
+          "zone_snapshots": 51042,
+          "represented_landmarks": 13517,
+          "lineages": 5982,
+          "zones_per_represented_landmark": {
+            "mean": 3.7761337574905673,
+            "median": 3.0,
+            "p90": 6.0,
+            "p95": 7.0,
+            "max": 18
+          },
+          "lineage_length_snapshots": {
+            "mean": 8.532597793380141,
+            "median": 3.0,
+            "p90": 29.0,
+            "p95": 39.0,
+            "max": 69
+          },
+          "lineage_share_ge_2": 0.6865596790371113,
+          "lineage_share_ge_4": 0.4610498161150117,
+          "lineage_share_ge_8": 0.30207288532263454,
+          "one_step_continuation_rate": 0.8828369905956113,
+          "one_step_drop_churn_rate": 0.11716300940438873,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.2307502426257134
+          },
+          "abs_width_log_change": {
+            "median": 0.0048793626807562,
+            "p95": 0.4194467120988144
+          }
+        }
+      },
+      "preregistered_flags": {
+        "BID_ROBUST_PASS": false,
+        "DUAL_FEED_STRONG_PASS": false
+      },
+      "limits": [
+        "DEV Jan-Jul 2024 only.",
+        "No candidate is promoted by this file.",
+        "Raw Brier across different zone populations is not a standalone winner criterion.",
+        "No Validation/OOS data used."
+      ]
+    },
+    {
+      "status": "DEV_MEMORY_SENSITIVITY_CANDIDATE_COMPLETE_NO_PROMOTION",
+      "lookback_active_m1": 900,
+      "incumbent_control": false,
+      "scientific_endpoint": "REVISIT_240",
+      "landmark_cadence": "15-minute UTC",
+      "frozen_reference_engine_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+      "engine_patch_attestation": {
+        "status": "MECHANICAL_SINGLE_LOOKBACK_REPLACEMENT_PASS",
+        "lookback_active_m1": 900,
+        "frozen_source_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+        "old_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "new_literal": "STEP=.01; LOOKBACK=900; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "patched_sha256": "7c1bd3f129a18c111b81755d0627c16a541b293f7d1851b185239aebaf99178f",
+        "other_source_mutations": 0
+      },
+      "BID": {
+        "rows": 66433,
+        "landmarks": 13653,
+        "lineages": 5832,
+        "folds": {
+          "APR": {
+            "delta_brier": -0.0041532395454099424,
+            "delta_logloss": -0.010256418148826607
+          },
+          "MAY": {
+            "delta_brier": 0.002390475685400434,
+            "delta_logloss": 0.005754795460446549
+          },
+          "JUN": {
+            "delta_brier": 0.00380196496157445,
+            "delta_logloss": 0.011816441721074211
+          },
+          "JUL": {
+            "delta_brier": 0.004360674820154925,
+            "delta_logloss": 0.011608887451104277
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.15516830525980546,
+          "M0GL_brier": 0.153605455112988,
+          "delta_brier": 0.0015628501468174516,
+          "M0_logloss": 0.4716247666560998,
+          "M0GL_logloss": 0.46703535907389976,
+          "delta_logloss": 0.004589407582200056
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 12,
+          "mean_delta_brier": 0.00192040419781557,
+          "bootstrap_95": [
+            -0.0003916466867399378,
+            0.004346314065997212
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": false,
+          "all_four_folds_nonnegative_logloss": false,
+          "weekly_ci_lower_gt_zero": false
+        }
+      },
+      "ASK": {
+        "rows": 66781,
+        "landmarks": 13678,
+        "lineages": 5899,
+        "folds": {
+          "APR": {
+            "delta_brier": -0.005331321135892686,
+            "delta_logloss": -0.013461293203001878
+          },
+          "MAY": {
+            "delta_brier": 0.0024048692965586427,
+            "delta_logloss": 0.005706026863897706
+          },
+          "JUN": {
+            "delta_brier": 0.0016099681756259754,
+            "delta_logloss": 0.007375456996794538
+          },
+          "JUL": {
+            "delta_brier": 0.003692828413703192,
+            "delta_logloss": 0.011091795375288593
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.15596649703483506,
+          "M0GL_brier": 0.15536079491382843,
+          "delta_brier": 0.0006057021210066349,
+          "M0_logloss": 0.4736457460064958,
+          "M0GL_logloss": 0.47100235799662865,
+          "delta_logloss": 0.0026433880098671314
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 12,
+          "mean_delta_brier": 0.0009753687117320942,
+          "bootstrap_95": [
+            -0.0013747463964847912,
+            0.003464136218483876
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": false,
+          "all_four_folds_nonnegative_logloss": false,
+          "weekly_ci_lower_gt_zero": false
+        }
+      },
+      "geometry_stability": {
+        "BID": {
+          "zone_snapshots": 66433,
+          "represented_landmarks": 13653,
+          "lineages": 5832,
+          "zones_per_represented_landmark": {
+            "mean": 4.865817036548743,
+            "median": 4.0,
+            "p90": 8.0,
+            "p95": 10.0,
+            "max": 21
+          },
+          "lineage_length_snapshots": {
+            "mean": 11.391117969821673,
+            "median": 3.0,
+            "p90": 42.0,
+            "p95": 59.0,
+            "max": 89
+          },
+          "lineage_share_ge_2": 0.7040466392318244,
+          "lineage_share_ge_4": 0.48302469135802467,
+          "lineage_share_ge_8": 0.3295610425240055,
+          "one_step_continuation_rate": 0.9122672326845204,
+          "one_step_drop_churn_rate": 0.08773276731547963,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.168880888392707
+          },
+          "abs_width_log_change": {
+            "median": 0.002477296682030149,
+            "p95": 0.30643193995431167
+          }
+        },
+        "ASK": {
+          "zone_snapshots": 66781,
+          "represented_landmarks": 13678,
+          "lineages": 5899,
+          "zones_per_represented_landmark": {
+            "mean": 4.882365842959497,
+            "median": 4.0,
+            "p90": 8.0,
+            "p95": 10.0,
+            "max": 22
+          },
+          "lineage_length_snapshots": {
+            "mean": 11.320732327513138,
+            "median": 3.0,
+            "p90": 40.19999999999982,
+            "p95": 59.0,
+            "max": 89
+          },
+          "lineage_share_ge_2": 0.6975758603153077,
+          "lineage_share_ge_4": 0.48075945075436516,
+          "lineage_share_ge_8": 0.3283607391083234,
+          "one_step_continuation_rate": 0.9117074485609032,
+          "one_step_drop_churn_rate": 0.08829255143909676,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.164383561643682
+          },
+          "abs_width_log_change": {
+            "median": 0.002417053683451773,
+            "p95": 0.3012623690960545
+          }
+        }
+      },
+      "preregistered_flags": {
+        "BID_ROBUST_PASS": false,
+        "DUAL_FEED_STRONG_PASS": false
+      },
+      "limits": [
+        "DEV Jan-Jul 2024 only.",
+        "No candidate is promoted by this file.",
+        "Raw Brier across different zone populations is not a standalone winner criterion.",
+        "No Validation/OOS data used."
+      ]
+    },
+    {
+      "status": "DEV_MEMORY_SENSITIVITY_CANDIDATE_COMPLETE_NO_PROMOTION",
+      "lookback_active_m1": 1440,
+      "incumbent_control": true,
+      "scientific_endpoint": "REVISIT_240",
+      "landmark_cadence": "15-minute UTC",
+      "frozen_reference_engine_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+      "engine_patch_attestation": {
+        "status": "MECHANICAL_SINGLE_LOOKBACK_REPLACEMENT_PASS",
+        "lookback_active_m1": 1440,
+        "frozen_source_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+        "old_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "new_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+        "patched_sha256": "09ad228c447f421b29e648b1cef46ddb5523ceb9c09f29e4068230cc13ab35a9",
+        "other_source_mutations": 0
+      },
+      "BID": {
+        "rows": 89093,
+        "landmarks": 13705,
+        "lineages": 5395,
+        "folds": {
+          "APR": {
+            "delta_brier": 0.0012969674799012676,
+            "delta_logloss": 0.002511501298964991
+          },
+          "MAY": {
+            "delta_brier": 0.001575698829924338,
+            "delta_logloss": 0.0033401082371762314
+          },
+          "JUN": {
+            "delta_brier": 0.0018491784726369642,
+            "delta_logloss": 0.007354763601052139
+          },
+          "JUL": {
+            "delta_brier": 0.001206172711918252,
+            "delta_logloss": 0.0035159833137729524
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.1405890319803096,
+          "M0GL_brier": 0.13911626746109226,
+          "delta_brier": 0.0014727645192173233,
+          "M0_logloss": 0.4305032034765411,
+          "M0GL_logloss": 0.4264080671897042,
+          "delta_logloss": 0.004095136286836887
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 14,
+          "mean_delta_brier": 0.001499195631536089,
+          "bootstrap_95": [
+            0.0006910281808650239,
+            0.0023455891239954046
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": true,
+          "all_four_folds_nonnegative_logloss": true,
+          "weekly_ci_lower_gt_zero": true
+        }
+      },
+      "ASK": {
+        "rows": 89863,
+        "landmarks": 13718,
+        "lineages": 5407,
+        "folds": {
+          "APR": {
+            "delta_brier": 0.0007053635582179862,
+            "delta_logloss": 0.0009613706618447071
+          },
+          "MAY": {
+            "delta_brier": 0.0007955770571111409,
+            "delta_logloss": 0.0017775064113002004
+          },
+          "JUN": {
+            "delta_brier": 0.002787333213725124,
+            "delta_logloss": 0.01008716701617196
+          },
+          "JUL": {
+            "delta_brier": 0.002784436867772133,
+            "delta_logloss": 0.00682303522816613
+          }
+        },
+        "pooled": {
+          "M0_brier": 0.14088126326593692,
+          "M0GL_brier": 0.13913841913728667,
+          "delta_brier": 0.0017428441286502505,
+          "M0_logloss": 0.4318447851254853,
+          "M0GL_logloss": 0.42706718315852127,
+          "delta_logloss": 0.004777601966964029
+        },
+        "weekly": {
+          "n_weeks": 18,
+          "positive_weeks": 13,
+          "mean_delta_brier": 0.0019555801629671916,
+          "bootstrap_95": [
+            0.0005757787685779064,
+            0.003442689328920215
+          ]
+        },
+        "dev_sign_checks": {
+          "all_four_folds_positive_brier": true,
+          "all_four_folds_nonnegative_logloss": true,
+          "weekly_ci_lower_gt_zero": true
+        }
+      },
+      "geometry_stability": {
+        "BID": {
+          "zone_snapshots": 89093,
+          "represented_landmarks": 13705,
+          "lineages": 5395,
+          "zones_per_represented_landmark": {
+            "mean": 6.500766143743159,
+            "median": 6.0,
+            "p90": 11.0,
+            "p95": 12.0,
+            "max": 23
+          },
+          "lineage_length_snapshots": {
+            "mean": 16.513994439295644,
+            "median": 3.0,
+            "p90": 63.0,
+            "p95": 94.0,
+            "max": 186
+          },
+          "lineage_share_ge_2": 0.6999073215940685,
+          "lineage_share_ge_4": 0.48897126969416127,
+          "lineage_share_ge_8": 0.3568118628359592,
+          "one_step_continuation_rate": 0.9395085702740018,
+          "one_step_drop_churn_rate": 0.06049142972599819,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.10714285714277014
+          },
+          "abs_width_log_change": {
+            "median": 0.0004479378587877017,
+            "p95": 0.184549987282441
+          }
+        },
+        "ASK": {
+          "zone_snapshots": 89863,
+          "represented_landmarks": 13718,
+          "lineages": 5407,
+          "zones_per_represented_landmark": {
+            "mean": 6.550736258929873,
+            "median": 6.0,
+            "p90": 11.0,
+            "p95": 12.0,
+            "max": 25
+          },
+          "lineage_length_snapshots": {
+            "mean": 16.61975217310893,
+            "median": 3.0,
+            "p90": 63.0,
+            "p95": 93.0,
+            "max": 186
+          },
+          "lineage_share_ge_2": 0.7037174033660071,
+          "lineage_share_ge_4": 0.4952838912520806,
+          "lineage_share_ge_8": 0.36212317366376917,
+          "one_step_continuation_rate": 0.9398933861580067,
+          "one_step_drop_churn_rate": 0.06010661384199334,
+          "abs_center_shift_vseg": {
+            "median": 0.0,
+            "p95": 0.10609677678638399
+          },
+          "abs_width_log_change": {
+            "median": 0.0004485870929383018,
+            "p95": 0.18561160571630061
+          }
+        }
+      },
+      "preregistered_flags": {
+        "BID_ROBUST_PASS": true,
+        "DUAL_FEED_STRONG_PASS": true
+      },
+      "limits": [
+        "DEV Jan-Jul 2024 only.",
+        "No candidate is promoted by this file.",
+        "Raw Brier across different zone populations is not a standalone winner criterion.",
+        "No Validation/OOS data used."
+      ]
+    }
+  ],
+  "incumbent_reference": {
+    "BID_delta_brier": 0.0014727645192173233,
+    "ASK_delta_brier": 0.0017428441286502505,
+    "BID_churn": 0.06049142972599819,
+    "ASK_churn": 0.06010661384199334
+  },
+  "next_decision": "Targeted Pro methodological gate: plateau/robustness review before any historical replication or Pine change."
+}

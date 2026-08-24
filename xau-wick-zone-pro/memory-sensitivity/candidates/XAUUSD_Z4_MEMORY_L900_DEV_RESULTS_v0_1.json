@@ -1,0 +1,183 @@
+{
+  "status": "DEV_MEMORY_SENSITIVITY_CANDIDATE_COMPLETE_NO_PROMOTION",
+  "lookback_active_m1": 900,
+  "incumbent_control": false,
+  "scientific_endpoint": "REVISIT_240",
+  "landmark_cadence": "15-minute UTC",
+  "frozen_reference_engine_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+  "engine_patch_attestation": {
+    "status": "MECHANICAL_SINGLE_LOOKBACK_REPLACEMENT_PASS",
+    "lookback_active_m1": 900,
+    "frozen_source_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+    "old_literal": "STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+    "new_literal": "STEP=.01; LOOKBACK=900; HORIZON=240; REACT_MAX=60; EPS=1e-9",
+    "patched_sha256": "7c1bd3f129a18c111b81755d0627c16a541b293f7d1851b185239aebaf99178f",
+    "other_source_mutations": 0
+  },
+  "BID": {
+    "rows": 66433,
+    "landmarks": 13653,
+    "lineages": 5832,
+    "folds": {
+      "APR": {
+        "delta_brier": -0.0041532395454099424,
+        "delta_logloss": -0.010256418148826607
+      },
+      "MAY": {
+        "delta_brier": 0.002390475685400434,
+        "delta_logloss": 0.005754795460446549
+      },
+      "JUN": {
+        "delta_brier": 0.00380196496157445,
+        "delta_logloss": 0.011816441721074211
+      },
+      "JUL": {
+        "delta_brier": 0.004360674820154925,
+        "delta_logloss": 0.011608887451104277
+      }
+    },
+    "pooled": {
+      "M0_brier": 0.15516830525980546,
+      "M0GL_brier": 0.153605455112988,
+      "delta_brier": 0.0015628501468174516,
+      "M0_logloss": 0.4716247666560998,
+      "M0GL_logloss": 0.46703535907389976,
+      "delta_logloss": 0.004589407582200056
+    },
+    "weekly": {
+      "n_weeks": 18,
+      "positive_weeks": 12,
+      "mean_delta_brier": 0.00192040419781557,
+      "bootstrap_95": [
+        -0.0003916466867399378,
+        0.004346314065997212
+      ]
+    },
+    "dev_sign_checks": {
+      "all_four_folds_positive_brier": false,
+      "all_four_folds_nonnegative_logloss": false,
+      "weekly_ci_lower_gt_zero": false
+    }
+  },
+  "ASK": {
+    "rows": 66781,
+    "landmarks": 13678,
+    "lineages": 5899,
+    "folds": {
+      "APR": {
+        "delta_brier": -0.005331321135892686,
+        "delta_logloss": -0.013461293203001878
+      },
+      "MAY": {
+        "delta_brier": 0.0024048692965586427,
+        "delta_logloss": 0.005706026863897706
+      },
+      "JUN": {
+        "delta_brier": 0.0016099681756259754,
+        "delta_logloss": 0.007375456996794538
+      },
+      "JUL": {
+        "delta_brier": 0.003692828413703192,
+        "delta_logloss": 0.011091795375288593
+      }
+    },
+    "pooled": {
+      "M0_brier": 0.15596649703483506,
+      "M0GL_brier": 0.15536079491382843,
+      "delta_brier": 0.0006057021210066349,
+      "M0_logloss": 0.4736457460064958,
+      "M0GL_logloss": 0.47100235799662865,
+      "delta_logloss": 0.0026433880098671314
+    },
+    "weekly": {
+      "n_weeks": 18,
+      "positive_weeks": 12,
+      "mean_delta_brier": 0.0009753687117320942,
+      "bootstrap_95": [
+        -0.0013747463964847912,
+        0.003464136218483876
+      ]
+    },
+    "dev_sign_checks": {
+      "all_four_folds_positive_brier": false,
+      "all_four_folds_nonnegative_logloss": false,
+      "weekly_ci_lower_gt_zero": false
+    }
+  },
+  "geometry_stability": {
+    "BID": {
+      "zone_snapshots": 66433,
+      "represented_landmarks": 13653,
+      "lineages": 5832,
+      "zones_per_represented_landmark": {
+        "mean": 4.865817036548743,
+        "median": 4.0,
+        "p90": 8.0,
+        "p95": 10.0,
+        "max": 21
+      },
+      "lineage_length_snapshots": {
+        "mean": 11.391117969821673,
+        "median": 3.0,
+        "p90": 42.0,
+        "p95": 59.0,
+        "max": 89
+      },
+      "lineage_share_ge_2": 0.7040466392318244,
+      "lineage_share_ge_4": 0.48302469135802467,
+      "lineage_share_ge_8": 0.3295610425240055,
+      "one_step_continuation_rate": 0.9122672326845204,
+      "one_step_drop_churn_rate": 0.08773276731547963,
+      "abs_center_shift_vseg": {
+        "median": 0.0,
+        "p95": 0.168880888392707
+      },
+      "abs_width_log_change": {
+        "median": 0.002477296682030149,
+        "p95": 0.30643193995431167
+      }
+    },
+    "ASK": {
+      "zone_snapshots": 66781,
+      "represented_landmarks": 13678,
+      "lineages": 5899,
+      "zones_per_represented_landmark": {
+        "mean": 4.882365842959497,
+        "median": 4.0,
+        "p90": 8.0,
+        "p95": 10.0,
+        "max": 22
+      },
+      "lineage_length_snapshots": {
+        "mean": 11.320732327513138,
+        "median": 3.0,
+        "p90": 40.19999999999982,
+        "p95": 59.0,
+        "max": 89
+      },
+      "lineage_share_ge_2": 0.6975758603153077,
+      "lineage_share_ge_4": 0.48075945075436516,
+      "lineage_share_ge_8": 0.3283607391083234,
+      "one_step_continuation_rate": 0.9117074485609032,
+      "one_step_drop_churn_rate": 0.08829255143909676,
+      "abs_center_shift_vseg": {
+        "median": 0.0,
+        "p95": 0.164383561643682
+      },
+      "abs_width_log_change": {
+        "median": 0.002417053683451773,
+        "p95": 0.3012623690960545
+      }
+    }
+  },
+  "preregistered_flags": {
+    "BID_ROBUST_PASS": false,
+    "DUAL_FEED_STRONG_PASS": false
+  },
+  "limits": [
+    "DEV Jan-Jul 2024 only.",
+    "No candidate is promoted by this file.",
+    "Raw Brier across different zone populations is not a standalone winner criterion.",
+    "No Validation/OOS data used."
+  ]
+}
