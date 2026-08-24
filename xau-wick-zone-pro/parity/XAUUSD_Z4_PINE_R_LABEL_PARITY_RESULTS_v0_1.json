@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "scope": "OUTCOME_BLIND_R_DISPLAY_LABEL_PARITY_DEV_BID",
+  "future_outcomes_used": false,
+  "metrics": {
+    "median_abs_r_float_error": 0.2825144587974222,
+    "p90_abs_r_float_error": 1.7672895308252894,
+    "p95_abs_r_float_error": 2.9741691878726133,
+    "p99_abs_r_float_error": 7.518601193117041,
+    "median_abs_display_r_error": 0.0,
+    "p95_abs_display_r_error": 3.0,
+    "share_display_within_1": 0.8722485185500651,
+    "share_display_within_2": 0.9345485075988952,
+    "share_display_within_5": 0.9809814681868513,
+    "r_pearson": 0.998217005633496,
+    "r_spearman": 0.9984154313895304,
+    "matched_pairs": 82183,
+    "matched_top1_agreement": 0.9699270072992701,
+    "top1_landmarks": 13700
+  },
+  "checks": {
+    "median_r_error_le_1": true,
+    "p95_r_error_le_5": true,
+    "share_display_within2_ge_080": true,
+    "share_display_within5_ge_095": true,
+    "r_spearman_ge_098": true,
+    "top1_ge_085": true
+  }
+}
