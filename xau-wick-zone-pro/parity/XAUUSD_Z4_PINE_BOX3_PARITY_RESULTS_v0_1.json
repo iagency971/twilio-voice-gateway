@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "parity_scope": "OUTCOME_BLIND_ENGINEERING_PARITY_DEV_BID_JAN_JUL_2024",
+  "reference": "Z4 exact SciPy Gaussian",
+  "proxy": "Z4 identical except Pine 3-box Gaussian smoothing",
+  "future_outcomes_used_in_metrics": false,
+  "metrics": {
+    "exact_rows": 89093,
+    "proxy_rows": 82954,
+    "matched_pairs": 82331,
+    "exact_zone_match_rate": 0.924101781284725,
+    "proxy_zone_match_rate": 0.9924898136316512,
+    "landmarks_exact": 13705,
+    "landmarks_proxy": 13702,
+    "same_zone_count_landmark_rate": 0.5992121388969944,
+    "mean_abs_zone_count_difference": 0.5028450539830756,
+    "iou_quantiles": {
+      "0.1": 0.9499060300145584,
+      "0.25": 0.9740326777317859,
+      "0.5": 0.9876119914381188,
+      "0.75": 0.9940591782464447,
+      "0.9": 0.9970849532599427,
+      "0.95": 0.9981967719721125
+    },
+    "center_err_vseg_quantiles": {
+      "0.5": 0.021668472373175998,
+      "0.9": 0.064794816415092,
+      "0.95": 0.0833333333339123,
+      "0.99": 0.16666666666634702
+    },
+    "lo_err_vseg_quantiles": {
+      "0.5": 0.01569370791392338,
+      "0.9": 0.06583770506557454,
+      "0.95": 0.1064479668972087
+    },
+    "hi_err_vseg_quantiles": {
+      "0.5": 0.015813852677284378,
+      "0.9": 0.06328682924487415,
+      "0.95": 0.10642834779265159
+    },
+    "score_pearson": 0.9983824469302314,
+    "score_spearman": 0.998950955547001,
+    "score_abs_err_quantiles": {
+      "0.5": 0.0011997133065366553,
+      "0.9": 0.012910237193429847,
+      "0.95": 0.02274523574566874,
+      "0.99": 0.0666947045399459
+    },
+    "within_landmark_spearman_median": 1.0,
+    "within_landmark_spearman_mean": 0.9918705123695407,
+    "within_landmark_rank_landmarks": 12330,
+    "top1_zone_agreement": 0.8926928972917731,
+    "top1_eligible_landmarks": 13699
+  },
+  "checks": {
+    "exact_match_ge_090": true,
+    "proxy_match_ge_090": true,
+    "median_iou_ge_075": true,
+    "p10_iou_ge_045": true,
+    "median_center_err_le_010_vseg": true,
+    "p95_center_err_le_035_vseg": true,
+    "score_spearman_ge_095": true,
+    "median_score_abs_err_le_003": true,
+    "p95_score_abs_err_le_010": true,
+    "top1_agreement_ge_085": true
+  }
+}
