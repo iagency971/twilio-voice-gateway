@@ -1,0 +1,1 @@
+MNQ_FORWARD_SHADOW_FAILURE exit_code=1
