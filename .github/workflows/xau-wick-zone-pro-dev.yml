@@ -7,6 +7,7 @@ on:
       - '.github/workflows/xau-wick-zone-pro-dev.yml'
       - 'xau-wick-zone-pro/xau_zone_episode_dev_z4.py'
       - 'xau-wick-zone-pro/xau_wick_zone_completion_models.py'
+      - 'xau-wick-zone-pro/xau_wick_zone_freeze_params.py'
 
 permissions:
   contents: write
@@ -90,6 +91,9 @@ jobs:
       - name: Run fixed chronological DEV models
         run: python xau-wick-zone-pro/xau_wick_zone_completion_models.py --bid-pkl /tmp/XAUUSD_Z4_CONTINUOUS_BID.pkl --ask-pkl /tmp/XAUUSD_Z4_CONTINUOUS_ASK.pkl --manifest-json /tmp/source_manifest.json --output /tmp/XAUUSD_Z4_DEV_BID_ASK_COMPLETION_v0_1_results.json
 
+      - name: Freeze final DEV model parameters
+        run: python xau-wick-zone-pro/xau_wick_zone_freeze_params.py --bid-pkl /tmp/XAUUSD_Z4_CONTINUOUS_BID.pkl --ask-pkl /tmp/XAUUSD_Z4_CONTINUOUS_ASK.pkl --completion-json /tmp/XAUUSD_Z4_DEV_BID_ASK_COMPLETION_v0_1_results.json --output /tmp/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json
+
       - name: Publish compact DEV evidence only
         shell: bash
         run: |
@@ -99,12 +103,13 @@ jobs:
           cp /tmp/XAUUSD_Z4_CONTINUOUS_BID_summary.json xau-wick-zone-pro/results/XAUUSD_Z4_CONTINUOUS_BID_summary.json
           cp /tmp/XAUUSD_Z4_CONTINUOUS_ASK_summary.json xau-wick-zone-pro/results/XAUUSD_Z4_CONTINUOUS_ASK_summary.json
           cp /tmp/XAUUSD_Z4_DEV_BID_ASK_COMPLETION_v0_1_results.json xau-wick-zone-pro/results/XAUUSD_Z4_DEV_BID_ASK_COMPLETION_v0_1_results.json
+          cp /tmp/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add xau-wick-zone-pro/results
           if git diff --cached --quiet; then
             echo 'No result change to publish.'
           else
-            git commit -m 'publish Z4 continuous BID ASK DEV evidence [skip ci]'
+            git commit -m 'publish Z4 frozen DEV model parameters [skip ci]'
             git push origin HEAD:agent/xau-wick-zone-pro-dev
           fi
