@@ -1,0 +1,34 @@
+{
+  "status": "DETERMINISTIC_RECOVERY_EXACT_MATCH_PASS",
+  "workflow_run_id": 32678683334,
+  "workflow_job_id": 97291382981,
+  "frozen_scientific_code_verified": true,
+  "source_qa_pass": true,
+  "z4_rebuild_pass": true,
+  "frozen_rescore_pass": true,
+  "bit_for_bit_primary_metric_recovery_match": true,
+  "original_reference_run_id": 32677272149,
+  "primary": {
+    "feed": "BID",
+    "endpoint": "REVISIT_240_ACTIVE_M1",
+    "n_rows": 132858,
+    "landmarks": 23506,
+    "rate_unweighted": 0.29874753496214,
+    "M0_brier": 0.16864482146367638,
+    "M0GL_brier": 0.1561993590966001,
+    "delta_brier": 0.012445462367076277,
+    "M0_logloss": 0.5253853429965941,
+    "M0GL_logloss": 0.48261072277144296,
+    "delta_logloss": 0.04277462022515116,
+    "weekly_bootstrap_95_delta_brier": [0.010084629331906146, 0.01469348036914224],
+    "H1_delta_brier": 0.009176417152060384,
+    "H2_delta_brier": 0.0157083941007313,
+    "gate_status": "PASS"
+  },
+  "calibration_diagnostic": {
+    "brier": 0.15595412515353455,
+    "logloss": 0.4875910131756277,
+    "ece10_correct_global_landmark_weights": 0.0757288000646641
+  },
+  "publication_note": "The recovery workflow successfully published its source manifest and continuous summary. The third Contents API write hit a concurrent branch 409 after the exact-match assertion had already printed 'BIT-FOR-BIT PRIMARY METRIC RECOVERY MATCH: PASS'. This compact attestation records the scientifically relevant recovered values; no model/data/result was changed."
+}
