@@ -1,0 +1,99 @@
+name: XAU Z4 Execution Scenarios DEV v0.1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-execution-scenarios-dev-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  execution-dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify prereg and frozen Z4 provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'FROZEN BEFORE EXECUTION-SCENARIO RESULTS' xau-wick-zone-pro/XAUUSD_Z4_EXECUTION_SCENARIOS_PREREG_v0_1_2026-08-24.md
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json)" = "c95fd545ec451968cb421f81ed6add0c508f387d"
+          test "$(git hash-object xau-wick-zone-pro/results/XAUUSD_Z4_REVISIT_SCORE_MAP_v0_1.json)" = "c3376009db6e130dc55994c1321c1d8007b8b458"
+          echo 'Preregression/frozen provenance: PASS'
+
+      - name: Install fixed dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+
+      - name: Download DEV BID Jan-Jul 2024 only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid
+          for m in 01 02 03 04 05 06 07; do
+            file="xauusd_bid_m1_2024_${m}.csv"
+            url="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/${file}"
+            curl --fail --location --retry 5 --retry-delay 2 --connect-timeout 20 "$url" -o "/tmp/xau/bid/${file}"
+          done
+
+      - name: Verify DEV source hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          man=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          exp={x['file']:x['sha256'] for x in man['files'] if x['side']=='bid' and x['file'].startswith('xauusd_bid_m1_2024_') and x['file'][-6:-4] in {'01','02','03','04','05','06','07'}}
+          got={}
+          for p in sorted(Path('/tmp/xau/bid').glob('*.csv')):
+              got[p.name]=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert set(got)==set(exp),(set(got),set(exp))
+          bad={k:(got[k],exp[k]) for k in got if got[k]!=exp[k]}
+          assert not bad,bad
+          print('DEV BID source hash gate PASS',len(got))
+          PY
+
+      - name: Rebuild exact frozen Z4 DEV BID
+        run: |
+          python xau-wick-zone-pro/xau_zone_episode_dev_z4.py \
+            --files /tmp/xau/bid/*.csv \
+            --output /tmp/XAUUSD_Z4_EXECUTION_DEV_BID.pkl \
+            --tag BID_Z4_EXECUTION_DEV_JAN_JUL_2024
+
+      - name: Run preregistered execution scenario screen
+        run: |
+          python xau-wick-zone-pro/xau_z4_execution_scenarios_dev_v0_1.py \
+            --z4-pkl /tmp/XAUUSD_Z4_EXECUTION_DEV_BID.pkl \
+            --raw-files /tmp/xau/bid/*.csv \
+            --frozen-json xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json \
+            --score-map-json xau-wick-zone-pro/results/XAUUSD_Z4_REVISIT_SCORE_MAP_v0_1.json \
+            --output /tmp/XAUUSD_Z4_EXECUTION_SCENARIOS_DEV_RESULTS_v0_1.json
+
+      - name: Publish DEV execution evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p xau-wick-zone-pro/execution
+          cp /tmp/XAUUSD_Z4_EXECUTION_SCENARIOS_DEV_RESULTS_v0_1.json xau-wick-zone-pro/execution/XAUUSD_Z4_EXECUTION_SCENARIOS_DEV_RESULTS_v0_1.json
+          cp /tmp/XAUUSD_Z4_EXECUTION_SCENARIOS_DEV_RESULTS_v0_1.csv xau-wick-zone-pro/execution/XAUUSD_Z4_EXECUTION_SCENARIOS_DEV_ROWS_v0_1.csv
+          cp /tmp/XAUUSD_Z4_EXECUTION_DEV_BID_summary.json xau-wick-zone-pro/execution/XAUUSD_Z4_EXECUTION_DEV_BID_summary.json
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add xau-wick-zone-pro/execution
+          git commit -m 'publish preregistered Z4 execution DEV screen v0.1 [skip ci]'
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin agent/xau-wick-zone-pro-dev && git push origin HEAD:agent/xau-wick-zone-pro-dev && exit 0
+            sleep 5
+          done
+          exit 1
