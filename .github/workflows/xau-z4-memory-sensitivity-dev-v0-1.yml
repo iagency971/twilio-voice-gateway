@@ -1,0 +1,205 @@
+name: XAU Z4 Memory Sensitivity DEV v0.1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-memory-sensitivity-dev-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        lookback: [240, 360, 600, 900, 1440]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify prereg and frozen Z4 engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'FROZEN BEFORE MEMORY-SENSITIVITY DEV OUTCOMES' xau-wick-zone-pro/XAUUSD_Z4_MEMORY_LOOKBACK_SENSITIVITY_PREREG_v0_1_2026-08-24.md
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/xau_wick_zone_completion_models.py)" = "94fcd68539176e9e6d64d7490e68baa555990001"
+          echo 'Preregression/frozen-engine provenance: PASS'
+
+      - name: Install fixed dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+
+      - name: Build mechanically patched candidate engine
+        env:
+          L: ${{ matrix.lookback }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          L=int(os.environ['L'])
+          allowed={240,360,600,900,1440}
+          assert L in allowed
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py')
+          text=src.read_text()
+          old='STEP=.01; LOOKBACK=1440; HORIZON=240; REACT_MAX=60; EPS=1e-9'
+          new=f'STEP=.01; LOOKBACK={L}; HORIZON=240; REACT_MAX=60; EPS=1e-9'
+          assert text.count(old)==1, text.count(old)
+          patched=text.replace(old,new)
+          # Prove the only text mutation is the preregistered LOOKBACK token.
+          assert patched.replace(new,old)==text
+          out=Path(f'/tmp/xau_zone_episode_dev_z4_L{L}.py')
+          out.write_text(patched)
+          att={
+            'status':'MECHANICAL_SINGLE_LOOKBACK_REPLACEMENT_PASS',
+            'lookback_active_m1':L,
+            'frozen_source_git_blob':'a8a147615c3fd366c49e93b340fd2018b5b66e9e',
+            'old_literal':old,
+            'new_literal':new,
+            'patched_sha256':hashlib.sha256(out.read_bytes()).hexdigest(),
+            'other_source_mutations':0
+          }
+          Path(f'/tmp/L{L}_engine_patch.json').write_text(json.dumps(att,indent=2))
+          print(json.dumps(att,indent=2))
+          PY
+
+      - name: Download exact DEV BID and ASK Jan-Jul 2024
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid /tmp/xau/ask
+          for side in bid ask; do
+            for m in 01 02 03 04 05 06 07; do
+              file="xauusd_${side}_m1_2024_${m}.csv"
+              url="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/${side}/m1/${file}"
+              curl --fail --location --retry 5 --retry-delay 2 --connect-timeout 20 "$url" -o "/tmp/xau/${side}/${file}"
+            done
+          done
+
+      - name: Verify all 14 DEV source hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          man=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          exp={x['file']:x['sha256'] for x in man['files']}
+          got={}
+          for side in ('bid','ask'):
+            for p in sorted(Path('/tmp/xau',side).glob('*.csv')):
+              got[p.name]=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert len(got)==14, len(got)
+          assert set(got)==set(exp), (set(got)-set(exp),set(exp)-set(got))
+          bad={k:(got[k],exp[k]) for k in got if got[k]!=exp[k]}
+          assert not bad,bad
+          print('DEV source hash gate PASS',len(got))
+          PY
+
+      - name: Rebuild candidate Z4 BID
+        env:
+          L: ${{ matrix.lookback }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "/tmp/xau_zone_episode_dev_z4_L${L}.py" \
+            --files /tmp/xau/bid/*.csv \
+            --output "/tmp/L${L}_BID.pkl" \
+            --tag "BID_Z4_MEMORY_L${L}"
+
+      - name: Rebuild candidate Z4 ASK
+        env:
+          L: ${{ matrix.lookback }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "/tmp/xau_zone_episode_dev_z4_L${L}.py" \
+            --files /tmp/xau/ask/*.csv \
+            --output "/tmp/L${L}_ASK.pkl" \
+            --tag "ASK_Z4_MEMORY_L${L}"
+
+      - name: Evaluate frozen DEV folds and stability
+        env:
+          L: ${{ matrix.lookback }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/xau_z4_memory_candidate_dev_eval_v0_1.py \
+            --bid-pkl "/tmp/L${L}_BID.pkl" \
+            --ask-pkl "/tmp/L${L}_ASK.pkl" \
+            --lookback "$L" \
+            --engine-patch-json "/tmp/L${L}_engine_patch.json" \
+            --output "/tmp/XAUUSD_Z4_MEMORY_L${L}_DEV_RESULTS_v0_1.json"
+
+      - name: Upload candidate evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: z4-memory-${{ matrix.lookback }}
+          path: |
+            /tmp/XAUUSD_Z4_MEMORY_L${{ matrix.lookback }}_DEV_RESULTS_v0_1.json
+            /tmp/L${{ matrix.lookback }}_engine_patch.json
+            /tmp/L${{ matrix.lookback }}_BID_summary.json
+            /tmp/L${{ matrix.lookback }}_ASK_summary.json
+          retention-days: 30
+
+  aggregate:
+    needs: candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download all candidate evidence
+        uses: actions/download-artifact@v4
+        with:
+          pattern: z4-memory-*
+          path: /tmp/memory-results
+          merge-multiple: true
+
+      - name: Aggregate preregistered five-candidate gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/xau_z4_memory_sensitivity_aggregate_v0_1.py \
+            --inputs '/tmp/memory-results/XAUUSD_Z4_MEMORY_L*_DEV_RESULTS_v0_1.json' \
+            --output-json /tmp/XAUUSD_Z4_MEMORY_SENSITIVITY_DEV_RESULTS_v0_1.json \
+            --output-md /tmp/XAUUSD_Z4_MEMORY_SENSITIVITY_DEV_RESULTS_v0_1.md
+
+      - name: Publish immutable DEV sensitivity evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          mkdir -p xau-wick-zone-pro/memory-sensitivity/candidates
+          cp /tmp/XAUUSD_Z4_MEMORY_SENSITIVITY_DEV_RESULTS_v0_1.json xau-wick-zone-pro/memory-sensitivity/
+          cp /tmp/XAUUSD_Z4_MEMORY_SENSITIVITY_DEV_RESULTS_v0_1.md xau-wick-zone-pro/memory-sensitivity/
+          cp /tmp/memory-results/XAUUSD_Z4_MEMORY_L*_DEV_RESULTS_v0_1.json xau-wick-zone-pro/memory-sensitivity/candidates/
+          cp /tmp/memory-results/L*_engine_patch.json xau-wick-zone-pro/memory-sensitivity/candidates/
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add xau-wick-zone-pro/memory-sensitivity
+          git commit -m 'publish Z4 memory sensitivity DEV results v0.1 [skip ci]'
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:agent/xau-wick-zone-pro-dev; then exit 0; fi
+            git pull --rebase origin agent/xau-wick-zone-pro-dev
+            sleep 5
+          done
+          exit 1
