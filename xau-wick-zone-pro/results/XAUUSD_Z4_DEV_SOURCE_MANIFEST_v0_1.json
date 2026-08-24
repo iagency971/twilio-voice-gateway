@@ -1,0 +1,182 @@
+{
+  "status": "DEV_ONLY_NO_VALIDATION_OOS",
+  "source": "kevingtlin/Market-Data-Lab Dukascopy XAUUSD M1",
+  "files": [
+    {
+      "side": "bid",
+      "month": "01",
+      "file": "xauusd_bid_m1_2024_01.csv",
+      "sha256": "7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d",
+      "bytes": 2231993,
+      "rows": 44640,
+      "active_rows": 30243,
+      "flat_rows": 14397,
+      "first_timestamp": 1704067200000,
+      "last_timestamp": 1706745540000
+    },
+    {
+      "side": "bid",
+      "month": "02",
+      "file": "xauusd_bid_m1_2024_02.csv",
+      "sha256": "45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f",
+      "bytes": 2087847,
+      "rows": 41760,
+      "active_rows": 28760,
+      "flat_rows": 13000,
+      "first_timestamp": 1706745600000,
+      "last_timestamp": 1709251140000
+    },
+    {
+      "side": "bid",
+      "month": "03",
+      "file": "xauusd_bid_m1_2024_03.csv",
+      "sha256": "28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14",
+      "bytes": 2231983,
+      "rows": 44640,
+      "active_rows": 27613,
+      "flat_rows": 17027,
+      "first_timestamp": 1709251200000,
+      "last_timestamp": 1711929540000
+    },
+    {
+      "side": "bid",
+      "month": "04",
+      "file": "xauusd_bid_m1_2024_04.csv",
+      "sha256": "ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9",
+      "bytes": 2159936,
+      "rows": 43200,
+      "active_rows": 30358,
+      "flat_rows": 12842,
+      "first_timestamp": 1711929600000,
+      "last_timestamp": 1714521540000
+    },
+    {
+      "side": "bid",
+      "month": "05",
+      "file": "xauusd_bid_m1_2024_05.csv",
+      "sha256": "18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6",
+      "bytes": 2232006,
+      "rows": 44640,
+      "active_rows": 31452,
+      "flat_rows": 13188,
+      "first_timestamp": 1714521600000,
+      "last_timestamp": 1717199940000
+    },
+    {
+      "side": "bid",
+      "month": "06",
+      "file": "xauusd_bid_m1_2024_06.csv",
+      "sha256": "f7cad6452e9666b37f6f7830bb69a61439095919bb1609daa80839fdb3a8fd39",
+      "bytes": 2159852,
+      "rows": 43200,
+      "active_rows": 27548,
+      "flat_rows": 15652,
+      "first_timestamp": 1717200000000,
+      "last_timestamp": 1719791940000
+    },
+    {
+      "side": "bid",
+      "month": "07",
+      "file": "xauusd_bid_m1_2024_07.csv",
+      "sha256": "a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52",
+      "bytes": 2231718,
+      "rows": 44640,
+      "active_rows": 31561,
+      "flat_rows": 13079,
+      "first_timestamp": 1719792000000,
+      "last_timestamp": 1722470340000
+    },
+    {
+      "side": "ask",
+      "month": "01",
+      "file": "xauusd_ask_m1_2024_01.csv",
+      "sha256": "a4ac5385c164b40a5760890279455228f64646180ea04bb6e45e633cafc024ae",
+      "bytes": 2231946,
+      "rows": 44640,
+      "active_rows": 30248,
+      "flat_rows": 14392,
+      "first_timestamp": 1704067200000,
+      "last_timestamp": 1706745540000
+    },
+    {
+      "side": "ask",
+      "month": "02",
+      "file": "xauusd_ask_m1_2024_02.csv",
+      "sha256": "40706a4ec8abb07c6fe13e4c4562f7d07485c104226e42d36c57e06d36c1c167",
+      "bytes": 2087789,
+      "rows": 41760,
+      "active_rows": 28761,
+      "flat_rows": 12999,
+      "first_timestamp": 1706745600000,
+      "last_timestamp": 1709251140000
+    },
+    {
+      "side": "ask",
+      "month": "03",
+      "file": "xauusd_ask_m1_2024_03.csv",
+      "sha256": "12ee5b98105d955b18b7a496120998f5f6647987cd16f706c94da6bd7541eb91",
+      "bytes": 2231876,
+      "rows": 44640,
+      "active_rows": 27621,
+      "flat_rows": 17019,
+      "first_timestamp": 1709251200000,
+      "last_timestamp": 1711929540000
+    },
+    {
+      "side": "ask",
+      "month": "04",
+      "file": "xauusd_ask_m1_2024_04.csv",
+      "sha256": "ef4001235ec800174d32459174e2235d7cdaf9f67662108c78a962d1d4cb43c6",
+      "bytes": 2159681,
+      "rows": 43200,
+      "active_rows": 30353,
+      "flat_rows": 12847,
+      "first_timestamp": 1711929600000,
+      "last_timestamp": 1714521540000
+    },
+    {
+      "side": "ask",
+      "month": "05",
+      "file": "xauusd_ask_m1_2024_05.csv",
+      "sha256": "54ffe9267ce4be51e68746c20eb0a3d5d77f46b0fc71c34af7eb8884d0af6588",
+      "bytes": 2231910,
+      "rows": 44640,
+      "active_rows": 31451,
+      "flat_rows": 13189,
+      "first_timestamp": 1714521600000,
+      "last_timestamp": 1717199940000
+    },
+    {
+      "side": "ask",
+      "month": "06",
+      "file": "xauusd_ask_m1_2024_06.csv",
+      "sha256": "ec13944e0fa902394e6a48baf8e142696c3b1486d229d50603f5464085073c56",
+      "bytes": 2159912,
+      "rows": 43200,
+      "active_rows": 27544,
+      "flat_rows": 15656,
+      "first_timestamp": 1717200000000,
+      "last_timestamp": 1719791940000
+    },
+    {
+      "side": "ask",
+      "month": "07",
+      "file": "xauusd_ask_m1_2024_07.csv",
+      "sha256": "129719740c4a6a034c756fefb3aa8759b00535c05345e60ffb527d75da7bae1b",
+      "bytes": 2231865,
+      "rows": 44640,
+      "active_rows": 31567,
+      "flat_rows": 13073,
+      "first_timestamp": 1719792000000,
+      "last_timestamp": 1722470340000
+    }
+  ],
+  "known_bid_hash_checks": {
+    "01": true,
+    "02": true,
+    "03": true,
+    "04": true,
+    "05": true,
+    "07": true
+  }
+}

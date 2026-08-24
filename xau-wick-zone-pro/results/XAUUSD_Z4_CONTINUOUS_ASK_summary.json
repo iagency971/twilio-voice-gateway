@@ -1,0 +1,25 @@
+{
+  "tag": "ASK_Z4_CONTINUOUS_JAN_JUL",
+  "rows": 89863,
+  "landmarks": 13718,
+  "eligible_landmarks": 13725,
+  "missing_side_zone_landmarks": 7,
+  "lineages": 5407,
+  "zone_count_quantiles": {
+    "0": 1.0,
+    "0.5": 7.0,
+    "0.9": 11.0,
+    "0.95": 13.0,
+    "0.99": 18.0,
+    "1": 25.0
+  },
+  "age_lm_quantiles": {
+    "0.5": 24.0,
+    "0.75": 50.0,
+    "0.9": 74.0,
+    "0.95": 85.0,
+    "0.99": 96.0
+  },
+  "revisit_rate": 0.28497824466131777,
+  "runtime_sec": 46.155866861343384
+}
