@@ -1,0 +1,75 @@
+{
+  "status": "PASS",
+  "scope": "OUTCOME_BLIND_PINE_GRID_STEP_COMPRESSION_DEV_BID_JAN_JUL_2024",
+  "future_outcomes_used": false,
+  "preregistered_candidates": [0.02, 0.05, 0.10],
+  "selection_rule": "largest preregistered step passing every criterion; otherwise 0.01",
+  "selected_step": 0.05,
+  "source_run": {
+    "run_id": 32679833932,
+    "job_id": 97294426626,
+    "head_sha": "e5539f9c4f15029fe9faa15c142007d6151d539f",
+    "note": "All three proxy builds and all three outcome-blind parity comparisons completed successfully. The workflow failed only in the later aggregation script because it looked for PARITY_02/05/01 instead of the already-created PARITY_002/005/010 files. Metrics below are transcribed from the immutable job log; selection follows the preregistered rule without threshold changes."
+  },
+  "criteria": {
+    "exact_zone_match_rate_min": 0.90,
+    "proxy_zone_match_rate_min": 0.90,
+    "median_iou_min": 0.80,
+    "p10_iou_min": 0.55,
+    "median_center_err_vseg_max": 0.08,
+    "p95_center_err_vseg_max": 0.25,
+    "score_spearman_min": 0.98,
+    "score_pearson_min": 0.98,
+    "median_score_abs_err_max": 0.015,
+    "p95_score_abs_err_max": 0.060,
+    "top1_zone_agreement_min": 0.85
+  },
+  "candidates": {
+    "0.02": {
+      "status": "PASS",
+      "exact_zone_match_rate": 0.9253925673172977,
+      "proxy_zone_match_rate": 0.9924285284381583,
+      "median_iou": 0.9850859930228058,
+      "p10_iou": 0.9438276922794533,
+      "median_center_err_vseg": 0.02380952380949803,
+      "p95_center_err_vseg": 0.10144927536188902,
+      "score_pearson": 0.9980923363869207,
+      "score_spearman": 0.9987875576656151,
+      "median_score_abs_err": 0.0014168379605887793,
+      "p95_score_abs_err": 0.024632896638910044,
+      "top1_zone_agreement": 0.8932038834951457
+    },
+    "0.05": {
+      "status": "PASS",
+      "exact_zone_match_rate": 0.9252466523744851,
+      "proxy_zone_match_rate": 0.9871979114272712,
+      "median_iou": 0.9738592996609347,
+      "p10_iou": 0.9063278544696319,
+      "median_center_err_vseg": 0.03824091778198188,
+      "p95_center_err_vseg": 0.17857142857128355,
+      "score_pearson": 0.9973438807055147,
+      "score_spearman": 0.9983640438252878,
+      "median_score_abs_err": 0.0023097487833543366,
+      "p95_score_abs_err": 0.03138030827074767,
+      "top1_zone_agreement": 0.8712502737026494
+    },
+    "0.10": {
+      "status": "FAIL",
+      "exact_zone_match_rate": 0.9185121165523666,
+      "proxy_zone_match_rate": 0.967373186906718,
+      "median_iou": 0.9504935203087522,
+      "p10_iou": 0.8012625728552448,
+      "median_center_err_vseg": 0.07001166861088047,
+      "p95_center_err_vseg": 0.32142857142831044,
+      "score_pearson": 0.9957403787445278,
+      "score_spearman": 0.9975762912368913,
+      "median_score_abs_err": 0.0035328670290449282,
+      "p95_score_abs_err": 0.04178182428139358,
+      "top1_zone_agreement": 0.8239848086473853,
+      "failed_frozen_checks": [
+        "p95_center_err_vseg <= 0.25",
+        "top1_zone_agreement >= 0.85"
+      ]
+    }
+  }
+}
