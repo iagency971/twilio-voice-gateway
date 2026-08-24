@@ -1,0 +1,30 @@
+{
+  "status": "FROZEN_BEFORE_VALIDATION_DATA_READ",
+  "freeze_date": "2026-08-23",
+  "primary_candidate": "P_REVISIT_240",
+  "branch": "agent/xau-wick-zone-pro-dev",
+  "prereg_addendum_commit": "281070c91f9fc8a504cb6d08f84e11ed765e1d0c",
+  "files": {
+    "xau-wick-zone-pro/xau_zone_episode_dev_z4.py": {
+      "git_blob_sha": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+      "role": "frozen causal Z4 feature/zone engine"
+    },
+    "xau-wick-zone-pro/xau_wick_zone_validation_score.py": {
+      "git_blob_sha": "1bdbf2d628fab93b8d777d782c8b9b55405752d4",
+      "role": "frozen validation scorer; no fitting"
+    },
+    "xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json": {
+      "git_blob_sha": "c95fd545ec451968cb421f81ed6add0c508f387d",
+      "role": "frozen DEV scaler/logistic/Platt parameters"
+    },
+    "xau-wick-zone-pro/results/XAUUSD_Z4_DEV_BID_ASK_COMPLETION_v0_1_results.json": {
+      "git_blob_sha": "fb90bb4ac1e05f7cafc2f0fc6abb278bd806513b",
+      "role": "DEV gate evidence only"
+    }
+  },
+  "validation_period_utc": ["2024-08-01", "2025-08-01"],
+  "primary_feed": "BID",
+  "secondary_feed": "ASK diagnostic only",
+  "oos_period_utc": ["2025-08-01", "2026-08-01"],
+  "oos_status": "SEALED"
+}
