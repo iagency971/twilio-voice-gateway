@@ -1,0 +1,40 @@
+{
+  "status": "AUDIT_COMPLETE",
+  "date": "2026-08-24",
+  "repository": "iagency971/twilio-voice-gateway",
+  "branch": "agent/xau-wick-zone-pro-dev",
+  "scientific_z4": {
+    "status": "GO_NARROW_CLAIM",
+    "claim": "Dukascopy XAUUSD M1 Z4 geometry+lineage adds predictive information for REVISIT_240 relative to frozen M0",
+    "reaction": "NO_GO",
+    "forexcom": "TRANSFER_ASSUMPTION_NOT_VALIDATED",
+    "higher_tf": "NOT_VALIDATED",
+    "body_experiments": "NOT_VALIDATED"
+  },
+  "pine": {
+    "last_faithful_existing": {
+      "file": "XAUUSD_Z4_Revisit_Score_QA_v2_0_1_M1_VALIDATED_PROXY.pine",
+      "sha256": "55737ed18eec86642663214860db8be33c9087382d3a52caf2dded7819b3f4fb",
+      "status": "CONDITIONAL_GO_CONFIRMED_HISTORY_REPLAY",
+      "engineering_repairs_required": [
+        "gate live updates on barstate.isconfirmed",
+        "reset/rearm 96-landmark lineage warmup after GRID_LIMIT state loss"
+      ]
+    },
+    "current": {
+      "file": "XAUUSD_Z4_Revisit_Score_QA_v2_0_8_M1_CYAN_LAST3.pine",
+      "sha256": "7f67fdeb03b1b612462a9df05fee4c4feffee0302594b2ee9825b4448e74f333",
+      "status": "NO_GO_VALIDATED_PROXY",
+      "blocking_divergence": "side = center >= close ? -1 : 1",
+      "effects": [
+        "reverses frozen side convention for non-overlap zones",
+        "includes P50 zones overlapping current close",
+        "changes side-dependent wick features",
+        "changes zone population and lineage state",
+        "invalidates raw score and R"
+      ]
+    }
+  },
+  "memory_hypothesis": "PREREG_REQUIRED",
+  "memo": "XAUUSD_Z4_AUDIT_PRO_GLOBAL_POST_VALIDATION_2026-08-24.md"
+}
