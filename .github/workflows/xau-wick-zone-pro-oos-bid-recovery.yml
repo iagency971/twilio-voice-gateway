@@ -1,0 +1,122 @@
+name: XAU Wick Zone Z4 OOS BID Recovery
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-wick-zone-pro-oos-bid-recovery.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  recover-bid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact frozen scientific code
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/xau_wick_zone_oos_score.py)" = "b9702145ec53849482dd0374af52fa506d4491b3"
+          test "$(git hash-object xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json)" = "c95fd545ec451968cb421f81ed6add0c508f387d"
+          test "$(git hash-object xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_RESULTS_v0_1.json)" = "d7a5120e58c9fa39c78d0453c417cd0694522e05"
+      - name: Install fixed research dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+      - name: Download BID causal history only through July 2026
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid
+          for y in 2024 2025 2026; do
+            if [ "$y" = "2024" ] || [ "$y" = "2025" ]; then months="01 02 03 04 05 06 07 08 09 10 11 12"; else months="01 02 03 04 05 06 07"; fi
+            for m in $months; do
+              file="xauusd_bid_m1_${y}_${m}.csv"
+              url="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/${file}"
+              curl --fail --location --retry 5 --retry-delay 2 --connect-timeout 20 "$url" -o "/tmp/xau/bid/${file}"
+            done
+          done
+      - name: BID source QA and prefix hash lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import pandas as pd
+          root=Path('/tmp/xau/bid')
+          val=json.load(open('xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_SOURCE_MANIFEST_v0_1.json'))
+          expected={(x['year'],x['month']):x['sha256'] for x in val['files'] if x['side']=='bid'}
+          out={'status':'OOS_BID_RECOVERY_SOURCE_QA_FROZEN_BOUNDARY','allowed_max_month':'2026-07','files':[],'prefix_hash_checks':{}}
+          for p in sorted(root.glob('*.csv')):
+            parts=p.stem.split('_'); year=parts[-2]; month=parts[-1]
+            if year>'2026' or (year=='2026' and month>'07'): raise SystemExit(f'post-OOS file forbidden: {p}')
+            raw=p.read_bytes(); sha=hashlib.sha256(raw).hexdigest(); d=pd.read_csv(p)
+            if list(d.columns)!=['timestamp','open','high','low','close']: raise SystemExit(f'bad schema {p}')
+            if d.timestamp.duplicated().any() or not d.timestamp.is_monotonic_increasing: raise SystemExit(f'timestamp QA failed {p}')
+            bad=((d.high<d[['open','close','low']].max(axis=1)) | (d.low>d[['open','close','high']].min(axis=1))).sum()
+            if bad: raise SystemExit(f'OHLC QA failed {p}: {bad}')
+            active=int((d.high>d.low).sum()); out['files'].append({'side':'bid','year':year,'month':month,'file':p.name,'sha256':sha,'bytes':len(raw),'rows':int(len(d)),'active_rows':active,'flat_rows':int(len(d)-active)})
+            if (year,month) in expected:
+              ok=(sha==expected[(year,month)]); out['prefix_hash_checks'][f'bid_{year}_{month}']=ok
+              if not ok: raise SystemExit(f'prefix hash mismatch {year}-{month}')
+          if not all(out['prefix_hash_checks'].values()): raise SystemExit('prefix hash gate failed')
+          Path('/tmp/XAUUSD_Z4_OOS_BID_RECOVERY_SOURCE_MANIFEST_v0_1.json').write_text(json.dumps(out,indent=2))
+          PY
+      - name: Rebuild original frozen Z4 BID
+        run: python xau-wick-zone-pro/xau_zone_episode_dev_z4.py --files /tmp/xau/bid/*.csv --output /tmp/XAUUSD_Z4_OOS_BID_RECOVERY.pkl --tag BID_Z4_OOS_RECOVERY_JAN2024_JUL2026
+      - name: Re-score frozen BID only — no fit, no parameter change
+        run: |
+          python xau-wick-zone-pro/xau_wick_zone_oos_score.py \
+            --bid-pkl /tmp/XAUUSD_Z4_OOS_BID_RECOVERY.pkl \
+            --frozen-json xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json \
+            --source-manifest /tmp/XAUUSD_Z4_OOS_BID_RECOVERY_SOURCE_MANIFEST_v0_1.json \
+            --validation-json xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_RESULTS_v0_1.json \
+            --output /tmp/XAUUSD_Z4_OOS_BID_RECOVERY_RESULTS_v0_1.json
+      - name: Exact match to original Actions stdout primary gate
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, math
+          r=json.load(open('/tmp/XAUUSD_Z4_OOS_BID_RECOVERY_RESULTS_v0_1.json'))
+          b=r['feeds']['BID']; raw=b['raw_primary']
+          expected={'n_rows':132858,'landmarks':23506,'delta_brier':0.012445462367076277,'delta_logloss':0.04277462022515116,'H1':0.009176417152060384,'H2':0.0157083941007313,'ci0':0.010084629331906146,'ci1':0.01469348036914224}
+          assert raw['n_rows']==expected['n_rows'] and raw['landmarks']==expected['landmarks']
+          assert math.isclose(raw['delta_brier'],expected['delta_brier'],rel_tol=0,abs_tol=1e-15)
+          assert math.isclose(raw['delta_logloss'],expected['delta_logloss'],rel_tol=0,abs_tol=1e-15)
+          assert math.isclose(b['halves']['H1_2025-08_to_2026-01']['delta_brier'],expected['H1'],rel_tol=0,abs_tol=1e-15)
+          assert math.isclose(b['halves']['H2_2026-02_to_2026-07']['delta_brier'],expected['H2'],rel_tol=0,abs_tol=1e-15)
+          assert math.isclose(b['weekly']['bootstrap_95'][0],expected['ci0'],rel_tol=0,abs_tol=1e-15)
+          assert math.isclose(b['weekly']['bootstrap_95'][1],expected['ci1'],rel_tol=0,abs_tol=1e-15)
+          assert r['primary_gate_status']=='PASS'
+          print('BIT-FOR-BIT PRIMARY METRIC RECOVERY MATCH: PASS')
+          PY
+      - name: Publish recovery through GitHub Contents API (race-safe)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-wick-zone-pro-dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64,json,os,urllib.error,urllib.request
+          files={
+            'xau-wick-zone-pro/oos/XAUUSD_Z4_OOS_BID_RECOVERY_SOURCE_MANIFEST_v0_1.json':'/tmp/XAUUSD_Z4_OOS_BID_RECOVERY_SOURCE_MANIFEST_v0_1.json',
+            'xau-wick-zone-pro/oos/XAUUSD_Z4_OOS_BID_RECOVERY_summary.json':'/tmp/XAUUSD_Z4_OOS_BID_RECOVERY_summary.json',
+            'xau-wick-zone-pro/oos/XAUUSD_Z4_OOS_BID_RECOVERY_RESULTS_v0_1.json':'/tmp/XAUUSD_Z4_OOS_BID_RECOVERY_RESULTS_v0_1.json'
+          }
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          for path,src in files.items():
+              url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+              body={'message':f'publish deterministic OOS BID recovery {path.split("/")[-1]} [skip ci]','content':base64.b64encode(open(src,'rb').read()).decode(),'branch':os.environ['BRANCH']}
+              req=urllib.request.Request(url,data=json.dumps(body).encode(),headers={**h,'Content-Type':'application/json'},method='PUT')
+              with urllib.request.urlopen(req,timeout=60) as rr: print(path,rr.status)
+          PY
