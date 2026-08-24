@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "scope": "OUTCOME_BLIND_PINE_PEAK_PROMINENCE_P50_PARITY_DEV_BID_STEP_005",
+  "future_outcomes_used": false,
+  "reference": "3-box step0.05 + SciPy peaks/prominence/P50",
+  "candidate": "3-box step0.05 + explicit Pine-feasible peak/prominence/P50 formulas",
+  "metrics": {
+    "exact_rows": 83502,
+    "proxy_rows": 83181,
+    "matched_pairs": 83083,
+    "exact_zone_match_rate": 0.9949821561160211,
+    "proxy_zone_match_rate": 0.9988218463351005,
+    "landmarks_exact": 13717,
+    "landmarks_proxy": 13717,
+    "same_zone_count_landmark_rate": 0.9632572719982504,
+    "mean_abs_zone_count_difference": 0.03769045709703288,
+    "iou_quantiles": {
+      "0.1": 1.0,
+      "0.25": 1.0,
+      "0.5": 1.0,
+      "0.75": 1.0,
+      "0.9": 1.0,
+      "0.95": 1.0
+    },
+    "center_err_vseg_quantiles": {
+      "0.5": 0.0,
+      "0.9": 0.0,
+      "0.95": 0.0,
+      "0.99": 0.0
+    },
+    "lo_err_vseg_quantiles": {
+      "0.5": 0.0,
+      "0.9": 0.0,
+      "0.95": 0.0
+    },
+    "hi_err_vseg_quantiles": {
+      "0.5": 0.0,
+      "0.9": 0.0,
+      "0.95": 0.0
+    },
+    "score_pearson": 0.9999897311828216,
+    "score_spearman": 0.9999916388680438,
+    "score_abs_err_quantiles": {
+      "0.5": 0.0,
+      "0.9": 0.0,
+      "0.95": 0.0,
+      "0.99": 0.0
+    },
+    "within_landmark_spearman_median": 1.0,
+    "within_landmark_spearman_mean": 0.9999417946343259,
+    "within_landmark_rank_landmarks": 12442,
+    "top1_zone_agreement": 0.9983232485237297,
+    "top1_eligible_landmarks": 13717
+  },
+  "checks": {
+    "reference_match_ge_097": true,
+    "pine_match_ge_097": true,
+    "median_iou_ge_098": true,
+    "p10_iou_ge_090": true,
+    "p95_center_err_le_010_vseg": true,
+    "score_pearson_ge_0995": true,
+    "score_spearman_ge_0995": true,
+    "median_score_abs_err_le_0005": true,
+    "p95_score_abs_err_le_0030": true,
+    "top1_agreement_ge_095": true
+  }
+}
