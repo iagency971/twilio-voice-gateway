@@ -1,0 +1,107 @@
+name: XAU Z4 Pine Peak Algorithm Parity
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-wick-zone-peak-algo.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+      - name: Verify frozen reference, grid selection and prereg
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json)" = "c95fd545ec451968cb421f81ed6add0c508f387d"
+          test -s xau-wick-zone-pro/XAUUSD_Z4_PINE_PEAK_ALGO_PREREG_v0_1.md
+          test -s xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_GRID_STEP_RESULT_ATTESTATION_v0_1.json
+          python - <<'PY'
+          import json
+          r=json.load(open('xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_GRID_STEP_RESULT_ATTESTATION_v0_1.json'))
+          assert r['selected_step']==0.05 and r['status']=='PASS'
+          PY
+      - name: Download hash-locked DEV BID Jan-Jul 2024
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid
+          declare -A H
+          H[01]=7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d
+          H[02]=45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f
+          H[03]=28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14
+          H[04]=ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9
+          H[05]=18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6
+          H[06]=f7cad6452e9666b37f6f7830bb69a61439095919bb1609daa80839fdb3a8fd39
+          H[07]=a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52
+          for m in 01 02 03 04 05 06 07; do
+            f="xauusd_bid_m1_2024_${m}.csv"
+            curl --fail --location --retry 5 --retry-delay 2 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/${f}" -o "/tmp/xau/bid/${f}"
+            test "$(sha256sum /tmp/xau/bid/${f}|awk '{print $1}')" = "${H[$m]}"
+          done
+      - name: Build selected 0.05 3-box SciPy-peak reference
+        run: python xau-wick-zone-pro/xau_wick_zone_pine_grid_proxy.py --step 0.05 --files /tmp/xau/bid/*.csv --output /tmp/PEAK_REF.pkl --tag PEAK_REF_STEP005
+      - name: Build intended Pine explicit-peak candidate
+        run: python xau-wick-zone-pro/xau_wick_zone_pine_full_proxy.py --step 0.05 --files /tmp/xau/bid/*.csv --output /tmp/PEAK_PINE.pkl --tag PEAK_PINE_STEP005
+      - name: Compare geometry and frozen score outcome-blind
+        run: |
+          python xau-wick-zone-pro/xau_wick_zone_parity_compare.py \
+            --exact-pkl /tmp/PEAK_REF.pkl \
+            --proxy-pkl /tmp/PEAK_PINE.pkl \
+            --frozen-json xau-wick-zone-pro/results/XAUUSD_Z4_FROZEN_MODEL_PARAMS_v0_1.json \
+            --output /tmp/peak_base.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          b=json.load(open('/tmp/peak_base.json'));m=b['metrics']
+          ck={
+            'reference_match_ge_097':m['exact_zone_match_rate']>=.97,
+            'pine_match_ge_097':m['proxy_zone_match_rate']>=.97,
+            'median_iou_ge_098':m['iou_quantiles']['0.5']>=.98,
+            'p10_iou_ge_090':m['iou_quantiles']['0.1']>=.90,
+            'p95_center_err_le_010_vseg':m['center_err_vseg_quantiles']['0.95']<=.10,
+            'score_pearson_ge_0995':m['score_pearson']>=.995,
+            'score_spearman_ge_0995':m['score_spearman']>=.995,
+            'median_score_abs_err_le_0005':m['score_abs_err_quantiles']['0.5']<=.005,
+            'p95_score_abs_err_le_0030':m['score_abs_err_quantiles']['0.95']<=.030,
+            'top1_agreement_ge_095':m['top1_zone_agreement']>=.95,
+          }
+          out={'status':'PASS' if all(ck.values()) else 'FAIL','scope':'OUTCOME_BLIND_PINE_PEAK_PROMINENCE_P50_PARITY_DEV_BID_STEP_005','future_outcomes_used':False,'reference':'3-box step0.05 + SciPy peaks/prominence/P50','candidate':'3-box step0.05 + explicit Pine-feasible peak/prominence/P50 formulas','metrics':m,'checks':ck}
+          Path('/tmp/XAUUSD_Z4_PINE_PEAK_ALGO_RESULTS_v0_1.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+      - name: Publish result retry-safe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: agent/xau-wick-zone-pro-dev
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64,json,os,time,urllib.error,urllib.parse,urllib.request
+          path='xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_PEAK_ALGO_RESULTS_v0_1.json';src='/tmp/XAUUSD_Z4_PINE_PEAK_ALGO_RESULTS_v0_1.json';h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'};url=f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          for a in range(8):
+            body={'message':'publish outcome-blind Pine peak algorithm parity [skip ci]','content':base64.b64encode(open(src,'rb').read()).decode(),'branch':os.environ['BRANCH']}
+            try:
+              with urllib.request.urlopen(urllib.request.Request(url+'?ref='+urllib.parse.quote(os.environ['BRANCH'],safe=''),headers=h),timeout=30) as r:body['sha']=json.load(r)['sha']
+            except urllib.error.HTTPError as e:
+              if e.code!=404:raise
+            try:
+              with urllib.request.urlopen(urllib.request.Request(url,data=json.dumps(body).encode(),headers=h,method='PUT'),timeout=60) as r:print(r.status)
+              break
+            except urllib.error.HTTPError as e:
+              if e.code not in (409,422) or a==7:raise
+              time.sleep(2+a)
+          PY
