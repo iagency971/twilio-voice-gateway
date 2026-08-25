@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "file": "XAUUSD_Z4_Revisit_Score_QA_v2_2_0_M1_C5_QA_PROXY.pine",
+  "sha256": "4f33ea438e7c008e8276129b7be26a51bdf06fd1668605c3f93321742aa2660e",
+  "checks": {
+    "pine_v6": true,
+    "title_v2_2_0": true,
+    "m1_only": true,
+    "lookback_1440": true,
+    "step_005": true,
+    "warmup_96": true,
+    "cadence_5m": true,
+    "confirmed_active": true,
+    "landmark_from_confirmed": true,
+    "grid_rearm": true,
+    "side_exact": true,
+    "overlap_excluded": true,
+    "bad_center_side_absent": true,
+    "qa_proxy_present": true,
+    "validated_proxy_runtime_absent": true,
+    "cyan_last3": true,
+    "peak_width_2": true,
+    "no_left_box_border": true,
+    "MODEL_MEAN_len": 34,
+    "MODEL_SCALE_len": 34,
+    "MODEL_COEF_len": 34,
+    "R_THRESH_len": 101,
+    "delimiter_balance": true
+  },
+  "note": "Static/source QA only. TradingView Pine compiler/runtime/replay remains external and pending before VALIDATED_PROXY labeling."
+}
