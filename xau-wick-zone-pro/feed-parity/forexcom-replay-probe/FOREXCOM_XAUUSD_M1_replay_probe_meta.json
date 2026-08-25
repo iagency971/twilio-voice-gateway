@@ -1,0 +1,35 @@
+{
+  "status": "NO_HISTORY",
+  "symbol_requested": "FOREXCOM:XAUUSD",
+  "authentication_mode": "anonymous_unauthorized_user_token",
+  "after_requested_utc": "2025-08-01T00:00:00Z",
+  "third_party_client": {
+    "repo": "parbhatc/TradingviewAPI",
+    "commit": "6d900b08072856177b579ba0c0f21b8162db6d43"
+  },
+  "symbol_status": {
+    "symbol": "FOREXCOM:XAUUSD",
+    "proName": "FOREXCOM:XAUUSD",
+    "description": "Gold / U.S. Dollar",
+    "exchange": "FOREXCOM",
+    "sourceId": "FOREXCOM",
+    "type": "commodity",
+    "currency": "USD",
+    "timezone": "America/New_York",
+    "session": "1800-1700:23456",
+    "delaySeconds": 0,
+    "realtime": true,
+    "dataStatus": "realtime"
+  },
+  "returned_status": "no_data",
+  "history_exhausted": true,
+  "all_available": true,
+  "bars": 0,
+  "first_timestamp_utc": null,
+  "last_timestamp_utc": null,
+  "progress": [],
+  "error": null,
+  "acquired_at_utc": "2026-08-25T12:19:00.368Z",
+  "transport": "TradingView prodata replay websocket via audited third-party client",
+  "caveat": "Unofficial TradingView web transport; exact FOREXCOM identity must be checked against the separately resolved chart-feed metadata before scientific use."
+}
