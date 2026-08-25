@@ -1,0 +1,101 @@
+name: XAU Z4 FOREXCOM M1 Range Probe
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-forexcom-m1-range-probe.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  range-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check websocket-client==1.8.0
+      - name: Probe exact older date ranges
+        run: |
+          mkdir -p xau-wick-zone-pro/feed-parity/forexcom-range-probe
+          python - <<'PY'
+          import gzip,json,random,string,time,websocket
+          from datetime import datetime,timezone
+          from pathlib import Path
+
+          SYMBOL='FOREXCOM:XAUUSD'
+          RANGES=[
+            ('2026-07-01T00:00:00Z','2026-07-04T00:00:00Z','jul_2026'),
+            ('2026-01-05T00:00:00Z','2026-01-08T00:00:00Z','jan_2026'),
+            ('2025-08-04T00:00:00Z','2025-08-07T00:00:00Z','aug_2025'),
+          ]
+          outdir=Path('xau-wick-zone-pro/feed-parity/forexcom-range-probe')
+          def epoch(s): return int(datetime.fromisoformat(s.replace('Z','+00:00')).timestamp())
+          def rid(p): return p+'_'+''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+          def pack(m,p):
+              s=json.dumps({'m':m,'p':p},separators=(',',':'));return f'~m~{len(s)}~m~'+s
+          def one(start,end,tag):
+              ws=websocket.create_connection('wss://data.tradingview.com/socket.io/websocket?from=chart%2F',timeout=25,origin='https://www.tradingview.com',header=['User-Agent: Mozilla/5.0'])
+              cs=rid('cs');qs=rid('qs'); rows={}; resolved=None; errors=[]
+              def send(m,p):ws.send(pack(m,p))
+              send('set_auth_token',['unauthorized_user_token']);send('chart_create_session',[cs,'']);send('quote_create_session',[qs])
+              send('quote_add_symbols',[qs,SYMBOL,{'flags':['force_permission']}])
+              send('resolve_symbol',[cs,'symbol_1','={"symbol":"FOREXCOM:XAUUSD","adjustment":"splits","session":"regular"}'])
+              r=f'r,{epoch(start)}:{epoch(end)}'
+              send('create_series',[cs,'s1','s1','symbol_1','1',0,r])
+              t0=time.time();complete=False
+              while time.time()-t0<45:
+                  try:msg=ws.recv()
+                  except Exception as e:errors.append(repr(e));break
+                  if isinstance(msg,str) and msg.startswith('~m~') and '~h~' in msg and msg.count('~m~')==2:
+                      try:ws.send(msg)
+                      except:pass
+                  if not isinstance(msg,str):continue
+                  for part in msg.split('~m~'):
+                      if not part or part.isdigit() or part.startswith('~h~'):continue
+                      try:o=json.loads(part)
+                      except:continue
+                      m=o.get('m');p=o.get('p',[])
+                      if m=='symbol_resolved' and len(p)>=3:resolved=p[2]
+                      if m in ('series_error','symbol_error'):errors.append(o)
+                      if m=='timescale_update' and len(p)>=2 and isinstance(p[1],dict):
+                          s=p[1].get('s1')
+                          if isinstance(s,dict):
+                              for rec in s.get('s',[]) or []:
+                                  v=rec.get('v') if isinstance(rec,dict) else None
+                                  if v and len(v)>=5 and v[0] is not None:rows[int(v[0])]=[int(v[0]),v[1],v[2],v[3],v[4],v[5] if len(v)>5 else None]
+                      if m=='series_completed' and len(p)>=2 and p[0]==cs and p[1]=='s1':complete=True;break
+                  if complete:break
+              ws.close();data=[rows[k] for k in sorted(rows)]
+              csv=outdir/f'FOREXCOM_XAUUSD_M1_range_{tag}.csv.gz'
+              with gzip.open(csv,'wt') as f:
+                  f.write('timestamp_utc,open,high,low,close,volume\n')
+                  for ts,o,h,l,c,v in data:
+                      dt=datetime.fromtimestamp(ts,timezone.utc).isoformat().replace('+00:00','Z');f.write(f'{dt},{o},{h},{l},{c},{"" if v is None else v}\n')
+              return {'tag':tag,'requested':[start,end],'range_arg':r,'bars':len(data),'series_completed':complete,'errors':errors,
+                      'first':datetime.fromtimestamp(data[0][0],timezone.utc).isoformat().replace('+00:00','Z') if data else None,
+                      'last':datetime.fromtimestamp(data[-1][0],timezone.utc).isoformat().replace('+00:00','Z') if data else None,
+                      'resolved_full_name':resolved.get('full_name') if isinstance(resolved,dict) else None,
+                      'bar_source':resolved.get('bar_source') if isinstance(resolved,dict) else None}
+          res=[one(*x) for x in RANGES]
+          verdict={'status':'PASS' if all(x['bars']>1000 and x['resolved_full_name']==SYMBOL for x in res) else 'FAIL','symbol':SYMBOL,'results':res,'acquired_at_utc':datetime.now(timezone.utc).isoformat().replace('+00:00','Z')}
+          (outdir/'FOREXCOM_XAUUSD_M1_range_probe_meta.json').write_text(json.dumps(verdict,indent=2))
+          print(json.dumps(verdict,indent=2))
+          if verdict['status']!='PASS':raise SystemExit(2)
+          PY
+      - name: Publish range-probe evidence
+        if: always()
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          git add xau-wick-zone-pro/feed-parity/forexcom-range-probe/
+          git commit -m 'publish FOREXCOM arbitrary M1 range probe [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
