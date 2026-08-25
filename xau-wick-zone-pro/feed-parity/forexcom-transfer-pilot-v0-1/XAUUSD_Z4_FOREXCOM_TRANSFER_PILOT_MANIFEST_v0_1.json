@@ -1,0 +1,19 @@
+{
+  "status": "FOREXCOM_TRANSFER_PILOT_PROVENANCE_RECORDED",
+  "future_outcomes_used": false,
+  "result_status": "PILOT_PASS_TRANSFER_VIABLE",
+  "sha256": {
+    "forex_depth": "d9505e23ac4c82e11a14f192629bbc24d6f38ddadbfc82f3ef2d60e67dc7d1f4",
+    "duka_overlap": "0203d452c893b304381257d564506894a1584ad1acdd00b4b81c5680c60610b8",
+    "geometry_engine": "3d3dc4e6948be0f255d714b5c1c34ee21df0ffefe58c91770569ac54b40f034f",
+    "comparator": "efb81f0e52f5977eff76bd895620986b1b1cb2cba5029fc8d89a93a3e8379a26",
+    "frozen_model": "33deaa05327305688a7002ac3544fae8a3ac0a02687e00815c6fce6d23f77789",
+    "r_map": "50be1210fcbf4debec75fd7d0abf733ecd977655917d15e3735aeddb69dbed6a",
+    "result": "de46e8b1d18b399d80a06a870f4e337f63528ccd79570679fca1fbc5ac5e86f4"
+  },
+  "source_identity": {
+    "forex": "TradingView chart websocket FOREXCOM:XAUUSD bar_source=mid",
+    "dukascopy": "kevingtlin/dukascopy_XAUUSD_1m_Data BID+ASK August 2026 snapshot"
+  },
+  "note": "Dukascopy overlap bytes are archived with this result because the current-month upstream file may later grow."
+}

@@ -1,0 +1,25 @@
+{
+  "tag": "DUKA_MID_C5_FEED",
+  "rows": 6325,
+  "landmarks": 839,
+  "eligible_landmarks": 839,
+  "missing_side_zone_landmarks": 0,
+  "lineages": 170,
+  "zone_count_quantiles": {
+    "0": 2.0,
+    "0.5": 7.0,
+    "0.9": 15.0,
+    "0.95": 16.0,
+    "0.99": 17.0,
+    "1": 17.0
+  },
+  "age_lm_quantiles": {
+    "0.5": 76.0,
+    "0.75": 154.0,
+    "0.9": 216.0,
+    "0.95": 242.0,
+    "0.99": 272.0
+  },
+  "revisit_rate": null,
+  "runtime_sec": 13.923789739608765
+}

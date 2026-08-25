@@ -1,0 +1,282 @@
+{
+  "status": "PILOT_PASS_TRANSFER_VIABLE",
+  "scope": "OUTCOME_BLIND_FOREXCOM_FEED_TRANSFER_PILOT",
+  "future_outcomes_used": false,
+  "no_model_refit": true,
+  "no_r_remap": true,
+  "forex_window_utc": [
+    "2026-08-16 22:01:00+00:00",
+    "2026-08-25 11:53:00+00:00"
+  ],
+  "mature_times_utc": {
+    "duka_mid": "2026-08-18 07:00:00+00:00",
+    "duka_bid": "2026-08-18 07:00:00+00:00",
+    "forex": "2026-08-18 06:55:00+00:00"
+  },
+  "raw_primary_mid_vs_forex": {
+    "window_utc": [
+      "2026-08-16 22:01:00+00:00",
+      "2026-08-20 23:58:00+00:00"
+    ],
+    "reference_active_rows": 5634,
+    "target_active_rows": 5638,
+    "common_active_rows": 5634,
+    "target_timestamp_coverage": 0.9992905285562256,
+    "consecutive_return_pairs": 5625,
+    "return_pearson": 0.9953205880536954,
+    "return_spearman": 0.9921487435200188,
+    "bar_range_pearson": 0.9927203030695642,
+    "bar_range_spearman": 0.9828423370689082,
+    "price_gap": {
+      "open": {
+        "signed_median": 0.010000000000218279,
+        "abs_quantiles": {
+          "0.5": 0.08999999999923602,
+          "0.9": 0.24499999999898137,
+          "0.95": 0.3100000000004002,
+          "0.99": 0.5233499999996005
+        }
+      },
+      "high": {
+        "signed_median": -0.030000000000654836,
+        "abs_quantiles": {
+          "0.5": 0.06499999999959982,
+          "0.9": 0.18999999999959982,
+          "0.95": 0.23999999999978172,
+          "0.99": 0.4099999999998545
+        }
+      },
+      "low": {
+        "signed_median": 0.05999999999949068,
+        "abs_quantiles": {
+          "0.5": 0.0750000000007276,
+          "0.9": 0.22000000000025466,
+          "0.95": 0.28467499999946966,
+          "0.99": 0.46499999999984537
+        }
+      },
+      "close": {
+        "signed_median": 0.010000000000218279,
+        "abs_quantiles": {
+          "0.5": 0.05999999999949068,
+          "0.9": 0.1750000000001819,
+          "0.95": 0.22999999999956344,
+          "0.99": 0.375
+        }
+      }
+    }
+  },
+  "raw_primary_checks": {
+    "target_timestamp_coverage_ge_097": true,
+    "return_pearson_ge_095": true,
+    "return_spearman_ge_095": true
+  },
+  "raw_control_bid_vs_forex": {
+    "window_utc": [
+      "2026-08-16 22:01:00+00:00",
+      "2026-08-20 23:58:00+00:00"
+    ],
+    "reference_active_rows": 5634,
+    "target_active_rows": 5638,
+    "common_active_rows": 5634,
+    "target_timestamp_coverage": 0.9992905285562256,
+    "consecutive_return_pairs": 5625,
+    "return_pearson": 0.9936654515500636,
+    "return_spearman": 0.9912108788104496,
+    "bar_range_pearson": 0.9908847461140178,
+    "bar_range_spearman": 0.9814470996257649,
+    "price_gap": {
+      "open": {
+        "signed_median": 0.3099999999994907,
+        "abs_quantiles": {
+          "0.5": 0.30999999999994543,
+          "0.9": 0.5600000000004002,
+          "0.95": 0.6549999999997453,
+          "0.99": 1.165099999999968
+        }
+      },
+      "high": {
+        "signed_median": 0.2650000000003274,
+        "abs_quantiles": {
+          "0.5": 0.2650000000003274,
+          "0.9": 0.4400000000005093,
+          "0.95": 0.5249999999996362,
+          "0.99": 1.0283500000000099
+        }
+      },
+      "low": {
+        "signed_median": 0.3600000000005821,
+        "abs_quantiles": {
+          "0.5": 0.3600000000005821,
+          "0.9": 0.5799999999999272,
+          "0.95": 0.6700000000000728,
+          "0.99": 1.3250500000001204
+        }
+      },
+      "close": {
+        "signed_median": 0.3149999999995998,
+        "abs_quantiles": {
+          "0.5": 0.3149999999995998,
+          "0.9": 0.5100000000002183,
+          "0.95": 0.5950000000002547,
+          "0.99": 1.2117000000000742
+        }
+      }
+    }
+  },
+  "primary_mid_vs_forex": {
+    "status": "PASS",
+    "label": "DUKASCOPY_SYNTH_MID__FOREXCOM_MID",
+    "metrics": {
+      "reference_rows": 6087,
+      "target_rows": 6171,
+      "matched_pairs": 5789,
+      "reference_zone_match_rate": 0.9510432068342369,
+      "target_zone_match_rate": 0.9380975530708151,
+      "relative_iou_quantiles": {
+        "0.1": 0.7587478278911951,
+        "0.25": 0.8846153093309634,
+        "0.5": 0.9221794613861578,
+        "0.75": 0.9605016448928009,
+        "0.9": 0.9769340995903988,
+        "0.95": 0.9850214900983562
+      },
+      "absolute_iou_quantiles": {
+        "0.1": 0.8096018136840112,
+        "0.5": 0.9346820159982882,
+        "0.9": 0.9802030629129529,
+        "0.95": 0.9905396471062539
+      },
+      "relative_center_err_vseg_quantiles": {
+        "0.5": 0.06779661016943056,
+        "0.9": 0.1884816753925131,
+        "0.95": 0.24650821596188552,
+        "0.99": 2.3470785484609125
+      },
+      "absolute_center_err_vseg_quantiles": {
+        "0.5": 0.06338028169024007,
+        "0.9": 0.14634146341471144,
+        "0.95": 0.17926766970945401,
+        "0.99": 2.3995223478516032
+      },
+      "score_pearson": 0.9960537930046519,
+      "score_spearman": 0.9978262487205733,
+      "score_abs_err_quantiles": {
+        "0.5": 0.004310686751473669,
+        "0.9": 0.030350483461631838,
+        "0.95": 0.040991891476045116,
+        "0.99": 0.06509572171342436
+      },
+      "r_pearson": 0.99757121717042,
+      "r_spearman": 0.9978262487205733,
+      "r_float_abs_err_quantiles": {
+        "0.5": 0.9809844987810905,
+        "0.9": 3.4456894197422088,
+        "0.95": 4.476226476735489,
+        "0.99": 6.826914352700877
+      },
+      "share_display_r_within_5": 0.9754707203316635,
+      "share_display_r_within_10": 0.9991362929694247,
+      "share_display_r_within_20": 0.9996545171877699,
+      "top1_zone_agreement": 0.8481182795698925,
+      "top1_landmarks": 744,
+      "eval_start_utc": "2026-08-18 07:00:00+00:00",
+      "common_mature_c5_times": 744
+    },
+    "checks": {
+      "reference_zone_match_ge_080": true,
+      "target_zone_match_ge_080": true,
+      "median_relative_iou_ge_070": true,
+      "p10_relative_iou_ge_030": true,
+      "median_relative_center_err_le_025_vseg": true,
+      "p95_relative_center_err_le_075_vseg": true,
+      "score_spearman_ge_090": true,
+      "median_score_abs_err_le_007": true,
+      "p95_score_abs_err_le_020": true,
+      "top1_ge_070": true,
+      "r_spearman_ge_090": true,
+      "share_display_within10_ge_080": true,
+      "share_display_within20_ge_095": true
+    }
+  },
+  "control_bid_vs_forex": {
+    "status": "PASS",
+    "label": "DUKASCOPY_BID__FOREXCOM_MID",
+    "metrics": {
+      "reference_rows": 6125,
+      "target_rows": 6171,
+      "matched_pairs": 5780,
+      "reference_zone_match_rate": 0.9436734693877551,
+      "target_zone_match_rate": 0.9366391184573003,
+      "relative_iou_quantiles": {
+        "0.1": 0.7791091130357651,
+        "0.25": 0.8673017720102139,
+        "0.5": 0.9184220989820675,
+        "0.75": 0.9578596466896703,
+        "0.9": 0.9763168234477131,
+        "0.95": 0.985327220862875
+      },
+      "absolute_iou_quantiles": {
+        "0.1": 0.6632512454835717,
+        "0.5": 0.8381162319923259,
+        "0.9": 0.9339792574750303,
+        "0.95": 0.945842878697664
+      },
+      "relative_center_err_vseg_quantiles": {
+        "0.5": 0.08562589873601237,
+        "0.9": 0.2283758383526965,
+        "0.95": 0.2888451741224846,
+        "0.99": 0.8605609362389594
+      },
+      "absolute_center_err_vseg_quantiles": {
+        "0.5": 0.22631578947388073,
+        "0.9": 0.3370786516851349,
+        "0.95": 0.40707482993200733,
+        "0.99": 0.6635172413791225
+      },
+      "score_pearson": 0.9958678405257817,
+      "score_spearman": 0.997930532337569,
+      "score_abs_err_quantiles": {
+        "0.5": 0.004202271962898914,
+        "0.9": 0.03064660660653964,
+        "0.95": 0.04492455346551265,
+        "0.99": 0.06300528401885296
+      },
+      "r_pearson": 0.9975556200061366,
+      "r_spearman": 0.997930532337569,
+      "r_float_abs_err_quantiles": {
+        "0.5": 0.9513330398089543,
+        "0.9": 3.5794301568713567,
+        "0.95": 4.6189405354694415,
+        "0.99": 6.671337010258431
+      },
+      "share_display_r_within_5": 0.9742214532871972,
+      "share_display_r_within_10": 0.9991349480968859,
+      "share_display_r_within_20": 0.9996539792387543,
+      "top1_zone_agreement": 0.8454301075268817,
+      "top1_landmarks": 744,
+      "eval_start_utc": "2026-08-18 07:00:00+00:00",
+      "common_mature_c5_times": 744
+    },
+    "checks": {
+      "reference_zone_match_ge_080": true,
+      "target_zone_match_ge_080": true,
+      "median_relative_iou_ge_070": true,
+      "p10_relative_iou_ge_030": true,
+      "median_relative_center_err_le_025_vseg": true,
+      "p95_relative_center_err_le_075_vseg": true,
+      "score_spearman_ge_090": true,
+      "median_score_abs_err_le_007": true,
+      "p95_score_abs_err_le_020": true,
+      "top1_ge_070": true,
+      "r_spearman_ge_090": true,
+      "share_display_within10_ge_080": true,
+      "share_display_within20_ge_095": true
+    }
+  },
+  "limitations": [
+    "Pilot window limited by unauthenticated TradingView chart-history depth and current Dukascopy monthly snapshot depth.",
+    "Dukascopy synthetic MID OHLC is barwise (BID OHLC + ASK OHLC)/2, not tick-synchronous reconstructed midpoint OHLC.",
+    "Pilot PASS cannot promote FOREXCOM to validated scientific feed without deeper temporal evidence."
+  ]
+}
