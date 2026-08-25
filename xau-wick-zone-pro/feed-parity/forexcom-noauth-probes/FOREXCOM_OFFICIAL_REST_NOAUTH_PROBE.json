@@ -1,0 +1,20 @@
+[
+  {
+    "url": "https://ciapi.cityindex.com/TradingAPI/market/search?SearchByMarketName=TRUE&Query=Gold&MaxResults=5&includeOptions=False",
+    "status_code": 401,
+    "content_type": "application/problem+json; charset=utf-8",
+    "body_prefix": "{\"status\":401,\"detail\":\"Authentication Failed\"}"
+  },
+  {
+    "url": "https://ciapi.cityindex.com/TradingAPI/market/search?SearchByMarketName=TRUE&Query=XAU%2FUSD&MaxResults=5&includeOptions=False",
+    "status_code": 401,
+    "content_type": "application/problem+json; charset=utf-8",
+    "body_prefix": "{\"status\":401,\"detail\":\"Authentication Failed\"}"
+  },
+  {
+    "url": "https://ciapi.cityindex.com/TradingAPI/market/401166448/barhistory?interval=MINUTE&span=1&PriceBars=10&PriceType=MID",
+    "status_code": 401,
+    "content_type": "application/problem+json; charset=utf-8",
+    "body_prefix": "{\"status\":401,\"detail\":\"Authentication Failed\"}"
+  }
+]

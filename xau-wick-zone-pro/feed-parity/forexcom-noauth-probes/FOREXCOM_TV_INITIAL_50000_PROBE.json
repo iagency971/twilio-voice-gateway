@@ -1,0 +1,10 @@
+{
+  "requested": 50000,
+  "bars": 9139,
+  "series_completed": true,
+  "events": [],
+  "resolved_full_name": "FOREXCOM:XAUUSD",
+  "bar_source": "mid",
+  "first": "2026-08-16T22:01:00Z",
+  "last": "2026-08-25T12:20:00Z"
+}
