@@ -1,0 +1,100 @@
+name: XAU Z4 C5 Geometry Shifted Grid Parity
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-c5-geometry-shifted-grid-parity.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Acquire frozen Aug 2024 BID
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau
+          f=xauusd_bid_m1_2024_08.csv
+          curl --fail --location --retry 5 --retry-delay 2 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/$f" -o "/tmp/xau/$f"
+          echo '69a43d059dbdb9bce3bed1be13db378437ed4131cd109d04690fadf2aa17a476  /tmp/xau/xauusd_bid_m1_2024_08.csv' | sha256sum -c -
+      - name: Build original and shifted outcome-blind C5 engines
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          common=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),
+            ('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+            ("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")]
+          for o,n in common:
+              assert src.count(o)==1,(o,src.count(o));src=src.replace(o,n)
+          assert 'out=outcome_zone(' not in src and '.revisited' not in src
+          Path('/tmp/orig.py').write_text(src)
+          old='base=0.0; maxp=math.ceil(H.max()/STEP)*STEP; nlevels=int(round(maxp/STEP))+16'
+          new='base=(math.floor(L.min()/STEP)-100)*STEP; maxp=math.ceil(H.max()/STEP)*STEP; nlevels=int(round((maxp-base)/STEP))+16'
+          assert src.count(old)==1,src.count(old)
+          shifted=src.replace(old,new)
+          Path('/tmp/shifted.py').write_text(shifted)
+          PY
+          python /tmp/orig.py --files /tmp/xau/*.csv --output /tmp/orig.pkl --tag PARITY_ORIG
+          python /tmp/shifted.py --files /tmp/xau/*.csv --output /tmp/shifted.pkl --tag PARITY_SHIFT
+      - name: Exact semantic parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import pandas as pd, numpy as np, json, hashlib
+          from pathlib import Path
+          a=pd.read_pickle('/tmp/orig.pkl').reset_index(drop=True)
+          b=pd.read_pickle('/tmp/shifted.pkl').reset_index(drop=True)
+          assert list(a.columns)==list(b.columns),(list(a.columns),list(b.columns))
+          assert len(a)==len(b),(len(a),len(b))
+          # Row order should be identical; check nonnumeric exactly and numeric tightly.
+          worst={};bad=[]
+          for c in a.columns:
+              if pd.api.types.is_numeric_dtype(a[c]) and pd.api.types.is_numeric_dtype(b[c]):
+                  x=a[c].to_numpy();y=b[c].to_numpy();mask=np.isfinite(x)&np.isfinite(y)
+                  d=float(np.max(np.abs(x[mask]-y[mask]))) if mask.any() else 0.0
+                  worst[c]=d
+                  same_nan=np.array_equal(np.isnan(x),np.isnan(y))
+                  if (not same_nan) or d>1e-8:bad.append((c,d,same_nan))
+              else:
+                  if not a[c].equals(b[c]):bad.append((c,'non_numeric_mismatch',False))
+          assert not bad,bad[:20]
+          keycols=['time','center','zlo','zhi','side','lineage_id','age_lm']
+          for c in keycols:
+              assert c in a.columns,c
+          out={'status':'SHIFTED_GRID_SEMANTIC_PARITY_PASS','rows':len(a),'columns':len(a.columns),'max_numeric_abs_diff':max(worst.values()) if worst else 0.0,
+               'key_max_abs_diff':{c:worst.get(c,0.0) for c in keycols if c in worst},
+               'orig_sha256':hashlib.sha256(Path('/tmp/orig.py').read_bytes()).hexdigest(),'shifted_sha256':hashlib.sha256(Path('/tmp/shifted.py').read_bytes()).hexdigest()}
+          Path('/tmp/parity.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+      - name: Publish parity attestation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity
+          mkdir -p "$out"
+          cp /tmp/parity.json "$out/XAUUSD_Z4_C5_SHIFTED_GRID_PARITY.json"
+          cp /tmp/shifted.py "$out/xau_z4_c5_geometry_shifted_grid_equivalent.py"
+          git add "$out"
+          git commit -m 'attest outcome-blind shifted-grid C5 geometry parity [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
