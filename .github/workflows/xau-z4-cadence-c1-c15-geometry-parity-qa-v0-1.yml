@@ -1,0 +1,107 @@
+name: XAU Z4 Cadence C1 C15 Geometry Parity QA v0.1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-cadence-c1-c15-geometry-parity-qa-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  qa-c1-c15:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify outcome-blind QA prereg
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'FROZEN BEFORE READING ANY NUMERICAL GEOMETRY DIFFERENCES' xau-wick-zone-pro/XAUUSD_Z4_CADENCE_GEOMETRY_PARITY_QA_PREREG_v0_1_2026-08-24.md
+          grep -q 'C1/C5/C15' xau-wick-zone-pro/XAUUSD_Z4_CADENCE_GEOMETRY_PARITY_QA_PREREG_v0_1_2026-08-24.md
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+      - name: Install fixed dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Build C1 and C15 engines mechanically
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          old='p=utc_ts(ts); return p.minute%15==0 and p.second==0'
+          assert src.count(old)==1
+          for c in (1,15):
+              new=f'p=utc_ts(ts); return p.minute%{c}==0 and p.second==0'
+              x=src.replace(old,new)
+              assert x.replace(new,old)==src
+              Path(f'/tmp/z4_C{c}.py').write_text(x)
+          PY
+      - name: Download exact DEV BID/ASK Jan-Jul 2024
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid /tmp/xau/ask
+          for side in bid ask; do
+            for m in 01 02 03 04 05 06 07; do
+              file="xauusd_${side}_m1_2024_${m}.csv"
+              curl --fail --location --retry 5 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/${side}/m1/${file}" -o "/tmp/xau/${side}/${file}"
+            done
+          done
+      - name: Verify all 14 hashes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          m=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          exp={x['file']:x['sha256'] for x in m['files']}
+          got={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for s in ('bid','ask') for p in Path('/tmp/xau',s).glob('*.csv')}
+          assert len(got)==14 and got==exp,(len(got),{k:(got.get(k),v) for k,v in exp.items() if got.get(k)!=v})
+          print('hash gate PASS')
+          PY
+      - name: Rebuild same-run C15 and C1 BID/ASK
+        shell: bash
+        run: |
+          set -euo pipefail
+          python /tmp/z4_C15.py --files /tmp/xau/bid/*.csv --output /tmp/C15_BID.pkl --tag QA_C15_BID
+          python /tmp/z4_C1.py  --files /tmp/xau/bid/*.csv --output /tmp/C1_BID.pkl  --tag QA_C1_BID
+          python /tmp/z4_C15.py --files /tmp/xau/ask/*.csv --output /tmp/C15_ASK.pkl --tag QA_C15_ASK
+          python /tmp/z4_C1.py  --files /tmp/xau/ask/*.csv --output /tmp/C1_ASK.pkl  --tag QA_C1_ASK
+      - name: Compare common 15-minute geometry without outcomes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/xau_z4_cadence_geometry_parity_qa_v0_1.py \
+            --bid-short /tmp/C1_BID.pkl --bid-15 /tmp/C15_BID.pkl \
+            --ask-short /tmp/C1_ASK.pkl --ask-15 /tmp/C15_ASK.pkl \
+            --cadence 1 --output /tmp/XAUUSD_Z4_CADENCE_C1_C15_GEOMETRY_PARITY_QA_v0_1.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/XAUUSD_Z4_CADENCE_C1_C15_GEOMETRY_PARITY_QA_v0_1.json'))
+          assert x['GEOMETRY_PARITY_PASS'],x
+          PY
+      - name: Publish QA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          mkdir -p xau-wick-zone-pro/cadence-sensitivity/qa
+          cp /tmp/XAUUSD_Z4_CADENCE_C1_C15_GEOMETRY_PARITY_QA_v0_1.json xau-wick-zone-pro/cadence-sensitivity/qa/
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add xau-wick-zone-pro/cadence-sensitivity/qa
+          git commit -m 'publish C1 C15 geometry parity QA v0.1 [skip ci]'
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:agent/xau-wick-zone-pro-dev; then exit 0; fi
+            git pull --rebase origin agent/xau-wick-zone-pro-dev
+            sleep 5
+          done
+          exit 1
