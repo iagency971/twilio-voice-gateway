@@ -1,0 +1,123 @@
+name: XAU Z4 E-BUY Coverage OOS Replication v1.0
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-coverage-oos-replication-v1-0.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  ebuy-oos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Freeze OOS guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_2.py xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_3.py xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py xau-wick-zone-pro/entry-research/xau_ebuy_coverage_oos_replication_v1_0.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_PREREG_v1_0_2026-08-25.md').read_text()
+          for x in ['OOS_H1','OOS_H2','both OOS_H1 and OOS_H2 pass every gate','No ASK or FOREXCOM data enters this primary replication','No post-hoc family/parameter rescue']:
+              assert x in s,x
+          print('OOS_PREREG_STATIC_PASS')
+          PY
+
+      - name: Acquire and verify frozen BID Aug2024-Jul2026
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/oos
+          python - <<'PY'
+          import json,subprocess,hashlib
+          from pathlib import Path
+          m=json.load(open('xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json'))
+          files=[x for x in m['files'] if x['side']=='bid' and '2024-08' <= f"{x['year']}-{x['month']}" <= '2026-07']
+          assert len(files)==24,len(files)
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in files:
+              p=Path('/tmp/xau/oos')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True)
+              got=hashlib.sha256(p.read_bytes()).hexdigest()
+              assert got==x['sha256'],(x['file'],x['sha256'],got)
+              print('HASH_PASS',x['file'])
+          PY
+
+      - name: Build continuous outcome-blind C5 Z4 geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          repl=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),
+            ('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+            ("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")]
+          for o,n in repl:assert src.count(o)==1,(o,src.count(o));src=src.replace(o,n)
+          assert 'out=outcome_zone(' not in src and '.revisited' not in src
+          Path('/tmp/z4_c5_geometry_only.py').write_text(src)
+          PY
+          python /tmp/z4_c5_geometry_only.py --files /tmp/xau/oos/*.csv --output /tmp/Z4_C5_OOS_GEOMETRY_ONLY.pkl --tag Z4_C5_EBUY_OOS_24M
+
+      - name: Run frozen OOS coverage replication
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/ebuy_oos
+          python xau-wick-zone-pro/entry-research/xau_ebuy_coverage_oos_replication_v1_0.py \
+            --files /tmp/xau/oos/*.csv \
+            --z4-pkl /tmp/Z4_C5_OOS_GEOMETRY_ONLY.pkl \
+            --output /tmp/ebuy_oos/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+            --candidates-csv /tmp/ebuy_oos/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv
+
+      - name: Build provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          paths={
+            'prereg':'xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_PREREG_v1_0_2026-08-25.md',
+            'engine':'xau-wick-zone-pro/entry-research/xau_ebuy_coverage_oos_replication_v1_0.py',
+            'v04_engine':'xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py',
+            'source_manifest':'xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json',
+            'z4_geometry':'/tmp/z4_c5_geometry_only.py',
+            'result':'/tmp/ebuy_oos/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json',
+            'candidates':'/tmp/ebuy_oos/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv'}
+          x=json.load(open(paths['result']))
+          out={'status':'EBUY_OOS_COVERAGE_PROVENANCE_RECORDED','result_status':x['status'],'future_price_outcomes_used':False,'authorization':x['authorization'],
+               'sha256':{k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in paths.items()}}
+          Path('/tmp/ebuy_oos/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish OOS replication evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0
+          mkdir -p "$out"
+          cp /tmp/ebuy_oos/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json "$out/"
+          cp /tmp/ebuy_oos/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json "$out/"
+          gzip -c /tmp/ebuy_oos/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv > "$out/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz"
+          git add "$out"
+          git commit -m 'publish frozen E-BUY coverage OOS replication v1.0 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
