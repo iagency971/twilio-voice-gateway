@@ -1,0 +1,19 @@
+{
+  "status": "REACTION_DEV_H1_PROVENANCE_RECORDED",
+  "reaction_status": "REACTION_DEV_COMPLETE",
+  "reaction_holdout_opened": false,
+  "selected_trigger": "BULL_REJECTION",
+  "contact_episode_count": 16896,
+  "sha256": {
+    "prereg": "79a04ee6533664476dc705a6d3a482da7dce068f00323415441463c2b0ef4e23",
+    "addendum_a": "9adf353b21603e9097cd9748beecd3b5284cb608e160208e589e125c746c2ae2",
+    "addendum_b": "c896a56c0d2edf73efc4089fe799d86cd6480ba00e4c9cfecb60bc99cfb69efe",
+    "addendum_c": "6efc7d9c4ba6b1a3e8aef75288f77bbc121818f1dd9effffce7830ff0e559bd2",
+    "engine_final": "2dc43218cc6db99c9815b37ad7a5085c3f2a5360fe18c62cfa5fee5494fadf8c",
+    "coverage_oos": "d0b23f99b4475adab5d539416ae9203cdeef78637b0b973e52d7181c1e2b3aa6",
+    "z4_geometry": "fe5ff37d571af3a2886f39371034eae5395a6af54efbdfe23023355714abcbb5",
+    "result": "5461b2be26f8d6d2ece97e593410c9d587c4dc43cd7b9c64c92a4577ebfff351",
+    "contacts": "67cfa2a2bdcbe9f05b6f9965dc4cb10381115449df0a6e47efc18b40f18fbd30",
+    "triggers": "ed2523feaa6c88ba0c7512464b63c5e33be92b692ea2ef1785d4181f17dd091e"
+  }
+}
