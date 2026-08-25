@@ -1,0 +1,182 @@
+name: XAU Z4 C5 R Label Parity v0.1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-c5-r-label-parity-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  c5-r-label:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install frozen dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+
+      - name: Wait for frozen C5 base engineering evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          f=xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1/XAUUSD_Z4_C5_PYTHON_ENGINEERING_GATE_RESULT_v0_1.json
+          for i in $(seq 1 180); do
+            git pull --rebase origin agent/xau-wick-zone-pro-dev || true
+            if [ -f "$f" ]; then break; fi
+            sleep 5
+          done
+          test -f "$f"
+          python - <<'PY'
+          import json
+          p='xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1/XAUUSD_Z4_C5_PYTHON_ENGINEERING_GATE_RESULT_v0_1.json'
+          x=json.load(open(p));assert x['status']=='C5_PYTHON_ENGINEERING_GATE_PASS';assert x['future_outcomes_used'] is False
+          print('base engineering PASS, selected warm-up cap',x['selected_warmup_cap'])
+          PY
+
+      - name: Download and verify exact BID DEV Jan-Jul 2024
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid
+          for m in 01 02 03 04 05 06 07; do
+            f="xauusd_bid_m1_2024_${m}.csv"
+            curl --fail --location --retry 5 --retry-delay 2 \
+              "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/${f}" \
+              -o "/tmp/xau/bid/${f}"
+          done
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          m=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          exp={x['file']:x['sha256'] for x in m['files'] if x.get('side','').lower()=='bid' or '_bid_' in x['file']}
+          got={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('/tmp/xau/bid').glob('*.csv')}
+          assert len(got)==7
+          for k,v in got.items(): assert exp[k]==v,(k,exp.get(k),v)
+          PY
+
+      - name: Build exact mechanical C5 DEV BID
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          old='p=utc_ts(ts); return p.minute%15==0 and p.second==0';new='p=utc_ts(ts); return p.minute%5==0 and p.second==0'
+          assert src.count(old)==1
+          p=Path('/tmp/z4_C5.py');p.write_text(src.replace(old,new))
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24'
+          PY
+          python /tmp/z4_C5.py --files /tmp/xau/bid/*.csv --output /tmp/C5_DEV_BID.pkl --tag C5_R_LABEL_EXACT
+
+      - name: Build C5 Pine-math proxy
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/c5proxy
+          cp xau-wick-zone-pro/xau_wick_zone_pine_full_proxy.py /tmp/c5proxy/
+          cp xau-wick-zone-pro/xau_zone_episode_dev_z4.py /tmp/c5proxy/
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/c5proxy/xau_zone_episode_dev_z4.py');src=p.read_text()
+          old='p=utc_ts(ts); return p.minute%15==0 and p.second==0';new='p=utc_ts(ts); return p.minute%5==0 and p.second==0'
+          assert src.count(old)==1;p.write_text(src.replace(old,new))
+          PY
+          python /tmp/c5proxy/xau_wick_zone_pine_full_proxy.py --step 0.05 \
+            --files /tmp/xau/bid/*.csv --output /tmp/C5_PROXY_BID.pkl --tag C5_R_LABEL_PROXY
+
+      - name: Apply C5 greedy lineage and selected C5 warm-up cap
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_wick_zone_greedy_lineage_audit.py').read_text()
+          old='if t.minute%15==0 and t.second==0:ok.append(i)';new='if t.minute%5==0 and t.second==0:ok.append(i)'
+          assert src.count(old)==1;Path('/tmp/c5_greedy_audit.py').write_text(src.replace(old,new))
+          PY
+          python - <<'PY'
+          import importlib.util,json,sys
+          from pathlib import Path
+          import pandas as pd
+          spec=importlib.util.spec_from_file_location('c5g','/tmp/c5_greedy_audit.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+          sys.path.insert(0,str(Path('xau-wick-zone-pro').resolve()))
+          from xau_wick_zone_lineage_cap_audit_fast import capped
+          Z=pd.read_pickle('/tmp/C5_PROXY_BID.pkl').reset_index(drop=True);Z['time']=pd.to_datetime(Z.time,utc=True)
+          eligible=m.eligible_from_files(['/tmp/xau/bid/*.csv']);G,_=m.greedy_states(Z,eligible);G['lineage_id']=G['lineage_id_greedy'].astype('int64')
+          q='xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1/XAUUSD_Z4_C5_PYTHON_ENGINEERING_GATE_RESULT_v0_1.json'
+          cap=int(json.load(open(q))['selected_warmup_cap']);C=capped(G,cap);C.to_pickle('/tmp/C5_PROXY_STATE_BID.pkl')
+          print({'cap':cap,'rows':len(C),'landmarks':int(C.landmark_i.nunique())})
+          PY
+
+      - name: Reproduce combined parity and matched pairs
+        shell: bash
+        run: |
+          set -euo pipefail
+          FROZEN=xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json
+          python xau-wick-zone-pro/xau_wick_zone_parity_compare.py \
+            --exact-pkl /tmp/C5_DEV_BID.pkl --proxy-pkl /tmp/C5_PROXY_STATE_BID.pkl \
+            --frozen-json "$FROZEN" --output /tmp/C5_COMBINED_PARITY.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/C5_COMBINED_PARITY.json'));assert x['status']=='PASS' and x['future_outcomes_used_in_metrics'] is False
+          PY
+
+      - name: Run preregistered C5 R display-label parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          MAP=xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1/XAUUSD_Z4_C5_REVISIT_SCORE_MAP_v0_1.json
+          python xau-wick-zone-pro/xau_wick_zone_r_label_parity.py \
+            --matched-csv /tmp/C5_COMBINED_PARITY.matched.csv --map-json "$MAP" \
+            --output /tmp/XAUUSD_Z4_C5_PINE_R_LABEL_PARITY_RESULT_v0_1.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/XAUUSD_Z4_C5_PINE_R_LABEL_PARITY_RESULT_v0_1.json'))
+          assert x['future_outcomes_used'] is False
+          assert x['status']=='PASS'
+          PY
+
+      - name: Build C5 engineering completion verdict
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          b=json.load(open('xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1/XAUUSD_Z4_C5_PYTHON_ENGINEERING_GATE_RESULT_v0_1.json'))
+          r=json.load(open('/tmp/XAUUSD_Z4_C5_PINE_R_LABEL_PARITY_RESULT_v0_1.json'))
+          out={'status':'C5_PYTHON_AND_R_DISPLAY_ENGINEERING_PASS' if b['status']=='C5_PYTHON_ENGINEERING_GATE_PASS' and r['status']=='PASS' else 'FAIL','cadence_min':5,'lookback_active_m1':1440,'future_outcomes_used':False,'selected_warmup_cap':b['selected_warmup_cap'],'base_engineering_status':b['status'],'r_display_status':r['status'],'r_metrics':r['metrics'],'r_checks':r['checks'],'r_result_sha256':hashlib.sha256(Path('/tmp/XAUUSD_Z4_C5_PINE_R_LABEL_PARITY_RESULT_v0_1.json').read_bytes()).hexdigest(),'next_if_pass':'C5 Pine QA candidate may be built from repaired v2.1.0 using C5-only params/R map/cadence/warm-up. TradingView runtime and FOREXCOM transfer remain separate.'}
+          Path('/tmp/XAUUSD_Z4_C5_ENGINEERING_COMPLETE_RESULT_v0_1.json').write_text(json.dumps(out,indent=2));assert out['status']=='C5_PYTHON_AND_R_DISPLAY_ENGINEERING_PASS'
+          print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish immutable C5 R-label evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          d=xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1
+          mkdir -p "$d"
+          cp /tmp/XAUUSD_Z4_C5_PINE_R_LABEL_PARITY_RESULT_v0_1.json "$d"/
+          cp /tmp/XAUUSD_Z4_C5_ENGINEERING_COMPLETE_RESULT_v0_1.json "$d"/
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add "$d"
+          git commit -m 'publish C5 R display parity and engineering completion v0.1 [skip ci]'
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:agent/xau-wick-zone-pro-dev; then exit 0; fi
+            git pull --rebase origin agent/xau-wick-zone-pro-dev
+            sleep 5
+          done
+          exit 1
