@@ -1,0 +1,58 @@
+{
+  "file": "XAUUSD_Z4_Revisit_Score_QA_v2_2_0_M1_C5_QA_PROXY.pine",
+  "sha256": "4f33ea438e7c008e8276129b7be26a51bdf06fd1668605c3f93321742aa2660e",
+  "status": "STATIC_QA_PASS_TRADINGVIEW_RUNTIME_PENDING",
+  "version": "2.2.0",
+  "cadence_min": 5,
+  "chart_timeframe": "M1_ONLY",
+  "lookback_active_m1": 1440,
+  "revisit_horizon_active_m1": 240,
+  "warmup_landmarks": 96,
+  "warmup_elapsed_nominal_min": 480,
+  "grid_step_usd": 0.05,
+  "scientific_feed": "Dukascopy XAUUSD BID",
+  "tradingview_feed_status": "TRANSFER_ASSUMPTION_NOT_VALIDATED",
+  "provenance": {
+    "pine_base_file": "XAUUSD_Z4_Revisit_Score_QA_v2_1_0_M1_QA_PROXY.pine",
+    "pine_base_sha256": "6d5480368a0c3b5ab0480e73afd6a34199806ca05a62b37683847ffc00406144",
+    "c5_frozen_model_blob": "450d79b3d2cfe04e0425081248156310a3046855",
+    "c5_score_map_blob": "56aecd66e8872f8ca1b007864c364fc14478f47c",
+    "c5_engineering_gate_blob": "cc1a157c457e74203f78bde367af2bcd094fd518",
+    "strict_threshold_attestation_commit": "1cc996a1d08cdbfb1f1a84c1114b4795f606310c"
+  },
+  "changes_from_v2_1_0": [
+    "snapshot cadence 15m -> 5m only",
+    "C15 BID M0GL intercept/mean/scale/coef -> frozen C5 BID M0GL parameters",
+    "C15 R thresholds -> C5 DEV-only R thresholds",
+    "version/status comments updated; QA_PROXY retained"
+  ],
+  "unchanged_invariants": [
+    "M1 confirmed bars only",
+    "LOOKBACK 1440 active M1",
+    "STEP 0.05 USD",
+    "Z4 side convention and overlap exclusion",
+    "3-box Pine smoothing proxy",
+    "explicit peak/prominence/P50 math",
+    "greedy lineage mechanics",
+    "96-landmark warmup/rearm after GRID_LIMIT",
+    "Class-A drawing/UI behavior"
+  ],
+  "checks": {
+    "base_sha_verified": true,
+    "mean_len": 34,
+    "scale_len": 34,
+    "coef_len": 34,
+    "r_threshold_len": 101,
+    "landmark_ms_300000": true,
+    "confirmed_bar_gate": true,
+    "side_exact": true,
+    "bad_center_side_absent": true,
+    "validated_proxy_label_absent": true
+  },
+  "required_next_gates": [
+    "TradingView Pine v6 compile",
+    "Replay across successive confirmed 5-minute snapshots",
+    "live close behavior at a 5-minute boundary",
+    "GRID_LIMIT recovery/re-arm where practicable"
+  ]
+}
