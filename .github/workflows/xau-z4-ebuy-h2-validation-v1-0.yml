@@ -1,0 +1,233 @@
+name: XAU Z4 E-BUY H2 Validation v1.0
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-h2-validation-v1-0.yml'
+
+permissions:
+  contents: write
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+
+jobs:
+  geometry-month:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        target: ['2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Freeze H2 geometry guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_H2_VALIDATION_PREREG_v1_0_2026-08-25.md').read_text()
+          for x in ['BULL_REJECTION','ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342','No TOUCH_REF, RECLAIM_CENTER or RECLAIM_FULL H2 outcome may be computed','No H2-derived recalibration or threshold movement is permitted']:
+              assert x in p,x
+          f=json.load(open('xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_FREEZE_v1_1.json'))
+          assert f['model_sha256']=='ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342'
+          assert f['reaction_holdout_opened'] is False
+          print('H2_GEOMETRY_FREEZE_GUARD_PASS')
+          PY
+
+      - name: Download target plus one-month causal geometry warmup
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/in /tmp/out
+          python - <<'PY'
+          import os,json,subprocess,hashlib
+          from pathlib import Path
+          t=os.environ['TARGET'];y,m=map(int,t.split('-'));pm=m-1;py=y
+          if pm==0:pm=12;py-=1
+          months=[f'{py:04d}-{pm:02d}',t]
+          man=json.load(open(os.environ['MANIFEST']))
+          ix={f"{x['year']}-{x['month']}":x for x in man['files'] if x['side']=='bid'}
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for mm in months:
+              x=ix[mm];p=Path('/tmp/in')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest();assert got==x['sha256'],(x['file'],got,x['sha256'])
+          print('H2_MONTH_INPUT_HASH_PASS',t,months)
+          PY
+
+      - name: Build target-month outcome-blind Z4 geometry
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py').read_text()
+          anchor='    m=len(Z)\n';assert src.count(anchor)==1
+          insert="    keep=['time','landmark_i','center','zlo','zhi','side']\n    Z[keep].to_pickle(args.output)\n    return\n\n"
+          Path('/tmp/geom.py').write_text(src.replace(anchor,insert+anchor))
+          PY
+          python /tmp/geom.py --files /tmp/in/*.csv --output /tmp/all.pkl --tag H2_${TARGET}
+          python - <<'PY'
+          import os,pandas as pd
+          t=os.environ['TARGET'];lo=pd.Timestamp(t+'-01T00:00:00Z');hi=lo+pd.offsets.MonthBegin(1)
+          d=pd.read_pickle('/tmp/all.pkl');d['time']=pd.to_datetime(d.time,utc=True)
+          q=d[(d.time>=lo)&(d.time<hi)].copy().reset_index(drop=True)
+          assert len(q)>0,(t,len(d))
+          q.to_pickle('/tmp/out/z4_'+t.replace('-','_')+'.pkl')
+          print('H2_TARGET_GEOMETRY_READY',t,len(q),q.time.min(),q.time.max())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: h2-z4-${{ matrix.target }}
+          path: /tmp/out/*.pkl
+          retention-days: 1
+
+  validate-h2:
+    needs: geometry-month
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.2 joblib==1.5.2
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: h2-z4-*
+          path: /tmp/z4parts
+          merge-multiple: true
+
+      - name: Assemble H2 Z4 geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/h2 /tmp/xau/h2
+          python - <<'PY'
+          import glob,pandas as pd
+          fs=sorted(glob.glob('/tmp/z4parts/z4_*.pkl'));assert len(fs)==12,fs
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True)
+          z['time']=pd.to_datetime(z.time,utc=True)
+          lo=pd.Timestamp('2025-08-01T00:00:00Z');hi=pd.Timestamp('2026-08-01T00:00:00Z')
+          assert z.time.min()>=lo and z.time.max()<hi,(z.time.min(),z.time.max())
+          z=z.sort_values(['time','side','center']).reset_index(drop=True)
+          z.to_pickle('/tmp/h2/Z4_C5_H2_GEOMETRY.pkl')
+          print('H2_Z4_ASSEMBLED',len(z),z.time.nunique(),z.time.min(),z.time.max())
+          PY
+
+      - name: Acquire exactly H2 BID raw and verify hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,subprocess,hashlib,os
+          from pathlib import Path
+          man=json.load(open(os.environ['MANIFEST']))
+          fs=[x for x in man['files'] if x['side']=='bid' and '2025-08'<=f"{x['year']}-{x['month']}"<='2026-07']
+          assert len(fs)==12 and all(f"{x['year']}-{x['month']}" >= '2025-08' for x in fs)
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/xau/h2')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest();assert got==x['sha256'],(x['file'],got,x['sha256'])
+          names=sorted(p.name for p in Path('/tmp/xau/h2').glob('*.csv'));assert len(names)==12
+          assert not any('2025_07' in n or '2024_' in n for n in names),names
+          print('H2_ONLY_SOURCE_HASH_PASS',names[0],names[-1])
+          PY
+
+      - name: Final prereg and artifact guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_ebuy_h2_validation_v1_0.py
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          model=Path('xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib')
+          assert hashlib.sha256(model.read_bytes()).hexdigest()=='ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342'
+          c=json.load(open('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json'))
+          assert c['status']=='EBUY_COVERAGE_OOS_REPLICATION_PASS' and c['results']['OOS_H2']['status']=='PASS'
+          print('H2_FINAL_GUARD_PASS')
+          PY
+
+      - name: Open H2 and run frozen validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_h2_validation_v1_0.py \
+            --files /tmp/xau/h2/*.csv \
+            --z4-pkl /tmp/h2/Z4_C5_H2_GEOMETRY.pkl \
+            --candidates-gz xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz \
+            --model-pkl xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib \
+            --coverage-result xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+            --contacts-csv /tmp/h2/XAUUSD_Z4_EBUY_H2_CONTACTS_v1_0.csv \
+            --triggers-csv /tmp/h2/XAUUSD_Z4_EBUY_H2_BULL_REJECTION_v1_0.csv \
+            --scored-csv /tmp/h2/XAUUSD_Z4_EBUY_H2_SCORED_v1_0.csv \
+            --output /tmp/h2/XAUUSD_Z4_EBUY_H2_VALIDATION_RESULT_v1_0.json
+          python - <<'PY'
+          import json,pandas as pd
+          x=json.load(open('/tmp/h2/XAUUSD_Z4_EBUY_H2_VALIDATION_RESULT_v1_0.json'))
+          assert x['alternate_trigger_outcomes_computed'] is False
+          t=pd.read_csv('/tmp/h2/XAUUSD_Z4_EBUY_H2_BULL_REJECTION_v1_0.csv',low_memory=False)
+          assert set(t.trigger.astype(str).unique()) <= {'BULL_REJECTION'}
+          print('H2_VALIDATION_RESULT',x['status'],x['contact_episode_count'],x['bull_rejection_fired_count'],x['metrics']['E80'],x['metrics']['E90'])
+          PY
+
+      - name: Build immutable H2 validation provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          paths={
+            'prereg':Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_H2_VALIDATION_PREREG_v1_0_2026-08-25.md'),
+            'engine':Path('xau-wick-zone-pro/entry-research/xau_ebuy_h2_validation_v1_0.py'),
+            'model':Path('xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib'),
+            'coverage_oos':Path('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json'),
+            'z4_geometry':Path('/tmp/h2/Z4_C5_H2_GEOMETRY.pkl'),
+            'result':Path('/tmp/h2/XAUUSD_Z4_EBUY_H2_VALIDATION_RESULT_v1_0.json'),
+            'contacts':Path('/tmp/h2/XAUUSD_Z4_EBUY_H2_CONTACTS_v1_0.csv'),
+            'triggers':Path('/tmp/h2/XAUUSD_Z4_EBUY_H2_BULL_REJECTION_v1_0.csv'),
+            'scored':Path('/tmp/h2/XAUUSD_Z4_EBUY_H2_SCORED_v1_0.csv')}
+          x=json.loads(paths['result'].read_text())
+          out={'status':'E_BUY_US_H2_VALIDATION_PROVENANCE_RECORDED','validation_status':x['status'],'model_sha256':x['model_sha256'],'alternate_trigger_outcomes_computed':False,
+               'sha256':{k:hashlib.sha256(v.read_bytes()).hexdigest() for k,v in paths.items()}}
+          Path('/tmp/h2/XAUUSD_Z4_EBUY_H2_VALIDATION_MANIFEST_v1_0.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish H2 validation evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/ebuy-h2-validation-v1-0
+          mkdir -p "$out"
+          cp /tmp/h2/XAUUSD_Z4_EBUY_H2_VALIDATION_RESULT_v1_0.json "$out/"
+          cp /tmp/h2/XAUUSD_Z4_EBUY_H2_VALIDATION_MANIFEST_v1_0.json "$out/"
+          gzip -c /tmp/h2/XAUUSD_Z4_EBUY_H2_CONTACTS_v1_0.csv > "$out/XAUUSD_Z4_EBUY_H2_CONTACTS_v1_0.csv.gz"
+          gzip -c /tmp/h2/XAUUSD_Z4_EBUY_H2_BULL_REJECTION_v1_0.csv > "$out/XAUUSD_Z4_EBUY_H2_BULL_REJECTION_v1_0.csv.gz"
+          gzip -c /tmp/h2/XAUUSD_Z4_EBUY_H2_SCORED_v1_0.csv > "$out/XAUUSD_Z4_EBUY_H2_SCORED_v1_0.csv.gz"
+          git add "$out"
+          git commit -m 'publish frozen BULL_REJECTION plus E_BUY_US H2 validation [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
