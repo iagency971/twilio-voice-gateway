@@ -1,0 +1,17 @@
+{
+  "status": "E_BUY_US_H2_VALIDATION_PROVENANCE_RECORDED",
+  "validation_status": "E_BUY_US_H2_VALIDATION_PASS",
+  "model_sha256": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+  "alternate_trigger_outcomes_computed": false,
+  "sha256": {
+    "prereg": "add1200a641979a59d17d08efb36d51182371e3a79b579d653408492d0e96121",
+    "engine": "2dca4a5d0cced3d532907972292cb69b8fe2d0300801dd852b6bcea8de3a8715",
+    "model": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+    "coverage_oos": "d0b23f99b4475adab5d539416ae9203cdeef78637b0b973e52d7181c1e2b3aa6",
+    "z4_geometry": "99dccad37bebaa9ca6d0994fad2e68e0aa5bff6c2f612640407958347c89ba56",
+    "result": "240ee40b3dbf7ccd9e615dd103484942de144a0ab34ecb15eab1452a1024c620",
+    "contacts": "b7ab8a73c61af31f2e81b74b30a3f316df82ef234b0ab553737ee8d770a91da5",
+    "triggers": "f846b387a9e020cc11666ec05e5180871a5b2533235a42de66d8af334d54cdc3",
+    "scored": "6a3168825f3772c2336a903a76bc258ff2571a7ff381b8e3ee6ef83572a0140c"
+  }
+}

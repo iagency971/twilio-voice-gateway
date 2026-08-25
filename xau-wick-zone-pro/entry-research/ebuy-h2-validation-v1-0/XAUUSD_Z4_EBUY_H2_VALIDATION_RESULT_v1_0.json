@@ -1,0 +1,160 @@
+{
+  "status": "E_BUY_US_H2_VALIDATION_PASS",
+  "scope": "BUY_ONLY_BULL_REJECTION_E_BUY_US_H2",
+  "h2_window": [
+    "2025-08-01 00:00:00+00:00",
+    "2026-08-01 00:00:00+00:00"
+  ],
+  "model_sha256": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+  "alternate_trigger_outcomes_computed": false,
+  "contact_episode_count": 17578,
+  "bull_rejection_fired_count": 7643,
+  "bull_rejection_fired_share": 0.43480486972351806,
+  "ambiguous_count": 6,
+  "ambiguous_share": 0.0007850320554755986,
+  "resolved_scored_n": 7637,
+  "metrics": {
+    "n": 7637,
+    "baseline_positive_rate": 0.3012963205447165,
+    "roc_auc": 0.7911069725893246,
+    "average_precision": 0.6072838283395393,
+    "brier": 0.16422268779009844,
+    "constant_baseline_brier": 0.21051684777093194,
+    "E80": {
+      "count": 1306,
+      "positive_rate": 0.6707503828483921,
+      "lift_vs_baseline": 0.36945406230367556,
+      "fp1": {
+        "favorable": 403,
+        "adverse": 860,
+        "ambiguous": 42,
+        "neither": 1,
+        "favorable_vs_adverse_rate": 0.31908155186064924
+      }
+    },
+    "E90": {
+      "count": 565,
+      "positive_rate": 0.7292035398230089,
+      "lift_vs_baseline": 0.4279072192782924,
+      "fp1": {
+        "favorable": 175,
+        "adverse": 366,
+        "ambiguous": 24,
+        "neither": 0,
+        "favorable_vs_adverse_rate": 0.3234750462107209
+      }
+    },
+    "fp1_all": {
+      "favorable": 2378,
+      "adverse": 5081,
+      "ambiguous": 165,
+      "neither": 13,
+      "favorable_vs_adverse_rate": 0.31880949188899316
+    }
+  },
+  "half_year_diagnostics": {
+    "H2A": {
+      "n": 3483,
+      "baseline_positive_rate": 0.3327591157048521,
+      "roc_auc": 0.7823844372931144,
+      "average_precision": 0.6300494841899458,
+      "brier": 0.17449197112915613,
+      "constant_baseline_brier": 0.22203048662017694,
+      "E80": {
+        "count": 686,
+        "positive_rate": 0.6865889212827988,
+        "lift_vs_baseline": 0.3538298055779467,
+        "fp1": {
+          "favorable": 218,
+          "adverse": 442,
+          "ambiguous": 25,
+          "neither": 1,
+          "favorable_vs_adverse_rate": 0.3303030303030303
+        }
+      },
+      "E90": {
+        "count": 304,
+        "positive_rate": 0.7368421052631579,
+        "lift_vs_baseline": 0.40408298955830574,
+        "fp1": {
+          "favorable": 89,
+          "adverse": 200,
+          "ambiguous": 15,
+          "neither": 0,
+          "favorable_vs_adverse_rate": 0.3079584775086505
+        }
+      },
+      "fp1_all": {
+        "favorable": 1112,
+        "adverse": 2284,
+        "ambiguous": 79,
+        "neither": 8,
+        "favorable_vs_adverse_rate": 0.32744405182567726
+      }
+    },
+    "H2B": {
+      "n": 4154,
+      "baseline_positive_rate": 0.2749157438613385,
+      "roc_auc": 0.7970395127022558,
+      "average_precision": 0.5842005287396006,
+      "brier": 0.15561221261678648,
+      "constant_baseline_brier": 0.19933707763850542,
+      "E80": {
+        "count": 620,
+        "positive_rate": 0.6532258064516129,
+        "lift_vs_baseline": 0.3783100625902744,
+        "fp1": {
+          "favorable": 185,
+          "adverse": 418,
+          "ambiguous": 17,
+          "neither": 0,
+          "favorable_vs_adverse_rate": 0.3067993366500829
+        }
+      },
+      "E90": {
+        "count": 261,
+        "positive_rate": 0.7203065134099617,
+        "lift_vs_baseline": 0.44539076954862317,
+        "fp1": {
+          "favorable": 86,
+          "adverse": 166,
+          "ambiguous": 9,
+          "neither": 0,
+          "favorable_vs_adverse_rate": 0.3412698412698413
+        }
+      },
+      "fp1_all": {
+        "favorable": 1266,
+        "adverse": 2797,
+        "ambiguous": 86,
+        "neither": 5,
+        "favorable_vs_adverse_rate": 0.3115924193945361
+      }
+    }
+  },
+  "checks": {
+    "contacts_ge_10000": true,
+    "bull_fired_ge_3000": true,
+    "bull_fired_share_ge_025": true,
+    "ambiguous_share_le_002": true,
+    "baseline_positive_rate_ge_020": true,
+    "auc_ge_065": true,
+    "ap_ge_baseline_plus_010": true,
+    "brier_better_than_constant": true,
+    "E80_n_ge_800": true,
+    "E80_rate_ge_baseline_plus_020": true,
+    "E80_rate_ge_050": true,
+    "E90_n_ge_350": true,
+    "E90_rate_ge_baseline_plus_025": true,
+    "E90_rate_ge_055": true,
+    "E90_rate_ge_E80": true
+  },
+  "authorization": "HISTORICAL_H2_ENTRY_RANK_VALIDATED",
+  "explicit_nonclaims": [
+    "No live profitability claim",
+    "No spread/slippage/commission validation",
+    "No FOREXCOM E score transfer validation",
+    "No R_US route claim",
+    "E_BUY_US is rank not calibrated probability"
+  ]
+}
