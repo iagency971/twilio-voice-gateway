@@ -1,0 +1,17 @@
+{
+  "status": "EBUY_V03_PROVENANCE_RECORDED",
+  "result_status": "EBUY_COVERAGE_FAIL",
+  "future_price_outcomes_used": false,
+  "selected_architecture": null,
+  "selected_esm": "ESM_BOTH_G120M",
+  "eligible_snapshot_count": 12959,
+  "sha256": {
+    "prereg": "006c543979557bf3fe6ecda118e5dc1ab39833dacbdb7ef8dd1025ab3ee24f94",
+    "engine_v01": "fe9a0efa986211f6277f1506e3bdf16aac57980b221c9aeb343c5b5c07d5df1c",
+    "engine_v02": "fd0c2f0178c40d91b826018c4e823ba9be26d059244b1b9fa199ae99e61dec92",
+    "engine_v03": "d3e3157c6a0d17e5da717252b59bf8fd5e769356e3ce1b3e676b3440e0a4bda9",
+    "z4_geometry": "3d3dc4e6948be0f255d714b5c1c34ee21df0ffefe58c91770569ac54b40f034f",
+    "result": "0efb3b78332709d4d6977e2a05c878c7e52c73311d324d2c56fdccc16374760f",
+    "selected": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  }
+}
