@@ -1,0 +1,138 @@
+name: XAU Z4 E-BUY Coverage OOS v1.0 Geometry Only
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-coverage-oos-v1-0-geometry-only.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  ebuy-oos-geometry-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Freeze and equivalence guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_ebuy_coverage_oos_replication_v1_0.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.load(open('xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/XAUUSD_Z4_C5_SHIFTED_GRID_PARITY.json'))
+          assert p['status']=='SHIFTED_GRID_SEMANTIC_PARITY_PASS',p
+          s=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_PREREG_v1_0_2026-08-25.md').read_text()
+          for x in ['OOS_H1','OOS_H2','both OOS_H1 and OOS_H2 pass every gate','No post-hoc family/parameter rescue']:
+              assert x in s,x
+          print('GEOMETRY_ONLY_FREEZE_GUARD_PASS')
+          PY
+
+      - name: Acquire August 2024 parity month
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parity
+          f=xauusd_bid_m1_2024_08.csv
+          curl --fail --location --retry 5 --retry-delay 2 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/$f" -o "/tmp/parity/$f"
+          echo '69a43d059dbdb9bce3bed1be13db378437ed4131cd109d04690fadf2aa17a476  /tmp/parity/xauusd_bid_m1_2024_08.csv' | sha256sum -c -
+
+      - name: Build full shifted and geometry-only engines
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py /tmp/full_shifted.py
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('/tmp/full_shifted.py').read_text()
+          anchor='    m=len(Z)\n'
+          assert src.count(anchor)==1,src.count(anchor)
+          insert="    keep=['time','landmark_i','center','zlo','zhi','side']\n    Z[keep].to_pickle(args.output)\n    print(args.tag,'GEOMETRY_ONLY',len(Z),'landmarks',Z.landmark_i.nunique(),flush=True)\n    return\n\n"
+          Path('/tmp/geometry_only.py').write_text(src.replace(anchor,insert+anchor))
+          PY
+          python /tmp/full_shifted.py --files /tmp/parity/*.csv --output /tmp/full.pkl --tag FULL_SHIFTED_PARITY
+          python /tmp/geometry_only.py --files /tmp/parity/*.csv --output /tmp/lite.pkl --tag GEOMETRY_ONLY_PARITY
+
+      - name: Consumed-column parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import pandas as pd,numpy as np,json,hashlib
+          from pathlib import Path
+          cols=['time','landmark_i','center','zlo','zhi','side']
+          a=pd.read_pickle('/tmp/full.pkl')[cols].reset_index(drop=True)
+          b=pd.read_pickle('/tmp/lite.pkl')[cols].reset_index(drop=True)
+          assert list(a.columns)==list(b.columns) and len(a)==len(b)
+          assert a.time.equals(b.time)
+          worst={}
+          for c in cols[1:]:
+              x=a[c].to_numpy();y=b[c].to_numpy();d=float(np.max(np.abs(x-y))) if len(x) else 0.;worst[c]=d
+              assert d<=1e-10,(c,d)
+          out={'status':'GEOMETRY_ONLY_CONSUMED_COLUMNS_PARITY_PASS','rows':len(a),'columns':cols,'max_abs_diff':max(worst.values()) if worst else 0.0,'column_max_abs_diff':worst,
+               'engine_sha256':hashlib.sha256(Path('/tmp/geometry_only.py').read_bytes()).hexdigest()}
+          Path('/tmp/geometry_only_parity.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+
+      - name: Acquire and verify frozen BID Aug2024-Jul2026
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/oos
+          python - <<'PY'
+          import json,subprocess,hashlib
+          from pathlib import Path
+          m=json.load(open('xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json'))
+          files=[x for x in m['files'] if x['side']=='bid' and '2024-08' <= f"{x['year']}-{x['month']}" <= '2026-07']
+          assert len(files)==24,len(files)
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in files:
+              p=Path('/tmp/xau/oos')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest();assert got==x['sha256'],(x['file'],got,x['sha256'])
+          print('ALL_24_SOURCE_HASHES_PASS')
+          PY
+
+      - name: Build geometry-only C5 Z4 24M
+        shell: bash
+        run: |
+          set -euo pipefail
+          python /tmp/geometry_only.py --files /tmp/xau/oos/*.csv --output /tmp/Z4_C5_OOS_GEOMETRY_ONLY_LITE.pkl --tag Z4_C5_EBUY_OOS_24M_LITE
+
+      - name: Run unchanged frozen OOS coverage gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/ebuy_oos_lite
+          python xau-wick-zone-pro/entry-research/xau_ebuy_coverage_oos_replication_v1_0.py \
+            --files /tmp/xau/oos/*.csv \
+            --z4-pkl /tmp/Z4_C5_OOS_GEOMETRY_ONLY_LITE.pkl \
+            --output /tmp/ebuy_oos_lite/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+            --candidates-csv /tmp/ebuy_oos_lite/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv
+
+      - name: Publish geometry-only OOS evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0-geometry-only
+          mkdir -p "$out"
+          cp /tmp/geometry_only_parity.json "$out/XAUUSD_Z4_GEOMETRY_ONLY_PARITY.json"
+          cp /tmp/ebuy_oos_lite/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json "$out/"
+          gzip -c /tmp/ebuy_oos_lite/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv > "$out/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz"
+          git add "$out"
+          git commit -m 'publish geometry-only equivalent E-BUY OOS replication [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
