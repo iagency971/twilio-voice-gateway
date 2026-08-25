@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "scope": "OUTCOME_BLIND_C5_COMBINED_PROXY_ATTESTED_AGAINST_HISTORICAL_C15_STRICT_THRESHOLDS",
+  "date": "2026-08-25",
+  "future_outcomes_used": false,
+  "c5_source_artifact": {
+    "path": "xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-2/XAUUSD_Z4_C5_COMBINED_PINE_PROXY_PARITY_RESULT_v0_2.json",
+    "blob_sha": "795e6c8af0f95a87229d605d93c4058f3b6cb1d9"
+  },
+  "historical_threshold_reference": {
+    "path": "xau-wick-zone-pro/parity/XAUUSD_Z4_PINE_COMBINED_PARITY_RESULTS_v0_1.json",
+    "blob_sha": "e8b2112f9a253f344f2418e2db0db989ad13bea6",
+    "note": "Threshold family that authorized the original C15 combined Pine proxy. Applied unchanged to C5 evidence after publication."
+  },
+  "thresholds": {
+    "exact_zone_match_rate_min": 0.90,
+    "proxy_zone_match_rate_min": 0.90,
+    "median_iou_min": 0.80,
+    "p10_iou_min": 0.55,
+    "median_center_err_vseg_max": 0.08,
+    "p95_center_err_vseg_max": 0.25,
+    "score_pearson_min": 0.98,
+    "score_spearman_min": 0.98,
+    "median_score_abs_err_max": 0.015,
+    "p95_score_abs_err_max": 0.060,
+    "top1_zone_agreement_min": 0.85
+  },
+  "metrics": {
+    "exact_zone_match_rate": 0.9231181124770181,
+    "proxy_zone_match_rate": 0.9880722877079634,
+    "median_iou": 0.9738906081503368,
+    "p10_iou": 0.9063930904542679,
+    "median_center_err_vseg": 0.03809523809521335,
+    "p95_center_err_vseg": 0.17857142857128355,
+    "score_pearson": 0.997384693847023,
+    "score_spearman": 0.998328512407977,
+    "median_score_abs_err": 0.0033826807071248854,
+    "p95_score_abs_err": 0.038428025445778044,
+    "top1_zone_agreement": 0.8734851803182947
+  },
+  "checks": {
+    "exact_zone_match_rate": true,
+    "proxy_zone_match_rate": true,
+    "median_iou": true,
+    "p10_iou": true,
+    "median_center_err_vseg": true,
+    "p95_center_err_vseg": true,
+    "score_pearson": true,
+    "score_spearman": true,
+    "median_score_abs_err": true,
+    "p95_score_abs_err": true,
+    "top1_zone_agreement": true
+  },
+  "supersedes_workflow_failure_interpretation": {
+    "workflow_run_id": 32801033964,
+    "workflow_name": "XAU Z4 C5 Strict Combined Attestation v0.1",
+    "failure_step": "Wait for C5 combined proxy metrics",
+    "scientific_gate_was_not_executed": true,
+    "classification": "ORCHESTRATION_WAIT_FAILURE_NOT_SCIENTIFIC_FAILURE"
+  }
+}
