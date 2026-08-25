@@ -1,0 +1,13 @@
+{
+  "status": "EBUY_V04_PROVENANCE_RECORDED",
+  "result_status": "EBUY_COVERAGE_PASS_V04_STICKY",
+  "future_price_outcomes_used": false,
+  "authorization": "AUTHORIZE_SEPARATE_PREREGISTERED_REACTION_STUDY",
+  "sha256": {
+    "prereg": "6b6f6ab7d76445d81ea234a549ef5172715115c199535fab707a6aa75cd4e245",
+    "engine_v04": "e60ed4076eaf5d0d4f86ce9613bd10d3a10062f3d0e802c1fdda85ab1d633110",
+    "z4_geometry": "3d3dc4e6948be0f255d714b5c1c34ee21df0ffefe58c91770569ac54b40f034f",
+    "result": "1ace949d03576f416a254e3aae1b7c1d993fa3d153507bc61011b748cc8e53c0",
+    "candidates": "dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920"
+  }
+}

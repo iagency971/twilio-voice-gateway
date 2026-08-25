@@ -1,0 +1,63 @@
+{
+  "status": "EBUY_COVERAGE_PASS_V04_STICKY",
+  "scope": "BUY_ONLY_OUTCOME_BLIND_ENTRY_ZONE_COVERAGE_V04_STICKY",
+  "future_price_outcomes_used": false,
+  "fixed_architecture": "Z4 + ESM_BOTH_G120M + EPM_M1_R2_A8H + EWM_G60M + ES_M1_8H_R2_T0.50",
+  "eligible_snapshot_count": 12959,
+  "display_rule": "sticky carry if still local + not crossed + matching current underlying; fill nearest; max3",
+  "coverage_count_distance_metrics": {
+    "snapshots": 12959,
+    "coverage": {
+      "0.5": 0.527972837410294,
+      "1.0": 0.8174241839648121,
+      "1.5": 0.9280037039895054,
+      "2.0": 0.9692877536846979
+    },
+    "candidate_count_median": 2.0,
+    "candidate_count_p90": 3.0,
+    "nearest_distance_v_median": 0.45095541401274514,
+    "nearest_distance_v_p90": 1.1904761904764138,
+    "one_step_persistence": 0.48254326561324307,
+    "persistence_zone_denominator": 26580
+  },
+  "stability": {
+    "transition_denominator": 26580,
+    "category_counts": {
+      "MATCHED_DISPLAY": 12826,
+      "CROSSED_BELOW": 7343,
+      "NO_LONGER_LOCAL": 6150,
+      "UNDERLYING_PRESENT_NOT_DISPLAYED": 0,
+      "UNEXPLAINED_DISAPPEARANCE": 261
+    },
+    "category_shares": {
+      "MATCHED_DISPLAY": 0.48254326561324307,
+      "CROSSED_BELOW": 0.27626034612490596,
+      "NO_LONGER_LOCAL": 0.23137697516930023,
+      "UNDERLYING_PRESENT_NOT_DISPLAYED": 0.0,
+      "UNEXPLAINED_DISAPPEARANCE": 0.00981941309255079
+    },
+    "raw_display_persistence": 0.48254326561324307,
+    "survival_eligible_denominator": 13087,
+    "survival_aware_display_persistence": 0.9800565446626424,
+    "unexplained_share_of_survival_eligible": 0.019943455337357682,
+    "display_churn_share_of_survival_eligible": 0.0
+  },
+  "checks": {
+    "coverage_1v_ge_080": true,
+    "coverage_1_5v_ge_090": true,
+    "coverage_2v_ge_095": true,
+    "count_median_1_to_3": true,
+    "count_p90_le_3": true,
+    "nearest_p90_le_1_5v": true,
+    "survival_aware_persistence_ge_070": true,
+    "unexplained_survival_share_le_005": true
+  },
+  "candidate_rows": 27636,
+  "authorization": "AUTHORIZE_SEPARATE_PREREGISTERED_REACTION_STUDY",
+  "explicit_nonclaims": [
+    "No reaction-quality claim",
+    "No profitable-entry claim",
+    "No TP-hit claim",
+    "No route/end-of-session claim"
+  ]
+}
