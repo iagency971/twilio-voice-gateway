@@ -13,7 +13,7 @@
   "stress": {
     "n": 13,
     "mean": 0.27360050148539483,
-    "sum": 3.5568065193101326,
+    "sum": 3.556806519310133,
     "pf": 1.7029057550826094,
     "win_rate": 0.46153846153846156,
     "max_dd": 3.8015944700650244,
@@ -45,5 +45,5 @@
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "a36a9d5eb3b5a1ddc68a9499463e854fb89a6a3510523edbc1758dde7e95738b"
+  "ledger_sha256": "322e2602a8f8938d0873e13d1fe480f0ba211ece50e878b23a3254132c559dfc"
 }
