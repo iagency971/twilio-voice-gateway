@@ -1,0 +1,121 @@
+name: XAU Z4 E-BUY Persistence Diagnostic v0.3A
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-persistence-diagnostic-v0-3a.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diag-v03a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Freeze diagnostic guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_2.py xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_3.py xau-wick-zone-pro/entry-research/xau_ebuy_persistence_diagnostic_v0_3a.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_PERSISTENCE_DIAGNOSTIC_PREREG_v0_3A_2026-08-25.md').read_text()
+          for x in ['MATCHED_DISPLAY','CROSSED_BELOW','NO_LONGER_LOCAL','UNDERLYING_PRESENT_NOT_DISPLAYED','UNEXPLAINED_DISAPPEARANCE','No future Z4 destination hit']:
+              assert x in s,x
+          print('V03A_DIAGNOSTIC_PREREG_PASS')
+          PY
+
+      - name: Acquire and verify frozen BID DEV
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid
+          for m in 01 02 03 04 05 06 07; do
+            f="xauusd_bid_m1_2024_${m}.csv"
+            curl --fail --location --retry 5 --retry-delay 2 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/${f}" -o "/tmp/xau/bid/${f}"
+          done
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          m=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          exp={x['file']:x['sha256'] for x in m['files'] if x.get('side')=='bid'}
+          got={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('/tmp/xau/bid').glob('*.csv')}
+          assert len(got)==7
+          for k,v in got.items():assert exp[k]==v,(k,exp.get(k),v)
+          print('SOURCE_HASH_PASS')
+          PY
+
+      - name: Build outcome-blind C5 Z4 geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          repl=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),
+            ('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+            ("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")]
+          for o,n in repl:assert src.count(o)==1,(o,src.count(o));src=src.replace(o,n)
+          assert 'out=outcome_zone(' not in src and '.revisited' not in src
+          Path('/tmp/z4_c5_geometry_only.py').write_text(src)
+          PY
+          python /tmp/z4_c5_geometry_only.py --files /tmp/xau/bid/*.csv --output /tmp/Z4_C5_GEOMETRY_ONLY.pkl --tag Z4_C5_EBUY_DIAG_V03A
+
+      - name: Run persistence decomposition
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/diag3a
+          python xau-wick-zone-pro/entry-research/xau_ebuy_persistence_diagnostic_v0_3a.py \
+            --files /tmp/xau/bid/*.csv \
+            --z4-pkl /tmp/Z4_C5_GEOMETRY_ONLY.pkl \
+            --v03-result xau-wick-zone-pro/entry-research/ebuy-coverage-v0-3/XAUUSD_Z4_EBUY_COVERAGE_RESULT_v0_3.json \
+            --output /tmp/diag3a/XAUUSD_Z4_EBUY_PERSISTENCE_DIAGNOSTIC_RESULT_v0_3A.json
+
+      - name: Build provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          paths={
+            'prereg':'xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_PERSISTENCE_DIAGNOSTIC_PREREG_v0_3A_2026-08-25.md',
+            'diagnostic_engine':'xau-wick-zone-pro/entry-research/xau_ebuy_persistence_diagnostic_v0_3a.py',
+            'v03_result':'xau-wick-zone-pro/entry-research/ebuy-coverage-v0-3/XAUUSD_Z4_EBUY_COVERAGE_RESULT_v0_3.json',
+            'z4_geometry':'/tmp/z4_c5_geometry_only.py',
+            'result':'/tmp/diag3a/XAUUSD_Z4_EBUY_PERSISTENCE_DIAGNOSTIC_RESULT_v0_3A.json'}
+          x=json.load(open(paths['result']))
+          out={'status':'EBUY_V03A_DIAGNOSTIC_PROVENANCE_RECORDED','future_price_outcomes_used':False,'diagnostic_status':x['status'],
+               'next_action':x['preregistered_next_action_interpretation'],'sha256':{k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in paths.items()}}
+          Path('/tmp/diag3a/XAUUSD_Z4_EBUY_PERSISTENCE_DIAGNOSTIC_MANIFEST_v0_3A.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish diagnostic evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/ebuy-persistence-diagnostic-v0-3a
+          mkdir -p "$out"
+          cp /tmp/diag3a/XAUUSD_Z4_EBUY_PERSISTENCE_DIAGNOSTIC_RESULT_v0_3A.json "$out/"
+          cp /tmp/diag3a/XAUUSD_Z4_EBUY_PERSISTENCE_DIAGNOSTIC_MANIFEST_v0_3A.json "$out/"
+          git add "$out"
+          git commit -m 'publish outcome-blind E-BUY persistence diagnostic v0.3A [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
