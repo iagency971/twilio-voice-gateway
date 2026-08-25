@@ -1,0 +1,258 @@
+name: XAU Z4 C5 Historical Replication v0.2 Parallel
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-c5-historical-replication-v0-2-parallel.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  freeze-dev-model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen cadence decision before any Aug-2024+ read
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'FROZEN BEFORE ANY CADENCE-SPECIFIC AUG-2024' xau-wick-zone-pro/XAUUSD_Z4_CADENCE_TARGETED_PRO_GATE_FRAMEWORK_v0_1_2026-08-24.md
+          grep -q 'C5 is the primary cadence candidate authorized for historical temporal replication' xau-wick-zone-pro/XAUUSD_Z4_CADENCE_TARGETED_PRO_GATE_FRAMEWORK_v0_1_2026-08-24.md
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fixed dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+      - name: Build mechanical C5 engine
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          old='p=utc_ts(ts); return p.minute%15==0 and p.second==0'; new='p=utc_ts(ts); return p.minute%5==0 and p.second==0'
+          assert src.count(old)==1
+          x=src.replace(old,new); assert x.replace(new,old)==src
+          p=Path('/tmp/z4_C5.py'); p.write_text(x)
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24'
+          PY
+      - name: Download DEV Jan-Jul 2024 only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid /tmp/xau/ask
+          for side in bid ask; do
+            for m in 01 02 03 04 05 06 07; do
+              f="xauusd_${side}_m1_2024_${m}.csv"
+              curl --fail --location --retry 5 --retry-delay 2 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/${side}/m1/${f}" -o "/tmp/xau/${side}/${f}"
+            done
+          done
+      - name: Verify exact DEV hashes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          m=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          exp={x['file']:x['sha256'] for x in m['files']}
+          got={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for s in ('bid','ask') for p in Path('/tmp/xau',s).glob('*.csv')}
+          assert len(got)==14 and got==exp
+          PY
+      - name: Rebuild exact C5 DEV BID and ASK
+        run: |
+          python /tmp/z4_C5.py --files /tmp/xau/bid/*.csv --output /tmp/C5_DEV_BID.pkl --tag C5_FREEZE_DEV_BID_V02
+          python /tmp/z4_C5.py --files /tmp/xau/ask/*.csv --output /tmp/C5_DEV_ASK.pkl --tag C5_FREEZE_DEV_ASK_V02
+      - name: Freeze full-DEV C5 models
+        shell: bash
+        run: |
+          python xau-wick-zone-pro/xau_z4_c5_freeze_dev_models_v0_1.py --bid-pkl /tmp/C5_DEV_BID.pkl --ask-pkl /tmp/C5_DEV_ASK.pkl --output /tmp/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          p=Path('/tmp/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json')
+          x=json.load(open(p)); assert x['status']=='FROZEN_C5_DEV_MODEL_PARAMETERS_BEFORE_CADENCE_HISTORICAL_REPLICATION'
+          a={'status':'C5_MODEL_FROZEN_BEFORE_HISTORICAL_DATA_READ','workflow_head_sha':os.environ.get('GITHUB_SHA'),'model_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'reference_engine_git_blob':'a8a147615c3fd366c49e93b340fd2018b5b66e9e','c5_engine_sha256':'7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24'}
+          Path('/tmp/XAUUSD_Z4_C5_MODEL_FREEZE_ATTESTATION_v0_1.json').write_text(json.dumps(a,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c5-v02-frozen-dev-model
+          path: |
+            /tmp/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json
+            /tmp/XAUUSD_Z4_C5_MODEL_FREEZE_ATTESTATION_v0_1.json
+          retention-days: 30
+
+  historical-build:
+    needs: freeze-dev-model
+    strategy:
+      fail-fast: false
+      matrix:
+        side: [bid, ask]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: c5-v02-frozen-dev-model
+          path: /tmp/freeze
+      - name: Verify frozen model before historical download
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('/tmp/freeze/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json')
+          a=json.load(open('/tmp/freeze/XAUUSD_Z4_C5_MODEL_FREEZE_ATTESTATION_v0_1.json'))
+          assert a['status']=='C5_MODEL_FROZEN_BEFORE_HISTORICAL_DATA_READ'
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==a['model_sha256']
+          PY
+      - name: Install fixed dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+      - name: Build mechanical C5 engine
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text(); old='p=utc_ts(ts); return p.minute%15==0 and p.second==0'; new='p=utc_ts(ts); return p.minute%5==0 and p.second==0'
+          x=src.replace(old,new); assert x.replace(new,old)==src
+          p=Path('/tmp/z4_C5.py'); p.write_text(x); assert hashlib.sha256(p.read_bytes()).hexdigest()=='7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24'
+          PY
+      - name: Download one-side causal history through Jul-2026 only
+        shell: bash
+        env:
+          SIDE: ${{ matrix.side }}
+        run: |
+          set -euo pipefail
+          mkdir -p "/tmp/xau/${SIDE}"
+          for y in 2024 2025 2026; do
+            if [ "$y" = "2024" ] || [ "$y" = "2025" ]; then months="01 02 03 04 05 06 07 08 09 10 11 12"; else months="01 02 03 04 05 06 07"; fi
+            for m in $months; do
+              f="xauusd_${SIDE}_m1_${y}_${m}.csv"
+              curl --fail --location --retry 5 --retry-delay 2 --connect-timeout 20 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/${SIDE}/m1/${f}" -o "/tmp/xau/${SIDE}/${f}"
+            done
+          done
+      - name: QA one-side historical source
+        shell: bash
+        env:
+          SIDE: ${{ matrix.side }}
+        run: |
+          python - <<'PY'
+          import os,hashlib,json
+          from pathlib import Path
+          import pandas as pd
+          side=os.environ['SIDE']
+          val=json.load(open('xau-wick-zone-pro/validation/XAUUSD_Z4_VALIDATION_SOURCE_MANIFEST_v0_1.json'))
+          vexp={(x['side'],x['year'],x['month']):x['sha256'] for x in val['files']}
+          brec=json.load(open('xau-wick-zone-pro/oos/XAUUSD_Z4_OOS_BID_RECOVERY_SOURCE_MANIFEST_v0_1.json'))
+          bexp={(x['year'],x['month']):x['sha256'] for x in brec['files']}
+          out={'status':'C5_HISTORICAL_SIDE_SOURCE_QA_PASS','side':side,'allowed_max_month':'2026-07','files':[],'validation_prefix_hash_checks':{},'bid_full_hash_checks':{}}
+          for p in sorted(Path('/tmp/xau',side).glob('*.csv')):
+              y,m=p.stem.split('_')[-2:]; raw=p.read_bytes(); sha=hashlib.sha256(raw).hexdigest(); d=pd.read_csv(p)
+              assert list(d.columns)==['timestamp','open','high','low','close']; assert not d.timestamp.duplicated().any() and d.timestamp.is_monotonic_increasing
+              bad=((d.high<d[['open','close','low']].max(axis=1)) | (d.low>d[['open','close','high']].min(axis=1))).sum(); assert bad==0
+              out['files'].append({'side':side,'year':y,'month':m,'file':p.name,'sha256':sha,'rows':int(len(d)),'active_rows':int((d.high>d.low).sum())})
+              if (side,y,m) in vexp:
+                  ok=sha==vexp[(side,y,m)]; out['validation_prefix_hash_checks'][f'{side}_{y}_{m}']=ok; assert ok
+              if side=='bid' and (y,m) in bexp:
+                  ok=sha==bexp[(y,m)]; out['bid_full_hash_checks'][f'bid_{y}_{m}']=ok; assert ok
+          assert len(out['files'])==31
+          if side=='bid': assert len(out['bid_full_hash_checks'])==31 and all(out['bid_full_hash_checks'].values())
+          Path(f'/tmp/C5_{side.upper()}_SOURCE_QA.json').write_text(json.dumps(out,indent=2))
+          PY
+      - name: Build continuous C5 side
+        shell: bash
+        env:
+          SIDE: ${{ matrix.side }}
+        run: |
+          python /tmp/z4_C5.py --files "/tmp/xau/${SIDE}"/*.csv --output "/tmp/C5_CONTINUOUS_${SIDE^^}.pkl" --tag "C5_HISTORICAL_${SIDE^^}_JAN2024_JUL2026_V02"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c5-v02-historical-${{ matrix.side }}
+          path: |
+            /tmp/C5_CONTINUOUS_*.pkl
+            /tmp/C5_CONTINUOUS_*_summary.json
+            /tmp/C5_*_SOURCE_QA.json
+          retention-days: 30
+
+  score-publish:
+    needs: [freeze-dev-model, historical-build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: c5-v02-frozen-dev-model
+          path: /tmp/freeze
+      - uses: actions/download-artifact@v4
+        with:
+          name: c5-v02-historical-bid
+          path: /tmp/bid
+      - uses: actions/download-artifact@v4
+        with:
+          name: c5-v02-historical-ask
+          path: /tmp/ask
+      - name: Install scoring dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+      - name: Combine source attestations
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          b=json.load(open('/tmp/bid/C5_BID_SOURCE_QA.json')); a=json.load(open('/tmp/ask/C5_ASK_SOURCE_QA.json'))
+          out={'status':'C5_HISTORICAL_REPLICATION_SOURCE_QA_PASS','source':'kevingtlin/Market-Data-Lab Dukascopy XAUUSD M1','allowed_max_month':'2026-07','files':b['files']+a['files'],'validation_prefix_hash_checks':{**b['validation_prefix_hash_checks'],**a['validation_prefix_hash_checks']},'bid_full_hash_checks':b['bid_full_hash_checks']}
+          assert len(out['files'])==62 and len(out['validation_prefix_hash_checks'])==38 and len(out['bid_full_hash_checks'])==31
+          Path('/tmp/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json').write_text(json.dumps(out,indent=2))
+          PY
+      - name: Score frozen C5 H1 and H2 — NO REFIT
+        run: |
+          python xau-wick-zone-pro/xau_z4_c5_historical_replication_score_v0_1.py \
+            --bid-pkl /tmp/bid/C5_CONTINUOUS_BID.pkl --ask-pkl /tmp/ask/C5_CONTINUOUS_ASK.pkl \
+            --frozen-json /tmp/freeze/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json \
+            --source-manifest /tmp/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json \
+            --output /tmp/XAUUSD_Z4_C5_HISTORICAL_REPLICATION_RESULTS_v0_2.json
+      - name: Publish immutable C5 replication evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          d=xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2
+          mkdir -p "$d"
+          cp /tmp/freeze/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json "$d"/
+          cp /tmp/freeze/XAUUSD_Z4_C5_MODEL_FREEZE_ATTESTATION_v0_1.json "$d"/
+          cp /tmp/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json "$d"/
+          cp /tmp/bid/C5_CONTINUOUS_BID_summary.json "$d"/
+          cp /tmp/ask/C5_CONTINUOUS_ASK_summary.json "$d"/
+          cp /tmp/XAUUSD_Z4_C5_HISTORICAL_REPLICATION_RESULTS_v0_2.json "$d"/
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add "$d"
+          git commit -m 'publish frozen parallel C5 historical replication evidence v0.2 [skip ci]'
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:agent/xau-wick-zone-pro-dev; then exit 0; fi
+            git pull --rebase origin agent/xau-wick-zone-pro-dev
+            sleep 5
+          done
+          exit 1
