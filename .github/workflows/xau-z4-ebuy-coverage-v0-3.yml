@@ -1,0 +1,129 @@
+name: XAU Z4 E-BUY Coverage v0.3 Structure Memory
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-coverage-v0-3.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  ebuy-v03:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Freeze guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_2.py xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_3.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_COVERAGE_PREREG_v0_3_2026-08-25.md').read_text()
+          for x in ['E-STRUCTURE-MEMORY','Fixed structural windows: `{5, 10, 20, 40}`','Grace periods tested: `{30, 60, 120}` minutes.','coverage >=80% inside 1.0v','raw pooled one-step 5-minute persistence >=70%']:
+              assert x in s,x
+          print('V03_PREREG_STATIC_PASS')
+          PY
+
+      - name: Acquire and verify frozen BID DEV
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/bid
+          for m in 01 02 03 04 05 06 07; do
+            f="xauusd_bid_m1_2024_${m}.csv"
+            curl --fail --location --retry 5 --retry-delay 2 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/${f}" -o "/tmp/xau/bid/${f}"
+          done
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          m=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          exp={x['file']:x['sha256'] for x in m['files'] if x.get('side')=='bid'}
+          got={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('/tmp/xau/bid').glob('*.csv')}
+          assert len(got)==7
+          for k,v in got.items():assert exp[k]==v,(k,exp.get(k),v)
+          print('SOURCE_HASH_PASS')
+          PY
+
+      - name: Build outcome-blind C5 Z4 geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          repl=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),
+            ('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+            ("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")]
+          for o,n in repl:assert src.count(o)==1,(o,src.count(o));src=src.replace(o,n)
+          assert 'out=outcome_zone(' not in src and '.revisited' not in src
+          Path('/tmp/z4_c5_geometry_only.py').write_text(src)
+          PY
+          python /tmp/z4_c5_geometry_only.py --files /tmp/xau/bid/*.csv --output /tmp/Z4_C5_GEOMETRY_ONLY.pkl --tag Z4_C5_EBUY_V03
+          python - <<'PY'
+          import pandas as pd
+          d=pd.read_pickle('/tmp/Z4_C5_GEOMETRY_ONLY.pkl');bad={'revisited','touch_idx','mfe5_v','mae5_v','sweep_far'}&set(d.columns)
+          assert not bad,bad
+          print({'rows':len(d),'times':int(d.time.nunique())})
+          PY
+
+      - name: Run structure-memory coverage v0.3
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/ebuy3
+          python xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_3.py \
+            --files /tmp/xau/bid/*.csv --z4-pkl /tmp/Z4_C5_GEOMETRY_ONLY.pkl \
+            --output /tmp/ebuy3/XAUUSD_Z4_EBUY_COVERAGE_RESULT_v0_3.json \
+            --selected-csv /tmp/ebuy3/XAUUSD_Z4_EBUY_SELECTED_CANDIDATES_v0_3.csv
+
+      - name: Provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          paths={
+            'prereg':'xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_COVERAGE_PREREG_v0_3_2026-08-25.md',
+            'engine_v01':'xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py',
+            'engine_v02':'xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_2.py',
+            'engine_v03':'xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_3.py',
+            'z4_geometry':'/tmp/z4_c5_geometry_only.py',
+            'result':'/tmp/ebuy3/XAUUSD_Z4_EBUY_COVERAGE_RESULT_v0_3.json',
+            'selected':'/tmp/ebuy3/XAUUSD_Z4_EBUY_SELECTED_CANDIDATES_v0_3.csv'}
+          x=json.load(open(paths['result']))
+          m={'status':'EBUY_V03_PROVENANCE_RECORDED','result_status':x['status'],'future_price_outcomes_used':False,'selected_architecture':x.get('selected_architecture'),
+             'selected_esm':x.get('esm',{}).get('selected_config'),'eligible_snapshot_count':x.get('eligible_snapshot_count'),
+             'sha256':{k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in paths.items()}}
+          Path('/tmp/ebuy3/XAUUSD_Z4_EBUY_COVERAGE_MANIFEST_v0_3.json').write_text(json.dumps(m,indent=2));print(json.dumps(m,indent=2))
+          PY
+
+      - name: Publish v0.3 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/ebuy-coverage-v0-3
+          mkdir -p "$out"
+          cp /tmp/ebuy3/XAUUSD_Z4_EBUY_COVERAGE_RESULT_v0_3.json "$out/"
+          cp /tmp/ebuy3/XAUUSD_Z4_EBUY_COVERAGE_MANIFEST_v0_3.json "$out/"
+          gzip -c /tmp/ebuy3/XAUUSD_Z4_EBUY_SELECTED_CANDIDATES_v0_3.csv > "$out/XAUUSD_Z4_EBUY_SELECTED_CANDIDATES_v0_3.csv.gz"
+          git add "$out"
+          git commit -m 'publish structure-memory BUY-only E-zone coverage v0.3 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
