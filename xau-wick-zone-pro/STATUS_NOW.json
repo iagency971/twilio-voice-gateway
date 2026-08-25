@@ -1,146 +1,69 @@
 {
-  "checked_at": "2026-08-24T02:00:25Z",
-  "workflows": {
-    "xau-wick-zone-pro-oos-bid-recovery.yml": [
-      {
-        "id": 32678683334,
-        "status": "completed",
-        "conclusion": "failure",
-        "head_sha": "92784d387c7ec1848031b3d0b23a07a5c8fd3bed",
-        "created_at": "2026-08-24T01:05:40Z",
-        "updated_at": "2026-08-24T01:17:36Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32678683334"
-      }
+  "checked_at": "2026-08-25T11:25:00Z",
+  "branch": "agent/xau-wick-zone-pro-dev",
+  "scientific_status": {
+    "claim": "Z4 geometry+lineage adds predictive information for REVISIT_240 on Dukascopy XAUUSD M1 relative to frozen M0",
+    "status": "GO_NARROW_CLAIM",
+    "lookback_active_m1": 1440,
+    "endpoint_active_m1": 240,
+    "reaction_reversal": "NO_GO",
+    "higher_tf_r": "NOT_VALIDATED",
+    "memory_after_drop": "PREREG_REQUIRED",
+    "forexcom_transfer": "NOT_VALIDATED"
+  },
+  "cadence_decision": {
+    "production_incumbent_until_runtime_gate": "C15",
+    "selected_replacement_candidate": "C5",
+    "c5_cadence_min": 5,
+    "c1_status": "SENSITIVITY_ONLY_NO_POSTHOC_RESCUE",
+    "c5_historical_replication": "PASS",
+    "c5_python_engineering_gate": "PASS",
+    "c5_strict_historical_threshold_attestation": "PASS"
+  },
+  "c5_historical_replication": {
+    "H1_BID_PRIMARY_PASS": true,
+    "H2_BID_PRIMARY_PASS": true,
+    "H1_ASK_SUPPORT_PASS": true,
+    "H2_ASK_SUPPORT_PASS": true,
+    "C5_HISTORICAL_REPLICATION_PASS": true
+  },
+  "c5_engineering": {
+    "dev_bid_rows": 267059,
+    "dev_bid_landmarks": 41110,
+    "selected_warmup_landmarks": 96,
+    "greedy_lineage": "PASS",
+    "combined_pine_math_proxy": "PASS",
+    "combined_score_spearman": 0.998328512407977,
+    "combined_top1_zone_agreement": 0.8734851803182947,
+    "r_display_parity": "PASS",
+    "r_display_p95_abs_float_error": 3.7142616469952796,
+    "r_display_within_5_share": 0.9769842654151473
+  },
+  "pine_candidate": {
+    "file": "XAUUSD_Z4_Revisit_Score_QA_v2_2_0_M1_C5_QA_PROXY.pine",
+    "sha256": "4f33ea438e7c008e8276129b7be26a51bdf06fd1668605c3f93321742aa2660e",
+    "status": "STATIC_QA_PASS_TRADINGVIEW_RUNTIME_PENDING",
+    "derived_from": "XAUUSD_Z4_Revisit_Score_QA_v2_1_0_M1_QA_PROXY.pine",
+    "base_sha256": "6d5480368a0c3b5ab0480e73afd6a34199806ca05a62b37683847ffc00406144",
+    "landmark_ms": 300000,
+    "lookback_active_m1": 1440,
+    "warmup_landmarks": 96,
+    "grid_step_usd": 0.05,
+    "r_map": "C5_SPECIFIC_DEV_ONLY",
+    "runtime_label": "QA_PROXY"
+  },
+  "remaining_gate": {
+    "blocking_for_validated_proxy": true,
+    "items": [
+      "TradingView Pine v6 compile",
+      "Replay stability across successive confirmed 5-minute snapshots",
+      "live close behavior at a 5-minute boundary",
+      "GRID_LIMIT reset and 96-landmark re-arm where practicable"
     ],
-    "xau-wick-zone-pine-parity.yml": [
-      {
-        "id": 32678995898,
-        "status": "completed",
-        "conclusion": "success",
-        "head_sha": "7ccfdd230a9d73dfe9c02912b228ee0f3cf56eb7",
-        "created_at": "2026-08-24T01:11:21Z",
-        "updated_at": "2026-08-24T01:15:27Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32678995898"
-      }
-    ],
-    "xau-wick-zone-score-map.yml": [
-      {
-        "id": 32679286322,
-        "status": "completed",
-        "conclusion": "success",
-        "head_sha": "379cc1782dc157ddfc28e6a3a4ed8fa9f5f9879b",
-        "created_at": "2026-08-24T01:16:53Z",
-        "updated_at": "2026-08-24T01:18:09Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679286322"
-      },
-      {
-        "id": 32679065716,
-        "status": "completed",
-        "conclusion": "failure",
-        "head_sha": "d10683af77ff1cd274886329576041048c4f12b6",
-        "created_at": "2026-08-24T01:12:42Z",
-        "updated_at": "2026-08-24T01:13:56Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679065716"
-      }
-    ],
-    "xau-wick-zone-lineage-cap.yml": [
-      {
-        "id": 32679497170,
-        "status": "completed",
-        "conclusion": "success",
-        "head_sha": "00a15605cabb537269c2f989be94472b2f5e7e90",
-        "created_at": "2026-08-24T01:20:55Z",
-        "updated_at": "2026-08-24T01:24:09Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679497170"
-      }
-    ],
-    "xau-wick-zone-lineage-cap-fast.yml": [
-      {
-        "id": 32679651960,
-        "status": "completed",
-        "conclusion": "success",
-        "head_sha": "31d94e5d73c2a0ec80671430cb5b4632aa1af50b",
-        "created_at": "2026-08-24T01:24:00Z",
-        "updated_at": "2026-08-24T01:26:43Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679651960"
-      }
-    ],
-    "xau-wick-zone-grid-step.yml": [
-      {
-        "id": 32679833932,
-        "status": "completed",
-        "conclusion": "failure",
-        "head_sha": "e5539f9c4f15029fe9faa15c142007d6151d539f",
-        "created_at": "2026-08-24T01:27:25Z",
-        "updated_at": "2026-08-24T01:36:07Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679833932"
-      }
-    ],
-    "xau-wick-zone-greedy-lineage.yml": [
-      {
-        "id": 32679934913,
-        "status": "completed",
-        "conclusion": "success",
-        "head_sha": "b71f7c67b3e738c1e0cd2e993518c5d1979af1a1",
-        "created_at": "2026-08-24T01:29:23Z",
-        "updated_at": "2026-08-24T01:31:02Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679934913"
-      }
-    ],
-    "xau-wick-zone-peak-algo.yml": [
-      {
-        "id": 32680427684,
-        "status": "completed",
-        "conclusion": "success",
-        "head_sha": "633984ccb8e93f02fc97ec7a73a3ee805544649a",
-        "created_at": "2026-08-24T01:38:16Z",
-        "updated_at": "2026-08-24T01:41:28Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32680427684"
-      }
-    ],
-    "xau-wick-zone-combined-parity.yml": [
-      {
-        "id": 32681005006,
-        "status": "completed",
-        "conclusion": "success",
-        "head_sha": "b7a5614e20554cb315333d69abc20558b004a558",
-        "created_at": "2026-08-24T01:49:14Z",
-        "updated_at": "2026-08-24T01:52:43Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32681005006"
-      }
-    ],
-    "xau-wick-zone-actual-state-parity.yml": [
-      {
-        "id": 32681553808,
-        "status": "in_progress",
-        "conclusion": null,
-        "head_sha": "349b973a1308eb03082d7d7b905a86975b295503",
-        "created_at": "2026-08-24T01:59:29Z",
-        "updated_at": "2026-08-24T01:59:32Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32681553808"
-      }
-    ],
-    "xau-wick-zone-r-label-parity.yml": [
-      {
-        "id": 32681405359,
-        "status": "in_progress",
-        "conclusion": null,
-        "head_sha": "73428b82ca2e40f6a60e182be5d9610219e58bfa",
-        "created_at": "2026-08-24T01:56:40Z",
-        "updated_at": "2026-08-24T01:56:43Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32681405359"
-      }
-    ],
-    "xau-wick-zone-finalization-monitor.yml": [
-      {
-        "id": 32679014641,
-        "status": "completed",
-        "conclusion": "success",
-        "head_sha": "9379e6b8e71b466f20beeaad660bf89963ae4374",
-        "created_at": "2026-08-24T01:11:43Z",
-        "updated_at": "2026-08-24T01:17:41Z",
-        "html_url": "https://github.com/iagency971/twilio-voice-gateway/actions/runs/32679014641"
-      }
-    ]
-  }
+    "note": "Passing this runtime gate can promote the C5 Pine implementation label; it does not validate FOREXCOM feed transfer."
+  },
+  "canonical_memo": "XAUUSD_Z4_C5_PROMOTION_DECISION_2026-08-25.md",
+  "strict_attestation": "cadence-sensitivity/c5-engineering-v0-2/XAUUSD_Z4_C5_STRICT_HISTORICAL_THRESHOLD_ATTESTATION_v0_2.json",
+  "pine_manifest": "XAUUSD_Z4_Revisit_Score_QA_v2_2_0_MANIFEST.json",
+  "pine_static_qa": "XAUUSD_Z4_Revisit_Score_QA_v2_2_0_STATIC_QA.json"
 }
