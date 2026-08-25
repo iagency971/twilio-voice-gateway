@@ -1,0 +1,2627 @@
+{
+  "status": "REACTION_DEV_COMPLETE",
+  "scope": "BUY_ONLY_EBUY_REACTION_DEV_H1",
+  "coverage_activation_status": "EBUY_COVERAGE_OOS_REPLICATION_PASS",
+  "reaction_dev_window_utc": [
+    "2024-08-01 00:00:00+00:00",
+    "2025-08-01 00:00:00+00:00"
+  ],
+  "reaction_holdout_opened": false,
+  "contact_episode_count": 16895,
+  "trigger_summaries": {
+    "TOUCH_REF": {
+      "fired_count": 16895,
+      "fired_share_of_contacts": 1.0,
+      "nonfire_reasons": {},
+      "tp1_invalidation": {
+        "TP1_FIRST": 2587,
+        "INVALIDATION_FIRST": 12707,
+        "NEITHER": 449,
+        "AMBIGUOUS": 1152,
+        "AMBIGUOUS_CONTACT_BAR": 1126,
+        "resolved_share": 0.9318141461970997,
+        "tp1_resolved_rate": 0.16432700247729148,
+        "invalidation_resolved_rate": 0.8071523851870672,
+        "neither_resolved_rate": 0.028520612335641238
+      },
+      "fp": {
+        "FP_0.50v_vs_0.25v": {
+          "favorable_first": 350,
+          "adverse_first": 4538,
+          "ambiguous": 12007,
+          "ambiguous_contact_bar": 11902,
+          "neither": 0,
+          "resolved_denominator": 4888,
+          "favorable_resolved_rate": 0.0716039279869067,
+          "ambiguity_rate": 0.7106836342113051
+        },
+        "FP_1.00v_vs_0.50v": {
+          "favorable_first": 2975,
+          "adverse_first": 9143,
+          "ambiguous": 4773,
+          "ambiguous_contact_bar": 4672,
+          "neither": 4,
+          "resolved_denominator": 12118,
+          "favorable_resolved_rate": 0.24550255817791714,
+          "ambiguity_rate": 0.2825096182302456
+        },
+        "FP_1.50v_vs_0.75v": {
+          "favorable_first": 4659,
+          "adverse_first": 10791,
+          "ambiguous": 1402,
+          "ambiguous_contact_bar": 1350,
+          "neither": 43,
+          "resolved_denominator": 15450,
+          "favorable_resolved_rate": 0.30155339805825243,
+          "ambiguity_rate": 0.08298313110387688
+        }
+      },
+      "mfe_v": {
+        "median": 5.4469660818020635,
+        "p90": 15.837891778698774
+      },
+      "mae_v": {
+        "median": 4.9896751264259365,
+        "p90": 17.88018603497845
+      },
+      "tp_distance_v": {
+        "median": 4.166480233320735,
+        "p90": 12.234320587320067
+      },
+      "minutes_to_us_end": {
+        "median": 294.0,
+        "p90": 499.0
+      },
+      "DEV_ELIGIBLE": true
+    },
+    "RECLAIM_CENTER": {
+      "fired_count": 10482,
+      "fired_share_of_contacts": 0.6204202426753478,
+      "nonfire_reasons": {
+        "INVALIDATED_BEFORE_TRIGGER": 5484,
+        "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 916,
+        "NO_NEXT_OPEN_BEFORE_US_END": 11,
+        "TRIGGER_NOT_SEEN": 2
+      },
+      "tp1_invalidation": {
+        "TP1_FIRST": 2554,
+        "INVALIDATION_FIRST": 7466,
+        "NEITHER": 436,
+        "AMBIGUOUS": 26,
+        "AMBIGUOUS_CONTACT_BAR": 0,
+        "resolved_share": 0.9975195573363862,
+        "tp1_resolved_rate": 0.24426166794185156,
+        "invalidation_resolved_rate": 0.7140397857689365,
+        "neither_resolved_rate": 0.041698546289211935
+      },
+      "fp": {
+        "FP_0.50v_vs_0.25v": {
+          "favorable_first": 3158,
+          "adverse_first": 5549,
+          "ambiguous": 1774,
+          "ambiguous_contact_bar": 0,
+          "neither": 1,
+          "resolved_denominator": 8707,
+          "favorable_resolved_rate": 0.36269668083151485,
+          "ambiguity_rate": 0.1692425109711887
+        },
+        "FP_1.00v_vs_0.50v": {
+          "favorable_first": 3541,
+          "adverse_first": 6716,
+          "ambiguous": 215,
+          "ambiguous_contact_bar": 0,
+          "neither": 10,
+          "resolved_denominator": 10257,
+          "favorable_resolved_rate": 0.34522764941015893,
+          "ambiguity_rate": 0.020511352795268077
+        },
+        "FP_1.50v_vs_0.75v": {
+          "favorable_first": 3569,
+          "adverse_first": 6821,
+          "ambiguous": 56,
+          "ambiguous_contact_bar": 0,
+          "neither": 36,
+          "resolved_denominator": 10390,
+          "favorable_resolved_rate": 0.3435033686236766,
+          "ambiguity_rate": 0.005342491890860523
+        }
+      },
+      "mfe_v": {
+        "median": 5.32466440365523,
+        "p90": 15.37392380077785
+      },
+      "mae_v": {
+        "median": 4.688441482949969,
+        "p90": 17.285565181399402
+      },
+      "tp_distance_v": {
+        "median": 4.2588170931155735,
+        "p90": 12.101901851317454
+      },
+      "minutes_to_us_end": {
+        "median": 284.0,
+        "p90": 494.0
+      },
+      "DEV_ELIGIBLE": true
+    },
+    "RECLAIM_FULL": {
+      "fired_count": 9274,
+      "fired_share_of_contacts": 0.5489197987570287,
+      "nonfire_reasons": {
+        "INVALIDATED_BEFORE_TRIGGER": 6676,
+        "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 924,
+        "NO_NEXT_OPEN_BEFORE_US_END": 16,
+        "TRIGGER_NOT_SEEN": 5
+      },
+      "tp1_invalidation": {
+        "TP1_FIRST": 2484,
+        "INVALIDATION_FIRST": 6340,
+        "NEITHER": 428,
+        "AMBIGUOUS": 22,
+        "AMBIGUOUS_CONTACT_BAR": 0,
+        "resolved_share": 0.9976277765796852,
+        "tp1_resolved_rate": 0.26848249027237353,
+        "invalidation_resolved_rate": 0.6852572416774751,
+        "neither_resolved_rate": 0.04626026805015132
+      },
+      "fp": {
+        "FP_0.50v_vs_0.25v": {
+          "favorable_first": 2788,
+          "adverse_first": 4935,
+          "ambiguous": 1550,
+          "ambiguous_contact_bar": 0,
+          "neither": 1,
+          "resolved_denominator": 7723,
+          "favorable_resolved_rate": 0.36099961154991583,
+          "ambiguity_rate": 0.1671339227949105
+        },
+        "FP_1.00v_vs_0.50v": {
+          "favorable_first": 3112,
+          "adverse_first": 5975,
+          "ambiguous": 177,
+          "ambiguous_contact_bar": 0,
+          "neither": 10,
+          "resolved_denominator": 9087,
+          "favorable_resolved_rate": 0.34246726092219654,
+          "ambiguity_rate": 0.019085615699805908
+        },
+        "FP_1.50v_vs_0.75v": {
+          "favorable_first": 3124,
+          "adverse_first": 6074,
+          "ambiguous": 47,
+          "ambiguous_contact_bar": 0,
+          "neither": 29,
+          "resolved_denominator": 9198,
+          "favorable_resolved_rate": 0.3396390519678191,
+          "ambiguity_rate": 0.005067931852490834
+        }
+      },
+      "mfe_v": {
+        "median": 5.268202949714208,
+        "p90": 15.319096430682446
+      },
+      "mae_v": {
+        "median": 4.722222222222877,
+        "p90": 17.320471467353165
+      },
+      "tp_distance_v": {
+        "median": 4.1268648662060965,
+        "p90": 12.059755146712494
+      },
+      "minutes_to_us_end": {
+        "median": 283.0,
+        "p90": 494.0
+      },
+      "DEV_ELIGIBLE": true
+    },
+    "BULL_REJECTION": {
+      "fired_count": 7127,
+      "fired_share_of_contacts": 0.4218407812962415,
+      "nonfire_reasons": {
+        "INVALIDATED_BEFORE_TRIGGER": 8731,
+        "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 1002,
+        "TRIGGER_NOT_SEEN": 22,
+        "NO_NEXT_OPEN_BEFORE_US_END": 13
+      },
+      "tp1_invalidation": {
+        "TP1_FIRST": 2235,
+        "INVALIDATION_FIRST": 4457,
+        "NEITHER": 417,
+        "AMBIGUOUS": 18,
+        "AMBIGUOUS_CONTACT_BAR": 0,
+        "resolved_share": 0.9974743931527992,
+        "tp1_resolved_rate": 0.3143902095934731,
+        "invalidation_resolved_rate": 0.6269517513011675,
+        "neither_resolved_rate": 0.058658039105359404
+      },
+      "fp": {
+        "FP_0.50v_vs_0.25v": {
+          "favorable_first": 2134,
+          "adverse_first": 3854,
+          "ambiguous": 1133,
+          "ambiguous_contact_bar": 0,
+          "neither": 6,
+          "resolved_denominator": 5988,
+          "favorable_resolved_rate": 0.3563794255177021,
+          "ambiguity_rate": 0.15897291988213835
+        },
+        "FP_1.00v_vs_0.50v": {
+          "favorable_first": 2316,
+          "adverse_first": 4667,
+          "ambiguous": 132,
+          "ambiguous_contact_bar": 0,
+          "neither": 12,
+          "resolved_denominator": 6983,
+          "favorable_resolved_rate": 0.3316626091937563,
+          "ambiguity_rate": 0.01852111687947243
+        },
+        "FP_1.50v_vs_0.75v": {
+          "favorable_first": 2352,
+          "adverse_first": 4715,
+          "ambiguous": 31,
+          "ambiguous_contact_bar": 0,
+          "neither": 29,
+          "resolved_denominator": 7067,
+          "favorable_resolved_rate": 0.3328144898825527,
+          "ambiguity_rate": 0.004349656236845798
+        }
+      },
+      "mfe_v": {
+        "median": 5.160583941605942,
+        "p90": 15.157039095295406
+      },
+      "mae_v": {
+        "median": 4.603997039229331,
+        "p90": 16.8211914126913
+      },
+      "tp_distance_v": {
+        "median": 3.9515271443875304,
+        "p90": 11.6906379711647
+      },
+      "minutes_to_us_end": {
+        "median": 279.0,
+        "p90": 494.0
+      },
+      "DEV_ELIGIBLE": true
+    }
+  },
+  "selected_trigger": "BULL_REJECTION",
+  "selection_rule": "preregistered v1.0 lexicographic rule",
+  "stratified": {
+    "by_family": {
+      "EPM_M1_R2_A8H": {
+        "TOUCH_REF": {
+          "sparse": false,
+          "contact_episode_count": 2425,
+          "summary": {
+            "fired_count": 2425,
+            "fired_share_of_contacts": 1.0,
+            "nonfire_reasons": {},
+            "tp1_invalidation": {
+              "TP1_FIRST": 356,
+              "INVALIDATION_FIRST": 1817,
+              "NEITHER": 58,
+              "AMBIGUOUS": 194,
+              "AMBIGUOUS_CONTACT_BAR": 191,
+              "resolved_share": 0.92,
+              "tp1_resolved_rate": 0.15956969968623935,
+              "invalidation_resolved_rate": 0.8144329896907216,
+              "neither_resolved_rate": 0.025997310623038995
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 43,
+                "adverse_first": 550,
+                "ambiguous": 1832,
+                "ambiguous_contact_bar": 1820,
+                "neither": 0,
+                "resolved_denominator": 593,
+                "favorable_resolved_rate": 0.07251264755480608,
+                "ambiguity_rate": 0.7554639175257732
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 397,
+                "adverse_first": 1220,
+                "ambiguous": 807,
+                "ambiguous_contact_bar": 790,
+                "neither": 1,
+                "resolved_denominator": 1617,
+                "favorable_resolved_rate": 0.24551638837353124,
+                "ambiguity_rate": 0.33278350515463917
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 659,
+                "adverse_first": 1520,
+                "ambiguous": 237,
+                "ambiguous_contact_bar": 229,
+                "neither": 9,
+                "resolved_denominator": 2179,
+                "favorable_resolved_rate": 0.3024323083983479,
+                "ambiguity_rate": 0.0977319587628866
+              }
+            },
+            "mfe_v": {
+              "median": 5.693859649123829,
+              "p90": 16.714647040855542
+            },
+            "mae_v": {
+              "median": 5.214457831326276,
+              "p90": 17.98969969969876
+            },
+            "tp_distance_v": {
+              "median": 3.98516374040395,
+              "p90": 12.134099876868213
+            },
+            "minutes_to_us_end": {
+              "median": 317.0,
+              "p90": 503.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_CENTER": {
+          "sparse": false,
+          "contact_episode_count": 2425,
+          "summary": {
+            "fired_count": 1458,
+            "fired_share_of_contacts": 0.6012371134020619,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 816,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 148,
+              "NO_NEXT_OPEN_BEFORE_US_END": 2,
+              "TRIGGER_NOT_SEEN": 1
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 350,
+              "INVALIDATION_FIRST": 1050,
+              "NEITHER": 55,
+              "AMBIGUOUS": 3,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9979423868312757,
+              "tp1_resolved_rate": 0.24054982817869416,
+              "invalidation_resolved_rate": 0.7216494845360825,
+              "neither_resolved_rate": 0.037800687285223365
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 451,
+                "adverse_first": 747,
+                "ambiguous": 260,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1198,
+                "favorable_resolved_rate": 0.3764607679465776,
+                "ambiguity_rate": 0.17832647462277093
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 493,
+                "adverse_first": 933,
+                "ambiguous": 31,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 1426,
+                "favorable_resolved_rate": 0.34572230014025246,
+                "ambiguity_rate": 0.021262002743484224
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 501,
+                "adverse_first": 947,
+                "ambiguous": 8,
+                "ambiguous_contact_bar": 0,
+                "neither": 2,
+                "resolved_denominator": 1448,
+                "favorable_resolved_rate": 0.34599447513812154,
+                "ambiguity_rate": 0.0054869684499314125
+              }
+            },
+            "mfe_v": {
+              "median": 5.52923149457893,
+              "p90": 16.01472303485698
+            },
+            "mae_v": {
+              "median": 4.7647927604900735,
+              "p90": 17.32288901179421
+            },
+            "tp_distance_v": {
+              "median": 4.265278545779973,
+              "p90": 12.535897725737412
+            },
+            "minutes_to_us_end": {
+              "median": 293.5,
+              "p90": 498.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_FULL": {
+          "sparse": false,
+          "contact_episode_count": 2425,
+          "summary": {
+            "fired_count": 1282,
+            "fired_share_of_contacts": 0.528659793814433,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 987,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 152,
+              "NO_NEXT_OPEN_BEFORE_US_END": 3,
+              "TRIGGER_NOT_SEEN": 1
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 339,
+              "INVALIDATION_FIRST": 886,
+              "NEITHER": 54,
+              "AMBIGUOUS": 3,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9976599063962559,
+              "tp1_resolved_rate": 0.2650508209538702,
+              "invalidation_resolved_rate": 0.6927286942924159,
+              "neither_resolved_rate": 0.04222048475371384
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 383,
+                "adverse_first": 665,
+                "ambiguous": 233,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 1048,
+                "favorable_resolved_rate": 0.3654580152671756,
+                "ambiguity_rate": 0.18174726989079562
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 423,
+                "adverse_first": 832,
+                "ambiguous": 26,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 1255,
+                "favorable_resolved_rate": 0.33705179282868525,
+                "ambiguity_rate": 0.0202808112324493
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 426,
+                "adverse_first": 847,
+                "ambiguous": 8,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 1273,
+                "favorable_resolved_rate": 0.33464257659073054,
+                "ambiguity_rate": 0.0062402496099844
+              }
+            },
+            "mfe_v": {
+              "median": 5.475259093680012,
+              "p90": 16.236148324743464
+            },
+            "mae_v": {
+              "median": 4.956438095753578,
+              "p90": 17.63972038140433
+            },
+            "tp_distance_v": {
+              "median": 4.191014342321222,
+              "p90": 12.09505223944085
+            },
+            "minutes_to_us_end": {
+              "median": 292.0,
+              "p90": 499.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "BULL_REJECTION": {
+          "sparse": false,
+          "contact_episode_count": 2425,
+          "summary": {
+            "fired_count": 945,
+            "fired_share_of_contacts": 0.38969072164948454,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 1314,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 160,
+              "TRIGGER_NOT_SEEN": 4,
+              "NO_NEXT_OPEN_BEFORE_US_END": 2
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 302,
+              "INVALIDATION_FIRST": 590,
+              "NEITHER": 52,
+              "AMBIGUOUS": 1,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9989417989417989,
+              "tp1_resolved_rate": 0.3199152542372881,
+              "invalidation_resolved_rate": 0.625,
+              "neither_resolved_rate": 0.05508474576271186
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 296,
+                "adverse_first": 491,
+                "ambiguous": 158,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 787,
+                "favorable_resolved_rate": 0.3761118170266836,
+                "ambiguity_rate": 0.1671957671957672
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 323,
+                "adverse_first": 601,
+                "ambiguous": 21,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 924,
+                "favorable_resolved_rate": 0.3495670995670996,
+                "ambiguity_rate": 0.022222222222222223
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 313,
+                "adverse_first": 626,
+                "ambiguous": 5,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 939,
+                "favorable_resolved_rate": 0.3333333333333333,
+                "ambiguity_rate": 0.005291005291005291
+              }
+            },
+            "mfe_v": {
+              "median": 5.158197507192556,
+              "p90": 15.501525423727504
+            },
+            "mae_v": {
+              "median": 4.723590585660204,
+              "p90": 17.44237981019781
+            },
+            "tp_distance_v": {
+              "median": 4.056364443679192,
+              "p90": 12.12902117974398
+            },
+            "minutes_to_us_end": {
+              "median": 278.0,
+              "p90": 495.20000000000005
+            },
+            "DEV_ELIGIBLE": false
+          }
+        }
+      },
+      "ESM_BOTH_G120M": {
+        "TOUCH_REF": {
+          "sparse": false,
+          "contact_episode_count": 7137,
+          "summary": {
+            "fired_count": 7137,
+            "fired_share_of_contacts": 1.0,
+            "nonfire_reasons": {},
+            "tp1_invalidation": {
+              "TP1_FIRST": 975,
+              "INVALIDATION_FIRST": 5484,
+              "NEITHER": 171,
+              "AMBIGUOUS": 507,
+              "AMBIGUOUS_CONTACT_BAR": 494,
+              "resolved_share": 0.9289617486338798,
+              "tp1_resolved_rate": 0.14705882352941177,
+              "invalidation_resolved_rate": 0.8271493212669683,
+              "neither_resolved_rate": 0.025791855203619908
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 141,
+                "adverse_first": 1798,
+                "ambiguous": 5198,
+                "ambiguous_contact_bar": 5152,
+                "neither": 0,
+                "resolved_denominator": 1939,
+                "favorable_resolved_rate": 0.07271789582258896,
+                "ambiguity_rate": 0.7283172201204988
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 1255,
+                "adverse_first": 3851,
+                "ambiguous": 2030,
+                "ambiguous_contact_bar": 1988,
+                "neither": 1,
+                "resolved_denominator": 5106,
+                "favorable_resolved_rate": 0.24578926752839797,
+                "ambiguity_rate": 0.28443323525290737
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1975,
+                "adverse_first": 4550,
+                "ambiguous": 598,
+                "ambiguous_contact_bar": 572,
+                "neither": 14,
+                "resolved_denominator": 6525,
+                "favorable_resolved_rate": 0.30268199233716475,
+                "ambiguity_rate": 0.08378870673952642
+              }
+            },
+            "mfe_v": {
+              "median": 5.524698795180343,
+              "p90": 15.931223372138552
+            },
+            "mae_v": {
+              "median": 4.960725552052429,
+              "p90": 17.564853695323905
+            },
+            "tp_distance_v": {
+              "median": 4.153383793980628,
+              "p90": 12.117475285766774
+            },
+            "minutes_to_us_end": {
+              "median": 286.0,
+              "p90": 494.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_CENTER": {
+          "sparse": false,
+          "contact_episode_count": 7137,
+          "summary": {
+            "fired_count": 4178,
+            "fired_share_of_contacts": 0.5854000280229789,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 2565,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 388,
+              "NO_NEXT_OPEN_BEFORE_US_END": 6
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 964,
+              "INVALIDATION_FIRST": 3036,
+              "NEITHER": 165,
+              "AMBIGUOUS": 13,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9968884633796075,
+              "tp1_resolved_rate": 0.23145258103241295,
+              "invalidation_resolved_rate": 0.7289315726290516,
+              "neither_resolved_rate": 0.03961584633853541
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 1253,
+                "adverse_first": 2228,
+                "ambiguous": 696,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 3481,
+                "favorable_resolved_rate": 0.35995403619649524,
+                "ambiguity_rate": 0.1665868836764002
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 1398,
+                "adverse_first": 2690,
+                "ambiguous": 84,
+                "ambiguous_contact_bar": 0,
+                "neither": 6,
+                "resolved_denominator": 4088,
+                "favorable_resolved_rate": 0.3419765166340509,
+                "ambiguity_rate": 0.020105313547151747
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1420,
+                "adverse_first": 2721,
+                "ambiguous": 19,
+                "ambiguous_contact_bar": 0,
+                "neither": 18,
+                "resolved_denominator": 4141,
+                "favorable_resolved_rate": 0.3429123400144893,
+                "ambiguity_rate": 0.004547630445189086
+              }
+            },
+            "mfe_v": {
+              "median": 5.459716746386044,
+              "p90": 15.799669153351278
+            },
+            "mae_v": {
+              "median": 4.597068613765565,
+              "p90": 17.186506893180177
+            },
+            "tp_distance_v": {
+              "median": 4.207176930269652,
+              "p90": 12.030091890931907
+            },
+            "minutes_to_us_end": {
+              "median": 279.0,
+              "p90": 494.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_FULL": {
+          "sparse": false,
+          "contact_episode_count": 7137,
+          "summary": {
+            "fired_count": 3721,
+            "fired_share_of_contacts": 0.5213675213675214,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 3033,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 375,
+              "NO_NEXT_OPEN_BEFORE_US_END": 6,
+              "TRIGGER_NOT_SEEN": 2
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 947,
+              "INVALIDATION_FIRST": 2601,
+              "NEITHER": 163,
+              "AMBIGUOUS": 10,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9973125503896801,
+              "tp1_resolved_rate": 0.25518728105631905,
+              "invalidation_resolved_rate": 0.7008892481810832,
+              "neither_resolved_rate": 0.043923470762597686
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 1126,
+                "adverse_first": 1991,
+                "ambiguous": 604,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 3117,
+                "favorable_resolved_rate": 0.3612447866538338,
+                "ambiguity_rate": 0.16232195646331632
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 1254,
+                "adverse_first": 2398,
+                "ambiguous": 63,
+                "ambiguous_contact_bar": 0,
+                "neither": 6,
+                "resolved_denominator": 3652,
+                "favorable_resolved_rate": 0.3433734939759036,
+                "ambiguity_rate": 0.016930932545014783
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1272,
+                "adverse_first": 2414,
+                "ambiguous": 18,
+                "ambiguous_contact_bar": 0,
+                "neither": 17,
+                "resolved_denominator": 3686,
+                "favorable_resolved_rate": 0.3450895279435703,
+                "ambiguity_rate": 0.004837409298575652
+              }
+            },
+            "mfe_v": {
+              "median": 5.4035087719289425,
+              "p90": 15.715302491101237
+            },
+            "mae_v": {
+              "median": 4.589843750000098,
+              "p90": 17.192570869987644
+            },
+            "tp_distance_v": {
+              "median": 4.13864225851644,
+              "p90": 12.020760519856989
+            },
+            "minutes_to_us_end": {
+              "median": 278.0,
+              "p90": 494.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "BULL_REJECTION": {
+          "sparse": false,
+          "contact_episode_count": 7137,
+          "summary": {
+            "fired_count": 2680,
+            "fired_share_of_contacts": 0.37550791649152304,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 4029,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 414,
+              "TRIGGER_NOT_SEEN": 10,
+              "NO_NEXT_OPEN_BEFORE_US_END": 4
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 829,
+              "INVALIDATION_FIRST": 1682,
+              "NEITHER": 160,
+              "AMBIGUOUS": 9,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9966417910447761,
+              "tp1_resolved_rate": 0.31037064769749156,
+              "invalidation_resolved_rate": 0.6297266941220516,
+              "neither_resolved_rate": 0.05990265818045676
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 806,
+                "adverse_first": 1451,
+                "ambiguous": 418,
+                "ambiguous_contact_bar": 0,
+                "neither": 5,
+                "resolved_denominator": 2257,
+                "favorable_resolved_rate": 0.35711120957022596,
+                "ambiguity_rate": 0.15597014925373134
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 877,
+                "adverse_first": 1752,
+                "ambiguous": 44,
+                "ambiguous_contact_bar": 0,
+                "neither": 7,
+                "resolved_denominator": 2629,
+                "favorable_resolved_rate": 0.33358691517687333,
+                "ambiguity_rate": 0.016417910447761194
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 906,
+                "adverse_first": 1745,
+                "ambiguous": 11,
+                "ambiguous_contact_bar": 0,
+                "neither": 18,
+                "resolved_denominator": 2651,
+                "favorable_resolved_rate": 0.34175782723500564,
+                "ambiguity_rate": 0.004104477611940298
+              }
+            },
+            "mfe_v": {
+              "median": 5.403212559410278,
+              "p90": 15.69268817204764
+            },
+            "mae_v": {
+              "median": 4.461688546036079,
+              "p90": 16.824963639438145
+            },
+            "tp_distance_v": {
+              "median": 3.8626996126304665,
+              "p90": 11.548902759541015
+            },
+            "minutes_to_us_end": {
+              "median": 273.0,
+              "p90": 489.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        }
+      },
+      "ES_M1_8H_R2_T0.50": {
+        "TOUCH_REF": {
+          "sparse": false,
+          "contact_episode_count": 2249,
+          "summary": {
+            "fired_count": 2249,
+            "fired_share_of_contacts": 1.0,
+            "nonfire_reasons": {},
+            "tp1_invalidation": {
+              "TP1_FIRST": 374,
+              "INVALIDATION_FIRST": 1608,
+              "NEITHER": 87,
+              "AMBIGUOUS": 180,
+              "AMBIGUOUS_CONTACT_BAR": 177,
+              "resolved_share": 0.9199644286349489,
+              "tp1_resolved_rate": 0.18076365393910102,
+              "invalidation_resolved_rate": 0.7771870468825519,
+              "neither_resolved_rate": 0.04204929917834703
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 47,
+                "adverse_first": 793,
+                "ambiguous": 1409,
+                "ambiguous_contact_bar": 1391,
+                "neither": 0,
+                "resolved_denominator": 840,
+                "favorable_resolved_rate": 0.055952380952380955,
+                "ambiguity_rate": 0.6265006669630947
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 401,
+                "adverse_first": 1326,
+                "ambiguous": 521,
+                "ambiguous_contact_bar": 514,
+                "neither": 1,
+                "resolved_denominator": 1727,
+                "favorable_resolved_rate": 0.23219455703532135,
+                "ambiguity_rate": 0.23165851489550912
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 618,
+                "adverse_first": 1465,
+                "ambiguous": 157,
+                "ambiguous_contact_bar": 149,
+                "neither": 9,
+                "resolved_denominator": 2083,
+                "favorable_resolved_rate": 0.29668746999519924,
+                "ambiguity_rate": 0.06980880391285016
+              }
+            },
+            "mfe_v": {
+              "median": 5.015577889448126,
+              "p90": 15.151210818169126
+            },
+            "mae_v": {
+              "median": 4.6546558704454135,
+              "p90": 17.607536369381457
+            },
+            "tp_distance_v": {
+              "median": 4.372418521624663,
+              "p90": 13.1178056000879
+            },
+            "minutes_to_us_end": {
+              "median": 257.0,
+              "p90": 502.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_CENTER": {
+          "sparse": false,
+          "contact_episode_count": 2249,
+          "summary": {
+            "fired_count": 1510,
+            "fired_share_of_contacts": 0.6714095153401511,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 579,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 159,
+              "NO_NEXT_OPEN_BEFORE_US_END": 1
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 365,
+              "INVALIDATION_FIRST": 1056,
+              "NEITHER": 86,
+              "AMBIGUOUS": 3,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9980132450331126,
+              "tp1_resolved_rate": 0.24220305242203052,
+              "invalidation_resolved_rate": 0.7007299270072993,
+              "neither_resolved_rate": 0.05706702057067021
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 465,
+                "adverse_first": 808,
+                "ambiguous": 237,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1273,
+                "favorable_resolved_rate": 0.3652788688138256,
+                "ambiguity_rate": 0.15695364238410597
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 503,
+                "adverse_first": 986,
+                "ambiguous": 20,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 1489,
+                "favorable_resolved_rate": 0.33781061114842176,
+                "ambiguity_rate": 0.013245033112582781
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 504,
+                "adverse_first": 990,
+                "ambiguous": 10,
+                "ambiguous_contact_bar": 0,
+                "neither": 6,
+                "resolved_denominator": 1494,
+                "favorable_resolved_rate": 0.3373493975903614,
+                "ambiguity_rate": 0.006622516556291391
+              }
+            },
+            "mfe_v": {
+              "median": 4.885345378956987,
+              "p90": 15.07475916392836
+            },
+            "mae_v": {
+              "median": 4.386756952447065,
+              "p90": 17.008116168253437
+            },
+            "tp_distance_v": {
+              "median": 4.728607660270715,
+              "p90": 13.426539195380025
+            },
+            "minutes_to_us_end": {
+              "median": 259.0,
+              "p90": 499.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_FULL": {
+          "sparse": false,
+          "contact_episode_count": 2249,
+          "summary": {
+            "fired_count": 1306,
+            "fired_share_of_contacts": 0.58070253445976,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 772,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 169,
+              "NO_NEXT_OPEN_BEFORE_US_END": 2
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 345,
+              "INVALIDATION_FIRST": 873,
+              "NEITHER": 85,
+              "AMBIGUOUS": 3,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9977029096477795,
+              "tp1_resolved_rate": 0.26477359938603223,
+              "invalidation_resolved_rate": 0.6699923254029163,
+              "neither_resolved_rate": 0.06523407521105141
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 390,
+                "adverse_first": 714,
+                "ambiguous": 202,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1104,
+                "favorable_resolved_rate": 0.3532608695652174,
+                "ambiguity_rate": 0.1546707503828484
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 429,
+                "adverse_first": 857,
+                "ambiguous": 19,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 1286,
+                "favorable_resolved_rate": 0.33359253499222397,
+                "ambiguity_rate": 0.01454823889739663
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 417,
+                "adverse_first": 876,
+                "ambiguous": 8,
+                "ambiguous_contact_bar": 0,
+                "neither": 5,
+                "resolved_denominator": 1293,
+                "favorable_resolved_rate": 0.3225058004640371,
+                "ambiguity_rate": 0.006125574272588055
+              }
+            },
+            "mfe_v": {
+              "median": 4.867295474378414,
+              "p90": 14.833347018279023
+            },
+            "mae_v": {
+              "median": 4.5362127769345255,
+              "p90": 17.328071379545634
+            },
+            "tp_distance_v": {
+              "median": 4.473692340070421,
+              "p90": 13.15989568855731
+            },
+            "minutes_to_us_end": {
+              "median": 260.0,
+              "p90": 499.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "BULL_REJECTION": {
+          "sparse": false,
+          "contact_episode_count": 2249,
+          "summary": {
+            "fired_count": 1098,
+            "fired_share_of_contacts": 0.4882169853268119,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 983,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 162,
+              "TRIGGER_NOT_SEEN": 5,
+              "NO_NEXT_OPEN_BEFORE_US_END": 1
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 319,
+              "INVALIDATION_FIRST": 696,
+              "NEITHER": 81,
+              "AMBIGUOUS": 2,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9981785063752276,
+              "tp1_resolved_rate": 0.29105839416058393,
+              "invalidation_resolved_rate": 0.635036496350365,
+              "neither_resolved_rate": 0.0739051094890511
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 312,
+                "adverse_first": 624,
+                "ambiguous": 162,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 936,
+                "favorable_resolved_rate": 0.3333333333333333,
+                "ambiguity_rate": 0.14754098360655737
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 351,
+                "adverse_first": 727,
+                "ambiguous": 19,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 1078,
+                "favorable_resolved_rate": 0.32560296846011133,
+                "ambiguity_rate": 0.017304189435336976
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 348,
+                "adverse_first": 744,
+                "ambiguous": 3,
+                "ambiguous_contact_bar": 0,
+                "neither": 3,
+                "resolved_denominator": 1092,
+                "favorable_resolved_rate": 0.31868131868131866,
+                "ambiguity_rate": 0.00273224043715847
+              }
+            },
+            "mfe_v": {
+              "median": 4.825583992139321,
+              "p90": 14.489426670886449
+            },
+            "mae_v": {
+              "median": 4.327801852499154,
+              "p90": 16.061783452714884
+            },
+            "tp_distance_v": {
+              "median": 4.356158019741791,
+              "p90": 12.272348035515082
+            },
+            "minutes_to_us_end": {
+              "median": 254.0,
+              "p90": 494.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        }
+      },
+      "EWM_G60M": {
+        "TOUCH_REF": {
+          "sparse": false,
+          "contact_episode_count": 4267,
+          "summary": {
+            "fired_count": 4267,
+            "fired_share_of_contacts": 1.0,
+            "nonfire_reasons": {},
+            "tp1_invalidation": {
+              "TP1_FIRST": 607,
+              "INVALIDATION_FIRST": 3335,
+              "NEITHER": 112,
+              "AMBIGUOUS": 213,
+              "AMBIGUOUS_CONTACT_BAR": 207,
+              "resolved_share": 0.9500820248418093,
+              "tp1_resolved_rate": 0.14972866304884064,
+              "invalidation_resolved_rate": 0.8226443019240256,
+              "neither_resolved_rate": 0.027627035027133696
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 103,
+                "adverse_first": 1192,
+                "ambiguous": 2972,
+                "ambiguous_contact_bar": 2948,
+                "neither": 0,
+                "resolved_denominator": 1295,
+                "favorable_resolved_rate": 0.07953667953667953,
+                "ambiguity_rate": 0.6965080853058355
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 788,
+                "adverse_first": 2310,
+                "ambiguous": 1168,
+                "ambiguous_contact_bar": 1139,
+                "neither": 1,
+                "resolved_denominator": 3098,
+                "favorable_resolved_rate": 0.2543576500968367,
+                "ambiguity_rate": 0.2737286149519569
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1183,
+                "adverse_first": 2725,
+                "ambiguous": 348,
+                "ambiguous_contact_bar": 341,
+                "neither": 11,
+                "resolved_denominator": 3908,
+                "favorable_resolved_rate": 0.30271238485158647,
+                "ambiguity_rate": 0.08155612842746661
+              }
+            },
+            "mfe_v": {
+              "median": 5.444421399400053,
+              "p90": 15.934914394566928
+            },
+            "mae_v": {
+              "median": 5.066858298969092,
+              "p90": 18.47817968825979
+            },
+            "tp_distance_v": {
+              "median": 4.568203351337694,
+              "p90": 12.636688995758051
+            },
+            "minutes_to_us_end": {
+              "median": 279.0,
+              "p90": 504.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_CENTER": {
+          "sparse": false,
+          "contact_episode_count": 4267,
+          "summary": {
+            "fired_count": 2689,
+            "fired_share_of_contacts": 0.630185141785798,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 1406,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 169,
+              "NO_NEXT_OPEN_BEFORE_US_END": 2,
+              "TRIGGER_NOT_SEEN": 1
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 600,
+              "INVALIDATION_FIRST": 1974,
+              "NEITHER": 109,
+              "AMBIGUOUS": 6,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9977686872443288,
+              "tp1_resolved_rate": 0.22363026462914648,
+              "invalidation_resolved_rate": 0.7357435706298919,
+              "neither_resolved_rate": 0.04062616474096161
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 800,
+                "adverse_first": 1428,
+                "ambiguous": 461,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 2228,
+                "favorable_resolved_rate": 0.3590664272890485,
+                "ambiguity_rate": 0.17143919672740796
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 921,
+                "adverse_first": 1701,
+                "ambiguous": 65,
+                "ambiguous_contact_bar": 0,
+                "neither": 2,
+                "resolved_denominator": 2622,
+                "favorable_resolved_rate": 0.3512585812356979,
+                "ambiguity_rate": 0.024172554853105245
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 908,
+                "adverse_first": 1754,
+                "ambiguous": 17,
+                "ambiguous_contact_bar": 0,
+                "neither": 10,
+                "resolved_denominator": 2662,
+                "favorable_resolved_rate": 0.3410969196093163,
+                "ambiguity_rate": 0.006322052807735217
+              }
+            },
+            "mfe_v": {
+              "median": 5.2825666795516915,
+              "p90": 15.165436072523885
+            },
+            "mae_v": {
+              "median": 4.783010156971275,
+              "p90": 17.179311131785827
+            },
+            "tp_distance_v": {
+              "median": 4.501909750154012,
+              "p90": 12.321816185643026
+            },
+            "minutes_to_us_end": {
+              "median": 266.0,
+              "p90": 494.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_FULL": {
+          "sparse": false,
+          "contact_episode_count": 4267,
+          "summary": {
+            "fired_count": 2418,
+            "fired_share_of_contacts": 0.5666744785563628,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 1670,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 173,
+              "NO_NEXT_OPEN_BEFORE_US_END": 5,
+              "TRIGGER_NOT_SEEN": 1
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 586,
+              "INVALIDATION_FIRST": 1721,
+              "NEITHER": 106,
+              "AMBIGUOUS": 5,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9979321753515302,
+              "tp1_resolved_rate": 0.24285122254455035,
+              "invalidation_resolved_rate": 0.7132200580190634,
+              "neither_resolved_rate": 0.043928719436386245
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 716,
+                "adverse_first": 1288,
+                "ambiguous": 414,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 2004,
+                "favorable_resolved_rate": 0.35728542914171657,
+                "ambiguity_rate": 0.17121588089330025
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 806,
+                "adverse_first": 1551,
+                "ambiguous": 59,
+                "ambiguous_contact_bar": 0,
+                "neither": 2,
+                "resolved_denominator": 2357,
+                "favorable_resolved_rate": 0.3419601187950785,
+                "ambiguity_rate": 0.024400330851943756
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 795,
+                "adverse_first": 1605,
+                "ambiguous": 12,
+                "ambiguous_contact_bar": 0,
+                "neither": 6,
+                "resolved_denominator": 2400,
+                "favorable_resolved_rate": 0.33125,
+                "ambiguity_rate": 0.004962779156327543
+              }
+            },
+            "mfe_v": {
+              "median": 5.26765873015962,
+              "p90": 15.064923342083286
+            },
+            "mae_v": {
+              "median": 4.827465986393769,
+              "p90": 16.940242785159235
+            },
+            "tp_distance_v": {
+              "median": 4.432184655959746,
+              "p90": 12.275871028544689
+            },
+            "minutes_to_us_end": {
+              "median": 264.0,
+              "p90": 494.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "BULL_REJECTION": {
+          "sparse": false,
+          "contact_episode_count": 4267,
+          "summary": {
+            "fired_count": 1897,
+            "fired_share_of_contacts": 0.4445746426060464,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 2170,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 191,
+              "NO_NEXT_OPEN_BEFORE_US_END": 6,
+              "TRIGGER_NOT_SEEN": 3
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 541,
+              "INVALIDATION_FIRST": 1248,
+              "NEITHER": 103,
+              "AMBIGUOUS": 5,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9973642593568793,
+              "tp1_resolved_rate": 0.28594080338266387,
+              "invalidation_resolved_rate": 0.6596194503171248,
+              "neither_resolved_rate": 0.054439746300211415
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 559,
+                "adverse_first": 1024,
+                "ambiguous": 313,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 1583,
+                "favorable_resolved_rate": 0.3531269740998105,
+                "ambiguity_rate": 0.16499736425935688
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 588,
+                "adverse_first": 1267,
+                "ambiguous": 38,
+                "ambiguous_contact_bar": 0,
+                "neither": 4,
+                "resolved_denominator": 1855,
+                "favorable_resolved_rate": 0.3169811320754717,
+                "ambiguity_rate": 0.020031628887717447
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 602,
+                "adverse_first": 1277,
+                "ambiguous": 11,
+                "ambiguous_contact_bar": 0,
+                "neither": 7,
+                "resolved_denominator": 1879,
+                "favorable_resolved_rate": 0.32038318254390635,
+                "ambiguity_rate": 0.005798629414865577
+              }
+            },
+            "mfe_v": {
+              "median": 5.094549499444637,
+              "p90": 15.018663174475508
+            },
+            "mae_v": {
+              "median": 4.89552238805879,
+              "p90": 16.537143581938153
+            },
+            "tp_distance_v": {
+              "median": 4.223149189116247,
+              "p90": 12.26717677789411
+            },
+            "minutes_to_us_end": {
+              "median": 264.0,
+              "p90": 494.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        }
+      },
+      "Z4": {
+        "TOUCH_REF": {
+          "sparse": false,
+          "contact_episode_count": 817,
+          "summary": {
+            "fired_count": 817,
+            "fired_share_of_contacts": 1.0,
+            "nonfire_reasons": {},
+            "tp1_invalidation": {
+              "TP1_FIRST": 275,
+              "INVALIDATION_FIRST": 463,
+              "NEITHER": 21,
+              "AMBIGUOUS": 58,
+              "AMBIGUOUS_CONTACT_BAR": 57,
+              "resolved_share": 0.9290085679314566,
+              "tp1_resolved_rate": 0.36231884057971014,
+              "invalidation_resolved_rate": 0.6100131752305665,
+              "neither_resolved_rate": 0.02766798418972332
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 16,
+                "adverse_first": 205,
+                "ambiguous": 596,
+                "ambiguous_contact_bar": 591,
+                "neither": 0,
+                "resolved_denominator": 221,
+                "favorable_resolved_rate": 0.07239819004524888,
+                "ambiguity_rate": 0.7294981640146879
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 134,
+                "adverse_first": 436,
+                "ambiguous": 247,
+                "ambiguous_contact_bar": 241,
+                "neither": 0,
+                "resolved_denominator": 570,
+                "favorable_resolved_rate": 0.23508771929824562,
+                "ambiguity_rate": 0.3023255813953488
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 224,
+                "adverse_first": 531,
+                "ambiguous": 62,
+                "ambiguous_contact_bar": 59,
+                "neither": 0,
+                "resolved_denominator": 755,
+                "favorable_resolved_rate": 0.29668874172185433,
+                "ambiguity_rate": 0.07588739290085679
+              }
+            },
+            "mfe_v": {
+              "median": 5.484260422029102,
+              "p90": 14.820696569085591
+            },
+            "mae_v": {
+              "median": 5.098626959328316,
+              "p90": 18.723714389699886
+            },
+            "tp_distance_v": {
+              "median": 2.678437323241194,
+              "p90": 6.832973572231226
+            },
+            "minutes_to_us_end": {
+              "median": 388.0,
+              "p90": 498.0
+            },
+            "DEV_ELIGIBLE": false
+          }
+        },
+        "RECLAIM_CENTER": {
+          "sparse": false,
+          "contact_episode_count": 817,
+          "summary": {
+            "fired_count": 647,
+            "fired_share_of_contacts": 0.791921664626683,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 118,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 52
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 275,
+              "INVALIDATION_FIRST": 350,
+              "NEITHER": 21,
+              "AMBIGUOUS": 1,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9984544049459042,
+              "tp1_resolved_rate": 0.42569659442724456,
+              "invalidation_resolved_rate": 0.541795665634675,
+              "neither_resolved_rate": 0.032507739938080496
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 189,
+                "adverse_first": 338,
+                "ambiguous": 120,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 527,
+                "favorable_resolved_rate": 0.3586337760910816,
+                "ambiguity_rate": 0.18547140649149924
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 226,
+                "adverse_first": 406,
+                "ambiguous": 15,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 632,
+                "favorable_resolved_rate": 0.3575949367088608,
+                "ambiguity_rate": 0.023183925811437404
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 236,
+                "adverse_first": 409,
+                "ambiguous": 2,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 645,
+                "favorable_resolved_rate": 0.36589147286821705,
+                "ambiguity_rate": 0.0030911901081916537
+              }
+            },
+            "mfe_v": {
+              "median": 5.237528604118015,
+              "p90": 13.800441988949059
+            },
+            "mae_v": {
+              "median": 4.894725870335699,
+              "p90": 18.609847832890143
+            },
+            "tp_distance_v": {
+              "median": 2.836492276365957,
+              "p90": 6.999272382728043
+            },
+            "minutes_to_us_end": {
+              "median": 379.0,
+              "p90": 498.0
+            },
+            "DEV_ELIGIBLE": false
+          }
+        },
+        "RECLAIM_FULL": {
+          "sparse": false,
+          "contact_episode_count": 817,
+          "summary": {
+            "fired_count": 547,
+            "fired_share_of_contacts": 0.6695226438188494,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 214,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 55,
+              "TRIGGER_NOT_SEEN": 1
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 267,
+              "INVALIDATION_FIRST": 259,
+              "NEITHER": 20,
+              "AMBIGUOUS": 1,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9981718464351006,
+              "tp1_resolved_rate": 0.489010989010989,
+              "invalidation_resolved_rate": 0.47435897435897434,
+              "neither_resolved_rate": 0.03663003663003663
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 173,
+                "adverse_first": 277,
+                "ambiguous": 97,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 450,
+                "favorable_resolved_rate": 0.3844444444444444,
+                "ambiguity_rate": 0.1773308957952468
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 200,
+                "adverse_first": 337,
+                "ambiguous": 10,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 537,
+                "favorable_resolved_rate": 0.37243947858473,
+                "ambiguity_rate": 0.018281535648994516
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 214,
+                "adverse_first": 332,
+                "ambiguous": 1,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 546,
+                "favorable_resolved_rate": 0.39194139194139194,
+                "ambiguity_rate": 0.0018281535648994515
+              }
+            },
+            "mfe_v": {
+              "median": 5.150442477875351,
+              "p90": 14.278082407925478
+            },
+            "mae_v": {
+              "median": 4.778210116731114,
+              "p90": 18.462051783097525
+            },
+            "tp_distance_v": {
+              "median": 2.56303067110832,
+              "p90": 6.7445526715633495
+            },
+            "minutes_to_us_end": {
+              "median": 374.0,
+              "p90": 496.80000000000007
+            },
+            "DEV_ELIGIBLE": false
+          }
+        },
+        "BULL_REJECTION": {
+          "sparse": false,
+          "contact_episode_count": 817,
+          "summary": {
+            "fired_count": 507,
+            "fired_share_of_contacts": 0.620563035495716,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 235,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 75
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 244,
+              "INVALIDATION_FIRST": 241,
+              "NEITHER": 21,
+              "AMBIGUOUS": 1,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9980276134122288,
+              "tp1_resolved_rate": 0.48221343873517786,
+              "invalidation_resolved_rate": 0.4762845849802372,
+              "neither_resolved_rate": 0.041501976284584984
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 161,
+                "adverse_first": 264,
+                "ambiguous": 82,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 425,
+                "favorable_resolved_rate": 0.3788235294117647,
+                "ambiguity_rate": 0.16173570019723865
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 177,
+                "adverse_first": 320,
+                "ambiguous": 10,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 497,
+                "favorable_resolved_rate": 0.3561368209255533,
+                "ambiguity_rate": 0.01972386587771203
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 183,
+                "adverse_first": 323,
+                "ambiguous": 1,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 506,
+                "favorable_resolved_rate": 0.3616600790513834,
+                "ambiguity_rate": 0.0019723865877712033
+              }
+            },
+            "mfe_v": {
+              "median": 5.073929961089156,
+              "p90": 12.992781813921436
+            },
+            "mae_v": {
+              "median": 4.83883218609055,
+              "p90": 18.64712931361481
+            },
+            "tp_distance_v": {
+              "median": 2.7560428963622727,
+              "p90": 7.238990013062213
+            },
+            "minutes_to_us_end": {
+              "median": 373.0,
+              "p90": 496.80000000000007
+            },
+            "DEV_ELIGIBLE": false
+          }
+        }
+      }
+    },
+    "by_us_subperiod": {
+      "US_AFTERNOON": {
+        "TOUCH_REF": {
+          "sparse": false,
+          "contact_episode_count": 8671,
+          "summary": {
+            "fired_count": 8671,
+            "fired_share_of_contacts": 1.0,
+            "nonfire_reasons": {},
+            "tp1_invalidation": {
+              "TP1_FIRST": 1119,
+              "INVALIDATION_FIRST": 6712,
+              "NEITHER": 422,
+              "AMBIGUOUS": 418,
+              "AMBIGUOUS_CONTACT_BAR": 408,
+              "resolved_share": 0.9517933341021797,
+              "tp1_resolved_rate": 0.1355870592511814,
+              "invalidation_resolved_rate": 0.8132800193868897,
+              "neither_resolved_rate": 0.051132921361929
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 220,
+                "adverse_first": 2456,
+                "ambiguous": 5995,
+                "ambiguous_contact_bar": 5925,
+                "neither": 0,
+                "resolved_denominator": 2676,
+                "favorable_resolved_rate": 0.08221225710014948,
+                "ambiguity_rate": 0.691385076692423
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 1692,
+                "adverse_first": 4787,
+                "ambiguous": 2188,
+                "ambiguous_contact_bar": 2147,
+                "neither": 4,
+                "resolved_denominator": 6479,
+                "favorable_resolved_rate": 0.2611514122549776,
+                "ambiguity_rate": 0.25233537077615037
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 2508,
+                "adverse_first": 5554,
+                "ambiguous": 566,
+                "ambiguous_contact_bar": 547,
+                "neither": 43,
+                "resolved_denominator": 8062,
+                "favorable_resolved_rate": 0.3110890597866534,
+                "ambiguity_rate": 0.06527505478030216
+              }
+            },
+            "mfe_v": {
+              "median": 4.559677419355712,
+              "p90": 12.557090909090492
+            },
+            "mae_v": {
+              "median": 3.7969696969686395,
+              "p90": 11.571262919028213
+            },
+            "tp_distance_v": {
+              "median": 5.682842214325257,
+              "p90": 15.013287674188199
+            },
+            "minutes_to_us_end": {
+              "median": 154.0,
+              "p90": 269.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_CENTER": {
+          "sparse": false,
+          "contact_episode_count": 8671,
+          "summary": {
+            "fired_count": 5527,
+            "fired_share_of_contacts": 0.6374120631991697,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 2790,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 341,
+              "NO_NEXT_OPEN_BEFORE_US_END": 11,
+              "TRIGGER_NOT_SEEN": 2
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 1104,
+              "INVALIDATION_FIRST": 4004,
+              "NEITHER": 409,
+              "AMBIGUOUS": 10,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.998190700199023,
+              "tp1_resolved_rate": 0.20010875475802067,
+              "invalidation_resolved_rate": 0.7257567518578938,
+              "neither_resolved_rate": 0.07413449338408555
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 1797,
+                "adverse_first": 2947,
+                "ambiguous": 782,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 4744,
+                "favorable_resolved_rate": 0.37879426644182124,
+                "ambiguity_rate": 0.14148724443640312
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 1930,
+                "adverse_first": 3507,
+                "ambiguous": 80,
+                "ambiguous_contact_bar": 0,
+                "neither": 10,
+                "resolved_denominator": 5437,
+                "favorable_resolved_rate": 0.3549751701305867,
+                "ambiguity_rate": 0.014474398407816174
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1911,
+                "adverse_first": 3562,
+                "ambiguous": 18,
+                "ambiguous_contact_bar": 0,
+                "neither": 36,
+                "resolved_denominator": 5473,
+                "favorable_resolved_rate": 0.3491686460807601,
+                "ambiguity_rate": 0.0032567396417586395
+              }
+            },
+            "mfe_v": {
+              "median": 4.379542395693373,
+              "p90": 12.382435143180663
+            },
+            "mae_v": {
+              "median": 3.670731707316052,
+              "p90": 11.685587006233241
+            },
+            "tp_distance_v": {
+              "median": 5.7288538244351574,
+              "p90": 14.92756405000406
+            },
+            "minutes_to_us_end": {
+              "median": 154.0,
+              "p90": 269.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_FULL": {
+          "sparse": false,
+          "contact_episode_count": 8671,
+          "summary": {
+            "fired_count": 4913,
+            "fired_share_of_contacts": 0.5666013147272517,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 3390,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 347,
+              "NO_NEXT_OPEN_BEFORE_US_END": 16,
+              "TRIGGER_NOT_SEEN": 5
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 1076,
+              "INVALIDATION_FIRST": 3427,
+              "NEITHER": 401,
+              "AMBIGUOUS": 9,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9981681253816406,
+              "tp1_resolved_rate": 0.21941272430668843,
+              "invalidation_resolved_rate": 0.6988172920065253,
+              "neither_resolved_rate": 0.0817699836867863
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 1579,
+                "adverse_first": 2649,
+                "ambiguous": 684,
+                "ambiguous_contact_bar": 0,
+                "neither": 1,
+                "resolved_denominator": 4228,
+                "favorable_resolved_rate": 0.37346263008514663,
+                "ambiguity_rate": 0.13922247099531854
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 1703,
+                "adverse_first": 3132,
+                "ambiguous": 68,
+                "ambiguous_contact_bar": 0,
+                "neither": 10,
+                "resolved_denominator": 4835,
+                "favorable_resolved_rate": 0.35222337125129266,
+                "ambiguity_rate": 0.01384083044982699
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1679,
+                "adverse_first": 3191,
+                "ambiguous": 14,
+                "ambiguous_contact_bar": 0,
+                "neither": 29,
+                "resolved_denominator": 4870,
+                "favorable_resolved_rate": 0.3447638603696099,
+                "ambiguity_rate": 0.0028495827396702628
+              }
+            },
+            "mfe_v": {
+              "median": 4.36363636363689,
+              "p90": 12.36500701262201
+            },
+            "mae_v": {
+              "median": 3.670731707316052,
+              "p90": 11.626550948244194
+            },
+            "tp_distance_v": {
+              "median": 5.616540998131252,
+              "p90": 14.81773786328843
+            },
+            "minutes_to_us_end": {
+              "median": 153.0,
+              "p90": 269.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "BULL_REJECTION": {
+          "sparse": false,
+          "contact_episode_count": 8671,
+          "summary": {
+            "fired_count": 3829,
+            "fired_share_of_contacts": 0.4415868988582632,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 4426,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 381,
+              "TRIGGER_NOT_SEEN": 22,
+              "NO_NEXT_OPEN_BEFORE_US_END": 13
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 984,
+              "INVALIDATION_FIRST": 2447,
+              "NEITHER": 390,
+              "AMBIGUOUS": 8,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9979106816401149,
+              "tp1_resolved_rate": 0.25752420832242867,
+              "invalidation_resolved_rate": 0.6404082700863648,
+              "neither_resolved_rate": 0.1020675215912065
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 1192,
+                "adverse_first": 2148,
+                "ambiguous": 483,
+                "ambiguous_contact_bar": 0,
+                "neither": 6,
+                "resolved_denominator": 3340,
+                "favorable_resolved_rate": 0.3568862275449102,
+                "ambiguity_rate": 0.12614259597806216
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 1239,
+                "adverse_first": 2533,
+                "ambiguous": 45,
+                "ambiguous_contact_bar": 0,
+                "neither": 12,
+                "resolved_denominator": 3772,
+                "favorable_resolved_rate": 0.32847295864262993,
+                "ambiguity_rate": 0.011752415774353616
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1268,
+                "adverse_first": 2519,
+                "ambiguous": 13,
+                "ambiguous_contact_bar": 0,
+                "neither": 29,
+                "resolved_denominator": 3787,
+                "favorable_resolved_rate": 0.33482968048587275,
+                "ambiguity_rate": 0.0033951423348132673
+              }
+            },
+            "mfe_v": {
+              "median": 4.292913385827011,
+              "p90": 12.336204299762105
+            },
+            "mae_v": {
+              "median": 3.670731707316052,
+              "p90": 11.482769838600415
+            },
+            "tp_distance_v": {
+              "median": 5.278769157173474,
+              "p90": 14.329259816199198
+            },
+            "minutes_to_us_end": {
+              "median": 153.0,
+              "p90": 269.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        }
+      },
+      "US_EARLY": {
+        "TOUCH_REF": {
+          "sparse": false,
+          "contact_episode_count": 3382,
+          "summary": {
+            "fired_count": 3382,
+            "fired_share_of_contacts": 1.0,
+            "nonfire_reasons": {},
+            "tp1_invalidation": {
+              "TP1_FIRST": 539,
+              "INVALIDATION_FIRST": 2549,
+              "NEITHER": 2,
+              "AMBIGUOUS": 292,
+              "AMBIGUOUS_CONTACT_BAR": 282,
+              "resolved_share": 0.9136605558840922,
+              "tp1_resolved_rate": 0.1744336569579288,
+              "invalidation_resolved_rate": 0.8249190938511327,
+              "neither_resolved_rate": 0.0006472491909385113
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 36,
+                "adverse_first": 740,
+                "ambiguous": 2606,
+                "ambiguous_contact_bar": 2597,
+                "neither": 0,
+                "resolved_denominator": 776,
+                "favorable_resolved_rate": 0.04639175257731959,
+                "ambiguity_rate": 0.7705499704316973
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 407,
+                "adverse_first": 1694,
+                "ambiguous": 1281,
+                "ambiguous_contact_bar": 1254,
+                "neither": 0,
+                "resolved_denominator": 2101,
+                "favorable_resolved_rate": 0.193717277486911,
+                "ambiguity_rate": 0.3787699586043761
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 754,
+                "adverse_first": 2126,
+                "ambiguous": 502,
+                "ambiguous_contact_bar": 479,
+                "neither": 0,
+                "resolved_denominator": 2880,
+                "favorable_resolved_rate": 0.26180555555555557,
+                "ambiguity_rate": 0.14843287995269072
+              }
+            },
+            "mfe_v": {
+              "median": 8.831925434736782,
+              "p90": 24.65059594251879
+            },
+            "mae_v": {
+              "median": 11.789133548153865,
+              "p90": 33.2208260157241
+            },
+            "tp_distance_v": {
+              "median": 3.650448411206494,
+              "p90": 9.915884632199422
+            },
+            "minutes_to_us_end": {
+              "median": 499.0,
+              "p90": 534.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_CENTER": {
+          "sparse": false,
+          "contact_episode_count": 3382,
+          "summary": {
+            "fired_count": 1977,
+            "fired_share_of_contacts": 0.5845653459491426,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 1184,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 221
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 532,
+              "INVALIDATION_FIRST": 1433,
+              "NEITHER": 2,
+              "AMBIGUOUS": 10,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9949418310571573,
+              "tp1_resolved_rate": 0.2704626334519573,
+              "invalidation_resolved_rate": 0.7285205897305541,
+              "neither_resolved_rate": 0.0010167768174885613
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 497,
+                "adverse_first": 989,
+                "ambiguous": 491,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1486,
+                "favorable_resolved_rate": 0.3344549125168237,
+                "ambiguity_rate": 0.24835609509357612
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 611,
+                "adverse_first": 1277,
+                "ambiguous": 89,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1888,
+                "favorable_resolved_rate": 0.3236228813559322,
+                "ambiguity_rate": 0.04501770359129995
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 587,
+                "adverse_first": 1359,
+                "ambiguous": 31,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1946,
+                "favorable_resolved_rate": 0.3016443987667009,
+                "ambiguity_rate": 0.01568032372281234
+              }
+            },
+            "mfe_v": {
+              "median": 8.699669966996018,
+              "p90": 24.016249084247796
+            },
+            "mae_v": {
+              "median": 11.830303030305352,
+              "p90": 32.999574338699446
+            },
+            "tp_distance_v": {
+              "median": 3.6372653857945703,
+              "p90": 9.982467135111145
+            },
+            "minutes_to_us_end": {
+              "median": 499.0,
+              "p90": 534.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_FULL": {
+          "sparse": false,
+          "contact_episode_count": 3382,
+          "summary": {
+            "fired_count": 1754,
+            "fired_share_of_contacts": 0.5186280307510349,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 1403,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 225
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 517,
+              "INVALIDATION_FIRST": 1227,
+              "NEITHER": 2,
+              "AMBIGUOUS": 8,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9954389965792474,
+              "tp1_resolved_rate": 0.2961053837342497,
+              "invalidation_resolved_rate": 0.7027491408934707,
+              "neither_resolved_rate": 0.001145475372279496
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 447,
+                "adverse_first": 872,
+                "ambiguous": 435,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1319,
+                "favorable_resolved_rate": 0.3388931008339651,
+                "ambiguity_rate": 0.24800456100342075
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 537,
+                "adverse_first": 1142,
+                "ambiguous": 75,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1679,
+                "favorable_resolved_rate": 0.31983323406789754,
+                "ambiguity_rate": 0.042759407069555305
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 517,
+                "adverse_first": 1208,
+                "ambiguous": 29,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1725,
+                "favorable_resolved_rate": 0.2997101449275362,
+                "ambiguity_rate": 0.01653363740022805
+              }
+            },
+            "mfe_v": {
+              "median": 8.479783909774781,
+              "p90": 23.67827784110098
+            },
+            "mae_v": {
+              "median": 12.036855531684848,
+              "p90": 33.86178797468141
+            },
+            "tp_distance_v": {
+              "median": 3.554441913515455,
+              "p90": 9.871529882057079
+            },
+            "minutes_to_us_end": {
+              "median": 499.0,
+              "p90": 534.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "BULL_REJECTION": {
+          "sparse": false,
+          "contact_episode_count": 3382,
+          "summary": {
+            "fired_count": 1297,
+            "fired_share_of_contacts": 0.38350088704908336,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 1843,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 242
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 459,
+              "INVALIDATION_FIRST": 830,
+              "NEITHER": 2,
+              "AMBIGUOUS": 6,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9953739398612182,
+              "tp1_resolved_rate": 0.3555383423702556,
+              "invalidation_resolved_rate": 0.6429124709527498,
+              "neither_resolved_rate": 0.001549186676994578
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 371,
+                "adverse_first": 618,
+                "ambiguous": 308,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 989,
+                "favorable_resolved_rate": 0.3751263902932255,
+                "ambiguity_rate": 0.23747108712413262
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 418,
+                "adverse_first": 822,
+                "ambiguous": 57,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1240,
+                "favorable_resolved_rate": 0.3370967741935484,
+                "ambiguity_rate": 0.04394757131842714
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 388,
+                "adverse_first": 895,
+                "ambiguous": 14,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1283,
+                "favorable_resolved_rate": 0.3024162120031177,
+                "ambiguity_rate": 0.01079414032382421
+              }
+            },
+            "mfe_v": {
+              "median": 8.442666666667652,
+              "p90": 23.813385093171444
+            },
+            "mae_v": {
+              "median": 11.495575221237635,
+              "p90": 33.40389883490276
+            },
+            "tp_distance_v": {
+              "median": 3.445816517952036,
+              "p90": 9.471541328956782
+            },
+            "minutes_to_us_end": {
+              "median": 499.0,
+              "p90": 534.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        }
+      },
+      "US_MORNING": {
+        "TOUCH_REF": {
+          "sparse": false,
+          "contact_episode_count": 4842,
+          "summary": {
+            "fired_count": 4842,
+            "fired_share_of_contacts": 1.0,
+            "nonfire_reasons": {},
+            "tp1_invalidation": {
+              "TP1_FIRST": 929,
+              "INVALIDATION_FIRST": 3446,
+              "NEITHER": 25,
+              "AMBIGUOUS": 442,
+              "AMBIGUOUS_CONTACT_BAR": 436,
+              "resolved_share": 0.9087154068566708,
+              "tp1_resolved_rate": 0.21113636363636365,
+              "invalidation_resolved_rate": 0.7831818181818182,
+              "neither_resolved_rate": 0.005681818181818182
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 94,
+                "adverse_first": 1342,
+                "ambiguous": 3406,
+                "ambiguous_contact_bar": 3380,
+                "neither": 0,
+                "resolved_denominator": 1436,
+                "favorable_resolved_rate": 0.06545961002785515,
+                "ambiguity_rate": 0.7034283353985956
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 876,
+                "adverse_first": 2662,
+                "ambiguous": 1304,
+                "ambiguous_contact_bar": 1271,
+                "neither": 0,
+                "resolved_denominator": 3538,
+                "favorable_resolved_rate": 0.2475975127190503,
+                "ambiguity_rate": 0.26931020239570425
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1397,
+                "adverse_first": 3111,
+                "ambiguous": 334,
+                "ambiguous_contact_bar": 324,
+                "neither": 0,
+                "resolved_denominator": 4508,
+                "favorable_resolved_rate": 0.3098935226264419,
+                "ambiguity_rate": 0.06897976042957456
+              }
+            },
+            "mfe_v": {
+              "median": 5.568172014817052,
+              "p90": 13.248557280626924
+            },
+            "mae_v": {
+              "median": 4.907971871488817,
+              "p90": 15.734310555994005
+            },
+            "tp_distance_v": {
+              "median": 2.861263231231121,
+              "p90": 7.2533059263840665
+            },
+            "minutes_to_us_end": {
+              "median": 382.0,
+              "p90": 439.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_CENTER": {
+          "sparse": false,
+          "contact_episode_count": 4842,
+          "summary": {
+            "fired_count": 2978,
+            "fired_share_of_contacts": 0.6150351094589013,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 1510,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 354
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 918,
+              "INVALIDATION_FIRST": 2029,
+              "NEITHER": 25,
+              "AMBIGUOUS": 6,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9979852249832102,
+              "tp1_resolved_rate": 0.3088829071332436,
+              "invalidation_resolved_rate": 0.6827052489905787,
+              "neither_resolved_rate": 0.008411843876177659
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 864,
+                "adverse_first": 1613,
+                "ambiguous": 501,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 2477,
+                "favorable_resolved_rate": 0.34880904319741624,
+                "ambiguity_rate": 0.1682337139019476
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 1000,
+                "adverse_first": 1932,
+                "ambiguous": 46,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 2932,
+                "favorable_resolved_rate": 0.34106412005457026,
+                "ambiguity_rate": 0.01544660846205507
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 1071,
+                "adverse_first": 1900,
+                "ambiguous": 7,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 2971,
+                "favorable_resolved_rate": 0.36048468529114774,
+                "ambiguity_rate": 0.0023505708529214238
+              }
+            },
+            "mfe_v": {
+              "median": 5.655568345956807,
+              "p90": 13.039427109975076
+            },
+            "mae_v": {
+              "median": 4.567168071248586,
+              "p90": 15.277300040314449
+            },
+            "tp_distance_v": {
+              "median": 2.982315799085053,
+              "p90": 7.210947998167858
+            },
+            "minutes_to_us_end": {
+              "median": 379.0,
+              "p90": 437.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "RECLAIM_FULL": {
+          "sparse": false,
+          "contact_episode_count": 4842,
+          "summary": {
+            "fired_count": 2607,
+            "fired_share_of_contacts": 0.5384138785625775,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 1883,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 352
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 891,
+              "INVALIDATION_FIRST": 1686,
+              "NEITHER": 25,
+              "AMBIGUOUS": 5,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9980820866896817,
+              "tp1_resolved_rate": 0.3424289008455035,
+              "invalidation_resolved_rate": 0.6479631053036126,
+              "neither_resolved_rate": 0.009607993850883935
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 762,
+                "adverse_first": 1414,
+                "ambiguous": 431,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 2176,
+                "favorable_resolved_rate": 0.35018382352941174,
+                "ambiguity_rate": 0.1653241273494438
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 872,
+                "adverse_first": 1701,
+                "ambiguous": 34,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 2573,
+                "favorable_resolved_rate": 0.33890400310921104,
+                "ambiguity_rate": 0.01304181051016494
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 928,
+                "adverse_first": 1675,
+                "ambiguous": 4,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 2603,
+                "favorable_resolved_rate": 0.3565117172493277,
+                "ambiguity_rate": 0.0015343306482546988
+              }
+            },
+            "mfe_v": {
+              "median": 5.580110497237938,
+              "p90": 12.989564695886676
+            },
+            "mae_v": {
+              "median": 4.58919803600648,
+              "p90": 15.246505138587473
+            },
+            "tp_distance_v": {
+              "median": 2.8618463104390073,
+              "p90": 7.140581773805852
+            },
+            "minutes_to_us_end": {
+              "median": 379.0,
+              "p90": 438.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        },
+        "BULL_REJECTION": {
+          "sparse": false,
+          "contact_episode_count": 4842,
+          "summary": {
+            "fired_count": 2001,
+            "fired_share_of_contacts": 0.41325898389095417,
+            "nonfire_reasons": {
+              "INVALIDATED_BEFORE_TRIGGER": 2462,
+              "TARGET_ALREADY_REACHED_BEFORE_TRIGGER": 379
+            },
+            "tp1_invalidation": {
+              "TP1_FIRST": 792,
+              "INVALIDATION_FIRST": 1180,
+              "NEITHER": 25,
+              "AMBIGUOUS": 4,
+              "AMBIGUOUS_CONTACT_BAR": 0,
+              "resolved_share": 0.9980009995002499,
+              "tp1_resolved_rate": 0.39659489233850775,
+              "invalidation_resolved_rate": 0.5908863294942414,
+              "neither_resolved_rate": 0.012518778167250876
+            },
+            "fp": {
+              "FP_0.50v_vs_0.25v": {
+                "favorable_first": 571,
+                "adverse_first": 1088,
+                "ambiguous": 342,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1659,
+                "favorable_resolved_rate": 0.34418324291742014,
+                "ambiguity_rate": 0.17091454272863568
+              },
+              "FP_1.00v_vs_0.50v": {
+                "favorable_first": 659,
+                "adverse_first": 1312,
+                "ambiguous": 30,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1971,
+                "favorable_resolved_rate": 0.3343480466768138,
+                "ambiguity_rate": 0.014992503748125937
+              },
+              "FP_1.50v_vs_0.75v": {
+                "favorable_first": 696,
+                "adverse_first": 1301,
+                "ambiguous": 4,
+                "ambiguous_contact_bar": 0,
+                "neither": 0,
+                "resolved_denominator": 1997,
+                "favorable_resolved_rate": 0.3485227841762644,
+                "ambiguity_rate": 0.001999000499750125
+              }
+            },
+            "mfe_v": {
+              "median": 5.464431354779954,
+              "p90": 13.015652173914456
+            },
+            "mae_v": {
+              "median": 4.5213675213672095,
+              "p90": 15.168949771690603
+            },
+            "tp_distance_v": {
+              "median": 2.742829251214251,
+              "p90": 7.207028473965631
+            },
+            "minutes_to_us_end": {
+              "median": 378.0,
+              "p90": 438.0
+            },
+            "DEV_ELIGIBLE": true
+          }
+        }
+      }
+    }
+  },
+  "authorization": "FREEZE_SELECTED_TRIGGER_AND_SCORE_SPEC_BEFORE_H2",
+  "explicit_nonclaims": [
+    "No H2 reaction result opened",
+    "No production E score",
+    "No live profitability claim",
+    "No R_US route claim"
+  ]
+}
