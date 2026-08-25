@@ -1,0 +1,13 @@
+{
+  "status": "EBUY_V03A_DIAGNOSTIC_PROVENANCE_RECORDED",
+  "future_price_outcomes_used": false,
+  "diagnostic_status": "DIAGNOSTIC_COMPLETE",
+  "next_action": "PREREGISTER_STICKY_DISPLAY_POOL_REPAIR",
+  "sha256": {
+    "prereg": "0a502ec42e9e0833cb6f2a9f03b7471c910107becd5a76af94d1f0ef9ceb69bb",
+    "diagnostic_engine": "318e81fa2bf1f7ffb4dc1b504253e2a316a44ac8656fc2eae1ddc51dded49964",
+    "v03_result": "0efb3b78332709d4d6977e2a05c878c7e52c73311d324d2c56fdccc16374760f",
+    "z4_geometry": "3d3dc4e6948be0f255d714b5c1c34ee21df0ffefe58c91770569ac54b40f034f",
+    "result": "bd38f52cf61741de2ed48505be5c44c679b218c75be7814985799d09c4bb6909"
+  }
+}
