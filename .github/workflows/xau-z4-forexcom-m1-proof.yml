@@ -1,0 +1,156 @@
+name: XAU Z4 FOREXCOM M1 Proof
+
+on:
+  push:
+    branches:
+      - agent/xau-wick-zone-pro-dev
+    paths:
+      - '.github/workflows/xau-z4-forexcom-m1-proof.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install websocket client
+        run: python -m pip install --disable-pip-version-check websocket-client==1.8.0
+
+      - name: Fetch FOREXCOM XAUUSD M1 proof from TradingView chart stream
+        run: |
+          mkdir -p xau-wick-zone-pro/feed-parity/forexcom-proof
+          python - <<'PY'
+          import csv, json, random, re, string, time
+          from datetime import datetime, timezone
+          import websocket
+
+          SYMBOL = 'FOREXCOM:XAUUSD'
+          INTERVAL = '1'
+          N_BARS = 5000
+          OUT_CSV = 'xau-wick-zone-pro/feed-parity/forexcom-proof/FOREXCOM_XAUUSD_M1_latest_5000.csv'
+          OUT_JSON = 'xau-wick-zone-pro/feed-parity/forexcom-proof/FOREXCOM_XAUUSD_M1_latest_5000_meta.json'
+
+          def rid(prefix):
+              return prefix + '_' + ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+
+          def frame(method, params):
+              payload = json.dumps({'m': method, 'p': params}, separators=(',', ':'))
+              return f'~m~{len(payload)}~m~{payload}'
+
+          url = 'wss://data.tradingview.com/socket.io/websocket?from=chart%2F'
+          ws = websocket.create_connection(
+              url,
+              timeout=20,
+              origin='https://www.tradingview.com',
+              header=['User-Agent: Mozilla/5.0']
+          )
+
+          cs = rid('cs')
+          qs = rid('qs')
+          def send(m, p):
+              ws.send(frame(m, p))
+
+          send('set_auth_token', ['unauthorized_user_token'])
+          send('chart_create_session', [cs, ''])
+          send('quote_create_session', [qs])
+          send('quote_set_fields', [qs, 'ch', 'chp', 'current_session', 'description', 'exchange', 'fractional', 'is_tradable', 'lp', 'lp_time', 'minmov', 'minmove2', 'original_name', 'pricescale', 'pro_name', 'short_name', 'type', 'update_mode', 'volume', 'currency_code'])
+          send('quote_add_symbols', [qs, SYMBOL, {'flags': ['force_permission']}])
+          sym = '={"symbol":"FOREXCOM:XAUUSD","adjustment":"splits","session":"regular"}'
+          send('resolve_symbol', [cs, 'symbol_1', sym])
+          send('create_series', [cs, 's1', 's1', 'symbol_1', INTERVAL, N_BARS])
+
+          rows = {}
+          resolved = None
+          messages = 0
+          t0 = time.time()
+          completed = False
+
+          while time.time() - t0 < 45:
+              msg = ws.recv()
+              messages += 1
+              if not isinstance(msg, str):
+                  continue
+              # TradingView heartbeat must be echoed verbatim.
+              if msg.startswith('~m~') and '~h~' in msg and msg.count('~m~') == 2:
+                  try:
+                      ws.send(msg)
+                  except Exception:
+                      pass
+              parts = msg.split('~m~')
+              for part in parts:
+                  if not part or part.isdigit() or part.startswith('~h~'):
+                      continue
+                  try:
+                      obj = json.loads(part)
+                  except Exception:
+                      continue
+                  m = obj.get('m')
+                  p = obj.get('p', [])
+                  if m == 'symbol_resolved' and len(p) >= 3:
+                      resolved = p[2]
+                  elif m == 'timescale_update' and len(p) >= 2 and isinstance(p[1], dict):
+                      series = p[1].get('s1')
+                      if isinstance(series, dict):
+                          for rec in series.get('s', []) or []:
+                              v = rec.get('v') if isinstance(rec, dict) else None
+                              if not v or len(v) < 5:
+                                  continue
+                              ts, o, h, l, c = v[:5]
+                              vol = v[5] if len(v) > 5 else None
+                              if ts is None:
+                                  continue
+                              rows[int(ts)] = [int(ts), o, h, l, c, vol]
+                  elif m == 'series_completed' and len(p) >= 2 and p[0] == cs and p[1] == 's1':
+                      completed = True
+                      break
+              if completed:
+                  break
+
+          ws.close()
+          data = [rows[k] for k in sorted(rows)]
+          if len(data) < 100:
+              raise RuntimeError(f'FOREXCOM proof acquisition returned only {len(data)} bars')
+
+          with open(OUT_CSV, 'w', newline='') as f:
+              w = csv.writer(f)
+              w.writerow(['timestamp_utc','open','high','low','close','volume'])
+              for ts,o,h,l,c,vol in data:
+                  w.writerow([datetime.fromtimestamp(ts, timezone.utc).isoformat().replace('+00:00','Z'), o,h,l,c,vol])
+
+          meta = {
+              'status': 'PASS',
+              'source_transport': 'TradingView chart websocket stream',
+              'symbol_requested': SYMBOL,
+              'interval': INTERVAL,
+              'requested_bars': N_BARS,
+              'received_bars': len(data),
+              'first_timestamp_utc': datetime.fromtimestamp(data[0][0], timezone.utc).isoformat().replace('+00:00','Z'),
+              'last_timestamp_utc': datetime.fromtimestamp(data[-1][0], timezone.utc).isoformat().replace('+00:00','Z'),
+              'resolved_symbol_payload': resolved,
+              'series_completed': completed,
+              'messages_received': messages,
+              'acquired_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+              'note': 'Proof acquisition only. This is an unofficial access path to TradingView chart data; identity is checked from requested/resolved FOREXCOM:XAUUSD metadata before use in feed-parity research.'
+          }
+          with open(OUT_JSON, 'w') as f:
+              json.dump(meta, f, indent=2, sort_keys=True)
+          print(json.dumps(meta, indent=2))
+          PY
+
+      - name: Commit proof data
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add xau-wick-zone-pro/feed-parity/forexcom-proof/
+          git commit -m 'publish FOREXCOM XAUUSD M1 acquisition proof [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
