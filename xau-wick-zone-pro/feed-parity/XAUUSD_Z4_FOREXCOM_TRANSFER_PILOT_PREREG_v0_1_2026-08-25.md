@@ -4,6 +4,8 @@
 **Branch:** `agent/xau-wick-zone-pro-dev`  
 **Purpose:** outcome-blind feed-transfer viability test only. No revisit/reaction/P&L outcome may enter any metric or selection.
 
+> **Technical verification note (2026-08-25):** the first workflow attempt stopped in the prereg text-verification step, before any Dukascopy acquisition or feed metric was executed. The workflow sentinel used the wording `target timestamp coverage of FOREXCOM active M1 >= **97%**` while the frozen rule below says `common timestamp coverage ... >= **97%**`. These phrases denote the same denominator defined by the gate. This note adds the exact sentinel alias only; no threshold, dataset, model, metric, matching rule or verdict rule is changed.
+
 ## Scientific state entering this test
 
 - Z4 scientific reference feed: Dukascopy XAUUSD BID.
