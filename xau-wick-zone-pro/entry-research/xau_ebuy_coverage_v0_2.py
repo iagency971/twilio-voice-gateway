@@ -58,22 +58,24 @@ def pivot_base_events(source,tf,r,raw,active):
         q=np.datetime64(confirm.tz_convert('UTC').tz_localize(None))
         start=int(np.searchsorted(rt,q,side='right')-1)
         if start<0:continue
-        # First confirmed M1 close below zlo, searched only to max 8h because no v0.2 state can live longer.
         end=min(len(raw),start+8*60+2)
         bad=np.where(cl[start+1:end] < zlo)[0]
         invalid=pd.Timestamp(raw.at[start+1+int(bad[0]),'time']) if len(bad) else None
         events.append({'start':confirm,'center':low,'zlo':zlo,'zhi':zhi,'invalid':invalid,'tf':tf,'r':r})
+    events.sort(key=lambda e:e['start'])
     return events
 
 
 def pivot_memory_lists(eval_snaps,events,age_h,config):
     out=[];cap=pd.Timedelta(hours=age_h)
-    # events are naturally time ordered enough; filtering is deliberately simple and deterministic.
+    if not events:return [[] for _ in eval_snaps]
+    starts=pd.DatetimeIndex([e['start'] for e in events])
+    starts_ns=starts.view('int64')
     for s in eval_snaps:
         t=s['time'];close=s['close'];v=s['v'];zs=[]
-        for e in events:
-            if e['start']>t:continue
-            if t-e['start']>cap:continue
+        tns=int(pd.Timestamp(t).value); lns=int((pd.Timestamp(t)-cap).value)
+        lo=int(np.searchsorted(starts_ns,lns,side='left'));hi=int(np.searchsorted(starts_ns,tns,side='right'))
+        for e in events[lo:hi]:
             if e['invalid'] is not None and e['invalid']<=t:continue
             dist=(close-e['center'])/v
             if not (0<dist<=2.0):continue
@@ -94,7 +96,6 @@ def wick_memory_all_c5(raw,all_c5,grace_min,config):
     grace=pd.Timedelta(minutes=grace_min)
     for s in all_c5:
         t=s['time'];close=s['close'];v=s['v']
-        # Invalidate on any confirmed M1 close since previous C5 observation.
         if prev_t is not None:
             i0=max(0,raw_index(raw,prev_t,'right')+1);i1=raw_index(raw,t,'right')
             seg=raw.close.iloc[i0:i1+1].to_numpy(float) if i1>=i0 else np.array([],float)
@@ -133,8 +134,7 @@ def fixed_swing_lists(raw,eval_snaps):
     return out
 
 
-def choose(metric_map):
-    return v01.choose_best(metric_map)
+def choose(metric_map):return v01.choose_best(metric_map)
 
 
 def architecture_lists(eval_snaps,z4_lists,*family_lists):
@@ -154,7 +154,6 @@ def main():
     print('eval snapshots',len(eval_snaps),'all mature C5',len(allc5),flush=True)
     z4_lists=[s['z4_below'] for s in eval_snaps]
 
-    # Pivot-memory base events and 12 preregistered configs.
     sources={'M1':raw,'M5':m5};radii={'M1':[2,3],'M5':[1,2]};event_map={}
     for tf in ['M1','M5']:
         for r in radii[tf]:
@@ -164,23 +163,20 @@ def main():
     for tf in ['M1','M5']:
         for r in radii[tf]:
             for age in [2,4,8]:
-                k=f'EPM_{tf}_R{r}_A{age}H'
-                L=pivot_memory_lists(eval_snaps,event_map[(tf,r)],age,k);pm_lists[k]=L;pm_metrics[k]=v01.metrics(eval_snaps,L)
+                k=f'EPM_{tf}_R{r}_A{age}H';L=pivot_memory_lists(eval_snaps,event_map[(tf,r)],age,k)
+                pm_lists[k]=L;pm_metrics[k]=v01.metrics(eval_snaps,L)
     best_pm=choose(pm_metrics)
 
-    # Wick-memory: fixed detector from v0.1, only grace is tested.
     wm_lists={};wm_metrics={}
     for grace in [15,30,60]:
         k=f'EWM_G{grace}M';mp=wick_memory_all_c5(raw,allc5,grace,k);L=[mp.get(s['time'],[]) for s in eval_snaps]
         wm_lists[k]=L;wm_metrics[k]=v01.metrics(eval_snaps,L)
     best_wm=choose(wm_metrics)
-    swing=fixed_swing_lists(raw,eval_snaps)
-    swing_metric=v01.metrics(eval_snaps,swing)
+    swing=fixed_swing_lists(raw,eval_snaps);swing_metric=v01.metrics(eval_snaps,swing)
     print('selected state configs',best_pm,best_wm,flush=True)
 
     arch={}
     arch['Z4_ONLY']=[v01.final_pool({**s,'z4_below':z4_lists[i]},[]) for i,s in enumerate(eval_snaps)]
-    # Every pivot config is explicitly evaluated with Z4, as preregistered.
     for k,L in pm_lists.items():arch[f'Z4_PLUS_{k}']=architecture_lists(eval_snaps,z4_lists,L)
     for k,L in wm_lists.items():arch[f'Z4_PLUS_{k}']=architecture_lists(eval_snaps,z4_lists,L)
     arch['Z4_PLUS_EPM_PLUS_EWM']=architecture_lists(eval_snaps,z4_lists,pm_lists[best_pm],wm_lists[best_wm])
@@ -212,8 +208,7 @@ def main():
                 rows.append({'time':s['time'],'close':s['close'],'v60':s['v'],'upper_z4_count':s['upper_z4_count'],'nearest_upper_z4_dist_v':s['nearest_upper_z4_dist_v'],
                              'entry_rank':rank,'family':z.family,'center':z.center,'zlo':z.zlo,'zhi':z.zhi,'distance_v':(s['close']-z.center)/s['v']})
     pd.DataFrame(rows).to_csv(a.selected_csv,index=False)
-    out={
-      'status':status,'scope':'BUY_ONLY_OUTCOME_BLIND_ENTRY_ZONE_COVERAGE_V02_STATEFUL','future_price_outcomes_used':False,
+    out={'status':status,'scope':'BUY_ONLY_OUTCOME_BLIND_ENTRY_ZONE_COVERAGE_V02_STATEFUL','future_price_outcomes_used':False,
       'eligible_snapshot_count':len(eval_snaps),'v01_failure_used_only_for':'coverage_and_stability_repair_design',
       'pivot_memory':{'selected_config':best_pm,'all_config_metrics':pm_metrics},
       'wick_memory':{'fixed_detector':'EW_M1_8H_S0.25','selected_config':best_wm,'all_config_metrics':wm_metrics},
@@ -221,8 +216,7 @@ def main():
       'architectures':{k:{'metrics':arch_metrics[k],'checks':arch_checks[k],'supplementary_family_count':scount(k)} for k in arch_metrics},
       'selected_architecture':selected,'selected_candidate_rows':len(rows),
       'authorization':('AUTHORIZE_SEPARATE_PREREGISTERED_REACTION_STUDY' if status=='EBUY_COVERAGE_PASS' else 'DO_NOT_START_REACTION_STUDY_WITHOUT_NEW_PREREG'),
-      'explicit_non_claims':['No entry profitability claim','No support/rejection claim','No TP-hit claim','No R_US/UP_FIRST/DOWN_FIRST claim']
-    }
+      'explicit_non_claims':['No entry profitability claim','No support/rejection claim','No TP-hit claim','No R_US/UP_FIRST/DOWN_FIRST claim']}
     Path(a.output).write_text(json.dumps(out,indent=2));print(json.dumps({'status':status,'best_pm':best_pm,'best_wm':best_wm,'selected_architecture':selected},indent=2),flush=True)
 
 if __name__=='__main__':main()
