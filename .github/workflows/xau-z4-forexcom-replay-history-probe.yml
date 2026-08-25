@@ -1,0 +1,123 @@
+name: XAU Z4 FOREXCOM Replay History Probe
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-forexcom-replay-history-probe.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  replay-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Freeze third-party replay client at audited commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone -q https://github.com/parbhatc/TradingviewAPI.git /tmp/TradingviewAPI
+          cd /tmp/TradingviewAPI
+          git checkout -q 6d900b08072856177b579ba0c0f21b8162db6d43
+          test "$(git rev-parse HEAD)" = "6d900b08072856177b579ba0c0f21b8162db6d43"
+          npm ci --silent
+          echo "THIRD_PARTY_SHA=$(git rev-parse HEAD)"
+
+      - name: Load anonymous FOREXCOM XAUUSD M1 via prodata replay
+        env:
+          TRADINGVIEW_REQUEST_TIMEOUT_MS: '45000'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p xau-wick-zone-pro/feed-parity/forexcom-replay-probe
+          cat >/tmp/TradingviewAPI/probe.mjs <<'JS'
+          import fs from 'node:fs';
+          import zlib from 'node:zlib';
+          import { TradingviewAPI } from './src/index.js';
+
+          const SYMBOL='FOREXCOM:XAUUSD';
+          const AFTER=Math.floor(Date.parse('2025-08-01T00:00:00Z')/1000);
+          const outDir=process.env.GITHUB_WORKSPACE + '/xau-wick-zone-pro/feed-parity/forexcom-replay-probe';
+          const api=new TradingviewAPI({save_session:false, tradingView:{timeoutMs:45000}});
+          let status=null; let history=null; let error=null; const progress=[];
+          try {
+            status=await api.symbol(SYMBOL);
+            history=await api.loadAllBars(SYMBOL,{
+              interval:'1', chunkSize:25000, session:'regular', after:AFTER,
+              onProgress: (p)=>{
+                const x={bars:p.bars,firstTimestamp:p.firstTimestamp,lastTimestamp:p.lastTimestamp};
+                progress.push(x);
+                console.log('PROGRESS',JSON.stringify(x));
+              }
+            });
+          } catch(e) {
+            error={name:e?.name??null,message:e?.message??String(e),code:e?.code??null,statusCode:e?.statusCode??null,details:e?.details??null,stack:e?.stack??null};
+            console.error('REPLAY_ERROR',JSON.stringify(error));
+          } finally { api.close(); }
+
+          const bars=history?.bars ?? [];
+          let csv='timestamp_utc,open,high,low,close,volume\n';
+          for (const b of bars) csv += `${new Date(b.time*1000).toISOString()},${b.open},${b.high},${b.low},${b.close},${Number.isFinite(b.volume)?b.volume:''}\n`;
+          fs.writeFileSync(outDir+'/FOREXCOM_XAUUSD_M1_replay_2025-08_to_now.csv.gz',zlib.gzipSync(Buffer.from(csv)));
+          const meta={
+            status: bars.length>=50000 ? 'PASS_DEEP_HISTORY' : (bars.length>0 ? 'PARTIAL_HISTORY' : 'NO_HISTORY'),
+            symbol_requested:SYMBOL, authentication_mode:'anonymous_unauthorized_user_token', after_requested_utc:'2025-08-01T00:00:00Z',
+            third_party_client:{repo:'parbhatc/TradingviewAPI',commit:'6d900b08072856177b579ba0c0f21b8162db6d43'},
+            symbol_status:status, returned_status:history?.status??null, history_exhausted:history?.historyExhausted??null, all_available:history?.allAvailable??null,
+            bars:bars.length, first_timestamp_utc:bars.length?new Date(bars[0].time*1000).toISOString():null,
+            last_timestamp_utc:bars.length?new Date(bars.at(-1).time*1000).toISOString():null,
+            progress, error, acquired_at_utc:new Date().toISOString(),
+            transport:'TradingView prodata replay websocket via audited third-party client',
+            caveat:'Unofficial TradingView web transport; exact FOREXCOM identity must be checked against the separately resolved chart-feed metadata before scientific use.'
+          };
+          fs.writeFileSync(outDir+'/FOREXCOM_XAUUSD_M1_replay_probe_meta.json',JSON.stringify(meta,null,2));
+          console.log(JSON.stringify(meta,null,2));
+          if (bars.length===0) process.exitCode=2;
+          JS
+          cd /tmp/TradingviewAPI
+          node probe.mjs
+
+      - name: Verify retrieved chronology and identity
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import gzip,json
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/feed-parity/forexcom-replay-probe/FOREXCOM_XAUUSD_M1_replay_probe_meta.json')
+          if not p.exists():
+              print('NO_META_TO_VERIFY'); raise SystemExit(0)
+          m=json.loads(p.read_text())
+          print(json.dumps(m,indent=2))
+          c=Path('xau-wick-zone-pro/feed-parity/forexcom-replay-probe/FOREXCOM_XAUUSD_M1_replay_2025-08_to_now.csv.gz')
+          if c.exists() and m.get('bars',0):
+              import pandas as pd
+              d=pd.read_csv(c); t=pd.to_datetime(d.timestamp_utc,utc=True)
+              assert t.is_monotonic_increasing and t.is_unique
+              assert len(d)==m['bars']
+              print('CHRONOLOGY_PASS',len(d),t.iloc[0],t.iloc[-1])
+          PY
+
+      - name: Publish replay probe evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          git add xau-wick-zone-pro/feed-parity/forexcom-replay-probe/ || true
+          git commit -m 'publish FOREXCOM anonymous replay history probe [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
