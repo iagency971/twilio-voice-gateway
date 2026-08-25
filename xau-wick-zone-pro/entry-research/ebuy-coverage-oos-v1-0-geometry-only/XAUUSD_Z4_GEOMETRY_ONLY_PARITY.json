@@ -1,0 +1,21 @@
+{
+  "status": "GEOMETRY_ONLY_CONSUMED_COLUMNS_PARITY_PASS",
+  "rows": 32797,
+  "columns": [
+    "time",
+    "landmark_i",
+    "center",
+    "zlo",
+    "zhi",
+    "side"
+  ],
+  "max_abs_diff": 0.0,
+  "column_max_abs_diff": {
+    "landmark_i": 0.0,
+    "center": 0.0,
+    "zlo": 0.0,
+    "zhi": 0.0,
+    "side": 0.0
+  },
+  "engine_sha256": "b9a6d3b4d6a3792d26fbce4a907a38e7de1b2a771e5f8cd103d00413fbeeafff"
+}

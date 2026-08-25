@@ -1,0 +1,181 @@
+{
+  "status": "EBUY_COVERAGE_OOS_REPLICATION_PASS",
+  "scope": "BUY_ONLY_EBUY_COVERAGE_OOS_REPLICATION_V1_0",
+  "future_price_outcomes_used": false,
+  "fixed_architecture": "Z4 + ESM_BOTH_G120M + EPM_M1_R2_A8H + EWM_G60M + ES_M1_8H_R2_T0.50",
+  "display_rule": "v0.4 sticky top3",
+  "results": {
+    "OOS_H1": {
+      "status": "PASS",
+      "window_utc": [
+        "2024-08-01 00:00:00+00:00",
+        "2025-08-01 00:00:00+00:00"
+      ],
+      "eligible_snapshot_count": 19878,
+      "metrics": {
+        "snapshots": 19878,
+        "coverage": {
+          "0.5": 0.5585571989133715,
+          "1.0": 0.8352953013381628,
+          "1.5": 0.9354059764563839,
+          "2.0": 0.9753999396317536
+        },
+        "candidate_count_median": 2.0,
+        "candidate_count_p90": 3.0,
+        "nearest_distance_v_median": 0.4212437585110732,
+        "nearest_distance_v_p90": 1.151537030959854,
+        "one_step_persistence": 0.48593591416557924,
+        "persistence_zone_denominator": 41382
+      },
+      "stability": {
+        "transition_denominator": 41382,
+        "category_counts": {
+          "MATCHED_DISPLAY": 20109,
+          "CROSSED_BELOW": 11562,
+          "NO_LONGER_LOCAL": 9294,
+          "UNDERLYING_PRESENT_NOT_DISPLAYED": 0,
+          "UNEXPLAINED_DISAPPEARANCE": 417
+        },
+        "category_shares": {
+          "MATCHED_DISPLAY": 0.48593591416557924,
+          "CROSSED_BELOW": 0.27939683920545166,
+          "NO_LONGER_LOCAL": 0.22459040162389446,
+          "UNDERLYING_PRESENT_NOT_DISPLAYED": 0.0,
+          "UNEXPLAINED_DISAPPEARANCE": 0.01007684500507467
+        },
+        "raw_display_persistence": 0.48593591416557924,
+        "survival_eligible_denominator": 20526,
+        "survival_aware_display_persistence": 0.9796843028354283,
+        "unexplained_share_of_survival_eligible": 0.020315697164571763,
+        "display_churn_share_of_survival_eligible": 0.0
+      },
+      "checks": {
+        "coverage_1v_ge_080": true,
+        "coverage_1_5v_ge_090": true,
+        "coverage_2v_ge_095": true,
+        "count_median_1_to_3": true,
+        "count_p90_le_3": true,
+        "nearest_p90_le_1_5v": true,
+        "survival_aware_persistence_ge_070": true,
+        "unexplained_survival_share_le_005": true
+      }
+    },
+    "OOS_H2": {
+      "status": "PASS",
+      "window_utc": [
+        "2025-08-01 00:00:00+00:00",
+        "2026-08-01 00:00:00+00:00"
+      ],
+      "eligible_snapshot_count": 20382,
+      "metrics": {
+        "snapshots": 20382,
+        "coverage": {
+          "0.5": 0.5752624865077028,
+          "1.0": 0.8401040133451084,
+          "1.5": 0.9358257285840448,
+          "2.0": 0.9749288587969778
+        },
+        "candidate_count_median": 2.0,
+        "candidate_count_p90": 3.0,
+        "nearest_distance_v_median": 0.40414201183430215,
+        "nearest_distance_v_p90": 1.1354166666664594,
+        "one_step_persistence": 0.4895874537543337,
+        "persistence_zone_denominator": 42977
+      },
+      "stability": {
+        "transition_denominator": 42977,
+        "category_counts": {
+          "MATCHED_DISPLAY": 21041,
+          "CROSSED_BELOW": 12128,
+          "NO_LONGER_LOCAL": 9391,
+          "UNDERLYING_PRESENT_NOT_DISPLAYED": 0,
+          "UNEXPLAINED_DISAPPEARANCE": 417
+        },
+        "category_shares": {
+          "MATCHED_DISPLAY": 0.4895874537543337,
+          "CROSSED_BELOW": 0.2821974544523815,
+          "NO_LONGER_LOCAL": 0.21851222747050747,
+          "UNDERLYING_PRESENT_NOT_DISPLAYED": 0.0,
+          "UNEXPLAINED_DISAPPEARANCE": 0.0097028643227773
+        },
+        "raw_display_persistence": 0.4895874537543337,
+        "survival_eligible_denominator": 21458,
+        "survival_aware_display_persistence": 0.9805666884145773,
+        "unexplained_share_of_survival_eligible": 0.019433311585422688,
+        "display_churn_share_of_survival_eligible": 0.0
+      },
+      "checks": {
+        "coverage_1v_ge_080": true,
+        "coverage_1_5v_ge_090": true,
+        "coverage_2v_ge_095": true,
+        "count_median_1_to_3": true,
+        "count_p90_le_3": true,
+        "nearest_p90_le_1_5v": true,
+        "survival_aware_persistence_ge_070": true,
+        "unexplained_survival_share_le_005": true
+      }
+    },
+    "OOS_ALL": {
+      "status": "PASS",
+      "window_utc": [
+        "2024-08-01 00:00:00+00:00",
+        "2026-08-01 00:00:00+00:00"
+      ],
+      "eligible_snapshot_count": 40260,
+      "metrics": {
+        "snapshots": 40260,
+        "coverage": {
+          "0.5": 0.5670144063586686,
+          "1.0": 0.8377297565822156,
+          "1.5": 0.935618479880775,
+          "2.0": 0.9751614505712867
+        },
+        "candidate_count_median": 2.0,
+        "candidate_count_p90": 3.0,
+        "nearest_distance_v_median": 0.4123850279270748,
+        "nearest_distance_v_p90": 1.1425233361466622,
+        "one_step_persistence": 0.4877962043172631,
+        "persistence_zone_denominator": 84359
+      },
+      "stability": {
+        "transition_denominator": 84359,
+        "category_counts": {
+          "MATCHED_DISPLAY": 41150,
+          "CROSSED_BELOW": 23690,
+          "NO_LONGER_LOCAL": 18685,
+          "UNDERLYING_PRESENT_NOT_DISPLAYED": 0,
+          "UNEXPLAINED_DISAPPEARANCE": 834
+        },
+        "category_shares": {
+          "MATCHED_DISPLAY": 0.4877962043172631,
+          "CROSSED_BELOW": 0.28082362284996265,
+          "NO_LONGER_LOCAL": 0.22149385364928462,
+          "UNDERLYING_PRESENT_NOT_DISPLAYED": 0.0,
+          "UNEXPLAINED_DISAPPEARANCE": 0.00988631918348961
+        },
+        "raw_display_persistence": 0.4877962043172631,
+        "survival_eligible_denominator": 41984,
+        "survival_aware_display_persistence": 0.9801352896341463,
+        "unexplained_share_of_survival_eligible": 0.019864710365853657,
+        "display_churn_share_of_survival_eligible": 0.0
+      },
+      "checks": {
+        "coverage_1v_ge_080": true,
+        "coverage_1_5v_ge_090": true,
+        "coverage_2v_ge_095": true,
+        "count_median_1_to_3": true,
+        "count_p90_le_3": true,
+        "nearest_p90_le_1_5v": true,
+        "survival_aware_persistence_ge_070": true,
+        "unexplained_survival_share_le_005": true
+      }
+    }
+  },
+  "authorization": "FREEZE_EBUY_LOCATION_ENGINE_AND_AUTHORIZE_REACTION_PREREG",
+  "explicit_nonclaims": [
+    "No reaction-quality claim",
+    "No TP-hit claim",
+    "No profitability claim",
+    "No route/end-of-session claim"
+  ]
+}
