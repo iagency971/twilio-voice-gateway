@@ -1,0 +1,127 @@
+name: XAU Z4 E-BUY Reaction DEV H1 v1.0 Precomputed Location
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-reaction-dev-h1-v1-0-precomputed.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  reaction-h1-precomputed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Frozen activation and engine guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_4_precomputed_location.py
+          python - <<'PY'
+          import json
+          c=json.load(open('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json'))
+          assert c['status']=='EBUY_COVERAGE_OOS_REPLICATION_PASS'
+          assert c['results']['OOS_H1']['status']=='PASS' and c['results']['OOS_H2']['status']=='PASS'
+          print('ACTIVATION_PASS')
+          PY
+
+      - name: Download frozen H1 monthly Z4 geometry artifacts
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32908654286
+          pattern: z4-*
+          path: /tmp/z4parts
+          merge-multiple: true
+
+      - name: Assemble H1 geometry and frozen E-BUY candidate table
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/reaction_h1 /tmp/xau/h1
+          python - <<'PY'
+          import glob,pandas as pd
+          fs=sorted(glob.glob('/tmp/z4parts/z4_*.pkl'));assert len(fs)==12,fs
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True)
+          z['time']=pd.to_datetime(z.time,utc=True)
+          z=z[(z.time>=pd.Timestamp('2024-08-01T00:00:00Z'))&(z.time<pd.Timestamp('2025-08-01T00:00:00Z'))].copy()
+          assert len(z)>0 and z.time.max()<pd.Timestamp('2025-08-01T00:00:00Z')
+          z.to_pickle('/tmp/Z4_C5_REACTION_H1_GEOMETRY.pkl')
+          print('Z4_H1_ASSEMBLED',len(z),z.time.nunique())
+          PY
+          gzip -dc xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz > /tmp/EBUY_OOS_CANDIDATES.csv
+          python - <<'PY'
+          import pandas as pd
+          d=pd.read_csv('/tmp/EBUY_OOS_CANDIDATES.csv')
+          assert 'window' in d.columns
+          h=d[d.window.astype(str)=='OOS_H1']
+          assert len(h)>0
+          print('FROZEN_H1_CANDIDATES',len(h),h.time.min(),h.time.max())
+          PY
+
+      - name: Acquire exactly H1 BID raw and verify hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,subprocess,hashlib
+          from pathlib import Path
+          man=json.load(open('xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json'))
+          files=[x for x in man['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2025-07']
+          assert len(files)==12
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in files:
+              p=Path('/tmp/xau/h1')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          assert not list(Path('/tmp/xau/h1').glob('*2025_08*')) and not list(Path('/tmp/xau/h1').glob('*2026*'))
+          print('H1_ONLY_SOURCE_HASH_PASS')
+          PY
+
+      - name: Run final frozen reaction engine from validated location table
+        shell: bash
+        env:
+          EBUY_PRECOMPUTED_CANDIDATES: /tmp/EBUY_OOS_CANDIDATES.csv
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_4_precomputed_location.py \
+            --files /tmp/xau/h1/*.csv \
+            --z4-pkl /tmp/Z4_C5_REACTION_H1_GEOMETRY.pkl \
+            --coverage-oos-result xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+            --contacts-csv /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_CONTACTS_v1_0.csv \
+            --trigger-csv /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv \
+            --output /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json'))
+          assert x['reaction_holdout_opened'] is False
+          print('REACTION_RESULT',x['status'],x['contact_episode_count'],x['selected_trigger'])
+          PY
+
+      - name: Publish precomputed-location H1 reaction evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0-precomputed-location
+          mkdir -p "$out"
+          cp /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json "$out/"
+          gzip -c /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_CONTACTS_v1_0.csv > "$out/XAUUSD_Z4_EBUY_REACTION_DEV_H1_CONTACTS_v1_0.csv.gz"
+          gzip -c /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv > "$out/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv.gz"
+          git add "$out"
+          git commit -m 'publish precomputed-location E-BUY reaction DEV H1 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
