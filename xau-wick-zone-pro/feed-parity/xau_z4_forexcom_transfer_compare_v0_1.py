@@ -54,8 +54,12 @@ def load_forex(path):
 
 def load_duka(path, mode):
     d = pd.read_csv(path)
-    # Dukascopy monthly snapshot timestamps are Unix milliseconds.
-    d['time'] = pd.to_datetime(pd.to_numeric(d['timestamp'], errors='raise'), unit='ms', utc=True)
+    ts = d['timestamp']
+    numeric = pd.to_numeric(ts, errors='coerce')
+    if numeric.notna().all():
+        d['time'] = pd.to_datetime(numeric, unit='ms', utc=True)
+    else:
+        d['time'] = pd.to_datetime(ts, utc=True)
     cols = ['open','high','low','close'] if mode == 'mid' else ['open_bid','high_bid','low_bid','close_bid']
     out = pd.DataFrame({'time': d.time})
     for src,dst in zip(cols, ['open','high','low','close']): out[dst] = pd.to_numeric(d[src], errors='coerce')
