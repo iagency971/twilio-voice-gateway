@@ -1,0 +1,8 @@
+{
+  "status": "SHIFTED_EQUIVALENT_OOS_EVIDENCE",
+  "result_status": "EBUY_COVERAGE_OOS_REPLICATION_PASS",
+  "future_price_outcomes_used": false,
+  "geometry_parity_status": "SHIFTED_GRID_SEMANTIC_PARITY_PASS",
+  "geometry_engine_sha256": "3d7f9a5bf4553de933a2ec3c99ca282a5c6cd006fc44cc61d7aa57b0ff1d999d",
+  "result_sha256": "035c6ebe8dd31a3ce2ab7d9bedcf08374e8bef623ce9d8a2408e371a4b3ce805"
+}
