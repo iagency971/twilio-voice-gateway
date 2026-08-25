@@ -1,0 +1,171 @@
+name: XAU Z4 E-BUY Reaction DEV H1 v1.0 Monthly Geometry
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-reaction-dev-h1-v1-0-monthly.yml'
+
+permissions:
+  contents: write
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+
+jobs:
+  geometry-month:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        target: ['2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Download target plus causal warmup
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/in /tmp/out
+          python - <<'PY'
+          import os,json,subprocess,hashlib
+          from pathlib import Path
+          t=os.environ['TARGET'];y,m=map(int,t.split('-'))
+          months=[t]
+          if t!='2024-08':
+              pm=m-1;py=y
+              if pm==0:pm=12;py-=1
+              months.insert(0,f'{py:04d}-{pm:02d}')
+          man=json.load(open(os.environ['MANIFEST']))
+          ix={f"{x['year']}-{x['month']}":x for x in man['files'] if x['side']=='bid'}
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for mm in months:
+              x=ix[mm];p=Path('/tmp/in')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          print('MONTH_INPUT_PASS',t,months)
+          PY
+      - name: Build target-month geometry
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py').read_text()
+          anchor='    m=len(Z)\n';assert src.count(anchor)==1
+          insert="    keep=['time','landmark_i','center','zlo','zhi','side']\n    Z[keep].to_pickle(args.output)\n    return\n\n"
+          Path('/tmp/geom.py').write_text(src.replace(anchor,insert+anchor))
+          PY
+          python /tmp/geom.py --files /tmp/in/*.csv --output /tmp/all.pkl --tag MONTH_${TARGET}
+          python - <<'PY'
+          import os,pandas as pd
+          t=os.environ['TARGET'];lo=pd.Timestamp(t+'-01T00:00:00Z');hi=lo+pd.offsets.MonthBegin(1)
+          d=pd.read_pickle('/tmp/all.pkl');d['time']=pd.to_datetime(d.time,utc=True)
+          q=d[(d.time>=lo)&(d.time<hi)].copy().reset_index(drop=True)
+          assert len(q)>0,(t,len(d))
+          q.to_pickle('/tmp/out/z4_'+t.replace('-','_')+'.pkl')
+          print('TARGET_GEOMETRY',t,len(q),q.time.min(),q.time.max())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-${{ matrix.target }}
+          path: /tmp/out/*.pkl
+          retention-days: 1
+
+  reaction-combine:
+    needs: geometry-month
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: z4-*
+          path: /tmp/z4parts
+          merge-multiple: true
+      - name: Assemble geometry and acquire H1 raw only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/h1 /tmp/reaction_h1
+          python - <<'PY'
+          import pandas as pd,glob
+          fs=sorted(glob.glob('/tmp/z4parts/z4_*.pkl'));assert len(fs)==12,fs
+          parts=[pd.read_pickle(f) for f in fs]
+          z=pd.concat(parts,ignore_index=True)
+          z.to_pickle('/tmp/Z4_C5_REACTION_H1_GEOMETRY.pkl')
+          assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z') and z.time.max()<pd.Timestamp('2025-08-01T00:00:00Z')
+          print('ASSEMBLED_Z4',len(z),z.time.nunique())
+          PY
+          python - <<'PY'
+          import json,subprocess,hashlib,os
+          from pathlib import Path
+          man=json.load(open(os.environ['MANIFEST']))
+          files=[x for x in man['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2025-07']
+          assert len(files)==12
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in files:
+              p=Path('/tmp/xau/h1')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          assert not list(Path('/tmp/xau/h1').glob('*2025_08*')) and not list(Path('/tmp/xau/h1').glob('*2026*'))
+          print('H1_ONLY_12_HASHES_PASS')
+          PY
+      - name: Activation and preoutcome guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          c=json.load(open('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json'))
+          assert c['status']=='EBUY_COVERAGE_OOS_REPLICATION_PASS' and c['results']['OOS_H1']['status']=='PASS' and c['results']['OOS_H2']['status']=='PASS'
+          print('ACTIVATION_PASS')
+          PY
+      - name: Run frozen H1 reaction engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_3_final_preoutcome.py \
+            --files /tmp/xau/h1/*.csv \
+            --z4-pkl /tmp/Z4_C5_REACTION_H1_GEOMETRY.pkl \
+            --coverage-oos-result xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+            --contacts-csv /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_CONTACTS_v1_0.csv \
+            --trigger-csv /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv \
+            --output /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json'))
+          assert x['reaction_holdout_opened'] is False
+          print('REACTION_DONE',x['status'],x['contact_episode_count'],x['selected_trigger'])
+          PY
+      - name: Publish monthly-geometry H1 reaction evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0-monthly-geometry
+          mkdir -p "$out"
+          cp /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json "$out/"
+          gzip -c /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_CONTACTS_v1_0.csv > "$out/XAUUSD_Z4_EBUY_REACTION_DEV_H1_CONTACTS_v1_0.csv.gz"
+          gzip -c /tmp/reaction_h1/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv > "$out/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv.gz"
+          git add "$out"
+          git commit -m 'publish parallel monthly-geometry E-BUY reaction DEV H1 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
