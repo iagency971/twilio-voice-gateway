@@ -1,0 +1,10 @@
+{
+  "status": "MECHANICAL_SINGLE_CADENCE_REPLACEMENT_PASS",
+  "cadence_min": 5,
+  "lookback_active_m1": 1440,
+  "frozen_source_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+  "old_literal": "p=utc_ts(ts); return p.minute%15==0 and p.second==0",
+  "new_literal": "p=utc_ts(ts); return p.minute%5==0 and p.second==0",
+  "patched_sha256": "7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24",
+  "other_source_mutations": 0
+}
