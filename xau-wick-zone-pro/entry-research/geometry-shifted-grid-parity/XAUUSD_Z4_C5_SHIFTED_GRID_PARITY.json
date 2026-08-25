@@ -1,0 +1,16 @@
+{
+  "status": "SHIFTED_GRID_SEMANTIC_PARITY_PASS",
+  "rows": 32797,
+  "columns": 44,
+  "max_numeric_abs_diff": 4.051425861462121e-12,
+  "key_max_abs_diff": {
+    "center": 4.547473508864641e-13,
+    "zlo": 4.547473508864641e-13,
+    "zhi": 4.547473508864641e-13,
+    "side": 0.0,
+    "lineage_id": 0.0,
+    "age_lm": 0.0
+  },
+  "orig_sha256": "3d3dc4e6948be0f255d714b5c1c34ee21df0ffefe58c91770569ac54b40f034f",
+  "shifted_sha256": "3d7f9a5bf4553de933a2ec3c99ca282a5c6cd006fc44cc61d7aa57b0ff1d999d"
+}
