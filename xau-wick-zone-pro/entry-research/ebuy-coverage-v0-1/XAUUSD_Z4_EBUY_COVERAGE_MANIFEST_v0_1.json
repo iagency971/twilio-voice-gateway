@@ -1,0 +1,23 @@
+{
+  "status": "EBUY_COVERAGE_PROVENANCE_RECORDED",
+  "result_status": "EBUY_COVERAGE_FAIL",
+  "future_price_outcomes_used": false,
+  "sha256": {
+    "prereg": "b6c22fafd90e41c18ffcfd70301d927c37ebbfbdf73f408222aace3b57d81342",
+    "coverage_engine": "fe9a0efa986211f6277f1506e3bdf16aac57980b221c9aeb343c5b5c07d5df1c",
+    "z4_geometry_engine": "3d3dc4e6948be0f255d714b5c1c34ee21df0ffefe58c91770569ac54b40f034f",
+    "result": "132aace7c7c261b4b829bb0b99954e209c83962149c59414c2aee0c4e6c984dc",
+    "selected_candidates": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  },
+  "source_sha256": {
+    "xauusd_bid_m1_2024_01.csv": "7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d",
+    "xauusd_bid_m1_2024_02.csv": "45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f",
+    "xauusd_bid_m1_2024_03.csv": "28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14",
+    "xauusd_bid_m1_2024_04.csv": "ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9",
+    "xauusd_bid_m1_2024_05.csv": "18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6",
+    "xauusd_bid_m1_2024_06.csv": "f7cad6452e9666b37f6f7830bb69a61439095919bb1609daa80839fdb3a8fd39",
+    "xauusd_bid_m1_2024_07.csv": "a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52"
+  },
+  "selected_architecture": null,
+  "eligible_snapshot_count": 12959
+}

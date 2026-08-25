@@ -1,0 +1,25 @@
+{
+  "tag": "Z4_C5_EBUY_COVERAGE",
+  "rows": 267495,
+  "landmarks": 41170,
+  "eligible_landmarks": 41233,
+  "missing_side_zone_landmarks": 63,
+  "lineages": 9407,
+  "zone_count_quantiles": {
+    "0": 1.0,
+    "0.5": 7.0,
+    "0.9": 11.0,
+    "0.95": 13.0,
+    "0.99": 17.0,
+    "1": 24.0
+  },
+  "age_lm_quantiles": {
+    "0.5": 63.0,
+    "0.75": 139.0,
+    "0.9": 211.0,
+    "0.95": 244.0,
+    "0.99": 278.0
+  },
+  "revisit_rate": null,
+  "runtime_sec": 123.43935441970825
+}
