@@ -1,0 +1,73 @@
+name: XAU Z4 E-BUY Reaction Readiness v1.0
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-reaction-readiness-v1-0.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Static pre-outcome QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0.py \
+            xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_1_runtime_repair.py \
+            xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_2_preoutcome_repairs.py \
+            xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_3_final_preoutcome.py
+          python xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_3_final_preoutcome.py --help >/tmp/help.txt
+          python - <<'PY'
+          from pathlib import Path
+          base=Path('xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0.py').read_text()
+          r1=Path('xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_1_runtime_repair.py').read_text()
+          r2=Path('xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_2_preoutcome_repairs.py').read_text()
+          r3=Path('xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_3_final_preoutcome.py').read_text()
+          pre=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_REACTION_DEV_PREREG_v1_0_CONDITIONAL_2026-08-25.md').read_text()
+          a=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_REACTION_DEV_PREREG_v1_0_ADDENDUM_A_2026-08-25.md').read_text()
+          b=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_REACTION_DEV_PREREG_v1_0_ADDENDUM_B_RUNTIME_STATE_2026-08-25.md').read_text()
+          c=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_REACTION_DEV_PREREG_v1_0_ADDENDUM_C_TOUCH_INTRABAR_2026-08-25.md').read_text()
+          assert "DEV_HI=pd.Timestamp('2025-08-01T00:00:00Z')" in base
+          assert "cov.get('status')!='EBUY_COVERAGE_OOS_REPLICATION_PASS'" in base
+          assert "if s['time'] >= base.DEV_HI" in r1
+          assert "runtime.setdefault(eid" in r1
+          assert "rt['consumed'] = True" in r1
+          assert 'AMBIGUOUS_CONTACT_BAR' in r2 and 'contact-bar high' in c
+          assert "AMBIG = {'AMBIGUOUS', 'AMBIGUOUS_CONTACT_BAR'}" in r3
+          assert 'REACTION_HOLDOUT' in pre and 'No reaction/TP/MFE/MAE/trigger result from H2 may be computed' in pre
+          assert 'before TP1 has already been reached' in a
+          assert 'software-state bug' in b
+          print('REACTION_READINESS_STATIC_PASS')
+          PY
+      - name: Publish readiness attestation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/reaction-dev-v1-0-readiness
+          mkdir -p "$out"
+          cat > "$out/REACTION_DEV_V1_0_READINESS_PASS.txt" <<'EOF'
+          REACTION_DEV_V1_0_READINESS_PASS
+          No reaction outcome computed.
+          H2 reaction holdout remains unopened.
+          Final execution engine: xau_ebuy_reaction_dev_v1_0_3_final_preoutcome.py
+          EOF
+          git add "$out"
+          git commit -m 'attest E-BUY reaction DEV pre-outcome readiness [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
