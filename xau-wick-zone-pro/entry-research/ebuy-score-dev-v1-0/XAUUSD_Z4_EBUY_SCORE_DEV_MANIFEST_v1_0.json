@@ -1,0 +1,15 @@
+{
+  "status": "E_BUY_US_SCORE_DEV_PROVENANCE_RECORDED",
+  "score_status": "E_BUY_US_DEV_FAIL",
+  "selected_model": "M2_HGB",
+  "reaction_holdout_opened": false,
+  "sha256": {
+    "prereg": "3994d17afd5fe48a4e304b37fc46de3b5f3b79449d6302c6960e3e77fd38d38f",
+    "engine": "876b0e391d794889b764658f7cd48b2ebce63b0cca51fcf339917ca3f3955c11",
+    "reaction_result": "5461b2be26f8d6d2ece97e593410c9d587c4dc43cd7b9c64c92a4577ebfff351",
+    "trigger_table": "13f050f3f46b24fe50f70c92388138a4d55568b41ff07c33227c0e14cecff0e3",
+    "candidate_table": "bc0e1761c4a68ae94c58ea6a1d2225668d56a02987218358c69011c12e82cdbd",
+    "result": "13cc296912aa72dc9529482aa87b9f1f8a0d1dc041418faa2da483b5ff2c6d6e",
+    "oof": "956ed3542f12efac3a68f37f92e208e71b7ce8772225f8ae48d0bb7360867595"
+  }
+}

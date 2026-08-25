@@ -1,0 +1,289 @@
+{
+  "status": "E_BUY_US_DEV_FAIL",
+  "scope": "BUY_ONLY_E_BUY_US_SCORE_DEV_H1",
+  "reaction_holdout_opened": false,
+  "bull_rejection_fired_total": 7128,
+  "ambiguous_excluded": 18,
+  "model_dataset_n": 7110,
+  "feature_schema": {
+    "numeric": [
+      "slot_rank",
+      "episode_age_c5",
+      "zone_width_v",
+      "arm_center_distance_v",
+      "tp_distance_v",
+      "minutes_to_us_end",
+      "v_contact",
+      "trend5_v",
+      "trend15_v",
+      "trend60_v",
+      "trend240_v",
+      "contact_penetration_width",
+      "contact_bull",
+      "contact_close_position",
+      "upper_z4_count",
+      "minutes_contact_to_trigger",
+      "trigger_body_v",
+      "trigger_range_v",
+      "trigger_lower_wick_v",
+      "trigger_upper_wick_v",
+      "trigger_close_position",
+      "trigger_close_minus_zhi_v",
+      "trigger_close_minus_center_v",
+      "exec_gap_v",
+      "max_penetration_to_trigger_width"
+    ],
+    "categorical": [
+      "family",
+      "episode_origin_family",
+      "us_subperiod"
+    ]
+  },
+  "models": {
+    "M1_LOGISTIC": {
+      "folds": [
+        {
+          "fold": "F1",
+          "train_n": 2275,
+          "test_n": 1218,
+          "baseline": 0.277504105090312,
+          "roc_auc": 0.8107282140935986,
+          "average_precision": 0.6077340871407882,
+          "brier": 0.1549221121457938,
+          "E80": {
+            "count": 212,
+            "positive_rate": 0.6415094339622641
+          },
+          "E90": {
+            "count": 110,
+            "positive_rate": 0.6818181818181818
+          },
+          "E80_above_baseline": true
+        },
+        {
+          "fold": "F2",
+          "train_n": 3493,
+          "test_n": 1130,
+          "baseline": 0.34424778761061947,
+          "roc_auc": 0.7671596432251282,
+          "average_precision": 0.622819582925685,
+          "brier": 0.18243514146825804,
+          "E80": {
+            "count": 195,
+            "positive_rate": 0.6871794871794872
+          },
+          "E90": {
+            "count": 84,
+            "positive_rate": 0.75
+          },
+          "E80_above_baseline": true
+        },
+        {
+          "fold": "F3",
+          "train_n": 4623,
+          "test_n": 1247,
+          "baseline": 0.2694466720128308,
+          "roc_auc": 0.7660962573833046,
+          "average_precision": 0.568187805027893,
+          "brier": 0.16289388114624495,
+          "E80": {
+            "count": 203,
+            "positive_rate": 0.6650246305418719
+          },
+          "E90": {
+            "count": 104,
+            "positive_rate": 0.7307692307692307
+          },
+          "E80_above_baseline": true
+        },
+        {
+          "fold": "F4",
+          "train_n": 5870,
+          "test_n": 1240,
+          "baseline": 0.31129032258064515,
+          "roc_auc": 0.8035941803885405,
+          "average_precision": 0.6421513133181526,
+          "brier": 0.16206857641904787,
+          "E80": {
+            "count": 227,
+            "positive_rate": 0.7092511013215859
+          },
+          "E90": {
+            "count": 115,
+            "positive_rate": 0.7913043478260869
+          },
+          "E80_above_baseline": true
+        }
+      ],
+      "pooled": {
+        "n": 4835,
+        "baseline": 0.2996897621509824,
+        "roc_auc": 0.7860742300635466,
+        "average_precision": 0.6060597424642136,
+        "brier": 0.1652410645298232,
+        "E80": {
+          "count": 837,
+          "positive_rate": 0.6762246117084827
+        },
+        "E90": {
+          "count": 413,
+          "positive_rate": 0.738498789346247
+        },
+        "fp1_all": {
+          "favorable": 1575,
+          "adverse": 3170,
+          "ambiguous": 83,
+          "neither": 7,
+          "favorable_vs_adverse_rate": 0.33192834562697576
+        },
+        "fp1_E80": {
+          "favorable": 277,
+          "adverse": 539,
+          "ambiguous": 19,
+          "neither": 2,
+          "favorable_vs_adverse_rate": 0.3394607843137255
+        },
+        "fp1_E90": {
+          "favorable": 144,
+          "adverse": 255,
+          "ambiguous": 12,
+          "neither": 2,
+          "favorable_vs_adverse_rate": 0.3609022556390977
+        }
+      },
+      "mean_fold_ap": 0.6102231971031297
+    },
+    "M2_HGB": {
+      "folds": [
+        {
+          "fold": "F1",
+          "train_n": 2275,
+          "test_n": 1218,
+          "baseline": 0.277504105090312,
+          "roc_auc": 0.8163797740720818,
+          "average_precision": 0.6404670778132037,
+          "brier": 0.15078867576288313,
+          "E80": {
+            "count": 204,
+            "positive_rate": 0.6862745098039216
+          },
+          "E90": {
+            "count": 104,
+            "positive_rate": 0.7692307692307693
+          },
+          "E80_above_baseline": true
+        },
+        {
+          "fold": "F2",
+          "train_n": 3493,
+          "test_n": 1130,
+          "baseline": 0.34424778761061947,
+          "roc_auc": 0.7673122890278891,
+          "average_precision": 0.6454165440403014,
+          "brier": 0.1801468410592546,
+          "E80": {
+            "count": 183,
+            "positive_rate": 0.7158469945355191
+          },
+          "E90": {
+            "count": 84,
+            "positive_rate": 0.8214285714285714
+          },
+          "E80_above_baseline": true
+        },
+        {
+          "fold": "F3",
+          "train_n": 4623,
+          "test_n": 1247,
+          "baseline": 0.2694466720128308,
+          "roc_auc": 0.7597845120485076,
+          "average_precision": 0.5554957699703231,
+          "brier": 0.16231782608923304,
+          "E80": {
+            "count": 185,
+            "positive_rate": 0.6324324324324324
+          },
+          "E90": {
+            "count": 83,
+            "positive_rate": 0.7228915662650602
+          },
+          "E80_above_baseline": true
+        },
+        {
+          "fold": "F4",
+          "train_n": 5870,
+          "test_n": 1240,
+          "baseline": 0.31129032258064515,
+          "roc_auc": 0.7997142371770758,
+          "average_precision": 0.6552429705067129,
+          "brier": 0.16185331685001794,
+          "E80": {
+            "count": 211,
+            "positive_rate": 0.6872037914691943
+          },
+          "E90": {
+            "count": 107,
+            "positive_rate": 0.8037383177570093
+          },
+          "E80_above_baseline": true
+        }
+      ],
+      "pooled": {
+        "n": 4835,
+        "baseline": 0.2996897621509824,
+        "roc_auc": 0.7854144679692332,
+        "average_precision": 0.621652331502607,
+        "brier": 0.16346121602966812,
+        "E80": {
+          "count": 783,
+          "positive_rate": 0.6807151979565773
+        },
+        "E90": {
+          "count": 378,
+          "positive_rate": 0.7804232804232805
+        },
+        "fp1_all": {
+          "favorable": 1575,
+          "adverse": 3170,
+          "ambiguous": 83,
+          "neither": 7,
+          "favorable_vs_adverse_rate": 0.33192834562697576
+        },
+        "fp1_E80": {
+          "favorable": 262,
+          "adverse": 507,
+          "ambiguous": 12,
+          "neither": 2,
+          "favorable_vs_adverse_rate": 0.34070221066319895
+        },
+        "fp1_E90": {
+          "favorable": 137,
+          "adverse": 230,
+          "ambiguous": 9,
+          "neither": 2,
+          "favorable_vs_adverse_rate": 0.37329700272479566
+        }
+      },
+      "mean_fold_ap": 0.6241555905826353
+    }
+  },
+  "selected_model": "M2_HGB",
+  "selected_checks": {
+    "pooled_auc_ge_060": true,
+    "pooled_ap_ge_baseline_plus_005": true,
+    "E80_n_ge_800": false,
+    "E80_rate_ge_baseline_plus_008": true,
+    "E90_n_ge_350": true,
+    "E90_rate_ge_baseline_plus_012": true,
+    "E80_positive_lift_in_at_least_3_of_4_folds": true
+  },
+  "selected_fold_E80_lift_count": 4,
+  "final_model_artifact": null,
+  "authorization": "KEEP_H2_CLOSED_NO_PRODUCTION_SCORE",
+  "explicit_nonclaims": [
+    "No H2 reaction result opened",
+    "E_BUY_US is a rank not calibrated probability",
+    "No live profitability claim",
+    "No R_US route claim"
+  ]
+}
