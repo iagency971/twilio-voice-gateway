@@ -1,0 +1,9 @@
+{
+  "status": "C5_DEV_ONLY_R_MAP_PROVENANCE_PASS",
+  "cadence_min": 5,
+  "future_outcomes_used": false,
+  "threshold_count": 101,
+  "monotone": true,
+  "score_map_sha256": "50be1210fcbf4debec75fd7d0abf733ecd977655917d15e3735aeddb69dbed6a",
+  "source": "exact C5 BID Jan-Jul 2024 DEV + frozen C5 BID M0GL"
+}

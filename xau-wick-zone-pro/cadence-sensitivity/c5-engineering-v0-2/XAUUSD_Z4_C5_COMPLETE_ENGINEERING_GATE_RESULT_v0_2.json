@@ -1,0 +1,121 @@
+{
+  "status": "C5_COMPLETE_PYTHON_ENGINEERING_GATE_PASS",
+  "cadence_min": 5,
+  "lookback_active_m1": 1440,
+  "future_outcomes_used": false,
+  "selected_warmup_cap": 96,
+  "checks": {
+    "score_map_provenance_pass": true,
+    "warmup_pass": true,
+    "warmup_vectorized_equivalence_pass": true,
+    "greedy_lineage_pass": true,
+    "combined_proxy_pass": true,
+    "r_display_pass": true
+  },
+  "warmup_metrics": {
+    "cap": 96,
+    "pearson": 0.9996221079793932,
+    "spearman": 0.9996974220575026,
+    "abs_error_quantiles": {
+      "0.5": 0.0,
+      "0.9": 0.007402536273818239,
+      "0.95": 0.016286902952413612,
+      "0.99": 0.038985746765903766
+    },
+    "fraction_abs_error_gt_003": 0.018793599916123404,
+    "fraction_abs_error_gt_005": 0.004781714901950505,
+    "fraction_full_age_gt_cap": 0.3735953478444838,
+    "within_landmark_spearman_median": 1.0,
+    "within_landmark_spearman_mean": 0.9967948576046128,
+    "within_landmark_n": 38179,
+    "top1_agreement": 0.9951836536122598,
+    "top1_landmarks": 41110,
+    "top3_jaccard_mean": 0.9948269991356505,
+    "top3_jaccard_median": 1.0,
+    "top3_landmarks": 38179,
+    "checks": {
+      "spearman_ge_0995": true,
+      "pearson_ge_0995": true,
+      "median_abs_error_le_0005": true,
+      "p95_abs_error_le_0030": true,
+      "fraction_abs_error_gt_005_le_002": true,
+      "within_landmark_spearman_median_ge_0995": true,
+      "top1_agreement_ge_095": true,
+      "top3_jaccard_mean_ge_095": true
+    },
+    "status": "PASS"
+  },
+  "combined_proxy_metrics": {
+    "exact_rows": 267059,
+    "proxy_rows": 249503,
+    "matched_pairs": 246527,
+    "exact_zone_match_rate": 0.9231181124770181,
+    "proxy_zone_match_rate": 0.9880722877079634,
+    "landmarks_exact": 41110,
+    "landmarks_proxy": 41142,
+    "same_zone_count_landmark_rate": 0.5931046212158025,
+    "mean_abs_zone_count_difference": 0.5213567228728315,
+    "iou_quantiles": {
+      "0.1": 0.9063930904542679,
+      "0.25": 0.9498605375530985,
+      "0.5": 0.9738906081503368,
+      "0.75": 0.9869746262628986,
+      "0.9": 0.9935639943346946,
+      "0.95": 0.9958251880965956
+    },
+    "center_err_vseg_quantiles": {
+      "0.5": 0.03809523809521335,
+      "0.9": 0.12307692307679392,
+      "0.95": 0.17857142857128355,
+      "0.99": 1.3333333333330526
+    },
+    "lo_err_vseg_quantiles": {
+      "0.5": 0.03203936153360073,
+      "0.9": 0.11894892264337575,
+      "0.95": 0.18153060100005372
+    },
+    "hi_err_vseg_quantiles": {
+      "0.5": 0.030897940817369123,
+      "0.9": 0.11403457831318807,
+      "0.95": 0.1726524022668224
+    },
+    "score_pearson": 0.997384693847023,
+    "score_spearman": 0.998328512407977,
+    "score_abs_err_quantiles": {
+      "0.5": 0.0033826807071248854,
+      "0.9": 0.02352410075962603,
+      "0.95": 0.038428025445778044,
+      "0.99": 0.08408170917693401
+    },
+    "within_landmark_spearman_median": 1.0,
+    "within_landmark_spearman_mean": 0.9897391479649482,
+    "within_landmark_rank_landmarks": 37171,
+    "top1_zone_agreement": 0.8734851803182947,
+    "top1_eligible_landmarks": 41094
+  },
+  "r_display_metrics": {
+    "median_abs_r_float_error": 0.43085856801201317,
+    "p90_abs_r_float_error": 2.364395964012365,
+    "p95_abs_r_float_error": 3.7142616469952796,
+    "p99_abs_r_float_error": 7.650594980783228,
+    "median_abs_display_r_error": 1.0,
+    "p95_abs_display_r_error": 4.0,
+    "share_display_within_1": 0.8180970035736451,
+    "share_display_within_2": 0.9054058987453707,
+    "share_display_within_5": 0.9769842654151473,
+    "r_pearson": 0.9981237091559116,
+    "r_spearman": 0.998328512407977,
+    "matched_pairs": 246527,
+    "matched_top1_agreement": 0.9701401732697362,
+    "top1_landmarks": 41092
+  },
+  "artifact_sha256": {
+    "score_map": "50be1210fcbf4debec75fd7d0abf733ecd977655917d15e3735aeddb69dbed6a",
+    "score_map_attestation": "dbb6b94ab869e5723bb37d0a99fad4c9546265c2de5e9b5472771cc5c6075473",
+    "warmup": "98600e8e567ee5c07fb2895c12b3c935a8e37590f20072fe3f15b34b5a2ea592",
+    "greedy": "8a4e308c57426965b5b153739ac9edd68fa77e438af75549966cd6bfc3451c20",
+    "combined": "bb35d66553e69f5c94daa294ecd46d7c5bdce75d19ed99b4a5c4aea4226249e3",
+    "r_display": "ab9ebb8faefe3eca1b1a0273f75fa691872f65673e6e506de456d455b74450d6"
+  },
+  "next_if_pass": "Build C5 Pine QA candidate from repaired v2.1.0 using C5 model/R/cadence/warm-up; then TradingView compile, Replay, confirmed live landmark, GRID_LIMIT recovery, and static parameter audit before any VALIDATED_PROXY label. FOREXCOM transfer remains unvalidated."
+}

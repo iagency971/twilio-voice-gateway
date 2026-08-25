@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "scope": "OUTCOME_BLIND_GREEDY_VS_HUNGARIAN_LINEAGE_ASSIGNMENT_DEV_BID",
+  "future_outcomes_used": false,
+  "metrics": {
+    "rows": 267059,
+    "eligible_landmarks": 41173,
+    "previous_link_agreement": 0.9998801762906324,
+    "score_pearson": 0.9999331327765744,
+    "score_spearman": 0.9999587756324775,
+    "score_abs_error_median": 0.0,
+    "score_abs_error_p95": 0.0,
+    "score_abs_error_p99": 0.0,
+    "within_landmark_spearman_median": 1.0,
+    "within_landmark_spearman_mean": 0.999807926024833,
+    "top1_agreement": 0.9996351252736561,
+    "top3_jaccard_mean": 0.9998297493386417,
+    "eligible_rank_landmarks": 38179,
+    "state_feature_errors": {
+      "age_lm": {
+        "exact_rate": 0.9950610164795045,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 281.0
+      },
+      "age_active_min": {
+        "exact_rate": 0.9950610164795045,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 1405.0
+      },
+      "age_civil_min": {
+        "exact_rate": 0.9950610164795045,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 3735.0
+      },
+      "center_shift_vseg": {
+        "exact_rate": 0.9998801762906324,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 9.59722222222532
+      },
+      "width_log_change": {
+        "exact_rate": 0.9998801762906324,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 2.6711060625878225
+      },
+      "prom_log_change": {
+        "exact_rate": 0.9998801762906324,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 2.3075068759560096
+      },
+      "mass_log_change": {
+        "exact_rate": 0.9998801762906324,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 4.820753098545222
+      },
+      "strength_log_change": {
+        "exact_rate": 0.9998801762906324,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 2.858249345188906
+      },
+      "reinforce_streak": {
+        "exact_rate": 0.9999475771271517,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 2.0
+      },
+      "center_sd4_vseg": {
+        "exact_rate": 0.9996517623446505,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 4.788217007570042
+      },
+      "width_cv4": {
+        "exact_rate": 0.9996517623446505,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 1.3067011380246605
+      },
+      "prom_vs_histmax": {
+        "exact_rate": 0.9946753339149776,
+        "median_abs_error": 0.0,
+        "p95_abs_error": 0.0,
+        "max_abs_error": 0.9320539816467922
+      }
+    }
+  },
+  "checks": {
+    "previous_link_agreement_ge_0995": true,
+    "score_pearson_ge_0999": true,
+    "score_spearman_ge_0999": true,
+    "median_score_error_le_0002": true,
+    "p95_score_error_le_0020": true,
+    "within_landmark_median_spearman_ge_0999": true,
+    "top1_agreement_ge_0995": true,
+    "top3_jaccard_ge_0995": true
+  }
+}
