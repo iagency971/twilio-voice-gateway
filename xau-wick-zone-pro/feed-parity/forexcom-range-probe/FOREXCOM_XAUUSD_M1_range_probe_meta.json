@@ -1,0 +1,52 @@
+{
+  "status": "FAIL",
+  "symbol": "FOREXCOM:XAUUSD",
+  "results": [
+    {
+      "tag": "jul_2026",
+      "requested": [
+        "2026-07-01T00:00:00Z",
+        "2026-07-04T00:00:00Z"
+      ],
+      "range_arg": "r,1782864000:1783123200",
+      "bars": 0,
+      "series_completed": false,
+      "errors": [],
+      "first": null,
+      "last": null,
+      "resolved_full_name": null,
+      "bar_source": null
+    },
+    {
+      "tag": "jan_2026",
+      "requested": [
+        "2026-01-05T00:00:00Z",
+        "2026-01-08T00:00:00Z"
+      ],
+      "range_arg": "r,1767571200:1767830400",
+      "bars": 0,
+      "series_completed": false,
+      "errors": [],
+      "first": null,
+      "last": null,
+      "resolved_full_name": null,
+      "bar_source": null
+    },
+    {
+      "tag": "aug_2025",
+      "requested": [
+        "2025-08-04T00:00:00Z",
+        "2025-08-07T00:00:00Z"
+      ],
+      "range_arg": "r,1754265600:1754524800",
+      "bars": 0,
+      "series_completed": false,
+      "errors": [],
+      "first": null,
+      "last": null,
+      "resolved_full_name": null,
+      "bar_source": null
+    }
+  ],
+  "acquired_at_utc": "2026-08-25T12:14:49.068807Z"
+}
