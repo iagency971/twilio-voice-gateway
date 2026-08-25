@@ -1,0 +1,15 @@
+{
+  "status": "EBUY_OOS_COVERAGE_PROVENANCE_RECORDED",
+  "result_status": "EBUY_COVERAGE_OOS_REPLICATION_PASS",
+  "future_price_outcomes_used": false,
+  "authorization": "FREEZE_EBUY_LOCATION_ENGINE_AND_AUTHORIZE_REACTION_PREREG",
+  "sha256": {
+    "prereg": "b84c6bbb11f1368a343254275f630d8a8b48faa3ae2c30b7b0901dc98cba017c",
+    "engine": "d557bf98b01b17ea9b05bd4fd847ed2892faa32f7c0d1ed984702a7bfd88ca54",
+    "v04_engine": "e60ed4076eaf5d0d4f86ce9613bd10d3a10062f3d0e802c1fdda85ab1d633110",
+    "source_manifest": "079b64fa8a23b7c1ded3196e783d75a057d33b457530639ae0ca0816eecc8c0d",
+    "z4_geometry": "3d3dc4e6948be0f255d714b5c1c34ee21df0ffefe58c91770569ac54b40f034f",
+    "result": "d0b23f99b4475adab5d539416ae9203cdeef78637b0b973e52d7181c1e2b3aa6",
+    "candidates": "157a5f180cc548f51ac9a0fd38ce9e031da48a0dad4fd4170f74b5836d4af90b"
+  }
+}
