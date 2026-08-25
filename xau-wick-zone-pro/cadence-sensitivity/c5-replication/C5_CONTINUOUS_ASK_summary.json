@@ -1,0 +1,25 @@
+{
+  "tag": "C5_HISTORICAL_ASK_JAN2024_JUL2026",
+  "rows": 1073559,
+  "landmarks": 182372,
+  "eligible_landmarks": 182878,
+  "missing_side_zone_landmarks": 506,
+  "lineages": 39409,
+  "zone_count_quantiles": {
+    "0": 1.0,
+    "0.5": 6.0,
+    "0.9": 10.0,
+    "0.95": 11.0,
+    "0.99": 14.0,
+    "1": 25.0
+  },
+  "age_lm_quantiles": {
+    "0.5": 60.0,
+    "0.75": 134.0,
+    "0.9": 208.0,
+    "0.95": 242.0,
+    "0.99": 277.0
+  },
+  "revisit_rate": 0.29215348201635866,
+  "runtime_sec": 2232.7765345573425
+}

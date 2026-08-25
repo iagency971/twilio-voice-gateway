@@ -1,0 +1,638 @@
+{
+  "status": "C5_HISTORICAL_REPLICATION_SOURCE_QA_PASS",
+  "source": "kevingtlin/Market-Data-Lab Dukascopy XAUUSD M1",
+  "allowed_max_month": "2026-07",
+  "files": [
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "01",
+      "file": "xauusd_bid_m1_2024_01.csv",
+      "sha256": "7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d",
+      "rows": 44640,
+      "active_rows": 30243
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "02",
+      "file": "xauusd_bid_m1_2024_02.csv",
+      "sha256": "45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f",
+      "rows": 41760,
+      "active_rows": 28760
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "03",
+      "file": "xauusd_bid_m1_2024_03.csv",
+      "sha256": "28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14",
+      "rows": 44640,
+      "active_rows": 27613
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "04",
+      "file": "xauusd_bid_m1_2024_04.csv",
+      "sha256": "ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9",
+      "rows": 43200,
+      "active_rows": 30358
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "05",
+      "file": "xauusd_bid_m1_2024_05.csv",
+      "sha256": "18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6",
+      "rows": 44640,
+      "active_rows": 31452
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "06",
+      "file": "xauusd_bid_m1_2024_06.csv",
+      "sha256": "f7cad6452e9666b37f6f7830bb69a61439095919bb1609daa80839fdb3a8fd39",
+      "rows": 43200,
+      "active_rows": 27548
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "07",
+      "file": "xauusd_bid_m1_2024_07.csv",
+      "sha256": "a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52",
+      "rows": 44640,
+      "active_rows": 31561
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "08",
+      "file": "xauusd_bid_m1_2024_08.csv",
+      "sha256": "69a43d059dbdb9bce3bed1be13db378437ed4131cd109d04690fadf2aa17a476",
+      "rows": 44640,
+      "active_rows": 30236
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "09",
+      "file": "xauusd_bid_m1_2024_09.csv",
+      "sha256": "b9548afce3bc91d47831654ff5745b2165241e5729fc40cdb82d2df76b3c0668",
+      "rows": 43200,
+      "active_rows": 28931
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "10",
+      "file": "xauusd_bid_m1_2024_10.csv",
+      "sha256": "7eaccb67908ef0ce451a230ee9e723cd2ed3e618f8e1ca9eb8148fc4457cd6d7",
+      "rows": 44640,
+      "active_rows": 31658
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "11",
+      "file": "xauusd_bid_m1_2024_11.csv",
+      "sha256": "8bdd99624cdebcc843d41420bbced1e57f91d9bebeb42279b85e6c9450232f8f",
+      "rows": 43200,
+      "active_rows": 28568
+    },
+    {
+      "side": "bid",
+      "year": "2024",
+      "month": "12",
+      "file": "xauusd_bid_m1_2024_12.csv",
+      "sha256": "c086505bd4ae2f98095bae1c80e6b80ade803ae8f56de6e558e37a0153f967cd",
+      "rows": 44640,
+      "active_rows": 28748
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "01",
+      "file": "xauusd_bid_m1_2025_01.csv",
+      "sha256": "4596e50b3fb203e12a9eee24942e0d22db8a2e409b71f9546a1e6ee6f80233a0",
+      "rows": 44640,
+      "active_rows": 30186
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "02",
+      "file": "xauusd_bid_m1_2025_02.csv",
+      "sha256": "59c6380fcccc11883f74d09bbc3fc7cddf093d0e8c00e8d6826cf19fe7350e58",
+      "rows": 40320,
+      "active_rows": 27439
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "03",
+      "file": "xauusd_bid_m1_2025_03.csv",
+      "sha256": "24b0bfbf3baa5d2bd314cb081a78835b182e1bb410d916e47479a780618874cb",
+      "rows": 44640,
+      "active_rows": 29084
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "04",
+      "file": "xauusd_bid_m1_2025_04.csv",
+      "sha256": "4e2364e526b266b788b7e980902e9e457653357b58ad5d9caff17814e4bce832",
+      "rows": 43200,
+      "active_rows": 28948
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "05",
+      "file": "xauusd_bid_m1_2025_05.csv",
+      "sha256": "d0f3a257cf9f9259d4ccc8b3a9525cfeed0413e281bb31521263d69d0aca2be0",
+      "rows": 44640,
+      "active_rows": 30085
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "06",
+      "file": "xauusd_bid_m1_2025_06.csv",
+      "sha256": "2440bcdc23708b6dcaea4e0d2cc8cab57b373dc5be3c287fc8086e82ee84d44e",
+      "rows": 43200,
+      "active_rows": 28947
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "07",
+      "file": "xauusd_bid_m1_2025_07.csv",
+      "sha256": "865435434eedc5fec42bd94bce881847be253092e44975228ce2e70959b47434",
+      "rows": 44640,
+      "active_rows": 31494
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "08",
+      "file": "xauusd_bid_m1_2025_08.csv",
+      "sha256": "eceee53a978775a2d7dab296a521890ff792d2cd426e7ba5eb094b63c97b83a5",
+      "rows": 44640,
+      "active_rows": 28960
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "09",
+      "file": "xauusd_bid_m1_2025_09.csv",
+      "sha256": "56855187ac9d16e19e422a76c198dde83be9f0be15c87e25d7561d1d7c5cd305",
+      "rows": 43200,
+      "active_rows": 30209
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "10",
+      "file": "xauusd_bid_m1_2025_10.csv",
+      "sha256": "ead56d0f295b545c8e291b4ef88a1fdd6e232b1a0fa0839051cbfb9135fa02b7",
+      "rows": 44640,
+      "active_rows": 31620
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "11",
+      "file": "xauusd_bid_m1_2025_11.csv",
+      "sha256": "0a4ad6343d60a96c78d5b72b1cf8386c9772617c500e4e5fbe3f38abc2229666",
+      "rows": 43200,
+      "active_rows": 27354
+    },
+    {
+      "side": "bid",
+      "year": "2025",
+      "month": "12",
+      "file": "xauusd_bid_m1_2025_12.csv",
+      "sha256": "92936e9e939434985ba0928cafbd8c2a248fd1c0f60371b36d3260d6481773fd",
+      "rows": 44640,
+      "active_rows": 30061
+    },
+    {
+      "side": "bid",
+      "year": "2026",
+      "month": "01",
+      "file": "xauusd_bid_m1_2026_01.csv",
+      "sha256": "906ee499bcc0236a6b6cb74ecd6c382ccf435d989a779833952a5c2fbe4ea3fe",
+      "rows": 44640,
+      "active_rows": 28828
+    },
+    {
+      "side": "bid",
+      "year": "2026",
+      "month": "02",
+      "file": "xauusd_bid_m1_2026_02.csv",
+      "sha256": "c58121aa702a061a62ca9ef976f682a613231c5b422e820491d121d347a6d7c9",
+      "rows": 40320,
+      "active_rows": 27424
+    },
+    {
+      "side": "bid",
+      "year": "2026",
+      "month": "03",
+      "file": "xauusd_bid_m1_2026_03.csv",
+      "sha256": "6f1fa7f0497d74ec053755624e9455d7ab50b0a03d1b712504b48f8690af8dab",
+      "rows": 44640,
+      "active_rows": 30475
+    },
+    {
+      "side": "bid",
+      "year": "2026",
+      "month": "04",
+      "file": "xauusd_bid_m1_2026_04.csv",
+      "sha256": "a976ab5b2511e79a87b6aaffb75d8b04b5295d7085240668faecae0f577aa721",
+      "rows": 43200,
+      "active_rows": 28977
+    },
+    {
+      "side": "bid",
+      "year": "2026",
+      "month": "05",
+      "file": "xauusd_bid_m1_2026_05.csv",
+      "sha256": "25398f20bce21bef289fe8321808488ef6165996064f38fab3f44f488dfd5bbd",
+      "rows": 44640,
+      "active_rows": 28826
+    },
+    {
+      "side": "bid",
+      "year": "2026",
+      "month": "06",
+      "file": "xauusd_bid_m1_2026_06.csv",
+      "sha256": "32498557a57cffbc80134be81755f89bb55d95aed6037e95fad259c10a52b284",
+      "rows": 36479,
+      "active_rows": 30119
+    },
+    {
+      "side": "bid",
+      "year": "2026",
+      "month": "07",
+      "file": "xauusd_bid_m1_2026_07.csv",
+      "sha256": "1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286",
+      "rows": 37739,
+      "active_rows": 31378
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "01",
+      "file": "xauusd_ask_m1_2024_01.csv",
+      "sha256": "a4ac5385c164b40a5760890279455228f64646180ea04bb6e45e633cafc024ae",
+      "rows": 44640,
+      "active_rows": 30248
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "02",
+      "file": "xauusd_ask_m1_2024_02.csv",
+      "sha256": "40706a4ec8abb07c6fe13e4c4562f7d07485c104226e42d36c57e06d36c1c167",
+      "rows": 41760,
+      "active_rows": 28761
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "03",
+      "file": "xauusd_ask_m1_2024_03.csv",
+      "sha256": "12ee5b98105d955b18b7a496120998f5f6647987cd16f706c94da6bd7541eb91",
+      "rows": 44640,
+      "active_rows": 27621
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "04",
+      "file": "xauusd_ask_m1_2024_04.csv",
+      "sha256": "ef4001235ec800174d32459174e2235d7cdaf9f67662108c78a962d1d4cb43c6",
+      "rows": 43200,
+      "active_rows": 30353
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "05",
+      "file": "xauusd_ask_m1_2024_05.csv",
+      "sha256": "54ffe9267ce4be51e68746c20eb0a3d5d77f46b0fc71c34af7eb8884d0af6588",
+      "rows": 44640,
+      "active_rows": 31451
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "06",
+      "file": "xauusd_ask_m1_2024_06.csv",
+      "sha256": "ec13944e0fa902394e6a48baf8e142696c3b1486d229d50603f5464085073c56",
+      "rows": 43200,
+      "active_rows": 27544
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "07",
+      "file": "xauusd_ask_m1_2024_07.csv",
+      "sha256": "129719740c4a6a034c756fefb3aa8759b00535c05345e60ffb527d75da7bae1b",
+      "rows": 44640,
+      "active_rows": 31567
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "08",
+      "file": "xauusd_ask_m1_2024_08.csv",
+      "sha256": "98326a42603240856c1d30b308b6ed16dd156b9badb7896b79d45d65b7ace208",
+      "rows": 44640,
+      "active_rows": 30239
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "09",
+      "file": "xauusd_ask_m1_2024_09.csv",
+      "sha256": "0b53c5d2372139bd985f8668e3739bfd8e31cfe698d1894dd9e13b2ebf4a750a",
+      "rows": 43200,
+      "active_rows": 28933
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "10",
+      "file": "xauusd_ask_m1_2024_10.csv",
+      "sha256": "cc4bff8d23b27fff6593d76be10d17261f8a90b7114fda06264f04875e1fa1f8",
+      "rows": 44640,
+      "active_rows": 31644
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "11",
+      "file": "xauusd_ask_m1_2024_11.csv",
+      "sha256": "3642dfbbb823ecc6c0d5807c2ec6f0bec7892ef960fa45d54f6a641cd8ebaae5",
+      "rows": 43200,
+      "active_rows": 28564
+    },
+    {
+      "side": "ask",
+      "year": "2024",
+      "month": "12",
+      "file": "xauusd_ask_m1_2024_12.csv",
+      "sha256": "b824face3d3e7f7dbf780d75d9a6081d82e5e9b26e1b5dfc403195a75df7c335",
+      "rows": 44640,
+      "active_rows": 28734
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "01",
+      "file": "xauusd_ask_m1_2025_01.csv",
+      "sha256": "b8c99a0e1b2f40c0eb8348364ca22b4c81ae395baf43547bec16e7ca41163617",
+      "rows": 44640,
+      "active_rows": 30190
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "02",
+      "file": "xauusd_ask_m1_2025_02.csv",
+      "sha256": "7f6c9348a43b99fadd6e8304d9c15108d14a328451b028353d52a7fa6ba0e355",
+      "rows": 40320,
+      "active_rows": 27426
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "03",
+      "file": "xauusd_ask_m1_2025_03.csv",
+      "sha256": "4351c24c8855c0d644cf26d2060befda3d48aaccb3aa5cb51351852ad4a5f455",
+      "rows": 44640,
+      "active_rows": 29079
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "04",
+      "file": "xauusd_ask_m1_2025_04.csv",
+      "sha256": "5b5297933a1f21fd1b69054e3e88c8694180bd2d8d540b1dcac64bde7a2f2ce8",
+      "rows": 43200,
+      "active_rows": 28950
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "05",
+      "file": "xauusd_ask_m1_2025_05.csv",
+      "sha256": "ed917c8a50ec2df090f0ad47b0fe4c619677ac99502535ecc5bada44a4d52964",
+      "rows": 44640,
+      "active_rows": 30085
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "06",
+      "file": "xauusd_ask_m1_2025_06.csv",
+      "sha256": "cc27d092f39c0a8b8bc3c2dedc610512e4baab278c2610d8536495c9ff695498",
+      "rows": 43200,
+      "active_rows": 28947
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "07",
+      "file": "xauusd_ask_m1_2025_07.csv",
+      "sha256": "a2727bb46f33ba513dea432733dba270eacf74b3a7d92587658e13eeade29ee0",
+      "rows": 44640,
+      "active_rows": 31497
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "08",
+      "file": "xauusd_ask_m1_2025_08.csv",
+      "sha256": "daa9ac2636ff4bf3f36a2b17cdee9888a2ba4d0a2f0d1029d7c1b17d28128b82",
+      "rows": 44640,
+      "active_rows": 28966
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "09",
+      "file": "xauusd_ask_m1_2025_09.csv",
+      "sha256": "f7a1ab14912dbe828213dfb4c9bdd8f5ddece7633a0a459161c730347ea18fc4",
+      "rows": 43200,
+      "active_rows": 30207
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "10",
+      "file": "xauusd_ask_m1_2025_10.csv",
+      "sha256": "4087af9a8d7b20c7d034c22b351c2f240e1940d80dd7a7dda28b401430158381",
+      "rows": 44640,
+      "active_rows": 31620
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "11",
+      "file": "xauusd_ask_m1_2025_11.csv",
+      "sha256": "fd5e83f9cace8b41fe82d5b458d85d82205902ba3bd75a2653d053611456cbf1",
+      "rows": 43200,
+      "active_rows": 27355
+    },
+    {
+      "side": "ask",
+      "year": "2025",
+      "month": "12",
+      "file": "xauusd_ask_m1_2025_12.csv",
+      "sha256": "0993e6f3ef6e5aeb70c965e5c23f4ee285721c9d7b4a1f70a206d09505465790",
+      "rows": 44640,
+      "active_rows": 30061
+    },
+    {
+      "side": "ask",
+      "year": "2026",
+      "month": "01",
+      "file": "xauusd_ask_m1_2026_01.csv",
+      "sha256": "b3dc4193328b2c61d44a5de8fd47f437d7e98349a978b64d72d7d57f8dfec89c",
+      "rows": 44640,
+      "active_rows": 28828
+    },
+    {
+      "side": "ask",
+      "year": "2026",
+      "month": "02",
+      "file": "xauusd_ask_m1_2026_02.csv",
+      "sha256": "a3985eb8a8236bcdecf25ec2541c3cdac1e2ff8e2266fc30e78ddd58253f28a6",
+      "rows": 40320,
+      "active_rows": 27425
+    },
+    {
+      "side": "ask",
+      "year": "2026",
+      "month": "03",
+      "file": "xauusd_ask_m1_2026_03.csv",
+      "sha256": "670a2dfc1f010661b9a435c78c9c093f7e48d8a777892619d3b84bc3a2a5e173",
+      "rows": 44640,
+      "active_rows": 30474
+    },
+    {
+      "side": "ask",
+      "year": "2026",
+      "month": "04",
+      "file": "xauusd_ask_m1_2026_04.csv",
+      "sha256": "95e5a5fd9dd9ad37bbc162bc67e4e92c44a87ef1f298ecedbf5ef37cc6c36091",
+      "rows": 43200,
+      "active_rows": 28977
+    },
+    {
+      "side": "ask",
+      "year": "2026",
+      "month": "05",
+      "file": "xauusd_ask_m1_2026_05.csv",
+      "sha256": "af9b1efcce3ede8f01c0b27806f0886419c784fa2d0feb5446e680beb53cca33",
+      "rows": 44640,
+      "active_rows": 28826
+    },
+    {
+      "side": "ask",
+      "year": "2026",
+      "month": "06",
+      "file": "xauusd_ask_m1_2026_06.csv",
+      "sha256": "e87bc45b471716a16c9849d07f32d7ca4c2267d5340e06575ddeb157ea34429f",
+      "rows": 36479,
+      "active_rows": 30119
+    },
+    {
+      "side": "ask",
+      "year": "2026",
+      "month": "07",
+      "file": "xauusd_ask_m1_2026_07.csv",
+      "sha256": "8dfba3b5b078cd3e5fbc0d6b946c3e6be34372a170bbbd50251ebd2299314f81",
+      "rows": 37739,
+      "active_rows": 31378
+    }
+  ],
+  "validation_prefix_hash_checks": {
+    "bid_2024_01": true,
+    "bid_2024_02": true,
+    "bid_2024_03": true,
+    "bid_2024_04": true,
+    "bid_2024_05": true,
+    "bid_2024_06": true,
+    "bid_2024_07": true,
+    "bid_2024_08": true,
+    "bid_2024_09": true,
+    "bid_2024_10": true,
+    "bid_2024_11": true,
+    "bid_2024_12": true,
+    "bid_2025_01": true,
+    "bid_2025_02": true,
+    "bid_2025_03": true,
+    "bid_2025_04": true,
+    "bid_2025_05": true,
+    "bid_2025_06": true,
+    "bid_2025_07": true,
+    "ask_2024_01": true,
+    "ask_2024_02": true,
+    "ask_2024_03": true,
+    "ask_2024_04": true,
+    "ask_2024_05": true,
+    "ask_2024_06": true,
+    "ask_2024_07": true,
+    "ask_2024_08": true,
+    "ask_2024_09": true,
+    "ask_2024_10": true,
+    "ask_2024_11": true,
+    "ask_2024_12": true,
+    "ask_2025_01": true,
+    "ask_2025_02": true,
+    "ask_2025_03": true,
+    "ask_2025_04": true,
+    "ask_2025_05": true,
+    "ask_2025_06": true,
+    "ask_2025_07": true
+  },
+  "bid_full_hash_checks": {
+    "bid_2024_01": true,
+    "bid_2024_02": true,
+    "bid_2024_03": true,
+    "bid_2024_04": true,
+    "bid_2024_05": true,
+    "bid_2024_06": true,
+    "bid_2024_07": true,
+    "bid_2024_08": true,
+    "bid_2024_09": true,
+    "bid_2024_10": true,
+    "bid_2024_11": true,
+    "bid_2024_12": true,
+    "bid_2025_01": true,
+    "bid_2025_02": true,
+    "bid_2025_03": true,
+    "bid_2025_04": true,
+    "bid_2025_05": true,
+    "bid_2025_06": true,
+    "bid_2025_07": true,
+    "bid_2025_08": true,
+    "bid_2025_09": true,
+    "bid_2025_10": true,
+    "bid_2025_11": true,
+    "bid_2025_12": true,
+    "bid_2026_01": true,
+    "bid_2026_02": true,
+    "bid_2026_03": true,
+    "bid_2026_04": true,
+    "bid_2026_05": true,
+    "bid_2026_06": true,
+    "bid_2026_07": true
+  }
+}

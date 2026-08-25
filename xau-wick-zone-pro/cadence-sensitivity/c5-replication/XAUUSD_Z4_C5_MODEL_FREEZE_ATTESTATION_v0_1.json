@@ -1,0 +1,7 @@
+{
+  "status": "C5_MODEL_FROZEN_BEFORE_HISTORICAL_DATA_READ",
+  "workflow_head_sha": "9a16ba65efd4d01e73ed77f4b2647780a8e3631e",
+  "model_sha256": "33deaa05327305688a7002ac3544fae8a3ac0a02687e00815c6fce6d23f77789",
+  "reference_engine_git_blob": "a8a147615c3fd366c49e93b340fd2018b5b66e9e",
+  "c5_engine_sha256": "7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24"
+}

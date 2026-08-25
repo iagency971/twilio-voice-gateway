@@ -1,0 +1,2366 @@
+{
+  "status": "C5_HISTORICAL_REPLICATION_COMPLETE",
+  "cadence_min": 5,
+  "lookback_active_m1": 1440,
+  "endpoint": "REVISIT_240_ACTIVE_M1",
+  "model_refit_after_dev": false,
+  "calibration_refit": false,
+  "periods": {
+    "H1": [
+      "2024-08-01",
+      "2025-08-01"
+    ],
+    "H2": [
+      "2025-08-01",
+      "2026-08-01"
+    ]
+  },
+  "source_manifest": {
+    "status": "C5_HISTORICAL_REPLICATION_SOURCE_QA_PASS",
+    "source": "kevingtlin/Market-Data-Lab Dukascopy XAUUSD M1",
+    "allowed_max_month": "2026-07",
+    "files": [
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "01",
+        "file": "xauusd_bid_m1_2024_01.csv",
+        "sha256": "7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d",
+        "rows": 44640,
+        "active_rows": 30243
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "02",
+        "file": "xauusd_bid_m1_2024_02.csv",
+        "sha256": "45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f",
+        "rows": 41760,
+        "active_rows": 28760
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "03",
+        "file": "xauusd_bid_m1_2024_03.csv",
+        "sha256": "28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14",
+        "rows": 44640,
+        "active_rows": 27613
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "04",
+        "file": "xauusd_bid_m1_2024_04.csv",
+        "sha256": "ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9",
+        "rows": 43200,
+        "active_rows": 30358
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "05",
+        "file": "xauusd_bid_m1_2024_05.csv",
+        "sha256": "18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6",
+        "rows": 44640,
+        "active_rows": 31452
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "06",
+        "file": "xauusd_bid_m1_2024_06.csv",
+        "sha256": "f7cad6452e9666b37f6f7830bb69a61439095919bb1609daa80839fdb3a8fd39",
+        "rows": 43200,
+        "active_rows": 27548
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "07",
+        "file": "xauusd_bid_m1_2024_07.csv",
+        "sha256": "a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52",
+        "rows": 44640,
+        "active_rows": 31561
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "08",
+        "file": "xauusd_bid_m1_2024_08.csv",
+        "sha256": "69a43d059dbdb9bce3bed1be13db378437ed4131cd109d04690fadf2aa17a476",
+        "rows": 44640,
+        "active_rows": 30236
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "09",
+        "file": "xauusd_bid_m1_2024_09.csv",
+        "sha256": "b9548afce3bc91d47831654ff5745b2165241e5729fc40cdb82d2df76b3c0668",
+        "rows": 43200,
+        "active_rows": 28931
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "10",
+        "file": "xauusd_bid_m1_2024_10.csv",
+        "sha256": "7eaccb67908ef0ce451a230ee9e723cd2ed3e618f8e1ca9eb8148fc4457cd6d7",
+        "rows": 44640,
+        "active_rows": 31658
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "11",
+        "file": "xauusd_bid_m1_2024_11.csv",
+        "sha256": "8bdd99624cdebcc843d41420bbced1e57f91d9bebeb42279b85e6c9450232f8f",
+        "rows": 43200,
+        "active_rows": 28568
+      },
+      {
+        "side": "bid",
+        "year": "2024",
+        "month": "12",
+        "file": "xauusd_bid_m1_2024_12.csv",
+        "sha256": "c086505bd4ae2f98095bae1c80e6b80ade803ae8f56de6e558e37a0153f967cd",
+        "rows": 44640,
+        "active_rows": 28748
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "01",
+        "file": "xauusd_bid_m1_2025_01.csv",
+        "sha256": "4596e50b3fb203e12a9eee24942e0d22db8a2e409b71f9546a1e6ee6f80233a0",
+        "rows": 44640,
+        "active_rows": 30186
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "02",
+        "file": "xauusd_bid_m1_2025_02.csv",
+        "sha256": "59c6380fcccc11883f74d09bbc3fc7cddf093d0e8c00e8d6826cf19fe7350e58",
+        "rows": 40320,
+        "active_rows": 27439
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "03",
+        "file": "xauusd_bid_m1_2025_03.csv",
+        "sha256": "24b0bfbf3baa5d2bd314cb081a78835b182e1bb410d916e47479a780618874cb",
+        "rows": 44640,
+        "active_rows": 29084
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "04",
+        "file": "xauusd_bid_m1_2025_04.csv",
+        "sha256": "4e2364e526b266b788b7e980902e9e457653357b58ad5d9caff17814e4bce832",
+        "rows": 43200,
+        "active_rows": 28948
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "05",
+        "file": "xauusd_bid_m1_2025_05.csv",
+        "sha256": "d0f3a257cf9f9259d4ccc8b3a9525cfeed0413e281bb31521263d69d0aca2be0",
+        "rows": 44640,
+        "active_rows": 30085
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "06",
+        "file": "xauusd_bid_m1_2025_06.csv",
+        "sha256": "2440bcdc23708b6dcaea4e0d2cc8cab57b373dc5be3c287fc8086e82ee84d44e",
+        "rows": 43200,
+        "active_rows": 28947
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "07",
+        "file": "xauusd_bid_m1_2025_07.csv",
+        "sha256": "865435434eedc5fec42bd94bce881847be253092e44975228ce2e70959b47434",
+        "rows": 44640,
+        "active_rows": 31494
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "08",
+        "file": "xauusd_bid_m1_2025_08.csv",
+        "sha256": "eceee53a978775a2d7dab296a521890ff792d2cd426e7ba5eb094b63c97b83a5",
+        "rows": 44640,
+        "active_rows": 28960
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "09",
+        "file": "xauusd_bid_m1_2025_09.csv",
+        "sha256": "56855187ac9d16e19e422a76c198dde83be9f0be15c87e25d7561d1d7c5cd305",
+        "rows": 43200,
+        "active_rows": 30209
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "10",
+        "file": "xauusd_bid_m1_2025_10.csv",
+        "sha256": "ead56d0f295b545c8e291b4ef88a1fdd6e232b1a0fa0839051cbfb9135fa02b7",
+        "rows": 44640,
+        "active_rows": 31620
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "11",
+        "file": "xauusd_bid_m1_2025_11.csv",
+        "sha256": "0a4ad6343d60a96c78d5b72b1cf8386c9772617c500e4e5fbe3f38abc2229666",
+        "rows": 43200,
+        "active_rows": 27354
+      },
+      {
+        "side": "bid",
+        "year": "2025",
+        "month": "12",
+        "file": "xauusd_bid_m1_2025_12.csv",
+        "sha256": "92936e9e939434985ba0928cafbd8c2a248fd1c0f60371b36d3260d6481773fd",
+        "rows": 44640,
+        "active_rows": 30061
+      },
+      {
+        "side": "bid",
+        "year": "2026",
+        "month": "01",
+        "file": "xauusd_bid_m1_2026_01.csv",
+        "sha256": "906ee499bcc0236a6b6cb74ecd6c382ccf435d989a779833952a5c2fbe4ea3fe",
+        "rows": 44640,
+        "active_rows": 28828
+      },
+      {
+        "side": "bid",
+        "year": "2026",
+        "month": "02",
+        "file": "xauusd_bid_m1_2026_02.csv",
+        "sha256": "c58121aa702a061a62ca9ef976f682a613231c5b422e820491d121d347a6d7c9",
+        "rows": 40320,
+        "active_rows": 27424
+      },
+      {
+        "side": "bid",
+        "year": "2026",
+        "month": "03",
+        "file": "xauusd_bid_m1_2026_03.csv",
+        "sha256": "6f1fa7f0497d74ec053755624e9455d7ab50b0a03d1b712504b48f8690af8dab",
+        "rows": 44640,
+        "active_rows": 30475
+      },
+      {
+        "side": "bid",
+        "year": "2026",
+        "month": "04",
+        "file": "xauusd_bid_m1_2026_04.csv",
+        "sha256": "a976ab5b2511e79a87b6aaffb75d8b04b5295d7085240668faecae0f577aa721",
+        "rows": 43200,
+        "active_rows": 28977
+      },
+      {
+        "side": "bid",
+        "year": "2026",
+        "month": "05",
+        "file": "xauusd_bid_m1_2026_05.csv",
+        "sha256": "25398f20bce21bef289fe8321808488ef6165996064f38fab3f44f488dfd5bbd",
+        "rows": 44640,
+        "active_rows": 28826
+      },
+      {
+        "side": "bid",
+        "year": "2026",
+        "month": "06",
+        "file": "xauusd_bid_m1_2026_06.csv",
+        "sha256": "32498557a57cffbc80134be81755f89bb55d95aed6037e95fad259c10a52b284",
+        "rows": 36479,
+        "active_rows": 30119
+      },
+      {
+        "side": "bid",
+        "year": "2026",
+        "month": "07",
+        "file": "xauusd_bid_m1_2026_07.csv",
+        "sha256": "1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286",
+        "rows": 37739,
+        "active_rows": 31378
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "01",
+        "file": "xauusd_ask_m1_2024_01.csv",
+        "sha256": "a4ac5385c164b40a5760890279455228f64646180ea04bb6e45e633cafc024ae",
+        "rows": 44640,
+        "active_rows": 30248
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "02",
+        "file": "xauusd_ask_m1_2024_02.csv",
+        "sha256": "40706a4ec8abb07c6fe13e4c4562f7d07485c104226e42d36c57e06d36c1c167",
+        "rows": 41760,
+        "active_rows": 28761
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "03",
+        "file": "xauusd_ask_m1_2024_03.csv",
+        "sha256": "12ee5b98105d955b18b7a496120998f5f6647987cd16f706c94da6bd7541eb91",
+        "rows": 44640,
+        "active_rows": 27621
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "04",
+        "file": "xauusd_ask_m1_2024_04.csv",
+        "sha256": "ef4001235ec800174d32459174e2235d7cdaf9f67662108c78a962d1d4cb43c6",
+        "rows": 43200,
+        "active_rows": 30353
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "05",
+        "file": "xauusd_ask_m1_2024_05.csv",
+        "sha256": "54ffe9267ce4be51e68746c20eb0a3d5d77f46b0fc71c34af7eb8884d0af6588",
+        "rows": 44640,
+        "active_rows": 31451
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "06",
+        "file": "xauusd_ask_m1_2024_06.csv",
+        "sha256": "ec13944e0fa902394e6a48baf8e142696c3b1486d229d50603f5464085073c56",
+        "rows": 43200,
+        "active_rows": 27544
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "07",
+        "file": "xauusd_ask_m1_2024_07.csv",
+        "sha256": "129719740c4a6a034c756fefb3aa8759b00535c05345e60ffb527d75da7bae1b",
+        "rows": 44640,
+        "active_rows": 31567
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "08",
+        "file": "xauusd_ask_m1_2024_08.csv",
+        "sha256": "98326a42603240856c1d30b308b6ed16dd156b9badb7896b79d45d65b7ace208",
+        "rows": 44640,
+        "active_rows": 30239
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "09",
+        "file": "xauusd_ask_m1_2024_09.csv",
+        "sha256": "0b53c5d2372139bd985f8668e3739bfd8e31cfe698d1894dd9e13b2ebf4a750a",
+        "rows": 43200,
+        "active_rows": 28933
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "10",
+        "file": "xauusd_ask_m1_2024_10.csv",
+        "sha256": "cc4bff8d23b27fff6593d76be10d17261f8a90b7114fda06264f04875e1fa1f8",
+        "rows": 44640,
+        "active_rows": 31644
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "11",
+        "file": "xauusd_ask_m1_2024_11.csv",
+        "sha256": "3642dfbbb823ecc6c0d5807c2ec6f0bec7892ef960fa45d54f6a641cd8ebaae5",
+        "rows": 43200,
+        "active_rows": 28564
+      },
+      {
+        "side": "ask",
+        "year": "2024",
+        "month": "12",
+        "file": "xauusd_ask_m1_2024_12.csv",
+        "sha256": "b824face3d3e7f7dbf780d75d9a6081d82e5e9b26e1b5dfc403195a75df7c335",
+        "rows": 44640,
+        "active_rows": 28734
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "01",
+        "file": "xauusd_ask_m1_2025_01.csv",
+        "sha256": "b8c99a0e1b2f40c0eb8348364ca22b4c81ae395baf43547bec16e7ca41163617",
+        "rows": 44640,
+        "active_rows": 30190
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "02",
+        "file": "xauusd_ask_m1_2025_02.csv",
+        "sha256": "7f6c9348a43b99fadd6e8304d9c15108d14a328451b028353d52a7fa6ba0e355",
+        "rows": 40320,
+        "active_rows": 27426
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "03",
+        "file": "xauusd_ask_m1_2025_03.csv",
+        "sha256": "4351c24c8855c0d644cf26d2060befda3d48aaccb3aa5cb51351852ad4a5f455",
+        "rows": 44640,
+        "active_rows": 29079
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "04",
+        "file": "xauusd_ask_m1_2025_04.csv",
+        "sha256": "5b5297933a1f21fd1b69054e3e88c8694180bd2d8d540b1dcac64bde7a2f2ce8",
+        "rows": 43200,
+        "active_rows": 28950
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "05",
+        "file": "xauusd_ask_m1_2025_05.csv",
+        "sha256": "ed917c8a50ec2df090f0ad47b0fe4c619677ac99502535ecc5bada44a4d52964",
+        "rows": 44640,
+        "active_rows": 30085
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "06",
+        "file": "xauusd_ask_m1_2025_06.csv",
+        "sha256": "cc27d092f39c0a8b8bc3c2dedc610512e4baab278c2610d8536495c9ff695498",
+        "rows": 43200,
+        "active_rows": 28947
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "07",
+        "file": "xauusd_ask_m1_2025_07.csv",
+        "sha256": "a2727bb46f33ba513dea432733dba270eacf74b3a7d92587658e13eeade29ee0",
+        "rows": 44640,
+        "active_rows": 31497
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "08",
+        "file": "xauusd_ask_m1_2025_08.csv",
+        "sha256": "daa9ac2636ff4bf3f36a2b17cdee9888a2ba4d0a2f0d1029d7c1b17d28128b82",
+        "rows": 44640,
+        "active_rows": 28966
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "09",
+        "file": "xauusd_ask_m1_2025_09.csv",
+        "sha256": "f7a1ab14912dbe828213dfb4c9bdd8f5ddece7633a0a459161c730347ea18fc4",
+        "rows": 43200,
+        "active_rows": 30207
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "10",
+        "file": "xauusd_ask_m1_2025_10.csv",
+        "sha256": "4087af9a8d7b20c7d034c22b351c2f240e1940d80dd7a7dda28b401430158381",
+        "rows": 44640,
+        "active_rows": 31620
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "11",
+        "file": "xauusd_ask_m1_2025_11.csv",
+        "sha256": "fd5e83f9cace8b41fe82d5b458d85d82205902ba3bd75a2653d053611456cbf1",
+        "rows": 43200,
+        "active_rows": 27355
+      },
+      {
+        "side": "ask",
+        "year": "2025",
+        "month": "12",
+        "file": "xauusd_ask_m1_2025_12.csv",
+        "sha256": "0993e6f3ef6e5aeb70c965e5c23f4ee285721c9d7b4a1f70a206d09505465790",
+        "rows": 44640,
+        "active_rows": 30061
+      },
+      {
+        "side": "ask",
+        "year": "2026",
+        "month": "01",
+        "file": "xauusd_ask_m1_2026_01.csv",
+        "sha256": "b3dc4193328b2c61d44a5de8fd47f437d7e98349a978b64d72d7d57f8dfec89c",
+        "rows": 44640,
+        "active_rows": 28828
+      },
+      {
+        "side": "ask",
+        "year": "2026",
+        "month": "02",
+        "file": "xauusd_ask_m1_2026_02.csv",
+        "sha256": "a3985eb8a8236bcdecf25ec2541c3cdac1e2ff8e2266fc30e78ddd58253f28a6",
+        "rows": 40320,
+        "active_rows": 27425
+      },
+      {
+        "side": "ask",
+        "year": "2026",
+        "month": "03",
+        "file": "xauusd_ask_m1_2026_03.csv",
+        "sha256": "670a2dfc1f010661b9a435c78c9c093f7e48d8a777892619d3b84bc3a2a5e173",
+        "rows": 44640,
+        "active_rows": 30474
+      },
+      {
+        "side": "ask",
+        "year": "2026",
+        "month": "04",
+        "file": "xauusd_ask_m1_2026_04.csv",
+        "sha256": "95e5a5fd9dd9ad37bbc162bc67e4e92c44a87ef1f298ecedbf5ef37cc6c36091",
+        "rows": 43200,
+        "active_rows": 28977
+      },
+      {
+        "side": "ask",
+        "year": "2026",
+        "month": "05",
+        "file": "xauusd_ask_m1_2026_05.csv",
+        "sha256": "af9b1efcce3ede8f01c0b27806f0886419c784fa2d0feb5446e680beb53cca33",
+        "rows": 44640,
+        "active_rows": 28826
+      },
+      {
+        "side": "ask",
+        "year": "2026",
+        "month": "06",
+        "file": "xauusd_ask_m1_2026_06.csv",
+        "sha256": "e87bc45b471716a16c9849d07f32d7ca4c2267d5340e06575ddeb157ea34429f",
+        "rows": 36479,
+        "active_rows": 30119
+      },
+      {
+        "side": "ask",
+        "year": "2026",
+        "month": "07",
+        "file": "xauusd_ask_m1_2026_07.csv",
+        "sha256": "8dfba3b5b078cd3e5fbc0d6b946c3e6be34372a170bbbd50251ebd2299314f81",
+        "rows": 37739,
+        "active_rows": 31378
+      }
+    ],
+    "validation_prefix_hash_checks": {
+      "bid_2024_01": true,
+      "bid_2024_02": true,
+      "bid_2024_03": true,
+      "bid_2024_04": true,
+      "bid_2024_05": true,
+      "bid_2024_06": true,
+      "bid_2024_07": true,
+      "bid_2024_08": true,
+      "bid_2024_09": true,
+      "bid_2024_10": true,
+      "bid_2024_11": true,
+      "bid_2024_12": true,
+      "bid_2025_01": true,
+      "bid_2025_02": true,
+      "bid_2025_03": true,
+      "bid_2025_04": true,
+      "bid_2025_05": true,
+      "bid_2025_06": true,
+      "bid_2025_07": true,
+      "ask_2024_01": true,
+      "ask_2024_02": true,
+      "ask_2024_03": true,
+      "ask_2024_04": true,
+      "ask_2024_05": true,
+      "ask_2024_06": true,
+      "ask_2024_07": true,
+      "ask_2024_08": true,
+      "ask_2024_09": true,
+      "ask_2024_10": true,
+      "ask_2024_11": true,
+      "ask_2024_12": true,
+      "ask_2025_01": true,
+      "ask_2025_02": true,
+      "ask_2025_03": true,
+      "ask_2025_04": true,
+      "ask_2025_05": true,
+      "ask_2025_06": true,
+      "ask_2025_07": true
+    },
+    "bid_full_hash_checks": {
+      "bid_2024_01": true,
+      "bid_2024_02": true,
+      "bid_2024_03": true,
+      "bid_2024_04": true,
+      "bid_2024_05": true,
+      "bid_2024_06": true,
+      "bid_2024_07": true,
+      "bid_2024_08": true,
+      "bid_2024_09": true,
+      "bid_2024_10": true,
+      "bid_2024_11": true,
+      "bid_2024_12": true,
+      "bid_2025_01": true,
+      "bid_2025_02": true,
+      "bid_2025_03": true,
+      "bid_2025_04": true,
+      "bid_2025_05": true,
+      "bid_2025_06": true,
+      "bid_2025_07": true,
+      "bid_2025_08": true,
+      "bid_2025_09": true,
+      "bid_2025_10": true,
+      "bid_2025_11": true,
+      "bid_2025_12": true,
+      "bid_2026_01": true,
+      "bid_2026_02": true,
+      "bid_2026_03": true,
+      "bid_2026_04": true,
+      "bid_2026_05": true,
+      "bid_2026_06": true,
+      "bid_2026_07": true
+    }
+  },
+  "feeds": {
+    "BID": {
+      "H1": {
+        "M0_brier": 0.13903685014188238,
+        "M0GL_brier": 0.1366938427504718,
+        "delta_brier": 0.0023430073914105787,
+        "M0_logloss": 0.43060998488276003,
+        "M0GL_logloss": 0.4232395541640338,
+        "delta_logloss": 0.007370430718726229,
+        "rows": 403077,
+        "landmarks": 70639,
+        "rate_unweighted": 0.29200376106798454,
+        "weekly": {
+          "n_weeks": 53,
+          "positive_weeks": 41,
+          "mean_delta_brier": 0.0023642600065480425,
+          "bootstrap_95": [
+            0.0015754862438442832,
+            0.003183043273867144
+          ],
+          "weeks": [
+            {
+              "week": "2024-07-29/2024-08-04",
+              "n": 3341,
+              "landmarks": 552,
+              "delta_brier": 0.001889525481492016,
+              "delta_logloss": 0.006293631159675739
+            },
+            {
+              "week": "2024-08-05/2024-08-11",
+              "n": 6838,
+              "landmarks": 1380,
+              "delta_brier": 0.004149905982989366,
+              "delta_logloss": 0.008323521350943885
+            },
+            {
+              "week": "2024-08-12/2024-08-18",
+              "n": 9672,
+              "landmarks": 1378,
+              "delta_brier": 0.00017032378907677614,
+              "delta_logloss": 0.002392154229926391
+            },
+            {
+              "week": "2024-08-19/2024-08-25",
+              "n": 8156,
+              "landmarks": 1380,
+              "delta_brier": 0.0022864806640189583,
+              "delta_logloss": 0.00889976587005481
+            },
+            {
+              "week": "2024-08-26/2024-09-01",
+              "n": 6565,
+              "landmarks": 1379,
+              "delta_brier": 0.0024652771141158714,
+              "delta_logloss": 0.014106651461343267
+            },
+            {
+              "week": "2024-09-02/2024-09-08",
+              "n": 8092,
+              "landmarks": 1350,
+              "delta_brier": -0.0009297527406925687,
+              "delta_logloss": 0.0034271616604528155
+            },
+            {
+              "week": "2024-09-09/2024-09-15",
+              "n": 9370,
+              "landmarks": 1378,
+              "delta_brier": 0.0020639870076657185,
+              "delta_logloss": 0.006070544215913298
+            },
+            {
+              "week": "2024-09-16/2024-09-22",
+              "n": 8243,
+              "landmarks": 1348,
+              "delta_brier": -2.60716844987241e-05,
+              "delta_logloss": 0.0030935272027293736
+            },
+            {
+              "week": "2024-09-23/2024-09-29",
+              "n": 6677,
+              "landmarks": 1361,
+              "delta_brier": 0.003730005761760219,
+              "delta_logloss": 0.00925867037674688
+            },
+            {
+              "week": "2024-09-30/2024-10-06",
+              "n": 7704,
+              "landmarks": 1380,
+              "delta_brier": -0.0005570329410680974,
+              "delta_logloss": 0.006007578131238089
+            },
+            {
+              "week": "2024-10-07/2024-10-13",
+              "n": 7570,
+              "landmarks": 1361,
+              "delta_brier": 0.004896856305376174,
+              "delta_logloss": 0.015084148510231543
+            },
+            {
+              "week": "2024-10-14/2024-10-20",
+              "n": 7439,
+              "landmarks": 1378,
+              "delta_brier": 0.00449268613504776,
+              "delta_logloss": 0.012041652764565869
+            },
+            {
+              "week": "2024-10-21/2024-10-27",
+              "n": 7367,
+              "landmarks": 1378,
+              "delta_brier": 0.0044346136321451735,
+              "delta_logloss": 0.018827612486876588
+            },
+            {
+              "week": "2024-10-28/2024-11-03",
+              "n": 7402,
+              "landmarks": 1368,
+              "delta_brier": 0.0031091986249077302,
+              "delta_logloss": 0.006051974065074073
+            },
+            {
+              "week": "2024-11-04/2024-11-10",
+              "n": 8383,
+              "landmarks": 1375,
+              "delta_brier": 0.0021692428291668897,
+              "delta_logloss": 0.007455852625376291
+            },
+            {
+              "week": "2024-11-11/2024-11-17",
+              "n": 9356,
+              "landmarks": 1380,
+              "delta_brier": 0.0012025947021677141,
+              "delta_logloss": 0.008047599451154519
+            },
+            {
+              "week": "2024-11-18/2024-11-24",
+              "n": 9224,
+              "landmarks": 1380,
+              "delta_brier": 0.0016982758211723514,
+              "delta_logloss": 0.007404443711218067
+            },
+            {
+              "week": "2024-11-25/2024-12-01",
+              "n": 9592,
+              "landmarks": 1323,
+              "delta_brier": -0.0008129408934400006,
+              "delta_logloss": -0.0010902559958552716
+            },
+            {
+              "week": "2024-12-02/2024-12-08",
+              "n": 6151,
+              "landmarks": 1373,
+              "delta_brier": 0.004373819510340687,
+              "delta_logloss": 0.011887944763211644
+            },
+            {
+              "week": "2024-12-09/2024-12-15",
+              "n": 8724,
+              "landmarks": 1376,
+              "delta_brier": -0.0004249642100003087,
+              "delta_logloss": 0.003443849689166778
+            },
+            {
+              "week": "2024-12-16/2024-12-22",
+              "n": 7789,
+              "landmarks": 1379,
+              "delta_brier": 0.004814464969091825,
+              "delta_logloss": 0.013021784232184808
+            },
+            {
+              "week": "2024-12-23/2024-12-29",
+              "n": 4161,
+              "landmarks": 1063,
+              "delta_brier": 0.005113274311340288,
+              "delta_logloss": 0.011479050352785458
+            },
+            {
+              "week": "2024-12-30/2025-01-05",
+              "n": 6984,
+              "landmarks": 1103,
+              "delta_brier": 0.003512117436221193,
+              "delta_logloss": 0.010550109416841036
+            },
+            {
+              "week": "2025-01-06/2025-01-12",
+              "n": 7054,
+              "landmarks": 1379,
+              "delta_brier": 0.0013875739484291716,
+              "delta_logloss": 0.00303453615855398
+            },
+            {
+              "week": "2025-01-13/2025-01-19",
+              "n": 6606,
+              "landmarks": 1378,
+              "delta_brier": 0.0013834931882064083,
+              "delta_logloss": 0.0015569163816933629
+            },
+            {
+              "week": "2025-01-20/2025-01-26",
+              "n": 5269,
+              "landmarks": 1314,
+              "delta_brier": 0.003915191758575021,
+              "delta_logloss": 0.00944190600047251
+            },
+            {
+              "week": "2025-01-27/2025-02-02",
+              "n": 7795,
+              "landmarks": 1378,
+              "delta_brier": -0.0036635650983487117,
+              "delta_logloss": -0.008745083837271073
+            },
+            {
+              "week": "2025-02-03/2025-02-09",
+              "n": 8394,
+              "landmarks": 1365,
+              "delta_brier": 0.0014152113959070567,
+              "delta_logloss": 0.0031390728106422405
+            },
+            {
+              "week": "2025-02-10/2025-02-16",
+              "n": 9010,
+              "landmarks": 1380,
+              "delta_brier": 0.0006131924671533007,
+              "delta_logloss": 0.0015434316985127317
+            },
+            {
+              "week": "2025-02-17/2025-02-23",
+              "n": 7302,
+              "landmarks": 1350,
+              "delta_brier": 0.002455831809605513,
+              "delta_logloss": 0.006788079297845251
+            },
+            {
+              "week": "2025-02-24/2025-03-02",
+              "n": 7260,
+              "landmarks": 1380,
+              "delta_brier": -0.000310246369537831,
+              "delta_logloss": 0.0006725030865328829
+            },
+            {
+              "week": "2025-03-03/2025-03-09",
+              "n": 6552,
+              "landmarks": 1389,
+              "delta_brier": 0.0020436324970283526,
+              "delta_logloss": 0.006323667464638472
+            },
+            {
+              "week": "2025-03-10/2025-03-16",
+              "n": 7189,
+              "landmarks": 1332,
+              "delta_brier": -0.00023519166361610222,
+              "delta_logloss": 0.0015518196529523132
+            },
+            {
+              "week": "2025-03-17/2025-03-23",
+              "n": 6653,
+              "landmarks": 1380,
+              "delta_brier": 0.010631695909205124,
+              "delta_logloss": 0.027866025472118472
+            },
+            {
+              "week": "2025-03-24/2025-03-30",
+              "n": 8484,
+              "landmarks": 1380,
+              "delta_brier": 0.0028993475630434973,
+              "delta_logloss": 0.006518785817423323
+            },
+            {
+              "week": "2025-03-31/2025-04-06",
+              "n": 8326,
+              "landmarks": 1379,
+              "delta_brier": 0.009290834880464421,
+              "delta_logloss": 0.0253001218404032
+            },
+            {
+              "week": "2025-04-07/2025-04-13",
+              "n": 7224,
+              "landmarks": 1380,
+              "delta_brier": 0.005503522931065694,
+              "delta_logloss": 0.011884162459410319
+            },
+            {
+              "week": "2025-04-14/2025-04-20",
+              "n": 5232,
+              "landmarks": 1098,
+              "delta_brier": 0.010273243443592789,
+              "delta_logloss": 0.023699644567136746
+            },
+            {
+              "week": "2025-04-21/2025-04-27",
+              "n": 9837,
+              "landmarks": 1377,
+              "delta_brier": 0.0031507578505761413,
+              "delta_logloss": 0.010801771035719998
+            },
+            {
+              "week": "2025-04-28/2025-05-04",
+              "n": 6515,
+              "landmarks": 1352,
+              "delta_brier": 0.002945209359380724,
+              "delta_logloss": 0.008307632349214666
+            },
+            {
+              "week": "2025-05-05/2025-05-11",
+              "n": 9152,
+              "landmarks": 1380,
+              "delta_brier": -1.4884580341517628e-05,
+              "delta_logloss": 0.006538884756691343
+            },
+            {
+              "week": "2025-05-12/2025-05-18",
+              "n": 8594,
+              "landmarks": 1380,
+              "delta_brier": 0.007396011777662359,
+              "delta_logloss": 0.02179157782125235
+            },
+            {
+              "week": "2025-05-19/2025-05-25",
+              "n": 8568,
+              "landmarks": 1380,
+              "delta_brier": 0.00220907878025553,
+              "delta_logloss": 0.005368140387721543
+            },
+            {
+              "week": "2025-05-26/2025-06-01",
+              "n": 7698,
+              "landmarks": 1350,
+              "delta_brier": 0.003028330184232403,
+              "delta_logloss": 0.009190949210120647
+            },
+            {
+              "week": "2025-06-02/2025-06-08",
+              "n": 8411,
+              "landmarks": 1380,
+              "delta_brier": 0.0036217785358753918,
+              "delta_logloss": 0.010449854151251936
+            },
+            {
+              "week": "2025-06-09/2025-06-15",
+              "n": 8525,
+              "landmarks": 1380,
+              "delta_brier": 0.0029739854059440407,
+              "delta_logloss": 0.00819613257956775
+            },
+            {
+              "week": "2025-06-16/2025-06-22",
+              "n": 4993,
+              "landmarks": 1331,
+              "delta_brier": 0.0007802243387229069,
+              "delta_logloss": 0.0006937620279341417
+            },
+            {
+              "week": "2025-06-23/2025-06-29",
+              "n": 8015,
+              "landmarks": 1380,
+              "delta_brier": -0.003333053954780507,
+              "delta_logloss": -0.005576443251455454
+            },
+            {
+              "week": "2025-06-30/2025-07-06",
+              "n": 8747,
+              "landmarks": 1332,
+              "delta_brier": -0.004353352279707456,
+              "delta_logloss": -0.007851053959253618
+            },
+            {
+              "week": "2025-07-07/2025-07-13",
+              "n": 7539,
+              "landmarks": 1379,
+              "delta_brier": 0.002356263046736279,
+              "delta_logloss": 0.004853900128886979
+            },
+            {
+              "week": "2025-07-14/2025-07-20",
+              "n": 8198,
+              "landmarks": 1380,
+              "delta_brier": 0.002051009562071243,
+              "delta_logloss": 0.0030840516696404863
+            },
+            {
+              "week": "2025-07-21/2025-07-27",
+              "n": 9647,
+              "landmarks": 1380,
+              "delta_brier": 0.0016984780142118572,
+              "delta_logloss": 0.0041027218675466215
+            },
+            {
+              "week": "2025-07-28/2025-08-03",
+              "n": 5488,
+              "landmarks": 1093,
+              "delta_brier": -0.0006297119629638526,
+              "delta_logloss": -0.0006206155876136155
+            }
+          ]
+        },
+        "groups": {
+          "BUY": {
+            "n": 237508,
+            "rate": 0.2727950216413763,
+            "delta_brier": 0.0038034548903096155,
+            "delta_logloss": 0.010677671283350731
+          },
+          "SELL": {
+            "n": 165569,
+            "rate": 0.3195586130253852,
+            "delta_brier": 0.003569599368063142,
+            "delta_logloss": 0.010684290350788384
+          },
+          "US": {
+            "n": 156673,
+            "rate": 0.2734868164903972,
+            "delta_brier": 0.003968764259624641,
+            "delta_logloss": 0.009843286118203565
+          },
+          "NON_US": {
+            "n": 246404,
+            "rate": 0.30377753607895974,
+            "delta_brier": 0.001307616318163063,
+            "delta_logloss": 0.005795550454579967
+          }
+        },
+        "primary_bid_rule_components": {
+          "delta_brier_gt_0": true,
+          "delta_logloss_gt_0": true,
+          "weekly_ci_lower_gt_0": true
+        }
+      },
+      "H2": {
+        "M0_brier": 0.16855726316899683,
+        "M0GL_brier": 0.15614945212175535,
+        "delta_brier": 0.01240781104724148,
+        "M0_logloss": 0.5274742596575841,
+        "M0GL_logloss": 0.4848478182965373,
+        "delta_logloss": 0.04262644136104682,
+        "rows": 398422,
+        "landmarks": 70523,
+        "rate_unweighted": 0.2982164639502839,
+        "weekly": {
+          "n_weeks": 53,
+          "positive_weeks": 52,
+          "mean_delta_brier": 0.012302904237745415,
+          "bootstrap_95": [
+            0.010232867093936053,
+            0.01449247684879381
+          ],
+          "weeks": [
+            {
+              "week": "2025-07-28/2025-08-03",
+              "n": 1908,
+              "landmarks": 276,
+              "delta_brier": 0.0079257252887905,
+              "delta_logloss": 0.018179883292961052
+            },
+            {
+              "week": "2025-08-04/2025-08-10",
+              "n": 7242,
+              "landmarks": 1289,
+              "delta_brier": 0.010929645037472402,
+              "delta_logloss": 0.02537829510231776
+            },
+            {
+              "week": "2025-08-11/2025-08-17",
+              "n": 4547,
+              "landmarks": 1336,
+              "delta_brier": 0.0048001520170438405,
+              "delta_logloss": 0.011047838076329586
+            },
+            {
+              "week": "2025-08-18/2025-08-24",
+              "n": 7795,
+              "landmarks": 1378,
+              "delta_brier": -0.0012714237743278456,
+              "delta_logloss": -0.002394301143573585
+            },
+            {
+              "week": "2025-08-25/2025-08-31",
+              "n": 7902,
+              "landmarks": 1380,
+              "delta_brier": 0.003086956774489419,
+              "delta_logloss": 0.01131592750685817
+            },
+            {
+              "week": "2025-09-01/2025-09-07",
+              "n": 8791,
+              "landmarks": 1350,
+              "delta_brier": 0.001037655844423599,
+              "delta_logloss": 0.004532604972256771
+            },
+            {
+              "week": "2025-09-08/2025-09-14",
+              "n": 7471,
+              "landmarks": 1380,
+              "delta_brier": 0.00527492918054176,
+              "delta_logloss": 0.013167563689350348
+            },
+            {
+              "week": "2025-09-15/2025-09-21",
+              "n": 7513,
+              "landmarks": 1380,
+              "delta_brier": 0.0034364949573971737,
+              "delta_logloss": 0.013516389868188261
+            },
+            {
+              "week": "2025-09-22/2025-09-28",
+              "n": 8547,
+              "landmarks": 1380,
+              "delta_brier": 0.005148342750240925,
+              "delta_logloss": 0.012105268278311598
+            },
+            {
+              "week": "2025-09-29/2025-10-05",
+              "n": 9035,
+              "landmarks": 1380,
+              "delta_brier": 0.0026156549255897527,
+              "delta_logloss": 0.009131049052771345
+            },
+            {
+              "week": "2025-10-06/2025-10-12",
+              "n": 9020,
+              "landmarks": 1380,
+              "delta_brier": 0.008301699600715168,
+              "delta_logloss": 0.02043023607467398
+            },
+            {
+              "week": "2025-10-13/2025-10-19",
+              "n": 8667,
+              "landmarks": 1380,
+              "delta_brier": 0.015549763810660727,
+              "delta_logloss": 0.05175928349314035
+            },
+            {
+              "week": "2025-10-20/2025-10-26",
+              "n": 8940,
+              "landmarks": 1380,
+              "delta_brier": 0.018256131476974913,
+              "delta_logloss": 0.06628424850367598
+            },
+            {
+              "week": "2025-10-27/2025-11-02",
+              "n": 7214,
+              "landmarks": 1365,
+              "delta_brier": 0.025105258258658225,
+              "delta_logloss": 0.06293645156428795
+            },
+            {
+              "week": "2025-11-03/2025-11-09",
+              "n": 6311,
+              "landmarks": 1380,
+              "delta_brier": 0.007017920395058108,
+              "delta_logloss": 0.016819863818468006
+            },
+            {
+              "week": "2025-11-10/2025-11-16",
+              "n": 9314,
+              "landmarks": 1380,
+              "delta_brier": 0.0047619870958516,
+              "delta_logloss": 0.01177678853226799
+            },
+            {
+              "week": "2025-11-17/2025-11-23",
+              "n": 5270,
+              "landmarks": 1376,
+              "delta_brier": 0.017833504669331063,
+              "delta_logloss": 0.04087079506249902
+            },
+            {
+              "week": "2025-11-24/2025-11-30",
+              "n": 4345,
+              "landmarks": 1296,
+              "delta_brier": 0.012682759640821384,
+              "delta_logloss": 0.02645027620356044
+            },
+            {
+              "week": "2025-12-01/2025-12-07",
+              "n": 6778,
+              "landmarks": 1373,
+              "delta_brier": 0.005963813731647782,
+              "delta_logloss": 0.013890508249190803
+            },
+            {
+              "week": "2025-12-08/2025-12-14",
+              "n": 6783,
+              "landmarks": 1376,
+              "delta_brier": 0.005003095707452165,
+              "delta_logloss": 0.012399356254057525
+            },
+            {
+              "week": "2025-12-15/2025-12-21",
+              "n": 5645,
+              "landmarks": 1378,
+              "delta_brier": 0.0091848578791707,
+              "delta_logloss": 0.028555859271116535
+            },
+            {
+              "week": "2025-12-22/2025-12-28",
+              "n": 7774,
+              "landmarks": 1064,
+              "delta_brier": 0.004561514416148688,
+              "delta_logloss": 0.014134299192071598
+            },
+            {
+              "week": "2025-12-29/2026-01-04",
+              "n": 7592,
+              "landmarks": 1104,
+              "delta_brier": 0.008704153460678404,
+              "delta_logloss": 0.033659186638935856
+            },
+            {
+              "week": "2026-01-05/2026-01-11",
+              "n": 6533,
+              "landmarks": 1380,
+              "delta_brier": 0.016642911261287613,
+              "delta_logloss": 0.03809951449804122
+            },
+            {
+              "week": "2026-01-12/2026-01-18",
+              "n": 6702,
+              "landmarks": 1370,
+              "delta_brier": 0.018077356241768233,
+              "delta_logloss": 0.046640890101416144
+            },
+            {
+              "week": "2026-01-19/2026-01-25",
+              "n": 9677,
+              "landmarks": 1346,
+              "delta_brier": 0.008113276983882145,
+              "delta_logloss": 0.02549099710031244
+            },
+            {
+              "week": "2026-01-26/2026-02-01",
+              "n": 10948,
+              "landmarks": 1377,
+              "delta_brier": 0.01775772163068204,
+              "delta_logloss": 0.17809040531455478
+            },
+            {
+              "week": "2026-02-02/2026-02-08",
+              "n": 7043,
+              "landmarks": 1380,
+              "delta_brier": 0.020058807939376144,
+              "delta_logloss": 0.19087880738196217
+            },
+            {
+              "week": "2026-02-09/2026-02-15",
+              "n": 6737,
+              "landmarks": 1379,
+              "delta_brier": 0.025872339054387933,
+              "delta_logloss": 0.08568760665217656
+            },
+            {
+              "week": "2026-02-16/2026-02-22",
+              "n": 7805,
+              "landmarks": 1350,
+              "delta_brier": 0.015551822898622142,
+              "delta_logloss": 0.042282328980105865
+            },
+            {
+              "week": "2026-02-23/2026-03-01",
+              "n": 7397,
+              "landmarks": 1378,
+              "delta_brier": 0.020493772186418957,
+              "delta_logloss": 0.0630603821057455
+            },
+            {
+              "week": "2026-03-02/2026-03-08",
+              "n": 8187,
+              "landmarks": 1391,
+              "delta_brier": 0.041506190288027045,
+              "delta_logloss": 0.1703454475988715
+            },
+            {
+              "week": "2026-03-09/2026-03-15",
+              "n": 6715,
+              "landmarks": 1379,
+              "delta_brier": 0.017209246465464623,
+              "delta_logloss": 0.04495959771481556
+            },
+            {
+              "week": "2026-03-16/2026-03-22",
+              "n": 9206,
+              "landmarks": 1363,
+              "delta_brier": 0.02536989970375042,
+              "delta_logloss": 0.08469491895320586
+            },
+            {
+              "week": "2026-03-23/2026-03-29",
+              "n": 6901,
+              "landmarks": 1380,
+              "delta_brier": 0.024691421845223188,
+              "delta_logloss": 0.14714402943618132
+            },
+            {
+              "week": "2026-03-30/2026-04-05",
+              "n": 7191,
+              "landmarks": 1104,
+              "delta_brier": 0.02230596953078076,
+              "delta_logloss": 0.07390088334470446
+            },
+            {
+              "week": "2026-04-06/2026-04-12",
+              "n": 6727,
+              "landmarks": 1380,
+              "delta_brier": 0.024388806661171464,
+              "delta_logloss": 0.06384350085225332
+            },
+            {
+              "week": "2026-04-13/2026-04-19",
+              "n": 7256,
+              "landmarks": 1380,
+              "delta_brier": 0.008893801102241028,
+              "delta_logloss": 0.025350571173974712
+            },
+            {
+              "week": "2026-04-20/2026-04-26",
+              "n": 8881,
+              "landmarks": 1380,
+              "delta_brier": 0.009624996413388709,
+              "delta_logloss": 0.026058968295799123
+            },
+            {
+              "week": "2026-04-27/2026-05-03",
+              "n": 8032,
+              "landmarks": 1380,
+              "delta_brier": 0.00835009125958816,
+              "delta_logloss": 0.020350525060752633
+            },
+            {
+              "week": "2026-05-04/2026-05-10",
+              "n": 8485,
+              "landmarks": 1380,
+              "delta_brier": 0.01651331657687266,
+              "delta_logloss": 0.04786758204846969
+            },
+            {
+              "week": "2026-05-11/2026-05-17",
+              "n": 6433,
+              "landmarks": 1359,
+              "delta_brier": 0.016582946074440025,
+              "delta_logloss": 0.039858503184572625
+            },
+            {
+              "week": "2026-05-18/2026-05-24",
+              "n": 5556,
+              "landmarks": 1361,
+              "delta_brier": 0.012875983508126382,
+              "delta_logloss": 0.029307279296949706
+            },
+            {
+              "week": "2026-05-25/2026-05-31",
+              "n": 9547,
+              "landmarks": 1350,
+              "delta_brier": 0.00533167244413793,
+              "delta_logloss": 0.016340631063668065
+            },
+            {
+              "week": "2026-06-01/2026-06-07",
+              "n": 9109,
+              "landmarks": 1380,
+              "delta_brier": 0.0065659954756911165,
+              "delta_logloss": 0.017273794690243094
+            },
+            {
+              "week": "2026-06-08/2026-06-14",
+              "n": 8764,
+              "landmarks": 1370,
+              "delta_brier": 0.016841075100006042,
+              "delta_logloss": 0.04992303117190605
+            },
+            {
+              "week": "2026-06-15/2026-06-21",
+              "n": 9830,
+              "landmarks": 1329,
+              "delta_brier": 0.007927542978491603,
+              "delta_logloss": 0.02884702397021932
+            },
+            {
+              "week": "2026-06-22/2026-06-28",
+              "n": 7546,
+              "landmarks": 1380,
+              "delta_brier": 0.016963374213707832,
+              "delta_logloss": 0.04832453455472557
+            },
+            {
+              "week": "2026-06-29/2026-07-05",
+              "n": 7809,
+              "landmarks": 1332,
+              "delta_brier": 0.010156305739787458,
+              "delta_logloss": 0.02825997813086467
+            },
+            {
+              "week": "2026-07-06/2026-07-12",
+              "n": 7169,
+              "landmarks": 1380,
+              "delta_brier": 0.012212794785078224,
+              "delta_logloss": 0.03023372922520895
+            },
+            {
+              "week": "2026-07-13/2026-07-19",
+              "n": 6678,
+              "landmarks": 1368,
+              "delta_brier": 0.011993248080971602,
+              "delta_logloss": 0.033096960608379855
+            },
+            {
+              "week": "2026-07-20/2026-07-26",
+              "n": 7925,
+              "landmarks": 1380,
+              "delta_brier": 0.004554876610585998,
+              "delta_logloss": 0.009180752978452889
+            },
+            {
+              "week": "2026-07-27/2026-08-02",
+              "n": 7229,
+              "landmarks": 1296,
+              "delta_brier": 0.0027157684017191097,
+              "delta_logloss": 0.007673272922263941
+            }
+          ]
+        },
+        "groups": {
+          "BUY": {
+            "n": 227637,
+            "rate": 0.2813646287730026,
+            "delta_brier": 0.017859353562877045,
+            "delta_logloss": 0.06304170674900178
+          },
+          "SELL": {
+            "n": 170785,
+            "rate": 0.3206780454957988,
+            "delta_brier": 0.014593648999318587,
+            "delta_logloss": 0.04643300504777381
+          },
+          "US": {
+            "n": 154999,
+            "rate": 0.2968728830508584,
+            "delta_brier": 0.01777770732707501,
+            "delta_logloss": 0.061207836444582275
+          },
+          "NON_US": {
+            "n": 243423,
+            "rate": 0.29907198580249195,
+            "delta_brier": 0.009010055269040113,
+            "delta_logloss": 0.030869223116585465
+          }
+        },
+        "primary_bid_rule_components": {
+          "delta_brier_gt_0": true,
+          "delta_logloss_gt_0": true,
+          "weekly_ci_lower_gt_0": true
+        }
+      }
+    },
+    "ASK": {
+      "H1": {
+        "M0_brier": 0.13897498311724218,
+        "M0GL_brier": 0.13687845517779001,
+        "delta_brier": 0.0020965279394521696,
+        "M0_logloss": 0.4307786333948353,
+        "M0GL_logloss": 0.42397860227960604,
+        "delta_logloss": 0.006800031115229255,
+        "rows": 403093,
+        "landmarks": 70624,
+        "rate_unweighted": 0.29285301406871367,
+        "weekly": {
+          "n_weeks": 53,
+          "positive_weeks": 39,
+          "mean_delta_brier": 0.002114046305581083,
+          "bootstrap_95": [
+            0.0013369684672491756,
+            0.0029579677836086117
+          ],
+          "weeks": [
+            {
+              "week": "2024-07-29/2024-08-04",
+              "n": 3526,
+              "landmarks": 552,
+              "delta_brier": 0.00028518497336615933,
+              "delta_logloss": 0.0024045051538419404
+            },
+            {
+              "week": "2024-08-05/2024-08-11",
+              "n": 6791,
+              "landmarks": 1380,
+              "delta_brier": 0.003055504791674657,
+              "delta_logloss": 0.005567086151545608
+            },
+            {
+              "week": "2024-08-12/2024-08-18",
+              "n": 9572,
+              "landmarks": 1377,
+              "delta_brier": 0.0007404675900780366,
+              "delta_logloss": 0.0036669110987962994
+            },
+            {
+              "week": "2024-08-19/2024-08-25",
+              "n": 7957,
+              "landmarks": 1380,
+              "delta_brier": -0.00044939319014311585,
+              "delta_logloss": 0.0018451012235657371
+            },
+            {
+              "week": "2024-08-26/2024-09-01",
+              "n": 6527,
+              "landmarks": 1380,
+              "delta_brier": 0.001817974549270629,
+              "delta_logloss": 0.013834460251569425
+            },
+            {
+              "week": "2024-09-02/2024-09-08",
+              "n": 8141,
+              "landmarks": 1349,
+              "delta_brier": 0.0007376709705725348,
+              "delta_logloss": 0.008259997209804693
+            },
+            {
+              "week": "2024-09-09/2024-09-15",
+              "n": 9333,
+              "landmarks": 1378,
+              "delta_brier": 3.9677404671464855e-05,
+              "delta_logloss": 0.0009060431260929924
+            },
+            {
+              "week": "2024-09-16/2024-09-22",
+              "n": 8085,
+              "landmarks": 1368,
+              "delta_brier": -0.00011731281860397069,
+              "delta_logloss": 0.002191107856313379
+            },
+            {
+              "week": "2024-09-23/2024-09-29",
+              "n": 6664,
+              "landmarks": 1362,
+              "delta_brier": 0.0037015226333912687,
+              "delta_logloss": 0.008371362957491357
+            },
+            {
+              "week": "2024-09-30/2024-10-06",
+              "n": 7504,
+              "landmarks": 1380,
+              "delta_brier": 0.0009532141382759818,
+              "delta_logloss": 0.008593924430966293
+            },
+            {
+              "week": "2024-10-07/2024-10-13",
+              "n": 7444,
+              "landmarks": 1361,
+              "delta_brier": 0.0030945201200116568,
+              "delta_logloss": 0.01088339125618476
+            },
+            {
+              "week": "2024-10-14/2024-10-20",
+              "n": 7008,
+              "landmarks": 1377,
+              "delta_brier": 0.00469488681444577,
+              "delta_logloss": 0.012132979198902272
+            },
+            {
+              "week": "2024-10-21/2024-10-27",
+              "n": 7503,
+              "landmarks": 1374,
+              "delta_brier": 0.003107055128611619,
+              "delta_logloss": 0.018545264891590696
+            },
+            {
+              "week": "2024-10-28/2024-11-03",
+              "n": 7084,
+              "landmarks": 1367,
+              "delta_brier": 0.0017073695869019578,
+              "delta_logloss": 0.003263827844985301
+            },
+            {
+              "week": "2024-11-04/2024-11-10",
+              "n": 8327,
+              "landmarks": 1374,
+              "delta_brier": -0.0002848843330708062,
+              "delta_logloss": 0.0011766132104978344
+            },
+            {
+              "week": "2024-11-11/2024-11-17",
+              "n": 9554,
+              "landmarks": 1380,
+              "delta_brier": 0.0003045764016919028,
+              "delta_logloss": 0.005154026909063469
+            },
+            {
+              "week": "2024-11-18/2024-11-24",
+              "n": 9232,
+              "landmarks": 1380,
+              "delta_brier": 0.0019981135729184585,
+              "delta_logloss": 0.008343928101027243
+            },
+            {
+              "week": "2024-11-25/2024-12-01",
+              "n": 9528,
+              "landmarks": 1321,
+              "delta_brier": -0.0003416998594359122,
+              "delta_logloss": 0.0011810558997134013
+            },
+            {
+              "week": "2024-12-02/2024-12-08",
+              "n": 6189,
+              "landmarks": 1372,
+              "delta_brier": 0.003492576263719821,
+              "delta_logloss": 0.008269614553285787
+            },
+            {
+              "week": "2024-12-09/2024-12-15",
+              "n": 8729,
+              "landmarks": 1374,
+              "delta_brier": -0.0002730271236733306,
+              "delta_logloss": 0.0017199162969197546
+            },
+            {
+              "week": "2024-12-16/2024-12-22",
+              "n": 7855,
+              "landmarks": 1379,
+              "delta_brier": 0.00460282583711305,
+              "delta_logloss": 0.011623524885328529
+            },
+            {
+              "week": "2024-12-23/2024-12-29",
+              "n": 4294,
+              "landmarks": 1064,
+              "delta_brier": 0.005527378304583552,
+              "delta_logloss": 0.013501078046160075
+            },
+            {
+              "week": "2024-12-30/2025-01-05",
+              "n": 7011,
+              "landmarks": 1104,
+              "delta_brier": 0.006912989656498517,
+              "delta_logloss": 0.019168589419115922
+            },
+            {
+              "week": "2025-01-06/2025-01-12",
+              "n": 7281,
+              "landmarks": 1380,
+              "delta_brier": 0.0004327076135234309,
+              "delta_logloss": 0.0024114285577379047
+            },
+            {
+              "week": "2025-01-13/2025-01-19",
+              "n": 6050,
+              "landmarks": 1378,
+              "delta_brier": 0.00390034170398762,
+              "delta_logloss": 0.007275871386904942
+            },
+            {
+              "week": "2025-01-20/2025-01-26",
+              "n": 5389,
+              "landmarks": 1314,
+              "delta_brier": 0.003126968896476831,
+              "delta_logloss": 0.008560723353531863
+            },
+            {
+              "week": "2025-01-27/2025-02-02",
+              "n": 8378,
+              "landmarks": 1378,
+              "delta_brier": -0.00035055138392897645,
+              "delta_logloss": -0.0015965680265930815
+            },
+            {
+              "week": "2025-02-03/2025-02-09",
+              "n": 8276,
+              "landmarks": 1378,
+              "delta_brier": -0.00012463663323408758,
+              "delta_logloss": -0.00010536707790426147
+            },
+            {
+              "week": "2025-02-10/2025-02-16",
+              "n": 9179,
+              "landmarks": 1380,
+              "delta_brier": -0.0011661086504112933,
+              "delta_logloss": -0.00253291515148929
+            },
+            {
+              "week": "2025-02-17/2025-02-23",
+              "n": 7362,
+              "landmarks": 1348,
+              "delta_brier": -0.0005541351911985126,
+              "delta_logloss": -0.00031088743449592116
+            },
+            {
+              "week": "2025-02-24/2025-03-02",
+              "n": 7163,
+              "landmarks": 1379,
+              "delta_brier": -0.00019718838270524341,
+              "delta_logloss": 0.0011529394732120446
+            },
+            {
+              "week": "2025-03-03/2025-03-09",
+              "n": 6622,
+              "landmarks": 1390,
+              "delta_brier": 0.0013190082107777668,
+              "delta_logloss": 0.007081972966339056
+            },
+            {
+              "week": "2025-03-10/2025-03-16",
+              "n": 7087,
+              "landmarks": 1331,
+              "delta_brier": -0.00013448578561155167,
+              "delta_logloss": 0.0008014303857775129
+            },
+            {
+              "week": "2025-03-17/2025-03-23",
+              "n": 6600,
+              "landmarks": 1380,
+              "delta_brier": 0.011735623000414058,
+              "delta_logloss": 0.031596926302816464
+            },
+            {
+              "week": "2025-03-24/2025-03-30",
+              "n": 8155,
+              "landmarks": 1379,
+              "delta_brier": 7.593239399455998e-05,
+              "delta_logloss": -0.00019529831906450745
+            },
+            {
+              "week": "2025-03-31/2025-04-06",
+              "n": 8216,
+              "landmarks": 1380,
+              "delta_brier": 0.009027001522664252,
+              "delta_logloss": 0.022190062183730708
+            },
+            {
+              "week": "2025-04-07/2025-04-13",
+              "n": 7249,
+              "landmarks": 1380,
+              "delta_brier": 0.0063756480849880975,
+              "delta_logloss": 0.014479020196171088
+            },
+            {
+              "week": "2025-04-14/2025-04-20",
+              "n": 5517,
+              "landmarks": 1092,
+              "delta_brier": 0.008492167030940467,
+              "delta_logloss": 0.02085457955942638
+            },
+            {
+              "week": "2025-04-21/2025-04-27",
+              "n": 10103,
+              "landmarks": 1377,
+              "delta_brier": 0.0024810379417635475,
+              "delta_logloss": 0.009661769327935277
+            },
+            {
+              "week": "2025-04-28/2025-05-04",
+              "n": 6295,
+              "landmarks": 1353,
+              "delta_brier": 0.0030538929056567743,
+              "delta_logloss": 0.008837511298775635
+            },
+            {
+              "week": "2025-05-05/2025-05-11",
+              "n": 9587,
+              "landmarks": 1380,
+              "delta_brier": 0.0004778591913900121,
+              "delta_logloss": 0.00589501100550166
+            },
+            {
+              "week": "2025-05-12/2025-05-18",
+              "n": 8761,
+              "landmarks": 1380,
+              "delta_brier": 0.007715203919639785,
+              "delta_logloss": 0.02353835156910411
+            },
+            {
+              "week": "2025-05-19/2025-05-25",
+              "n": 8531,
+              "landmarks": 1380,
+              "delta_brier": 0.0036261583927520713,
+              "delta_logloss": 0.009463621373027475
+            },
+            {
+              "week": "2025-05-26/2025-06-01",
+              "n": 7538,
+              "landmarks": 1349,
+              "delta_brier": 0.002956706557353167,
+              "delta_logloss": 0.009916367914050428
+            },
+            {
+              "week": "2025-06-02/2025-06-08",
+              "n": 8703,
+              "landmarks": 1379,
+              "delta_brier": 0.0013571577126649526,
+              "delta_logloss": 0.0040655466954804265
+            },
+            {
+              "week": "2025-06-09/2025-06-15",
+              "n": 8464,
+              "landmarks": 1380,
+              "delta_brier": 0.0032611978898567096,
+              "delta_logloss": 0.008840465398853137
+            },
+            {
+              "week": "2025-06-16/2025-06-22",
+              "n": 5069,
+              "landmarks": 1327,
+              "delta_brier": 7.253440464852212e-05,
+              "delta_logloss": -0.0010163522792021595
+            },
+            {
+              "week": "2025-06-23/2025-06-29",
+              "n": 8624,
+              "landmarks": 1380,
+              "delta_brier": -0.004446854154451008,
+              "delta_logloss": -0.008883120560506386
+            },
+            {
+              "week": "2025-06-30/2025-07-06",
+              "n": 8329,
+              "landmarks": 1331,
+              "delta_brier": -0.0031649158395434807,
+              "delta_logloss": -0.005517679888903559
+            },
+            {
+              "week": "2025-07-07/2025-07-13",
+              "n": 7384,
+              "landmarks": 1359,
+              "delta_brier": 0.0030413118053827792,
+              "delta_logloss": 0.006093737681133471
+            },
+            {
+              "week": "2025-07-14/2025-07-20",
+              "n": 7967,
+              "landmarks": 1380,
+              "delta_brier": 0.0023197973024311758,
+              "delta_logloss": 0.0038178446474553818
+            },
+            {
+              "week": "2025-07-21/2025-07-27",
+              "n": 9832,
+              "landmarks": 1380,
+              "delta_brier": 0.002937298089578655,
+              "delta_logloss": 0.0064220709114920504
+            },
+            {
+              "week": "2025-07-28/2025-08-03",
+              "n": 5524,
+              "landmarks": 1089,
+              "delta_brier": -0.0009094157668735892,
+              "delta_logloss": -0.0016265733075240263
+            }
+          ]
+        },
+        "groups": {
+          "BUY": {
+            "n": 236738,
+            "rate": 0.2745017698890757,
+            "delta_brier": 0.0036373327684988965,
+            "delta_logloss": 0.010478297962215555
+          },
+          "SELL": {
+            "n": 166355,
+            "rate": 0.31896847104084636,
+            "delta_brier": 0.0034240814648182905,
+            "delta_logloss": 0.010181401996146755
+          },
+          "US": {
+            "n": 157739,
+            "rate": 0.2730713393643931,
+            "delta_brier": 0.003564693925801221,
+            "delta_logloss": 0.008885381811063853
+          },
+          "NON_US": {
+            "n": 245354,
+            "rate": 0.3055707263790279,
+            "delta_brier": 0.0011610647677522956,
+            "delta_logloss": 0.005471319788192597
+          }
+        },
+        "primary_bid_rule_components": {
+          "delta_brier_gt_0": true,
+          "delta_logloss_gt_0": true,
+          "weekly_ci_lower_gt_0": true
+        }
+      },
+      "H2": {
+        "M0_brier": 0.1683798897449726,
+        "M0GL_brier": 0.156060348945971,
+        "delta_brier": 0.012319540799001577,
+        "M0_logloss": 0.5282133763268071,
+        "M0GL_logloss": 0.4854919744768178,
+        "delta_logloss": 0.04272140184998929,
+        "rows": 400553,
+        "landmarks": 70538,
+        "rate_unweighted": 0.29654502650086256,
+        "weekly": {
+          "n_weeks": 53,
+          "positive_weeks": 52,
+          "mean_delta_brier": 0.012238837852424252,
+          "bootstrap_95": [
+            0.010130299679267324,
+            0.014452835480275232
+          ],
+          "weeks": [
+            {
+              "week": "2025-07-28/2025-08-03",
+              "n": 1911,
+              "landmarks": 276,
+              "delta_brier": 0.009654225613144093,
+              "delta_logloss": 0.022460582317969435
+            },
+            {
+              "week": "2025-08-04/2025-08-10",
+              "n": 7502,
+              "landmarks": 1296,
+              "delta_brier": 0.007365861411869595,
+              "delta_logloss": 0.01687932461047037
+            },
+            {
+              "week": "2025-08-11/2025-08-17",
+              "n": 4701,
+              "landmarks": 1334,
+              "delta_brier": 0.00581412649734056,
+              "delta_logloss": 0.011661462824820001
+            },
+            {
+              "week": "2025-08-18/2025-08-24",
+              "n": 8193,
+              "landmarks": 1380,
+              "delta_brier": -0.0013942737990157994,
+              "delta_logloss": -0.0035282605913823373
+            },
+            {
+              "week": "2025-08-25/2025-08-31",
+              "n": 8206,
+              "landmarks": 1380,
+              "delta_brier": 0.00048587140612776913,
+              "delta_logloss": 0.006218515640510902
+            },
+            {
+              "week": "2025-09-01/2025-09-07",
+              "n": 8601,
+              "landmarks": 1350,
+              "delta_brier": 0.002073203047268532,
+              "delta_logloss": 0.006847547367048956
+            },
+            {
+              "week": "2025-09-08/2025-09-14",
+              "n": 7267,
+              "landmarks": 1380,
+              "delta_brier": 0.005630392931817302,
+              "delta_logloss": 0.014230944083874042
+            },
+            {
+              "week": "2025-09-15/2025-09-21",
+              "n": 7366,
+              "landmarks": 1380,
+              "delta_brier": 0.0032794764417178324,
+              "delta_logloss": 0.014341584569011245
+            },
+            {
+              "week": "2025-09-22/2025-09-28",
+              "n": 8642,
+              "landmarks": 1380,
+              "delta_brier": 0.006502033196992968,
+              "delta_logloss": 0.014779803398376812
+            },
+            {
+              "week": "2025-09-29/2025-10-05",
+              "n": 9331,
+              "landmarks": 1380,
+              "delta_brier": 0.002626083093649506,
+              "delta_logloss": 0.008865694989613704
+            },
+            {
+              "week": "2025-10-06/2025-10-12",
+              "n": 8804,
+              "landmarks": 1380,
+              "delta_brier": 0.010448294949685216,
+              "delta_logloss": 0.025453075459705987
+            },
+            {
+              "week": "2025-10-13/2025-10-19",
+              "n": 8652,
+              "landmarks": 1380,
+              "delta_brier": 0.016970346230562372,
+              "delta_logloss": 0.05580866684387514
+            },
+            {
+              "week": "2025-10-20/2025-10-26",
+              "n": 8953,
+              "landmarks": 1380,
+              "delta_brier": 0.018773339487459018,
+              "delta_logloss": 0.06591414179227739
+            },
+            {
+              "week": "2025-10-27/2025-11-02",
+              "n": 7142,
+              "landmarks": 1365,
+              "delta_brier": 0.026375821242714453,
+              "delta_logloss": 0.06638660321355672
+            },
+            {
+              "week": "2025-11-03/2025-11-09",
+              "n": 6268,
+              "landmarks": 1380,
+              "delta_brier": 0.008390685349809857,
+              "delta_logloss": 0.019344963778647473
+            },
+            {
+              "week": "2025-11-10/2025-11-16",
+              "n": 9226,
+              "landmarks": 1380,
+              "delta_brier": 0.0045963324401250005,
+              "delta_logloss": 0.012570315214812444
+            },
+            {
+              "week": "2025-11-17/2025-11-23",
+              "n": 5240,
+              "landmarks": 1367,
+              "delta_brier": 0.019658953201000084,
+              "delta_logloss": 0.045257701437974085
+            },
+            {
+              "week": "2025-11-24/2025-11-30",
+              "n": 4579,
+              "landmarks": 1295,
+              "delta_brier": 0.01103579223664733,
+              "delta_logloss": 0.024705713560292053
+            },
+            {
+              "week": "2025-12-01/2025-12-07",
+              "n": 6794,
+              "landmarks": 1373,
+              "delta_brier": 0.004746439059593044,
+              "delta_logloss": 0.009519477636715568
+            },
+            {
+              "week": "2025-12-08/2025-12-14",
+              "n": 7002,
+              "landmarks": 1377,
+              "delta_brier": 0.003481666481475687,
+              "delta_logloss": 0.008898375617266863
+            },
+            {
+              "week": "2025-12-15/2025-12-21",
+              "n": 5564,
+              "landmarks": 1378,
+              "delta_brier": 0.010266865885513315,
+              "delta_logloss": 0.030710121439285643
+            },
+            {
+              "week": "2025-12-22/2025-12-28",
+              "n": 8215,
+              "landmarks": 1064,
+              "delta_brier": 0.0031140165948461973,
+              "delta_logloss": 0.012782767458064115
+            },
+            {
+              "week": "2025-12-29/2026-01-04",
+              "n": 7641,
+              "landmarks": 1104,
+              "delta_brier": 0.00990321780669437,
+              "delta_logloss": 0.03821154990930509
+            },
+            {
+              "week": "2026-01-05/2026-01-11",
+              "n": 6521,
+              "landmarks": 1380,
+              "delta_brier": 0.01797119996121377,
+              "delta_logloss": 0.040730303647408206
+            },
+            {
+              "week": "2026-01-12/2026-01-18",
+              "n": 6676,
+              "landmarks": 1371,
+              "delta_brier": 0.016046540533229237,
+              "delta_logloss": 0.04074952028767287
+            },
+            {
+              "week": "2026-01-19/2026-01-25",
+              "n": 9905,
+              "landmarks": 1345,
+              "delta_brier": 0.008884894314296843,
+              "delta_logloss": 0.030526228897344798
+            },
+            {
+              "week": "2026-01-26/2026-02-01",
+              "n": 11232,
+              "landmarks": 1378,
+              "delta_brier": 0.01799782951982451,
+              "delta_logloss": 0.19415236047547002
+            },
+            {
+              "week": "2026-02-02/2026-02-08",
+              "n": 7214,
+              "landmarks": 1380,
+              "delta_brier": 0.01885793472416683,
+              "delta_logloss": 0.1768987991150952
+            },
+            {
+              "week": "2026-02-09/2026-02-15",
+              "n": 6539,
+              "landmarks": 1379,
+              "delta_brier": 0.026483684191096618,
+              "delta_logloss": 0.08690383159448056
+            },
+            {
+              "week": "2026-02-16/2026-02-22",
+              "n": 8104,
+              "landmarks": 1350,
+              "delta_brier": 0.016395735031708075,
+              "delta_logloss": 0.043506236871850845
+            },
+            {
+              "week": "2026-02-23/2026-03-01",
+              "n": 7875,
+              "landmarks": 1380,
+              "delta_brier": 0.018481126196445014,
+              "delta_logloss": 0.057373364428307705
+            },
+            {
+              "week": "2026-03-02/2026-03-08",
+              "n": 8021,
+              "landmarks": 1391,
+              "delta_brier": 0.03935968897030595,
+              "delta_logloss": 0.167994905799976
+            },
+            {
+              "week": "2026-03-09/2026-03-15",
+              "n": 6434,
+              "landmarks": 1379,
+              "delta_brier": 0.020069595592897643,
+              "delta_logloss": 0.05322057113127643
+            },
+            {
+              "week": "2026-03-16/2026-03-22",
+              "n": 9165,
+              "landmarks": 1373,
+              "delta_brier": 0.023466476099040706,
+              "delta_logloss": 0.07987286968220214
+            },
+            {
+              "week": "2026-03-23/2026-03-29",
+              "n": 6715,
+              "landmarks": 1380,
+              "delta_brier": 0.02440690894329106,
+              "delta_logloss": 0.15069525795858174
+            },
+            {
+              "week": "2026-03-30/2026-04-05",
+              "n": 7006,
+              "landmarks": 1104,
+              "delta_brier": 0.023043997976706837,
+              "delta_logloss": 0.0772721724733465
+            },
+            {
+              "week": "2026-04-06/2026-04-12",
+              "n": 6942,
+              "landmarks": 1378,
+              "delta_brier": 0.02302599375617112,
+              "delta_logloss": 0.0623236585590341
+            },
+            {
+              "week": "2026-04-13/2026-04-19",
+              "n": 6924,
+              "landmarks": 1380,
+              "delta_brier": 0.007993405767789202,
+              "delta_logloss": 0.023373809053595818
+            },
+            {
+              "week": "2026-04-20/2026-04-26",
+              "n": 8625,
+              "landmarks": 1380,
+              "delta_brier": 0.009952439075933683,
+              "delta_logloss": 0.025926360374327828
+            },
+            {
+              "week": "2026-04-27/2026-05-03",
+              "n": 8165,
+              "landmarks": 1380,
+              "delta_brier": 0.006985818125430671,
+              "delta_logloss": 0.018339557545883012
+            },
+            {
+              "week": "2026-05-04/2026-05-10",
+              "n": 8678,
+              "landmarks": 1380,
+              "delta_brier": 0.016792097473184053,
+              "delta_logloss": 0.04242903017934846
+            },
+            {
+              "week": "2026-05-11/2026-05-17",
+              "n": 6307,
+              "landmarks": 1349,
+              "delta_brier": 0.015686561585002035,
+              "delta_logloss": 0.03790796228403498
+            },
+            {
+              "week": "2026-05-18/2026-05-24",
+              "n": 5710,
+              "landmarks": 1380,
+              "delta_brier": 0.012101089009352972,
+              "delta_logloss": 0.027231973271619914
+            },
+            {
+              "week": "2026-05-25/2026-05-31",
+              "n": 9475,
+              "landmarks": 1350,
+              "delta_brier": 0.0059159519363565505,
+              "delta_logloss": 0.016522728904400208
+            },
+            {
+              "week": "2026-06-01/2026-06-07",
+              "n": 9197,
+              "landmarks": 1380,
+              "delta_brier": 0.008218530903561894,
+              "delta_logloss": 0.021533698768626375
+            },
+            {
+              "week": "2026-06-08/2026-06-14",
+              "n": 8773,
+              "landmarks": 1370,
+              "delta_brier": 0.01745057728891572,
+              "delta_logloss": 0.05249733837800019
+            },
+            {
+              "week": "2026-06-15/2026-06-21",
+              "n": 9545,
+              "landmarks": 1326,
+              "delta_brier": 0.006565768127089533,
+              "delta_logloss": 0.025331878528311536
+            },
+            {
+              "week": "2026-06-22/2026-06-28",
+              "n": 7399,
+              "landmarks": 1380,
+              "delta_brier": 0.018385474750156755,
+              "delta_logloss": 0.05266686344432486
+            },
+            {
+              "week": "2026-06-29/2026-07-05",
+              "n": 7985,
+              "landmarks": 1332,
+              "delta_brier": 0.009852560963688223,
+              "delta_logloss": 0.028434759559882672
+            },
+            {
+              "week": "2026-07-06/2026-07-12",
+              "n": 7086,
+              "landmarks": 1380,
+              "delta_brier": 0.010802967859068952,
+              "delta_logloss": 0.02697035155965366
+            },
+            {
+              "week": "2026-07-13/2026-07-19",
+              "n": 6819,
+              "landmarks": 1368,
+              "delta_brier": 0.01356819326266423,
+              "delta_logloss": 0.03775431235037274
+            },
+            {
+              "week": "2026-07-20/2026-07-26",
+              "n": 8331,
+              "landmarks": 1380,
+              "delta_brier": 0.001959149577526062,
+              "delta_logloss": 0.003539450232403041
+            },
+            {
+              "week": "2026-07-27/2026-08-02",
+              "n": 7385,
+              "landmarks": 1296,
+              "delta_brier": 0.0021374438553322384,
+              "delta_logloss": 0.006863647014831498
+            }
+          ]
+        },
+        "groups": {
+          "BUY": {
+            "n": 228553,
+            "rate": 0.2808145156703259,
+            "delta_brier": 0.01751467257032638,
+            "delta_logloss": 0.06306423178592291
+          },
+          "SELL": {
+            "n": 172000,
+            "rate": 0.31744767441860466,
+            "delta_brier": 0.015732697961399006,
+            "delta_logloss": 0.049384811529052275
+          },
+          "US": {
+            "n": 155169,
+            "rate": 0.29556161346660736,
+            "delta_brier": 0.017651368334094114,
+            "delta_logloss": 0.06158914944995775
+          },
+          "NON_US": {
+            "n": 245384,
+            "rate": 0.2971668894467447,
+            "delta_brier": 0.008952077267770753,
+            "delta_logloss": 0.030804952651064033
+          }
+        },
+        "primary_bid_rule_components": {
+          "delta_brier_gt_0": true,
+          "delta_logloss_gt_0": true,
+          "weekly_ci_lower_gt_0": true
+        }
+      }
+    }
+  },
+  "gate": {
+    "H1_BID_PRIMARY_PASS": true,
+    "H2_BID_PRIMARY_PASS": true,
+    "H1_ASK_SUPPORT_PASS": true,
+    "H2_ASK_SUPPORT_PASS": true,
+    "C5_HISTORICAL_REPLICATION_PASS": true
+  },
+  "interpretation": "Historical temporal replication of a cadence hypothesis formulated after original C15 Validation/OOS were already known; not a pristine new independent holdout."
+}

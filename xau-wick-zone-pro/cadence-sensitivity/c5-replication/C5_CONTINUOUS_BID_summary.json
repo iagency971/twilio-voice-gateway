@@ -1,0 +1,25 @@
+{
+  "tag": "C5_HISTORICAL_BID_JAN2024_JUL2026",
+  "rows": 1068994,
+  "landmarks": 182332,
+  "eligible_landmarks": 182886,
+  "missing_side_zone_landmarks": 554,
+  "lineages": 39209,
+  "zone_count_quantiles": {
+    "0": 1.0,
+    "0.5": 6.0,
+    "0.9": 10.0,
+    "0.95": 11.0,
+    "0.99": 14.0,
+    "1": 24.0
+  },
+  "age_lm_quantiles": {
+    "0.5": 60.0,
+    "0.75": 135.0,
+    "0.9": 209.0,
+    "0.95": 242.0,
+    "0.99": 277.0
+  },
+  "revisit_rate": 0.29251520588515934,
+  "runtime_sec": 2234.1382381916046
+}
