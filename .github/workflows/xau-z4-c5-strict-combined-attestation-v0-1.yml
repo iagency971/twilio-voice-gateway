@@ -1,0 +1,91 @@
+name: XAU Z4 C5 Strict Combined Attestation v0.1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-c5-strict-combined-attestation-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  strict-attestation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - name: Wait for C5 combined proxy metrics
+        shell: bash
+        run: |
+          set -euo pipefail
+          f=xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1/XAUUSD_Z4_C5_COMBINED_PINE_PROXY_PARITY_RESULT_v0_1.json
+          for i in $(seq 1 1200); do
+            git pull --rebase origin agent/xau-wick-zone-pro-dev || true
+            if [ -f "$f" ]; then exit 0; fi
+            sleep 5
+          done
+          echo 'C5 combined proxy result did not appear' >&2
+          exit 1
+
+      - name: Apply frozen historical strict gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1/XAUUSD_Z4_C5_COMBINED_PINE_PROXY_PARITY_RESULT_v0_1.json')
+          x=json.load(open(src));m=x['metrics']
+          c={
+            'exact_match_ge_090':m['exact_zone_match_rate']>=.90,
+            'proxy_match_ge_090':m['proxy_zone_match_rate']>=.90,
+            'median_iou_ge_080':m['iou_quantiles']['0.5']>=.80,
+            'p10_iou_ge_055':m['iou_quantiles']['0.1']>=.55,
+            'median_center_err_le_008':m['center_err_vseg_quantiles']['0.5']<=.08,
+            'p95_center_err_le_025':m['center_err_vseg_quantiles']['0.95']<=.25,
+            'score_pearson_ge_098':m['score_pearson']>=.98,
+            'score_spearman_ge_098':m['score_spearman']>=.98,
+            'median_score_err_le_0015':m['score_abs_err_quantiles']['0.5']<=.015,
+            'p95_score_err_le_0060':m['score_abs_err_quantiles']['0.95']<=.060,
+            'top1_agreement_ge_085':m['top1_zone_agreement']>=.85,
+          }
+          out={
+            'status':'PASS' if all(c.values()) else 'FAIL',
+            'scope':'OUTCOME_BLIND_C5_COMBINED_PROXY_STRICT_HISTORICAL_GATE_ATTESTATION',
+            'future_outcomes_used':False,
+            'source_result':str(src),
+            'source_generic_status':x.get('status'),
+            'generic_checks_ignored_for_promotion':True,
+            'strict_gate_prereg':'xau-wick-zone-pro/XAUUSD_Z4_C5_COMBINED_PINE_PROXY_STRICT_GATE_v0_1_2026-08-24.md',
+            'metrics':m,
+            'strict_checks':c,
+          }
+          p=Path('/tmp/XAUUSD_Z4_C5_COMBINED_PINE_PROXY_STRICT_ATTESTATION_v0_1.json');p.write_text(json.dumps(out,indent=2))
+          print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish strict attestation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          d=xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-1
+          cp /tmp/XAUUSD_Z4_C5_COMBINED_PINE_PROXY_STRICT_ATTESTATION_v0_1.json "$d"/
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add "$d/XAUUSD_Z4_C5_COMBINED_PINE_PROXY_STRICT_ATTESTATION_v0_1.json"
+          git commit -m 'publish strict C5 combined proxy parity attestation [skip ci]'
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:agent/xau-wick-zone-pro-dev; then break; fi
+            git pull --rebase origin agent/xau-wick-zone-pro-dev
+            sleep 5
+          done
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/XAUUSD_Z4_C5_COMBINED_PINE_PROXY_STRICT_ATTESTATION_v0_1.json'))
+          assert x['status']=='PASS',x
+          PY
