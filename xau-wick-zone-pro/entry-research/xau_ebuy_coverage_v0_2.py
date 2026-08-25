@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -11,7 +12,7 @@ import pandas as pd
 
 HERE=Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location('v01',HERE/'xau_ebuy_coverage_v0_1.py')
-v01=importlib.util.module_from_spec(spec); spec.loader.exec_module(v01)
+v01=importlib.util.module_from_spec(spec); sys.modules[spec.name]=v01; spec.loader.exec_module(v01)
 Zone=v01.Zone
 
 
