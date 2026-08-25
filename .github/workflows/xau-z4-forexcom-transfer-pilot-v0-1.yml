@@ -1,0 +1,170 @@
+name: XAU Z4 FOREXCOM Transfer Pilot v0.1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-forexcom-transfer-pilot-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  transfer-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install frozen dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 requests==2.31.0
+
+      - name: Verify preregistration is frozen before results
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/feed-parity/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_PREREG_v0_1_2026-08-25.md')
+          s=p.read_text()
+          for x in ['target timestamp coverage of FOREXCOM active M1 >= **97%**','raw-score Spearman >= **0.90**','at least **80%** of matched displayed integer R values within +/-10 points','No refit, recalibration']:
+              assert x in s,x
+          print('PREREG_FROZEN_PASS')
+          PY
+
+      - name: Acquire Dukascopy BID+ASK August 2026
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2026-08 --to-month 2026-08 --out /tmp/duka_aug_2026.csv
+
+      - name: Verify and prepare common-window native feed inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import pandas as pd
+          fpath=Path('xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz')
+          meta=json.load(open('xau-wick-zone-pro/feed-parity/forexcom-proof/FOREXCOM_XAUUSD_M1_latest_5000_meta.json'))
+          assert meta['resolved_symbol_payload']['full_name']=='FOREXCOM:XAUUSD'
+          assert meta['resolved_symbol_payload']['exchange']=='FOREXCOM'
+          assert meta['resolved_symbol_payload']['bar_source']=='mid'
+          F=pd.read_csv(fpath);F['time']=pd.to_datetime(F.timestamp_utc,utc=True);F=F.sort_values('time').drop_duplicates('time')
+          D=pd.read_csv('/tmp/duka_aug_2026.csv');D['time']=pd.to_datetime(D.timestamp,utc=True);D=D.sort_values('time').drop_duplicates('time')
+          lo,hi=F.time.min(),F.time.max();D=D[(D.time>=lo)&(D.time<=hi)].copy()
+          if len(D)<5000:raise RuntimeError(f'insufficient Dukascopy overlap rows {len(D)}')
+          # Keep exact acquired merged Dukascopy overlap for reproducibility.
+          D.drop(columns=['time']).to_csv('/tmp/duka_overlap.csv',index=False)
+          def to_engine(df,cols,out):
+              x=pd.DataFrame({'timestamp':(df.time.astype('int64')//10**6).astype('int64')})
+              for src,dst in zip(cols,['open','high','low','close']):x[dst]=pd.to_numeric(df[src],errors='coerce')
+              x=x.dropna();x.to_csv(out,index=False);return x
+          to_engine(F,['open','high','low','close'],'/tmp/forex.csv')
+          to_engine(D,['open','high','low','close'],'/tmp/duka_mid.csv')
+          to_engine(D,['open_bid','high_bid','low_bid','close_bid'],'/tmp/duka_bid.csv')
+          print({'forex_rows':len(F),'duka_overlap_rows':len(D),'window':[str(lo),str(hi)],'forex_sha256':hashlib.sha256(fpath.read_bytes()).hexdigest(),'duka_overlap_sha256':hashlib.sha256(Path('/tmp/duka_overlap.csv').read_bytes()).hexdigest()})
+          PY
+
+      - name: Build mechanical C5 geometry-lineage-only engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          replacements=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),
+            ('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+            ("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")
+          ]
+          for old,new in replacements:
+              assert src.count(old)==1,(old,src.count(old));src=src.replace(old,new)
+          assert src.count('outcome_zone(')==1  # definition remains, no call
+          assert 'out=outcome_zone(' not in src
+          assert '.revisited' not in src
+          p=Path('/tmp/z4_c5_feed_geometry.py');p.write_text(src)
+          print('geometry_engine_sha256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+
+      - name: Run outcome-blind C5 geometry on three native feeds
+        shell: bash
+        run: |
+          set -euo pipefail
+          python /tmp/z4_c5_feed_geometry.py --files /tmp/duka_mid.csv --output /tmp/duka_mid.pkl --tag DUKA_MID_C5_FEED &
+          p1=$!
+          python /tmp/z4_c5_feed_geometry.py --files /tmp/duka_bid.csv --output /tmp/duka_bid.pkl --tag DUKA_BID_C5_FEED &
+          p2=$!
+          python /tmp/z4_c5_feed_geometry.py --files /tmp/forex.csv --output /tmp/forex.pkl --tag FOREXCOM_MID_C5_FEED &
+          p3=$!
+          wait $p1; wait $p2; wait $p3
+          python - <<'PY'
+          import pandas as pd
+          for n in ['duka_mid','duka_bid','forex']:
+              d=pd.read_pickle('/tmp/'+n+'.pkl')
+              forbidden=[c for c in d.columns if c in {'revisited','touch_idx','mfe5_v','mae5_v','sweep_far','reclaim_peak','reclaim_full'}]
+              assert not forbidden,(n,forbidden)
+              print(n,len(d),d.time.nunique(),d.time.min(),d.time.max())
+          PY
+
+      - name: Run frozen feed-transfer comparator
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/feed-parity/xau_z4_forexcom_transfer_compare_v0_1.py \
+            --forex-csv xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz \
+            --duka-csv /tmp/duka_overlap.csv \
+            --duka-mid-pkl /tmp/duka_mid.pkl --duka-bid-pkl /tmp/duka_bid.pkl --forex-pkl /tmp/forex.pkl \
+            --frozen-json xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json \
+            --rmap-json xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-2/XAUUSD_Z4_C5_REVISIT_SCORE_MAP_v0_2.json \
+            --output /tmp/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_RESULT_v0_1.json
+
+      - name: Build immutable pilot provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          files={
+            'forex_depth':'xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz',
+            'duka_overlap':'/tmp/duka_overlap.csv',
+            'geometry_engine':'/tmp/z4_c5_feed_geometry.py',
+            'comparator':'xau-wick-zone-pro/feed-parity/xau_z4_forexcom_transfer_compare_v0_1.py',
+            'frozen_model':'xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_FROZEN_MODEL_PARAMS_v0_1.json',
+            'r_map':'xau-wick-zone-pro/cadence-sensitivity/c5-engineering-v0-2/XAUUSD_Z4_C5_REVISIT_SCORE_MAP_v0_2.json',
+            'result':'/tmp/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_RESULT_v0_1.json'}
+          sha={k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in files.items()}
+          r=json.load(open(files['result']))
+          m={'status':'FOREXCOM_TRANSFER_PILOT_PROVENANCE_RECORDED','future_outcomes_used':False,'result_status':r['status'],'sha256':sha,'source_identity':{'forex':'TradingView chart websocket FOREXCOM:XAUUSD bar_source=mid','dukascopy':'kevingtlin/dukascopy_XAUUSD_1m_Data BID+ASK August 2026 snapshot'},'note':'Dukascopy overlap bytes are archived with this result because the current-month upstream file may later grow.'}
+          Path('/tmp/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_MANIFEST_v0_1.json').write_text(json.dumps(m,indent=2))
+          PY
+
+      - name: Publish pilot evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions'
+          git config user.email 'github-actions@github.com'
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1
+          mkdir -p "$out"
+          cp /tmp/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_RESULT_v0_1.json "$out/"
+          cp /tmp/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_MANIFEST_v0_1.json "$out/"
+          gzip -c /tmp/duka_overlap.csv > "$out/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz"
+          for x in PRIMARY CONTROL; do
+            f="/tmp/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_${x}_MATCHED_v0_1.csv"
+            if [ -f "$f" ]; then gzip -c "$f" > "$out/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_${x}_MATCHED_v0_1.csv.gz"; fi
+          done
+          cp /tmp/duka_mid_summary.json "$out/DUKA_MID_C5_geometry_summary.json"
+          cp /tmp/duka_bid_summary.json "$out/DUKA_BID_C5_geometry_summary.json"
+          cp /tmp/forex_summary.json "$out/FOREXCOM_MID_C5_geometry_summary.json"
+          git add "$out"
+          git commit -m 'publish frozen FOREXCOM transfer pilot evidence [skip ci]'
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
