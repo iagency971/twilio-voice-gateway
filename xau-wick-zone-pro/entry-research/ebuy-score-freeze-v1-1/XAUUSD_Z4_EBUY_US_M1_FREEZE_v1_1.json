@@ -1,0 +1,56 @@
+{
+  "status": "E_BUY_US_M1_FALLBACK_FROZEN_V1_1",
+  "reaction_holdout_opened": false,
+  "model_id": "M1_LOGISTIC",
+  "v10_m1_gate_checks": {
+    "pooled_auc_ge_060": true,
+    "pooled_ap_ge_baseline_plus_005": true,
+    "E80_n_ge_800": true,
+    "E80_rate_ge_baseline_plus_008": true,
+    "E90_n_ge_350": true,
+    "E90_rate_ge_baseline_plus_012": true,
+    "E80_positive_lift_in_at_least_3_of_4_folds": true
+  },
+  "training_n": 7110,
+  "training_positive_rate": 0.3143459915611814,
+  "model_sha256": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+  "numeric_features": [
+    "slot_rank",
+    "episode_age_c5",
+    "zone_width_v",
+    "arm_center_distance_v",
+    "tp_distance_v",
+    "minutes_to_us_end",
+    "v_contact",
+    "trend5_v",
+    "trend15_v",
+    "trend60_v",
+    "trend240_v",
+    "contact_penetration_width",
+    "contact_bull",
+    "contact_close_position",
+    "upper_z4_count",
+    "minutes_contact_to_trigger",
+    "trigger_body_v",
+    "trigger_range_v",
+    "trigger_lower_wick_v",
+    "trigger_upper_wick_v",
+    "trigger_close_position",
+    "trigger_close_minus_zhi_v",
+    "trigger_close_minus_center_v",
+    "exec_gap_v",
+    "max_penetration_to_trigger_width"
+  ],
+  "categorical_features": [
+    "family",
+    "episode_origin_family",
+    "us_subperiod"
+  ],
+  "authorization": "PREREGISTER_H2_VALIDATION_BEFORE_ANY_H2_REACTION_OUTCOME",
+  "explicit_nonclaims": [
+    "DEV fallback, not independent validation",
+    "No H2 outcomes opened",
+    "No calibrated probability claim",
+    "No live profitability claim"
+  ]
+}
