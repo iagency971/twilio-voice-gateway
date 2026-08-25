@@ -1,0 +1,82 @@
+{
+  "acquired_at_utc": "2026-08-25T11:52:17.701356Z",
+  "first_timestamp_utc": "2026-08-19T20:32:00Z",
+  "interval": "1",
+  "last_timestamp_utc": "2026-08-25T11:52:00Z",
+  "messages_received": 2,
+  "note": "Proof acquisition only. This is an unofficial access path to TradingView chart data; identity is checked from requested/resolved FOREXCOM:XAUUSD metadata before use in feed-parity research.",
+  "received_bars": 5000,
+  "requested_bars": 5000,
+  "resolved_symbol_payload": {
+    "aliases": [],
+    "allowed_adjustment": "none",
+    "alternatives": [],
+    "bar_fillgaps": false,
+    "bar_source": "mid",
+    "bar_transform": "openprev",
+    "base_name": [
+      "FOREXCOM:XAUUSD"
+    ],
+    "currency_code": "USD",
+    "currency_id": "USD",
+    "description": "Gold / U.S. Dollar",
+    "exchange": "FOREXCOM",
+    "exchange_listed_name": "FOREX.com",
+    "format": "price",
+    "formatter": "price",
+    "fractional": false,
+    "full_name": "FOREXCOM:XAUUSD",
+    "has_adjustment": false,
+    "has_extended_hours": false,
+    "has_intraday": true,
+    "is-tickbars-available": true,
+    "is_replayable": true,
+    "is_tradable": true,
+    "legs": [
+      "FOREXCOM:XAUUSD"
+    ],
+    "listed_exchange": "FOREXCOM",
+    "measure": "price",
+    "minmov": 1,
+    "minmove2": 1,
+    "name": "XAUUSD",
+    "pointvalue": 1.0,
+    "pricescale": 100,
+    "pro_name": "FOREXCOM:XAUUSD",
+    "pro_perm": "",
+    "provider_id": "gain",
+    "session": "1800-1700:23456",
+    "session_display": "1800-1700:23456",
+    "short_description": "Gold / U.S. Dollar",
+    "source2": {
+      "country": "US",
+      "description": "FOREX.com",
+      "exchange-type": "exchange",
+      "id": "FOREXCOM",
+      "name": "FOREX.com",
+      "url": "https://www.forex.com/"
+    },
+    "source_id": "FOREXCOM",
+    "subsession_id": "regular",
+    "subsessions": [
+      {
+        "description": "Regular Trading Hours",
+        "id": "regular",
+        "private": false,
+        "session": "1800-1700:23456",
+        "session-display": "1800-1700:23456"
+      }
+    ],
+    "timezone": "America/New_York",
+    "type": "commodity",
+    "typespecs": [
+      "cfd"
+    ],
+    "variable_tick_size": "",
+    "visible_plots_set": "ohlc"
+  },
+  "series_completed": true,
+  "source_transport": "TradingView chart websocket stream",
+  "status": "PASS",
+  "symbol_requested": "FOREXCOM:XAUUSD"
+}
