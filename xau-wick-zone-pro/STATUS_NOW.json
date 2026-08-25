@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-25T11:25:00Z",
+  "checked_at": "2026-08-25T19:13:00Z",
   "branch": "agent/xau-wick-zone-pro-dev",
   "scientific_status": {
     "claim": "Z4 geometry+lineage adds predictive information for REVISIT_240 on Dukascopy XAUUSD M1 relative to frozen M0",
@@ -9,7 +9,8 @@
     "reaction_reversal": "NO_GO",
     "higher_tf_r": "NOT_VALIDATED",
     "memory_after_drop": "PREREG_REQUIRED",
-    "forexcom_transfer": "NOT_VALIDATED"
+    "forexcom_transfer": "VALIDATED_OPERATIONAL_TRANSFER",
+    "forexcom_scientific_role": "TRANSFER_FEED_NOT_ORIGINAL_DEVELOPMENT_FEED"
   },
   "cadence_decision": {
     "production_incumbent_until_runtime_gate": "C15",
@@ -39,6 +40,39 @@
     "r_display_p95_abs_float_error": 3.7142616469952796,
     "r_display_within_5_share": 0.9769842654151473
   },
+  "forexcom_transfer_validation": {
+    "status": "VALIDATED_OPERATIONAL_TRANSFER",
+    "source_symbol": "FOREXCOM:XAUUSD",
+    "source_bar_type": "mid",
+    "primary_reference": "DUKASCOPY_SYNTH_MID",
+    "scientific_reference_remains": "DUKASCOPY_BID",
+    "future_outcomes_used": false,
+    "model_refit": false,
+    "r_remap": false,
+    "raw_common_active_m1": 5634,
+    "raw_timestamp_coverage": 0.9992905285562256,
+    "return_pearson": 0.9953205880536954,
+    "return_spearman": 0.9921487435200188,
+    "mature_common_c5_snapshots": 744,
+    "matched_zone_pairs": 5789,
+    "reference_zone_match_rate": 0.9510432068342369,
+    "target_zone_match_rate": 0.9380975530708151,
+    "relative_iou_median": 0.9221794613861578,
+    "relative_iou_p10": 0.7587478278911951,
+    "relative_center_error_median_vseg": 0.06779661016943056,
+    "relative_center_error_p95_vseg": 0.24650821596188552,
+    "score_spearman": 0.9978262487205733,
+    "score_abs_error_median": 0.004310686751473669,
+    "score_abs_error_p95": 0.040991891476045116,
+    "r_spearman": 0.9978262487205733,
+    "r_display_within_5_share": 0.9754707203316635,
+    "r_display_within_10_share": 0.9991362929694247,
+    "top1_zone_agreement": 0.8481182795698925,
+    "bid_control": "PASS",
+    "residual_limitation": "DEEP_MULTI_MONTH_FOREXCOM_TEMPORAL_REPLICATION_NOT_AVAILABLE_WITHOUT_AUTHENTICATED_HISTORY; TRACK_AS_GENERALIZATION_LIMIT_NOT_OPERATIONAL_BLOCKER",
+    "validation_memo": "feed-parity/XAUUSD_Z4_FOREXCOM_TRANSFER_VALIDATION_2026-08-25.md",
+    "pilot_result": "feed-parity/forexcom-transfer-pilot-v0-1/XAUUSD_Z4_FOREXCOM_TRANSFER_PILOT_RESULT_v0_1.json"
+  },
   "pine_candidate": {
     "file": "XAUUSD_Z4_Revisit_Score_QA_v2_2_0_M1_C5_QA_PROXY.pine",
     "sha256": "4f33ea438e7c008e8276129b7be26a51bdf06fd1668605c3f93321742aa2660e",
@@ -50,7 +84,8 @@
     "warmup_landmarks": 96,
     "grid_step_usd": 0.05,
     "r_map": "C5_SPECIFIC_DEV_ONLY",
-    "runtime_label": "QA_PROXY"
+    "runtime_label": "QA_PROXY",
+    "forexcom_feed_authorized": true
   },
   "remaining_gate": {
     "blocking_for_validated_proxy": true,
@@ -60,9 +95,10 @@
       "live close behavior at a 5-minute boundary",
       "GRID_LIMIT reset and 96-landmark re-arm where practicable"
     ],
-    "note": "Passing this runtime gate can promote the C5 Pine implementation label; it does not validate FOREXCOM feed transfer."
+    "note": "FOREXCOM feed transfer is now operationally validated. The remaining blocker is Pine runtime implementation QA only."
   },
   "canonical_memo": "XAUUSD_Z4_C5_PROMOTION_DECISION_2026-08-25.md",
+  "forexcom_validation_memo": "feed-parity/XAUUSD_Z4_FOREXCOM_TRANSFER_VALIDATION_2026-08-25.md",
   "strict_attestation": "cadence-sensitivity/c5-engineering-v0-2/XAUUSD_Z4_C5_STRICT_HISTORICAL_THRESHOLD_ATTESTATION_v0_2.json",
   "pine_manifest": "XAUUSD_Z4_Revisit_Score_QA_v2_2_0_MANIFEST.json",
   "pine_static_qa": "XAUUSD_Z4_Revisit_Score_QA_v2_2_0_STATIC_QA.json"
