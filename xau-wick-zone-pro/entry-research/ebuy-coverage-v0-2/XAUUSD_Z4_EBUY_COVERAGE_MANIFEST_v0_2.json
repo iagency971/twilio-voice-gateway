@@ -1,0 +1,15 @@
+{
+  "status": "EBUY_V02_PROVENANCE_RECORDED",
+  "result_status": "EBUY_COVERAGE_FAIL",
+  "future_price_outcomes_used": false,
+  "selected_architecture": null,
+  "eligible_snapshot_count": 12959,
+  "sha256": {
+    "prereg": "c1eda2f775262c2281ad7c20954b7284eaa15e68bb75fe2cd02fbe1c29457179",
+    "engine_v01": "fe9a0efa986211f6277f1506e3bdf16aac57980b221c9aeb343c5b5c07d5df1c",
+    "engine_v02": "fd0c2f0178c40d91b826018c4e823ba9be26d059244b1b9fa199ae99e61dec92",
+    "z4_geometry": "3d3dc4e6948be0f255d714b5c1c34ee21df0ffefe58c91770569ac54b40f034f",
+    "result": "c1031c54443a63f29ef95d6e6efbfe760ab9b5cf4ee154031b25dc67a1012019",
+    "selected": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  }
+}
