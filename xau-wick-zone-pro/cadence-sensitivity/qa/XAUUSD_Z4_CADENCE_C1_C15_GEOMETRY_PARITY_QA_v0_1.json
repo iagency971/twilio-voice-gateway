@@ -1,0 +1,77 @@
+{
+  "status": "OUTCOME_BLIND_CADENCE_GEOMETRY_PARITY_QA",
+  "cadence_short": 1,
+  "lookback_active_m1": 1440,
+  "criteria": {
+    "center_tol_usd": 1e-12,
+    "bound_tol_usd": 1e-08,
+    "same_rows_landmarks_counts": true,
+    "same_side": true
+  },
+  "BID": {
+    "label": "BID_C1_vs_C15",
+    "rows_A": 89093,
+    "rows_B": 89093,
+    "landmarks_A": 13705,
+    "landmarks_B": 13705,
+    "bad_landmark_zone_count_n": 0,
+    "bad_landmark_zone_count_first10": [],
+    "side_mismatch_rows": 0,
+    "center_abs_error_usd": {
+      "median": 0.0,
+      "p99": 0.0,
+      "max": 0.0,
+      "n_over_tol": 0,
+      "tol": 1e-12
+    },
+    "zlo_abs_error_usd": {
+      "median": 0.0,
+      "p99": 0.0,
+      "max": 0.0,
+      "n_over_tol": 0,
+      "tol": 1e-08
+    },
+    "zhi_abs_error_usd": {
+      "median": 0.0,
+      "p99": 0.0,
+      "max": 0.0,
+      "n_over_tol": 0,
+      "tol": 1e-08
+    },
+    "GEOMETRY_PARITY_PASS": true
+  },
+  "ASK": {
+    "label": "ASK_C1_vs_C15",
+    "rows_A": 89863,
+    "rows_B": 89863,
+    "landmarks_A": 13718,
+    "landmarks_B": 13718,
+    "bad_landmark_zone_count_n": 0,
+    "bad_landmark_zone_count_first10": [],
+    "side_mismatch_rows": 0,
+    "center_abs_error_usd": {
+      "median": 0.0,
+      "p99": 0.0,
+      "max": 0.0,
+      "n_over_tol": 0,
+      "tol": 1e-12
+    },
+    "zlo_abs_error_usd": {
+      "median": 0.0,
+      "p99": 0.0,
+      "max": 0.0,
+      "n_over_tol": 0,
+      "tol": 1e-08
+    },
+    "zhi_abs_error_usd": {
+      "median": 0.0,
+      "p99": 0.0,
+      "max": 0.0,
+      "n_over_tol": 0,
+      "tol": 1e-08
+    },
+    "GEOMETRY_PARITY_PASS": true
+  },
+  "GEOMETRY_PARITY_PASS": true,
+  "outcomes_read": false
+}
