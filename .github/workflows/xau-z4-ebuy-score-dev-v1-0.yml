@@ -1,0 +1,119 @@
+name: XAU Z4 E_BUY_US Score DEV H1 v1.0
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-score-dev-v1-0.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  score-dev-h1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.2 joblib==1.5.2
+
+      - name: Freeze and H2-closed guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_ebuy_score_dev_v1_0.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_SCORE_DEV_PREREG_v1_0_2026-08-25.md').read_text()
+          for x in ['E_BUY_US','BULL_REJECTION','Four expanding-window folds','No hyperparameter search','ROC AUC >= 0.60','H2 reaction holdout remains closed']:
+              assert x in p,x
+          r=json.load(open('xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json'))
+          assert r['reaction_holdout_opened'] is False
+          assert r['selected_trigger']=='BULL_REJECTION'
+          assert r['trigger_summaries']['BULL_REJECTION']['fired_count']==7128
+          print('SCORE_DEV_FREEZE_GUARD_PASS')
+          PY
+
+      - name: Acquire exactly H1 BID raw and verify hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/h1 /tmp/score
+          python - <<'PY'
+          import json,subprocess,hashlib
+          from pathlib import Path
+          man=json.load(open('xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json'))
+          files=[x for x in man['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2025-07']
+          assert len(files)==12 and all(f"{x['year']}-{x['month']}"<'2025-08' for x in files)
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in files:
+              p=Path('/tmp/xau/h1')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          assert not list(Path('/tmp/xau/h1').glob('*2025_08*')) and not list(Path('/tmp/xau/h1').glob('*2026*'))
+          print('H1_ONLY_HASH_PASS')
+          PY
+
+      - name: Run preregistered E_BUY_US score DEV
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_score_dev_v1_0.py \
+            --files /tmp/xau/h1/*.csv \
+            --triggers-gz xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv.gz \
+            --candidates-gz xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz \
+            --output /tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_RESULT_v1_0.json \
+            --oof-csv /tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_OOF_v1_0.csv \
+            --model-pkl /tmp/score/XAUUSD_Z4_EBUY_SCORE_MODEL_H1_v1_0.joblib
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_RESULT_v1_0.json'))
+          assert x['reaction_holdout_opened'] is False
+          print('SCORE_DEV_RESULT',x['status'],x['selected_model'],x['selected_checks'])
+          PY
+
+      - name: Build immutable score DEV provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          result=Path('/tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_RESULT_v1_0.json')
+          x=json.loads(result.read_text())
+          paths={
+            'prereg':Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_SCORE_DEV_PREREG_v1_0_2026-08-25.md'),
+            'engine':Path('xau-wick-zone-pro/entry-research/xau_ebuy_score_dev_v1_0.py'),
+            'reaction_result':Path('xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json'),
+            'trigger_table':Path('xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv.gz'),
+            'candidate_table':Path('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz'),
+            'result':result,
+            'oof':Path('/tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_OOF_v1_0.csv')}
+          if Path('/tmp/score/XAUUSD_Z4_EBUY_SCORE_MODEL_H1_v1_0.joblib').exists():paths['model']=Path('/tmp/score/XAUUSD_Z4_EBUY_SCORE_MODEL_H1_v1_0.joblib')
+          out={'status':'E_BUY_US_SCORE_DEV_PROVENANCE_RECORDED','score_status':x['status'],'selected_model':x['selected_model'],'reaction_holdout_opened':False,
+               'sha256':{k:hashlib.sha256(v.read_bytes()).hexdigest() for k,v in paths.items()}}
+          Path('/tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_MANIFEST_v1_0.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish E_BUY_US score DEV evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/ebuy-score-dev-v1-0
+          mkdir -p "$out"
+          cp /tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_RESULT_v1_0.json "$out/"
+          cp /tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_MANIFEST_v1_0.json "$out/"
+          gzip -c /tmp/score/XAUUSD_Z4_EBUY_SCORE_DEV_OOF_v1_0.csv > "$out/XAUUSD_Z4_EBUY_SCORE_DEV_OOF_v1_0.csv.gz"
+          if [ -f /tmp/score/XAUUSD_Z4_EBUY_SCORE_MODEL_H1_v1_0.joblib ]; then cp /tmp/score/XAUUSD_Z4_EBUY_SCORE_MODEL_H1_v1_0.joblib "$out/"; fi
+          git add "$out"
+          git commit -m 'publish preregistered E_BUY_US score DEV H1 v1.0 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
