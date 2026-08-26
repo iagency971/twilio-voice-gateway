@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 env:
   MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
@@ -46,7 +47,7 @@ jobs:
           print('RAW_24M_HASH_PASS')
           PY
 
-      - name: Build exact canonical continuous outcome-blind C5 Z4 geometry
+      - name: Build canonical continuous outcome-blind C5 Z4 geometry
         shell: bash
         run: |
           set -euo pipefail
@@ -63,12 +64,62 @@ jobs:
           assert 'out=outcome_zone(' not in src and '.revisited' not in src
           Path('/tmp/z4_c5_geometry_only.py').write_text(src)
           PY
-          python /tmp/z4_c5_geometry_only.py --files /tmp/xau/*.csv --output /tmp/fused/Z4_C5_24M.pkl --tag Z4_C5_EBUY_FUSED_SENSITIVITY_24M
+          python /tmp/z4_c5_geometry_only.py --files /tmp/xau/*.csv --output /tmp/fused/Z4_C5_24M_CONTINUOUS.pkl --tag Z4_C5_EBUY_FUSED_SENSITIVITY_24M
           python - <<'PY'
           import pandas as pd
-          z=pd.read_pickle('/tmp/fused/Z4_C5_24M.pkl');z['time']=pd.to_datetime(z.time,utc=True)
+          z=pd.read_pickle('/tmp/fused/Z4_C5_24M_CONTINUOUS.pkl');z['time']=pd.to_datetime(z.time,utc=True)
           assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z') and z.time.max()<pd.Timestamp('2026-08-01T00:00:00Z')
           print('CANONICAL_CONTINUOUS_Z4_READY',len(z),z.time.nunique())
+          PY
+
+      - name: Download exact frozen H1 reaction target geometry
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32908654286
+          pattern: z4-*
+          path: /tmp/h1z4
+          merge-multiple: true
+
+      - name: Assemble canonical target map and diagnose H1 difference
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import glob
+          import numpy as np
+          import pandas as pd
+          cont=pd.read_pickle('/tmp/fused/Z4_C5_24M_CONTINUOUS.pkl');cont['time']=pd.to_datetime(cont.time,utc=True)
+          fs=sorted(glob.glob('/tmp/h1z4/z4_*.pkl'));assert len(fs)==12,fs
+          h1=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True);h1['time']=pd.to_datetime(h1.time,utc=True)
+          lo=pd.Timestamp('2024-08-01T00:00:00Z');mid=pd.Timestamp('2025-08-01T00:00:00Z');hi=pd.Timestamp('2026-08-01T00:00:00Z')
+          h1=h1[(h1.time>=lo)&(h1.time<mid)].copy()
+          assert h1.time.min()>=lo and h1.time.max()<mid
+          h2=cont[(cont.time>=mid)&(cont.time<hi)].copy()
+          z=pd.concat([h1,h2],ignore_index=True).sort_values(['time','side','center']).reset_index(drop=True)
+          z.to_pickle('/tmp/fused/Z4_C5_24M_CANONICAL_REACTION_TARGETS.pkl')
+
+          cand=pd.read_csv('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz',compression='gzip',low_memory=False)
+          cand=cand[cand.window.astype(str)=='OOS_H1'].copy();cand['time']=pd.to_datetime(cand.time,utc=True)
+          closes=cand.groupby('time',sort=False)['close'].first().to_dict()
+          cH=cont[(cont.time>=lo)&(cont.time<mid)]
+          by_c={pd.Timestamp(t):g for t,g in cH.groupby('time',sort=False)}
+          by_m={pd.Timestamp(t):g for t,g in h1.groupby('time',sort=False)}
+          def target(g,close):
+              if g is None:return None
+              u=g[(g.side==1)&(g.zlo>close)]
+              if len(u)==0:u=g[g.side==1]
+              if len(u)==0:return None
+              r=u.iloc[int(np.argmin(u.zlo.to_numpy(float)-close))]
+              return (float(r.zlo),float(r.center),float(r.zhi))
+          dif=[]
+          for t,cl in closes.items():
+              a=target(by_c.get(t),float(cl));b=target(by_m.get(t),float(cl))
+              if a!=b:dif.append((t,float(cl),a,b))
+          print('H1_TARGET_MAP_DIFFERING_SNAPSHOTS',len(dif))
+          for x in dif[:20]:print('H1_TARGET_DIFF',x)
+          print('CANONICAL_REACTION_TARGET_Z4_READY',len(z),len(h1),len(h2))
           PY
 
       - name: Frozen-study guards
@@ -93,7 +144,7 @@ jobs:
           set -euo pipefail
           python xau-wick-zone-pro/entry-research/xau_ebuy_fused_zone_sensitivity_v0_1.py \
             --files /tmp/xau/*.csv \
-            --z4-pkl /tmp/fused/Z4_C5_24M.pkl \
+            --z4-pkl /tmp/fused/Z4_C5_24M_CANONICAL_REACTION_TARGETS.pkl \
             --candidates-gz xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz \
             --model-pkl xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib \
             --coverage-result xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
