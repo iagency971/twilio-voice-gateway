@@ -1,0 +1,216 @@
+name: XAU Z4 E-BUY C1 Refresh Causal Reaction v1.0
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-c1-refresh-causal-reaction-v1-0.yml'
+      - 'xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_causal_reaction_v1_0.py'
+      - 'xau-wick-zone-pro/cadence-sensitivity/C1_REFRESH_CAUSAL_REACTION_TRIGGER.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  reaction-window:
+    strategy:
+      fail-fast: false
+      matrix:
+        window: [H1, H2]
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify frozen methodology and source provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'C1 minute-refresh sensitivity preregistration v1.0' xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_v1_0_2026-08-26.md
+          grep -q 'CAUSAL_ACTIVE_INTERVAL_V1' xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_A_CAUSAL_INTERVAL_2026-08-26.md
+          grep -q 'causal episode-state propagation' xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_B_EPISODE_STATE_2026-08-26.md
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_3_final_preoutcome.py)" = "454ae358dae4b289c8a5907ed9ec69dbad329843"
+          test "$(git hash-object xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_outcome_blind_gate_v1_0.py)" = "be4018c696f39f68110f531ab2826e4e0c3a991a"
+          python -m py_compile xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_causal_reaction_v1_0.py
+
+      - name: Install fixed dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Build mechanical C1 and C5 detector engines
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          old='p=utc_ts(ts); return p.minute%15==0 and p.second==0'
+          assert src.count(old)==1
+          expected={1:'86a5b1af2e77d0e78526652c03f4c6f1a6bfbdaaf92d21e34c1b121f6fdf4dcb',5:'7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24'}
+          for c in (1,5):
+              new=f'p=utc_ts(ts); return p.minute%{c}==0 and p.second==0'
+              text=src.replace(old,new)
+              assert text.replace(new,old)==src
+              p=Path(f'/tmp/z4_C{c}.py');p.write_text(text)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==expected[c]
+          print('MECHANICAL_C1_C5_HASH_PASS')
+          PY
+
+      - name: Download exact BID window plus one-month warmup and verify hashes
+        shell: bash
+        env:
+          WINDOW: ${{ matrix.window }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          w=os.environ['WINDOW']
+          bounds={'H1':('2024-07','2025-07'),'H2':('2025-07','2026-07')}
+          lo,hi=bounds[w]
+          dev=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          hist=json.load(open('xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json'))
+          pool={}
+          for x in list(dev['files'])+list(hist['files']):
+              if str(x.get('side','')).lower()!='bid': continue
+              ym=f"{int(x['year']):04d}-{int(x['month']):02d}"
+              if lo<=ym<=hi: pool[x['file']]=x
+          files=sorted(pool.values(),key=lambda x:(int(x['year']),int(x['month'])))
+          assert len(files)==13,[(x['file'],x['year'],x['month']) for x in files]
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in files:
+              p=Path('/tmp/xau')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest()
+              assert got==x['sha256'],(p.name,got,x['sha256'])
+          Path('/tmp/source_files.txt').write_text('\n'.join(str(Path('/tmp/xau')/x['file']) for x in files)+'\n')
+          print(w,'SOURCE_HASH_PASS',len(files),files[0]['file'],files[-1]['file'])
+          PY
+
+      - name: Rebuild C1 and C5 canonical Z4 geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t FILES < /tmp/source_files.txt
+          t0=$(date +%s)
+          python /tmp/z4_C1.py --files "${FILES[@]}" --output /tmp/C1_BID.pkl --tag C1_EBUY_CAUSAL_REACTION
+          t1=$(date +%s)
+          python /tmp/z4_C5.py --files "${FILES[@]}" --output /tmp/C5_BID.pkl --tag C5_EBUY_CAUSAL_REACTION
+          t2=$(date +%s)
+          echo "DET_C1_SEC=$((t1-t0))" >> "$GITHUB_ENV"
+          echo "DET_C5_SEC=$((t2-t1))" >> "$GITHUB_ENV"
+
+      - name: Run frozen-baseline parity then causal C5/C1 reaction comparison
+        shell: bash
+        env:
+          WINDOW: ${{ matrix.window }}
+        run: |
+          set -euo pipefail
+          mapfile -t FILES < /tmp/source_files.txt
+          mkdir -p /tmp/evidence
+          python xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_causal_reaction_v1_0.py \
+            --window "$WINDOW" \
+            --files "${FILES[@]}" \
+            --c1-pkl /tmp/C1_BID.pkl \
+            --c5-pkl /tmp/C5_BID.pkl \
+            --candidates-gz xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz \
+            --coverage-result xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+            --frozen-h1-result xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0-precomputed-location/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json \
+            --frozen-h2-result xau-wick-zone-pro/entry-research/ebuy-h2-validation-v1-0/XAUUSD_Z4_EBUY_H2_VALIDATION_RESULT_v1_0.json \
+            --evidence-dir /tmp/evidence \
+            --detector-c1-sec "$DET_C1_SEC" --detector-c5-sec "$DET_C5_SEC" \
+            --output "/tmp/${WINDOW}_C1_REFRESH_CAUSAL_REACTION_RESULT_v1_0.json"
+          python - <<'PY'
+          import glob,json
+          p=glob.glob('/tmp/*_C1_REFRESH_CAUSAL_REACTION_RESULT_v1_0.json')[0];x=json.load(open(p))
+          assert x['status']=='C1_REFRESH_CAUSAL_REACTION_WINDOW_COMPLETE_NO_PROMOTION'
+          assert x['frozen_c5_baseline']['pass'] is True
+          assert x['detector_common_anchor_geometry_parity']['pass'] is True
+          assert x['preregistered_runtime_semantics']['score_used'] is False
+          print('WINDOW_GATE_PASS',x['window'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c1-refresh-causal-reaction-${{ matrix.window }}
+          path: |
+            /tmp/${{ matrix.window }}_C1_REFRESH_CAUSAL_REACTION_RESULT_v1_0.json
+            /tmp/evidence/*.csv.gz
+          retention-days: 30
+
+  aggregate-publish:
+    needs: reaction-window
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: c1-refresh-causal-reaction-*
+          path: /tmp/results
+          merge-multiple: true
+      - name: Aggregate H1 H2 causal evidence without production promotion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          R={}
+          for w in ('H1','H2'):
+              p=Path('/tmp/results')/f'{w}_C1_REFRESH_CAUSAL_REACTION_RESULT_v1_0.json'
+              x=json.load(open(p));assert x['window']==w and x['frozen_c5_baseline']['pass'] is True
+              R[w]=x
+          d={w:R[w]['causal_active_interval_v1']['C1_minus_C5']['tp1_resolved_rate'] for w in R}
+          coherent_positive=all(d[w] is not None and d[w]>0 for w in ('H1','H2'))
+          stability_c1=all(R[w]['outcome_blind_historical_window_diagnostics']['C1']['preregistered_thresholds']['pass'] for w in ('H1','H2'))
+          out={
+            'status':'C1_REFRESH_CAUSAL_REACTION_H1_H2_COMPLETE_NO_PRODUCTION_PROMOTION',
+            'study':'E_BUY_C1_REFRESH_CAUSAL_ACTIVE_INTERVAL_V1',
+            'H1':R['H1'],'H2':R['H2'],
+            'aggregate_flags':{
+              'frozen_C5_parity_both':True,
+              'detector_geometry_parity_both':bool(R['H1']['detector_common_anchor_geometry_parity']['pass'] and R['H2']['detector_common_anchor_geometry_parity']['pass']),
+              'C1_stability_thresholds_H1_H2':stability_c1,
+              'primary_TP1_direction_coherent_positive_H1_H2':coherent_positive
+            },
+            'primary_delta_tp1_resolved_rate':d,
+            'interpretation_status':('COHERENT_POSITIVE_PENDING_PRO_ARTIFACT_AND_FRAGMENTATION_INTERPRETATION' if coherent_positive and stability_c1 else 'RETAIN_C5_NO_COHERENT_POSITIVE_C1_GATE'),
+            'authorization':'NONE_RETROSPECTIVE_SENSITIVITY_ONLY',
+            'next_gate':'PRO_INTERPRET_EFFECT_SIZE_CI_CONTACT_FRAGMENTATION_INVALIDATION_GEOMETRY_RUNTIME_BEFORE_ANY_PINE_QA'
+          }
+          Path('/tmp/XAUUSD_Z4_EBUY_C1_REFRESH_CAUSAL_REACTION_H1_H2_RESULT_v1_0.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps({'flags':out['aggregate_flags'],'delta':d,'interpretation_status':out['interpretation_status']},indent=2))
+          PY
+      - name: Publish immutable causal reaction evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/cadence-sensitivity/c1-refresh-v1-0/reaction-causal-v1
+          mkdir -p "$out"
+          cp /tmp/XAUUSD_Z4_EBUY_C1_REFRESH_CAUSAL_REACTION_H1_H2_RESULT_v1_0.json "$out/"
+          cp /tmp/results/H1_C1_REFRESH_CAUSAL_REACTION_RESULT_v1_0.json "$out/"
+          cp /tmp/results/H2_C1_REFRESH_CAUSAL_REACTION_RESULT_v1_0.json "$out/"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add "$out"
+          git commit -m 'publish C1 refresh causal reaction H1 H2 v1.0 [skip ci]'
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:agent/xau-wick-zone-pro-dev; then exit 0; fi
+            git pull --rebase origin agent/xau-wick-zone-pro-dev
+            sleep 5
+          done
+          exit 1
