@@ -1,0 +1,170 @@
+name: XAU Z4 E-BUY Fused H1 Parity Diagnostic v0.1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-fused-parity-diagnostic-v0-1.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.2 joblib==1.5.2
+
+      - name: Acquire exact H1 BID raw and verify hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau /tmp/h1z4
+          python - <<'PY'
+          import json,subprocess,hashlib,os
+          from pathlib import Path
+          man=json.load(open(os.environ['MANIFEST']))
+          fs=[x for x in man['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2025-07']
+          assert len(fs)==12, len(fs)
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/xau')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          print('RAW_H1_HASH_PASS',len(fs))
+          PY
+
+      - name: Download exact frozen H1 reaction Z4 geometry
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: 32908654286
+          pattern: z4-*
+          path: /tmp/h1z4
+          merge-multiple: true
+
+      - name: Rebuild baseline and diff canonical contacts and BR
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import glob, importlib.util, sys, json
+          from collections import Counter
+          from pathlib import Path
+          import numpy as np
+          import pandas as pd
+
+          HERE=Path('xau-wick-zone-pro/entry-research')
+          def load(name,path):
+              spec=importlib.util.spec_from_file_location(name,path)
+              m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
+          fused=load('parity_fused',HERE/'xau_ebuy_fused_zone_sensitivity_v0_1.py')
+          base=fused.base
+
+          lo=pd.Timestamp('2024-08-01T00:00:00Z');hi=pd.Timestamp('2025-08-01T00:00:00Z')
+          raw=base.v01.load_raw(sorted(glob.glob('/tmp/xau/*.csv')))
+          active=base.v01.active_m1(raw)
+          zfs=sorted(glob.glob('/tmp/h1z4/z4_*.pkl'));assert len(zfs)==12,zfs
+          z4=pd.concat([pd.read_pickle(f) for f in zfs],ignore_index=True);z4['time']=pd.to_datetime(z4.time,utc=True)
+          z4=z4[(z4.time>=lo)&(z4.time<hi)].copy().sort_values(['time','side','center']).reset_index(drop=True)
+          cand=pd.read_csv(HERE/'ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz',compression='gzip',low_memory=False);cand['time']=pd.to_datetime(cand.time,utc=True)
+          cov=json.load(open(HERE/'ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json'))
+          snaps,displays=fused.build_states(active,z4,cand,lo,hi,'OOS_H1',cov)
+          states=base.assign_episode_states(snaps,displays)
+          base.DEV_LO=lo;base.DEV_HI=hi
+          old=base.TRIGGERS;base.TRIGGERS=('BULL_REJECTION',)
+          contacts,trades=base.detect_contacts(raw,active,z4,snaps,displays,states)
+          base.TRIGGERS=old
+          gotc=pd.DataFrame(contacts);gott=pd.DataFrame(trades)
+          can_c=pd.read_csv(HERE/'reaction-dev-h1-v1-0/XAUUSD_Z4_EBUY_REACTION_DEV_H1_CONTACTS_v1_0.csv.gz',compression='gzip',low_memory=False)
+          can_t=pd.read_csv(HERE/'reaction-dev-h1-v1-0/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv.gz',compression='gzip',low_memory=False)
+          for d in (gotc,can_c):
+              for k in ('contact_time','c5_time','arm_time'):
+                  if k in d:d[k]=pd.to_datetime(d[k],utc=True,errors='coerce')
+          for d in (gott,can_t):
+              for k in ('contact_time','c5_time','trigger_time','exec_time'):
+                  if k in d:d[k]=pd.to_datetime(d[k],utc=True,errors='coerce')
+
+          print('COUNTS canonical_contacts got_contacts',len(can_c),len(gotc))
+          print('COUNTS canonical_trigger_rows got_trigger_rows',len(can_t),len(gott))
+
+          def ckey(r):
+              return (str(pd.Timestamp(r.contact_time)),str(pd.Timestamp(r.c5_time)),str(r.family),round(float(r.zlo),9),round(float(r.center),9),round(float(r.zhi),9))
+          cc=Counter(ckey(r) for _,r in can_c.iterrows());gc=Counter(ckey(r) for _,r in gotc.iterrows())
+          miss=list((cc-gc).elements());extra=list((gc-cc).elements())
+          print('CONTACT_KEY_MISSING',len(miss));print('CONTACT_KEY_EXTRA',len(extra))
+          for x in miss[:20]:print('MISSING_CONTACT_KEY',x)
+          for x in extra[:20]:print('EXTRA_CONTACT_KEY',x)
+
+          # Also compare episode-id/time identity to diagnose lineage differences.
+          def eidkey(r):return (int(r.episode_id),str(pd.Timestamp(r.contact_time)))
+          ce=Counter(eidkey(r) for _,r in can_c.iterrows());ge=Counter(eidkey(r) for _,r in gotc.iterrows())
+          em=list((ce-ge).elements());ee=list((ge-ce).elements())
+          print('EPISODE_TIME_MISSING',len(em),'EXTRA',len(ee))
+          for x in em[:20]:print('MISSING_EPISODE_TIME',x)
+          for x in ee[:20]:print('EXTRA_EPISODE_TIME',x)
+
+          def asbool(s):
+              if s.dtype==bool:return s
+              return s.astype(str).str.lower().isin(['true','1','yes'])
+          can_br=can_t[(can_t.trigger.astype(str)=='BULL_REJECTION') & asbool(can_t.fired)].copy()
+          got_br=gott[asbool(gott.fired)].copy()
+          print('BR_FIRED canonical got',len(can_br),len(got_br))
+          def tkey(r):
+              return (str(pd.Timestamp(r.contact_time)),str(pd.Timestamp(r.c5_time)),round(float(r.zlo),9),round(float(r.zhi),9),str(pd.Timestamp(r.trigger_time)),str(pd.Timestamp(r.exec_time)))
+          cb=Counter(tkey(r) for _,r in can_br.iterrows());gb=Counter(tkey(r) for _,r in got_br.iterrows())
+          bm=list((cb-gb).elements());be=list((gb-cb).elements())
+          print('BR_KEY_MISSING',len(bm),'EXTRA',len(be))
+          for x in bm[:20]:print('MISSING_BR_KEY',x)
+          for x in be[:20]:print('EXTRA_BR_KEY',x)
+
+          # Print complete evidence around the first missing contact.
+          if miss:
+              key=miss[0]
+              m=can_c.apply(lambda r:ckey(r)==key,axis=1)
+              row=can_c[m].iloc[0]
+              print('=== FIRST_MISSING_CANONICAL_CONTACT ===')
+              cols=['episode_id','contact_time','c5_time','family','episode_origin_family','slot_rank','episode_age_c5','zlo','center','zhi','v_contact','arm_time','arm_close','tp1_zlo','tp1_center','tp1_zhi','contact_penetration_width','contact_bull','contact_close_position']
+              print(row[[c for c in cols if c in row.index]].to_dict())
+              ct=pd.Timestamp(row.contact_time);c5=pd.Timestamp(row.c5_time)
+              print('=== RAW_AROUND_CONTACT ===')
+              print(raw[(raw.time>=ct-pd.Timedelta(minutes=5))&(raw.time<=ct+pd.Timedelta(minutes=5))][['time','open','high','low','close']].to_string(index=False))
+              print('=== CANDIDATES_AROUND_C5 ===')
+              cwin=cand[(cand.window.astype(str)=='OOS_H1')&(cand.time>=c5-pd.Timedelta(minutes=20))&(cand.time<=c5+pd.Timedelta(minutes=20))]
+              show=[c for c in ['time','entry_rank','family','zlo','center','zhi','close','v60'] if c in cwin.columns]
+              print(cwin[show].to_string(index=False))
+              eid=int(row.episode_id)
+              print('=== REBUILT_STATE_EPISODE ===')
+              lines=[]
+              for s,zs,sts in zip(snaps,displays,states):
+                  for z,st in zip(zs,sts):
+                      if int(st['id'])==eid:
+                          lines.append((s['time'],st['id'],st['age'],st['slot'],st['origin_family'],z.family,z.zlo,z.center,z.zhi,s['close']))
+              for q in lines[-30:]:print('STATE',q)
+
+          if bm:
+              key=bm[0]
+              m=can_br.apply(lambda r:tkey(r)==key,axis=1);row=can_br[m].iloc[0]
+              print('=== FIRST_MISSING_CANONICAL_BR ===')
+              cols=['episode_id','contact_time','c5_time','zlo','center','zhi','trigger_time','exec_time','exec_price','tp1_zlo','reason','tp1_invalidation_status']
+              print(row[[c for c in cols if c in row.index]].to_dict())
+
+          # Fail deliberately unless exact parity is achieved, preserving logs as evidence.
+          assert len(gotc)==len(can_c)==16896,(len(gotc),len(can_c))
+          assert len(got_br)==len(can_br)==7128,(len(got_br),len(can_br))
+          assert not miss and not extra and not bm and not be,(len(miss),len(extra),len(bm),len(be))
+          print('H1_EVENT_PARITY_PASS')
+          PY
