@@ -217,9 +217,9 @@
       "pass": true
     },
     "runtime": {
-      "c1_sec": 908.0,
-      "c5_sec": 186.0,
-      "c1_over_c5": 4.881720430107527
+      "c1_sec": 697.0,
+      "c5_sec": 138.0,
+      "c1_over_c5": 5.050724637681159
     },
     "explicit_nonclaims": [
       "No reaction-quality claim",
@@ -443,9 +443,9 @@
       "pass": true
     },
     "runtime": {
-      "c1_sec": 627.0,
-      "c5_sec": 127.0,
-      "c1_over_c5": 4.937007874015748
+      "c1_sec": 892.0,
+      "c5_sec": 181.0,
+      "c1_over_c5": 4.928176795580111
     },
     "explicit_nonclaims": [
       "No reaction-quality claim",
