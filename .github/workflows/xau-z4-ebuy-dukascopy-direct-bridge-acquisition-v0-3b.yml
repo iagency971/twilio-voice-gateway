@@ -1,0 +1,121 @@
+name: XAU Z4 E-BUY Dukascopy Direct Bridge Acquisition v0.3b
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-dukascopy-direct-bridge-acquisition-v0-3b.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  direct-bridge:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frozen bridge dependencies
+        run: |
+          python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+          npm install --no-save dukascopy-node@1.46.4
+      - name: Frozen prereg guard
+        run: |
+          set -euo pipefail
+          test -f xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_DUKASCOPY_DIRECT_BRIDGE_PREREG_v0_3_2026-08-25.md
+      - name: Acquire Dukascopy direct with transport retries
+        env:
+          DEBUG: dukascopy-node:urls,dukascopy-node:fetcher,dukascopy-node:data
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/direct-bridge
+          node <<'JS'
+          const fs=require('fs');
+          const {getHistoricalRates}=require('dukascopy-node');
+          async function one(side,out){
+            const cfg={
+              instrument:'xauusd',
+              dates:{from:new Date('2026-08-16T00:00:00Z'),to:new Date('2026-08-26T00:00:00Z')},
+              timeframe:'m1',priceType:side,format:'json',
+              batchSize:1,pauseBetweenBatchesMs:500,
+              retryCount:5,retryOnEmpty:true,failAfterRetryCount:true,pauseBetweenRetriesMs:3000
+            };
+            const data=await getHistoricalRates(cfg);
+            const arr=(typeof data==='string')?JSON.parse(data):data;
+            if(!Array.isArray(arr)||arr.length<5000) throw new Error(side+' insufficient direct rows '+(arr&&arr.length));
+            const lines=['timestamp,open,high,low,close,volume'];
+            for(const r of arr) lines.push([r.timestamp,r.open,r.high,r.low,r.close,r.volume??''].join(','));
+            fs.writeFileSync(out,lines.join('\n')+'\n');
+            console.log('DIRECT_OK',side,arr.length,new Date(arr[0].timestamp).toISOString(),new Date(arr[arr.length-1].timestamp).toISOString());
+          }
+          (async()=>{await one('bid','/tmp/direct-bridge/direct_bid.csv');await one('ask','/tmp/direct-bridge/direct_ask.csv')})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+      - name: Apply frozen direct-to-mirror bridge gate
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import numpy as np,pandas as pd
+          from scipy.stats import spearmanr
+          old=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz')
+          old['time']=pd.to_datetime(old.timestamp,utc=True);old=old.sort_values('time').drop_duplicates('time')
+          def load(path):
+              d=pd.read_csv(path);d['time']=pd.to_datetime(pd.to_numeric(d.timestamp),unit='ms',utc=True);return d.sort_values('time').drop_duplicates('time')
+          direct={'bid':load('/tmp/direct-bridge/direct_bid.csv'),'ask':load('/tmp/direct-bridge/direct_ask.csv')}
+          bridge={};all_pass=True
+          for side,d in direct.items():
+              cols=['open','high','low','close'];oc=[c+'_'+side for c in cols]
+              m=old[['time']+oc].merge(d[['time']+cols],on='time',how='left',suffixes=('_old','_direct'))
+              coverage=float(m.close.notna().mean());common=m.dropna(subset=cols).copy()
+              errs={};checks={'timestamp_coverage_ge_0995':coverage>=.995,'common_rows_ge_5000':len(common)>=5000}
+              a=pd.to_numeric(common['close_'+side],errors='raise').to_numpy(float);b=pd.to_numeric(common.close,errors='raise').to_numpy(float)
+              rs=float(spearmanr(np.diff(np.log(a)),np.diff(np.log(b))).statistic) if len(common)>3 else None
+              checks['return_spearman_ge_0999']=rs is not None and rs>=.999
+              for c in cols:
+                  x=pd.to_numeric(common[c+'_'+side],errors='raise').to_numpy(float);y=pd.to_numeric(common[c],errors='raise').to_numpy(float);e=np.abs(x-y)
+                  errs[c]={'median':float(np.median(e)),'p99':float(np.quantile(e,.99)),'max':float(np.max(e))}
+                  checks[f'{c}_median_le_0001']=errs[c]['median']<=.001
+                  checks[f'{c}_p99_le_001']=errs[c]['p99']<=.01
+                  checks[f'{c}_max_le_005']=errs[c]['max']<=.05
+              passed=all(checks.values());all_pass=all_pass and passed
+              bridge[side]={'pass':passed,'direct_rows':int(len(d)),'direct_min_utc':str(d.time.min()),'direct_max_utc':str(d.time.max()),'archive_rows':int(len(old)),'coverage':coverage,'common_rows':int(len(common)),'return_spearman':rs,'errors_usd':errs,'checks':checks}
+          out={'status':'DUKASCOPY_DIRECT_BRIDGE_PASS' if all_pass else 'DUKASCOPY_DIRECT_BRIDGE_FAIL','library':'dukascopy-node@1.46.4','transport_retry_profile':{'batchSize':1,'retryCount':5,'retryOnEmpty':True,'pauseBetweenRetriesMs':3000},'future_trade_outcomes_used':False,'bridge':bridge}
+          Path('/tmp/direct-bridge/bridge_result.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          # Prepare merged bytes only if scientific bridge passes.
+          if all_pass:
+              b=direct['bid'][['time','open','high','low','close']].rename(columns={c:c+'_bid' for c in ['open','high','low','close']})
+              q=direct['ask'][['time','open','high','low','close']].rename(columns={c:c+'_ask' for c in ['open','high','low','close']})
+              D=b.merge(q,on='time',how='inner',validate='one_to_one')
+              for c in ['open','high','low','close']:D[c]=(D[c+'_bid']+D[c+'_ask'])/2.
+              D['spread']=D.close_ask-D.close_bid;D['timestamp']=D.time.dt.strftime('%Y-%m-%d %H:%M:%S%z')
+              keep=['timestamp','open','high','low','close','open_bid','high_bid','low_bid','close_bid','open_ask','high_ask','low_ask','close_ask','spread']
+              D[keep].to_csv('/tmp/direct-bridge/direct_merged.csv',index=False)
+          meta={'bid_sha256':hashlib.sha256(Path('/tmp/direct-bridge/direct_bid.csv').read_bytes()).hexdigest(),'ask_sha256':hashlib.sha256(Path('/tmp/direct-bridge/direct_ask.csv').read_bytes()).hexdigest(),'bridge_status':out['status']}
+          if Path('/tmp/direct-bridge/direct_merged.csv').exists():meta['merged_sha256']=hashlib.sha256(Path('/tmp/direct-bridge/direct_merged.csv').read_bytes()).hexdigest()
+          Path('/tmp/direct-bridge/meta.json').write_text(json.dumps(meta,indent=2))
+          PY
+      - name: Publish immutable direct bridge evidence
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/dukascopy-direct-bridge-v0-3b
+          mkdir -p "$out"
+          cp /tmp/direct-bridge/bridge_result.json "$out/XAUUSD_DUKASCOPY_DIRECT_BRIDGE_RESULT_v0_3b.json"
+          cp /tmp/direct-bridge/meta.json "$out/XAUUSD_DUKASCOPY_DIRECT_BRIDGE_META_v0_3b.json"
+          gzip -c /tmp/direct-bridge/direct_bid.csv > "$out/XAUUSD_DUKASCOPY_DIRECT_BID_v0_3b.csv.gz"
+          gzip -c /tmp/direct-bridge/direct_ask.csv > "$out/XAUUSD_DUKASCOPY_DIRECT_ASK_v0_3b.csv.gz"
+          if test -f /tmp/direct-bridge/direct_merged.csv; then gzip -c /tmp/direct-bridge/direct_merged.csv > "$out/XAUUSD_DUKASCOPY_DIRECT_MERGED_v0_3b.csv.gz"; fi
+          git add "$out"
+          git commit -m 'record robust Dukascopy direct bridge acquisition v0.3b [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
