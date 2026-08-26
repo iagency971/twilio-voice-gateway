@@ -28,6 +28,8 @@ jobs:
         run: |
           set -euo pipefail
           test -f xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_DUKASCOPY_NATIVE_RECOVERY_ENTRY_TRANSFER_PREREG_v0_3_2026-08-25.md
+          test -f xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_DUKASCOPY_NATIVE_RECOVERY_v0_3_ERRATUM_A_TRANSPORT_HOST_2026-08-25.md
+          test -f xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_DUKASCOPY_NATIVE_RECOVERY_v0_3_ERRATUM_B_TRANSPORT_ORDER_CONCURRENCY_2026-08-25.md
           test -f xau-wick-zone-pro/feed-parity/xau_dukascopy_native_bi5_m1_v0_1.py
           test -f xau-wick-zone-pro/feed-parity/xau_dukascopy_native_mirror_qa_v0_1.py
           test -f xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py
