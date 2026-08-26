@@ -33,7 +33,6 @@ jobs:
           from pathlib import Path
           s=Path('xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py').read_text()
           forbidden=['mfe_v','mae_v','tp1_invalidation_status','target_invalidation_status(','trigger_outcome(']
-          # Names may appear only in explicit non-outcome context? For this comparator they must not be called/used.
           for x in forbidden:
               if x in s: raise SystemExit(f'forbidden future-outcome token in transfer comparator: {x}')
           print('OUTCOME_BLIND_TRANSFER_GUARD_PASS')
@@ -44,20 +43,23 @@ jobs:
           mkdir -p /tmp/entry-transfer
           python - <<'PY'
           import pandas as pd
-          from pathlib import Path
           d=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz')
-          ts=pd.to_numeric(d.timestamp,errors='coerce')
-          assert ts.notna().all()
+          n=pd.to_numeric(d.timestamp,errors='coerce')
+          if n.notna().all():
+              t=pd.to_datetime(n,unit='ms',utc=True)
+          else:
+              t=pd.to_datetime(d.timestamp,utc=True)
+          ts=(t.astype('int64')//1_000_000).astype('int64')
           for mode,cols in [('bid',['open_bid','high_bid','low_bid','close_bid']),('mid',['open','high','low','close'])]:
-              o=pd.DataFrame({'timestamp':ts.astype('int64')})
+              o=pd.DataFrame({'timestamp':ts})
               for src,dst in zip(cols,['open','high','low','close']):o[dst]=pd.to_numeric(d[src],errors='raise')
               o.to_csv(f'/tmp/entry-transfer/duka_{mode}.csv',index=False)
           f=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz')
-          t=pd.to_datetime(f.timestamp_utc,utc=True)
-          o=pd.DataFrame({'timestamp':(t.astype('int64')//1_000_000).astype('int64')})
+          ft=pd.to_datetime(f.timestamp_utc,utc=True)
+          o=pd.DataFrame({'timestamp':(ft.astype('int64')//1_000_000).astype('int64')})
           for c in ['open','high','low','close']:o[c]=pd.to_numeric(f[c],errors='raise')
           o.to_csv('/tmp/entry-transfer/forex.csv',index=False)
-          print('DUKA',len(d),'FOREX',len(f),str(t.min()),str(t.max()))
+          print('DUKA',len(d),str(t.min()),str(t.max()),'FOREX',len(f),str(ft.min()),str(ft.max()))
           PY
       - name: Build independent outcome-blind Z4 geometry
         run: |
