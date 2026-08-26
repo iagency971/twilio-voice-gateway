@@ -1,0 +1,138 @@
+name: XAU Z4 E-BUY Asia Reaction v2.1 Final
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-asia-reaction-v2-1-final.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_C5_GEOMETRY_RUN_ID: '33009186853'
+  ARCH_RUN_ID: '33019435150'
+  ARCH_RUN_SHA: 'a9ce1362f48f418ce02e712064f2400dcd12cd08'
+
+jobs:
+  final-reaction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen final reaction guards
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_EBUY_ASIA_SESSION_PREREG_ADDENDUM_B_FINAL_REACTION_ENGINE_2026-08-26.md
+          python -m py_compile xau-wick-zone-pro/session-research/xau_ebuy_asia_reaction_v2_1_final.py
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_3_final_preoutcome.py)" = "454ae358dae4b289c8a5907ed9ec69dbad329843"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_2_preoutcome_repairs.py)" = "2cec750b98be9d1434ca4c3c2ec6ff397da1a7e5"
+          got=$(gh api "repos/iagency971/twilio-voice-gateway/actions/runs/${ARCH_RUN_ID}" --jq .head_sha);test "$got" = "$ARCH_RUN_SHA"
+      - name: Wait for exact architecture evidence
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ready=0
+          for i in $(seq 1 360); do
+            n=$(gh api "repos/iagency971/twilio-voice-gateway/actions/runs/${ARCH_RUN_ID}/artifacts?per_page=100" --jq '[.artifacts[]|select(.name=="asia-v2-exact-architecture-and-gated-reaction")]|length')
+            if [ "$n" = 1 ]; then ready=1;break;fi
+            sleep 20
+          done
+          test "$ready" = 1
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.ARCH_RUN_ID }}
+          name: asia-v2-exact-architecture-and-gated-reaction
+          path: /tmp/arch
+      - name: Inspect architecture authorization only
+        shell: bash
+        run: |
+          set -euo pipefail;mkdir -p /tmp/results
+          python - <<'PY'
+          import json,shutil
+          from pathlib import Path
+          p=Path('/tmp/arch/XAUUSD_Z4_EBUY_ASIA_ARCHITECTURE_RESULT_v2_0.json');q=json.load(open(p));assert q['v1_current_architecture_parity']['pass'] is True
+          shutil.copy2(p,'/tmp/results/XAUUSD_Z4_EBUY_ASIA_ARCHITECTURE_RESULT_v2_0.json')
+          c=Path('/tmp/arch/XAUUSD_Z4_EBUY_ASIA_SELECTED_CANDIDATES_v2_0.csv')
+          if c.exists():shutil.copy2(c,'/tmp/results/XAUUSD_Z4_EBUY_ASIA_SELECTED_CANDIDATES_v2_0.csv')
+          Path('/tmp/results/AUTH.txt').write_text('1\n' if q.get('reaction_study_authorized') else '0\n')
+          print({'status':q['status'],'selected':q.get('selected_architecture'),'authorized':q.get('reaction_study_authorized')})
+          PY
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Download exact frozen source-faithful C5 geometry
+        if: ${{ hashFiles('/tmp/results/AUTH.txt') != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_C5_GEOMETRY_RUN_ID }}
+          pattern: frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - name: Build inputs and run corrected reaction if authorized
+        shell: bash
+        run: |
+          set -euo pipefail
+          AUTH=$(cat /tmp/results/AUTH.txt)
+          if [ "$AUTH" != 1 ]; then
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          q=json.load(open('/tmp/results/XAUUSD_Z4_EBUY_ASIA_ARCHITECTURE_RESULT_v2_0.json'))
+          Path('/tmp/results/XAUUSD_Z4_EBUY_ASIA_REACTION_FINAL_STATUS.json').write_text(json.dumps({'status':'REACTION_NOT_AUTHORIZED','architecture_status':q['status'],'selected_architecture':q.get('selected_architecture'),'production_authorization':'NONE'},indent=2))
+          PY
+            exit 0
+          fi
+          python - <<'PY'
+          import glob,pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'));assert len(fs)==24
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True);z['time']=pd.to_datetime(z.time,utc=True);z=z.sort_values(['time','side','center']).reset_index(drop=True);z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
+          PY
+          mkdir -p /tmp/raw
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['MANIFEST']));fs=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07'];assert len(fs)==24
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/raw')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL);assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          PY
+          python xau-wick-zone-pro/session-research/xau_ebuy_asia_reaction_v2_1_final.py \
+            --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl \
+            --candidates-csv /tmp/results/XAUUSD_Z4_EBUY_ASIA_SELECTED_CANDIDATES_v2_0.csv \
+            --gate-result /tmp/results/XAUUSD_Z4_EBUY_ASIA_ARCHITECTURE_RESULT_v2_0.json \
+            --output /tmp/results/XAUUSD_Z4_EBUY_ASIA_REACTION_RESULT_v2_1_FINAL.json \
+            --contacts-csv /tmp/results/XAUUSD_Z4_EBUY_ASIA_CONTACTS_v2_1_FINAL.csv.gz \
+            --br-csv /tmp/results/XAUUSD_Z4_EBUY_ASIA_BR_v2_1_FINAL.csv.gz
+      - name: Final manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/results');files=sorted(p for p in root.iterdir() if p.is_file() and p.name!='AUTH.txt')
+          reaction=(root/'XAUUSD_Z4_EBUY_ASIA_REACTION_RESULT_v2_1_FINAL.json').exists()
+          man={'status':'ASIA_V2_FINAL_REACTION_EVIDENCE_COMPLETE','corrected_final_reaction_executed':reaction,'production_authorization':'NONE','files':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in files}}
+          (root/'XAUUSD_Z4_EBUY_ASIA_V2_FINAL_REACTION_MANIFEST.json').write_text(json.dumps(man,indent=2));print(json.dumps(man,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asia-v2-final-corrected-reaction
+          path: /tmp/results/*
+          retention-days: 30
