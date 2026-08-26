@@ -1,0 +1,175 @@
+name: XAU Z4 C1 Exact Local Grid Fallback v2
+
+on:
+  push:
+    branches:
+      - agent/xau-wick-zone-pro-dev
+    paths:
+      - .github/workflows/xau-z4-c1-local-grid-fallback-v2.yml
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  SOURCE_DETECTOR: xau-wick-zone-pro/xau_zone_episode_dev_z4.py
+  BUILDER: xau-wick-zone-pro/cadence-sensitivity/xau_c1_exact_local_grid_shard_v1.py
+  FULL_SOURCE_RUN_ID: '33009725953'
+  FULL_SOURCE_SHA: '7575e67330b52e5ebc1f6466df9014ed2f04199f'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - '2025-10'
+          - '2026-02'
+          - '2026-03'
+          - '2026-04'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Frozen guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object "$SOURCE_DETECTOR")" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test -s xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_J_EXACT_LOCAL_GRID_ACCELERATOR_2026-08-26.md
+          python -m py_compile "$BUILDER"
+      - name: Build exact local-grid shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$BUILDER" \
+            --target "${{ matrix.target }}" \
+            --manifest "$MANIFEST" \
+            --source-detector "$SOURCE_DETECTOR" \
+            --input-dir /tmp/input \
+            --output-dir /tmp/output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-grid-v2-C1-${{ matrix.target }}
+          path: /tmp/output/*
+          retention-days: 1
+
+  parity:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1
+      - name: Guard original source run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          got=$(gh api "repos/iagency971/twilio-voice-gateway/actions/runs/${FULL_SOURCE_RUN_ID}" --jq .head_sha)
+          test "$got" = "$FULL_SOURCE_SHA"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: local-grid-v2-C1-*
+          path: /tmp/local
+          merge-multiple: false
+      - name: Download original 2025-10
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FULL_SOURCE_RUN_ID }}
+          name: mechanical-month-C1-2025-10
+          path: /tmp/full/2025-10
+      - name: Download original 2026-04
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FULL_SOURCE_RUN_ID }}
+          name: mechanical-month-C1-2026-04
+          path: /tmp/full/2026-04
+      - name: Exact double parity and package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/validated
+          python - <<'PY'
+          import json
+          import numpy as np
+          import pandas as pd
+          from pathlib import Path
+
+          refs = {}
+          for target in ('2025-10','2026-04'):
+              stem = 'C1_' + target.replace('-','_') + '.pkl'
+              projected = pd.read_pickle('/tmp/local/local-grid-v2-C1-' + target + '/' + stem).copy()
+              original = pd.read_pickle('/tmp/full/' + target + '/' + stem).copy()
+              cols = ['time','side','center','zlo','zhi']
+              for frame in (projected, original):
+                  frame['time'] = pd.to_datetime(frame.time, utc=True)
+              projected = projected[cols].sort_values(cols).reset_index(drop=True)
+              original = original[cols].sort_values(cols).reset_index(drop=True)
+              shape = len(projected) == len(original)
+              same_time = same_side = False
+              ec = el = eh = float('inf')
+              if shape:
+                  same_time = bool((projected.time.to_numpy() == original.time.to_numpy()).all())
+                  same_side = bool((projected.side.to_numpy() == original.side.to_numpy()).all())
+                  if len(projected):
+                      ec = float(np.max(np.abs(projected.center.to_numpy(float) - original.center.to_numpy(float))))
+                      el = float(np.max(np.abs(projected.zlo.to_numpy(float) - original.zlo.to_numpy(float))))
+                      eh = float(np.max(np.abs(projected.zhi.to_numpy(float) - original.zhi.to_numpy(float))))
+                  else:
+                      ec = el = eh = 0.0
+              ok = bool(shape and same_time and same_side and ec <= 1e-12 and el <= 1e-8 and eh <= 1e-8)
+              refs[target] = {
+                  'projected_rows': len(projected), 'original_rows': len(original),
+                  'same_shape': shape, 'same_time': same_time, 'same_side': same_side,
+                  'center_max_abs_usd': ec, 'zlo_max_abs_usd': el, 'zhi_max_abs_usd': eh,
+                  'pass': ok
+              }
+              if not ok:
+                  raise RuntimeError(refs[target])
+
+          patch_shas = set()
+          for target in ('2025-10','2026-02','2026-03','2026-04'):
+              folder = Path('/tmp/local/local-grid-v2-C1-' + target)
+              patch_shas.add((folder / 'LOCAL_GRID_PATCH_SHA256.txt').read_text().strip())
+          if len(patch_shas) != 1:
+              raise RuntimeError({'patch_shas': sorted(patch_shas)})
+
+          result = {
+              'status': 'C1_EXACT_LOCAL_GRID_DOUBLE_PARITY_PASS',
+              'references': refs,
+              'patch_sha256': next(iter(patch_shas)),
+              'authorization': 'C1_2026_02_03_GEOMETRY_ONLY'
+          }
+          Path('/tmp/validated/C1_EXACT_LOCAL_GRID_DOUBLE_PARITY.json').write_text(json.dumps(result, indent=2))
+          Path('/tmp/validated/LOCAL_GRID_PATCH_SHA256.txt').write_text(result['patch_sha256'] + '\n')
+          for target in ('2026-02','2026-03'):
+              folder = Path('/tmp/local/local-grid-v2-C1-' + target)
+              stem = 'C1_' + target.replace('-','_')
+              for suffix in ('.pkl','_RUNTIME_SEC.txt'):
+                  src = folder / (stem + suffix)
+                  (Path('/tmp/validated') / src.name).write_bytes(src.read_bytes())
+          print(json.dumps(result, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: validated-local-grid-v2-C1-2026-02-03
+          path: /tmp/validated/*
+          retention-days: 30
