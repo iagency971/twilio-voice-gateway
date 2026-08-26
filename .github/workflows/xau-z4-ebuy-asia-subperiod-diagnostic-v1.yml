@@ -1,0 +1,115 @@
+name: XAU Z4 E-BUY Asia Subperiod Diagnostic v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-asia-subperiod-diagnostic-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_C5_RUN_ID: '33009186853'
+  ASIA_V1_RUN_ID: '33018338282'
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Frozen guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_EBUY_ASIA_SESSION_PREREG_ADDENDUM_C_SUBPERIOD_DIAGNOSTIC_2026-08-26.md
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py)" = "ef45037d2a99a705ddf9bfbc3ebc666f88119a80"
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_C5_RUN_ID }}
+          pattern: frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.ASIA_V1_RUN_ID }}
+          name: asia-outcome-blind-v1-0
+          path: /tmp/v1
+      - name: Assemble geometry and exact raw
+        shell: bash
+        run: |
+          set -euo pipefail;mkdir -p /tmp/raw /tmp/out
+          python - <<'PY'
+          import glob,pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'));assert len(fs)==24
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True);z['time']=pd.to_datetime(z.time,utc=True);z=z.sort_values(['time','side','center']).reset_index(drop=True);z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
+          PY
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['MANIFEST']));fs=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07'];assert len(fs)==24
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/raw')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL);assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          PY
+      - name: Compute fixed subperiod metrics from immutable v1 display
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import importlib.util,json,sys
+          from collections import Counter
+          from pathlib import Path
+          import numpy as np,pandas as pd
+          spec=importlib.util.spec_from_file_location('v01','xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py');v=importlib.util.module_from_spec(spec);sys.modules[spec.name]=v;spec.loader.exec_module(v)
+          raw=v.load_raw(['/tmp/raw/*.csv']);active=v.active_m1(raw);z4=pd.read_pickle('/tmp/FROZEN_C5_24M.pkl');z4['time']=pd.to_datetime(z4.time,utc=True)
+          def asia(t):
+              q=pd.Timestamp(t).tz_convert('America/New_York');return q.hour>=18 or q.hour<3
+          def sp(t):
+              q=pd.Timestamp(t).tz_convert('America/New_York');m=q.hour*60+q.minute
+              if 18*60<=m<21*60:return 'ASIA_EARLY_18_21'
+              if m>=21*60:return 'ASIA_LATE_PRE_MIDNIGHT_21_00'
+              if m<3*60:return 'ASIA_POST_MIDNIGHT_00_03'
+              return 'NON_ASIA'
+          v.ny_us=asia;snaps=v.make_eval_times(active,z4)
+          cand=pd.read_csv('/tmp/v1/XAUUSD_Z4_EBUY_ASIA_CANDIDATES_v1_0.csv');cand['time']=pd.to_datetime(cand.time,utc=True)
+          by={t:g.sort_values('entry_rank') for t,g in cand.groupby('time')}
+          Zone=v.Zone
+          rec=[]
+          for s in snaps:
+              g=by.get(pd.Timestamp(s['time']));zs=[]
+              if g is not None:
+                  zs=[Zone(float(r.center),float(r.zlo),float(r.zhi),str(r.family),0.0) for _,r in g.iterrows()]
+              rec.append((s,zs))
+          wins={'H1':(pd.Timestamp('2024-08-01T00:00:00Z'),pd.Timestamp('2025-08-01T00:00:00Z')),'H2':(pd.Timestamp('2025-08-01T00:00:00Z'),pd.Timestamp('2026-08-01T00:00:00Z'))}
+          out={}
+          for w,(lo,hi) in wins.items():
+              out[w]={}
+              for sub in ('ASIA_EARLY_18_21','ASIA_LATE_PRE_MIDNIGHT_21_00','ASIA_POST_MIDNIGHT_00_03'):
+                  pairs=[x for x in rec if lo<=pd.Timestamp(x[0]['time'])<hi and sp(x[0]['time'])==sub];ss=[x[0] for x in pairs];zz=[x[1] for x in pairs];m=v.metrics(ss,zz);cnt=[len(x) for x in zz];fam=Counter(z.family for L in zz for z in L);zero=sum(1 for x in zz if not x)
+                  out[w][sub]={'eligible_snapshot_count':len(ss),'zero_display_share':zero/len(ss) if ss else None,'mean_zone_count':float(np.mean(cnt)) if cnt else None,'metrics':m,'family_mix':dict(sorted(fam.items()))}
+          delta={}
+          for sub in out['H1']:
+              delta[sub]={b:out['H2'][sub]['metrics']['coverage'][b]-out['H1'][sub]['metrics']['coverage'][b] for b in ('0.5','1.0','1.5','2.0')}
+          result={'status':'ASIA_SUBPERIOD_DIAGNOSTIC_COMPLETE','future_price_outcomes_used':False,'source_display':'immutable Asia v1 candidate table run 33018338282','results':out,'H2_minus_H1_coverage':delta,'production_authorization':'NONE'}
+          Path('/tmp/out/XAUUSD_Z4_EBUY_ASIA_SUBPERIOD_DIAGNOSTIC_v1.json').write_text(json.dumps(result,indent=2,default=str));print(json.dumps(result,indent=2,default=str))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asia-subperiod-diagnostic-v1
+          path: /tmp/out/*
+          retention-days: 30
