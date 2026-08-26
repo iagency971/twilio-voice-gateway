@@ -112,7 +112,6 @@ jobs:
           import numpy as np
           import pandas as pd
           from pathlib import Path
-
           refs = {}
           for target in ('2025-10','2026-04'):
               stem = 'C1_' + target.replace('-','_') + '.pkl'
@@ -136,28 +135,16 @@ jobs:
                   else:
                       ec = el = eh = 0.0
               ok = bool(shape and same_time and same_side and ec <= 1e-12 and el <= 1e-8 and eh <= 1e-8)
-              refs[target] = {
-                  'projected_rows': len(projected), 'original_rows': len(original),
-                  'same_shape': shape, 'same_time': same_time, 'same_side': same_side,
-                  'center_max_abs_usd': ec, 'zlo_max_abs_usd': el, 'zhi_max_abs_usd': eh,
-                  'pass': ok
-              }
+              refs[target] = {'projected_rows': len(projected), 'original_rows': len(original), 'same_shape': shape, 'same_time': same_time, 'same_side': same_side, 'center_max_abs_usd': ec, 'zlo_max_abs_usd': el, 'zhi_max_abs_usd': eh, 'pass': ok}
               if not ok:
                   raise RuntimeError(refs[target])
-
           patch_shas = set()
           for target in ('2025-10','2026-02','2026-03','2026-04'):
               folder = Path('/tmp/local/local-grid-v2-C1-' + target)
               patch_shas.add((folder / 'LOCAL_GRID_PATCH_SHA256.txt').read_text().strip())
           if len(patch_shas) != 1:
               raise RuntimeError({'patch_shas': sorted(patch_shas)})
-
-          result = {
-              'status': 'C1_EXACT_LOCAL_GRID_DOUBLE_PARITY_PASS',
-              'references': refs,
-              'patch_sha256': next(iter(patch_shas)),
-              'authorization': 'C1_2026_02_03_GEOMETRY_ONLY'
-          }
+          result = {'status': 'C1_EXACT_LOCAL_GRID_DOUBLE_PARITY_PASS', 'references': refs, 'patch_sha256': next(iter(patch_shas)), 'authorization': 'C1_2026_02_03_GEOMETRY_ONLY'}
           Path('/tmp/validated/C1_EXACT_LOCAL_GRID_DOUBLE_PARITY.json').write_text(json.dumps(result, indent=2))
           Path('/tmp/validated/LOCAL_GRID_PATCH_SHA256.txt').write_text(result['patch_sha256'] + '\n')
           for target in ('2026-02','2026-03'):
