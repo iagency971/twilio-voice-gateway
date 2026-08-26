@@ -1,0 +1,307 @@
+{
+  "status": "ENTRY_TRANSFER_PILOT_FAIL_NO_PINE_PROMOTION",
+  "scope": "OUTCOME_BLIND_EBUY_BULL_REJECTION_E_SCORE_FOREXCOM_TRANSFER",
+  "future_trade_outcomes_used": false,
+  "no_model_refit": true,
+  "no_e_remap": true,
+  "common_raw_window_utc": [
+    "2026-08-16 22:01:00+00:00",
+    "2026-08-20 23:58:00+00:00"
+  ],
+  "model_sha256": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+  "raw_scientific_reference_bid_vs_forex": {
+    "metrics": {
+      "window_utc": [
+        "2026-08-16 22:01:00+00:00",
+        "2026-08-20 23:58:00+00:00"
+      ],
+      "reference_active_rows": 5634,
+      "target_active_rows": 5638,
+      "common_active_rows": 5634,
+      "target_timestamp_coverage": 0.9992905285562256,
+      "consecutive_return_pairs": 5625,
+      "return_pearson": 0.9936654515500636,
+      "return_spearman": 0.9912108788104496,
+      "bar_range_pearson": 0.9908847461140178,
+      "bar_range_spearman": 0.9814470996257649,
+      "price_gap": {
+        "open": {
+          "signed_median": 0.3099999999994907,
+          "abs_quantiles": {
+            "0.5": 0.30999999999994543,
+            "0.9": 0.5600000000004002,
+            "0.95": 0.6549999999997453,
+            "0.99": 1.165099999999968
+          }
+        },
+        "high": {
+          "signed_median": 0.2650000000003274,
+          "abs_quantiles": {
+            "0.5": 0.2650000000003274,
+            "0.9": 0.4400000000005093,
+            "0.95": 0.5249999999996362,
+            "0.99": 1.0283500000000099
+          }
+        },
+        "low": {
+          "signed_median": 0.3600000000005821,
+          "abs_quantiles": {
+            "0.5": 0.3600000000005821,
+            "0.9": 0.5799999999999272,
+            "0.95": 0.6700000000000728,
+            "0.99": 1.3250500000001204
+          }
+        },
+        "close": {
+          "signed_median": 0.3149999999995998,
+          "abs_quantiles": {
+            "0.5": 0.3149999999995998,
+            "0.9": 0.5100000000002183,
+            "0.95": 0.5950000000002547,
+            "0.99": 1.2117000000000742
+          }
+        }
+      }
+    },
+    "checks": {
+      "timestamp_coverage_ge_097": true,
+      "return_spearman_ge_095": true
+    },
+    "pass": true
+  },
+  "raw_mid_control_vs_forex": {
+    "metrics": {
+      "window_utc": [
+        "2026-08-16 22:01:00+00:00",
+        "2026-08-20 23:58:00+00:00"
+      ],
+      "reference_active_rows": 5634,
+      "target_active_rows": 5638,
+      "common_active_rows": 5634,
+      "target_timestamp_coverage": 0.9992905285562256,
+      "consecutive_return_pairs": 5625,
+      "return_pearson": 0.9953205880536954,
+      "return_spearman": 0.9921487435200188,
+      "bar_range_pearson": 0.9927203030695642,
+      "bar_range_spearman": 0.9828423370689082,
+      "price_gap": {
+        "open": {
+          "signed_median": 0.010000000000218279,
+          "abs_quantiles": {
+            "0.5": 0.08999999999923602,
+            "0.9": 0.24499999999898137,
+            "0.95": 0.3100000000004002,
+            "0.99": 0.5233499999996005
+          }
+        },
+        "high": {
+          "signed_median": -0.030000000000654836,
+          "abs_quantiles": {
+            "0.5": 0.06499999999959982,
+            "0.9": 0.18999999999959982,
+            "0.95": 0.23999999999978172,
+            "0.99": 0.4099999999998545
+          }
+        },
+        "low": {
+          "signed_median": 0.05999999999949068,
+          "abs_quantiles": {
+            "0.5": 0.0750000000007276,
+            "0.9": 0.22000000000025466,
+            "0.95": 0.28467499999946966,
+            "0.99": 0.46499999999984537
+          }
+        },
+        "close": {
+          "signed_median": 0.010000000000218279,
+          "abs_quantiles": {
+            "0.5": 0.05999999999949068,
+            "0.9": 0.1750000000001819,
+            "0.95": 0.22999999999956344,
+            "0.99": 0.375
+          }
+        }
+      }
+    },
+    "checks": {
+      "timestamp_coverage_ge_097": true,
+      "return_spearman_ge_095": true
+    },
+    "pass": true
+  },
+  "scientific_reference_bid_vs_forex": {
+    "label": "DUKASCOPY_BID__FOREXCOM_MID",
+    "status": "FAIL",
+    "location": {
+      "metrics": {
+        "common_eligible_c5": 232,
+        "reference_zone_count": 475,
+        "target_zone_count": 483,
+        "reference_zone_match_rate": 0.9473684210526315,
+        "target_zone_match_rate": 0.9316770186335404,
+        "relative_iou_quantiles": {
+          "0.1": 0.2411482196356102,
+          "0.5": 0.7390635479565049,
+          "0.9": 0.9393681166850182
+        },
+        "relative_center_err_v_quantiles": {
+          "0.5": 0.04339670582624959,
+          "0.9": 0.17985211475849938,
+          "0.95": 0.27623739461079494
+        },
+        "exact_candidate_count_agreement": 0.8017241379310345,
+        "candidate_count_within1_agreement": 0.9913793103448276,
+        "nearest_top1_agreement": 0.8017241379310345,
+        "family_agreement_matched": 0.8044444444444444
+      },
+      "checks": {
+        "common_c5_ge_250": false,
+        "reference_zone_match_ge_075": true,
+        "target_zone_match_ge_075": true,
+        "median_relative_iou_ge_060": true,
+        "median_center_err_le_035v": true,
+        "p90_center_err_le_075v": true,
+        "exact_count_agreement_ge_065": true,
+        "within1_count_agreement_ge_090": true,
+        "nearest_top1_ge_070": true
+      }
+    },
+    "trigger_score": {
+      "metrics": {
+        "reference_triggers": 77,
+        "target_triggers": 83,
+        "matched_triggers": 57,
+        "reference_match_rate": 0.7402597402597403,
+        "target_match_rate": 0.6867469879518072,
+        "time_delta_min_quantiles": {
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.19999999999999574
+        },
+        "entry_zone_center_err_v_quantiles": {
+          "0.5": 0.1598746081505587,
+          "0.9": 0.2671713997573622
+        },
+        "raw_score_spearman": 0.9133393829401091,
+        "E_spearman": 0.9133865924616441,
+        "E_abs_diff_quantiles": {
+          "0.5": 2.0956399437412117,
+          "0.9": 8.745428973277072,
+          "0.95": 23.817158931082947
+        },
+        "share_E_within15": 0.9122807017543859,
+        "E80_union_count": 11,
+        "E80_classification_agreement": 0.9649122807017544,
+        "E90_union_count": 6,
+        "E90_classification_agreement": 0.9824561403508771
+      },
+      "checks": {
+        "reference_triggers_ge_25": true,
+        "target_triggers_ge_25": true,
+        "matched_ge_20": true,
+        "reference_match_ge_060": true,
+        "target_match_ge_060": true,
+        "median_time_delta_le_1m": true,
+        "p90_time_delta_le_2m": true,
+        "median_center_err_le_050v": true,
+        "raw_score_spearman_ge_080": true,
+        "E_spearman_ge_080": true,
+        "median_E_abs_diff_le_10": true,
+        "share_E_within15_ge_080": true,
+        "E80_agreement_if_n_ge10": true
+      }
+    }
+  },
+  "mid_control_vs_forex": {
+    "label": "DUKASCOPY_SYNTH_MID__FOREXCOM_MID",
+    "status": "FAIL",
+    "location": {
+      "metrics": {
+        "common_eligible_c5": 232,
+        "reference_zone_count": 476,
+        "target_zone_count": 483,
+        "reference_zone_match_rate": 0.9495798319327731,
+        "target_zone_match_rate": 0.9358178053830227,
+        "relative_iou_quantiles": {
+          "0.1": 0.14725406819710965,
+          "0.5": 0.714603025138677,
+          "0.9": 0.9464719558647838
+        },
+        "relative_center_err_v_quantiles": {
+          "0.5": 0.04824153406745586,
+          "0.9": 0.18703614326433735,
+          "0.95": 0.33250105421546977
+        },
+        "exact_candidate_count_agreement": 0.7974137931034483,
+        "candidate_count_within1_agreement": 0.9913793103448276,
+        "nearest_top1_agreement": 0.8232758620689655,
+        "family_agreement_matched": 0.8185840707964602
+      },
+      "checks": {
+        "common_c5_ge_250": false,
+        "reference_zone_match_ge_075": true,
+        "target_zone_match_ge_075": true,
+        "median_relative_iou_ge_060": true,
+        "median_center_err_le_035v": true,
+        "p90_center_err_le_075v": true,
+        "exact_count_agreement_ge_065": true,
+        "within1_count_agreement_ge_090": true,
+        "nearest_top1_ge_070": true
+      }
+    },
+    "trigger_score": {
+      "metrics": {
+        "reference_triggers": 91,
+        "target_triggers": 83,
+        "matched_triggers": 65,
+        "reference_match_rate": 0.7142857142857143,
+        "target_match_rate": 0.7831325301204819,
+        "time_delta_min_quantiles": {
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0
+        },
+        "entry_zone_center_err_v_quantiles": {
+          "0.5": 0.033898305084827045,
+          "0.9": 0.15760634159680498
+        },
+        "raw_score_spearman": 0.9259615384615384,
+        "E_spearman": 0.9250958838800905,
+        "E_abs_diff_quantiles": {
+          "0.5": 1.6596343178621709,
+          "0.9": 5.654008438818567,
+          "0.95": 15.153305203938105
+        },
+        "share_E_within15": 0.9384615384615385,
+        "E80_union_count": 8,
+        "E80_classification_agreement": 1.0,
+        "E90_union_count": 6,
+        "E90_classification_agreement": 0.9692307692307692
+      },
+      "checks": {
+        "reference_triggers_ge_25": true,
+        "target_triggers_ge_25": true,
+        "matched_ge_20": true,
+        "reference_match_ge_060": true,
+        "target_match_ge_060": true,
+        "median_time_delta_le_1m": true,
+        "p90_time_delta_le_2m": true,
+        "median_center_err_le_050v": true,
+        "raw_score_spearman_ge_080": true,
+        "E_spearman_ge_080": true,
+        "median_E_abs_diff_le_10": true,
+        "share_E_within15_ge_080": true,
+        "E80_agreement_if_n_ge10": true
+      }
+    }
+  },
+  "authorization": "DO_NOT_PROMOTE_ENTRY_LAYER_TO_PINE",
+  "explicit_nonclaims": [
+    "No FOREXCOM future-performance validation",
+    "No profitability claim",
+    "No transaction-cost validation",
+    "No R_US route claim",
+    "No higher-timeframe E-BUY claim",
+    "E_BUY_US is a rank not calibrated probability"
+  ]
+}

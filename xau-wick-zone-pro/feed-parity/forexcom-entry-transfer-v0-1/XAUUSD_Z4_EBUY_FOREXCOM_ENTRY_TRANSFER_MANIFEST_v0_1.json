@@ -1,0 +1,13 @@
+{
+  "status": "ENTRY_TRANSFER_PROVENANCE_RECORDED",
+  "transfer_status": "ENTRY_TRANSFER_PILOT_FAIL_NO_PINE_PROMOTION",
+  "future_trade_outcomes_used": false,
+  "sha256": {
+    "prereg": "da557cd330e9d00a6fb43c0c4d1e70f7190082495732ba36ed8c9f97cba1d2e9",
+    "engine": "f0ef3bed13d4dcd15ed56831c2befa413be5a63d9886c28073b652328548e483",
+    "model": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+    "forex_snapshot": "d9505e23ac4c82e11a14f192629bbc24d6f38ddadbfc82f3ef2d60e67dc7d1f4",
+    "duka_snapshot": "240761aed64496eec5102ad6c39c2f13a6e4f080c40eb72944ba5bcb86795cf0",
+    "result": "c2418dad9386ce3320b5bfc5c442eb084b4c2f1ab81cea1dcc38e905ab36f502"
+  }
+}
