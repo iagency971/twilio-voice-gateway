@@ -1,0 +1,137 @@
+{
+  "status": "PASS",
+  "symbol": "XAUUSD",
+  "price_divisor": 1000.0,
+  "method": "native daily BID/ASK M1 first; native tick fallback only for missing side/timestamps; direct values always win; no interpolation/forward-fill",
+  "sources": [
+    "https://www.dukascopy.com/datafeed",
+    "https://datafeed.dukascopy.com/datafeed"
+  ],
+  "from_date": "2026-08-19",
+  "to_date": "2026-08-20",
+  "m1_count": 2280,
+  "first_m1": "2026-08-19 09:00:00+00:00",
+  "last_m1": "2026-08-20 23:59:00+00:00",
+  "days": [
+    {
+      "date": "2026-08-19",
+      "direct": {
+        "BID": {
+          "host": null,
+          "attempts": [
+            {
+              "url": "https://www.dukascopy.com/datafeed/XAUUSD/2026/07/19/BID_candles_min_1.bi5",
+              "error": "ReadTimeout"
+            },
+            {
+              "url": "https://www.dukascopy.com/datafeed/XAUUSD/2026/07/19/BID_candles_min_1.bi5",
+              "error": "ReadTimeout"
+            },
+            {
+              "url": "https://www.dukascopy.com/datafeed/XAUUSD/2026/07/19/BID_candles_min_1.bi5",
+              "status": 503
+            },
+            {
+              "url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/19/BID_candles_min_1.bi5",
+              "status": 503
+            },
+            {
+              "url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/19/BID_candles_min_1.bi5",
+              "status": 503
+            },
+            {
+              "url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/19/BID_candles_min_1.bi5",
+              "status": 503
+            }
+          ],
+          "decode": null,
+          "rows": 0
+        },
+        "ASK": {
+          "host": null,
+          "attempts": [
+            {
+              "url": "https://www.dukascopy.com/datafeed/XAUUSD/2026/07/19/ASK_candles_min_1.bi5",
+              "status": 503
+            },
+            {
+              "url": "https://www.dukascopy.com/datafeed/XAUUSD/2026/07/19/ASK_candles_min_1.bi5",
+              "error": "ReadTimeout"
+            },
+            {
+              "url": "https://www.dukascopy.com/datafeed/XAUUSD/2026/07/19/ASK_candles_min_1.bi5",
+              "status": 503
+            },
+            {
+              "url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/19/ASK_candles_min_1.bi5",
+              "status": 503
+            },
+            {
+              "url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/19/ASK_candles_min_1.bi5",
+              "status": 503
+            },
+            {
+              "url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/19/ASK_candles_min_1.bi5",
+              "status": 503
+            }
+          ],
+          "decode": null,
+          "rows": 0
+        }
+      },
+      "fallback_used": true,
+      "fallback": {
+        "rows": 840,
+        "hosts": {
+          "https://datafeed.dukascopy.com/datafeed": 2,
+          "https://www.dukascopy.com/datafeed": 12
+        },
+        "missing_request_count": 10
+      },
+      "final_common_rows": 840
+    },
+    {
+      "date": "2026-08-20",
+      "direct": {
+        "BID": {
+          "host": "https://www.dukascopy.com/datafeed",
+          "attempts": [
+            {
+              "url": "https://www.dukascopy.com/datafeed/XAUUSD/2026/07/20/BID_candles_min_1.bi5",
+              "status": 200
+            }
+          ],
+          "decode": {
+            "layout": "O_C_L_H",
+            "layout_scores": {
+              "O_H_L_C": 0.06944444444444445,
+              "O_C_L_H": 1.0
+            },
+            "records": 1440
+          },
+          "rows": 1440
+        },
+        "ASK": {
+          "host": "https://www.dukascopy.com/datafeed",
+          "attempts": [
+            {
+              "url": "https://www.dukascopy.com/datafeed/XAUUSD/2026/07/20/ASK_candles_min_1.bi5",
+              "status": 200
+            }
+          ],
+          "decode": {
+            "layout": "O_C_L_H",
+            "layout_scores": {
+              "O_H_L_C": 0.07777777777777778,
+              "O_C_L_H": 1.0
+            },
+            "records": 1440
+          },
+          "rows": 1440
+        }
+      },
+      "fallback_used": false,
+      "final_common_rows": 1440
+    }
+  ]
+}
