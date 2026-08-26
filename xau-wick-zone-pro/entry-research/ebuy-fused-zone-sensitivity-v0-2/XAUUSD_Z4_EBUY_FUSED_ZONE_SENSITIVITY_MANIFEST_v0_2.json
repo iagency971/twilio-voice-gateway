@@ -1,0 +1,26 @@
+{
+  "status": "FUSED_ZONE_SENSITIVITY_V02_PROVENANCE_RECORDED",
+  "result_status": "FUSED_ZONE_SENSITIVITY_COMPLETE",
+  "study": "RETROSPECTIVE_FUSED_ZONE_SENSITIVITY",
+  "h1_baseline_source": "FROZEN_OOS_EBUY_CANDIDATE_TABLE",
+  "h1_baseline_contacts": 16895,
+  "h1_baseline_bull_rejection": 7127,
+  "historical_rebuilt_location_reference_run": 32908338133,
+  "source_faithful_precomputed_location_run": 32909036841,
+  "h1_target_geometry_run": 32908654286,
+  "h2_target_geometry_run": 32909876310,
+  "model_refit": false,
+  "fusion_grid_changed": false,
+  "production_authorization": "NONE_RETROSPECTIVE_SENSITIVITY_ONLY",
+  "sha256": {
+    "prereg": "d41f8418dae079f03349f70f253831a391455f5086bfa348c76a65a35290e6f6",
+    "addendum_a": "207f38b9a0ee4a7dcaf1f3acbc485e139002dd3e973b619cddf1fb4613723b8d",
+    "engine_v01": "59ccccec3b3055a1fa78a38712430e377bedcb4ae6b2781e711fb22381eff987",
+    "wrapper_v02": "b4b38d1249706d6875f8226925361527b478e6db023636185842276fc1142a97",
+    "candidate_table": "bc0e1761c4a68ae94c58ea6a1d2225668d56a02987218358c69011c12e82cdbd",
+    "model": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+    "targets_24m": "17aeb45750e0dae6d03d90d05335f2853f002945fe6dba2a93ac7a9ed9a1de03",
+    "result": "e547d72dedb230f50c33463c38ce9c58f6f9d9169519ec6794da26c6510322ae",
+    "summary": "59c45c9dc713ee949b22609a0e053b002404976c293fde36a23fc574e2b07dc6"
+  }
+}

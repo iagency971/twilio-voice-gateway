@@ -1,0 +1,647 @@
+{
+  "status": "FUSED_ZONE_SENSITIVITY_COMPLETE",
+  "study": "RETROSPECTIVE_FUSED_ZONE_SENSITIVITY",
+  "model_sha256": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+  "grid": {
+    "BASELINE": null,
+    "G010": 0.1,
+    "G020": 0.2,
+    "G025": 0.25,
+    "G030": 0.3,
+    "G040": 0.4,
+    "G050": 0.5
+  },
+  "windows": {
+    "H1": {
+      "BASELINE": {
+        "gap_v": null,
+        "geometry": {
+          "snapshot_count": 19878,
+          "zone_count_mean": 2.188902304054734,
+          "zone_count_median": 2.0,
+          "zone_count_p90": 3.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.0,
+          "width_v_median": 0.2613354037268275,
+          "width_v_p90": 0.7587882503942021,
+          "coverage": {
+            "1.0": 0.8353456082100815,
+            "1.5": 0.9354059764563839,
+            "2.0": 0.9753999396317536
+          }
+        },
+        "contact_episode_count": 16895,
+        "bull_rejection_fired_count": 7127,
+        "bull_rejection_fired_share": 0.4218407812962415,
+        "reaction": {
+          "TP1_FIRST": 2235,
+          "INVALIDATION_FIRST": 4457,
+          "NEITHER": 417,
+          "AMBIGUOUS": 18,
+          "resolved_n": 7109,
+          "tp1_resolved_rate": 0.3143902095934731,
+          "invalidation_resolved_rate": 0.6269517513011675
+        },
+        "score": {
+          "n": 7109,
+          "baseline_positive_rate": 0.3143902095934731,
+          "roc_auc": 0.7999365670374421,
+          "average_precision": 0.6439743473724805,
+          "E80": {
+            "count": 1422,
+            "positive_rate": 0.680731364275668
+          },
+          "E90": {
+            "count": 712,
+            "positive_rate": 0.773876404494382
+          }
+        }
+      },
+      "G010": {
+        "gap_v": 0.1,
+        "geometry": {
+          "snapshot_count": 19878,
+          "zone_count_mean": 1.8399738404266022,
+          "zone_count_median": 2.0,
+          "zone_count_p90": 3.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.3087835798370057,
+          "width_v_median": 0.31254147312570607,
+          "width_v_p90": 0.9684773742651692,
+          "coverage": {
+            "1.0": 0.8119529127678841,
+            "1.5": 0.9299225274172452,
+            "2.0": 0.9748968709125666
+          }
+        },
+        "contact_episode_count": 13820,
+        "bull_rejection_fired_count": 6068,
+        "bull_rejection_fired_share": 0.4390738060781476,
+        "reaction": {
+          "TP1_FIRST": 1947,
+          "INVALIDATION_FIRST": 3752,
+          "NEITHER": 355,
+          "AMBIGUOUS": 14,
+          "resolved_n": 6054,
+          "tp1_resolved_rate": 0.321605550049554,
+          "invalidation_resolved_rate": 0.6197555335315494
+        },
+        "score": {
+          "n": 6054,
+          "baseline_positive_rate": 0.321605550049554,
+          "roc_auc": 0.7988649541558384,
+          "average_precision": 0.6512375872653546,
+          "E80": {
+            "count": 1304,
+            "positive_rate": 0.6725460122699386
+          },
+          "E90": {
+            "count": 669,
+            "positive_rate": 0.7683109118086696
+          }
+        }
+      },
+      "G020": {
+        "gap_v": 0.2,
+        "geometry": {
+          "snapshot_count": 19878,
+          "zone_count_mean": 1.6154039641815072,
+          "zone_count_median": 2.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.4645839621692323,
+          "width_v_median": 0.43740083976120003,
+          "width_v_p90": 1.182142857142794,
+          "coverage": {
+            "1.0": 0.7847872019317839,
+            "1.5": 0.924338464634269,
+            "2.0": 0.974494415937217
+          }
+        },
+        "contact_episode_count": 11778,
+        "bull_rejection_fired_count": 5404,
+        "bull_rejection_fired_share": 0.4588215316692138,
+        "reaction": {
+          "TP1_FIRST": 1799,
+          "INVALIDATION_FIRST": 3278,
+          "NEITHER": 314,
+          "AMBIGUOUS": 13,
+          "resolved_n": 5391,
+          "tp1_resolved_rate": 0.33370432201817846,
+          "invalidation_resolved_rate": 0.6080504544611389
+        },
+        "score": {
+          "n": 5391,
+          "baseline_positive_rate": 0.33370432201817846,
+          "roc_auc": 0.7991344176608881,
+          "average_precision": 0.657848886290451,
+          "E80": {
+            "count": 1238,
+            "positive_rate": 0.678513731825525
+          },
+          "E90": {
+            "count": 665,
+            "positive_rate": 0.762406015037594
+          }
+        }
+      },
+      "G025": {
+        "gap_v": 0.25,
+        "geometry": {
+          "snapshot_count": 19878,
+          "zone_count_mean": 1.5214810343092866,
+          "zone_count_median": 1.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.517003722708522,
+          "width_v_median": 0.5116811594205957,
+          "width_v_p90": 1.292426874467022,
+          "coverage": {
+            "1.0": 0.7670288761444813,
+            "1.5": 0.9226280309890331,
+            "2.0": 0.9743938021933796
+          }
+        },
+        "contact_episode_count": 10971,
+        "bull_rejection_fired_count": 5141,
+        "bull_rejection_fired_share": 0.46859903381642515,
+        "reaction": {
+          "TP1_FIRST": 1724,
+          "INVALIDATION_FIRST": 3103,
+          "NEITHER": 302,
+          "AMBIGUOUS": 12,
+          "resolved_n": 5129,
+          "tp1_resolved_rate": 0.3361279001754728,
+          "invalidation_resolved_rate": 0.6049912263599142
+        },
+        "score": {
+          "n": 5129,
+          "baseline_positive_rate": 0.3361279001754728,
+          "roc_auc": 0.7984726296459077,
+          "average_precision": 0.6572876813426667,
+          "E80": {
+            "count": 1215,
+            "positive_rate": 0.6781893004115226
+          },
+          "E90": {
+            "count": 667,
+            "positive_rate": 0.7556221889055472
+          }
+        }
+      },
+      "G030": {
+        "gap_v": 0.3,
+        "geometry": {
+          "snapshot_count": 19878,
+          "zone_count_mean": 1.4451152027366938,
+          "zone_count_median": 1.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.55745044773116,
+          "width_v_median": 0.5544859765715766,
+          "width_v_p90": 1.3876259757529628,
+          "coverage": {
+            "1.0": 0.7518865076969514,
+            "1.5": 0.920766676728041,
+            "2.0": 0.9741925747057048
+          }
+        },
+        "contact_episode_count": 10269,
+        "bull_rejection_fired_count": 4917,
+        "bull_rejection_fired_share": 0.47881974875839906,
+        "reaction": {
+          "TP1_FIRST": 1659,
+          "INVALIDATION_FIRST": 2951,
+          "NEITHER": 297,
+          "AMBIGUOUS": 10,
+          "resolved_n": 4907,
+          "tp1_resolved_rate": 0.33808844507845937,
+          "invalidation_resolved_rate": 0.6013857754228653
+        },
+        "score": {
+          "n": 4907,
+          "baseline_positive_rate": 0.33808844507845937,
+          "roc_auc": 0.7958756833156658,
+          "average_precision": 0.6563217741183427,
+          "E80": {
+            "count": 1196,
+            "positive_rate": 0.6722408026755853
+          },
+          "E90": {
+            "count": 664,
+            "positive_rate": 0.7530120481927711
+          }
+        }
+      },
+      "G040": {
+        "gap_v": 0.4,
+        "geometry": {
+          "snapshot_count": 19878,
+          "zone_count_mean": 1.3171848274474294,
+          "zone_count_median": 1.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.6186739108562229,
+          "width_v_median": 0.6508670520232323,
+          "width_v_p90": 1.5716705464496896,
+          "coverage": {
+            "1.0": 0.7187845859744441,
+            "1.5": 0.9188047087232116,
+            "2.0": 0.9739913472180299
+          }
+        },
+        "contact_episode_count": 9123,
+        "bull_rejection_fired_count": 4524,
+        "bull_rejection_fired_share": 0.4958895100295955,
+        "reaction": {
+          "TP1_FIRST": 1561,
+          "INVALIDATION_FIRST": 2669,
+          "NEITHER": 284,
+          "AMBIGUOUS": 10,
+          "resolved_n": 4514,
+          "tp1_resolved_rate": 0.345813026140895,
+          "invalidation_resolved_rate": 0.5912715994683208
+        },
+        "score": {
+          "n": 4514,
+          "baseline_positive_rate": 0.345813026140895,
+          "roc_auc": 0.7976741315414914,
+          "average_precision": 0.6647343471529291,
+          "E80": {
+            "count": 1171,
+            "positive_rate": 0.6789069171648164
+          },
+          "E90": {
+            "count": 670,
+            "positive_rate": 0.746268656716418
+          }
+        }
+      },
+      "G050": {
+        "gap_v": 0.5,
+        "geometry": {
+          "snapshot_count": 19878,
+          "zone_count_mean": 1.22049501961968,
+          "zone_count_median": 1.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.6568568266425193,
+          "width_v_median": 0.7941100426121134,
+          "width_v_p90": 1.7000000000002728,
+          "coverage": {
+            "1.0": 0.6864372673307174,
+            "1.5": 0.9177482644129188,
+            "2.0": 0.9739913472180299
+          }
+        },
+        "contact_episode_count": 8258,
+        "bull_rejection_fired_count": 4228,
+        "bull_rejection_fired_share": 0.5119883749091789,
+        "reaction": {
+          "TP1_FIRST": 1488,
+          "INVALIDATION_FIRST": 2456,
+          "NEITHER": 276,
+          "AMBIGUOUS": 8,
+          "resolved_n": 4220,
+          "tp1_resolved_rate": 0.35260663507109,
+          "invalidation_resolved_rate": 0.5819905213270142
+        },
+        "score": {
+          "n": 4220,
+          "baseline_positive_rate": 0.35260663507109,
+          "roc_auc": 0.7991216210897527,
+          "average_precision": 0.6763044567120037,
+          "E80": {
+            "count": 1157,
+            "positive_rate": 0.6810717372515125
+          },
+          "E90": {
+            "count": 684,
+            "positive_rate": 0.7514619883040936
+          }
+        }
+      }
+    },
+    "H2": {
+      "BASELINE": {
+        "gap_v": null,
+        "geometry": {
+          "snapshot_count": 20382,
+          "zone_count_mean": 2.210087331959572,
+          "zone_count_median": 2.0,
+          "zone_count_p90": 3.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.0,
+          "width_v_median": 0.2612348450075235,
+          "width_v_p90": 0.7679899301197768,
+          "coverage": {
+            "1.0": 0.8401040133451084,
+            "1.5": 0.9358747914826808,
+            "2.0": 0.9749288587969778
+          }
+        },
+        "contact_episode_count": 17578,
+        "bull_rejection_fired_count": 7643,
+        "bull_rejection_fired_share": 0.43480486972351806,
+        "reaction": {
+          "TP1_FIRST": 2301,
+          "INVALIDATION_FIRST": 4925,
+          "NEITHER": 411,
+          "AMBIGUOUS": 6,
+          "resolved_n": 7637,
+          "tp1_resolved_rate": 0.3012963205447165,
+          "invalidation_resolved_rate": 0.6448867356291738
+        },
+        "score": {
+          "n": 7637,
+          "baseline_positive_rate": 0.3012963205447165,
+          "roc_auc": 0.7911069725893246,
+          "average_precision": 0.6072838283395393,
+          "E80": {
+            "count": 1306,
+            "positive_rate": 0.6707503828483921
+          },
+          "E90": {
+            "count": 565,
+            "positive_rate": 0.7292035398230089
+          }
+        }
+      },
+      "G010": {
+        "gap_v": 0.1,
+        "geometry": {
+          "snapshot_count": 20382,
+          "zone_count_mean": 1.86257482092042,
+          "zone_count_median": 2.0,
+          "zone_count_p90": 3.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.30968501619075656,
+          "width_v_median": 0.31004847373264216,
+          "width_v_p90": 0.9732503642727005,
+          "coverage": {
+            "1.0": 0.8173878912766166,
+            "1.5": 0.9292513001668139,
+            "2.0": 0.9739966637228927
+          }
+        },
+        "contact_episode_count": 14353,
+        "bull_rejection_fired_count": 6516,
+        "bull_rejection_fired_share": 0.4539817459764509,
+        "reaction": {
+          "TP1_FIRST": 2031,
+          "INVALIDATION_FIRST": 4123,
+          "NEITHER": 356,
+          "AMBIGUOUS": 6,
+          "resolved_n": 6510,
+          "tp1_resolved_rate": 0.3119815668202765,
+          "invalidation_resolved_rate": 0.6333333333333333
+        },
+        "score": {
+          "n": 6510,
+          "baseline_positive_rate": 0.3119815668202765,
+          "roc_auc": 0.7885693166941652,
+          "average_precision": 0.6115449103395064,
+          "E80": {
+            "count": 1203,
+            "positive_rate": 0.6666666666666666
+          },
+          "E90": {
+            "count": 538,
+            "positive_rate": 0.7267657992565055
+          }
+        }
+      },
+      "G020": {
+        "gap_v": 0.2,
+        "geometry": {
+          "snapshot_count": 20382,
+          "zone_count_mean": 1.6292807379059955,
+          "zone_count_median": 2.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.4700716318320086,
+          "width_v_median": 0.44146778140283804,
+          "width_v_p90": 1.192295429121703,
+          "coverage": {
+            "1.0": 0.7923167500735944,
+            "1.5": 0.9252281424786576,
+            "2.0": 0.9738004121283486
+          }
+        },
+        "contact_episode_count": 12243,
+        "bull_rejection_fired_count": 5806,
+        "bull_rejection_fired_share": 0.4742301723433799,
+        "reaction": {
+          "TP1_FIRST": 1853,
+          "INVALIDATION_FIRST": 3623,
+          "NEITHER": 326,
+          "AMBIGUOUS": 4,
+          "resolved_n": 5802,
+          "tp1_resolved_rate": 0.31937263012754225,
+          "invalidation_resolved_rate": 0.6244398483281627
+        },
+        "score": {
+          "n": 5802,
+          "baseline_positive_rate": 0.31937263012754225,
+          "roc_auc": 0.7900754861942545,
+          "average_precision": 0.6224271047499936,
+          "E80": {
+            "count": 1160,
+            "positive_rate": 0.6681034482758621
+          },
+          "E90": {
+            "count": 555,
+            "positive_rate": 0.736936936936937
+          }
+        }
+      },
+      "G025": {
+        "gap_v": 0.25,
+        "geometry": {
+          "snapshot_count": 20382,
+          "zone_count_mean": 1.5359140418015897,
+          "zone_count_median": 1.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.5234030026493965,
+          "width_v_median": 0.5151391162030488,
+          "width_v_p90": 1.2993467101705958,
+          "coverage": {
+            "1.0": 0.7772053772936905,
+            "1.5": 0.9230203120400353,
+            "2.0": 0.9735550976351682
+          }
+        },
+        "contact_episode_count": 11434,
+        "bull_rejection_fired_count": 5533,
+        "bull_rejection_fired_share": 0.48390764386916213,
+        "reaction": {
+          "TP1_FIRST": 1768,
+          "INVALIDATION_FIRST": 3449,
+          "NEITHER": 312,
+          "AMBIGUOUS": 4,
+          "resolved_n": 5529,
+          "tp1_resolved_rate": 0.31976849339844454,
+          "invalidation_resolved_rate": 0.6238017724724182
+        },
+        "score": {
+          "n": 5529,
+          "baseline_positive_rate": 0.31976849339844454,
+          "roc_auc": 0.7880297732984753,
+          "average_precision": 0.6200122017136602,
+          "E80": {
+            "count": 1129,
+            "positive_rate": 0.66696191319752
+          },
+          "E90": {
+            "count": 548,
+            "positive_rate": 0.7317518248175182
+          }
+        }
+      },
+      "G030": {
+        "gap_v": 0.3,
+        "geometry": {
+          "snapshot_count": 20382,
+          "zone_count_mean": 1.4594249828279855,
+          "zone_count_median": 1.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.5628986360514179,
+          "width_v_median": 0.5609368788863285,
+          "width_v_p90": 1.3999383663380145,
+          "coverage": {
+            "1.0": 0.7613580610342459,
+            "1.5": 0.9216465508782259,
+            "2.0": 0.9734569718378961
+          }
+        },
+        "contact_episode_count": 10735,
+        "bull_rejection_fired_count": 5290,
+        "bull_rejection_fired_share": 0.4927806241266884,
+        "reaction": {
+          "TP1_FIRST": 1727,
+          "INVALIDATION_FIRST": 3258,
+          "NEITHER": 301,
+          "AMBIGUOUS": 4,
+          "resolved_n": 5286,
+          "tp1_resolved_rate": 0.3267120696178585,
+          "invalidation_resolved_rate": 0.6163450624290578
+        },
+        "score": {
+          "n": 5286,
+          "baseline_positive_rate": 0.3267120696178585,
+          "roc_auc": 0.7846702936177364,
+          "average_precision": 0.621642839921403,
+          "E80": {
+            "count": 1114,
+            "positive_rate": 0.6651705565529623
+          },
+          "E90": {
+            "count": 550,
+            "positive_rate": 0.7290909090909091
+          }
+        }
+      },
+      "G040": {
+        "gap_v": 0.4,
+        "geometry": {
+          "snapshot_count": 20382,
+          "zone_count_mean": 1.3249435776665686,
+          "zone_count_median": 1.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.6264350897851045,
+          "width_v_median": 0.6632963988917842,
+          "width_v_p90": 1.6058055313904294,
+          "coverage": {
+            "1.0": 0.7266215287999215,
+            "1.5": 0.9196349720341478,
+            "2.0": 0.9732116573447159
+          }
+        },
+        "contact_episode_count": 9489,
+        "bull_rejection_fired_count": 4845,
+        "bull_rejection_fired_share": 0.5105912108757509,
+        "reaction": {
+          "TP1_FIRST": 1618,
+          "INVALIDATION_FIRST": 2942,
+          "NEITHER": 284,
+          "AMBIGUOUS": 1,
+          "resolved_n": 4844,
+          "tp1_resolved_rate": 0.33402146985962017,
+          "invalidation_resolved_rate": 0.6073492981007432
+        },
+        "score": {
+          "n": 4844,
+          "baseline_positive_rate": 0.33402146985962017,
+          "roc_auc": 0.7873236382084072,
+          "average_precision": 0.6249322835384334,
+          "E80": {
+            "count": 1105,
+            "positive_rate": 0.669683257918552
+          },
+          "E90": {
+            "count": 573,
+            "positive_rate": 0.7242582897033158
+          }
+        }
+      },
+      "G050": {
+        "gap_v": 0.5,
+        "geometry": {
+          "snapshot_count": 20382,
+          "zone_count_mean": 1.2252477676381122,
+          "zone_count_median": 1.0,
+          "zone_count_p90": 2.0,
+          "share_snapshots_count_reduced_vs_baseline": 0.6675497988421156,
+          "width_v_median": 0.798973185088298,
+          "width_v_p90": 1.7292947844787585,
+          "coverage": {
+            "1.0": 0.6943872043960357,
+            "1.5": 0.9183593366696104,
+            "2.0": 0.9731135315474438
+          }
+        },
+        "contact_episode_count": 8491,
+        "bull_rejection_fired_count": 4495,
+        "bull_rejection_fired_share": 0.5293840537039218,
+        "reaction": {
+          "TP1_FIRST": 1547,
+          "INVALIDATION_FIRST": 2680,
+          "NEITHER": 267,
+          "AMBIGUOUS": 1,
+          "resolved_n": 4494,
+          "tp1_resolved_rate": 0.3442367601246106,
+          "invalidation_resolved_rate": 0.5963506898086337
+        },
+        "score": {
+          "n": 4494,
+          "baseline_positive_rate": 0.3442367601246106,
+          "roc_auc": 0.789290172491434,
+          "average_precision": 0.6379950047116515,
+          "E80": {
+            "count": 1098,
+            "positive_rate": 0.6775956284153005
+          },
+          "E90": {
+            "count": 596,
+            "positive_rate": 0.7315436241610739
+          }
+        }
+      }
+    }
+  },
+  "baseline_parity": {
+    "H1": {
+      "checks": {
+        "contacts": true,
+        "fired": true
+      },
+      "pass": true
+    },
+    "H2": {
+      "checks": {
+        "contacts": true,
+        "fired": true,
+        "resolved_n": true,
+        "baseline_rate": true,
+        "auc": true,
+        "ap": true,
+        "E80_count": true,
+        "E80_rate": true,
+        "E90_count": true,
+        "E90_rate": true
+      },
+      "pass": true
+    }
+  },
+  "production_authorization": "NONE_RETROSPECTIVE_SENSITIVITY_ONLY"
+}
