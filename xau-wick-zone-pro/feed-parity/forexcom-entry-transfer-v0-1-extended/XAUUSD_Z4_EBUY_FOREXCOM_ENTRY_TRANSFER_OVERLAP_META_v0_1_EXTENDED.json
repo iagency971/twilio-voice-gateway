@@ -1,0 +1,10 @@
+{
+  "overlap_window_utc": [
+    "2026-08-16 22:01:00+00:00",
+    "2026-08-20 23:58:00+00:00"
+  ],
+  "forex_overlap_rows": 5638,
+  "duka_overlap_rows": 5874,
+  "forex_overlap_sha256": "9db344fcd1c65604f617969177b1665fd90f7a6334262b1b74ef59b6f29d012a",
+  "duka_overlap_sha256": "0203d452c893b304381257d564506894a1584ad1acdd00b4b81c5680c60610b8"
+}

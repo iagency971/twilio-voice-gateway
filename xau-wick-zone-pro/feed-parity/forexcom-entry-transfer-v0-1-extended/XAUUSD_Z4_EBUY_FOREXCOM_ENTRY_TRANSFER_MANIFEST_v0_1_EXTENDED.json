@@ -1,0 +1,16 @@
+{
+  "status": "ENTRY_TRANSFER_EXTENDED_PROVENANCE_RECORDED",
+  "transfer_status": "ENTRY_TRANSFER_PILOT_FAIL_NO_PINE_PROMOTION",
+  "future_trade_outcomes_used": false,
+  "thresholds_changed": false,
+  "model_refit": false,
+  "e_remap": false,
+  "sha256": {
+    "prereg": "da557cd330e9d00a6fb43c0c4d1e70f7190082495732ba36ed8c9f97cba1d2e9",
+    "comparator": "f0ef3bed13d4dcd15ed56831c2befa413be5a63d9886c28073b652328548e483",
+    "model": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+    "forex_snapshot": "d91ae62ebed5f78a236c93dc099df81e310993d4f8edddb5b3c471632ba70f7a",
+    "duka_overlap": "55de09c7dbb1a0dfc7d111205aa9741c58afbcc334fe31bc69d1f63a4a1aff01",
+    "result": "099f9705d51eee4c9ec6d836fd53b842a61c440a8f52569bcfc04ecb293b1cc5"
+  }
+}
