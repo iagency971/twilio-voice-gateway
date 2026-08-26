@@ -1,0 +1,186 @@
+name: XAU Z4 E-BUY C1 Refresh Outcome-Blind DEV Gate v1.0
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-c1-refresh-outcome-blind-dev-gate-v1-0.yml'
+      - 'xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_outcome_blind_gate_v1_0.py'
+
+permissions:
+  contents: write
+
+jobs:
+  outcome-blind-side:
+    strategy:
+      fail-fast: false
+      matrix:
+        side: [bid, ask]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify frozen preregistration and detector provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'C1 minute-refresh sensitivity preregistration v1.0' xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_v1_0_2026-08-26.md
+          grep -q '480 C1 landmarks' xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_v1_0_2026-08-26.md
+          grep -q 'CAUSAL_ACTIVE_INTERVAL_V1' xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_A_CAUSAL_INTERVAL_2026-08-26.md
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+
+      - name: Install fixed dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Build mechanical C1 and C5 detector engines
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          old='p=utc_ts(ts); return p.minute%15==0 and p.second==0'
+          assert src.count(old)==1
+          expected={1:'86a5b1af2e77d0e78526652c03f4c6f1a6bfbdaaf92d21e34c1b121f6fdf4dcb',5:'7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24'}
+          for c in (1,5):
+              new=f'p=utc_ts(ts); return p.minute%{c}==0 and p.second==0'
+              x=src.replace(old,new)
+              assert x.replace(new,old)==src
+              p=Path(f'/tmp/z4_C{c}.py');p.write_text(x)
+              got=hashlib.sha256(p.read_bytes()).hexdigest()
+              assert got==expected[c],(c,got,expected[c])
+          print('mechanical engine hash gate PASS')
+          PY
+
+      - name: Download exact DEV Jan-Jul 2024 source
+        shell: bash
+        env:
+          SIDE: ${{ matrix.side }}
+        run: |
+          set -euo pipefail
+          mkdir -p "/tmp/xau/${SIDE}"
+          for m in 01 02 03 04 05 06 07; do
+            f="xauusd_${SIDE}_m1_2024_${m}.csv"
+            curl --fail --location --retry 5 --retry-delay 2 "https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/${SIDE}/m1/${f}" -o "/tmp/xau/${SIDE}/${f}"
+          done
+
+      - name: Verify exact source hashes
+        shell: bash
+        env:
+          SIDE: ${{ matrix.side }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          side=os.environ['SIDE']
+          m=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
+          exp={x['file']:x['sha256'] for x in m['files'] if x['side'].lower()==side}
+          got={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('/tmp/xau',side).glob('*.csv')}
+          assert len(got)==7 and got==exp,(len(got),{k:(got.get(k),v) for k,v in exp.items() if got.get(k)!=v})
+          print(side,'source hash gate PASS')
+          PY
+
+      - name: Rebuild C1 and C5 canonical Z4 states and capture runtime
+        shell: bash
+        env:
+          SIDE: ${{ matrix.side }}
+        run: |
+          set -euo pipefail
+          t0=$(date +%s)
+          python /tmp/z4_C1.py --files "/tmp/xau/${SIDE}"/*.csv --output "/tmp/C1_${SIDE^^}.pkl" --tag "C1_EBUY_GATE_${SIDE^^}"
+          t1=$(date +%s)
+          python /tmp/z4_C5.py --files "/tmp/xau/${SIDE}"/*.csv --output "/tmp/C5_${SIDE^^}.pkl" --tag "C5_EBUY_GATE_${SIDE^^}"
+          t2=$(date +%s)
+          echo "C1_SEC=$((t1-t0))" >> "$GITHUB_ENV"
+          echo "C5_SEC=$((t2-t1))" >> "$GITHUB_ENV"
+
+      - name: Run E-BUY outcome-blind minute-refresh gate
+        shell: bash
+        env:
+          SIDE: ${{ matrix.side }}
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_outcome_blind_gate_v1_0.py \
+            --files "/tmp/xau/${SIDE}"/*.csv \
+            --c1-pkl "/tmp/C1_${SIDE^^}.pkl" \
+            --c5-pkl "/tmp/C5_${SIDE^^}.pkl" \
+            --runtime-c1-sec "$C1_SEC" --runtime-c5-sec "$C5_SEC" \
+            --side "$SIDE" --output "/tmp/C1_REFRESH_${SIDE^^}_OUTCOME_BLIND_GATE_v1_0.json"
+          python - <<'PY'
+          import json,glob
+          p=glob.glob('/tmp/C1_REFRESH_*_OUTCOME_BLIND_GATE_v1_0.json')[0]
+          x=json.load(open(p))
+          assert x['future_reaction_outcomes_used'] is False
+          assert x['detector_common_anchor_geometry_parity']['pass'] is True,x['detector_common_anchor_geometry_parity']
+          assert x['status']=='OUTCOME_BLIND_C1_REFRESH_GATE_COMPLETE'
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c1-refresh-outcome-blind-${{ matrix.side }}
+          path: /tmp/C1_REFRESH_*_OUTCOME_BLIND_GATE_v1_0.json
+          retention-days: 30
+
+  aggregate-publish:
+    needs: outcome-blind-side
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: c1-refresh-outcome-blind-bid
+          path: /tmp/bid
+      - uses: actions/download-artifact@v4
+        with:
+          name: c1-refresh-outcome-blind-ask
+          path: /tmp/ask
+      - name: Aggregate outcome-blind evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,glob
+          from pathlib import Path
+          b=json.load(open(glob.glob('/tmp/bid/*.json')[0]));a=json.load(open(glob.glob('/tmp/ask/*.json')[0]))
+          out={
+            'status':'C1_REFRESH_OUTCOME_BLIND_DEV_GATE_COMPLETE',
+            'study':'E_BUY_C1_MINUTE_REFRESH_OUTCOME_BLIND_DEV_GATE_V1_0',
+            'future_reaction_outcomes_used':False,
+            'BID':b,'ASK':a,
+            'geometry_parity_all':bool(b['detector_common_anchor_geometry_parity']['pass'] and a['detector_common_anchor_geometry_parity']['pass']),
+            'next_gate':'PRO_INTERPRET_STABILITY_CHURN_BEFORE_H1_H2_REACTION'
+          }
+          Path('/tmp/XAUUSD_Z4_EBUY_C1_REFRESH_OUTCOME_BLIND_DEV_GATE_RESULT_v1_0.json').write_text(json.dumps(out,indent=2))
+          PY
+      - name: Publish immutable outcome-blind gate result
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          d=xau-wick-zone-pro/cadence-sensitivity/c1-refresh-v1-0
+          mkdir -p "$d"
+          cp /tmp/XAUUSD_Z4_EBUY_C1_REFRESH_OUTCOME_BLIND_DEV_GATE_RESULT_v1_0.json "$d"/
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add "$d"
+          git commit -m 'publish C1 minute-refresh outcome-blind DEV gate v1.0 [skip ci]'
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:agent/xau-wick-zone-pro-dev; then exit 0; fi
+            git pull --rebase origin agent/xau-wick-zone-pro-dev
+            sleep 5
+          done
+          exit 1
