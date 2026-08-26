@@ -1,0 +1,200 @@
+name: XAU Z4 E-BUY Fused Zone Sensitivity v0.2
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-fused-zone-sensitivity-v0-2.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  H1_Z4_RUN: '32908654286'
+  H2_Z4_RUN: '32909876310'
+
+jobs:
+  sensitivity-v02:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.2 joblib==1.5.2
+
+      - name: Frozen v0.2 provenance and scientific guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            xau-wick-zone-pro/entry-research/xau_ebuy_fused_zone_sensitivity_v0_1.py \
+            xau-wick-zone-pro/entry-research/xau_ebuy_fused_zone_sensitivity_v0_2_baseline_provenance.py
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('xau-wick-zone-pro/entry-research')
+          prereg=(root/'XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_PREREG_v0_1_2026-08-26.md').read_text()
+          add=(root/'XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_ADDENDUM_A_BASELINE_PROVENANCE_2026-08-26.md').read_text()
+          for x in ['0.10v, 0.20v, 0.25v, 0.30v, 0.40v, 0.50v','No model refit','No fusion threshold may be promoted']:
+              assert x in prereg,x
+          for x in ['16,895 contacts / 7,127 fired BULL_REJECTION','32908338133','32909036841','provenance repair']:
+              assert x in add,x
+          model=root/'ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib'
+          assert hashlib.sha256(model.read_bytes()).hexdigest()=='ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342'
+          man=json.load(open(root/'ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json'))
+          cand=root/'ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz'
+          assert hashlib.sha256(cand.read_bytes()).hexdigest()==man['sha256']['candidates']
+          assert man['authorization']=='FREEZE_EBUY_LOCATION_ENGINE_AND_AUTHORIZE_REACTION_PREREG'
+          print('V02_FROZEN_PROVENANCE_GUARDS_PASS')
+          PY
+
+      - name: Download exact frozen H1 reaction target geometry
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.H1_Z4_RUN }}
+          pattern: z4-*
+          path: /tmp/h1z4
+          merge-multiple: true
+
+      - name: Download exact frozen H2 validation target geometry
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.H2_Z4_RUN }}
+          pattern: h2-z4-*
+          path: /tmp/h2z4
+          merge-multiple: true
+
+      - name: Assemble exact H1 plus H2 target geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fusedv02 /tmp/xau
+          python - <<'PY'
+          import glob,hashlib
+          from pathlib import Path
+          import pandas as pd
+          h1fs=sorted(glob.glob('/tmp/h1z4/z4_*.pkl'))
+          h2fs=sorted(glob.glob('/tmp/h2z4/z4_*.pkl'))
+          assert len(h1fs)==12,h1fs
+          assert len(h2fs)==12,h2fs
+          h1=pd.concat([pd.read_pickle(f) for f in h1fs],ignore_index=True);h1['time']=pd.to_datetime(h1.time,utc=True)
+          h2=pd.concat([pd.read_pickle(f) for f in h2fs],ignore_index=True);h2['time']=pd.to_datetime(h2.time,utc=True)
+          a=pd.Timestamp('2024-08-01T00:00:00Z');b=pd.Timestamp('2025-08-01T00:00:00Z');c=pd.Timestamp('2026-08-01T00:00:00Z')
+          h1=h1[(h1.time>=a)&(h1.time<b)].copy()
+          h2=h2[(h2.time>=b)&(h2.time<c)].copy()
+          assert len(h1)>0 and len(h2)>0
+          assert h1.time.max()<b and h2.time.min()>=b and h2.time.max()<c
+          z=pd.concat([h1,h2],ignore_index=True).sort_values(['time','side','center']).reset_index(drop=True)
+          out=Path('/tmp/fusedv02/Z4_C5_24M_EXACT_REACTION_TARGETS.pkl');z.to_pickle(out)
+          print('EXACT_TARGETS_READY',len(h1),len(h2),len(z),z.time.min(),z.time.max(),hashlib.sha256(out.read_bytes()).hexdigest())
+          PY
+
+      - name: Acquire exact 24-month BID raw and verify hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,subprocess,hashlib,os
+          from pathlib import Path
+          man=json.load(open(os.environ['MANIFEST']))
+          fs=[x for x in man['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07']
+          assert len(fs)==24,len(fs)
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/xau')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest();assert got==x['sha256'],(x['file'],got,x['sha256'])
+          assert len(list(Path('/tmp/xau').glob('*.csv')))==24
+          print('RAW_24M_HASH_PASS')
+          PY
+
+      - name: Run provenance-corrected frozen fused-zone sensitivity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_fused_zone_sensitivity_v0_2_baseline_provenance.py \
+            --files /tmp/xau/*.csv \
+            --z4-pkl /tmp/fusedv02/Z4_C5_24M_EXACT_REACTION_TARGETS.pkl \
+            --candidates-gz xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz \
+            --model-pkl xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib \
+            --coverage-result xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+            --h2-reference xau-wick-zone-pro/entry-research/ebuy-h2-validation-v1-0/XAUUSD_Z4_EBUY_H2_VALIDATION_RESULT_v1_0.json \
+            --output-json /tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_RESULT_v0_2.json \
+            --output-csv /tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_SUMMARY_v0_2.csv
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_RESULT_v0_2.json'))
+          assert x['status']=='FUSED_ZONE_SENSITIVITY_COMPLETE',x['status']
+          assert x['baseline_parity']['H1']['pass'] is True
+          assert x['baseline_parity']['H2']['pass'] is True
+          assert x['windows']['H1']['BASELINE']['contact_episode_count']==16895
+          assert x['windows']['H1']['BASELINE']['bull_rejection_fired_count']==7127
+          print('V02_SENSITIVITY_PARITY_PASS',x['baseline_parity'])
+          PY
+
+      - name: Build immutable v0.2 provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('xau-wick-zone-pro/entry-research')
+          paths={
+            'prereg':root/'XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_PREREG_v0_1_2026-08-26.md',
+            'addendum_a':root/'XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_ADDENDUM_A_BASELINE_PROVENANCE_2026-08-26.md',
+            'engine_v01':root/'xau_ebuy_fused_zone_sensitivity_v0_1.py',
+            'wrapper_v02':root/'xau_ebuy_fused_zone_sensitivity_v0_2_baseline_provenance.py',
+            'candidate_table':root/'ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz',
+            'model':root/'ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib',
+            'targets_24m':Path('/tmp/fusedv02/Z4_C5_24M_EXACT_REACTION_TARGETS.pkl'),
+            'result':Path('/tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_RESULT_v0_2.json'),
+            'summary':Path('/tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_SUMMARY_v0_2.csv')}
+          x=json.loads(paths['result'].read_text())
+          out={
+            'status':'FUSED_ZONE_SENSITIVITY_V02_PROVENANCE_RECORDED',
+            'result_status':x['status'],
+            'study':'RETROSPECTIVE_FUSED_ZONE_SENSITIVITY',
+            'h1_baseline_source':'FROZEN_OOS_EBUY_CANDIDATE_TABLE',
+            'h1_baseline_contacts':16895,
+            'h1_baseline_bull_rejection':7127,
+            'historical_rebuilt_location_reference_run':32908338133,
+            'source_faithful_precomputed_location_run':32909036841,
+            'h1_target_geometry_run':32908654286,
+            'h2_target_geometry_run':32909876310,
+            'model_refit':False,
+            'fusion_grid_changed':False,
+            'production_authorization':'NONE_RETROSPECTIVE_SENSITIVITY_ONLY',
+            'sha256':{k:hashlib.sha256(v.read_bytes()).hexdigest() for k,v in paths.items()}}
+          Path('/tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_MANIFEST_v0_2.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish v0.2 sensitivity evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/entry-research/ebuy-fused-zone-sensitivity-v0-2
+          mkdir -p "$out"
+          cp /tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_RESULT_v0_2.json "$out/"
+          cp /tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_SUMMARY_v0_2.csv "$out/"
+          cp /tmp/fusedv02/XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_MANIFEST_v0_2.json "$out/"
+          git add "$out"
+          git commit -m 'publish provenance-corrected E-BUY fused-zone sensitivity v0.2 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
