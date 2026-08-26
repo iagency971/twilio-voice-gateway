@@ -1,0 +1,152 @@
+name: XAU Z4 E-BUY Dukascopy Jetta Entry Transfer v0.5
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-dukascopy-jetta-entry-transfer-v0-5.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  jetta-entry-transfer-v05:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frozen dependencies
+        run: |
+          python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.2 joblib==1.5.2 requests==2.31.0 websocket-client==1.8.0
+          npm install --no-save dukascopy-node@1.50.0
+      - name: Frozen v0.5 guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          PR=xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_DUKASCOPY_JETTA_ENTRY_TRANSFER_PREREG_v0_5_2026-08-26.md
+          ACQ=xau-wick-zone-pro/feed-parity/xau_dukascopy_jetta_m1_v0_5.js
+          QA=xau-wick-zone-pro/feed-parity/xau_dukascopy_native_mirror_qa_v0_1.py
+          CMP=xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py
+          MOD=xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib
+          test -f "$PR";test -f "$ACQ";test -f "$QA";test -f "$CMP";test -f "$MOD"
+          echo 'f0ef3bed13d4dcd15ed56831c2befa413be5a63d9886c28073b652328548e483  '"$CMP" | sha256sum -c -
+          echo 'ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342  '"$MOD" | sha256sum -c -
+          node -e "const p=require('dukascopy-node/package.json'); if(p.version!=='1.50.0') process.exit(2); console.log('DUKASCOPY_NODE',p.version)"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_DUKASCOPY_JETTA_ENTRY_TRANSFER_PREREG_v0_5_2026-08-26.md').read_text()
+          for x in ['mirror coverage >= 0.99','common M1 >= 2000','common eligible C5 >= 250','dukascopy-node@1.50.0']:
+              assert x in p,x
+          s=Path('xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py').read_text()
+          assert "'common_c5_ge_250':metrics['common_eligible_c5']>=250" in s
+          for x in ['mfe_v','mae_v','tp1_invalidation_status','target_invalidation_status(','trigger_outcome(']:
+              if x in s:raise SystemExit(x)
+          print('V05_FROZEN_OUTCOME_BLIND_GUARD_PASS')
+          PY
+          mkdir -p /tmp/ebuy-v05
+      - name: Acquire frozen monthly mirror for Stage A QA
+        run: python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2026-08 --to-month 2026-08 --out /tmp/ebuy-v05/duka_mirror_aug.csv
+      - name: Stage A acquire Dukascopy Jetta M1
+        run: |
+          node xau-wick-zone-pro/feed-parity/xau_dukascopy_jetta_m1_v0_5.js \
+            --from 2026-08-19T00:00:00Z --to 2026-08-21T00:00:00Z \
+            --out /tmp/ebuy-v05/duka_jetta_qa.csv --meta /tmp/ebuy-v05/duka_jetta_qa_meta.json
+      - name: Stage A unchanged Jetta vs mirror QA
+        run: |
+          python xau-wick-zone-pro/feed-parity/xau_dukascopy_native_mirror_qa_v0_1.py \
+            --mirror /tmp/ebuy-v05/duka_mirror_aug.csv --native /tmp/ebuy-v05/duka_jetta_qa.csv \
+            --output /tmp/ebuy-v05/jetta_qa_result.json
+      - name: Publish immutable Stage A v0.5 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions;git config user.email github-actions@github.com;git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/dukascopy-jetta-recovery-v0-5;mkdir -p "$out"
+          cp /tmp/ebuy-v05/jetta_qa_result.json "$out/XAUUSD_DUKASCOPY_JETTA_QA_RESULT_v0_5.json";cp /tmp/ebuy-v05/duka_jetta_qa_meta.json "$out/XAUUSD_DUKASCOPY_JETTA_QA_META_v0_5.json";gzip -c /tmp/ebuy-v05/duka_jetta_qa.csv > "$out/XAUUSD_DUKASCOPY_JETTA_QA_M1_v0_5.csv.gz"
+          git add "$out";git commit -m 'record Dukascopy Jetta QA v0.5 [skip ci]' || true;git push origin HEAD:agent/xau-wick-zone-pro-dev
+      - name: Stage A hard gate
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/ebuy-v05/jetta_qa_result.json'))
+          if r['status']!='DUKASCOPY_NATIVE_RECOVERY_PASS':raise SystemExit('V05_STAGE_A_FAIL_STAGE_B_FORBIDDEN')
+          print('V05_STAGE_A_PASS_AUTHORIZE_STAGE_B')
+          PY
+      - name: Stage B acquire completed Dukascopy Jetta M1 window
+        run: |
+          node xau-wick-zone-pro/feed-parity/xau_dukascopy_jetta_m1_v0_5.js \
+            --from 2026-08-16T00:00:00Z --to 2026-08-26T00:00:00Z \
+            --out /tmp/ebuy-v05/duka_jetta_full.csv --meta /tmp/ebuy-v05/duka_jetta_full_meta.json
+      - name: Stage B acquire fresh exact FOREXCOM M1
+        run: |
+          python xau-wick-zone-pro/feed-parity/xau_forexcom_m1_depth_acquire_v0_1.py \
+            --output /tmp/ebuy-v05/forex_full.csv.gz --meta /tmp/ebuy-v05/forex_full_meta.json
+      - name: Freeze exact Stage B overlap and prepare engines
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import pandas as pd
+          F=pd.read_csv('/tmp/ebuy-v05/forex_full.csv.gz');F['time']=pd.to_datetime(F.timestamp_utc,utc=True);F=F.sort_values('time').drop_duplicates('time')
+          D=pd.read_csv('/tmp/ebuy-v05/duka_jetta_full.csv');D['time']=pd.to_datetime(D.timestamp,utc=True);D=D.sort_values('time').drop_duplicates('time')
+          lo=max(F.time.min(),D.time.min());hi=min(F.time.max(),D.time.max());F=F[(F.time>=lo)&(F.time<=hi)].copy();D=D[(D.time>=lo)&(D.time<=hi)].copy()
+          if len(F)<5000 or len(D)<5000:raise RuntimeError(f'insufficient overlap F={len(F)} D={len(D)} {lo} {hi}')
+          F.drop(columns=['time']).to_csv('/tmp/ebuy-v05/forex_overlap.csv',index=False);D.drop(columns=['time']).to_csv('/tmp/ebuy-v05/duka_overlap.csv',index=False)
+          def eng(df,cols,out):
+              x=pd.DataFrame({'timestamp':(df.time.astype('int64')//1_000_000).astype('int64')})
+              for s,t in zip(cols,['open','high','low','close']):x[t]=pd.to_numeric(df[s],errors='coerce')
+              x.dropna().to_csv(out,index=False)
+          eng(F,['open','high','low','close'],'/tmp/ebuy-v05/forex_engine.csv');eng(D,['open','high','low','close'],'/tmp/ebuy-v05/duka_mid_engine.csv');eng(D,['open_bid','high_bid','low_bid','close_bid'],'/tmp/ebuy-v05/duka_bid_engine.csv')
+          m={'window_utc':[str(lo),str(hi)],'forex_rows':len(F),'duka_rows':len(D),'forex_sha256':hashlib.sha256(Path('/tmp/ebuy-v05/forex_overlap.csv').read_bytes()).hexdigest(),'duka_sha256':hashlib.sha256(Path('/tmp/ebuy-v05/duka_overlap.csv').read_bytes()).hexdigest()};Path('/tmp/ebuy-v05/overlap_meta.json').write_text(json.dumps(m,indent=2));print(json.dumps(m,indent=2))
+          PY
+          gzip -c /tmp/ebuy-v05/forex_overlap.csv > /tmp/ebuy-v05/forex_overlap.csv.gz
+          gzip -c /tmp/ebuy-v05/duka_overlap.csv > /tmp/ebuy-v05/duka_overlap.csv.gz
+      - name: Build independent outcome-blind Z4 geometry
+        shell: bash
+        run: |
+          G=xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py
+          python "$G" --files /tmp/ebuy-v05/duka_bid_engine.csv --output /tmp/ebuy-v05/z4_bid.pkl --tag ENTRY_TRANSFER_V05_DUKA_BID & p1=$!
+          python "$G" --files /tmp/ebuy-v05/duka_mid_engine.csv --output /tmp/ebuy-v05/z4_mid.pkl --tag ENTRY_TRANSFER_V05_DUKA_MID & p2=$!
+          python "$G" --files /tmp/ebuy-v05/forex_engine.csv --output /tmp/ebuy-v05/z4_forex.pkl --tag ENTRY_TRANSFER_V05_FOREX & p3=$!
+          wait $p1;wait $p2;wait $p3
+      - name: Run byte-identical frozen entry-transfer comparator
+        run: |
+          python xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py \
+            --forex-csv /tmp/ebuy-v05/forex_overlap.csv.gz --duka-csv /tmp/ebuy-v05/duka_overlap.csv.gz \
+            --z4-bid-pkl /tmp/ebuy-v05/z4_bid.pkl --z4-mid-pkl /tmp/ebuy-v05/z4_mid.pkl --z4-forex-pkl /tmp/ebuy-v05/z4_forex.pkl \
+            --model-pkl xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib \
+            --output /tmp/ebuy-v05/raw_result.json --matched-bid-csv /tmp/ebuy-v05/matched_bid.csv --matched-mid-csv /tmp/ebuy-v05/matched_mid.csv
+      - name: Apply preregistered v0.5 decision
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.load(open('/tmp/ebuy-v05/jetta_qa_result.json'));r=json.load(open('/tmp/ebuy-v05/raw_result.json'));passed=a['status']=='DUKASCOPY_NATIVE_RECOVERY_PASS' and r['status']=='ENTRY_TRANSFER_PILOT_PASS_OPERATIONAL'
+          d={'status':'ENTRY_TRANSFER_V05_PASS_OPERATIONAL' if passed else 'ENTRY_TRANSFER_V05_FAIL_NO_PINE_PROMOTION','stage_a':a['status'],'raw_entry_comparator_status':r['status'],'common_c5_bid':r['scientific_reference_bid_vs_forex']['location']['metrics']['common_eligible_c5'],'common_c5_mid':r['mid_control_vs_forex']['location']['metrics']['common_eligible_c5'],'future_trade_outcomes_used':False,'thresholds_changed':False,'model_refit':False,'e_remap':False,'authorization':'AUTHORIZE_ENTRY_LAYER_PINE_ENGINEERING' if passed else 'DO_NOT_PROMOTE_ENTRY_LAYER_TO_PINE'}
+          Path('/tmp/ebuy-v05/decision.json').write_text(json.dumps(d,indent=2));print(json.dumps(d,indent=2))
+          PY
+      - name: Build immutable v0.5 provenance and publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          fs={'prereg':'xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_DUKASCOPY_JETTA_ENTRY_TRANSFER_PREREG_v0_5_2026-08-26.md','jetta_acquirer':'xau-wick-zone-pro/feed-parity/xau_dukascopy_jetta_m1_v0_5.js','native_qa':'xau-wick-zone-pro/feed-parity/xau_dukascopy_native_mirror_qa_v0_1.py','comparator':'xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py','model':'xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib','duka_full':'/tmp/ebuy-v05/duka_jetta_full.csv','forex_full':'/tmp/ebuy-v05/forex_full.csv.gz','qa_result':'/tmp/ebuy-v05/jetta_qa_result.json','raw_result':'/tmp/ebuy-v05/raw_result.json','decision':'/tmp/ebuy-v05/decision.json'}
+          sha={k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in fs.items()};d=json.load(open('/tmp/ebuy-v05/decision.json'));Path('/tmp/ebuy-v05/manifest.json').write_text(json.dumps({'status':'ENTRY_TRANSFER_V05_PROVENANCE_RECORDED','decision_status':d['status'],'future_trade_outcomes_used':False,'sha256':sha},indent=2))
+          PY
+          git config user.name github-actions;git config user.email github-actions@github.com;git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/forexcom-entry-transfer-v0-5;mkdir -p "$out"
+          cp /tmp/ebuy-v05/decision.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_DECISION_v0_5.json";cp /tmp/ebuy-v05/raw_result.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_RAW_RESULT_v0_5.json";cp /tmp/ebuy-v05/manifest.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_MANIFEST_v0_5.json";cp /tmp/ebuy-v05/overlap_meta.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_OVERLAP_META_v0_5.json";cp /tmp/ebuy-v05/duka_jetta_full_meta.json "$out/";cp /tmp/ebuy-v05/forex_full_meta.json "$out/";gzip -c /tmp/ebuy-v05/duka_jetta_full.csv > "$out/DUKASCOPY_JETTA_XAUUSD_M1_v0_5.csv.gz";cp /tmp/ebuy-v05/forex_full.csv.gz "$out/FOREXCOM_XAUUSD_M1_v0_5.csv.gz";gzip -c /tmp/ebuy-v05/matched_bid.csv > "$out/MATCHED_BID_v0_5.csv.gz";gzip -c /tmp/ebuy-v05/matched_mid.csv > "$out/MATCHED_MID_v0_5.csv.gz"
+          git add "$out";git commit -m 'publish Dukascopy-Jetta FOREXCOM E-BUY entry transfer v0.5 [skip ci]' || true;git push origin HEAD:agent/xau-wick-zone-pro-dev
