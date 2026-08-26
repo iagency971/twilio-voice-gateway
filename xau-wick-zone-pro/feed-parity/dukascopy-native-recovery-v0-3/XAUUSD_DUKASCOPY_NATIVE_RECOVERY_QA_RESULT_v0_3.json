@@ -7,10 +7,10 @@
   ],
   "future_trade_outcomes_used": false,
   "BID": {
-    "common_m1": 2758,
+    "common_m1": 1678,
     "mirror_rows": 2878,
-    "native_rows": 2760,
-    "mirror_coverage": 0.9583043780403058,
+    "native_rows": 1680,
+    "mirror_coverage": 0.5830437804030577,
     "return_spearman": 1.0,
     "median_abs_ohlc_error": 0.0,
     "errors": {
@@ -32,7 +32,7 @@
       }
     },
     "checks": {
-      "common_m1_ge_2000": true,
+      "common_m1_ge_2000": false,
       "mirror_coverage_ge_099": false,
       "return_spearman_ge_0999": true,
       "median_abs_ohlc_error_le_0005": true,
@@ -43,11 +43,11 @@
     "pass": false
   },
   "ASK": {
-    "common_m1": 2758,
+    "common_m1": 1678,
     "mirror_rows": 2878,
-    "native_rows": 2760,
-    "mirror_coverage": 0.9583043780403058,
-    "return_spearman": 1.0,
+    "native_rows": 1680,
+    "mirror_coverage": 0.5830437804030577,
+    "return_spearman": 0.9999999999999999,
     "median_abs_ohlc_error": 0.0,
     "errors": {
       "open_ask": {
@@ -68,7 +68,7 @@
       }
     },
     "checks": {
-      "common_m1_ge_2000": true,
+      "common_m1_ge_2000": false,
       "mirror_coverage_ge_099": false,
       "return_spearman_ge_0999": true,
       "median_abs_ohlc_error_le_0005": true,

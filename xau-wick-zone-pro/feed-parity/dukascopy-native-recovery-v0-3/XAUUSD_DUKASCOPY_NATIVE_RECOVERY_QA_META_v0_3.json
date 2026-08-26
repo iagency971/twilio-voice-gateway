@@ -3,33 +3,33 @@
   "symbol": "XAUUSD",
   "price_divisor": 1000.0,
   "sources": [
-    "https://datafeed.dukascopy.com/datafeed",
-    "https://www.dukascopy.com/datafeed"
+    "https://www.dukascopy.com/datafeed",
+    "https://datafeed.dukascopy.com/datafeed"
   ],
-  "transport_repair": "same BI5 path; datafeed host then www host fallback; no synthetic missing hours",
+  "transport_repair": "same BI5 paths; www host first, datafeed fallback; max 6 workers; no synthetic missing hours",
   "from_date": "2026-08-19",
   "to_date": "2026-08-20",
-  "tick_count": 535649,
-  "m1_count": 2760,
-  "first_m1": "2026-08-19 00:00:00+00:00",
+  "tick_count": 321045,
+  "m1_count": 1680,
+  "first_m1": "2026-08-19 15:00:00+00:00",
   "last_m1": "2026-08-20 23:59:00+00:00",
   "days": [
     {
       "date": "2026-08-19",
-      "ticks": 255579,
-      "hour_files_with_ticks": 23,
+      "ticks": 40975,
+      "hour_files_with_ticks": 5,
       "hosts_used": {
-        "https://datafeed.dukascopy.com/datafeed": 22,
-        "https://www.dukascopy.com/datafeed": 1
+        "https://datafeed.dukascopy.com/datafeed": 1,
+        "https://www.dukascopy.com/datafeed": 4
       },
-      "missing_request_count": 1
+      "missing_request_count": 19
     },
     {
       "date": "2026-08-20",
       "ticks": 280070,
       "hour_files_with_ticks": 23,
       "hosts_used": {
-        "https://datafeed.dukascopy.com/datafeed": 23
+        "https://www.dukascopy.com/datafeed": 23
       },
       "missing_request_count": 1
     }
