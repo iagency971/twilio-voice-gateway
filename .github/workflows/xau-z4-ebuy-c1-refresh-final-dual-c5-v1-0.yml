@@ -43,7 +43,7 @@ jobs:
             xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_C_CONTINUOUS_OOS_STATE_2026-08-26.md \
             xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_D_EXACT_MONTHLY_PARTITION_2026-08-26.md \
             xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_E_COMMON_COMPLETE_SESSION_SUPPORT_2026-08-26.md \
-            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_F_DUAL_C5_CONTROL_2026-08-26.md; do
+            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_F_DUAL_C5_CAUSAL_CONTROL_2026-08-26.md; do
               test -s "$f"
           done
           python -m py_compile \
