@@ -1,0 +1,161 @@
+name: XAU Z4 E-BUY FOREXCOM Entry Transfer Data Extension v0.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-forexcom-entry-transfer-data-extension-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  extension:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install frozen dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.2 joblib==1.5.2 requests==2.31.0
+      - name: Freeze extension guards
+        run: |
+          set -euo pipefail
+          test -f xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_DATA_EXTENSION_ADDENDUM_v0_1_2026-08-25.md
+          echo 'f0ef3bed13d4dcd15ed56831c2befa413be5a63d9886c28073b652328548e483  xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py' | sha256sum -c -
+          echo 'ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342  xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib' | sha256sum -c -
+          echo 'd9505e23ac4c82e11a14f192629bbc24d6f38ddadbfc82f3ef2d60e67dc7d1f4  xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz' | sha256sum -c -
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py').read_text()
+          for x in ['mfe_v','mae_v','tp1_invalidation_status','target_invalidation_status(','trigger_outcome(']:
+              assert x not in s,x
+          print('OUTCOME_BLIND_EXTENSION_GUARD_PASS')
+          PY
+      - name: Reacquire same Dukascopy August 2026 source
+        run: |
+          set -euo pipefail
+          python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2026-08 --to-month 2026-08 --out /tmp/duka_aug_2026_extended.csv
+      - name: Verify source continuity and prepare extended common window
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/entry-extension
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import numpy as np,pandas as pd
+          new=pd.read_csv('/tmp/duka_aug_2026_extended.csv')
+          new['time']=pd.to_datetime(new.timestamp,utc=True)
+          new=new.sort_values('time').drop_duplicates('time').reset_index(drop=True)
+          old=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz')
+          old['time']=pd.to_datetime(old.timestamp,utc=True)
+          old=old.sort_values('time').drop_duplicates('time').reset_index(drop=True)
+          cols=['open','high','low','close','open_bid','high_bid','low_bid','close_bid','open_ask','high_ask','low_ask','close_ask']
+          m=old[['time']+cols].merge(new[['time']+cols],on='time',how='left',suffixes=('_old','_new'),validate='one_to_one')
+          assert len(m)==len(old),(len(m),len(old))
+          assert m[[c+'_new' for c in cols]].notna().all().all(),'new acquisition missing archived overlap timestamps/values'
+          maxdiff=0.0
+          for c in cols:
+              a=pd.to_numeric(m[c+'_old'],errors='raise').to_numpy(float);b=pd.to_numeric(m[c+'_new'],errors='raise').to_numpy(float)
+              maxdiff=max(maxdiff,float(np.max(np.abs(a-b))))
+          assert maxdiff<=1e-12,maxdiff
+          F=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz')
+          F['time']=pd.to_datetime(F.timestamp_utc,utc=True);F=F.sort_values('time').drop_duplicates('time').reset_index(drop=True)
+          lo,hi=F.time.min(),F.time.max()
+          D=new[(new.time>=lo)&(new.time<=hi)].copy()
+          assert len(D)>=len(old),(len(D),len(old))
+          D.drop(columns=['time']).to_csv('/tmp/entry-extension/duka_overlap_extended.csv',index=False)
+          def to_engine(df,cols,out):
+              x=pd.DataFrame({'timestamp':(df.time.astype('int64')//10**6).astype('int64')})
+              for src,dst in zip(cols,['open','high','low','close']):x[dst]=pd.to_numeric(df[src],errors='raise')
+              x.to_csv(out,index=False)
+          to_engine(D,['open','high','low','close'],'/tmp/entry-extension/duka_mid.csv')
+          to_engine(D,['open_bid','high_bid','low_bid','close_bid'],'/tmp/entry-extension/duka_bid.csv')
+          to_engine(F,['open','high','low','close'],'/tmp/entry-extension/forex.csv')
+          meta={
+            'status':'SAME_SOURCE_EXTENSION_ACQUIRED',
+            'command':'python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2026-08 --to-month 2026-08',
+            'source':'kevingtlin/dukascopy_XAUUSD_1m_Data BID+ASK August 2026 via canonical acquisition script',
+            'new_month_rows':int(len(new)),'new_month_min_utc':str(new.time.min()),'new_month_max_utc':str(new.time.max()),
+            'new_month_sha256':hashlib.sha256(Path('/tmp/duka_aug_2026_extended.csv').read_bytes()).hexdigest(),
+            'archived_overlap_rows':int(len(old)),'archived_overlap_max_utc':str(old.time.max()),'historical_overlap_max_abs_diff':maxdiff,
+            'extended_overlap_rows':int(len(D)),'extended_overlap_min_utc':str(D.time.min()),'extended_overlap_max_utc':str(D.time.max()),
+            'extended_overlap_sha256':hashlib.sha256(Path('/tmp/entry-extension/duka_overlap_extended.csv').read_bytes()).hexdigest(),
+            'forex_rows':int(len(F)),'forex_min_utc':str(lo),'forex_max_utc':str(hi)
+          }
+          Path('/tmp/entry-extension/data_extension_meta.json').write_text(json.dumps(meta,indent=2));print(json.dumps(meta,indent=2))
+          PY
+      - name: Build independent outcome-blind Z4 geometry on extended intersection
+        run: |
+          set -euo pipefail
+          G=xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py
+          python "$G" --files /tmp/entry-extension/duka_bid.csv --output /tmp/entry-extension/z4_bid.pkl --tag ENTRY_EXTENSION_DUKA_BID & p1=$!
+          python "$G" --files /tmp/entry-extension/duka_mid.csv --output /tmp/entry-extension/z4_mid.pkl --tag ENTRY_EXTENSION_DUKA_MID & p2=$!
+          python "$G" --files /tmp/entry-extension/forex.csv --output /tmp/entry-extension/z4_forex.pkl --tag ENTRY_EXTENSION_FOREX & p3=$!
+          wait $p1; wait $p2; wait $p3
+      - name: Replay exact frozen entry-layer comparator
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py \
+            --forex-csv xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz \
+            --duka-csv /tmp/entry-extension/duka_overlap_extended.csv \
+            --z4-bid-pkl /tmp/entry-extension/z4_bid.pkl \
+            --z4-mid-pkl /tmp/entry-extension/z4_mid.pkl \
+            --z4-forex-pkl /tmp/entry-extension/z4_forex.pkl \
+            --model-pkl xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib \
+            --output /tmp/entry-extension/pilot_result.json \
+            --matched-bid-csv /tmp/entry-extension/matched_bid.csv \
+            --matched-mid-csv /tmp/entry-extension/matched_mid.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.load(open('/tmp/entry-extension/pilot_result.json'))
+          r['status_original_comparator']=r['status']
+          r['status']='ENTRY_TRANSFER_DATA_EXTENSION_PASS_OPERATIONAL' if r['status']=='ENTRY_TRANSFER_PILOT_PASS_OPERATIONAL' else 'ENTRY_TRANSFER_DATA_EXTENSION_FAIL'
+          r['data_extension_only']=True
+          r['all_v0_1_thresholds_unchanged']=True
+          r['authorization']='AUTHORIZE_PINE_ENTRY_LAYER_ENGINEERING_ON_FOREXCOM_M1' if r['status']=='ENTRY_TRANSFER_DATA_EXTENSION_PASS_OPERATIONAL' else 'DO_NOT_PROMOTE_ENTRY_LAYER_TO_PINE'
+          Path('/tmp/entry-extension/result.json').write_text(json.dumps(r,indent=2))
+          print(json.dumps({'status':r['status'],'bid_common_c5':r['scientific_reference_bid_vs_forex']['location']['metrics']['common_eligible_c5'],'mid_common_c5':r['mid_control_vs_forex']['location']['metrics']['common_eligible_c5'],'authorization':r['authorization']},indent=2))
+          PY
+      - name: Build immutable extension provenance
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          paths={
+           'addendum':'xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_DATA_EXTENSION_ADDENDUM_v0_1_2026-08-25.md',
+           'original_prereg':'xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_PREREG_v0_1_2026-08-25.md',
+           'comparator':'xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py',
+           'model':'xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib',
+           'forex_snapshot':'xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz',
+           'new_duka_month':'/tmp/duka_aug_2026_extended.csv',
+           'extended_overlap':'/tmp/entry-extension/duka_overlap_extended.csv',
+           'result':'/tmp/entry-extension/result.json'}
+          h={k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in paths.items()}
+          r=json.load(open('/tmp/entry-extension/result.json'));m=json.load(open('/tmp/entry-extension/data_extension_meta.json'))
+          out={'status':'ENTRY_TRANSFER_DATA_EXTENSION_PROVENANCE_RECORDED','result_status':r['status'],'future_trade_outcomes_used':False,'all_thresholds_unchanged':True,'source_continuity_max_abs_diff':m['historical_overlap_max_abs_diff'],'sha256':h}
+          Path('/tmp/entry-extension/manifest.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+      - name: Publish extension evidence
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/forexcom-entry-transfer-data-extension-v0-1
+          mkdir -p "$out"
+          cp /tmp/entry-extension/data_extension_meta.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_DATA_EXTENSION_META_v0_1.json"
+          cp /tmp/entry-extension/result.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_DATA_EXTENSION_RESULT_v0_1.json"
+          cp /tmp/entry-extension/manifest.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_DATA_EXTENSION_MANIFEST_v0_1.json"
+          gzip -c /tmp/entry-extension/duka_overlap_extended.csv > "$out/DUKASCOPY_XAUUSD_M1_overlap_extended_snapshot.csv.gz"
+          gzip -c /tmp/entry-extension/matched_bid.csv > "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_EXT_MATCHED_BID_v0_1.csv.gz"
+          gzip -c /tmp/entry-extension/matched_mid.csv > "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_EXT_MATCHED_MID_v0_1.csv.gz"
+          git add "$out"
+          git commit -m 'record same-source FOREXCOM entry transfer data extension [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
