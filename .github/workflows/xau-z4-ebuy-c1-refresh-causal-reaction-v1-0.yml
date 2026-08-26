@@ -77,14 +77,14 @@ jobs:
           w=os.environ['WINDOW']
           bounds={'H1':('2024-07','2025-07'),'H2':('2025-07','2026-07')}
           lo,hi=bounds[w]
-          dev=json.load(open('xau-wick-zone-pro/results/XAUUSD_Z4_DEV_SOURCE_MANIFEST_v0_1.json'))
           hist=json.load(open('xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json'))
-          pool={}
-          for x in list(dev['files'])+list(hist['files']):
+          assert hist['status']=='C5_HISTORICAL_REPLICATION_SOURCE_QA_PASS'
+          files=[]
+          for x in hist['files']:
               if str(x.get('side','')).lower()!='bid': continue
               ym=f"{int(x['year']):04d}-{int(x['month']):02d}"
-              if lo<=ym<=hi: pool[x['file']]=x
-          files=sorted(pool.values(),key=lambda x:(int(x['year']),int(x['month'])))
+              if lo<=ym<=hi: files.append(x)
+          files=sorted(files,key=lambda x:(int(x['year']),int(x['month'])))
           assert len(files)==13,[(x['file'],x['year'],x['month']) for x in files]
           root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
           for x in files:
