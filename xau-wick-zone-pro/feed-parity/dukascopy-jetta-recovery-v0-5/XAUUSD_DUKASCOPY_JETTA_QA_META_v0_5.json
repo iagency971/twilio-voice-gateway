@@ -13,10 +13,31 @@
   "from": "2026-08-19T00:00:00Z",
   "to": "2026-08-21T00:00:00Z",
   "bid_rows": 2878,
-  "ask_rows": 2878,
+  "ask_rows": 2879,
   "common_rows": 2878,
   "first_timestamp_utc": "2026-08-19T00:00:00.000Z",
   "last_timestamp_utc": "2026-08-20T23:58:00.000Z",
   "mid": "barwise average BID/ASK",
-  "local_gap_fill": false
+  "local_gap_fill": false,
+  "transport_chunking": "UTC day-by-day; empty day accepted as zero rows; no synthetic bars",
+  "bid_days": [
+    {
+      "date": "2026-08-19",
+      "rows": 1439
+    },
+    {
+      "date": "2026-08-20",
+      "rows": 1439
+    }
+  ],
+  "ask_days": [
+    {
+      "date": "2026-08-19",
+      "rows": 1439
+    },
+    {
+      "date": "2026-08-20",
+      "rows": 1440
+    }
+  ]
 }
