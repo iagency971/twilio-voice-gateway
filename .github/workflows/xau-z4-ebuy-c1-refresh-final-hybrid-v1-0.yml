@@ -1,0 +1,269 @@
+name: XAU Z4 E-BUY C1 Refresh Final Hybrid v1.0
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-c1-refresh-final-hybrid-v1-0.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  PRIMARY_RUN_ID: '33009725953'
+  PRIMARY_RUN_SHA: '7575e67330b52e5ebc1f6466df9014ed2f04199f'
+  FALLBACK_RUN_ID: '33013127430'
+  FALLBACK_RUN_SHA: '5f7771b3d5b399f1fdda8dc0aa3b4695004fd4a3'
+  FROZEN_SOURCE_RUN_ID: '33009186853'
+
+jobs:
+  final-hybrid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Frozen methodology and source-run guards
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for f in \
+            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_v1_0_2026-08-26.md \
+            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_A_CAUSAL_INTERVAL_2026-08-26.md \
+            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_B_EPISODE_STATE_2026-08-26.md \
+            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_C_CONTINUOUS_OOS_STATE_2026-08-26.md \
+            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_D_EXACT_MONTHLY_PARTITION_2026-08-26.md \
+            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_E_COMMON_COMPLETE_SESSION_SUPPORT_2026-08-26.md \
+            xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_F_DUAL_C5_CAUSAL_CONTROL_2026-08-26.md; do
+              test -s "$f"
+          done
+          python -m py_compile \
+            xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_causal_reaction_v1_1.py \
+            xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_common_support_postprocess_v1_0.py \
+            xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_dual_c5_postprocess_v1_0.py
+          psha=$(gh api "repos/iagency971/twilio-voice-gateway/actions/runs/${PRIMARY_RUN_ID}" --jq .head_sha)
+          fsha=$(gh api "repos/iagency971/twilio-voice-gateway/actions/runs/${FALLBACK_RUN_ID}" --jq .head_sha)
+          test "$psha" = "$PRIMARY_RUN_SHA"
+          test "$fsha" = "$FALLBACK_RUN_SHA"
+          echo SOURCE_RUN_SHA_PASS primary=$psha fallback=$fsha
+
+      - name: Wait for exact original or fallback completion
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ready=0
+          for i in $(seq 1 180); do
+            gh api "repos/iagency971/twilio-voice-gateway/actions/runs/${PRIMARY_RUN_ID}/artifacts?per_page=100" > /tmp/pa.json
+            gh api "repos/iagency971/twilio-voice-gateway/actions/runs/${FALLBACK_RUN_ID}/artifacts?per_page=100" > /tmp/fa.json
+            python - <<'PY' > /tmp/gate.txt
+          import json
+          p=json.load(open('/tmp/pa.json'))['artifacts']; f=json.load(open('/tmp/fa.json'))['artifacts']
+          pn={x['name'] for x in p if x['name'].startswith('mechanical-month-')}
+          expected=[]
+          for y,m0,m1 in [(2024,8,12),(2025,1,12),(2026,1,7)]:
+              for m in range(m0,m1+1):
+                  for c in (1,5): expected.append(f'mechanical-month-C{c}-{y:04d}-{m:02d}')
+          exp=set(expected); missing=sorted(exp-pn)
+          allowed={f'mechanical-month-C1-2026-{m:02d}' for m in (1,2,3)}
+          fn={x['name'] for x in f if x['name'].startswith('fallback-mechanical-month-C1-')}
+          covered=[]
+          for x in missing:
+              suffix=x.replace('mechanical-month-','fallback-mechanical-month-')
+              if suffix in fn: covered.append(x)
+          ok=(not missing) or (set(missing)<=allowed and set(covered)==set(missing))
+          print('PRIMARY_COUNT',len(pn))
+          print('MISSING',','.join(missing) if missing else 'NONE')
+          print('FALLBACK_COUNT',len(fn))
+          print('COVERED',','.join(covered) if covered else 'NONE')
+          print('READY',int(ok))
+          print('USE_FALLBACK',int(bool(missing)))
+          PY
+            cat /tmp/gate.txt
+            ready=$(awk '$1=="READY"{print $2}' /tmp/gate.txt)
+            if [ "$ready" = "1" ]; then break; fi
+            sleep 20
+          done
+          test "$ready" = "1"
+          use=$(awk '$1=="USE_FALLBACK"{print $2}' /tmp/gate.txt)
+          if [ "$use" = "1" ]; then echo "USE_FALLBACK=true" >> "$GITHUB_ENV"; else echo "USE_FALLBACK=false" >> "$GITHUB_ENV"; fi
+          echo HYBRID_SOURCE_GATE_PASS use_fallback=$use
+
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Download primary mechanical shards
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.PRIMARY_RUN_ID }}
+          pattern: mechanical-month-*
+          path: /tmp/primary
+          merge-multiple: true
+
+      - name: Download fallback missing C1 shards
+        if: env.USE_FALLBACK == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FALLBACK_RUN_ID }}
+          pattern: fallback-mechanical-month-C1-*
+          path: /tmp/fallback
+          merge-multiple: true
+
+      - name: Merge exact 24 C1 plus 24 C5 source set
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/mech
+          cp /tmp/primary/C*.pkl /tmp/mech/
+          cp /tmp/primary/C*_RUNTIME_SEC.txt /tmp/mech/
+          if [ "${USE_FALLBACK}" = "true" ]; then
+            for f in /tmp/fallback/C1_*.pkl /tmp/fallback/C1_*_RUNTIME_SEC.txt; do
+              [ -e "$f" ] || continue
+              b=$(basename "$f")
+              if [ ! -e "/tmp/mech/$b" ]; then cp "$f" "/tmp/mech/$b"; fi
+            done
+          fi
+          python - <<'PY'
+          import glob,os
+          c1=sorted(glob.glob('/tmp/mech/C1_????_??.pkl')); c5=sorted(glob.glob('/tmp/mech/C5_????_??.pkl'))
+          assert len(c1)==24,(len(c1),c1); assert len(c5)==24,(len(c5),c5)
+          r1=sorted(glob.glob('/tmp/mech/C1_????_??_RUNTIME_SEC.txt')); r5=sorted(glob.glob('/tmp/mech/C5_????_??_RUNTIME_SEC.txt'))
+          assert len(r1)==24,(len(r1),r1); assert len(r5)==24,(len(r5),r5)
+          print('EXACT_24_PLUS_24_MECHANICAL_SOURCE_PASS')
+          PY
+
+      - name: Download exact historical source-faithful C5 geometry
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_SOURCE_RUN_ID }}
+          pattern: frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+
+      - name: Assemble geometry and acquire exact 24M BID source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/oos /tmp/results /tmp/evidence
+          python - <<'PY'
+          import glob,pandas as pd
+          for c in (1,5):
+              fs=sorted(glob.glob(f'/tmp/mech/C{c}_????_??.pkl')); assert len(fs)==24,(c,len(fs))
+              z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True)
+              z['time']=pd.to_datetime(z.time,utc=True); z=z.sort_values(['time','side','center']).reset_index(drop=True)
+              assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z') and z.time.max()<pd.Timestamp('2026-08-01T00:00:00Z')
+              z.to_pickle(f'/tmp/C{c}_BID_24M_PARTITION.pkl')
+              print('MECHANICAL_ASSEMBLED',c,len(z),z.time.nunique())
+          fz=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl')); assert len(fz)==24,(len(fz),fz)
+          z=pd.concat([pd.read_pickle(f) for f in fz],ignore_index=True); z['time']=pd.to_datetime(z.time,utc=True)
+          z=z.sort_values(['time','side','center']).reset_index(drop=True); z.to_pickle('/tmp/FROZEN_MONTHLY_C5_24M.pkl')
+          print('SOURCE_FAITHFUL_C5_ASSEMBLED',len(z),z.time.nunique())
+          PY
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['MANIFEST'])); fs=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07']
+          assert len(fs)==24,len(fs); root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/xau/oos')/x['file']; subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest(); assert got==x['sha256'],(p.name,got,x['sha256'])
+          print('RAW_24M_HASH_PASS')
+          PY
+          C1SEC=$(awk '{s+=$1} END{print s+0}' /tmp/mech/C1_*_RUNTIME_SEC.txt)
+          C5SEC=$(awk '{s+=$1} END{print s+0}' /tmp/mech/C5_*_RUNTIME_SEC.txt)
+          echo "DET_C1_SEC=$C1SEC" >> "$GITHUB_ENV"; echo "DET_C5_SEC=$C5SEC" >> "$GITHUB_ENV"
+
+      - name: Rebuild and hash exact frozen OOS geometry-only provenance script
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          repl=[('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")]
+          for o,n in repl: assert src.count(o)==1,(o,src.count(o)); src=src.replace(o,n)
+          p=Path('/tmp/z4_c5_geometry_only.py'); p.write_text(src)
+          man=json.load(open('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json'))
+          got=hashlib.sha256(p.read_bytes()).hexdigest(); assert got==man['sha256']['z4_geometry'],(got,man['sha256']['z4_geometry'])
+          print('FROZEN_OOS_GEOMETRY_SCRIPT_HASH_PASS',got)
+          PY
+
+      - name: Run source-faithful H1 and H2 causal studies
+        shell: bash
+        run: |
+          set -euo pipefail
+          for W in H1 H2; do
+            mkdir -p "/tmp/evidence/$W"
+            python xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_causal_reaction_v1_1.py \
+              --window "$W" --files /tmp/xau/oos/*.csv \
+              --c1-pkl /tmp/C1_BID_24M_PARTITION.pkl --c5-pkl /tmp/C5_BID_24M_PARTITION.pkl \
+              --frozen-c5-z4-pkl /tmp/FROZEN_MONTHLY_C5_24M.pkl --frozen-z4-engine /tmp/z4_c5_geometry_only.py \
+              --candidates-gz xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz \
+              --coverage-result xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+              --coverage-manifest xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json \
+              --source-manifest "$MANIFEST" \
+              --frozen-h1-result xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0-precomputed-location/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json \
+              --frozen-h2-result xau-wick-zone-pro/entry-research/ebuy-h2-validation-v1-0/XAUUSD_Z4_EBUY_H2_VALIDATION_RESULT_v1_0.json \
+              --evidence-dir "/tmp/evidence/$W" --detector-c1-sec "$DET_C1_SEC" --detector-c5-sec "$DET_C5_SEC" \
+              --output "/tmp/results/${W}_SOURCE_FAITHFUL_CAUSAL_RESULT.json"
+          done
+
+      - name: Run common-support dual-C5 postprocessing
+        shell: bash
+        run: |
+          set -euo pipefail
+          for W in H1 H2; do
+            python xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_dual_c5_postprocess_v1_0.py \
+              --window "$W" --files /tmp/xau/oos/*.csv --c5-mechanical-pkl /tmp/C5_BID_24M_PARTITION.pkl \
+              --c5-source-faithful-pkl /tmp/FROZEN_MONTHLY_C5_24M.pkl \
+              --c1-contacts "/tmp/evidence/$W/${W}_CAUSAL_V1_C1_CONTACTS.csv.gz" --c1-trades "/tmp/evidence/$W/${W}_CAUSAL_V1_C1_BR.csv.gz" \
+              --c5-source-contacts "/tmp/evidence/$W/${W}_CAUSAL_V1_C5_CONTACTS.csv.gz" --c5-source-trades "/tmp/evidence/$W/${W}_CAUSAL_V1_C5_BR.csv.gz" \
+              --mechanical-evidence-dir "/tmp/evidence/$W" --output "/tmp/results/${W}_DUAL_C5_COMMON_SUPPORT_RESULT.json"
+          done
+
+      - name: Aggregate evidence without auto-promotion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          B={w:json.load(open(f'/tmp/results/{w}_SOURCE_FAITHFUL_CAUSAL_RESULT.json')) for w in ('H1','H2')}
+          D={w:json.load(open(f'/tmp/results/{w}_DUAL_C5_COMMON_SUPPORT_RESULT.json')) for w in ('H1','H2')}
+          for w in ('H1','H2'):
+              assert B[w]['frozen_c5_baseline']['pass'] is True
+              assert B[w]['detector_common_anchor_geometry_parity']['pass'] is True
+              assert B[w]['preregistered_runtime_semantics']['score_used'] is False
+          p1=D['H1']['primary_cadence_isolate']['paired_day_bootstrap']['delta_tp1_rate']; p2=D['H2']['primary_cadence_isolate']['paired_day_bootstrap']['delta_tp1_rate']
+          h12=(p1 is not None and p2 is not None and ((p1>0)==(p2>0)))
+          controls={w:bool(D[w]['direction_coherence_across_C5_controls']) for w in ('H1','H2')}
+          out={'status':'C1_REFRESH_FINAL_HYBRID_DUAL_C5_EVIDENCE_COMPLETE_PENDING_PRO_INTERPRETATION','authorization':'NONE_RETROSPECTIVE_SENSITIVITY_ONLY','production_change_authorized':False,'source_runs':{'mechanical_partition':33009725953,'timeout_only_fallback':33013127430 if __import__('os').environ.get('USE_FALLBACK')=='true' else None,'source_faithful_monthly_c5':33009186853},'H1':D['H1'],'H2':D['H2'],'base_source_faithful':{'H1':B['H1'],'H2':B['H2']},'primary_h1_h2_direction_coherent':bool(h12),'within_window_direction_coherence_across_C5_controls':controls,'all_direction_coherence':bool(h12 and all(controls.values())),'next_gate':'PRO_INTERPRET_REACTION_COHERENCE_FRAGMENTATION_GEOMETRY_STABILITY_RUNTIME_NO_AUTO_PROMOTION'}
+          Path('/tmp/results/C1_REFRESH_FINAL_HYBRID_DUAL_C5_AGGREGATE.json').write_text(json.dumps(out,indent=2,default=str))
+          print(json.dumps({'status':out['status'],'H1_primary_delta':p1,'H1_primary_ci':D['H1']['primary_cadence_isolate']['paired_day_bootstrap']['bootstrap_95'],'H2_primary_delta':p2,'H2_primary_ci':D['H2']['primary_cadence_isolate']['paired_day_bootstrap']['bootstrap_95'],'H1_bridge_delta':D['H1']['historical_bridge_robustness']['paired_day_bootstrap']['delta_tp1_rate'],'H2_bridge_delta':D['H2']['historical_bridge_robustness']['paired_day_bootstrap']['delta_tp1_rate'],'H1_controls_coherent':controls['H1'],'H2_controls_coherent':controls['H2'],'H1_H2_primary_coherent':h12},indent=2))
+          PY
+
+      - name: Upload final immutable evidence bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: C1-refresh-final-hybrid-dual-c5-evidence-v1-0
+          path: |
+            /tmp/results/*
+            /tmp/evidence/*/*
+          retention-days: 30
