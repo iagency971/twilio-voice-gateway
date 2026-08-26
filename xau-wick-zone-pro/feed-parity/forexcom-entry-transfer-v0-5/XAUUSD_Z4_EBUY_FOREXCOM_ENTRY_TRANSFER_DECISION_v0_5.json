@@ -1,0 +1,12 @@
+{
+  "status": "ENTRY_TRANSFER_V05_PASS_OPERATIONAL",
+  "stage_a": "DUKASCOPY_NATIVE_RECOVERY_PASS",
+  "raw_entry_comparator_status": "ENTRY_TRANSFER_PILOT_PASS_OPERATIONAL",
+  "common_c5_bid": 462,
+  "common_c5_mid": 462,
+  "future_trade_outcomes_used": false,
+  "thresholds_changed": false,
+  "model_refit": false,
+  "e_remap": false,
+  "authorization": "AUTHORIZE_ENTRY_LAYER_PINE_ENGINEERING"
+}

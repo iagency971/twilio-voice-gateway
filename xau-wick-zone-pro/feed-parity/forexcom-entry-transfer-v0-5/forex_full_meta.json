@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "symbol": "FOREXCOM:XAUUSD",
+  "interval": "1",
+  "target_bars": 100000,
+  "batch": 5000,
+  "received_unique_bars": 9896,
+  "increments": [
+    5000,
+    4896,
+    0,
+    0
+  ],
+  "first_timestamp_utc": "2026-08-16T22:01:00Z",
+  "last_timestamp_utc": "2026-08-26T01:59:00Z",
+  "acquired_at_utc": "2026-08-26T01:59:42.718499Z",
+  "transport": "TradingView chart websocket / request_more_data",
+  "bar_source": "mid",
+  "purpose": "prospective v0.2 E-BUY entry transfer sample extension"
+}

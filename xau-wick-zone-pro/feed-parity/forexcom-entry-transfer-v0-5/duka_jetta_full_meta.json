@@ -1,0 +1,107 @@
+{
+  "status": "PASS",
+  "source": "Dukascopy Jetta via dukascopy-node",
+  "package_version": "1.50.0",
+  "instrument": "xauusd",
+  "timeframe": "m1",
+  "price_types": [
+    "bid",
+    "ask"
+  ],
+  "ignoreFlats": true,
+  "utcOffset": 0,
+  "from": "2026-08-16T00:00:00Z",
+  "to": "2026-08-26T00:00:00Z",
+  "bid_rows": 12776,
+  "ask_rows": 12778,
+  "common_rows": 12776,
+  "first_timestamp_utc": "2026-08-16T00:00:00.000Z",
+  "last_timestamp_utc": "2026-08-25T23:59:00.000Z",
+  "mid": "barwise average BID/ASK",
+  "local_gap_fill": false,
+  "transport_chunking": "UTC day-by-day; empty day accepted as zero rows; no synthetic bars",
+  "bid_days": [
+    {
+      "date": "2026-08-16",
+      "rows": 1440
+    },
+    {
+      "date": "2026-08-17",
+      "rows": 1440
+    },
+    {
+      "date": "2026-08-18",
+      "rows": 1440
+    },
+    {
+      "date": "2026-08-19",
+      "rows": 1439
+    },
+    {
+      "date": "2026-08-20",
+      "rows": 1439
+    },
+    {
+      "date": "2026-08-21",
+      "rows": 1260
+    },
+    {
+      "date": "2026-08-22",
+      "rows": 0
+    },
+    {
+      "date": "2026-08-23",
+      "rows": 1439
+    },
+    {
+      "date": "2026-08-24",
+      "rows": 1439
+    },
+    {
+      "date": "2026-08-25",
+      "rows": 1440
+    }
+  ],
+  "ask_days": [
+    {
+      "date": "2026-08-16",
+      "rows": 1440
+    },
+    {
+      "date": "2026-08-17",
+      "rows": 1440
+    },
+    {
+      "date": "2026-08-18",
+      "rows": 1440
+    },
+    {
+      "date": "2026-08-19",
+      "rows": 1439
+    },
+    {
+      "date": "2026-08-20",
+      "rows": 1440
+    },
+    {
+      "date": "2026-08-21",
+      "rows": 1260
+    },
+    {
+      "date": "2026-08-22",
+      "rows": 0
+    },
+    {
+      "date": "2026-08-23",
+      "rows": 1440
+    },
+    {
+      "date": "2026-08-24",
+      "rows": 1439
+    },
+    {
+      "date": "2026-08-25",
+      "rows": 1440
+    }
+  ]
+}

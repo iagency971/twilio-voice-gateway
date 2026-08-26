@@ -1,0 +1,17 @@
+{
+  "status": "ENTRY_TRANSFER_V05_PROVENANCE_RECORDED",
+  "decision_status": "ENTRY_TRANSFER_V05_PASS_OPERATIONAL",
+  "future_trade_outcomes_used": false,
+  "sha256": {
+    "prereg": "664a55b1614b21a0aa330908f773e0eee79ddc9c8d45de090bb475f43cd4179e",
+    "jetta_acquirer": "05327905f7305c519eee98d9a26854f1df22c03c823ee8ee89bc70bb50b4fb51",
+    "native_qa": "3d611e3f5406f60f0128e73f177b08de48547a20adadda942eb03e887b2a6312",
+    "comparator": "f0ef3bed13d4dcd15ed56831c2befa413be5a63d9886c28073b652328548e483",
+    "model": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+    "duka_full": "bc40aded70bacf3c4553e01cf27aa540aa2dcf66df329e688408103a35846f7e",
+    "forex_full": "8fd842ed210bb1774002b9dda4fdc733f48a4e899648b8e2be81cf67ccaeb358",
+    "qa_result": "46c8e08ec993fe9abf040efadd3229be873295a0a49b1e9b6de35e1505f9a544",
+    "raw_result": "ff9c3cf60e6151e360a228ff2a40ee52e41dcb501376024b87f85632b69bbf08",
+    "decision": "a1485b05b25a5b8e276cc90bd9b8d8dedfc10b2b0f704ee803a4d589f54ba4c3"
+  }
+}
