@@ -1,4 +1,4 @@
-# trigger-v1
+# trigger-v2-pr
 name: XAU Z4 E-BUY C1 Refresh Outcome-Blind DEV Gate v1.0
 
 on:
@@ -7,6 +7,11 @@ on:
     paths:
       - '.github/workflows/xau-z4-ebuy-c1-refresh-outcome-blind-dev-gate-v1-0.yml'
       - 'xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_outcome_blind_gate_v1_0.py'
+      - 'xau-wick-zone-pro/cadence-sensitivity/C1_REFRESH_RUN_TRIGGER.txt'
+  pull_request:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - 'xau-wick-zone-pro/cadence-sensitivity/C1_REFRESH_RUN_TRIGGER.txt'
 
 permissions:
   contents: write
