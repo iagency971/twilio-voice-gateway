@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "symbol": "XAUUSD",
+  "price_divisor": 1000.0,
+  "sources": [
+    "https://datafeed.dukascopy.com/datafeed",
+    "https://www.dukascopy.com/datafeed"
+  ],
+  "transport_repair": "same BI5 path; datafeed host then www host fallback; no synthetic missing hours",
+  "from_date": "2026-08-19",
+  "to_date": "2026-08-20",
+  "tick_count": 535649,
+  "m1_count": 2760,
+  "first_m1": "2026-08-19 00:00:00+00:00",
+  "last_m1": "2026-08-20 23:59:00+00:00",
+  "days": [
+    {
+      "date": "2026-08-19",
+      "ticks": 255579,
+      "hour_files_with_ticks": 23,
+      "hosts_used": {
+        "https://datafeed.dukascopy.com/datafeed": 22,
+        "https://www.dukascopy.com/datafeed": 1
+      },
+      "missing_request_count": 1
+    },
+    {
+      "date": "2026-08-20",
+      "ticks": 280070,
+      "hour_files_with_ticks": 23,
+      "hosts_used": {
+        "https://datafeed.dukascopy.com/datafeed": 23
+      },
+      "missing_request_count": 1
+    }
+  ],
+  "aggregation": "BID/ASK tick OHLC per UTC minute; MID barwise average; no forward-fill"
+}

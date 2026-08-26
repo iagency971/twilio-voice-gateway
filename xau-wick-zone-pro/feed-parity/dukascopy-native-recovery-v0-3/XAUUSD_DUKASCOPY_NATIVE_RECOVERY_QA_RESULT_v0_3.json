@@ -1,0 +1,82 @@
+{
+  "status": "DUKASCOPY_NATIVE_RECOVERY_FAIL",
+  "scope": "OUTCOME_BLIND_NATIVE_BI5_VS_MONTHLY_MIRROR_M1",
+  "window_utc": [
+    "2026-08-19 00:00:00+00:00",
+    "2026-08-21 00:00:00+00:00"
+  ],
+  "future_trade_outcomes_used": false,
+  "BID": {
+    "common_m1": 2758,
+    "mirror_rows": 2878,
+    "native_rows": 2760,
+    "mirror_coverage": 0.9583043780403058,
+    "return_spearman": 1.0,
+    "median_abs_ohlc_error": 0.0,
+    "errors": {
+      "open_bid": {
+        "median": 0.0,
+        "p95": 0.0
+      },
+      "high_bid": {
+        "median": 0.0,
+        "p95": 0.0
+      },
+      "low_bid": {
+        "median": 0.0,
+        "p95": 0.0
+      },
+      "close_bid": {
+        "median": 0.0,
+        "p95": 0.0
+      }
+    },
+    "checks": {
+      "common_m1_ge_2000": true,
+      "mirror_coverage_ge_099": false,
+      "return_spearman_ge_0999": true,
+      "median_abs_ohlc_error_le_0005": true,
+      "p95_close_le_001": true,
+      "p95_high_le_002": true,
+      "p95_low_le_002": true
+    },
+    "pass": false
+  },
+  "ASK": {
+    "common_m1": 2758,
+    "mirror_rows": 2878,
+    "native_rows": 2760,
+    "mirror_coverage": 0.9583043780403058,
+    "return_spearman": 1.0,
+    "median_abs_ohlc_error": 0.0,
+    "errors": {
+      "open_ask": {
+        "median": 0.0,
+        "p95": 0.0
+      },
+      "high_ask": {
+        "median": 0.0,
+        "p95": 0.0
+      },
+      "low_ask": {
+        "median": 0.0,
+        "p95": 0.0
+      },
+      "close_ask": {
+        "median": 0.0,
+        "p95": 0.0
+      }
+    },
+    "checks": {
+      "common_m1_ge_2000": true,
+      "mirror_coverage_ge_099": false,
+      "return_spearman_ge_0999": true,
+      "median_abs_ohlc_error_le_0005": true,
+      "p95_close_le_001": true,
+      "p95_high_le_002": true,
+      "p95_low_le_002": true
+    },
+    "pass": false
+  },
+  "authorization": "DO_NOT_USE_NATIVE_FOR_ENTRY_TRANSFER"
+}
