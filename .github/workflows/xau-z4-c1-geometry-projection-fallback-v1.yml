@@ -1,0 +1,181 @@
+name: XAU Z4 C1 Geometry Projection Fallback v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-c1-geometry-projection-fallback-v1.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FULL_SOURCE_RUN_ID: '33009725953'
+  FULL_SOURCE_SHA: '7575e67330b52e5ebc1f6466df9014ed2f04199f'
+
+jobs:
+  projection-month:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ['2025-10','2026-01','2026-02','2026-03','2026-04']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Exact source context and frozen projection patch
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test -s xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_G_GEOMETRY_PROJECTION_ACCELERATOR_2026-08-26.md
+          mkdir -p /tmp/in /tmp/out
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          t=os.environ['TARGET']; y,m=map(int,t.split('-'))
+          pm=m-1; py=y
+          if pm==0: pm=12; py-=1
+          nm=m+1; ny=y
+          if nm==13: nm=1; ny+=1
+          months=[f'{py:04d}-{pm:02d}',t,f'{ny:04d}-{nm:02d}']
+          man=json.load(open(os.environ['MANIFEST'])); ix={f"{x['year']}-{x['month']}":x for x in man['files'] if x['side']=='bid'}
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for mm in months:
+              x=ix[mm]; p=Path('/tmp/in')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest(); assert got==x['sha256'],(p.name,got,x['sha256'])
+          print('PROJECTION_SOURCE_HASH_PASS',t,months)
+          PY
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          changes=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%1==0 and p.second==0'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+          ]
+          for old,new in changes:
+              assert src.count(old)==1,(old,src.count(old)); src=src.replace(old,new)
+          anchor='    m=len(Z)\n'; assert src.count(anchor)==1
+          insert="    keep=['time','side','center','zlo','zhi']\n    Z[keep].to_pickle(args.output)\n    return\n\n"
+          src=src.replace(anchor,insert+anchor)
+          p=Path('/tmp/projector.py'); p.write_text(src)
+          sha=hashlib.sha256(p.read_bytes()).hexdigest(); Path('/tmp/out/PROJECTION_PATCH_SHA256.txt').write_text(sha+'\n')
+          assert 'i+HORIZON+REACT_MAX>=N' in src
+          assert 'out=outcome_zone(' not in src
+          print('PROJECTION_PATCH_READY',sha)
+          PY
+      - name: Build target projected geometry
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          t0=$(date +%s)
+          python /tmp/projector.py --files /tmp/in/*.csv --output /tmp/all.pkl --tag "C1_${TARGET}_GEOMETRY_PROJECTION"
+          t1=$(date +%s)
+          python - <<'PY'
+          import os,pandas as pd
+          t=os.environ['TARGET']; lo=pd.Timestamp(t+'-01T00:00:00Z'); hi=lo+pd.offsets.MonthBegin(1)
+          d=pd.read_pickle('/tmp/all.pkl'); d['time']=pd.to_datetime(d.time,utc=True)
+          q=d[(d.time>=lo)&(d.time<hi)].copy().reset_index(drop=True); assert len(q)>0,(t,len(d))
+          q.to_pickle('/tmp/out/C1_'+t.replace('-','_')+'.pkl')
+          print('PROJECTED_TARGET_READY',t,len(q),q.time.min(),q.time.max())
+          PY
+          echo "$((t1-t0))" > "/tmp/out/C1_${TARGET//-/_}_RUNTIME_SEC.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: projected-C1-${{ matrix.target }}
+          path: /tmp/out/*
+          retention-days: 1
+
+  parity-and-package:
+    needs: projection-month
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1
+      - name: Guard full-detector source run
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          got=$(gh api "repos/iagency971/twilio-voice-gateway/actions/runs/${FULL_SOURCE_RUN_ID}" --jq .head_sha)
+          test "$got" = "$FULL_SOURCE_SHA"
+          echo FULL_REFERENCE_SHA_PASS "$got"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: projected-C1-*
+          path: /tmp/projected
+          merge-multiple: false
+      - name: Download full C1 2025-10 reference
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FULL_SOURCE_RUN_ID }}
+          name: mechanical-month-C1-2025-10
+          path: /tmp/full/2025-10
+      - name: Download full C1 2026-04 reference
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FULL_SOURCE_RUN_ID }}
+          name: mechanical-month-C1-2026-04
+          path: /tmp/full/2026-04
+      - name: Mandatory full-detector geometry parity and package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/validated
+          python - <<'PY'
+          import json,numpy as np,pandas as pd
+          from pathlib import Path
+          out={}
+          for t in ('2025-10','2026-04'):
+              a=pd.read_pickle(f'/tmp/projected/projected-C1-{t}/C1_{t.replace("-","_")}.pkl').copy()
+              b=pd.read_pickle(f'/tmp/full/{t}/C1_{t.replace("-","_")}.pkl').copy()
+              for d in (a,b): d['time']=pd.to_datetime(d.time,utc=True)
+              cols=['time','side','center','zlo','zhi']; a=a[cols].sort_values(cols).reset_index(drop=True); b=b[cols].sort_values(cols).reset_index(drop=True)
+              same_shape=len(a)==len(b); same_time=side=False; ec=el=eh=float('inf')
+              if same_shape:
+                  same_time=bool((a.time.to_numpy()==b.time.to_numpy()).all()); side=bool((a.side.to_numpy()==b.side.to_numpy()).all())
+                  ec=float(np.max(np.abs(a.center.to_numpy(float)-b.center.to_numpy(float)))) if len(a) else 0.0
+                  el=float(np.max(np.abs(a.zlo.to_numpy(float)-b.zlo.to_numpy(float)))) if len(a) else 0.0
+                  eh=float(np.max(np.abs(a.zhi.to_numpy(float)-b.zhi.to_numpy(float)))) if len(a) else 0.0
+              ok=bool(same_shape and same_time and side and ec<=1e-12 and el<=1e-8 and eh<=1e-8)
+              out[t]={'projected_rows':len(a),'full_rows':len(b),'same_shape':same_shape,'same_time':same_time,'same_side':side,'center_max_abs_usd':ec,'zlo_max_abs_usd':el,'zhi_max_abs_usd':eh,'pass':ok}
+              assert ok,out[t]
+          result={'status':'C1_GEOMETRY_PROJECTION_PARITY_PASS','references':out,'authorization':'MISSING_2026_C1_SHARDS_ONLY'}
+          Path('/tmp/validated/C1_GEOMETRY_PROJECTION_PARITY.json').write_text(json.dumps(result,indent=2))
+          for t in ('2026-01','2026-02','2026-03'):
+              src=Path(f'/tmp/projected/projected-C1-{t}/C1_{t.replace("-","_")}.pkl'); assert src.exists(); (Path('/tmp/validated')/src.name).write_bytes(src.read_bytes())
+              r=Path(f'/tmp/projected/projected-C1-{t}/C1_{t.replace("-","_")}_RUNTIME_SEC.txt'); assert r.exists(); (Path('/tmp/validated')/r.name).write_bytes(r.read_bytes())
+          shas={Path(x).read_text().strip() for x in Path('/tmp/projected').glob('projected-C1-*/PROJECTION_PATCH_SHA256.txt')}; assert len(shas)==1,shas
+          Path('/tmp/validated/PROJECTION_PATCH_SHA256.txt').write_text(next(iter(shas))+'\n')
+          print(json.dumps(result,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: validated-projected-C1-2026-01-02-03
+          path: /tmp/validated/*
+          retention-days: 30
