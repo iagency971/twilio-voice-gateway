@@ -1,0 +1,254 @@
+name: XAU Z4 E-BUY C1 Refresh Causal Reaction v1.2 Parallel
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-c1-refresh-causal-reaction-v1-2-parallel.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_SOURCE_RUN_ID: '33009186853'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - name: Frozen methodology guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'Exact monthly computational partition' xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_D_EXACT_MONTHLY_PARTITION_2026-08-26.md
+          grep -q 'Continuous OOS state provenance' xau-wick-zone-pro/cadence-sensitivity/XAUUSD_Z4_C1_REFRESH_EBUY_PREREG_ADDENDUM_C_CONTINUOUS_OOS_STATE_2026-08-26.md
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          python -m py_compile xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_causal_reaction_v1_1.py
+          echo V12_PARALLEL_PREFLIGHT_PASS
+
+  detector-month:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 32
+      matrix:
+        cadence: [1, 5]
+        target: ['2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Download exact bounded source context
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/in /tmp/out
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          t=os.environ['TARGET']; y,m=map(int,t.split('-')); months=[]
+          if t!='2024-08':
+              pm=m-1; py=y
+              if pm==0: pm=12; py-=1
+              months.append(f'{py:04d}-{pm:02d}')
+          months.append(t)
+          if t!='2026-07':
+              nm=m+1; ny=y
+              if nm==13: nm=1; ny+=1
+              months.append(f'{ny:04d}-{nm:02d}')
+          man=json.load(open(os.environ['MANIFEST'])); ix={f"{x['year']}-{x['month']}":x for x in man['files'] if x['side']=='bid'}
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for mm in months:
+              x=ix[mm]; p=Path('/tmp/in')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest(); assert got==x['sha256'],(p.name,got,x['sha256'])
+          print('BOUNDED_CONTEXT_HASH_PASS',t,months)
+          PY
+      - name: Build unchanged frozen mechanical detector and trim target
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+          CADENCE: ${{ matrix.cadence }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,os
+          from pathlib import Path
+          c=int(os.environ['CADENCE']); src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          old='p=utc_ts(ts); return p.minute%15==0 and p.second==0'; assert src.count(old)==1
+          new=f'p=utc_ts(ts); return p.minute%{c}==0 and p.second==0'; text=src.replace(old,new); assert text.replace(new,old)==src
+          expected={1:'86a5b1af2e77d0e78526652c03f4c6f1a6bfbdaaf92d21e34c1b121f6fdf4dcb',5:'7bb47cfc78a26dd7a74965556352114a8e31ca1545ef4d21a987951daf417d24'}
+          p=Path('/tmp/detector.py'); p.write_text(text); got=hashlib.sha256(p.read_bytes()).hexdigest(); assert got==expected[c],(got,expected[c])
+          PY
+          t0=$(date +%s)
+          python /tmp/detector.py --files /tmp/in/*.csv --output /tmp/all.pkl --tag "C${CADENCE}_${TARGET}_PARTITION"
+          t1=$(date +%s)
+          python - <<'PY'
+          import os,pandas as pd
+          t=os.environ['TARGET']; c=os.environ['CADENCE']; lo=pd.Timestamp(t+'-01T00:00:00Z'); hi=lo+pd.offsets.MonthBegin(1)
+          d=pd.read_pickle('/tmp/all.pkl'); d['time']=pd.to_datetime(d.time,utc=True)
+          q=d[(d.time>=lo)&(d.time<hi)].copy().reset_index(drop=True); assert len(q)>0,(c,t,len(d))
+          q.to_pickle('/tmp/out/C'+c+'_'+t.replace('-','_')+'.pkl')
+          print('MECHANICAL_TARGET_READY',c,t,len(q),q.time.min(),q.time.max())
+          PY
+          echo "$((t1-t0))" > "/tmp/out/C${CADENCE}_${TARGET//-/_}_RUNTIME_SEC.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mechanical-month-C${{ matrix.cadence }}-${{ matrix.target }}
+          path: /tmp/out/*
+          retention-days: 1
+
+  causal-study:
+    needs: detector-month
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: mechanical-month-*
+          path: /tmp/mech
+          merge-multiple: true
+      - name: Download source-faithful frozen C5 monthly artifacts from preoutcome v1.1 run
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_SOURCE_RUN_ID }}
+          pattern: frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - name: Download monolithic C5 partition reference from preoutcome v1.1 run
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_SOURCE_RUN_ID }}
+          name: mechanical-z4-C5
+          path: /tmp/c5monolith
+      - name: Acquire exact continuous raw and assemble all geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau/oos /tmp/results /tmp/evidence
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['MANIFEST'])); fs=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07']; assert len(fs)==24
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/xau/oos')/x['file']; subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          print('STUDY_RAW_24M_HASH_PASS')
+          PY
+          python - <<'PY'
+          import glob,numpy as np,pandas as pd
+          for c in (1,5):
+              fs=sorted(glob.glob(f'/tmp/mech/C{c}_????_??.pkl')); assert len(fs)==24,(c,len(fs),fs)
+              z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True); z['time']=pd.to_datetime(z.time,utc=True)
+              z=z.sort_values(['time','side','center']).reset_index(drop=True); z.to_pickle(f'/tmp/C{c}_BID_24M_PARTITION.pkl')
+              print('MECHANICAL_PARTITION_ASSEMBLED',c,len(z),z.time.nunique())
+          fz=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl')); assert len(fz)==24,(len(fz),fz)
+          z=pd.concat([pd.read_pickle(f) for f in fz],ignore_index=True); z['time']=pd.to_datetime(z.time,utc=True); z=z.sort_values(['time','side','center']).reset_index(drop=True); z.to_pickle('/tmp/FROZEN_MONTHLY_C5_24M.pkl')
+          # Exact partition QA on C5 against the independently running monolithic C5 reference.
+          a=pd.read_pickle('/tmp/C5_BID_24M_PARTITION.pkl'); b=pd.read_pickle('/tmp/c5monolith/C5_BID_24M.pkl')
+          for d in (a,b): d['time']=pd.to_datetime(d.time,utc=True)
+          cols=['time','side','center','zlo','zhi']; a=a[cols].sort_values(['time','side','center']).reset_index(drop=True); b=b[cols].sort_values(['time','side','center']).reset_index(drop=True)
+          assert len(a)==len(b),(len(a),len(b)); assert a.time.equals(b.time); assert np.array_equal(a.side.to_numpy(),b.side.to_numpy())
+          for k in ('center','zlo','zhi'):
+              err=float(np.max(np.abs(a[k].to_numpy(float)-b[k].to_numpy(float)))) if len(a) else 0.0; assert err<=1e-12,(k,err)
+          print('C5_MONTHLY_PARTITION_MONOLITHIC_EXACT_PASS',len(a))
+          PY
+          C1SEC=$(awk '{s+=$1} END{print s+0}' /tmp/mech/C1_*_RUNTIME_SEC.txt)
+          C5SEC=$(awk '{s+=$1} END{print s+0}' /tmp/mech/C5_*_RUNTIME_SEC.txt)
+          echo "DET_C1_SEC=$C1SEC" >> "$GITHUB_ENV"
+          echo "DET_C5_SEC=$C5SEC" >> "$GITHUB_ENV"
+      - name: Rebuild exact OOS geometry-only provenance script
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          repl=[('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")]
+          for o,n in repl: assert src.count(o)==1,(o,src.count(o)); src=src.replace(o,n)
+          p=Path('/tmp/z4_c5_geometry_only.py'); p.write_text(src)
+          man=json.load(open('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json')); got=hashlib.sha256(p.read_bytes()).hexdigest(); assert got==man['sha256']['z4_geometry'],(got,man['sha256']['z4_geometry'])
+          print('OOS_PROVENANCE_SCRIPT_HASH_PASS',got)
+          PY
+      - name: Run H1 and H2 causal study only after all parity gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          for W in H1 H2; do
+            mkdir -p "/tmp/evidence/$W"
+            python xau-wick-zone-pro/cadence-sensitivity/xau_ebuy_c1_refresh_causal_reaction_v1_1.py \
+              --window "$W" --files /tmp/xau/oos/*.csv \
+              --c1-pkl /tmp/C1_BID_24M_PARTITION.pkl --c5-pkl /tmp/C5_BID_24M_PARTITION.pkl \
+              --frozen-c5-z4-pkl /tmp/FROZEN_MONTHLY_C5_24M.pkl --frozen-z4-engine /tmp/z4_c5_geometry_only.py \
+              --candidates-gz xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz \
+              --coverage-result xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_RESULT_v1_0.json \
+              --coverage-manifest xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json \
+              --source-manifest "$MANIFEST" \
+              --frozen-h1-result xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0-precomputed-location/XAUUSD_Z4_EBUY_REACTION_DEV_H1_RESULT_v1_0.json \
+              --frozen-h2-result xau-wick-zone-pro/entry-research/ebuy-h2-validation-v1-0/XAUUSD_Z4_EBUY_H2_VALIDATION_RESULT_v1_0.json \
+              --evidence-dir "/tmp/evidence/$W" --detector-c1-sec "$DET_C1_SEC" --detector-c5-sec "$DET_C5_SEC" \
+              --output "/tmp/results/${W}_C1_REFRESH_CAUSAL_REACTION_RESULT_v1_2.json"
+          done
+      - name: Aggregate retrospective cadence evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          R={w:json.load(open(f'/tmp/results/{w}_C1_REFRESH_CAUSAL_REACTION_RESULT_v1_2.json')) for w in ('H1','H2')}
+          for w in R:
+              assert R[w]['frozen_c5_baseline']['pass'] is True and R[w]['detector_common_anchor_geometry_parity']['pass'] is True
+          d={w:R[w]['causal_active_interval_v1']['C1_minus_C5']['tp1_resolved_rate'] for w in R}; ci={w:R[w]['causal_active_interval_v1']['paired_trading_day_bootstrap']['bootstrap_95'] for w in R}
+          coherent=all(d[w] is not None and d[w]>0 for w in R); stable=all(R[w]['outcome_blind_historical_window_diagnostics']['C1']['preregistered_thresholds']['pass'] for w in R)
+          out={'status':'C1_REFRESH_CAUSAL_REACTION_H1_H2_V1_2_COMPLETE_NO_PRODUCTION_PROMOTION','study':'E_BUY_C1_REFRESH_CAUSAL_ACTIVE_INTERVAL_V1_EXACT_MONTHLY_PARTITION',
+               'H1':R['H1'],'H2':R['H2'],'partition_validation':'C5_MONTHLY_PARTITION_MONOLITHIC_EXACT_PASS',
+               'aggregate_flags':{'frozen_C5_consumption_parity_both':True,'source_faithful_C5_state_parity_both':True,'detector_geometry_parity_both':True,'C1_stability_thresholds_H1_H2':stable,'primary_TP1_direction_coherent_positive_H1_H2':coherent},
+               'primary_delta_tp1_resolved_rate':d,'paired_day_bootstrap_95':ci,'interpretation_status':'PRO_INTERPRETATION_REQUIRED_NO_AUTOMATIC_PROMOTION','authorization':'NONE_RETROSPECTIVE_SENSITIVITY_ONLY','next_gate':'PRO_INTERPRET_EFFECT_SIZE_CI_CONTACT_FRAGMENTATION_INVALIDATION_GEOMETRY_RUNTIME_BEFORE_ANY_PINE_QA'}
+          Path('/tmp/results/XAUUSD_Z4_EBUY_C1_REFRESH_CAUSAL_REACTION_H1_H2_RESULT_v1_2.json').write_text(json.dumps(out,indent=2)); print(json.dumps({'delta':d,'ci95':ci,'flags':out['aggregate_flags']},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c1-refresh-causal-reaction-v1-2-evidence
+          path: |
+            /tmp/results/*.json
+            /tmp/evidence/**/*.csv.gz
+          retention-days: 30
+      - name: Publish immutable JSON evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/cadence-sensitivity/c1-refresh-v1-2/reaction-causal-v1
+          mkdir -p "$out"; cp /tmp/results/*.json "$out/"
+          git config user.name github-actions; git config user.email github-actions@github.com
+          git add "$out"; git commit -m 'publish exact-partition C1 refresh causal reaction H1 H2 v1.2 [skip ci]'
+          for i in 1 2 3 4 5; do if git push origin HEAD:agent/xau-wick-zone-pro-dev; then exit 0; fi; git pull --rebase origin agent/xau-wick-zone-pro-dev; sleep 5; done
+          exit 1
