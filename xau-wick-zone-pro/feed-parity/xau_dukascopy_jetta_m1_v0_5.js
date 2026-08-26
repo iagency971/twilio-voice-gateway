@@ -1,7 +1,6 @@
-'use strict';
-const fs=require('fs');
-const path=require('path');
-const {getHistoricalRates}=require('dukascopy-node');
+import fs from 'fs';
+import path from 'path';
+import {getHistoricalRates} from 'dukascopy-node';
 
 function args(){
   const a={};for(let i=2;i<process.argv.length;i+=2)a[process.argv[i].replace(/^--/,'')]=process.argv[i+1];
@@ -34,7 +33,6 @@ async function one(side,a){
     new Date(t).toISOString(),(b.open+q.open)/2,(b.high+q.high)/2,(b.low+q.low)/2,(b.close+q.close)/2,
     b.open,b.high,b.low,b.close,q.open,q.high,q.low,q.close,q.close-b.close].join(','));}
   fs.mkdirSync(path.dirname(a.out),{recursive:true});fs.writeFileSync(a.out,lines.join('\n')+'\n');
-  let version='1.50.0';try{version=require('dukascopy-node/package.json').version}catch(e){}
-  const meta={status:ts.length?'PASS':'EMPTY',source:'Dukascopy Jetta via dukascopy-node',package_version:version,instrument:'xauusd',timeframe:'m1',price_types:['bid','ask'],ignoreFlats:true,utcOffset:0,from:a.from,to:a.to,bid_rows:bid.length,ask_rows:ask.length,common_rows:ts.length,first_timestamp_utc:ts.length?new Date(ts[0]).toISOString():null,last_timestamp_utc:ts.length?new Date(ts[ts.length-1]).toISOString():null,mid:'barwise average BID/ASK',local_gap_fill:false};
+  const meta={status:ts.length?'PASS':'EMPTY',source:'Dukascopy Jetta via dukascopy-node',package_version:'1.50.0',instrument:'xauusd',timeframe:'m1',price_types:['bid','ask'],ignoreFlats:true,utcOffset:0,from:a.from,to:a.to,bid_rows:bid.length,ask_rows:ask.length,common_rows:ts.length,first_timestamp_utc:ts.length?new Date(ts[0]).toISOString():null,last_timestamp_utc:ts.length?new Date(ts[ts.length-1]).toISOString():null,mid:'barwise average BID/ASK',local_gap_fill:false};
   fs.writeFileSync(a.meta,JSON.stringify(meta,null,2));console.log(JSON.stringify(meta,null,2));
 })().catch(e=>{console.error(e&&e.stack||e);process.exit(1)});
