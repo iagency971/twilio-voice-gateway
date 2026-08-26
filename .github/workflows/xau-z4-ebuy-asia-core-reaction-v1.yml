@@ -1,0 +1,220 @@
+name: XAU Z4 E-BUY Asia Core Reaction v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-asia-core-reaction-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_C5_GEOMETRY_RUN_ID: '33009186853'
+  FRESH_LOCATION_RUN_ID: '33020549015'
+  RAW_ROOT: https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1
+  JULY_FILE: xauusd_bid_m1_2026_07.csv
+  JULY_SHA: 1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286
+  AUG_FILE: xauusd_bid_m1_2026_08.csv
+  AUG_SHA: 4f61d531018a8e8c37b1f410945e1d23d59fee96cde13bef223dcc9e63d0f852
+
+jobs:
+  historical:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen prereg and code guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_EBUY_ASIA_CORE_21_03_REACTION_PREREG_v1_0_2026-08-26.md
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_EBUY_ASIA_CORE_21_03_REACTION_PREREG_ADDENDUM_A_2026-08-26.md
+          python -m py_compile xau-wick-zone-pro/session-research/xau_ebuy_asia_core_reaction_v1_0.py
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py)" = "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_reaction_dev_v1_0_3_final_preoutcome.py)" = "454ae358dae4b289c8a5907ed9ec69dbad329843"
+          test "$(git hash-object xau-wick-zone-pro/session-research/xau_ebuy_asia_reaction_v1_0.py)" = "07b5a3fe367f7d38bf51c581541c3eeaa32d0300"
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Download exact frozen source-faithful C5 geometry
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_C5_GEOMETRY_RUN_ID }}
+          pattern: frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - name: Assemble exact 24M C5 geometry
+        shell: bash
+        run: |
+          set -euo pipefail;mkdir -p /tmp/raw /tmp/out
+          python - <<'PY'
+          import glob,pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'));assert len(fs)==24,len(fs)
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True);z['time']=pd.to_datetime(z.time,utc=True)
+          z=z.sort_values(['time','side','center']).reset_index(drop=True)
+          assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z') and z.time.max()<pd.Timestamp('2026-08-01T00:00:00Z')
+          z.to_pickle('/tmp/FROZEN_C5_24M.pkl');print('HIST_GEOMETRY_READY',len(z),z.time.nunique())
+          PY
+      - name: Acquire exact 24M BID source and verify hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['MANIFEST']))
+          fs=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07']
+          assert len(fs)==24,len(fs)
+          root=os.environ['RAW_ROOT']+'/'
+          for x in fs:
+              p=Path('/tmp/raw')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest();assert got==x['sha256'],(p.name,got,x['sha256'])
+          print('HIST_RAW_HASH_PASS',len(fs))
+          PY
+      - name: Run historical Asia Core reaction gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/session-research/xau_ebuy_asia_core_reaction_v1_0.py \
+            --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl --mode historical \
+            --output /tmp/out/HISTORICAL_ASIA_CORE_REACTION.json \
+            --contacts-csv /tmp/out/HISTORICAL_CONTACTS.csv.gz \
+            --br-csv /tmp/out/HISTORICAL_BR.csv.gz \
+            --candidates-csv /tmp/out/HISTORICAL_CANDIDATES.csv.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asia-core-reaction-historical-v1
+          path: /tmp/out/*
+          retention-days: 30
+
+  fresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen prereg and code guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_EBUY_ASIA_CORE_21_03_REACTION_PREREG_v1_0_2026-08-26.md
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_EBUY_ASIA_CORE_21_03_REACTION_PREREG_ADDENDUM_A_2026-08-26.md
+          python -m py_compile xau-wick-zone-pro/session-research/xau_ebuy_asia_core_reaction_v1_0.py
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Download fresh location evidence with frozen session IDs
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FRESH_LOCATION_RUN_ID }}
+          name: asia-core-aug2026-location-v1
+          path: /tmp/location
+      - name: Download July warmup and exact frozen August bytes
+        shell: bash
+        run: |
+          set -euo pipefail;mkdir -p /tmp/raw /tmp/out
+          curl --fail --location --retry 5 --retry-delay 2 "$RAW_ROOT/$JULY_FILE" -o "/tmp/raw/$JULY_FILE"
+          curl --fail --location --retry 5 --retry-delay 2 "$RAW_ROOT/$AUG_FILE" -o "/tmp/raw/$AUG_FILE"
+          test "$(sha256sum /tmp/raw/$JULY_FILE | awk '{print $1}')" = "$JULY_SHA"
+          test "$(sha256sum /tmp/raw/$AUG_FILE | awk '{print $1}')" = "$AUG_SHA"
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/location/XAUUSD_Z4_EBUY_ASIA_CORE_AUG2026_LOCATION_RESULT_v1.json'))
+          assert q['status']=='ASIA_CORE_FRESH_AUG2026_LOCATION_PASS' and q['pass'] is True
+          assert q['source']['sha256']=='4f61d531018a8e8c37b1f410945e1d23d59fee96cde13bef223dcc9e63d0f852'
+          print('FRESH_LOCATION_GATE_AND_SOURCE_PASS',len(q['eligible_session_ids']))
+          PY
+      - name: Build exact Jul-Aug source-faithful C5 geometry-only state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          repl=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),
+            ('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+            ("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")]
+          for old,new in repl:
+              assert src.count(old)==1,(old,src.count(old));src=src.replace(old,new)
+          p=Path('/tmp/z4_c5_geometry_only.py');p.write_text(src)
+          man=json.load(open('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json'))
+          got=hashlib.sha256(p.read_bytes()).hexdigest();assert got==man['sha256']['z4_geometry'],(got,man['sha256']['z4_geometry'])
+          print('FRESH_GEOMETRY_ENGINE_HASH_PASS',got)
+          PY
+          python /tmp/z4_c5_geometry_only.py --files /tmp/raw/$JULY_FILE /tmp/raw/$AUG_FILE --output /tmp/Z4_JUL_AUG_C5.pkl --tag ASIA_CORE_AUG2026_REACTION_GEOMETRY
+      - name: Run fresh August Asia Core reaction confirmation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/session-research/xau_ebuy_asia_core_reaction_v1_0.py \
+            --files /tmp/raw/$JULY_FILE /tmp/raw/$AUG_FILE --z4-pkl /tmp/Z4_JUL_AUG_C5.pkl --mode fresh \
+            --fresh-session-ids-json /tmp/location/XAUUSD_Z4_EBUY_ASIA_CORE_AUG2026_LOCATION_RESULT_v1.json \
+            --output /tmp/out/FRESH_AUG2026_ASIA_CORE_REACTION.json \
+            --contacts-csv /tmp/out/FRESH_CONTACTS.csv.gz \
+            --br-csv /tmp/out/FRESH_BR.csv.gz \
+            --candidates-csv /tmp/out/FRESH_CANDIDATES.csv.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asia-core-reaction-fresh-aug2026-v1
+          path: /tmp/out/*
+          retention-days: 30
+
+  aggregate:
+    needs: [historical, fresh]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: asia-core-reaction-*-v1
+          path: /tmp/evidence
+          merge-multiple: true
+      - name: Aggregate preregistered reaction decision
+        shell: bash
+        run: |
+          set -euo pipefail;mkdir -p /tmp/final
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          h=json.load(open('/tmp/evidence/HISTORICAL_ASIA_CORE_REACTION.json'))
+          f=json.load(open('/tmp/evidence/FRESH_AUG2026_ASIA_CORE_REACTION.json'))
+          assert h['status'] in ('ASIA_CORE_BR_REACTION_PASS','ASIA_CORE_BR_REACTION_FAIL')
+          assert f['status']=='ASIA_CORE_FRESH_AUG2026_REACTION_COMPLETE'
+          passed=bool(h['reaction_transfer_pass'])
+          fr=f['fresh_result'];fresh_direction=(fr['tp1_resolved_rate'] is not None and fr['tp1_resolved_rate']>=.30)
+          out={
+            'status':'ASIA_CORE_BR_QA_AUTHORIZED' if passed else 'ASIA_CORE_ZONES_ONLY',
+            'historical_gate_pass':passed,
+            'historical':h,
+            'fresh_aug2026':f,
+            'fresh_aug2026_tp1_rate_ge_030_descriptive':fresh_direction,
+            'E_BUY_US_transfer_authorized':False,
+            'Asia_Core_BR_QA_authorized':passed,
+            'Asia_Core_BUY_Escore_authorized':False,
+            'production_authorization':'BR_QA_ONLY_NO_E_SCORE' if passed else 'ZONES_ONLY'
+          }
+          p=Path('/tmp/final/XAUUSD_Z4_EBUY_ASIA_CORE_REACTION_DECISION_v1.json');p.write_text(json.dumps(out,indent=2,default=str))
+          man={'files':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()},'status':out['status']}
+          Path('/tmp/final/MANIFEST.json').write_text(json.dumps(man,indent=2));print(json.dumps(out,indent=2,default=str))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asia-core-reaction-decision-v1
+          path: /tmp/final/*
+          retention-days: 30
