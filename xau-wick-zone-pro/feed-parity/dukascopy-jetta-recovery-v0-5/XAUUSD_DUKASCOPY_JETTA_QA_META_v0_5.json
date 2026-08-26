@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "source": "Dukascopy Jetta via dukascopy-node",
+  "package_version": "1.50.0",
+  "instrument": "xauusd",
+  "timeframe": "m1",
+  "price_types": [
+    "bid",
+    "ask"
+  ],
+  "ignoreFlats": true,
+  "utcOffset": 0,
+  "from": "2026-08-19T00:00:00Z",
+  "to": "2026-08-21T00:00:00Z",
+  "bid_rows": 2878,
+  "ask_rows": 2878,
+  "common_rows": 2878,
+  "first_timestamp_utc": "2026-08-19T00:00:00.000Z",
+  "last_timestamp_utc": "2026-08-20T23:58:00.000Z",
+  "mid": "barwise average BID/ASK",
+  "local_gap_fill": false
+}
