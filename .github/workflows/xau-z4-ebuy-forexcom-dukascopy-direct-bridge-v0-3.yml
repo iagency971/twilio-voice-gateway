@@ -1,0 +1,180 @@
+name: XAU Z4 E-BUY FOREXCOM Dukascopy Direct Bridge v0.3
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-forexcom-dukascopy-direct-bridge-v0-3.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  bridge-transfer:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frozen dependencies
+        run: |
+          python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.2 joblib==1.5.2
+          npm install --no-save dukascopy-node@1.46.4
+      - name: Frozen bridge and entry guards
+        run: |
+          set -euo pipefail
+          test -f xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_DUKASCOPY_DIRECT_BRIDGE_PREREG_v0_3_2026-08-25.md
+          echo 'f0ef3bed13d4dcd15ed56831c2befa413be5a63d9886c28073b652328548e483  xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py' | sha256sum -c -
+          echo 'ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342  xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib' | sha256sum -c -
+          echo 'd9505e23ac4c82e11a14f192629bbc24d6f38ddadbfc82f3ef2d60e67dc7d1f4  xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz' | sha256sum -c -
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py').read_text()
+          for x in ['mfe_v','mae_v','tp1_invalidation_status','target_invalidation_status(','trigger_outcome(']: assert x not in s,x
+          assert "'common_c5_ge_250':metrics['common_eligible_c5']>=250" in s
+          print('DIRECT_BRIDGE_PREREG_AND_OUTCOME_BLIND_GUARD_PASS')
+          PY
+      - name: Acquire Dukascopy direct M1 BID and ASK
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/direct-bridge
+          node <<'JS'
+          const fs=require('fs');
+          const {getHistoricalRates}=require('dukascopy-node');
+          async function one(side,out){
+            const data=await getHistoricalRates({
+              instrument:'xauusd',
+              dates:{from:new Date('2026-08-16T00:00:00Z'),to:new Date('2026-08-26T00:00:00Z')},
+              timeframe:'m1', priceType:side, format:'json'
+            });
+            const arr=(typeof data==='string')?JSON.parse(data):data;
+            if(!Array.isArray(arr)||arr.length<5000) throw new Error(side+' insufficient direct rows '+(arr&&arr.length));
+            const lines=['timestamp,open,high,low,close,volume'];
+            for(const r of arr) lines.push([r.timestamp,r.open,r.high,r.low,r.close,r.volume??''].join(','));
+            fs.writeFileSync(out,lines.join('\n')+'\n');
+            console.log(side,arr.length,new Date(arr[0].timestamp).toISOString(),new Date(arr[arr.length-1].timestamp).toISOString());
+          }
+          (async()=>{await one('bid','/tmp/direct-bridge/direct_bid.csv');await one('ask','/tmp/direct-bridge/direct_ask.csv')})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+      - name: Bridge direct Dukascopy against frozen mirror and prepare extension
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import numpy as np,pandas as pd
+          from scipy.stats import spearmanr
+          old=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz')
+          old['time']=pd.to_datetime(old.timestamp,utc=True);old=old.sort_values('time').drop_duplicates('time')
+          def load(path):
+              d=pd.read_csv(path);d['time']=pd.to_datetime(pd.to_numeric(d.timestamp),unit='ms',utc=True);return d.sort_values('time').drop_duplicates('time')
+          direct={'bid':load('/tmp/direct-bridge/direct_bid.csv'),'ask':load('/tmp/direct-bridge/direct_ask.csv')}
+          bridge={};all_pass=True
+          for side,d in direct.items():
+              cols=['open','high','low','close'];oc=[c+'_'+side for c in cols]
+              m=old[['time']+oc].merge(d[['time']+cols],on='time',how='left',suffixes=('_old','_direct'))
+              coverage=float(m.close.notna().mean());common=m.dropna(subset=cols).copy()
+              errs={};checks={'timestamp_coverage_ge_0995':coverage>=.995,'common_rows_ge_5000':len(common)>=5000}
+              a=pd.to_numeric(common['close_'+side],errors='raise').to_numpy(float);b=pd.to_numeric(common.close,errors='raise').to_numpy(float)
+              rs=float(spearmanr(np.diff(np.log(a)),np.diff(np.log(b))).statistic) if len(common)>3 else None
+              checks['return_spearman_ge_0999']=rs is not None and rs>=.999
+              for c in cols:
+                  x=pd.to_numeric(common[c+'_'+side],errors='raise').to_numpy(float);y=pd.to_numeric(common[c],errors='raise').to_numpy(float);e=np.abs(x-y)
+                  errs[c]={'median':float(np.median(e)),'p99':float(np.quantile(e,.99)),'max':float(np.max(e))}
+                  checks[f'{c}_median_le_0001']=errs[c]['median']<=.001
+                  checks[f'{c}_p99_le_001']=errs[c]['p99']<=.01
+                  checks[f'{c}_max_le_005']=errs[c]['max']<=.05
+              passed=all(checks.values());all_pass=all_pass and passed
+              bridge[side]={'pass':passed,'direct_rows':int(len(d)),'direct_min_utc':str(d.time.min()),'direct_max_utc':str(d.time.max()),'archive_rows':int(len(old)),'coverage':coverage,'common_rows':int(len(common)),'return_spearman':rs,'errors_usd':errs,'checks':checks}
+          out={'status':'DUKASCOPY_DIRECT_BRIDGE_PASS' if all_pass else 'DUKASCOPY_DIRECT_BRIDGE_FAIL','library':'dukascopy-node@1.46.4','bridge':bridge,'future_trade_outcomes_used':False}
+          Path('/tmp/direct-bridge/bridge_result.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          if not all_pass: raise SystemExit('DUKASCOPY_DIRECT_BRIDGE_FAIL_NO_ENTRY_TRANSFER')
+          # Merge direct BID/ASK only after bridge PASS.
+          b=direct['bid'][['time','open','high','low','close']].rename(columns={c:c+'_bid' for c in ['open','high','low','close']})
+          q=direct['ask'][['time','open','high','low','close']].rename(columns={c:c+'_ask' for c in ['open','high','low','close']})
+          D=b.merge(q,on='time',how='inner',validate='one_to_one')
+          for c in ['open','high','low','close']:D[c]=(D[c+'_bid']+D[c+'_ask'])/2.
+          D['spread']=D.close_ask-D.close_bid;D['timestamp']=D.time.dt.strftime('%Y-%m-%d %H:%M:%S%z')
+          F=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz');F['time']=pd.to_datetime(F.timestamp_utc,utc=True);F=F.sort_values('time').drop_duplicates('time')
+          lo,hi=F.time.min(),F.time.max();D=D[(D.time>=lo)&(D.time<=hi)].copy()
+          cutoff=pd.Timestamp('2026-08-20 23:58:00Z');extra=int((D.time>cutoff).sum())
+          if extra<500: raise SystemExit(f'DIRECT_EXTENSION_INSUFFICIENT extra_rows={extra}')
+          keep=['timestamp','open','high','low','close','open_bid','high_bid','low_bid','close_bid','open_ask','high_ask','low_ask','close_ask','spread']
+          D[keep].to_csv('/tmp/direct-bridge/duka_direct_merged.csv',index=False)
+          def engine(df,cols,outp):
+              x=pd.DataFrame({'timestamp':(df.time.astype('int64')//1_000_000).astype('int64')})
+              for src,dst in zip(cols,['open','high','low','close']):x[dst]=pd.to_numeric(df[src],errors='raise')
+              x.to_csv(outp,index=False)
+          engine(D,['open_bid','high_bid','low_bid','close_bid'],'/tmp/direct-bridge/duka_bid_engine.csv')
+          engine(D,['open','high','low','close'],'/tmp/direct-bridge/duka_mid_engine.csv')
+          engine(F,['open','high','low','close'],'/tmp/direct-bridge/forex_engine.csv')
+          meta={'status':'DIRECT_EXTENSION_READY','direct_merged_rows':int(len(D)),'intersection_min_utc':str(D.time.min()),'intersection_max_utc':str(D.time.max()),'post_mirror_cutoff_rows':extra,'direct_merged_sha256':hashlib.sha256(Path('/tmp/direct-bridge/duka_direct_merged.csv').read_bytes()).hexdigest(),'bid_raw_sha256':hashlib.sha256(Path('/tmp/direct-bridge/direct_bid.csv').read_bytes()).hexdigest(),'ask_raw_sha256':hashlib.sha256(Path('/tmp/direct-bridge/direct_ask.csv').read_bytes()).hexdigest()}
+          Path('/tmp/direct-bridge/extension_meta.json').write_text(json.dumps(meta,indent=2));print(json.dumps(meta,indent=2))
+          PY
+      - name: Build independent outcome-blind Z4 geometry on direct bridge feed
+        run: |
+          set -euo pipefail
+          G=xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py
+          python "$G" --files /tmp/direct-bridge/duka_bid_engine.csv --output /tmp/direct-bridge/z4_bid.pkl --tag V03_DIRECT_DUKA_BID & p1=$!
+          python "$G" --files /tmp/direct-bridge/duka_mid_engine.csv --output /tmp/direct-bridge/z4_mid.pkl --tag V03_DIRECT_DUKA_MID & p2=$!
+          python "$G" --files /tmp/direct-bridge/forex_engine.csv --output /tmp/direct-bridge/z4_forex.pkl --tag V03_FROZEN_FOREX & p3=$!
+          wait $p1;wait $p2;wait $p3
+      - name: Replay exact frozen entry transfer comparator v0.1
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py \
+            --forex-csv xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz \
+            --duka-csv /tmp/direct-bridge/duka_direct_merged.csv \
+            --z4-bid-pkl /tmp/direct-bridge/z4_bid.pkl \
+            --z4-mid-pkl /tmp/direct-bridge/z4_mid.pkl \
+            --z4-forex-pkl /tmp/direct-bridge/z4_forex.pkl \
+            --model-pkl xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib \
+            --output /tmp/direct-bridge/comparator_result.json \
+            --matched-bid-csv /tmp/direct-bridge/matched_bid.csv \
+            --matched-mid-csv /tmp/direct-bridge/matched_mid.csv
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.load(open('/tmp/direct-bridge/comparator_result.json'))
+          passed=r['status']=='ENTRY_TRANSFER_PILOT_PASS_OPERATIONAL'
+          r['status_original_comparator']=r['status'];r['status']='ENTRY_TRANSFER_V0_3_PASS_OPERATIONAL' if passed else 'ENTRY_TRANSFER_V0_3_FAIL_NO_PINE_PROMOTION'
+          r['dukascopy_direct_bridge_status']='PASS';r['all_v0_1_thresholds_unchanged']=True;r['data_transport']='dukascopy-node@1.46.4 direct after frozen mirror bridge'
+          r['authorization']='AUTHORIZE_PINE_ENTRY_LAYER_ENGINEERING_ON_FOREXCOM_M1' if passed else 'DO_NOT_PROMOTE_ENTRY_LAYER_TO_PINE'
+          Path('/tmp/direct-bridge/result.json').write_text(json.dumps(r,indent=2));print(json.dumps({'status':r['status'],'bid_common_c5':r['scientific_reference_bid_vs_forex']['location']['metrics']['common_eligible_c5'],'mid_common_c5':r['mid_control_vs_forex']['location']['metrics']['common_eligible_c5'],'authorization':r['authorization']},indent=2))
+          PY
+      - name: Build immutable v0.3 provenance
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          paths={'prereg':'xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_DUKASCOPY_DIRECT_BRIDGE_PREREG_v0_3_2026-08-25.md','comparator':'xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py','model':'xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib','forex':'xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz','direct_bid':'/tmp/direct-bridge/direct_bid.csv','direct_ask':'/tmp/direct-bridge/direct_ask.csv','bridge':'/tmp/direct-bridge/bridge_result.json','result':'/tmp/direct-bridge/result.json'}
+          sha={k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in paths.items()};r=json.load(open(paths['result']));b=json.load(open(paths['bridge']))
+          out={'status':'ENTRY_TRANSFER_V0_3_PROVENANCE_RECORDED','result_status':r['status'],'bridge_status':b['status'],'future_trade_outcomes_used':False,'thresholds_changed':False,'model_refit':False,'e_remap':False,'sha256':sha}
+          Path('/tmp/direct-bridge/manifest.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+      - name: Publish v0.3 direct bridge evidence
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/forexcom-entry-transfer-dukascopy-direct-v0-3
+          mkdir -p "$out"
+          cp /tmp/direct-bridge/bridge_result.json "$out/XAUUSD_Z4_EBUY_DUKASCOPY_DIRECT_BRIDGE_RESULT_v0_3.json"
+          cp /tmp/direct-bridge/extension_meta.json "$out/XAUUSD_Z4_EBUY_DUKASCOPY_DIRECT_EXTENSION_META_v0_3.json"
+          cp /tmp/direct-bridge/result.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_RESULT_v0_3.json"
+          cp /tmp/direct-bridge/manifest.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_MANIFEST_v0_3.json"
+          gzip -c /tmp/direct-bridge/duka_direct_merged.csv > "$out/DUKASCOPY_DIRECT_XAUUSD_M1_intersection_v0_3.csv.gz"
+          gzip -c /tmp/direct-bridge/matched_bid.csv > "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_MATCHED_BID_v0_3.csv.gz"
+          gzip -c /tmp/direct-bridge/matched_mid.csv > "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_MATCHED_MID_v0_3.csv.gz"
+          git add "$out"
+          git commit -m 'record strict Dukascopy-direct bridge and FOREXCOM entry transfer v0.3 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
