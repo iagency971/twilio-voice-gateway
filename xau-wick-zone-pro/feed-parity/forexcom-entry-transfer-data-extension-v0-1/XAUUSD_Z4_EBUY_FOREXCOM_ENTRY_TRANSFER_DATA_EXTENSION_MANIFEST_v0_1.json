@@ -1,0 +1,17 @@
+{
+  "status": "ENTRY_TRANSFER_DATA_EXTENSION_PROVENANCE_RECORDED",
+  "result_status": "ENTRY_TRANSFER_DATA_EXTENSION_FAIL",
+  "future_trade_outcomes_used": false,
+  "all_thresholds_unchanged": true,
+  "source_continuity_max_abs_diff": 0.0,
+  "sha256": {
+    "addendum": "31301d30e735dae4728b6a0f0c0bf48353a826a228c875391a35cb990cbf97b7",
+    "original_prereg": "da557cd330e9d00a6fb43c0c4d1e70f7190082495732ba36ed8c9f97cba1d2e9",
+    "comparator": "f0ef3bed13d4dcd15ed56831c2befa413be5a63d9886c28073b652328548e483",
+    "model": "ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342",
+    "forex_snapshot": "d9505e23ac4c82e11a14f192629bbc24d6f38ddadbfc82f3ef2d60e67dc7d1f4",
+    "new_duka_month": "7a7cdba12ad8586aec791f055afc515929318143db228c83d5df0bf555123d57",
+    "extended_overlap": "0203d452c893b304381257d564506894a1584ad1acdd00b4b81c5680c60610b8",
+    "result": "4d23cf8ca6cbe1fce5206fd80b716449b580a63409f2ebf2dff888da51e57f27"
+  }
+}

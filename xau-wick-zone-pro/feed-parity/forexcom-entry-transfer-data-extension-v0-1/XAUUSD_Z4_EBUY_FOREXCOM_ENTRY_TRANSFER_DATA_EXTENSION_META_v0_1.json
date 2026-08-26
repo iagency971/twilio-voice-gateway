@@ -1,0 +1,19 @@
+{
+  "status": "SAME_SOURCE_EXTENSION_ACQUIRED",
+  "command": "python xau-multiyear/scripts/acquire_dukascopy_window.py --from-month 2026-08 --to-month 2026-08",
+  "source": "kevingtlin/dukascopy_XAUUSD_1m_Data BID+ASK August 2026 via canonical acquisition script",
+  "new_month_rows": 24115,
+  "new_month_min_utc": "2026-08-02 00:00:00+00:00",
+  "new_month_max_utc": "2026-08-20 23:58:00+00:00",
+  "new_month_sha256": "7a7cdba12ad8586aec791f055afc515929318143db228c83d5df0bf555123d57",
+  "archived_overlap_rows": 5874,
+  "archived_overlap_max_utc": "2026-08-20 23:58:00+00:00",
+  "historical_overlap_max_abs_diff": 0.0,
+  "extended_overlap_rows": 5874,
+  "extended_overlap_min_utc": "2026-08-16 22:01:00+00:00",
+  "extended_overlap_max_utc": "2026-08-20 23:58:00+00:00",
+  "extended_overlap_sha256": "0203d452c893b304381257d564506894a1584ad1acdd00b4b81c5680c60610b8",
+  "forex_rows": 9112,
+  "forex_min_utc": "2026-08-16 22:01:00+00:00",
+  "forex_max_utc": "2026-08-25 11:53:00+00:00"
+}
