@@ -1,0 +1,123 @@
+name: XAU Z4 E-BUY Asia Core Aug2026 Location v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-asia-core-aug2026-location-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  JULY_FILE: xauusd_bid_m1_2026_07.csv
+  JULY_SHA: 1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286
+  AUG_FILE: xauusd_bid_m1_2026_08.csv
+  RAW_ROOT: https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1
+
+jobs:
+  holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen prereg and source guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_EBUY_ASIA_CORE_21_03_FRESH_AUG2026_PREREG_v1_0.md
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py)" = "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f"
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Download frozen July warmup and fresh August holdout; hash before metrics
+        shell: bash
+        run: |
+          set -euo pipefail;mkdir -p /tmp/raw /tmp/results
+          curl --fail --location --retry 5 --retry-delay 2 "$RAW_ROOT/$JULY_FILE" -o "/tmp/raw/$JULY_FILE"
+          curl --fail --location --retry 5 --retry-delay 2 "$RAW_ROOT/$AUG_FILE" -o "/tmp/raw/$AUG_FILE"
+          J=$(sha256sum "/tmp/raw/$JULY_FILE" | awk '{print $1}');test "$J" = "$JULY_SHA"
+          A=$(sha256sum "/tmp/raw/$AUG_FILE" | awk '{print $1}')
+          echo "AUG_SHA=$A" >> "$GITHUB_ENV"
+          python - <<'PY'
+          import hashlib,json,os,pandas as pd
+          from pathlib import Path
+          p=Path('/tmp/raw')/os.environ['AUG_FILE'];d=pd.read_csv(p);t=pd.to_datetime(d.timestamp,unit='ms',utc=True)
+          q={'file':os.environ['AUG_FILE'],'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'rows':int(len(d)),'first_time_utc':str(t.min()),'last_time_utc':str(t.max()),'source_frozen_before_metrics':True}
+          Path('/tmp/results/AUG2026_SOURCE_FREEZE.json').write_text(json.dumps(q,indent=2));print(json.dumps(q,indent=2))
+          PY
+      - name: Build exact source-faithful C5 geometry-only engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          repl=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),
+            ('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+            ("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")]
+          for old,new in repl:
+              assert src.count(old)==1,(old,src.count(old));src=src.replace(old,new)
+          p=Path('/tmp/z4_c5_geometry_only.py');p.write_text(src)
+          man=json.load(open('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json'))
+          got=hashlib.sha256(p.read_bytes()).hexdigest();assert got==man['sha256']['z4_geometry'],(got,man['sha256']['z4_geometry']);print('GEOMETRY_ENGINE_HASH_PASS',got)
+          PY
+          python /tmp/z4_c5_geometry_only.py --files /tmp/raw/$JULY_FILE /tmp/raw/$AUG_FILE --output /tmp/Z4_JUL_AUG_C5.pkl --tag ASIA_CORE_AUG2026_C5_GEOMETRY
+      - name: Run fresh Asia Core outcome-blind location/stability gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import importlib.util,json,sys,time
+          from collections import Counter
+          from pathlib import Path
+          import numpy as np,pandas as pd
+          ROOT=Path('xau-wick-zone-pro/entry-research')
+          spec=importlib.util.spec_from_file_location('v04',ROOT/'xau_ebuy_coverage_v0_4_sticky.py');v04=importlib.util.module_from_spec(spec);sys.modules[spec.name]=v04;spec.loader.exec_module(v04);v01=v04.v01
+          raw=v01.load_raw(['/tmp/raw/xauusd_bid_m1_2026_07.csv','/tmp/raw/xauusd_bid_m1_2026_08.csv']);active=v01.active_m1(raw)
+          aug=v01.load_raw(['/tmp/raw/xauusd_bid_m1_2026_08.csv']);aug_min=pd.Timestamp(aug.time.min());aug_max=pd.Timestamp(aug.time.max())
+          z4=pd.read_pickle('/tmp/Z4_JUL_AUG_C5.pkl');z4['time']=pd.to_datetime(z4.time,utc=True)
+          bad=sorted(v01.FORBIDDEN & set(z4.columns));assert not bad,bad
+          def core(t):
+              q=pd.Timestamp(t).tz_convert('America/New_York');return q.hour>=21 or q.hour<3
+          def sid(t):
+              q=pd.Timestamp(t).tz_convert('America/New_York');d=q.date() if q.hour>=21 else (q-pd.Timedelta(days=1)).date();return d.isoformat()
+          v04.v01.ny_us=core
+          snaps,pools=v04.build_fixed_pools(raw,active,z4);displays=v04.sticky_display(raw,snaps,pools)
+          # Freeze complete session IDs mechanically from the downloaded August byte stream.
+          ny0=aug_min.tz_convert('America/New_York');ny1=aug_max.tz_convert('America/New_York');days=pd.date_range((ny0-pd.Timedelta(days=2)).date(),(ny1+pd.Timedelta(days=1)).date(),freq='D')
+          complete=set()
+          for day in days:
+              st=pd.Timestamp(year=day.year,month=day.month,day=day.day,hour=21,tz='America/New_York').tz_convert('UTC');en=(st.tz_convert('America/New_York')+pd.Timedelta(hours=6)).tz_convert('UTC')
+              if aug_min<=st and aug_max>=en-pd.Timedelta(minutes=1):complete.add(day.date().isoformat())
+          ix=[i for i,s in enumerate(snaps) if aug_min<=pd.Timestamp(s['time'])<=aug_max and sid(s['time']) in complete]
+          ss=[snaps[i] for i in ix];dd=[displays[i] for i in ix];pp=[pools[i] for i in ix]
+          assert ss,'no fresh holdout snapshots'
+          metrics=v01.metrics(ss,dd);st=v04.stability(raw,ss,dd,pp);fam=Counter(z.family for L in dd for z in L);sessions=sorted({sid(s['time']) for s in ss});zero=sum(1 for L in dd if not L)
+          checks={
+            'coverage_1v_ge_080':metrics['coverage']['1.0']>=.80,
+            'coverage_1p5v_ge_090':metrics['coverage']['1.5']>=.90,
+            'coverage_2v_ge_095':metrics['coverage']['2.0']>=.95,
+            'count_median_1_to_3':1.0<=metrics['candidate_count_median']<=3.0,
+            'count_p90_le_3':metrics['candidate_count_p90']<=3.0,
+            'nearest_p90_le_1p5v':metrics['nearest_distance_v_p90'] is not None and metrics['nearest_distance_v_p90']<=1.5,
+            'survival_aware_persistence_ge_070':st['survival_aware_display_persistence'] is not None and st['survival_aware_display_persistence']>=.70,
+            'unexplained_survival_share_le_005':st['unexplained_share_of_survival_eligible'] is not None and st['unexplained_share_of_survival_eligible']<=.05,
+          }
+          passed=all(checks.values());src=json.load(open('/tmp/results/AUG2026_SOURCE_FREEZE.json'))
+          out={'status':'ASIA_CORE_FRESH_AUG2026_LOCATION_PASS' if passed else 'ASIA_CORE_FRESH_AUG2026_LOCATION_FAIL','future_price_outcomes_used':False,'score_used':False,'window':'21:00-03:00 America/New_York','architecture':'Z4 + ESM_BOTH_G120M + EPM_M1_R2_A8H + EWM_G60M + ES_M1_8H_R2_T0.50','source':src,'complete_source_session_id_count':len(complete),'eligible_session_count':len(sessions),'eligible_session_ids':sessions,'eligible_snapshot_count':len(ss),'zero_display_share':zero/len(ss),'mean_zone_count':float(np.mean([len(x) for x in dd])),'metrics':metrics,'stability':st,'family_mix':dict(sorted(fam.items())),'checks':checks,'pass':passed,'reaction_study_authorized':passed,'production_authorization':'NONE_PARTIAL_MONTH_FRESH_HOLDOUT'}
+          Path('/tmp/results/XAUUSD_Z4_EBUY_ASIA_CORE_AUG2026_LOCATION_RESULT_v1.json').write_text(json.dumps(out,indent=2,default=str));print(json.dumps(out,indent=2,default=str))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asia-core-aug2026-location-v1
+          path: /tmp/results/*
+          retention-days: 30
