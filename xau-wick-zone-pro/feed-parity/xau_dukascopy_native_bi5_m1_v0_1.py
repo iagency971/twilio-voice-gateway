@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import argparse,json,lzma,struct,time
+from concurrent.futures import ThreadPoolExecutor,as_completed
 from datetime import date,datetime,timedelta,timezone
 from pathlib import Path
 import pandas as pd
 import requests
 
 SYMBOL='XAUUSD'; DIV=1000.0; REC=struct.Struct('>IIIff')
-BASES=('https://datafeed.dukascopy.com/datafeed','https://www.dukascopy.com/datafeed')
+BASES=('https://www.dukascopy.com/datafeed','https://datafeed.dukascopy.com/datafeed')
 
 def cli():
     p=argparse.ArgumentParser();p.add_argument('--from-date',required=True);p.add_argument('--to-date',required=True);p.add_argument('--out',required=True);p.add_argument('--meta',required=True);return p.parse_args()
@@ -41,11 +42,18 @@ def decode(blob,base,max_ms):
         out.append((base+timedelta(milliseconds=int(ms)),bid/DIV,ask/DIV,bv,av))
     return out
 
+def fetch_hour(d,h):
+    path=f'{SYMBOL}/{d.year:04d}/{d.month-1:02d}/{d.day:02d}/{h:02d}h_ticks.bi5'
+    blob,host,att=download_path(path)
+    q=decode(blob,datetime(d.year,d.month,d.day,h,tzinfo=timezone.utc),3_600_000)
+    return h,q,host,att
+
 def fetch_day(d):
     ticks=[];hour_files=0;hosts={};missing=[]
-    for h in range(24):
-        path=f'{SYMBOL}/{d.year:04d}/{d.month-1:02d}/{d.day:02d}/{h:02d}h_ticks.bi5'
-        blob,host,att=download_path(path);q=decode(blob,datetime(d.year,d.month,d.day,h,tzinfo=timezone.utc),3_600_000)
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        futs=[ex.submit(fetch_hour,d,h) for h in range(24)]
+        results=[f.result() for f in as_completed(futs)]
+    for h,q,host,att in sorted(results,key=lambda x:x[0]):
         if q:
             hour_files+=1;ticks.extend(q);hosts[host]=hosts.get(host,0)+1
         else:missing.append({'hour':h,'attempts':att})
@@ -54,6 +62,7 @@ def fetch_day(d):
         blob,host,att=download_path(path);ticks=decode(blob,datetime(d.year,d.month,d.day,tzinfo=timezone.utc),86_400_000)
         if ticks:hosts[host]=hosts.get(host,0)+1
         else:missing.append({'daily':True,'attempts':att})
+    ticks.sort(key=lambda x:x[0])
     return ticks,hour_files,hosts,missing
 
 def aggregate(ticks):
@@ -71,6 +80,6 @@ def main():
     for d in daterange(a.from_date,a.to_date):
         q,n,hosts,missing=fetch_day(d);ticks.extend(q);dm.append({'date':d.isoformat(),'ticks':len(q),'hour_files_with_ticks':n,'hosts_used':hosts,'missing_request_count':len(missing)});print(d,len(q),n,hosts,len(missing),flush=True)
     x=aggregate(ticks);Path(a.out).parent.mkdir(parents=True,exist_ok=True);x.to_csv(a.out,index=False)
-    meta={'status':'PASS' if len(x) else 'EMPTY','symbol':SYMBOL,'price_divisor':DIV,'sources':list(BASES),'transport_repair':'same BI5 path; datafeed host then www host fallback; no synthetic missing hours','from_date':a.from_date,'to_date':a.to_date,'tick_count':len(ticks),'m1_count':len(x),'first_m1':str(x.timestamp.min()) if len(x) else None,'last_m1':str(x.timestamp.max()) if len(x) else None,'days':dm,'aggregation':'BID/ASK tick OHLC per UTC minute; MID barwise average; no forward-fill'}
+    meta={'status':'PASS' if len(x) else 'EMPTY','symbol':SYMBOL,'price_divisor':DIV,'sources':list(BASES),'transport_repair':'same BI5 paths; www host first, datafeed fallback; max 6 workers; no synthetic missing hours','from_date':a.from_date,'to_date':a.to_date,'tick_count':len(ticks),'m1_count':len(x),'first_m1':str(x.timestamp.min()) if len(x) else None,'last_m1':str(x.timestamp.max()) if len(x) else None,'days':dm,'aggregation':'BID/ASK tick OHLC per UTC minute; MID barwise average; no forward-fill'}
     Path(a.meta).write_text(json.dumps(meta,indent=2));print(json.dumps(meta,indent=2))
 if __name__=='__main__':main()
