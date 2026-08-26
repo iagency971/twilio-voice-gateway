@@ -39,7 +39,7 @@ jobs:
             xau-wick-zone-pro/entry-research/xau_ebuy_fused_zone_sensitivity_v0_1.py \
             xau-wick-zone-pro/entry-research/xau_ebuy_fused_zone_sensitivity_v0_2_baseline_provenance.py
           python - <<'PY'
-          import hashlib,json
+          import gzip,hashlib,json
           from pathlib import Path
           root=Path('xau-wick-zone-pro/entry-research')
           prereg=(root/'XAUUSD_Z4_EBUY_FUSED_ZONE_SENSITIVITY_PREREG_v0_1_2026-08-26.md').read_text()
@@ -52,9 +52,11 @@ jobs:
           assert hashlib.sha256(model.read_bytes()).hexdigest()=='ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342'
           man=json.load(open(root/'ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json'))
           cand=root/'ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_OOS_STICKY_CANDIDATES_v1_0.csv.gz'
-          assert hashlib.sha256(cand.read_bytes()).hexdigest()==man['sha256']['candidates']
+          gz_bytes=cand.read_bytes()
+          csv_sha=hashlib.sha256(gzip.decompress(gz_bytes)).hexdigest()
+          assert csv_sha==man['sha256']['candidates'],(csv_sha,man['sha256']['candidates'])
           assert man['authorization']=='FREEZE_EBUY_LOCATION_ENGINE_AND_AUTHORIZE_REACTION_PREREG'
-          print('V02_FROZEN_PROVENANCE_GUARDS_PASS')
+          print('V02_FROZEN_PROVENANCE_GUARDS_PASS','candidate_csv_sha256',csv_sha,'candidate_gzip_sha256',hashlib.sha256(gz_bytes).hexdigest())
           PY
 
       - name: Download exact frozen H1 reaction target geometry
