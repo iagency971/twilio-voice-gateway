@@ -1,0 +1,132 @@
+name: XAU Z4 E-BUY Asia Architecture v2.0 Parallel
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-asia-architecture-v2-0-parallel.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_C5_GEOMETRY_RUN_ID: '33009186853'
+
+jobs:
+  esm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {mode: LOW, grace: 30}
+          - {mode: LOW, grace: 60}
+          - {mode: LOW, grace: 120}
+          - {mode: BODYLOW, grace: 30}
+          - {mode: BODYLOW, grace: 60}
+          - {mode: BODYLOW, grace: 120}
+          - {mode: BOTH, grace: 30}
+          - {mode: BOTH, grace: 60}
+          - {mode: BOTH, grace: 120}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen methodology guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_EBUY_ASIA_SESSION_PREREG_v2_0_2026-08-26.md
+          python -m py_compile xau-wick-zone-pro/session-research/xau_ebuy_asia_v2_single_esm.py
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py)" = "ef45037d2a99a705ddf9bfbc3ebc666f88119a80"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py)" = "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_3.py)" = "10747fcf3bc9fa4e362fc7b42592d3eebba2fe12"
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_C5_GEOMETRY_RUN_ID }}
+          pattern: frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - name: Assemble C5 geometry and exact raw source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/raw /tmp/out/csv
+          python - <<'PY'
+          import glob,pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'));assert len(fs)==24
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True);z['time']=pd.to_datetime(z.time,utc=True);z=z.sort_values(['time','side','center']).reset_index(drop=True);z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
+          PY
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['MANIFEST']));fs=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07'];assert len(fs)==24
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/raw')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL);assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          PY
+      - name: Run one frozen ESM row of the 45-candidate grid
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/session-research/xau_ebuy_asia_v2_single_esm.py \
+            --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl \
+            --mode '${{ matrix.mode }}' --grace '${{ matrix.grace }}' \
+            --output /tmp/out/result.json --csv-dir /tmp/out/csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asia-v2-esm-${{ matrix.mode }}-${{ matrix.grace }}
+          path: /tmp/out/*
+          retention-days: 30
+
+  aggregate:
+    needs: esm
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: asia-v2-esm-*
+          path: /tmp/grid
+          merge-multiple: false
+      - name: Aggregate, exact v1 parity, deterministic selection
+        shell: bash
+        run: |
+          set -euo pipefail;mkdir -p /tmp/final
+          python - <<'PY'
+          import importlib.util,json,shutil,sys
+          from pathlib import Path
+          spec=importlib.util.spec_from_file_location('agg_parent','xau-wick-zone-pro/session-research/xau_ebuy_asia_architecture_v2_0_exact_parity.py');m=importlib.util.module_from_spec(spec);sys.modules[spec.name]=m;spec.loader.exec_module(m);p=m.mod
+          candidates={};runtime=0.0
+          for f in sorted(Path('/tmp/grid').glob('asia-v2-esm-*/result.json')):
+              q=json.load(open(f));assert q['status']=='ASIA_V2_SINGLE_ESM_COMPLETE';runtime+=float(q['runtime_sec']);candidates.update(q['candidates'])
+          assert len(candidates)==45,len(candidates)
+          parity=p.parity_v1(candidates)
+          passers=[k for k,q in candidates.items() if q['passes_both_windows']]
+          selected=None
+          if passers:
+              def key(cid):
+                  q=candidates[cid];h1=q['windows']['H1'];h2=q['windows']['H2'];wc1=min(h1['metrics']['coverage']['1.0'],h2['metrics']['coverage']['1.0']);wc15=min(h1['metrics']['coverage']['1.5'],h2['metrics']['coverage']['1.5']);wp=min(h1['stability']['survival_aware_display_persistence'],h2['stability']['survival_aware_display_persistence']);wn=max(h1['metrics']['nearest_distance_v_p90'],h2['metrics']['nearest_distance_v_p90']);return(q['supplemental_family_count'],-wc1,-wc15,-wp,wn,cid)
+              selected=sorted(passers,key=key)[0]
+              src=list(Path('/tmp/grid').glob(f'asia-v2-esm-*/csv/{selected}.csv.gz'));assert len(src)==1,src;shutil.copy2(src[0],'/tmp/final/XAUUSD_Z4_EBUY_ASIA_SELECTED_CANDIDATES_v2_0.csv.gz')
+          out={'status':'ASIA_V2_ARCHITECTURE_GATE_PASS' if selected else 'ASIA_V2_ARCHITECTURE_GATE_FAIL','scope':'C5_ASIA_18_03_OUTCOME_BLIND_PREEXISTING_ARCHITECTURE_GRID_PARALLEL','future_price_outcomes_used':False,'score_used':False,'candidate_count':len(candidates),'passer_count':len(passers),'v1_current_architecture_parity':parity,'selection_rule':'pass H1+H2; fewest supplemental families; max worst C1; max worst C1.5; max worst survival persistence; min worst nearest p90; ID','all_candidates':candidates,'selected_architecture':selected,'reaction_study_authorized':bool(selected),'authorization':'AUTHORIZE_ASIA_V2_REACTION_STUDY' if selected else 'STOP_RETAIN_US_ONLY','production_authorization':'NONE','sum_worker_runtime_sec':runtime}
+          Path('/tmp/final/XAUUSD_Z4_EBUY_ASIA_ARCHITECTURE_RESULT_v2_0.json').write_text(json.dumps(out,indent=2,default=str));print(json.dumps({'status':out['status'],'passer_count':len(passers),'selected':selected,'selected_H1':candidates[selected]['windows']['H1'] if selected else None,'selected_H2':candidates[selected]['windows']['H2'] if selected else None},indent=2,default=str))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asia-v2-parallel-architecture-final
+          path: /tmp/final/*
+          retention-days: 30
