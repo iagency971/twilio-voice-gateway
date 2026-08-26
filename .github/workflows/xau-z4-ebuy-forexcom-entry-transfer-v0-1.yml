@@ -1,0 +1,115 @@
+name: XAU Z4 E-BUY FOREXCOM Entry Transfer v0.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-forexcom-entry-transfer-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  entry-transfer:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.2 joblib==1.5.2
+      - name: Frozen guards
+        run: |
+          set -euo pipefail
+          test -f xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_PREREG_v0_1_2026-08-25.md
+          test -f xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz
+          test -f xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz
+          test -f xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib
+          echo 'ac1c3effe84b64ffd1deebd82c3c6009ae56be9505974e3824b20169e3b38342  xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib' | sha256sum -c -
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py').read_text()
+          forbidden=['mfe_v','mae_v','tp1_invalidation_status','target_invalidation_status(','trigger_outcome(']
+          # Names may appear only in explicit non-outcome context? For this comparator they must not be called/used.
+          for x in forbidden:
+              if x in s: raise SystemExit(f'forbidden future-outcome token in transfer comparator: {x}')
+          print('OUTCOME_BLIND_TRANSFER_GUARD_PASS')
+          PY
+      - name: Prepare canonical raw inputs
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/entry-transfer
+          python - <<'PY'
+          import pandas as pd
+          from pathlib import Path
+          d=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz')
+          ts=pd.to_numeric(d.timestamp,errors='coerce')
+          assert ts.notna().all()
+          for mode,cols in [('bid',['open_bid','high_bid','low_bid','close_bid']),('mid',['open','high','low','close'])]:
+              o=pd.DataFrame({'timestamp':ts.astype('int64')})
+              for src,dst in zip(cols,['open','high','low','close']):o[dst]=pd.to_numeric(d[src],errors='raise')
+              o.to_csv(f'/tmp/entry-transfer/duka_{mode}.csv',index=False)
+          f=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz')
+          t=pd.to_datetime(f.timestamp_utc,utc=True)
+          o=pd.DataFrame({'timestamp':(t.astype('int64')//1_000_000).astype('int64')})
+          for c in ['open','high','low','close']:o[c]=pd.to_numeric(f[c],errors='raise')
+          o.to_csv('/tmp/entry-transfer/forex.csv',index=False)
+          print('DUKA',len(d),'FOREX',len(f),str(t.min()),str(t.max()))
+          PY
+      - name: Build independent outcome-blind Z4 geometry
+        run: |
+          set -euo pipefail
+          G=xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py
+          python "$G" --files /tmp/entry-transfer/duka_bid.csv --output /tmp/entry-transfer/z4_bid.pkl --tag ENTRY_TRANSFER_DUKA_BID
+          python "$G" --files /tmp/entry-transfer/duka_mid.csv --output /tmp/entry-transfer/z4_mid.pkl --tag ENTRY_TRANSFER_DUKA_MID
+          python "$G" --files /tmp/entry-transfer/forex.csv --output /tmp/entry-transfer/z4_forex.pkl --tag ENTRY_TRANSFER_FOREX
+      - name: Run frozen entry-layer transfer pilot
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py \
+            --forex-csv xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz \
+            --duka-csv xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz \
+            --z4-bid-pkl /tmp/entry-transfer/z4_bid.pkl \
+            --z4-mid-pkl /tmp/entry-transfer/z4_mid.pkl \
+            --z4-forex-pkl /tmp/entry-transfer/z4_forex.pkl \
+            --model-pkl xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib \
+            --output /tmp/entry-transfer/result.json \
+            --matched-bid-csv /tmp/entry-transfer/matched_bid.csv \
+            --matched-mid-csv /tmp/entry-transfer/matched_mid.csv
+      - name: Build provenance
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          paths={
+           'prereg':'xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_PREREG_v0_1_2026-08-25.md',
+           'engine':'xau-wick-zone-pro/entry-research/xau_ebuy_forexcom_entry_transfer_v0_1.py',
+           'model':'xau-wick-zone-pro/entry-research/ebuy-score-freeze-v1-1/XAUUSD_Z4_EBUY_US_M1_MODEL_FROZEN_v1_1.joblib',
+           'forex_snapshot':'xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz',
+           'duka_snapshot':'xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz',
+           'result':'/tmp/entry-transfer/result.json'}
+          h={k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in paths.items()}
+          r=json.load(open('/tmp/entry-transfer/result.json'))
+          out={'status':'ENTRY_TRANSFER_PROVENANCE_RECORDED','transfer_status':r['status'],'future_trade_outcomes_used':False,'sha256':h}
+          Path('/tmp/entry-transfer/manifest.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out,indent=2))
+          PY
+      - name: Publish entry transfer evidence
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/forexcom-entry-transfer-v0-1
+          mkdir -p "$out"
+          cp /tmp/entry-transfer/result.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_RESULT_v0_1.json"
+          cp /tmp/entry-transfer/manifest.json "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_MANIFEST_v0_1.json"
+          gzip -c /tmp/entry-transfer/matched_bid.csv > "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_MATCHED_BID_v0_1.csv.gz"
+          gzip -c /tmp/entry-transfer/matched_mid.csv > "$out/XAUUSD_Z4_EBUY_FOREXCOM_ENTRY_TRANSFER_MATCHED_MID_v0_1.csv.gz"
+          git add "$out"
+          git commit -m 'record outcome-blind FOREXCOM E-BUY entry transfer pilot [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
