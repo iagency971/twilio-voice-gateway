@@ -1,0 +1,89 @@
+name: XAU Z4 C1 Missing 2026 Fallback v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-c1-missing-2026-fallback-v1.yml'
+
+permissions:
+  contents: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+
+jobs:
+  c1-fallback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ['2026-01','2026-02','2026-03']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Exact source and detector guards
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          mkdir -p /tmp/in /tmp/out
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          t=os.environ['TARGET']; y,m=map(int,t.split('-')); months=[]
+          pm=m-1; py=y
+          if pm==0: pm=12; py-=1
+          months.append(f'{py:04d}-{pm:02d}'); months.append(t)
+          nm=m+1; ny=y
+          if nm==13: nm=1; ny+=1
+          months.append(f'{ny:04d}-{nm:02d}')
+          man=json.load(open(os.environ['MANIFEST'])); ix={f"{x['year']}-{x['month']}":x for x in man['files'] if x['side']=='bid'}
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for mm in months:
+              x=ix[mm]; p=Path('/tmp/in')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest(); assert got==x['sha256'],(p.name,got,x['sha256'])
+          print('FALLBACK_SOURCE_HASH_PASS',t,months)
+          PY
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          old='p=utc_ts(ts); return p.minute%15==0 and p.second==0'; new='p=utc_ts(ts); return p.minute%1==0 and p.second==0'
+          assert src.count(old)==1; text=src.replace(old,new); assert text.replace(new,old)==src
+          p=Path('/tmp/detector.py'); p.write_text(text)
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='86a5b1af2e77d0e78526652c03f4c6f1a6bfbdaaf92d21e34c1b121f6fdf4dcb'
+          print('FALLBACK_C1_HASH_PASS')
+          PY
+      - name: Build exact target shard
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          t0=$(date +%s)
+          python /tmp/detector.py --files /tmp/in/*.csv --output /tmp/all.pkl --tag "C1_${TARGET}_FALLBACK_IDENTICAL"
+          t1=$(date +%s)
+          python - <<'PY'
+          import os,pandas as pd
+          t=os.environ['TARGET']; lo=pd.Timestamp(t+'-01T00:00:00Z'); hi=lo+pd.offsets.MonthBegin(1)
+          d=pd.read_pickle('/tmp/all.pkl'); d['time']=pd.to_datetime(d.time,utc=True)
+          q=d[(d.time>=lo)&(d.time<hi)].copy().reset_index(drop=True); assert len(q)>0
+          q.to_pickle('/tmp/out/C1_'+t.replace('-','_')+'.pkl')
+          print('FALLBACK_TARGET_READY',t,len(q),q.time.min(),q.time.max())
+          PY
+          echo "$((t1-t0))" > "/tmp/out/C1_${TARGET//-/_}_RUNTIME_SEC.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fallback-mechanical-month-C1-${{ matrix.target }}
+          path: /tmp/out/*
+          retention-days: 1
