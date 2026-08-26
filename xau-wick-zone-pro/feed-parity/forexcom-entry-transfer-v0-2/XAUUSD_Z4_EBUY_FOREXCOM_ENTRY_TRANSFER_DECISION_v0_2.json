@@ -1,0 +1,11 @@
+{
+  "status": "ENTRY_TRANSFER_EXTENSION_FAIL_NO_PINE_PROMOTION",
+  "raw_comparator_status": "ENTRY_TRANSFER_PILOT_FAIL_NO_PINE_PROMOTION",
+  "common_c5_bid": 232,
+  "common_c5_mid": 232,
+  "thresholds_changed": false,
+  "model_refit": false,
+  "e_remap": false,
+  "future_trade_outcomes_used": false,
+  "authorization": "DO_NOT_PROMOTE_ENTRY_LAYER_TO_PINE"
+}
