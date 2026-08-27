@@ -1,0 +1,76 @@
+name: XAU Dukascopy FreeServ Transport Probe v0.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-dukascopy-freeserv-transport-probe-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install requests
+        run: python -m pip install --disable-pip-version-check requests==2.31.0
+      - name: Probe official FreeServ API without credentials
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/freeserv-probe
+          python - <<'PY'
+          import json,time
+          from pathlib import Path
+          import requests
+          base='https://freeserv.dukascopy.com/2.0/'
+          s=requests.Session(); s.headers['User-Agent']='Mozilla/5.0 XAU-transport-probe/0.1'
+          out={'status':'TRANSPORT_PROBE_ONLY','future_trade_outcomes_used':False,'requests':{}}
+          def req(name,params):
+              try:
+                  r=s.get(base,params=params,timeout=30)
+                  ct=r.headers.get('content-type','')
+                  rec={'status_code':r.status_code,'url_without_secret':r.url,'content_type':ct,'body_prefix':r.text[:500]}
+                  try: rec['json']=r.json()
+                  except Exception: pass
+                  out['requests'][name]=rec
+                  return r
+              except Exception as e:
+                  out['requests'][name]={'error_type':type(e).__name__,'error':str(e)}
+                  return None
+          r=req('instrument_list',{'path':'api/instrumentList'})
+          xau_id=None
+          if r is not None and r.status_code==200:
+              try:
+                  data=r.json()
+                  for item in data if isinstance(data,list) else []:
+                      if str(item.get('name','')).upper() in {'XAU/USD','XAUUSD'} or str(item.get('id','')).upper() in {'XAU/USD','XAUUSD'}:
+                          xau_id=item.get('id');out['xau_instrument_record']=item;break
+              except Exception: pass
+          # Authentication behavior only. Use a tiny known historical window and max 2 rows.
+          hp={'path':'api/historicalPrices','instrument':xau_id or 'XAU/USD','timeFrame':'1min','count':2,'start':1787184000000,'end':1787184120000}
+          req('historical_prices_no_key',hp)
+          req('last_one_minute_candles_no_key',{'path':'api/lastOneMinuteCandles','instruments':'XAU/USD'})
+          # Redact any accidental key query name/value (none supplied here).
+          Path('/tmp/freeserv-probe/result.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out,indent=2))
+          PY
+      - name: Publish transport probe
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/dukascopy-freeserv-probe-v0-1
+          mkdir -p "$out"
+          cp /tmp/freeserv-probe/result.json "$out/XAUUSD_DUKASCOPY_FREESERV_TRANSPORT_PROBE_v0_1.json"
+          git add "$out"
+          git commit -m 'record Dukascopy FreeServ transport probe [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
