@@ -1,6 +1,4 @@
 entry_time,exit_time,direction,model,tag,entry,exit,stop,target,reason,risk_ticks,total_r,moved_be,partial_taken
-2026-07-30 10:38:00,2026-07-30 10:38:00,long,kalman_mom,kalman_mom_long,28237.0,28226.4375,28226.5,28267.5,stop,42.0,-1.005952380952381,False,False
-2026-07-30 13:44:00,2026-07-30 13:46:00,long,pm_mom,pm_mom_long,28185.5,28201.1875,28172.0,28214.75,trail,54.0,1.162037037037037,False,True
 2026-07-31 10:40:00,2026-07-31 10:41:00,long,or_rev,or_rev_long,28269.5,28269.4375,28257.0,28570.75,trail,50.0,-0.005,True,True
 2026-07-31 13:36:00,2026-07-31 13:37:00,long,pm_mom,pm_mom_long,28486.0,28499.4375,28473.5,28509.25,trail,50.0,1.075,True,True
 2026-08-03 12:15:00,2026-08-03 12:17:00,long,kalman_mom,kalman_mom_long,28814.75,28836.4375,28803.5,28845.5,trail,45.0,1.9277777777777778,True,True

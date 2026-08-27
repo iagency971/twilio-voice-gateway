@@ -12,9 +12,9 @@
   },
   "stress": {
     "n": 17,
-    "mean": 0.050287186035937174,
-    "sum": 0.854882162610932,
-    "pf": 1.099242050179072,
+    "mean": 0.05028718603593719,
+    "sum": 0.8548821626109322,
+    "pf": 1.0992420501790723,
     "win_rate": 0.4117647058823529,
     "max_dd": 3.8015944700650244,
     "losing_streak": 5
@@ -45,5 +45,5 @@
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "792fd70ed970671624783e09a019ad37a81c72d02175fff3139c28ac3a1d7551"
+  "ledger_sha256": "1ef8813fc6eeb01280c4cc5af4888453a95b9db98d2baa5aa478109d63cc5cf9"
 }
