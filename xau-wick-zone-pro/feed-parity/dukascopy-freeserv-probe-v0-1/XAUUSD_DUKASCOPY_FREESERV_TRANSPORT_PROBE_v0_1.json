@@ -1,0 +1,24 @@
+{
+  "status": "TRANSPORT_PROBE_ONLY",
+  "future_trade_outcomes_used": false,
+  "requests": {
+    "instrument_list": {
+      "status_code": 204,
+      "url_without_secret": "https://freeserv.dukascopy.com/2.0/?path=api%2FinstrumentList",
+      "content_type": "text/javascript; charset=UTF-8",
+      "body_prefix": ""
+    },
+    "historical_prices_no_key": {
+      "status_code": 204,
+      "url_without_secret": "https://freeserv.dukascopy.com/2.0/?path=api%2FhistoricalPrices&instrument=XAU%2FUSD&timeFrame=1min&count=2&start=1787184000000&end=1787184120000",
+      "content_type": "text/html; charset=UTF-8",
+      "body_prefix": ""
+    },
+    "last_one_minute_candles_no_key": {
+      "status_code": 204,
+      "url_without_secret": "https://freeserv.dukascopy.com/2.0/?path=api%2FlastOneMinuteCandles&instruments=XAU%2FUSD",
+      "content_type": "text/html; charset=UTF-8",
+      "body_prefix": ""
+    }
+  }
+}
