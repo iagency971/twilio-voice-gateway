@@ -1,0 +1,12 @@
+name: XAU Raw BI5 Trigger Smoke
+on:
+  push:
+    branches:
+      - agent/xau-wick-zone-pro-dev
+    paths:
+      - .github/workflows/xau-raw-bi5-trigger-smoke.yml
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo RAW_BI5_TRIGGER_SMOKE_PASS
