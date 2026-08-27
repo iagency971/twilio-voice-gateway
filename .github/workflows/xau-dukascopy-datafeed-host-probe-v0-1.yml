@@ -1,0 +1,57 @@
+name: XAU Dukascopy Datafeed Host Probe v0.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-dukascopy-datafeed-host-probe-v0-1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Probe Dukascopy historical datafeed hosts
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import requests
+          s=requests.Session();s.headers['User-Agent']='Mozilla/5.0 XAU-datafeed-host-probe/0.1'
+          hosts=['https://www.dukascopy.com/datafeed','http://www.dukascopy.com/datafeed','https://datafeed.dukascopy.com/datafeed']
+          # Dukascopy path uses zero-based month: August -> 07.
+          objects=['XAUUSD/2026/07/20/BID_candles_min_1.bi5','XAUUSD/2026/07/20/ASK_candles_min_1.bi5','XAUUSD/2026/07/21/BID_candles_min_1.bi5','XAUUSD/2026/07/21/ASK_candles_min_1.bi5']
+          out={'status':'TRANSPORT_HOST_PROBE_ONLY','future_trade_outcomes_used':False,'results':{}}
+          for host in hosts:
+              out['results'][host]={}
+              for obj in objects:
+                  u=host+'/'+obj
+                  try:
+                      r=s.get(u,timeout=(10,30),allow_redirects=True)
+                      b=r.content
+                      out['results'][host][obj]={'status_code':r.status_code,'final_url':r.url,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest() if b else None,'content_type':r.headers.get('content-type'),'content_encoding':r.headers.get('content-encoding')}
+                  except Exception as e:
+                      out['results'][host][obj]={'error_type':type(e).__name__,'error':str(e)[:500]}
+          Path('/tmp/host_probe.json').write_text(json.dumps(out,indent=2));print(json.dumps(out,indent=2))
+          PY
+      - name: Publish probe
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/dukascopy-datafeed-host-probe-v0-1
+          mkdir -p "$out"
+          cp /tmp/host_probe.json "$out/XAUUSD_DUKASCOPY_DATAFEED_HOST_PROBE_v0_1.json"
+          git add "$out"
+          git commit -m 'record Dukascopy alternate datafeed host probe [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
