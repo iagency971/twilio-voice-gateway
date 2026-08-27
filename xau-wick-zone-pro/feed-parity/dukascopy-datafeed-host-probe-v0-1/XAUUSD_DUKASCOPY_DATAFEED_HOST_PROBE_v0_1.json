@@ -1,0 +1,108 @@
+{
+  "status": "TRANSPORT_HOST_PROBE_ONLY",
+  "future_trade_outcomes_used": false,
+  "results": {
+    "https://www.dukascopy.com/datafeed": {
+      "XAUUSD/2026/07/20/BID_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/20/BID_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/20/ASK_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/20/ASK_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/21/BID_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/21/BID_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/21/ASK_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/21/ASK_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      }
+    },
+    "http://www.dukascopy.com/datafeed": {
+      "XAUUSD/2026/07/20/BID_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/20/BID_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/20/ASK_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/20/ASK_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/21/BID_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/21/BID_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/21/ASK_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/21/ASK_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      }
+    },
+    "https://datafeed.dukascopy.com/datafeed": {
+      "XAUUSD/2026/07/20/BID_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/20/BID_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/20/ASK_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/20/ASK_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/21/BID_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/21/BID_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      },
+      "XAUUSD/2026/07/21/ASK_candles_min_1.bi5": {
+        "status_code": 503,
+        "final_url": "https://datafeed.dukascopy.com/datafeed/XAUUSD/2026/07/21/ASK_candles_min_1.bi5",
+        "bytes": 107,
+        "sha256": "839488ebc08446a096a893996ed23eac321ac166724cd8c5d9092057834d2d79",
+        "content_type": "text/html",
+        "content_encoding": null
+      }
+    }
+  }
+}
