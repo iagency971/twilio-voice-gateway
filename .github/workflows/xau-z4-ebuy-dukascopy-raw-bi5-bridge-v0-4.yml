@@ -1,0 +1,163 @@
+name: XAU Z4 E-BUY Dukascopy Raw BI5 Bridge v0.4
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-dukascopy-raw-bi5-bridge-v0-4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  raw-bridge:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install frozen bridge dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 requests==2.31.0
+      - name: Prereg guard
+        run: |
+          set -euo pipefail
+          test -f xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FOREXCOM_DUKASCOPY_RAW_BI5_BRIDGE_PREREG_v0_4_2026-08-27.md
+          echo 'd9505e23ac4c82e11a14f192629bbc24d6f38ddadbfc82f3ef2d60e67dc7d1f4  xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz' | sha256sum -c -
+      - name: Download and decode raw Dukascopy BI5 BID ASK
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/raw-bi5
+          python - <<'PY'
+          import hashlib,json,lzma,struct,time
+          from datetime import datetime,timedelta,timezone
+          from pathlib import Path
+          import pandas as pd, requests
+
+          START=datetime(2026,8,16,tzinfo=timezone.utc)
+          END=datetime(2026,8,26,tzinfo=timezone.utc)
+          PRIMARY='https://datafeed.dukascopy.com/datafeed'
+          FALLBACK='https://www.dukascopy.com/datafeed'
+          FMT='>IIIIIf'; REC=struct.calcsize(FMT)
+          sess=requests.Session(); sess.headers['User-Agent']='Mozilla/5.0 XAU-raw-bi5-bridge-v0.4'
+          file_meta=[]
+
+          def get_bytes(url):
+              last=None
+              for attempt in range(1,5):
+                  try:
+                      r=sess.get(url,timeout=(10,45),allow_redirects=True)
+                      if r.status_code in (404,410): return b'',r.status_code,r.url,attempt
+                      r.raise_for_status()
+                      return r.content,r.status_code,r.url,attempt
+                  except Exception as e:
+                      last=e; time.sleep(2*attempt)
+              raise RuntimeError(f'download failed {url}: {last}')
+
+          def day_rows(day,side):
+              rel=f'XAUUSD/{day.year:04d}/{day.month-1:02d}/{day.day:02d}/{side.upper()}_candles_min_1.bi5'
+              used=None; raw=None; status=None; final=None; attempts=None
+              for host in (PRIMARY,FALLBACK):
+                  try:
+                      raw,status,final,attempts=get_bytes(host+'/'+rel); used=host; break
+                  except Exception:
+                      continue
+              if raw is None: raise RuntimeError(f'no transport succeeded for {rel}')
+              meta={'day':day.date().isoformat(),'side':side,'relative_path':rel,'host':used,'status_code':status,'final_url':final,'attempts':attempts,'compressed_bytes':len(raw),'compressed_sha256':hashlib.sha256(raw).hexdigest() if raw else None}
+              if not raw:
+                  meta.update({'records':0,'decompressed_bytes':0}); file_meta.append(meta); return []
+              try: dec=lzma.decompress(raw)
+              except Exception as e: raise RuntimeError(f'LZMA decode failed {rel}: {e}')
+              if len(dec)%REC: raise RuntimeError(f'bad record length {rel}: {len(dec)} mod {REC}')
+              rows=[]
+              for off in range(0,len(dec),REC):
+                  sec,o,h,l,c,v=struct.unpack(FMT,dec[off:off+REC])
+                  ts=day+timedelta(seconds=int(sec))
+                  rows.append((ts,o/1000.0,h/1000.0,l/1000.0,c/1000.0,float(v)))
+              meta.update({'records':len(rows),'decompressed_bytes':len(dec),'first_utc':str(rows[0][0]) if rows else None,'last_utc':str(rows[-1][0]) if rows else None});file_meta.append(meta)
+              return rows
+
+          all_side={}
+          for side in ('bid','ask'):
+              rows=[]; d=START
+              while d<END:
+                  rows.extend(day_rows(d,side)); d+=timedelta(days=1)
+              df=pd.DataFrame(rows,columns=['time','open','high','low','close','volume']).sort_values('time').drop_duplicates('time').reset_index(drop=True)
+              if len(df)<5000: raise RuntimeError(f'{side} insufficient decoded rows {len(df)}')
+              df.to_csv(f'/tmp/raw-bi5/direct_{side}.csv',index=False)
+              all_side[side]=df
+              print(side,len(df),df.time.min(),df.time.max())
+          Path('/tmp/raw-bi5/file_manifest.json').write_text(json.dumps({'status':'RAW_BI5_DECODE_COMPLETE','future_trade_outcomes_used':False,'format':FMT,'price_divisor':1000.0,'files':file_meta},indent=2))
+          PY
+      - name: Apply frozen raw BI5 to mirror bridge gate
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          import numpy as np,pandas as pd
+          from scipy.stats import spearmanr
+
+          old=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz')
+          old['time']=pd.to_datetime(old.timestamp,utc=True);old=old.sort_values('time').drop_duplicates('time')
+          direct={}
+          for side in ('bid','ask'):
+              d=pd.read_csv(f'/tmp/raw-bi5/direct_{side}.csv');d['time']=pd.to_datetime(d.time,utc=True);direct[side]=d.sort_values('time').drop_duplicates('time')
+
+          bridge={};all_pass=True
+          for side,d in direct.items():
+              cols=['open','high','low','close']; oldcols=[c+'_'+side for c in cols]
+              m=old[['time']+oldcols].merge(d[['time']+cols],on='time',how='left',suffixes=('_old','_direct'))
+              coverage=float(m['close'].notna().mean());common=m.dropna(subset=cols).copy()
+              checks={'timestamp_coverage_ge_0995':coverage>=.995,'common_rows_ge_5000':len(common)>=5000}
+              a=pd.to_numeric(common['close_'+side],errors='raise').to_numpy(float); b=pd.to_numeric(common['close'],errors='raise').to_numpy(float)
+              rs=float(spearmanr(np.diff(np.log(a)),np.diff(np.log(b))).statistic) if len(common)>3 else None
+              checks['return_spearman_ge_0999']=rs is not None and rs>=.999
+              errs={}
+              for c in cols:
+                  x=pd.to_numeric(common[c+'_'+side],errors='raise').to_numpy(float); y=pd.to_numeric(common[c],errors='raise').to_numpy(float); e=np.abs(x-y)
+                  errs[c]={'median':float(np.median(e)),'p99':float(np.quantile(e,.99)),'max':float(np.max(e))}
+                  checks[f'{c}_median_le_0001']=errs[c]['median']<=.001
+                  checks[f'{c}_p99_le_001']=errs[c]['p99']<=.01
+                  checks[f'{c}_max_le_005']=errs[c]['max']<=.05
+              passed=all(checks.values());all_pass=all_pass and passed
+              bridge[side]={'pass':passed,'direct_rows':int(len(d)),'direct_min_utc':str(d.time.min()),'direct_max_utc':str(d.time.max()),'archive_rows':int(len(old)),'coverage':coverage,'common_rows':int(len(common)),'return_spearman':rs,'errors_usd':errs,'checks':checks}
+
+          result={'status':'DUKASCOPY_RAW_BI5_BRIDGE_PASS' if all_pass else 'DUKASCOPY_RAW_BI5_BRIDGE_FAIL','future_trade_outcomes_used':False,'decoder':{'format':'>IIIIIf','price_divisor':1000.0},'bridge':bridge}
+          Path('/tmp/raw-bi5/bridge_result.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2))
+
+          ext={'bridge_pass':all_pass}
+          if all_pass:
+              b=direct['bid'][['time','open','high','low','close']].rename(columns={c:c+'_bid' for c in ['open','high','low','close']})
+              q=direct['ask'][['time','open','high','low','close']].rename(columns={c:c+'_ask' for c in ['open','high','low','close']})
+              D=b.merge(q,on='time',how='inner',validate='one_to_one')
+              for c in ['open','high','low','close']: D[c]=(D[c+'_bid']+D[c+'_ask'])/2.0
+              D['spread']=D.close_ask-D.close_bid; D['timestamp']=D.time.dt.strftime('%Y-%m-%d %H:%M:%S%z')
+              F=pd.read_csv('xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz');F['time']=pd.to_datetime(F.timestamp_utc,utc=True)
+              lo,hi=F.time.min(),F.time.max(); I=D[(D.time>=lo)&(D.time<=hi)].copy()
+              cutoff=pd.Timestamp('2026-08-20 23:58:00Z');extra=int((I.time>cutoff).sum())
+              keep=['timestamp','open','high','low','close','open_bid','high_bid','low_bid','close_bid','open_ask','high_ask','low_ask','close_ask','spread']
+              I[keep].to_csv('/tmp/raw-bi5/direct_merged_intersection.csv',index=False)
+              ext.update({'status':'DIRECT_EXTENSION_READY' if extra>=500 else 'DIRECT_EXTENSION_INSUFFICIENT','intersection_rows':int(len(I)),'intersection_min_utc':str(I.time.min()),'intersection_max_utc':str(I.time.max()),'post_2026_08_20_2358_rows':extra,'meets_extra_500':extra>=500,'merged_sha256':hashlib.sha256(Path('/tmp/raw-bi5/direct_merged_intersection.csv').read_bytes()).hexdigest()})
+          Path('/tmp/raw-bi5/extension_meta.json').write_text(json.dumps(ext,indent=2));print(json.dumps(ext,indent=2))
+          PY
+      - name: Publish immutable raw BI5 bridge evidence
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/dukascopy-raw-bi5-bridge-v0-4
+          mkdir -p "$out"
+          cp /tmp/raw-bi5/bridge_result.json "$out/XAUUSD_DUKASCOPY_RAW_BI5_BRIDGE_RESULT_v0_4.json"
+          cp /tmp/raw-bi5/extension_meta.json "$out/XAUUSD_DUKASCOPY_RAW_BI5_EXTENSION_META_v0_4.json"
+          cp /tmp/raw-bi5/file_manifest.json "$out/XAUUSD_DUKASCOPY_RAW_BI5_FILE_MANIFEST_v0_4.json"
+          gzip -c /tmp/raw-bi5/direct_bid.csv > "$out/XAUUSD_DUKASCOPY_RAW_BI5_BID_v0_4.csv.gz"
+          gzip -c /tmp/raw-bi5/direct_ask.csv > "$out/XAUUSD_DUKASCOPY_RAW_BI5_ASK_v0_4.csv.gz"
+          if test -f /tmp/raw-bi5/direct_merged_intersection.csv; then gzip -c /tmp/raw-bi5/direct_merged_intersection.csv > "$out/XAUUSD_DUKASCOPY_RAW_BI5_MERGED_INTERSECTION_v0_4.csv.gz"; fi
+          git add "$out"
+          git commit -m 'record preregistered raw BI5 Dukascopy bridge v0.4 [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
