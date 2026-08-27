@@ -1,0 +1,108 @@
+{
+  "status": "DUKASCOPY_RAW_BI5_BRIDGE_FAIL",
+  "future_trade_outcomes_used": false,
+  "decoder": {
+    "format": ">IIIIIf",
+    "price_divisor": 1000.0
+  },
+  "bridge": {
+    "bid": {
+      "pass": false,
+      "direct_rows": 14400,
+      "direct_min_utc": "2026-08-16 00:00:00+00:00",
+      "direct_max_utc": "2026-08-25 23:59:00+00:00",
+      "archive_rows": 5874,
+      "coverage": 1.0,
+      "common_rows": 5874,
+      "return_spearman": 0.545063142760898,
+      "errors_usd": {
+        "open": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "high": {
+          "median": 0.6700000000000728,
+          "p99": 4.759999999999554,
+          "max": 11.039999999999964
+        },
+        "low": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "close": {
+          "median": 0.6700000000000728,
+          "p99": 4.759999999999554,
+          "max": 11.039999999999964
+        }
+      },
+      "checks": {
+        "timestamp_coverage_ge_0995": true,
+        "common_rows_ge_5000": true,
+        "return_spearman_ge_0999": false,
+        "open_median_le_0001": true,
+        "open_p99_le_001": true,
+        "open_max_le_005": true,
+        "high_median_le_0001": false,
+        "high_p99_le_001": false,
+        "high_max_le_005": false,
+        "low_median_le_0001": true,
+        "low_p99_le_001": true,
+        "low_max_le_005": true,
+        "close_median_le_0001": false,
+        "close_p99_le_001": false,
+        "close_max_le_005": false
+      }
+    },
+    "ask": {
+      "pass": false,
+      "direct_rows": 14400,
+      "direct_min_utc": "2026-08-16 00:00:00+00:00",
+      "direct_max_utc": "2026-08-25 23:59:00+00:00",
+      "archive_rows": 5874,
+      "coverage": 1.0,
+      "common_rows": 5874,
+      "return_spearman": 0.543281852050308,
+      "errors_usd": {
+        "open": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "high": {
+          "median": 0.6599999999998545,
+          "p99": 4.7008000000002355,
+          "max": 10.859999999999673
+        },
+        "low": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "close": {
+          "median": 0.6599999999998545,
+          "p99": 4.7008000000002355,
+          "max": 10.859999999999673
+        }
+      },
+      "checks": {
+        "timestamp_coverage_ge_0995": true,
+        "common_rows_ge_5000": true,
+        "return_spearman_ge_0999": false,
+        "open_median_le_0001": true,
+        "open_p99_le_001": true,
+        "open_max_le_005": true,
+        "high_median_le_0001": false,
+        "high_p99_le_001": false,
+        "high_max_le_005": false,
+        "low_median_le_0001": true,
+        "low_p99_le_001": true,
+        "low_max_le_005": true,
+        "close_median_le_0001": false,
+        "close_p99_le_001": false,
+        "close_max_le_005": false
+      }
+    }
+  }
+}
