@@ -1,12 +1,39 @@
-name: XAU Raw BI5 Trigger Smoke
+name: XAU Raw BI5 Bridge Runner v0.4
 on:
   push:
     branches:
       - agent/xau-wick-zone-pro-dev
     paths:
       - .github/workflows/xau-raw-bi5-trigger-smoke.yml
+permissions:
+  contents: write
 jobs:
-  smoke:
+  bridge:
     runs-on: ubuntu-24.04
     steps:
-      - run: echo RAW_BI5_TRIGGER_SMOKE_PASS
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 requests==2.31.0
+      - name: Run frozen raw BI5 bridge
+        run: python xau-wick-zone-pro/entry-research/xau_dukascopy_raw_bi5_bridge_v0_4.py --archive xau-wick-zone-pro/feed-parity/forexcom-transfer-pilot-v0-1/DUKASCOPY_XAUUSD_M1_overlap_snapshot.csv.gz --forex xau-wick-zone-pro/feed-parity/forexcom-depth-test/FOREXCOM_XAUUSD_M1_depth_test.csv.gz --outdir /tmp/raw-bi5-v04
+      - name: Publish bridge evidence
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          out=xau-wick-zone-pro/feed-parity/dukascopy-raw-bi5-bridge-v0-4c
+          mkdir -p "$out"
+          cp /tmp/raw-bi5-v04/bridge_result.json "$out/XAUUSD_DUKASCOPY_RAW_BI5_BRIDGE_RESULT_v0_4.json"
+          cp /tmp/raw-bi5-v04/extension_meta.json "$out/XAUUSD_DUKASCOPY_RAW_BI5_EXTENSION_META_v0_4.json"
+          cp /tmp/raw-bi5-v04/file_manifest.json "$out/XAUUSD_DUKASCOPY_RAW_BI5_FILE_MANIFEST_v0_4.json"
+          gzip -c /tmp/raw-bi5-v04/direct_bid.csv > "$out/XAUUSD_DUKASCOPY_RAW_BI5_BID_v0_4.csv.gz"
+          gzip -c /tmp/raw-bi5-v04/direct_ask.csv > "$out/XAUUSD_DUKASCOPY_RAW_BI5_ASK_v0_4.csv.gz"
+          if test -f /tmp/raw-bi5-v04/direct_merged_intersection.csv; then gzip -c /tmp/raw-bi5-v04/direct_merged_intersection.csv > "$out/XAUUSD_DUKASCOPY_RAW_BI5_MERGED_INTERSECTION_v0_4.csv.gz"; fi
+          git add "$out"
+          git commit -m 'record raw BI5 bridge v0.4c evidence [skip ci]' || exit 0
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
