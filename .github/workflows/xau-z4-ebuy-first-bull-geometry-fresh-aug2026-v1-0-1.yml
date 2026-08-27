@@ -1,0 +1,148 @@
+name: XAU Z4 E-BUY FIRST_BULL Geometry Fresh Aug2026 v1.0.1 corrected bootstrap
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-ebuy-first-bull-geometry-fresh-aug2026-v1-0-1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SOURCE_COMMIT: 91e3942741d670687e929d9842fc71c0af16f4ec
+  JULY_FILE: xauusd_bid_m1_2026_07.csv
+  JULY_SHA: 1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286
+  AUG_FILE: xauusd_bid_m1_2026_08.csv
+
+jobs:
+  fresh-holdout-corrected:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Frozen prereg model correction and engine guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FIRST_BULL_GEOMETRY_FRESH_AUG2026_PREREG_v1_0_2026-08-27.md)" = "3b979eb3851bf65d87e3bf44cb24bd9eb9a5d640"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FIRST_BULL_GEOMETRY_H1_FROZEN_MODEL_v1_0.json)" = "7064cd9c1ab91e76123b745be246ec1c57ef41cc"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FIRST_BULL_GEOMETRY_FRESH_AUG2026_PREREG_ADDENDUM_A_BOOTSTRAP_CLUSTER_UNIVERSE_2026-08-27.md)" = "d54dc560b0ccdd4d0a72222db7a22859a981262b"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_bull_candle_geometry_v1_0.py)" = "ea319f719d8cf6c7a1b543e0f5ec912adcc054cb"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_first_bull_geometry_fresh_aug2026_v1_0_1.py)" = "044d9b5cf5d6e0597c4dbfdb4feea712706ee2ab"
+          test "$(git hash-object xau-wick-zone-pro/xau_zone_episode_dev_z4.py)" = "a8a147615c3fd366c49e93b340fd2018b5b66e9e"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py)" = "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f"
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_ebuy_first_bull_geometry_fresh_aug2026_v1_0_1.py
+
+      - name: Install frozen analysis dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.8.0
+
+      - name: Download identical July warmup and August holdout source; freeze bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/raw /tmp/results
+          RAW_ROOT="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/${SOURCE_COMMIT}/xauusd/bid/m1"
+          curl --fail --location --retry 5 --retry-delay 2 "$RAW_ROOT/$JULY_FILE" -o "/tmp/raw/$JULY_FILE"
+          curl --fail --location --retry 5 --retry-delay 2 "$RAW_ROOT/$AUG_FILE" -o "/tmp/raw/$AUG_FILE"
+          J="$(sha256sum "/tmp/raw/$JULY_FILE" | awk '{print $1}')"
+          test "$J" = "$JULY_SHA"
+          python - <<'PY'
+          import hashlib, json, os, pandas as pd
+          from pathlib import Path
+          p=Path('/tmp/raw')/os.environ['AUG_FILE']
+          d=pd.read_csv(p)
+          t=pd.to_datetime(d.timestamp,unit='ms',utc=True)
+          q={
+            'repository':'kevingtlin/Market-Data-Lab',
+            'source_commit':os.environ['SOURCE_COMMIT'],
+            'file':os.environ['AUG_FILE'],
+            'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+            'rows':int(len(d)),
+            'first_time_utc':str(t.min()),
+            'last_time_utc':str(t.max()),
+            'source_frozen_before_original_first_bull_outcomes':True,
+            'same_bytes_as_original_fresh_holdout_required':True,
+          }
+          assert q['sha256']=='4f61d531018a8e8c37b1f410945e1d23d59fee96cde13bef223dcc9e63d0f852',q
+          Path('/tmp/results/AUG2026_US_FIRST_BULL_SOURCE_FREEZE_v1_0_1.json').write_text(json.dumps(q,indent=2))
+          print(json.dumps(q,indent=2))
+          PY
+
+      - name: Build identical source-faithful C5 Z4 geometry with July warmup
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/xau_zone_episode_dev_z4.py').read_text()
+          repl=[
+            ('p=utc_ts(ts); return p.minute%15==0 and p.second==0','p=utc_ts(ts); return p.minute%5==0 and p.second==0'),
+            ('if i<LOOKBACK-1 or i+HORIZON+REACT_MAX>=N or not landmark_ok(T[i]): continue','if i<LOOKBACK-1 or not landmark_ok(T[i]): continue'),
+            ('out=outcome_zone(i,zlo,zhi,center,side,v)','out={}'),
+            ("'revisit_rate':float(Z.revisited.mean()),'runtime_sec':time.time()-t0","'revisit_rate':None,'runtime_sec':time.time()-t0")
+          ]
+          for old,new in repl:
+              assert src.count(old)==1,(old,src.count(old))
+              src=src.replace(old,new)
+          p=Path('/tmp/z4_c5_geometry_only.py')
+          p.write_text(src)
+          man=json.load(open('xau-wick-zone-pro/entry-research/ebuy-coverage-oos-v1-0/XAUUSD_Z4_EBUY_COVERAGE_OOS_REPLICATION_MANIFEST_v1_0.json'))
+          got=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert got==man['sha256']['z4_geometry'],(got,man['sha256']['z4_geometry'])
+          print('GEOMETRY_ENGINE_HASH_PASS',got)
+          PY
+          python /tmp/z4_c5_geometry_only.py \
+            --files "/tmp/raw/$JULY_FILE" "/tmp/raw/$AUG_FILE" \
+            --output /tmp/Z4_JUL_AUG_C5.pkl \
+            --tag FIRST_BULL_FRESH_AUG2026_US_C5_GEOMETRY_CORRECTED_BOOTSTRAP
+
+      - name: Run deterministic prereg-compliance bootstrap correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_ebuy_first_bull_geometry_fresh_aug2026_v1_0_1.py \
+            --files "/tmp/raw/$JULY_FILE" "/tmp/raw/$AUG_FILE" \
+            --aug-file "/tmp/raw/$AUG_FILE" \
+            --z4-pkl /tmp/Z4_JUL_AUG_C5.pkl \
+            --model-json xau-wick-zone-pro/entry-research/XAUUSD_Z4_EBUY_FIRST_BULL_GEOMETRY_H1_FROZEN_MODEL_v1_0.json \
+            --source-freeze-json /tmp/results/AUG2026_US_FIRST_BULL_SOURCE_FREEZE_v1_0_1.json \
+            --output-json /tmp/results/XAUUSD_Z4_EBUY_FIRST_BULL_GEOMETRY_FRESH_AUG2026_RESULT_v1_0_1.json \
+            --contacts-csv /tmp/results/XAUUSD_Z4_EBUY_FIRST_BULL_GEOMETRY_FRESH_AUG2026_CONTACTS_v1_0_1.csv.gz \
+            --events-csv /tmp/results/XAUUSD_Z4_EBUY_FIRST_BULL_GEOMETRY_FRESH_AUG2026_EVENTS_v1_0_1.csv.gz
+
+      - name: Build immutable corrected result manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/results')
+          files={}
+          for p in sorted(root.iterdir()):
+              if p.name=='MANIFEST_v1_0_1.json': continue
+              files[p.name]={'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+          q={
+            'status':'FRESH_AUG2026_US_FIRST_BULL_CORRECTED_BOOTSTRAP_ARTIFACT_COMPLETE',
+            'correction':'ALL_MECHANICALLY_ELIGIBLE_RAW_US_SESSIONS_INCLUDING_ZERO_EVENT_CLUSTERS',
+            'files':files,
+          }
+          (root/'MANIFEST_v1_0_1.json').write_text(json.dumps(q,indent=2))
+          print(json.dumps(q,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: first-bull-geometry-fresh-aug2026-us-v1-0-1
+          path: /tmp/results/*
+          retention-days: 30
