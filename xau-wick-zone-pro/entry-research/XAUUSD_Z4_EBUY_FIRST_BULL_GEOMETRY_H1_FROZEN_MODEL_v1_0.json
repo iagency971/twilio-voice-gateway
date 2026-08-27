@@ -1,0 +1,85 @@
+{
+  "closepos_only_reference": {
+    "coefficients": [
+      0.15225494593007663
+    ],
+    "feature": [
+      "close_pos"
+    ],
+    "h1_auc": 0.5417168433625159,
+    "intercept": -0.9178354743043772,
+    "scaler_mean": [
+      0.7620070632763071
+    ],
+    "scaler_scale": [
+      0.2052109377093431
+    ]
+  },
+  "explicit_nonclaims": [
+    "Fresh August 2026 US outcomes not opened when this artifact was frozen.",
+    "H2 was not used to fit or calibrate this model.",
+    "No Pine change authorized by this freeze alone."
+  ],
+  "frozen_date": "2026-08-27",
+  "model": {
+    "C": 1.0,
+    "coefficients": [
+      0.04404793696367129,
+      0.046736183433898904,
+      -0.014369300046809596,
+      -0.044047936963671194,
+      -0.06310707448131833,
+      0.19893555064013924
+    ],
+    "features": [
+      "close_pos",
+      "body_frac",
+      "lower_wick_frac",
+      "upper_wick_frac",
+      "log1p_lower_wick_to_body",
+      "range_v"
+    ],
+    "h1_metrics": {
+      "auc": 0.5804183407321777,
+      "average_precision": 0.35397418778920137,
+      "brier": 0.2009799035681871,
+      "positive_rate": 0.28640953887334225
+    },
+    "h1_score_quantiles": {
+      "q20": 0.2387694161370814,
+      "q80": 0.3273659155086846
+    },
+    "intercept": -0.92779288983851,
+    "max_iter": 2000,
+    "scaler_mean": [
+      0.7620070632763071,
+      0.4430247104451043,
+      0.3189823528312027,
+      0.23799293672369293,
+      0.7888509527526636,
+      1.0835067043619373
+    ],
+    "scaler_scale": [
+      0.2052109377093431,
+      0.2670765787459337,
+      0.23960955060267855,
+      0.2052109377093431,
+      0.8429844290864775,
+      0.5349373451794432
+    ],
+    "sklearn_version": "1.8.0",
+    "solver": "lbfgs",
+    "type": "StandardScaler + sklearn LogisticRegression"
+  },
+  "source_events": {
+    "path": "XAUUSD_Z4_EBUY_FIRST_BULL_EVENTS_v1_0.csv",
+    "resolved_n": 8219,
+    "sample": "H1",
+    "sha256": "0a9aabf27a178a96f9041d36aec4c556aff826c0a98c5e04b88e2ecf3f4923f6",
+    "window_utc": [
+      "2024-08-01T00:00:00Z",
+      "2025-08-01T00:00:00Z"
+    ]
+  },
+  "status": "FROZEN_BEFORE_FRESH_AUG2026_US_OUTCOMES"
+}
