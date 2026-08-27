@@ -1,0 +1,111 @@
+{
+  "status": "DUKASCOPY_DIRECT_BRIDGE_FAIL",
+  "library": "dukascopy-node@1.46.4",
+  "transport_retry_profile": {
+    "batchSize": 1,
+    "retryCount": 5,
+    "retryOnEmpty": true,
+    "pauseBetweenRetriesMs": 3000
+  },
+  "future_trade_outcomes_used": false,
+  "bridge": {
+    "bid": {
+      "pass": false,
+      "direct_rows": 9780,
+      "direct_min_utc": "2026-08-16 22:00:00+00:00",
+      "direct_max_utc": "2026-08-25 23:59:00+00:00",
+      "archive_rows": 5874,
+      "coverage": 0.9591419816138917,
+      "common_rows": 5634,
+      "return_spearman": 1.0,
+      "errors_usd": {
+        "open": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "high": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "low": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "close": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "checks": {
+        "timestamp_coverage_ge_0995": false,
+        "common_rows_ge_5000": true,
+        "return_spearman_ge_0999": true,
+        "open_median_le_0001": true,
+        "open_p99_le_001": true,
+        "open_max_le_005": true,
+        "high_median_le_0001": true,
+        "high_p99_le_001": true,
+        "high_max_le_005": true,
+        "low_median_le_0001": true,
+        "low_p99_le_001": true,
+        "low_max_le_005": true,
+        "close_median_le_0001": true,
+        "close_p99_le_001": true,
+        "close_max_le_005": true
+      }
+    },
+    "ask": {
+      "pass": false,
+      "direct_rows": 9780,
+      "direct_min_utc": "2026-08-16 22:00:00+00:00",
+      "direct_max_utc": "2026-08-25 23:59:00+00:00",
+      "archive_rows": 5874,
+      "coverage": 0.9591419816138917,
+      "common_rows": 5634,
+      "return_spearman": 1.0,
+      "errors_usd": {
+        "open": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "high": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "low": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "close": {
+          "median": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "checks": {
+        "timestamp_coverage_ge_0995": false,
+        "common_rows_ge_5000": true,
+        "return_spearman_ge_0999": true,
+        "open_median_le_0001": true,
+        "open_p99_le_001": true,
+        "open_max_le_005": true,
+        "high_median_le_0001": true,
+        "high_p99_le_001": true,
+        "high_max_le_005": true,
+        "low_median_le_0001": true,
+        "low_p99_le_001": true,
+        "low_max_le_005": true,
+        "close_median_le_0001": true,
+        "close_p99_le_001": true,
+        "close_max_le_005": true
+      }
+    }
+  }
+}
