@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - name: Extract BID and ASK target minutes from archive
+      - name: Compute BID ASK executable statistics from archived Dukascopy data
         shell: bash
         run: |
           python3 - <<'PY'
-          import csv,io,json,urllib.request
-          from datetime import datetime,timezone
+          import csv,io,json,statistics,urllib.request
+          from datetime import datetime,timezone,timedelta
           from zoneinfo import ZoneInfo
           from concurrent.futures import ThreadPoolExecutor,as_completed
           ny=ZoneInfo('America/New_York')
@@ -26,89 +26,48 @@ jobs:
           def one(t):
             side,y,m=t; url=f'https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/{side}/m1/xauusd_{side}_m1_{y}_{m:02d}.csv'
             req=urllib.request.Request(url,headers={'User-Agent':'gold-reopen-study'})
-            out={}; maxutc=None
+            o={};mx=None
             with urllib.request.urlopen(req,timeout=90) as resp:
-              r=csv.DictReader(io.TextIOWrapper(resp,encoding='utf-8'))
-              for row in r:
-                ts=int(float(row['timestamp'])); du=datetime.fromtimestamp(ts/1000,timezone.utc); maxutc=du if maxutc is None or du>maxutc else maxutc
-                d=du.astimezone(ny)
-                if (d.hour==16 and 55<=d.minute<=59) or (d.hour==18 and 0<=d.minute<=4):
-                  out[f'{d.date().isoformat()}|{d.hour:02d}:{d.minute:02d}']={'open':float(row['open']),'high':float(row['high']),'low':float(row['low']),'close':float(row['close'])}
-            return side,y,m,out,maxutc.isoformat() if maxutc else None
-          data={'bid':{},'ask':{}}; mx={'bid':None,'ask':None}
+              for row in csv.DictReader(io.TextIOWrapper(resp,encoding='utf-8')):
+                du=datetime.fromtimestamp(int(float(row['timestamp']))/1000,timezone.utc);mx=du if mx is None or du>mx else mx;d=du.astimezone(ny)
+                if (d.hour==16 and 55<=d.minute<=59) or (d.hour==18 and d.minute==0):
+                  o[f'{d.date().isoformat()}|{d.hour:02d}:{d.minute:02d}']={'open':float(row['open']),'high':float(row['high']),'low':float(row['low']),'close':float(row['close'])}
+            return side,o,mx.isoformat() if mx else None
+          D={'bid':{},'ask':{}};mx={'bid':None,'ask':None}
           with ThreadPoolExecutor(max_workers=6) as ex:
             for fut in as_completed([ex.submit(one,t) for t in tasks]):
-              side,y,m,o,mu=fut.result(); data[side].update(o)
-              if mu and (mx[side] is None or mu>mx[side]):mx[side]=mu
-              print(side,y,m,len(o),mu)
-          with open('selected.json','w') as f:json.dump({'data':data,'max':mx},f)
-          print('ARCHIVE_MAX',mx)
-          PY
-
-      - name: Download recent BID and ASK tails
-        shell: bash
-        run: |
-          set -euxo pipefail
-          mkdir -p tail_bid tail_ask
-          npx --yes dukascopy-node -i xauusd -from 2026-08-15 -to now -t m1 -p bid -f csv -bs 1 -bp 1500 -dir tail_bid -fn recent_bid -r 5 -rp 5000
-          npx --yes dukascopy-node -i xauusd -from 2026-08-15 -to now -t m1 -p ask -f csv -bs 1 -bp 1500 -dir tail_ask -fn recent_ask -r 5 -rp 5000
-
-      - name: Compute executable LONG statistics
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import csv,glob,json,statistics
-          from datetime import datetime,timezone,timedelta
-          from zoneinfo import ZoneInfo
-          ny=ZoneInfo('America/New_York')
-          with open('selected.json') as f:z=json.load(f)
-          D=z['data']; tailmax={}
-          for side in ('bid','ask'):
-            lm=None
-            for p in glob.glob(f'tail_{side}/*.csv'):
-              with open(p,newline='') as f:
-                for row in csv.DictReader(f):
-                  raw=row.get('timestamp') or row.get('time') or row.get('date')
-                  try:
-                    x=float(raw);du=datetime.fromtimestamp(x/1000 if x>1e10 else x,timezone.utc)
-                  except Exception:
-                    du=datetime.fromisoformat(str(raw).replace('Z','+00:00'));du=du.replace(tzinfo=timezone.utc) if du.tzinfo is None else du.astimezone(timezone.utc)
-                  lm=du if lm is None or du>lm else lm;d=du.astimezone(ny)
-                  if (d.hour==16 and 55<=d.minute<=59) or (d.hour==18 and 0<=d.minute<=4):
-                    D[side][f'{d.date().isoformat()}|{d.hour:02d}:{d.minute:02d}']={'open':float(row['open']),'high':float(row['high']),'low':float(row['low']),'close':float(row['close'])}
-            tailmax[side]=lm.isoformat() if lm else None
-          def g(side,d,h,m):return D[side].get(f'{d.isoformat()}|{h:02d}:{m:02d}')
+              s,o,m=fut.result();D[s].update(o);mx[s]=m if m and (mx[s] is None or m>mx[s]) else mx[s]
+          def g(s,d,h,m):return D[s].get(f'{d.isoformat()}|{h:02d}:{m:02d}')
           def active(bs):
-            if any(b is None for b in bs):return False
+            if any(x is None for x in bs):return False
             v=[]
-            for b in bs:v.extend([b['open'],b['high'],b['low'],b['close']])
+            for b in bs:v += [b['open'],b['high'],b['low'],b['close']]
             return max(v)-min(v)>1e-9
-          ev=[]
-          cands=[]
-          for k in D['bid']:
+          events=[]
+          for k in sorted(D['bid']):
             ds,ts=k.split('|')
-            if ts=='18:00':cands.append(datetime.fromisoformat(ds).date())
-          for d in sorted(set(cands)):
+            if ts!='18:00':continue
+            d=datetime.fromisoformat(ds).date()
             if d.weekday()==6:typ='WEEKEND';prev=d-timedelta(days=2)
             elif d.weekday() in (0,1,2,3):typ='NORMAL';prev=d
             else:continue
-            be=[g('bid',prev,16,m) for m in range(55,60)];ae=[g('ask',prev,16,m) for m in range(55,60)];rb=[g('bid',d,18,m) for m in range(5)]
-            if any(x is None for x in be+ae) or rb[0] is None or not active(be) or not active(rb):continue
+            be=[g('bid',prev,16,m) for m in range(55,60)];ae=[g('ask',prev,16,m) for m in range(55,60)];rb=g('bid',d,18,0)
+            if rb is None or any(x is None for x in be+ae) or not active(be):continue
             e={'year':d.year,'type':typ,'m':{}}
             for i,m in enumerate(range(55,60)):
-              ent=ae[i]['open'];e['m'][str(m)]={'to_open':rb[0]['open']-ent,'to_1m':rb[0]['close']-ent,'entry_spread':ae[i]['open']-be[i]['open']}
-            ev.append(e)
+              ent=ae[i]['open'];e['m'][str(m)]={'to_open':rb['open']-ent,'to_1m':rb['close']-ent,'spread':ae[i]['open']-be[i]['open']}
+            events.append(e)
           def pct(k,n):return 100*k/n if n else None
           def mean(x):return statistics.fmean(x) if x else None
           def med(x):return statistics.median(x) if x else None
           def S(es):
-            n=len(es);o={'N':n,'entry':{}}
+            n=len(es);z={'N':n,'entry':{}}
             for m in range(55,60):
-              a=[e['m'][str(m)]['to_open'] for e in es];b=[e['m'][str(m)]['to_1m'] for e in es];s=[e['m'][str(m)]['entry_spread'] for e in es]
-              o['entry'][f'16:{m}']={'at_reopen_win_pct':pct(sum(x>0 for x in a),n),'at_reopen_mean':mean(a),'after1m_win_pct':pct(sum(x>0 for x in b),n),'after1m_mean':mean(b),'after1m_median':med(b),'entry_spread_mean':mean(s),'entry_spread_median':med(s)}
-            return o
-          out={'source':'Dukascopy BID+ASK','tail_max':tailmax,'groups':{'NORMAL':S([e for e in ev if e['type']=='NORMAL']),'WEEKEND':S([e for e in ev if e['type']=='WEEKEND'])},'yearly':{}}
+              a=[e['m'][str(m)]['to_open'] for e in es];b=[e['m'][str(m)]['to_1m'] for e in es];s=[e['m'][str(m)]['spread'] for e in es]
+              z['entry'][f'16:{m}']={'reopen_win_pct':pct(sum(x>0 for x in a),n),'reopen_mean':mean(a),'after1m_win_pct':pct(sum(x>0 for x in b),n),'after1m_mean':mean(b),'after1m_median':med(b),'spread_mean':mean(s),'spread_median':med(s)}
+            return z
+          out={'cutoff':mx,'events':len(events),'groups':{'NORMAL':S([e for e in events if e['type']=='NORMAL']),'WEEKEND':S([e for e in events if e['type']=='WEEKEND'])},'yearly':{}}
           for y in range(2020,2027):
-            ys=[e for e in ev if e['year']==y];out['yearly'][str(y)]={'NORMAL':S([e for e in ys if e['type']=='NORMAL']),'WEEKEND':S([e for e in ys if e['type']=='WEEKEND'])}
+            ys=[e for e in events if e['year']==y];out['yearly'][str(y)]={'NORMAL':S([e for e in ys if e['type']=='NORMAL']),'WEEKEND':S([e for e in ys if e['type']=='WEEKEND'])}
           print('EXEC_JSON_START');print(json.dumps(out,sort_keys=True));print('EXEC_JSON_END')
           PY
