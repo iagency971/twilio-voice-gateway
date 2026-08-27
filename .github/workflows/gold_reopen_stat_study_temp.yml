@@ -10,188 +10,155 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Extract target minutes from archived Dukascopy history
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import csv, io, json, urllib.request
+          from datetime import datetime, timezone
+          from zoneinfo import ZoneInfo
+          from concurrent.futures import ThreadPoolExecutor, as_completed
 
-      - name: Download Dukascopy XAUUSD M1 BID
+          ny=ZoneInfo('America/New_York')
+          months=[]
+          for y in range(2020,2027):
+              maxm=8 if y==2026 else 12
+              for m in range(1,maxm+1): months.append((y,m))
+          base='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/xauusd_bid_m1_{y}_{m:02d}.csv'
+
+          def one_month(ym):
+              y,m=ym; url=base.format(y=y,m=m)
+              req=urllib.request.Request(url,headers={'User-Agent':'gold-reopen-study'})
+              out={}; maxutc=None; n=0
+              with urllib.request.urlopen(req,timeout=90) as resp:
+                  txt=io.TextIOWrapper(resp,encoding='utf-8')
+                  r=csv.DictReader(txt)
+                  for row in r:
+                      n+=1
+                      ts=int(float(row['timestamp']))
+                      dtutc=datetime.fromtimestamp(ts/1000,timezone.utc)
+                      maxutc=dtutc if maxutc is None or dtutc>maxutc else maxutc
+                      dt=dtutc.astimezone(ny)
+                      if (dt.hour==16 and 55<=dt.minute<=59) or (dt.hour==18 and 0<=dt.minute<=4):
+                          out[f'{dt.date().isoformat()}|{dt.hour:02d}:{dt.minute:02d}']={
+                              'open':float(row['open']),'high':float(row['high']),'low':float(row['low']),'close':float(row['close']),
+                              'utc':dtutc.isoformat(),'ny':dt.isoformat(),'origin':'archive'}
+              return y,m,out,maxutc.isoformat() if maxutc else None,n
+
+          allbars={}; maxutc=None; total=0
+          with ThreadPoolExecutor(max_workers=4) as ex:
+              futs=[ex.submit(one_month,ym) for ym in months]
+              for fut in as_completed(futs):
+                  y,m,b,mu,n=fut.result(); allbars.update(b); total+=n
+                  if mu and (maxutc is None or mu>maxutc): maxutc=mu
+                  print(f'ARCHIVE {y}-{m:02d} rows={n} selected={len(b)} max={mu}')
+          with open('archive_selected.json','w') as f:
+              json.dump({'bars':allbars,'max_utc':maxutc,'rows':total},f)
+          print('ARCHIVE_MAX_UTC',maxutc,'SELECTED',len(allbars),'ROWS',total)
+          PY
+
+      - name: Download recent Dukascopy tail without flats
         shell: bash
         run: |
           set -euxo pipefail
-          mkdir -p data
-          npx --yes dukascopy-node -i xauusd -from 2020-01-01 -to now -t m1 -p bid -f csv --cache -dir data -fn xauusd_bid_m1_2020_to_now -r 5 -rp 3000
-          ls -lh data
+          mkdir -p tail
+          npx --yes dukascopy-node -i xauusd -from 2026-08-15 -to now -t m1 -p bid -f csv -bs 1 -bp 1500 -dir tail -fn recent_bid -r 5 -rp 5000
+          ls -lh tail
 
-      - name: Compute reopen statistics
+      - name: Compute final statistics
         shell: bash
         run: |
           python3 - <<'PY'
           import csv, glob, json, math, statistics
           from datetime import datetime, timezone, timedelta
           from zoneinfo import ZoneInfo
-          from collections import defaultdict
 
-          files = glob.glob('data/*.csv')
-          if not files:
-              raise SystemExit('No CSV downloaded')
-          path = max(files, key=lambda p: __import__('os').path.getsize(p))
-          ny = ZoneInfo('America/New_York')
-
-          bars = {}
-          first_utc = None
-          last_utc = None
-          total_rows = 0
-          with open(path, newline='') as f:
-              r = csv.DictReader(f)
-              for row in r:
-                  total_rows += 1
-                  raw_ts = row.get('timestamp') or row.get('time') or row.get('date')
-                  if raw_ts is None:
-                      continue
-                  try:
-                      x = float(raw_ts)
-                      if x > 10_000_000_000:
-                          dt_utc = datetime.fromtimestamp(x/1000.0, timezone.utc)
-                      else:
-                          dt_utc = datetime.fromtimestamp(x, timezone.utc)
-                  except Exception:
-                      s = str(raw_ts).replace('Z', '+00:00')
-                      dt_utc = datetime.fromisoformat(s)
-                      if dt_utc.tzinfo is None:
-                          dt_utc = dt_utc.replace(tzinfo=timezone.utc)
-                      else:
-                          dt_utc = dt_utc.astimezone(timezone.utc)
-                  first_utc = dt_utc if first_utc is None else min(first_utc, dt_utc)
-                  last_utc = dt_utc if last_utc is None else max(last_utc, dt_utc)
-                  dt = dt_utc.astimezone(ny)
-                  if (dt.hour == 16 and 55 <= dt.minute <= 59) or (dt.hour == 18 and dt.minute == 0):
+          ny=ZoneInfo('America/New_York')
+          with open('archive_selected.json') as f: arc=json.load(f)
+          bars=arc['bars']
+          last_tail=None; tail_rows=0
+          for path in glob.glob('tail/*.csv'):
+              with open(path,newline='') as f:
+                  for row in csv.DictReader(f):
+                      tail_rows+=1
+                      raw=row.get('timestamp') or row.get('time') or row.get('date')
                       try:
-                          bars[(dt.date().isoformat(), dt.hour, dt.minute)] = {
-                              'open': float(row['open']), 'high': float(row['high']),
-                              'low': float(row['low']), 'close': float(row['close']),
-                              'utc': dt_utc.isoformat(), 'ny': dt.isoformat()
-                          }
+                          x=float(raw); dtutc=datetime.fromtimestamp(x/1000 if x>1e10 else x,timezone.utc)
                       except Exception:
-                          pass
+                          dtutc=datetime.fromisoformat(str(raw).replace('Z','+00:00'))
+                          if dtutc.tzinfo is None: dtutc=dtutc.replace(tzinfo=timezone.utc)
+                          dtutc=dtutc.astimezone(timezone.utc)
+                      last_tail=dtutc if last_tail is None or dtutc>last_tail else last_tail
+                      dt=dtutc.astimezone(ny)
+                      if (dt.hour==16 and 55<=dt.minute<=59) or (dt.hour==18 and 0<=dt.minute<=4):
+                          bars[f'{dt.date().isoformat()}|{dt.hour:02d}:{dt.minute:02d}']={
+                              'open':float(row['open']),'high':float(row['high']),'low':float(row['low']),'close':float(row['close']),
+                              'utc':dtutc.isoformat(),'ny':dt.isoformat(),'origin':'tail'}
 
-          events = []
-          # Candidate reopen bars are actual 18:00 bars in the non-flat Dukascopy output.
-          for (dstr,h,m), rb in sorted(bars.items()):
-              if h != 18 or m != 0:
-                  continue
-              d = datetime.fromisoformat(dstr).date()
-              wd = d.weekday()  # Mon=0 ... Sun=6
-              if wd == 6:
-                  typ = 'WEEKEND_MONDAY_SESSION'
-                  prev_d = d - timedelta(days=2)  # Friday
+          def get(d,h,m): return bars.get(f'{d.isoformat()}|{h:02d}:{m:02d}')
+          def active(bs):
+              if any(b is None for b in bs): return False
+              vals=[]
+              for b in bs: vals.extend([b['open'],b['high'],b['low'],b['close']])
+              return max(vals)-min(vals) > 1e-9
+
+          events=[]; rejected_inactive=0; rejected_missing=0
+          candidates=[]
+          for k,b in bars.items():
+              dpart,tpart=k.split('|')
+              if tpart=='18:00': candidates.append(datetime.fromisoformat(dpart).date())
+          for d in sorted(set(candidates)):
+              wd=d.weekday()
+              if wd==6:
+                  typ='WEEKEND_MONDAY_SESSION'; prev=d-timedelta(days=2)
               elif wd in (0,1,2,3):
-                  typ = 'NORMAL_DAILY'
-                  prev_d = d
-              else:
-                  continue
-              entries = {}
-              valid = True
-              for mm in range(55,60):
-                  b = bars.get((prev_d.isoformat(),16,mm))
-                  if b is None:
-                      valid = False
-                      break
-                  entries[mm] = b
-              if not valid:
-                  continue
-              prev_close = entries[59]['close']
-              ev = {
-                  'reopen_date_ny': dstr,
-                  'reopen_year': d.year,
-                  'type': typ,
-                  'reopen_open': rb['open'],
-                  'reopen_close_1m': rb['close'],
-                  'prior_close': prev_close,
-                  'gap': rb['open'] - prev_close,
-                  'first_min_body': rb['close'] - rb['open'],
-                  'close_to_1m': rb['close'] - prev_close,
-                  'entries': {}
-              }
-              for mm,b in entries.items():
-                  ev['entries'][str(mm)] = {
-                      'entry_open': b['open'],
-                      'to_reopen_open': rb['open'] - b['open'],
-                      'to_1m_close': rb['close'] - b['open']
-                  }
-              events.append(ev)
+                  typ='NORMAL_DAILY'; prev=d
+              else: continue
+              ent=[get(prev,16,m) for m in range(55,60)]
+              ro=[get(d,18,m) for m in range(0,5)]
+              if any(x is None for x in ent) or ro[0] is None:
+                  rejected_missing+=1; continue
+              if not active(ent) or not active(ro):
+                  rejected_inactive+=1; continue
+              rb=ro[0]; pc=ent[-1]['close']
+              e={'reopen_date_ny':d.isoformat(),'year':d.year,'type':typ,
+                 'gap':rb['open']-pc,'first_min':rb['close']-rb['open'],'net1m':rb['close']-pc,'entry':{}}
+              for idx,m in enumerate(range(55,60)):
+                  p=ent[idx]['open']
+                  e['entry'][f'16:{m}']={'to_open':rb['open']-p,'to_1m':rb['close']-p}
+              events.append(e)
 
-          def pct(num, den):
-              return 100.0*num/den if den else None
-          def mean(xs):
-              return statistics.fmean(xs) if xs else None
-          def median(xs):
-              return statistics.median(xs) if xs else None
-          def wilson(k,n,z=1.959963984540054):
-              if not n: return (None,None)
-              p=k/n; den=1+z*z/n
-              c=(p+z*z/(2*n))/den
-              h=z*math.sqrt(p*(1-p)/n+z*z/(4*n*n))/den
-              return (100*(c-h),100*(c+h))
-
-          def stats(es):
-              n=len(es)
-              gap=[e['gap'] for e in es]
-              fm=[e['first_min_body'] for e in es]
-              net=[e['close_to_1m'] for e in es]
-              ku=sum(x>0 for x in gap); kfm=sum(x>0 for x in fm); kn=sum(x>0 for x in net)
-              out={
-                  'N':n,
-                  'gap_up_pct':pct(ku,n), 'gap_flat_pct':pct(sum(x==0 for x in gap),n),
-                  'gap_mean':mean(gap), 'gap_median':median(gap),
-                  'first_min_up_pct':pct(kfm,n), 'first_min_flat_pct':pct(sum(x==0 for x in fm),n),
-                  'first_min_mean':mean(fm), 'first_min_median':median(fm),
-                  'first_min_mean_if_up':mean([x for x in fm if x>0]),
-                  'first_min_mean_if_down':mean([x for x in fm if x<0]),
-                  'first_min_up_ci95':wilson(kfm,n),
-                  'close_to_1m_up_pct':pct(kn,n), 'close_to_1m_mean':mean(net), 'close_to_1m_median':median(net),
-                  'entry':{}
-              }
-              for mm in range(55,60):
-                  a=[e['entries'][str(mm)]['to_reopen_open'] for e in es]
-                  b=[e['entries'][str(mm)]['to_1m_close'] for e in es]
-                  out['entry'][f'16:{mm}']={
-                      'reopen_win_pct':pct(sum(x>0 for x in a),n), 'reopen_mean':mean(a),
-                      'after1m_win_pct':pct(sum(x>0 for x in b),n), 'after1m_mean':mean(b),
-                      'after1m_median':median(b)
-                  }
+          def mean(x): return statistics.fmean(x) if x else None
+          def med(x): return statistics.median(x) if x else None
+          def pct(k,n): return 100*k/n if n else None
+          def ci(k,n,z=1.959963984540054):
+              if not n:return [None,None]
+              p=k/n; den=1+z*z/n; c=(p+z*z/(2*n))/den; h=z*math.sqrt(p*(1-p)/n+z*z/(4*n*n))/den
+              return [100*(c-h),100*(c+h)]
+          def S(es):
+              n=len(es); gap=[e['gap'] for e in es]; fm=[e['first_min'] for e in es]; net=[e['net1m'] for e in es]
+              ku=sum(x>0 for x in gap); kf=sum(x>0 for x in fm); kn=sum(x>0 for x in net)
+              out={'N':n,
+                   'gap_up_pct':pct(ku,n),'gap_down_pct':pct(sum(x<0 for x in gap),n),'gap_mean':mean(gap),'gap_median':med(gap),
+                   'first_min_up_pct':pct(kf,n),'first_min_down_pct':pct(sum(x<0 for x in fm),n),'first_min_flat_pct':pct(sum(x==0 for x in fm),n),
+                   'first_min_mean':mean(fm),'first_min_median':med(fm),'first_min_mean_if_up':mean([x for x in fm if x>0]),'first_min_mean_if_down':mean([x for x in fm if x<0]),'first_min_ci95':ci(kf,n),
+                   'net1m_up_pct':pct(kn,n),'net1m_mean':mean(net),'net1m_median':med(net),'entry':{}}
+              for m in range(55,60):
+                  a=[e['entry'][f'16:{m}']['to_open'] for e in es]; b=[e['entry'][f'16:{m}']['to_1m'] for e in es]
+                  out['entry'][f'16:{m}']={'at_reopen_up_pct':pct(sum(x>0 for x in a),n),'at_reopen_mean':mean(a),'after1m_up_pct':pct(sum(x>0 for x in b),n),'after1m_mean':mean(b),'after1m_median':med(b)}
               return out
 
-          groups={
-              'ALL':stats(events),
-              'WEEKEND_MONDAY_SESSION':stats([e for e in events if e['type']=='WEEKEND_MONDAY_SESSION']),
-              'NORMAL_DAILY':stats([e for e in events if e['type']=='NORMAL_DAILY'])
-          }
+          groups={'ALL':S(events),'WEEKEND_MONDAY_SESSION':S([e for e in events if e['type']=='WEEKEND_MONDAY_SESSION']),'NORMAL_DAILY':S([e for e in events if e['type']=='NORMAL_DAILY'])}
           yearly={}
           for y in range(2020,2027):
-              yearly[str(y)]={
-                  'ALL':stats([e for e in events if e['reopen_year']==y]),
-                  'WEEKEND_MONDAY_SESSION':stats([e for e in events if e['reopen_year']==y and e['type']=='WEEKEND_MONDAY_SESSION']),
-                  'NORMAL_DAILY':stats([e for e in events if e['reopen_year']==y and e['type']=='NORMAL_DAILY'])
-              }
-          result={
-              'source':'Dukascopy XAUUSD M1 BID via dukascopy-node',
-              'timezone':'America/New_York',
-              'definition':{
-                  'weekend':'Sunday 18:00 ET reopening (Monday trading session), versus Friday 16:59 close / 16:55-16:59 entries',
-                  'normal':'Monday-Thursday 18:00 ET reopening versus same-day 16:59 close / 16:55-16:59 entries',
-                  'gap':'18:00 bar OPEN minus prior 16:59 bar CLOSE',
-                  'first_minute':'18:00 bar CLOSE minus 18:00 bar OPEN',
-                  'entry':'entry at OPEN of 16:55..16:59, evaluated at 18:00 OPEN and at CLOSE of 18:00 M1 bar'
-              },
-              'input_rows':total_rows,
-              'first_utc': first_utc.isoformat() if first_utc else None,
-              'last_utc': last_utc.isoformat() if last_utc else None,
-              'valid_events':len(events),
-              'groups':groups,
-              'yearly':yearly
-          }
+              ys=[e for e in events if e['year']==y]
+              yearly[str(y)]={'ALL':S(ys),'WEEKEND_MONDAY_SESSION':S([e for e in ys if e['type']=='WEEKEND_MONDAY_SESSION']),'NORMAL_DAILY':S([e for e in ys if e['type']=='NORMAL_DAILY'])}
+          result={'source':'Dukascopy XAUUSD M1 BID; archived monthly files + direct current tail','timezone':'America/New_York',
+                  'archive_max_utc':arc['max_utc'],'tail_max_utc':last_tail.isoformat() if last_tail else None,'archive_rows':arc['rows'],'tail_rows':tail_rows,
+                  'valid_events':len(events),'rejected_inactive':rejected_inactive,'rejected_missing':rejected_missing,
+                  'definitions':{'weekend':'Sunday 18:00 ET reopening = Monday trading session; compare Friday 16:55-16:59','normal':'Monday-Thursday 18:00 ET; compare same day 16:55-16:59','gap':'18:00 open - prior 16:59 close','first_minute':'18:00 M1 close - 18:00 M1 open','net1m':'18:00 M1 close - prior 16:59 close','entry':'BUY price reference = M1 open at 16:55..16:59; evaluate versus 18:00 open and 18:00 bar close; BID-only gross statistic'},
+                  'groups':groups,'yearly':yearly}
           print('RESULT_JSON_START')
-          print(json.dumps(result, sort_keys=True))
+          print(json.dumps(result,sort_keys=True))
           print('RESULT_JSON_END')
           PY
