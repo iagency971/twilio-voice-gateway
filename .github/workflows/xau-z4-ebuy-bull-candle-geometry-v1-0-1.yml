@@ -1,0 +1,62 @@
+name: XAU Z4 EBUY Bull Candle Geometry v1.0.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/xau-wick-zone-pro-dev
+    paths:
+      - .github/workflows/xau-z4-ebuy-bull-candle-geometry-v1-0-1.yml
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install numpy pandas scikit-learn
+      - name: Download frozen 24M Dukascopy BID M1 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/xau_raw
+          python - <<'PY'
+          import urllib.request
+          from pathlib import Path
+          months=[]; y,m=2024,8
+          for _ in range(24):
+              months.append((y,m)); m+=1
+              if m==13: y,m=y+1,1
+          base='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1'
+          out=Path('/tmp/xau_raw')
+          for y,m in months:
+              fn=f'xauusd_bid_m1_{y}_{m:02d}.csv'
+              urllib.request.urlretrieve(f'{base}/{fn}',out/fn)
+          PY
+          sha256sum /tmp/xau_raw/*.csv | sort > /tmp/xau_raw/SHA256SUMS.txt
+      - name: Run frozen geometry study with timestamp-only engineering fix
+        run: |
+          mkdir -p /tmp/out
+          python xau-wick-zone-pro/entry-research/xau_ebuy_bull_candle_geometry_v1_0_1_timefix.py \
+            --h1-contacts xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0-precomputed-location/XAUUSD_Z4_EBUY_REACTION_DEV_H1_CONTACTS_v1_0.csv.gz \
+            --h2-contacts xau-wick-zone-pro/entry-research/ebuy-h2-validation-v1-0/XAUUSD_Z4_EBUY_H2_CONTACTS_v1_0.csv.gz \
+            --raw-dir /tmp/xau_raw \
+            --output-json /tmp/out/XAUUSD_Z4_EBUY_BULL_CANDLE_GEOMETRY_RESULT_v1_0.json \
+            --output-csv /tmp/out/XAUUSD_Z4_EBUY_FIRST_BULL_EVENTS_v1_0.csv
+          cp /tmp/xau_raw/SHA256SUMS.txt /tmp/out/RAW_SOURCE_SHA256SUMS.txt
+      - name: Upload immutable result artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xau-z4-ebuy-bull-candle-geometry-v1-0-1
+          path: /tmp/out/
+          if-no-files-found: error
+          retention-days: 90
