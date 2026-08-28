@@ -1,0 +1,71 @@
+name: Gold reopen 100 to 2000 temp
+
+on:
+  push:
+    branches:
+      - agent/gold-reopen-stat-study-2026-08-27
+    paths:
+      - '.github/workflows/gold_reopen_native_100to2000_temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sim:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/gold-reopen-stat-study-2026-08-27
+      - name: Simulate capital ladders on archived 2026 path
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import importlib.util,json,math
+          from concurrent.futures import ThreadPoolExecutor,as_completed
+          spec=importlib.util.spec_from_file_location('g','xau-multiyear/reopen-study/gold_reopen_5m_study.py')
+          g=importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
+          store={'bid':{},'ask':{}}; tasks=[]
+          for side in ('bid','ask'):
+            for m in range(1,9): tasks.append((side,2026,m))
+          with ThreadPoolExecutor(max_workers=6) as ex:
+            for fut in as_completed([ex.submit(g.load_archive_month,*t) for t in tasks]):
+              side,y,m,o,mx=fut.result(); store[side].update(o)
+          events,reject=g.build_events(store)
+          es=sorted([e for e in events if e['year']==2026 and e['type']=='NORMAL'], key=lambda e:e['date'])
+          # One CFD lot = 100 oz => pnl USD = points * 100 * lots.
+          def run(unit):
+            eq=100.0; peak=eq; maxdd=0.0; maxdd_pct=0.0; min_eq=eq; target=None; bust=None; rows=[]
+            for i,e in enumerate(es,1):
+              lots=max(0.01, math.floor((eq+1e-9)/unit)*0.01)
+              ent=e['entries']['55']
+              pnl_pt=ent['exits']['1']; mae_pt=max(0.0,ent['mae_by_h']['1'])
+              trough=eq-mae_pt*100*lots
+              min_eq=min(min_eq,trough)
+              dd=peak-trough; dd_pct=100*dd/peak if peak>0 else 999
+              if dd>maxdd: maxdd=dd
+              if dd_pct>maxdd_pct: maxdd_pct=dd_pct
+              if trough<=0 and bust is None:
+                bust={'date':e['date'],'trade_no':i,'equity_before':eq,'lots':lots,'trough':trough,'mae_pt':mae_pt}
+                break
+              eq += pnl_pt*100*lots
+              rows.append({'date':e['date'],'trade_no':i,'lots':lots,'equity_close':eq,'pnl_pt':pnl_pt,'trough':trough})
+              peak=max(peak,eq)
+              if eq>=2000 and target is None:
+                target={'date':e['date'],'trade_no':i,'equity':eq,'lots':lots}
+                break
+            return {'unit_usd_per_0_01_lot':unit,'target':target,'bust':bust,'final_equity':eq,'trades_completed':len(rows),'max_mtm_drawdown_usd':maxdd,'max_mtm_drawdown_pct_of_peak':maxdd_pct,'min_equity':min_eq,'last_rows':rows[-5:]}
+          out={'definition':'Start $100; BUY 16:55 ASK -> BID close 18:00 M1; NORMAL only; size = max(0.01, floor(closed_equity/unit)*0.01); 1 lot=100oz; Dukascopy spread included; archive through 2026-08-20 only; NO broker swap/commission/margin-stopout modeled','N_events_archive':len(es),'reject':reject,'plans':{str(u):run(u) for u in (50,75,100,125,150,200,250)}}
+          p='xau-multiyear/reopen-study/NATIVE_1655_1801_100_TO_2000_2026_ARCHIVE.json'
+          json.dump(out,open(p,'w'),indent=2,sort_keys=True)
+          print(json.dumps(out,sort_keys=True))
+          PY
+      - name: Commit result
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add xau-multiyear/reopen-study/NATIVE_1655_1801_100_TO_2000_2026_ARCHIVE.json
+          git commit -m 'results: simulate aggressive 100-to-2000 reopen ladders' || exit 0
+          git push origin HEAD:agent/gold-reopen-stat-study-2026-08-27
