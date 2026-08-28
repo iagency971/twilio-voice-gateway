@@ -1,0 +1,97 @@
+name: Gold reopen native risk temp
+
+on:
+  push:
+    branches:
+      - agent/gold-reopen-stat-study-2026-08-27
+    paths:
+      - '.github/workflows/gold_reopen_native_risk_temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/gold-reopen-stat-study-2026-08-27
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Download recent BID ASK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p tail_bid tail_ask
+          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p bid -f csv -bs 1 -bp 5000 -dir tail_bid -fn recent_bid -r 5 -rp 10000 -fr
+          sleep 5
+          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p ask -f csv -bs 1 -bp 5000 -dir tail_ask -fn recent_ask -r 5 -rp 10000 -fr
+      - name: Compute 2026 risk metrics
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import importlib.util,json
+          from concurrent.futures import ThreadPoolExecutor,as_completed
+          spec=importlib.util.spec_from_file_location('g','xau-multiyear/reopen-study/gold_reopen_5m_study.py')
+          g=importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
+          store={'bid':{},'ask':{}}; tasks=[]
+          for side in ('bid','ask'):
+            for m in range(1,9): tasks.append((side,2026,m))
+          with ThreadPoolExecutor(max_workers=6) as ex:
+            for fut in as_completed([ex.submit(g.load_archive_month,*t) for t in tasks]):
+              side,y,m,o,mx=fut.result(); store[side].update(o)
+          g.parse_tail('tail_bid/recent_bid.csv','bid',store,None)
+          g.parse_tail('tail_ask/recent_ask.csv','ask',store,None)
+          events,reject=g.build_events(store)
+          es=sorted([e for e in events if e['year']==2026 and e['type']=='NORMAL'], key=lambda e:e['date'])
+          rows=[]
+          equity=0.0; peak=0.0; maxdd=0.0; maxdd_start=None; maxdd_end=None; peak_date=None
+          for e in es:
+            p=e['entries']['55']['exits']['1']
+            mae=max(0.0,e['entries']['55']['mae_by_h']['1'])
+            rows.append({'date':e['date'],'pnl_pt':p,'mae_pt':mae})
+            equity += 100*p
+            if equity > peak:
+              peak=equity; peak_date=e['date']
+            dd=peak-equity
+            if dd>maxdd:
+              maxdd=dd; maxdd_start=peak_date; maxdd_end=e['date']
+          worst=min(rows,key=lambda r:r['pnl_pt'])
+          worst_mae=max(rows,key=lambda r:r['mae_pt'])
+          losses=[r for r in rows if r['pnl_pt']<0]
+          # longest consecutive losing streak and its cumulative realized loss
+          best={'count':0,'sum_pt':0,'start':None,'end':None}; cur=[]
+          for r in rows:
+            if r['pnl_pt']<0: cur.append(r)
+            else:
+              if len(cur)>best['count'] or (len(cur)==best['count'] and sum(x['pnl_pt'] for x in cur)<best['sum_pt']):
+                best={'count':len(cur),'sum_pt':sum(x['pnl_pt'] for x in cur),'start':cur[0]['date'] if cur else None,'end':cur[-1]['date'] if cur else None}
+              cur=[]
+          if len(cur)>best['count'] or (len(cur)==best['count'] and sum(x['pnl_pt'] for x in cur)<best['sum_pt']):
+            best={'count':len(cur),'sum_pt':sum(x['pnl_pt'] for x in cur),'start':cur[0]['date'] if cur else None,'end':cur[-1]['date'] if cur else None}
+          out={
+            'definition':'BUY 16:55 ASK -> BID close 18:00 M1; 1 lot=100 oz; no swap/commission beyond Dukascopy spread',
+            'N':len(rows),'reject':reject,
+            'worst_realized':{**worst,'usd_1lot':100*worst['pnl_pt']},
+            'worst_intratrade_mae':{**worst_mae,'usd_1lot':100*worst_mae['mae_pt']},
+            'max_closed_equity_drawdown_usd_1lot':maxdd,
+            'max_closed_equity_drawdown_start':maxdd_start,
+            'max_closed_equity_drawdown_end':maxdd_end,
+            'longest_losing_streak':{**best,'usd_1lot':100*best['sum_pt']},
+            'final_gross_pnl_usd_1lot':sum(r['pnl_pt'] for r in rows)*100
+          }
+          p='xau-multiyear/reopen-study/NATIVE_1655_1801_RISK_2026_2026-08-27.json'
+          json.dump(out,open(p,'w'),indent=2,sort_keys=True)
+          print(json.dumps(out,sort_keys=True))
+          PY
+      - name: Commit result
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add xau-multiyear/reopen-study/NATIVE_1655_1801_RISK_2026_2026-08-27.json
+          git commit -m 'results: add native 16:55-18:01 risk metrics 2026' || exit 0
+          git push origin HEAD:agent/gold-reopen-stat-study-2026-08-27
