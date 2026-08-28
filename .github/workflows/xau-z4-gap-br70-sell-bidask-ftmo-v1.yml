@@ -1,0 +1,112 @@
+name: XAU Z4 Gap BR70 SELL BIDASK FTMO v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-gap-br70-sell-bidask-ftmo-v1.yml'
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  bidask-execution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Frozen methodology and implementation guards
+        run: |
+          test "$(git hash-object xau-wick-zone-pro/session-research/XAUUSD_Z4_GAP_BR70_SELL_DUKASCOPY_BIDASK_FTMO_COMMISSION_PREREG_v1_0_2026-08-28.md)" = "499fb629647c2d2ed793c981435de61c31761bef"
+          test "$(git hash-object xau-wick-zone-pro/session-research/xau_z4_gap_br70_sell_bidask_ftmo_v1_0.py)" = "a61b207f3aee8b8eb89f44069acc2de2a7d97abb"
+
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1
+
+      - name: Download immutable standalone trade ledgers
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 33203080123
+          pattern: z4-gap-br70-*
+          path: source
+
+      - name: Download pinned Dukascopy BID and ASK 24M
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import urllib.request, calendar, csv, io
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/3fbaf3280338474b379e3a01ac3396f85d4a60be'
+          months=[]
+          y,m=2024,8
+          while (y,m) <= (2026,7):
+              months.append((y,m))
+              m+=1
+              if m==13: y+=1; m=1
+          for side in ('bid','ask'):
+              Path('raw/'+side).mkdir(parents=True,exist_ok=True)
+              for y,m in months:
+                  fn=f'xauusd_{side}_m1_{y:04d}_{m:02d}.csv'
+                  url=f'{root}/xauusd/{side}/m1/{fn}'
+                  print('download',url,flush=True)
+                  urllib.request.urlretrieve(url, 'raw/'+side+'/'+fn)
+          urllib.request.urlretrieve(f'{root}/xauusd/ask/m1/ask_m1_file_audit.csv','raw/ask_m1_file_audit.csv')
+          PY
+
+      - name: Verify frozen BID hashes and ASK audit coverage
+        run: |
+          python - <<'PY'
+          import json,hashlib,csv
+          from pathlib import Path
+          man=json.loads(Path('xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json').read_text())
+          exp={x['file']:x['sha256'] for x in man['files'] if x.get('side')=='bid'}
+          bids=sorted(Path('raw/bid').glob('*.csv'))
+          assert len(bids)==24, len(bids)
+          for p in bids:
+              got=hashlib.sha256(p.read_bytes()).hexdigest()
+              assert p.name in exp, f'no frozen BID hash for {p.name}'
+              assert got==exp[p.name], f'BID hash mismatch {p.name}: {got} != {exp[p.name]}'
+          rows={r['Name']:r for r in csv.DictReader(Path('raw/ask_m1_file_audit.csv').open())}
+          asks=sorted(Path('raw/ask').glob('*.csv'))
+          assert len(asks)==24, len(asks)
+          for p in asks:
+              assert p.name in rows, f'ASK missing from audit {p.name}'
+              assert rows[p.name]['Status']=='ok', (p.name,rows[p.name]['Status'],rows[p.name]['Note'])
+              assert p.stat().st_size>0
+          print('BID frozen hashes PASS; ASK pinned audit PASS; 24+24 files')
+          PY
+
+      - name: Run executable BIDASK plus current FTMO commission validation
+        run: |
+          mkdir -p out
+          mapfile -t TRADES < <(find source -type f -name '*_Z4_GAP_TRADES.csv.gz' | sort)
+          test "${#TRADES[@]}" -eq 4
+          python xau-wick-zone-pro/session-research/xau_z4_gap_br70_sell_bidask_ftmo_v1_0.py \
+            --bid-files raw/bid/*.csv \
+            --ask-files raw/ask/*.csv \
+            --trade-files "${TRADES[@]}" \
+            --output out/BIDASK_FTMO_RESULT.json \
+            --trades-output out/BIDASK_FTMO_TRADES.csv.gz \
+            --ask-manifest-output out/BIDASK_SOURCE_MANIFEST.json
+
+      - name: Evidence manifest
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          files={}
+          for p in sorted(Path('out').iterdir()):
+              files[p.name]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}
+          Path('out/EVIDENCE_MANIFEST.json').write_text(json.dumps({'source_trade_run':33203080123,'files':files},indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-gap-br70-sell-bidask-ftmo-v1
+          path: out
+          retention-days: 30
