@@ -1,0 +1,22 @@
+name: Gold reopen 5m archive fallback temp
+
+on:
+  push:
+    branches:
+      - agent/gold-reopen-stat-study-2026-08-27
+    paths:
+      - '.github/workflows/gold_reopen_5m_archive_temp.yml'
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/gold-reopen-stat-study-2026-08-27
+      - name: Compute archive-only MFE MAE exits and gap-aware stops
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 xau-multiyear/reopen-study/gold_reopen_5m_study.py
