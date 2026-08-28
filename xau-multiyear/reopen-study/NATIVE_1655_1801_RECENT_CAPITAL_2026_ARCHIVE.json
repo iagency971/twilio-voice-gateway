@@ -1,0 +1,124 @@
+{
+  "definition": "Start $100 at each start date; same 16:55->18:01 NORMAL strategy; archived data only through 2026-08-20; no swap/commission/margin stop-out",
+  "starts": {
+    "2026-01-01": {
+      "N": 128,
+      "plans": {
+        "100": {
+          "bust": null,
+          "final_equity": 2007.1510000000353,
+          "max_mtm_dd_pct": 26.58053655970563,
+          "target": {
+            "date": "2026-06-23",
+            "equity": 2007.1510000000353,
+            "lots": 0.19,
+            "trade_no": 94
+          },
+          "trades_available": 128
+        },
+        "50": {
+          "bust": null,
+          "final_equity": 3274.8819999999805,
+          "max_mtm_dd_pct": 61.05047319557621,
+          "target": {
+            "date": "2026-04-07",
+            "equity": 3274.8819999999805,
+            "lots": 0.37,
+            "trade_no": 51
+          },
+          "trades_available": 128
+        },
+        "75": {
+          "bust": null,
+          "final_equity": 2013.9280000000008,
+          "max_mtm_dd_pct": 40.501361230919755,
+          "target": {
+            "date": "2026-04-23",
+            "equity": 2013.9280000000008,
+            "lots": 0.24,
+            "trade_no": 61
+          },
+          "trades_available": 128
+        }
+      }
+    },
+    "2026-05-01": {
+      "N": 63,
+      "plans": {
+        "100": {
+          "bust": null,
+          "final_equity": 193.34600000000137,
+          "max_mtm_dd_pct": 18.537837081272908,
+          "target": null,
+          "trades_available": 63
+        },
+        "50": {
+          "bust": null,
+          "final_equity": 392.6220000000035,
+          "max_mtm_dd_pct": 34.75074339688677,
+          "target": null,
+          "trades_available": 63
+        },
+        "75": {
+          "bust": null,
+          "final_equity": 235.95600000000104,
+          "max_mtm_dd_pct": 18.537837081272908,
+          "target": null,
+          "trades_available": 63
+        }
+      }
+    },
+    "2026-06-01": {
+      "N": 48,
+      "plans": {
+        "100": {
+          "bust": null,
+          "final_equity": 138.42000000000098,
+          "max_mtm_dd_pct": 13.82738364211432,
+          "target": null,
+          "trades_available": 48
+        },
+        "50": {
+          "bust": null,
+          "final_equity": 161.47000000000116,
+          "max_mtm_dd_pct": 32.92651904954269,
+          "target": null,
+          "trades_available": 48
+        },
+        "75": {
+          "bust": null,
+          "final_equity": 138.42000000000098,
+          "max_mtm_dd_pct": 13.82738364211432,
+          "target": null,
+          "trades_available": 48
+        }
+      }
+    },
+    "2026-07-01": {
+      "N": 30,
+      "plans": {
+        "100": {
+          "bust": null,
+          "final_equity": 111.44999999999936,
+          "max_mtm_dd_pct": 17.3518571023529,
+          "target": null,
+          "trades_available": 30
+        },
+        "50": {
+          "bust": null,
+          "final_equity": 105.21999999999844,
+          "max_mtm_dd_pct": 26.20498118616676,
+          "target": null,
+          "trades_available": 30
+        },
+        "75": {
+          "bust": null,
+          "final_equity": 111.44999999999936,
+          "max_mtm_dd_pct": 17.3518571023529,
+          "target": null,
+          "trades_available": 30
+        }
+      }
+    }
+  }
+}
