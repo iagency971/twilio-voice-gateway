@@ -1,0 +1,71 @@
+name: Gold reopen native monthly temp
+
+on:
+  push:
+    branches:
+      - agent/gold-reopen-stat-study-2026-08-27
+    paths:
+      - '.github/workflows/gold_reopen_native_monthly_temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/gold-reopen-stat-study-2026-08-27
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Download recent BID ASK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p tail_bid tail_ask
+          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p bid -f csv -bs 1 -bp 5000 -dir tail_bid -fn recent_bid -r 5 -rp 10000 -fr
+          sleep 5
+          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p ask -f csv -bs 1 -bp 5000 -dir tail_ask -fn recent_ask -r 5 -rp 10000 -fr
+      - name: Compute monthly native study
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import importlib.util,json,statistics
+          from concurrent.futures import ThreadPoolExecutor,as_completed
+          spec=importlib.util.spec_from_file_location('g','xau-multiyear/reopen-study/gold_reopen_5m_study.py')
+          g=importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
+          store={'bid':{},'ask':{}}; tasks=[]
+          for side in ('bid','ask'):
+            for m in range(1,9): tasks.append((side,2026,m))
+          with ThreadPoolExecutor(max_workers=6) as ex:
+            for fut in as_completed([ex.submit(g.load_archive_month,*t) for t in tasks]):
+              side,y,m,o,mx=fut.result(); store[side].update(o)
+          g.parse_tail('tail_bid/recent_bid.csv','bid',store,None)
+          g.parse_tail('tail_ask/recent_ask.csv','ask',store,None)
+          events,reject=g.build_events(store)
+          normal=[e for e in events if e['year']==2026 and e['type']=='NORMAL']
+          def stat(es):
+            xs=[e['entries']['55']['exits']['1'] for e in es]
+            return g.basic(xs)
+          out={'definition':'BUY ASK open 16:55 ET; exit BID close of 18:00 M1 ~= 18:01 ET','reject':reject,'months':{}}
+          for m in range(1,9):
+            es=[e for e in normal if int(e['date'][5:7])==m]
+            out['months'][f'{m:02d}']=stat(es)
+          out['jan_apr']=stat([e for e in normal if int(e['date'][5:7])<=4])
+          out['may_aug']=stat([e for e in normal if 5<=int(e['date'][5:7])<=8])
+          out['all_2026']=stat(normal)
+          p='xau-multiyear/reopen-study/NATIVE_1655_1801_MONTHLY_2026_2026-08-27.json'
+          json.dump(out,open(p,'w'),indent=2,sort_keys=True)
+          print(json.dumps(out,sort_keys=True))
+          PY
+      - name: Commit result
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add xau-multiyear/reopen-study/NATIVE_1655_1801_MONTHLY_2026_2026-08-27.json
+          git commit -m 'results: add native 16:55-18:01 monthly 2026' || exit 0
+          git push origin HEAD:agent/gold-reopen-stat-study-2026-08-27
