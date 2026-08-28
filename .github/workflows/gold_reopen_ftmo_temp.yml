@@ -7,6 +7,9 @@ on:
     paths:
       - '.github/workflows/gold_reopen_ftmo_temp.yml'
 
+permissions:
+  contents: write
+
 jobs:
   study:
     runs-on: ubuntu-latest
@@ -30,11 +33,11 @@ jobs:
         shell: bash
         run: |
           python3 xau-multiyear/reopen-study/gold_reopen_ftmo_study.py > ftmo_full.json
-      - name: Print compact result
+      - name: Build compact result
         shell: bash
         run: |
           python3 - <<'PY'
-          import json
+          import json, os
           d=json.load(open('ftmo_full.json'))
           def pick(s):
               if not s or not s.get('N'): return {'N':0}
@@ -59,11 +62,15 @@ jobs:
                   row['best_1805_by_mean']=max(row['entries'],key=lambda e:row['entries'][e].get('to1805open',{}).get('mean',-1e99))
               out['years'][y]=row
           for typ in ('NORMAL','WEEKEND'):
-              g=d['all_years'][typ]; out['all_years'][typ]={'N':g['N'],'entries':{e:pick(g['entries'][e]) for e in ('16:45','16:49')}}
+              g=d['all_years'][typ]
+              out['all_years'][typ]={'N':g['N'],'entries':{e:pick(g['entries'][e]) for e in ('16:45','16:49')}}
           for m,g in d['2026_by_month'].items():
               out['months2026'][m]={'N':g['N'],'entries':{e:pick(g['entries'][e]) for e in ('16:45','16:46','16:47','16:48','16:49')}}
           for wd,g in d['2026_by_weekday'].items():
               out['weekdays2026'][wd]={'N':g['N'],'entries':{e:pick(g['entries'][e]) for e in ('16:45','16:49')}}
+          p='xau-multiyear/reopen-study/FTMO_COMPACT_2026-08-27.json'
+          os.makedirs(os.path.dirname(p),exist_ok=True)
+          json.dump(out,open(p,'w'),sort_keys=True,indent=2)
           print('FTMO_COMPACT_JSON_START')
           print(json.dumps(out,sort_keys=True))
           print('FTMO_COMPACT_JSON_END')
@@ -73,3 +80,11 @@ jobs:
           name: gold-reopen-ftmo-full
           path: ftmo_full.json
           retention-days: 3
+      - name: Commit compact result
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add xau-multiyear/reopen-study/FTMO_COMPACT_2026-08-27.json
+          git commit -m 'results: add FTMO reopen compact output' || exit 0
+          git push origin HEAD:agent/gold-reopen-stat-study-2026-08-27
