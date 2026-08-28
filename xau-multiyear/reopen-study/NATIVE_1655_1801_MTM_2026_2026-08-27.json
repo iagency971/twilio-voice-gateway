@@ -1,0 +1,21 @@
+{
+  "N": 132,
+  "definition": "BUY 16:55 ASK -> BID close 18:00 M1; fixed 1.00 lot=100 oz; MTM trough uses M1 low across full exposure through exit minute; Dukascopy spread included; no broker swap/commission",
+  "final_gross_pnl_usd_1lot": 42494.20000000011,
+  "max_mark_to_market_drawdown_usd_1lot": 3397.7999999999156,
+  "reject": {
+    "inactive": 7,
+    "missing": 2,
+    "negative_spread": 0
+  },
+  "worst": {
+    "date": "2026-02-25",
+    "drawdown_usd": 3397.7999999999156,
+    "equity_before_trade_usd": 9977.899999999954,
+    "intratrade_trough_usd": 8991.899999999987,
+    "mae_usd": 985.9999999999673,
+    "peak_date": "2026-02-11",
+    "peak_usd": 12389.699999999903,
+    "trade_pnl_usd": -109.69999999997526
+  }
+}
