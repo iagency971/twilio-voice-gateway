@@ -1,0 +1,91 @@
+name: XAU Z4 ABOVE_MAIN E_BUY_US Score v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-break-retrace-above-main-ebuy-score-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  STRUCTURAL_RUN_ID: '33139524456'
+
+jobs:
+  score-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Frozen prereg, engine and score evidence guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/entry-research/XAUUSD_Z4_BREAK_RETRACE_ABOVE_MAIN_EBUY_SCORE_PREREG_v1_0_2026-08-28.md
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_z4_break_retrace_e123_rejection_v1_0.py)" = "7862638917015838948001a374f9bea7dba83e07"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0-precomputed-location/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv.gz)" = "7b6d80583a37e370bcea7e55d94f8689fd286bef"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/ebuy-score-dev-v1-0/XAUUSD_Z4_EBUY_SCORE_DEV_OOF_v1_0.csv.gz)" = "743642c833290c16fe479d6a20e99b567e71153b"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/ebuy-h2-validation-v1-0/XAUUSD_Z4_EBUY_H2_SCORED_v1_0.csv.gz)" = "3644b3f0af7f71810170093ba9bddf4fe20e6adb"
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_z4_break_retrace_above_main_ebuy_score_v1_0.py
+
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1 scikit-learn==1.7.1
+
+      - name: Download exact frozen structural-study evidence
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.STRUCTURAL_RUN_ID }}
+          name: z4-break-retrace-e123-rejection-v1-1
+          path: /tmp/structural
+
+      - name: Verify structural evidence and locate trade table
+        shell: bash
+        run: |
+          set -euo pipefail
+          find /tmp/structural -maxdepth 2 -type f -print
+          test "$(sha256sum /tmp/structural/XAUUSD_Z4_BREAK_RETRACE_E123_REJECTION_RESULT_v1_0.json | awk '{print $1}')" = "48a8477f5743c034c148eb8a918861560d57c5dea71e65db6d602fdb28cfdb9c"
+          test "$(sha256sum /tmp/structural/XAUUSD_Z4_BREAK_RETRACE_E123_TRADES_v1_0.csv.gz | awk '{print $1}')" = "1aacd87f8b0787f330976c0e47dcdc91f3bcdecb74ac7de96a3acb0da6e59e0d"
+
+      - name: Run frozen score interaction study
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/out
+          python xau-wick-zone-pro/entry-research/xau_z4_break_retrace_above_main_ebuy_score_v1_0.py \
+            --structural-trades /tmp/structural/XAUUSD_Z4_BREAK_RETRACE_E123_TRADES_v1_0.csv.gz \
+            --h1-triggers xau-wick-zone-pro/entry-research/reaction-dev-h1-v1-0-precomputed-location/XAUUSD_Z4_EBUY_REACTION_DEV_H1_TRIGGERS_v1_0.csv.gz \
+            --h1-oof xau-wick-zone-pro/entry-research/ebuy-score-dev-v1-0/XAUUSD_Z4_EBUY_SCORE_DEV_OOF_v1_0.csv.gz \
+            --h2-scored xau-wick-zone-pro/entry-research/ebuy-h2-validation-v1-0/XAUUSD_Z4_EBUY_H2_SCORED_v1_0.csv.gz \
+            --output /tmp/out/XAUUSD_Z4_BREAK_RETRACE_ABOVE_MAIN_EBUY_SCORE_RESULT_v1_0.json \
+            --mapped-csv /tmp/out/XAUUSD_Z4_BREAK_RETRACE_ABOVE_MAIN_EBUY_SCORE_MAPPED_v1_0.csv.gz
+
+      - name: Build immutable result manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/out')
+          files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.iterdir())}
+          m={'status':'ABOVE_MAIN_EBUY_SCORE_EVIDENCE_RECORDED','files':files}
+          (root/'MANIFEST.json').write_text(json.dumps(m,indent=2))
+          print(json.dumps(m,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-above-main-ebuy-score-v1-0
+          path: /tmp/out/*
+          retention-days: 30
