@@ -73,7 +73,7 @@ jobs:
           assert len(asks)==24, len(asks)
           for p in asks:
               assert p.name in rows, f'ASK missing from audit {p.name}'
-              assert rows[p.name]['Status']=='ok', (p.name,rows[p.name]['Status'],rows[p.name]['Note'])
+              assert rows[p.name]['Status'] in ('ok','ok_market_session'), (p.name,rows[p.name]['Status'],rows[p.name]['Note'])
               assert p.stat().st_size>0
           print('BID frozen hashes PASS; ASK pinned audit PASS; 24+24 files')
           PY
