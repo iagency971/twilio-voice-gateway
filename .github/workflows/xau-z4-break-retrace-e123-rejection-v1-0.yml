@@ -1,0 +1,116 @@
+name: XAU Z4 Break Retrace E1-E3 Rejection v1.0
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-break-retrace-e123-rejection-v1-0.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_C5_GEOMETRY_RUN_ID: '33009186853'
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen prereg and engine guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/entry-research/XAUUSD_Z4_BREAK_RETRACE_E123_REJECTION_PREREG_v1_0_2026-08-27.md
+          test -s xau-wick-zone-pro/entry-research/XAUUSD_Z4_BREAK_RETRACE_E123_REJECTION_PREREG_ADDENDUM_A_CAUSAL_ORDERING_2026-08-27.md
+          test -s xau-wick-zone-pro/entry-research/XAUUSD_Z4_BREAK_RETRACE_E123_REJECTION_PREREG_ADDENDUM_B_EPISODE_IDENTITY_2026-08-27.md
+          python -m py_compile xau-wick-zone-pro/entry-research/xau_z4_break_retrace_e123_rejection_v1_0.py
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py)" = "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py)" = "ef45037d2a99a705ddf9bfbc3ebc666f88119a80"
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - name: Download exact frozen source-faithful C5 Z4 geometry
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_C5_GEOMETRY_RUN_ID }}
+          pattern: frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - name: Assemble exact 24M C5 Z4 geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import glob,pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'))
+          assert len(fs)==24,len(fs)
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True)
+          z['time']=pd.to_datetime(z.time,utc=True)
+          z=z.sort_values(['time','side','center']).reset_index(drop=True)
+          assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z')
+          assert z.time.max()<pd.Timestamp('2026-08-01T00:00:00Z')
+          z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
+          print('FROZEN_C5_24M_READY',len(z),z.time.nunique(),z.time.min(),z.time.max())
+          PY
+      - name: Acquire exact 24M BID M1 source and verify hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/raw /tmp/results
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['MANIFEST']))
+          fs=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07']
+          assert len(fs)==24,len(fs)
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in fs:
+              p=Path('/tmp/raw')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest()
+              assert got==x['sha256'],(p.name,got,x['sha256'])
+          print('RAW_24M_HASH_PASS',len(fs))
+          PY
+      - name: Run preregistered structural breakout/retrace/E rejection study
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/xau_z4_break_retrace_e123_rejection_v1_0.py \
+            --files /tmp/raw/*.csv \
+            --z4-pkl /tmp/FROZEN_C5_24M.pkl \
+            --output /tmp/results/XAUUSD_Z4_BREAK_RETRACE_E123_REJECTION_RESULT_v1_0.json \
+            --episodes-csv /tmp/results/XAUUSD_Z4_BREAK_RETRACE_E123_EPISODES_v1_0.csv.gz \
+            --contacts-csv /tmp/results/XAUUSD_Z4_BREAK_RETRACE_E123_CONTACTS_v1_0.csv.gz \
+            --trades-csv /tmp/results/XAUUSD_Z4_BREAK_RETRACE_E123_TRADES_v1_0.csv.gz
+      - name: Build immutable evidence manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/results')
+          files=sorted(root.iterdir())
+          man={
+            'status':'Z4_BREAK_RETRACE_E123_REJECTION_EVIDENCE_RECORDED',
+            'production_authorization':'NONE',
+            'files':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+          }
+          (root/'XAUUSD_Z4_BREAK_RETRACE_E123_REJECTION_MANIFEST_v1_0.json').write_text(json.dumps(man,indent=2))
+          print(json.dumps(man,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-break-retrace-e123-rejection-v1-0
+          path: /tmp/results/*
+          retention-days: 30
