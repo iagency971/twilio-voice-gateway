@@ -1,0 +1,32 @@
+{
+  "N": 132,
+  "definition": "BUY 16:55 ASK -> BID close 18:00 M1; 1 lot=100 oz; no swap/commission beyond Dukascopy spread",
+  "final_gross_pnl_usd_1lot": 42494.20000000009,
+  "longest_losing_streak": {
+    "count": 3,
+    "end": "2026-02-18",
+    "start": "2026-02-12",
+    "sum_pt": -26.706999999999425,
+    "usd_1lot": -2670.6999999999425
+  },
+  "max_closed_equity_drawdown_end": "2026-02-18",
+  "max_closed_equity_drawdown_start": "2026-02-11",
+  "max_closed_equity_drawdown_usd_1lot": 2670.6999999999425,
+  "reject": {
+    "inactive": 7,
+    "missing": 2,
+    "negative_spread": 0
+  },
+  "worst_intratrade_mae": {
+    "date": "2026-02-12",
+    "mae_pt": 22.186999999999898,
+    "pnl_pt": -21.966999999999643,
+    "usd_1lot": 2218.69999999999
+  },
+  "worst_realized": {
+    "date": "2026-02-12",
+    "mae_pt": 22.186999999999898,
+    "pnl_pt": -21.966999999999643,
+    "usd_1lot": -2196.6999999999643
+  }
+}
