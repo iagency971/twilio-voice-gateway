@@ -1,0 +1,44 @@
+name: Gold reopen 5m executable study temp
+
+on:
+  push:
+    branches:
+      - agent/gold-reopen-stat-study-2026-08-27
+    paths:
+      - 'xau-multiyear/reopen-study/gold_reopen_5m_study.py'
+      - '.github/workflows/gold_reopen_5m_study_temp.yml'
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/gold-reopen-stat-study-2026-08-27
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Download slow recent Dukascopy BID tail
+        shell: bash
+        run: |
+          set +e
+          mkdir -p tail_bid
+          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to now -t m1 -p bid -f csv -bs 1 -bp 5000 -dir tail_bid -fn recent_bid -r 8 -rp 10000 -fr
+          echo "BID_RC=$?"
+          ls -lh tail_bid || true
+          sleep 10
+      - name: Download slow recent Dukascopy ASK tail
+        shell: bash
+        run: |
+          set +e
+          mkdir -p tail_ask
+          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to now -t m1 -p ask -f csv -bs 1 -bp 5000 -dir tail_ask -fn recent_ask -r 8 -rp 10000 -fr
+          echo "ASK_RC=$?"
+          ls -lh tail_ask || true
+      - name: Compute MFE MAE exits and gap-aware stops
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 xau-multiyear/reopen-study/gold_reopen_5m_study.py
+          ls -lh reopen5m_results.json
