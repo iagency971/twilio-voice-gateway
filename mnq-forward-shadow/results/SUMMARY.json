@@ -40,10 +40,10 @@
     }
   },
   "positive_weeks": 2,
-  "remove_best_10pct_mean": -0.0019284021673095138,
+  "remove_best_10pct_mean": -0.0019284021673095324,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "29c38322b75d9b412a7ffa13f65efb6d7bcc9f7f46b8132fef773b60bbec5549"
+  "ledger_sha256": "90f3fd6408ddd84926f8fa8a0e50e7702240d801dee5e4abc176e06ecc958ef5"
 }
