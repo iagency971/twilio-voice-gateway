@@ -1,0 +1,133 @@
+name: XAU Direct E1-E3 SELL Between Above Z4 v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-e123-direct-sell-between-above-z4-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_Z4_RUN_ID: '33139524456'
+  PREREG: xau-wick-zone-pro/session-research/XAUUSD_E123_DIRECT_SELL_BETWEEN_ABOVE_Z4_PREREG_v1_0_2026-08-28.md
+  ENGINE: xau-wick-zone-pro/session-research/xau_e123_direct_sell_between_above_z4_v1_0.py
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: true
+      matrix:
+        session: [US, ASIA_BROAD, ASIA_CORE_STANDALONE, EUROPE]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s "$PREREG"
+          test "$(git hash-object "$ENGINE")" = "60e6783f8c4e530ae403fa298b8abf3959e08518"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py)" = "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py)" = "ef45037d2a99a705ddf9bfbc3ebc666f88119a80"
+          python -m py_compile "$ENGINE"
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_Z4_RUN_ID }}
+          pattern: z4br-frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - name: Assemble exact 24M causal Z4 and acquire raw BID M1
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/raw /tmp/results
+          python - <<'PY'
+          import glob,hashlib,json,os,subprocess
+          from pathlib import Path
+          import pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl')); assert len(fs)==24,len(fs)
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True)
+          z['time']=pd.to_datetime(z.time,utc=True); z=z.sort_values(['time','side','center']).reset_index(drop=True)
+          assert set(z.columns)=={'time','landmark_i','center','zlo','zhi','side'}
+          assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z') and z.time.max()<pd.Timestamp('2026-08-01T00:00:00Z')
+          z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
+          m=json.load(open(os.environ['MANIFEST']))
+          rows=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07']; assert len(rows)==24
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in rows:
+              p=Path('/tmp/raw')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          print('DIRECT_ESELL_INPUT_QA_PASS',len(z),len(rows))
+          PY
+      - name: Run direct SELL study
+        shell: bash
+        env:
+          SESSION: ${{ matrix.session }}
+        run: |
+          set -euo pipefail
+          python "$ENGINE" --session "$SESSION" --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl \
+            --output "/tmp/results/${SESSION}_RESULT.json" \
+            --contacts-csv "/tmp/results/${SESSION}_CONTACTS.csv.gz" \
+            --trades-csv "/tmp/results/${SESSION}_TRADES.csv.gz"
+      - name: Evidence manifest
+        shell: bash
+        env:
+          SESSION: ${{ matrix.session }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path('/tmp/results'); files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.iterdir())}
+          (root/f"{os.environ['SESSION']}_MANIFEST.json").write_text(json.dumps({'session':os.environ['SESSION'],'files':files},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: direct-esell-${{ matrix.session }}
+          path: /tmp/results/*
+          retention-days: 30
+
+  aggregate:
+    needs: study
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: direct-esell-*
+          path: /tmp/evidence
+          merge-multiple: true
+      - name: Build combined decision JSON
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/final
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          names=['US','ASIA_BROAD','ASIA_CORE_STANDALONE','EUROPE']
+          out={'status':'DIRECT_ESELL_BETWEEN_ABOVE_Z4_COMPLETE','sessions':{},'production_authorization':'NONE_RETROSPECTIVE_DIRECT_ESELL_RESEARCH'}
+          for n in names:
+              r=json.load(open(f'/tmp/evidence/{n}_RESULT.json'))
+              out['sessions'][n]={'session':r['session'],'H1':r['results']['H1'],'H2':r['results']['H2'],'pooled':r['pooled']}
+          Path('/tmp/final/DIRECT_ESELL_COMBINED_DECISION.json').write_text(json.dumps(out,indent=2,allow_nan=False))
+          src={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path('/tmp/evidence').iterdir())}
+          Path('/tmp/final/DIRECT_ESELL_AGGREGATE_MANIFEST.json').write_text(json.dumps({'status':out['status'],'source_files':src},indent=2))
+          print(json.dumps(out,indent=2,allow_nan=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: direct-esell-between-above-z4-v1-final
+          path: /tmp/final/*
+          retention-days: 30
