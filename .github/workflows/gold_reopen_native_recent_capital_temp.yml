@@ -1,0 +1,67 @@
+name: Gold reopen recent capital temp
+
+on:
+  push:
+    branches:
+      - agent/gold-reopen-stat-study-2026-08-27
+    paths:
+      - '.github/workflows/gold_reopen_native_recent_capital_temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sim:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/gold-reopen-stat-study-2026-08-27
+      - name: Simulate recent-regime capital ladders
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import importlib.util,json,math
+          from concurrent.futures import ThreadPoolExecutor,as_completed
+          spec=importlib.util.spec_from_file_location('g','xau-multiyear/reopen-study/gold_reopen_5m_study.py')
+          g=importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
+          store={'bid':{},'ask':{}}; tasks=[]
+          for side in ('bid','ask'):
+            for m in range(1,9): tasks.append((side,2026,m))
+          with ThreadPoolExecutor(max_workers=6) as ex:
+            for fut in as_completed([ex.submit(g.load_archive_month,*t) for t in tasks]):
+              side,y,m,o,mx=fut.result(); store[side].update(o)
+          events,reject=g.build_events(store)
+          all_es=sorted([e for e in events if e['year']==2026 and e['type']=='NORMAL'], key=lambda e:e['date'])
+          def run(es,unit):
+            eq=100.0; peak=eq; maxdd_pct=0.0; bust=None; target=None
+            for i,e in enumerate(es,1):
+              lots=max(0.01,math.floor((eq+1e-9)/unit)*0.01)
+              ent=e['entries']['55']; mae=max(0.0,ent['mae_by_h']['1']); pnl=ent['exits']['1']
+              trough=eq-mae*100*lots
+              dd_pct=100*(peak-trough)/peak if peak>0 else 999
+              maxdd_pct=max(maxdd_pct,dd_pct)
+              if trough<=0:
+                bust={'date':e['date'],'trade_no':i,'equity_before':eq,'lots':lots,'trough':trough}; break
+              eq+=pnl*100*lots; peak=max(peak,eq)
+              if eq>=2000:
+                target={'date':e['date'],'trade_no':i,'equity':eq,'lots':lots}; break
+            return {'final_equity':eq,'max_mtm_dd_pct':maxdd_pct,'bust':bust,'target':target,'trades_available':len(es)}
+          starts={'2026-01-01':'2026-01-01','2026-05-01':'2026-05-01','2026-06-01':'2026-06-01','2026-07-01':'2026-07-01'}
+          out={'definition':'Start $100 at each start date; same 16:55->18:01 NORMAL strategy; archived data only through 2026-08-20; no swap/commission/margin stop-out','starts':{}}
+          for label,start in starts.items():
+            es=[e for e in all_es if e['date']>=start]
+            out['starts'][label]={'N':len(es),'plans':{str(u):run(es,u) for u in (50,75,100)}}
+          p='xau-multiyear/reopen-study/NATIVE_1655_1801_RECENT_CAPITAL_2026_ARCHIVE.json'
+          json.dump(out,open(p,'w'),indent=2,sort_keys=True)
+          print(json.dumps(out,sort_keys=True))
+          PY
+      - name: Commit result
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add xau-multiyear/reopen-study/NATIVE_1655_1801_RECENT_CAPITAL_2026_ARCHIVE.json
+          git commit -m 'results: add recent-regime capital ladder simulation' || exit 0
+          git push origin HEAD:agent/gold-reopen-stat-study-2026-08-27
