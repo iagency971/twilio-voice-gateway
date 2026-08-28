@@ -27,64 +27,44 @@ jobs:
           set -euxo pipefail
           mkdir -p tail_bid tail_ask
           npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p bid -f csv -bs 1 -bp 5000 -dir tail_bid -fn recent_bid -r 5 -rp 10000 -fr
-          sleep 10
+          sleep 5
           npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p ask -f csv -bs 1 -bp 5000 -dir tail_ask -fn recent_ask -r 5 -rp 10000 -fr
-      - name: Run FTMO study
+      - name: Run full 2020-2026 FTMO study
         shell: bash
         run: |
           python3 xau-multiyear/reopen-study/gold_reopen_ftmo_study.py > ftmo_full.json
-      - name: Build compact result
+      - name: Build compact yearly result
         shell: bash
         run: |
           python3 - <<'PY'
           import json, os
           d=json.load(open('ftmo_full.json'))
+          def b(z):
+            return {k:z.get(k) for k in ('N','mean','median','win_pct','pf','p10','p25','p75','p90')}
           def pick(s):
-              if not s or not s.get('N'): return {'N':0}
-              return {
-                  'N':s['N'],'spread':s['spread'],
-                  'to1800open':s['to_1800_open'],'to1805open':s['exit']['18:05_OPEN'],
-                  '1805close':s['exit']['18:05_CLOSE'],'1806close':s['exit']['18:06_CLOSE'],
-                  '1808close':s['exit']['18:08_CLOSE'],'1810close':s['exit']['18:10_CLOSE'],
-                  'missed1800_1805':s['missed_1800_to_1805_open'],
-                  'avg_swap_mult':s['avg_swap_multiplier'],
-                  'swap_be':s['break_even_base_swap_price_units_no_extra_slippage'],
-                  'flat_cost_be':s['break_even_total_flat_extra_cost_price_units'],
-                  'swap_sens':{k:s['swap_sensitivity_1805_open'][k] for k in ('0.25','0.5','1.0','2.0')},
-                  'slip_sens':{k:s['extra_slippage_sensitivity_1805_open'][k] for k in ('0.25','0.5','1.0','2.0')}
-              }
-          out={'meta':d['meta'],'years':{},'all_years':{},'months2026':{},'weekdays2026':{}}
+            if not s or not s.get('N'): return {'N':0}
+            return {'N':s['N'],'spread_mean':s['spread']['mean'],
+                    'to1800':b(s['to_1800_open']),'to1805':b(s['exit']['18:05_OPEN']),
+                    '1805close':b(s['exit']['18:05_CLOSE']),'1806close':b(s['exit']['18:06_CLOSE']),
+                    '1810close':b(s['exit']['18:10_CLOSE']),
+                    'missed1800_1805':b(s['missed_1800_to_1805_open']),
+                    'avg_swap_mult':s['avg_swap_multiplier'],'swap_be':s['break_even_base_swap_price_units_no_extra_slippage']}
+          out={'meta':d['meta'],'years':{},'weekend_years':{},'months2026':{}}
           for y in map(str,range(2020,2027)):
-              g=d['by_year'][y]['NORMAL']; row={'N':g['N'],'entries':{}}
-              for e in ('16:45','16:46','16:47','16:48','16:49'):
-                  row['entries'][e]=pick(g['entries'][e])
-              if g['N']:
-                  row['best_1805_by_mean']=max(row['entries'],key=lambda e:row['entries'][e].get('to1805open',{}).get('mean',-1e99))
-              out['years'][y]=row
-          for typ in ('NORMAL','WEEKEND'):
-              g=d['all_years'][typ]
-              out['all_years'][typ]={'N':g['N'],'entries':{e:pick(g['entries'][e]) for e in ('16:45','16:49')}}
+            gn=d['by_year'][y]['NORMAL']
+            out['years'][y]={'N':gn['N'],'entries':{e:pick(gn['entries'][e]) for e in ('16:45','16:46','16:47','16:48','16:49')}}
+            gw=d['by_year'][y]['WEEKEND']
+            out['weekend_years'][y]={'N':gw['N'],'entry_16:49':pick(gw['entries']['16:49']) if gw['N'] else {'N':0}}
           for m,g in d['2026_by_month'].items():
-              out['months2026'][m]={'N':g['N'],'entries':{e:pick(g['entries'][e]) for e in ('16:45','16:46','16:47','16:48','16:49')}}
-          for wd,g in d['2026_by_weekday'].items():
-              out['weekdays2026'][wd]={'N':g['N'],'entries':{e:pick(g['entries'][e]) for e in ('16:45','16:49')}}
-          p='xau-multiyear/reopen-study/FTMO_COMPACT_2026-08-27.json'
-          os.makedirs(os.path.dirname(p),exist_ok=True)
+            out['months2026'][m]={'N':g['N'],'entry_16:49':pick(g['entries']['16:49']) if g['N'] else {'N':0}}
+          p='xau-multiyear/reopen-study/FTMO_YEARLY_2020_2026_2026-08-27.json'
           json.dump(out,open(p,'w'),sort_keys=True,indent=2)
-          print('FTMO_COMPACT_JSON_START')
-          print(json.dumps(out,sort_keys=True))
-          print('FTMO_COMPACT_JSON_END')
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: gold-reopen-ftmo-full
-          path: ftmo_full.json
-          retention-days: 3
       - name: Commit compact result
         shell: bash
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add xau-multiyear/reopen-study/FTMO_COMPACT_2026-08-27.json
-          git commit -m 'results: add FTMO reopen compact output' || exit 0
+          git add xau-multiyear/reopen-study/FTMO_YEARLY_2020_2026_2026-08-27.json
+          git commit -m 'results: add FTMO yearly 2020-2026 output' || exit 0
           git push origin HEAD:agent/gold-reopen-stat-study-2026-08-27
