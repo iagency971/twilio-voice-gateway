@@ -1,0 +1,139 @@
+name: XAU Z4 Break Retrace Asia Europe No Score v1 Parallel
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-break-retrace-e123-asia-europe-noscore-v1-parallel.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_US_STUDY_RUN_ID: '33139524456'
+
+jobs:
+  session-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: true
+      matrix:
+        session: [ASIA_BROAD, ASIA_CORE_STANDALONE, EUROPE]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/session-research/XAUUSD_Z4_BREAK_RETRACE_E123_ASIA_EUROPE_NO_SCORE_PREREG_v1_0_2026-08-28.md
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_z4_break_retrace_e123_rejection_v1_0.py)" = "7862638917015838948001a374f9bea7dba83e07"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py)" = "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py)" = "ef45037d2a99a705ddf9bfbc3ebc666f88119a80"
+          test "$(git hash-object xau-wick-zone-pro/session-research/xau_z4_break_retrace_e123_session_v1_0.py)" = "536ff1fccf766184d7a61f4a2813b15f2fa79e5c"
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_US_STUDY_RUN_ID }}
+          pattern: z4br-frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - name: Assemble frozen geometry and acquire exact raw
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/raw /tmp/results
+          python - <<'PY'
+          import glob,hashlib,json,os,subprocess
+          from pathlib import Path
+          import pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl')); assert len(fs)==24,len(fs)
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True); z['time']=pd.to_datetime(z.time,utc=True)
+          z=z.sort_values(['time','side','center']).reset_index(drop=True)
+          assert set(z.columns)=={'time','landmark_i','center','zlo','zhi','side'}
+          z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
+          m=json.load(open(os.environ['MANIFEST']))
+          rows=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07']; assert len(rows)==24
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in rows:
+              p=Path('/tmp/raw')/x['file']; subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          print('PARALLEL_INPUT_QA_PASS',len(z),len(rows))
+          PY
+      - name: Run frozen no-score session study
+        shell: bash
+        env:
+          SESSION: ${{ matrix.session }}
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/session-research/xau_z4_break_retrace_e123_session_v1_0.py \
+            --session "$SESSION" --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl \
+            --output "/tmp/results/${SESSION}_RESULT.json" \
+            --episodes-csv "/tmp/results/${SESSION}_EPISODES.csv.gz" \
+            --contacts-csv "/tmp/results/${SESSION}_CONTACTS.csv.gz" \
+            --trades-csv "/tmp/results/${SESSION}_TRADES.csv.gz"
+      - name: Session evidence manifest
+        shell: bash
+        env:
+          SESSION: ${{ matrix.session }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path('/tmp/results'); files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.iterdir())}
+          (root/f"{os.environ['SESSION']}_MANIFEST.json").write_text(json.dumps({'session':os.environ['SESSION'],'files':files},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4br-noscore-${{ matrix.session }}
+          path: /tmp/results/*
+          retention-days: 30
+
+  aggregate:
+    needs: session-study
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: z4br-noscore-*
+          path: /tmp/evidence
+          merge-multiple: true
+      - name: Build combined frozen decision
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/final
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          names=['ASIA_BROAD','ASIA_CORE_STANDALONE','EUROPE']
+          out={'status':'ASIA_EUROPE_NO_SCORE_STRUCTURAL_STUDY_COMPLETE','sessions':{},'production_authorization':'NONE'}
+          for n in names:
+              r=json.load(open(f'/tmp/evidence/{n}_RESULT.json')); s={}
+              for w in ['H1','H2']:
+                  b=r['results'][w]; x=r['prespecified_session_diagnostics'][w]
+                  s[w]={
+                    'all':{'executed_trades':b['executed_trades'],'TP_FIRST':b['TP_FIRST'],'INVALIDATION_FIRST':b['INVALIDATION_FIRST'],'NEITHER':b['NEITHER'],'AMBIGUOUS':b['AMBIGUOUS'],'terminal_tp_rate':b['terminal_tp_rate'],'expectancy_R_before_costs':x['all_terminal_structural_R']['expectancy_R_before_costs'],'profit_factor_R':x['all_terminal_structural_R']['profit_factor_R']},
+                    'ABOVE_MAIN':x['by_e_main_relation_terminal_R']['ABOVE_MAIN'],
+                    'by_entry_rank':x['by_entry_rank_terminal_R'],
+                    'by_relation':x['by_e_main_relation_terminal_R'],
+                    'by_trigger_subperiod':x['by_trigger_subperiod_terminal_R']}
+              s['ABOVE_MAIN_directional_replication_gate']=r['prespecified_session_diagnostics']['ABOVE_MAIN_directional_replication_gate']; out['sessions'][n]=s
+          p=Path('/tmp/final/ASIA_EUROPE_COMBINED_DECISION.json'); p.write_text(json.dumps(out,indent=2,default=str))
+          files={x.name:hashlib.sha256(x.read_bytes()).hexdigest() for x in sorted(Path('/tmp/evidence').iterdir())}
+          Path('/tmp/final/ASIA_EUROPE_AGGREGATE_MANIFEST.json').write_text(json.dumps({'status':out['status'],'source_files':files},indent=2))
+          print(json.dumps(out,indent=2,default=str))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-break-retrace-e123-asia-europe-noscore-v1-parallel
+          path: /tmp/final/*
+          retention-days: 30
