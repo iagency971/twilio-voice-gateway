@@ -36,27 +36,24 @@ jobs:
           pattern: z4-gap-br70-*
           path: source
 
-      - name: Download pinned Dukascopy BID and ASK 24M
+      - name: Download pinned Dukascopy BID and ASK 24M with retries
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import urllib.request, calendar, csv, io
-          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/3fbaf3280338474b379e3a01ac3396f85d4a60be'
-          months=[]
-          y,m=2024,8
-          while (y,m) <= (2026,7):
-              months.append((y,m))
-              m+=1
-              if m==13: y+=1; m=1
-          for side in ('bid','ask'):
-              Path('raw/'+side).mkdir(parents=True,exist_ok=True)
-              for y,m in months:
-                  fn=f'xauusd_{side}_m1_{y:04d}_{m:02d}.csv'
-                  url=f'{root}/xauusd/{side}/m1/{fn}'
-                  print('download',url,flush=True)
-                  urllib.request.urlretrieve(url, 'raw/'+side+'/'+fn)
-          urllib.request.urlretrieve(f'{root}/xauusd/ask/m1/ask_m1_file_audit.csv','raw/ask_m1_file_audit.csv')
-          PY
+          set -euo pipefail
+          ROOT='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/3fbaf3280338474b379e3a01ac3396f85d4a60be'
+          mkdir -p raw/bid raw/ask
+          for SIDE in bid ask; do
+            Y=2024; M=8
+            while [ "$Y" -lt 2026 ] || { [ "$Y" -eq 2026 ] && [ "$M" -le 7 ]; }; do
+              MM=$(printf '%02d' "$M")
+              FN="xauusd_${SIDE}_m1_${Y}_${MM}.csv"
+              URL="${ROOT}/xauusd/${SIDE}/m1/${FN}"
+              echo "download ${URL}"
+              curl -fL --retry 10 --retry-all-errors --retry-delay 2 --connect-timeout 20 --max-time 180 -o "raw/${SIDE}/${FN}" "${URL}"
+              M=$((M+1)); if [ "$M" -eq 13 ]; then Y=$((Y+1)); M=1; fi
+            done
+          done
+          curl -fL --retry 10 --retry-all-errors --retry-delay 2 --connect-timeout 20 --max-time 180 \
+            -o raw/ask_m1_file_audit.csv "${ROOT}/xauusd/ask/m1/ask_m1_file_audit.csv"
 
       - name: Verify frozen BID hashes and ASK audit coverage
         run: |
