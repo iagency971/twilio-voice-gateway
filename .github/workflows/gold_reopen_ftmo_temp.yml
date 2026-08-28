@@ -1,4 +1,4 @@
-name: Gold reopen FTMO temp
+name: Gold reopen FTMO yearly summary temp
 
 on:
   push:
@@ -11,60 +11,39 @@ permissions:
   contents: write
 
 jobs:
-  study:
+  extract:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/gold-reopen-stat-study-2026-08-27
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Download recent BID ASK
-        shell: bash
-        run: |
-          set -euxo pipefail
-          mkdir -p tail_bid tail_ask
-          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p bid -f csv -bs 1 -bp 5000 -dir tail_bid -fn recent_bid -r 5 -rp 10000 -fr
-          sleep 5
-          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p ask -f csv -bs 1 -bp 5000 -dir tail_ask -fn recent_ask -r 5 -rp 10000 -fr
-      - name: Run full 2020-2026 FTMO study
-        shell: bash
-        run: |
-          python3 xau-multiyear/reopen-study/gold_reopen_ftmo_study.py > ftmo_full.json
-      - name: Build compact yearly result
+      - name: Extract small yearly summary
         shell: bash
         run: |
           python3 - <<'PY'
-          import json, os
-          d=json.load(open('ftmo_full.json'))
-          def b(z):
-            return {k:z.get(k) for k in ('N','mean','median','win_pct','pf','p10','p25','p75','p90')}
-          def pick(s):
-            if not s or not s.get('N'): return {'N':0}
-            return {'N':s['N'],'spread_mean':s['spread']['mean'],
-                    'to1800':b(s['to_1800_open']),'to1805':b(s['exit']['18:05_OPEN']),
-                    '1805close':b(s['exit']['18:05_CLOSE']),'1806close':b(s['exit']['18:06_CLOSE']),
-                    '1810close':b(s['exit']['18:10_CLOSE']),
-                    'missed1800_1805':b(s['missed_1800_to_1805_open']),
-                    'avg_swap_mult':s['avg_swap_multiplier'],'swap_be':s['break_even_base_swap_price_units_no_extra_slippage']}
-          out={'meta':d['meta'],'years':{},'weekend_years':{},'months2026':{}}
+          import json
+          d=json.load(open('xau-multiyear/reopen-study/FTMO_YEARLY_2020_2026_2026-08-27.json'))
+          def x(z):
+            if not z or not z.get('N'): return {'N':0}
+            t=z['to1805']
+            return {'N':z['N'],'mean':t['mean'],'median':t['median'],'win_pct':t['win_pct'],'pf':t['pf'],
+                    'spread_mean':z['spread_mean'],'to1800_mean':z['to1800']['mean'],
+                    'move_1800_1805_mean':z['missed1800_1805']['mean'],'swap_be':z['swap_be']}
+          o={'years':{},'weekend_years':{},'months2026':{}}
           for y in map(str,range(2020,2027)):
-            gn=d['by_year'][y]['NORMAL']
-            out['years'][y]={'N':gn['N'],'entries':{e:pick(gn['entries'][e]) for e in ('16:45','16:46','16:47','16:48','16:49')}}
-            gw=d['by_year'][y]['WEEKEND']
-            out['weekend_years'][y]={'N':gw['N'],'entry_16:49':pick(gw['entries']['16:49']) if gw['N'] else {'N':0}}
-          for m,g in d['2026_by_month'].items():
-            out['months2026'][m]={'N':g['N'],'entry_16:49':pick(g['entries']['16:49']) if g['N'] else {'N':0}}
-          p='xau-multiyear/reopen-study/FTMO_YEARLY_2020_2026_2026-08-27.json'
-          json.dump(out,open(p,'w'),sort_keys=True,indent=2)
+            g=d['years'][y]
+            o['years'][y]={'N':g['N'],'entries':{e:x(g['entries'][e]) for e in ('16:45','16:46','16:47','16:48','16:49')}}
+            w=d['weekend_years'][y]
+            o['weekend_years'][y]={'N':w['N'],'entry_16:49':x(w['entry_16:49']) if w['N'] else {'N':0}}
+          for m,g in d['months2026'].items():
+            o['months2026'][m]={'N':g['N'],'entry_16:49':x(g['entry_16:49']) if g['N'] else {'N':0}}
+          json.dump(o,open('xau-multiyear/reopen-study/FTMO_YEAR_SUMMARY_2020_2026_2026-08-27.json','w'),sort_keys=True,indent=2)
           PY
-      - name: Commit compact result
+      - name: Commit small summary
         shell: bash
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add xau-multiyear/reopen-study/FTMO_YEARLY_2020_2026_2026-08-27.json
-          git commit -m 'results: add FTMO yearly 2020-2026 output' || exit 0
+          git add xau-multiyear/reopen-study/FTMO_YEAR_SUMMARY_2020_2026_2026-08-27.json
+          git commit -m 'results: add FTMO yearly headline summary' || exit 0
           git push origin HEAD:agent/gold-reopen-stat-study-2026-08-27
