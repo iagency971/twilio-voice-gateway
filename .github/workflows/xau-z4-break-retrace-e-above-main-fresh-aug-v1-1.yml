@@ -1,0 +1,211 @@
+name: XAU Z4 E ABOVE_MAIN Fresh Aug v1.1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-break-retrace-e-above-main-fresh-aug-v1-1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  RAW_ROOT: https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1
+  JULY_FILE: xauusd_bid_m1_2026_07.csv
+  JULY_SHA: 1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286
+  AUG_FILE: xauusd_bid_m1_2026_08.csv
+
+jobs:
+  fresh-confirmation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Frozen prereg and exact-engine guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s xau-wick-zone-pro/entry-research/XAUUSD_Z4_BREAK_RETRACE_E_ABOVE_MAIN_FRESH_AUG_PREREG_v1_0_2026-08-28.md
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_z4_break_retrace_e123_rejection_v1_0.py)" = "7862638917015838948001a374f9bea7dba83e07"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py)" = "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f"
+          test "$(git hash-object xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py)" = "ef45037d2a99a705ddf9bfbc3ebc666f88119a80"
+
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+
+      - name: Acquire exact July warmup and freeze current August BID bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/raw /tmp/results
+          curl --fail --location --retry 5 --retry-delay 2 "$RAW_ROOT/$JULY_FILE" -o "/tmp/raw/$JULY_FILE"
+          test "$(sha256sum /tmp/raw/$JULY_FILE | awk '{print $1}')" = "$JULY_SHA"
+          curl --fail --location --retry 5 --retry-delay 2 "$RAW_ROOT/$AUG_FILE" -o "/tmp/raw/$AUG_FILE"
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          a=Path('/tmp/raw')/os.environ['AUG_FILE']
+          j=Path('/tmp/raw')/os.environ['JULY_FILE']
+          meta={
+            'july_file':j.name,
+            'july_sha256':hashlib.sha256(j.read_bytes()).hexdigest(),
+            'august_file':a.name,
+            'august_sha256':hashlib.sha256(a.read_bytes()).hexdigest(),
+            'august_bytes':a.stat().st_size,
+          }
+          Path('/tmp/results/FRESH_AUG_SOURCE_META.json').write_text(json.dumps(meta,indent=2))
+          print(json.dumps(meta,indent=2))
+          PY
+
+      - name: Build exact source-faithful Jul-Aug C5 Z4 geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py').read_text()
+          anchor='    m=len(Z)\n'
+          assert src.count(anchor)==1
+          insert="    keep=['time','landmark_i','center','zlo','zhi','side']\n    Z[keep].to_pickle(args.output)\n    return\n\n"
+          Path('/tmp/geom.py').write_text(src.replace(anchor,insert+anchor))
+          PY
+          python /tmp/geom.py --files "/tmp/raw/$JULY_FILE" "/tmp/raw/$AUG_FILE" --output /tmp/all_z4.pkl --tag FRESH_AUG_Z4
+          python - <<'PY'
+          import pandas as pd
+          d=pd.read_pickle('/tmp/all_z4.pkl'); d['time']=pd.to_datetime(d.time,utc=True)
+          lo=pd.Timestamp('2026-08-01T00:00:00Z'); hi=pd.Timestamp('2026-09-01T00:00:00Z')
+          q=d[(d.time>=lo)&(d.time<hi)].copy().reset_index(drop=True)
+          assert len(q)>0,(len(d),d.time.min(),d.time.max())
+          q.to_pickle('/tmp/FRESH_AUG_Z4.pkl')
+          print('FRESH_AUG_Z4_READY',len(q),q.time.nunique(),q.time.min(),q.time.max())
+          PY
+
+      - name: Patch analysis window only to fresh August
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/entry-research/xau_z4_break_retrace_e123_rejection_v1_0.py')
+          s=p.read_text()
+          old="""WINDOWS = {\n    'H1': (pd.Timestamp('2024-08-01T00:00:00Z'), pd.Timestamp('2025-08-01T00:00:00Z')),\n    'H2': (pd.Timestamp('2025-08-01T00:00:00Z'), pd.Timestamp('2026-08-01T00:00:00Z')),\n}\n"""
+          new="""WINDOWS = {\n    'FRESH_AUG': (pd.Timestamp('2026-08-01T00:00:00Z'), pd.Timestamp('2026-09-01T00:00:00Z')),\n}\n"""
+          assert s.count(old)==1
+          s=s.replace(old,new)
+          old2="pooled = summary_for(WINDOWS['H1'][0], WINDOWS['H2'][1])"
+          assert s.count(old2)==1
+          s=s.replace(old2,"pooled = summary_for(WINDOWS['FRESH_AUG'][0], WINDOWS['FRESH_AUG'][1])")
+          old3="print(json.dumps({'status': out['status'], 'H1': results['H1'], 'H2': results['H2']}, indent=2, default=str), flush=True)"
+          assert s.count(old3)==1
+          s=s.replace(old3,"print(json.dumps({'status': out['status'], 'FRESH_AUG': results['FRESH_AUG']}, indent=2, default=str), flush=True)")
+          out=p.parent/'_fresh_aug_z4_break_retrace_e123.py'; out.write_text(s)
+          print('FRESH_WINDOW_PATCH_ONLY_READY')
+          PY
+
+      - name: Run exact frozen structural setup on fresh August
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/entry-research/_fresh_aug_z4_break_retrace_e123.py \
+            --files "/tmp/raw/$JULY_FILE" "/tmp/raw/$AUG_FILE" \
+            --z4-pkl /tmp/FRESH_AUG_Z4.pkl \
+            --output /tmp/results/FRESH_AUG_RESULT.json \
+            --episodes-csv /tmp/results/FRESH_AUG_EPISODES.csv.gz \
+            --contacts-csv /tmp/results/FRESH_AUG_CONTACTS.csv.gz \
+            --trades-csv /tmp/results/FRESH_AUG_TRADES.csv.gz
+
+      - name: Build preregistered confirmation decision and diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,math,os
+          from pathlib import Path
+          import pandas as pd
+          r=json.load(open('/tmp/results/FRESH_AUG_RESULT.json'))['results']['FRESH_AUG']
+          tr=pd.read_csv('/tmp/results/FRESH_AUG_TRADES.csv.gz')
+          # Derive exact available August timestamps through the same canonical raw loader.
+          import importlib.util,sys
+          ep=Path('xau-wick-zone-pro/entry-research')
+          spec=importlib.util.spec_from_file_location('fresh_v01',ep/'xau_ebuy_coverage_v0_1.py')
+          v01=importlib.util.module_from_spec(spec);sys.modules['fresh_v01']=v01;spec.loader.exec_module(v01)
+          raw=v01.load_raw([str(Path('/tmp/raw')/os.environ['JULY_FILE']),str(Path('/tmp/raw')/os.environ['AUG_FILE'])])
+          ts=pd.to_datetime(raw.time,utc=True)
+          aug=ts[(ts>=pd.Timestamp('2026-08-01T00:00:00Z'))&(ts<pd.Timestamp('2026-09-01T00:00:00Z'))]
+          ny=aug.dt.tz_convert('America/New_York')
+          us_dates=sorted(set(ny[(ny.dt.hour>=8)&(ny.dt.hour<17)].dt.date.astype(str)))
+          above=r.get('by_e_main_relation',{}).get('ABOVE_MAIN',{})
+          tp=int(above.get('TP_FIRST',0)); sl=int(above.get('INVALIDATION_FIRST',0)); n=tp+sl
+          ph=tp/n if n else None
+          if n:
+              z=1.959963984540054
+              den=1+z*z/n
+              center=(ph+z*z/(2*n))/den
+              half=z*math.sqrt(ph*(1-ph)/n+z*z/(4*n*n))/den
+              wlo=max(0.0,center-half); whi=min(1.0,center+half)
+          else:
+              wlo=whi=None
+          if n>=10 and ph is not None and ph>0.50:
+              label='STRONG_CONFIRMATION' if wlo is not None and wlo>0.50 else 'DIRECTIONAL_CONFIRMATION'
+          else:
+              label='NOT_CONFIRMED'
+          def rdiag(df):
+              d=df[df.outcome.isin(['TP_FIRST','INVALIDATION_FIRST'])].copy()
+              if len(d)==0:
+                  return {'n_terminal':0,'expectancy_R':None,'profit_factor_R':None}
+              vals=[]; pos=0.0; neg=0.0
+              for _,x in d.iterrows():
+                  if x.outcome=='TP_FIRST':
+                      v=float(x.nominal_rr); vals.append(v); pos+=v
+                  else:
+                      vals.append(-1.0); neg+=1.0
+              return {'n_terminal':int(len(vals)),'expectancy_R':float(sum(vals)/len(vals)),'profit_factor_R':float(pos/neg) if neg else None}
+          fresh_meta=json.load(open('/tmp/results/FRESH_AUG_SOURCE_META.json'))
+          out={
+            'status':'FRESH_AUG_ABOVE_MAIN_CONFIRMATION_COMPLETE',
+            'confirmation_label':label,
+            'fresh_source':{**fresh_meta,'first_aug_timestamp':str(aug.min()) if len(aug) else None,'last_aug_timestamp':str(aug.max()) if len(aug) else None,'us_session_count':len(us_dates),'us_dates':us_dates},
+            'primary_above_main':{
+              'TP_FIRST':tp,'INVALIDATION_FIRST':sl,
+              'NEITHER':int(above.get('NEITHER',0)),'AMBIGUOUS':int(above.get('AMBIGUOUS',0)),
+              'terminal_denominator':n,'terminal_tp_rate':ph,'wilson95':[wlo,whi],
+              'pre_registered_directional_rule':'n>=10 and terminal_tp_rate>0.50',
+              'pre_registered_strong_rule':'directional and Wilson95 lower>0.50'
+            },
+            'terminal_R_before_costs':{
+              'all':rdiag(tr),
+              'ABOVE_MAIN':rdiag(tr[tr.e_main_relation=='ABOVE_MAIN'])
+            },
+            'all_fresh_summary':r,
+            'production_authorization':'NONE_FRESH_CONFIRMATION_DIAGNOSTIC_ONLY'
+          }
+          Path('/tmp/results/FRESH_AUG_CONFIRMATION_DECISION.json').write_text(json.dumps(out,indent=2,default=str))
+          print(json.dumps({k:out[k] for k in ('status','confirmation_label','fresh_source','primary_above_main','terminal_R_before_costs')},indent=2))
+          PY
+
+      - name: Build immutable evidence manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/results')
+          files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.iterdir())}
+          man={'status':'FRESH_AUG_CONFIRMATION_EVIDENCE_RECORDED','files':files}
+          (root/'FRESH_AUG_CONFIRMATION_MANIFEST.json').write_text(json.dumps(man,indent=2))
+          print(json.dumps(man,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-e-above-main-fresh-aug-v1-1
+          path: /tmp/results/*
+          retention-days: 30
