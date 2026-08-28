@@ -1,0 +1,79 @@
+name: XAU Z4 Gap BR70 SELL Execution Robustness v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-gap-br70-sell-execution-robustness-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  TRADES_RUN_ID: '33203080123'
+
+jobs:
+  robustness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/session-research/XAUUSD_Z4_GAP_BR70_SELL_EXECUTION_ROBUSTNESS_PREREG_v1_0_2026-08-28.md)" = "32ce54d1a35ba800342aa93932481947ae84fe25"
+          test "$(git hash-object xau-wick-zone-pro/session-research/xau_z4_gap_br70_sell_execution_robustness_v1_0.py)" = "3d177ae336038f26026e48a61d10331e301c74bd"
+          echo EXECUTION_ROBUSTNESS_PREFLIGHT_PASS
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1
+      - name: Download immutable standalone trade ledgers
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.TRADES_RUN_ID }}
+          pattern: z4-gap-br70-*
+          path: /tmp/evidence
+          merge-multiple: true
+      - name: Acquire exact hash-verified BID M1
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/raw /tmp/results
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['MANIFEST']));rows=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07'];assert len(rows)==24
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in rows:
+              p=Path('/tmp/raw')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL);assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          print('RAW_HASH_QA_PASS',len(rows))
+          PY
+      - name: Run session-liquidation and cost sensitivity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python xau-wick-zone-pro/session-research/xau_z4_gap_br70_sell_execution_robustness_v1_0.py \
+            --files /tmp/raw/*.csv --evidence-root /tmp/evidence \
+            --output /tmp/results/Z4_GAP_BR70_EXECUTION_ROBUSTNESS.json \
+            --realized-csv /tmp/results/Z4_GAP_BR70_REALIZED_LEDGER.csv.gz
+      - name: Evidence manifest
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          r=Path('/tmp/results');files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(r.iterdir())};(r/'Z4_GAP_BR70_EXECUTION_ROBUSTNESS_MANIFEST.json').write_text(json.dumps({'files':files},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-gap-br70-sell-execution-robustness-v1
+          path: /tmp/results/*
+          retention-days: 30
