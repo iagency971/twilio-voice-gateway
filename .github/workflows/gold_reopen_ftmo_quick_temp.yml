@@ -1,14 +1,9 @@
 name: Gold reopen FTMO quick temp
 
 on:
-  push:
+  pull_request:
     branches:
       - agent/gold-reopen-stat-study-2026-08-27
-    paths:
-      - '.github/workflows/gold_reopen_ftmo_quick_temp.yml'
-
-permissions:
-  contents: write
 
 jobs:
   study:
@@ -29,11 +24,11 @@ jobs:
           npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p bid -f csv -bs 1 -bp 5000 -dir tail_bid -fn recent_bid -r 5 -rp 10000 -fr
           sleep 5
           npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p ask -f csv -bs 1 -bp 5000 -dir tail_ask -fn recent_ask -r 5 -rp 10000 -fr
-      - name: Compute 2025 2026 FTMO result
+      - name: Compute and print 2025 2026 FTMO result
         shell: bash
         run: |
           python3 - <<'PY'
-          import importlib.util,json,os
+          import importlib.util,json
           from concurrent.futures import ThreadPoolExecutor,as_completed
           spec=importlib.util.spec_from_file_location('g','xau-multiyear/reopen-study/gold_reopen_ftmo_study.py')
           g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
@@ -47,27 +42,35 @@ jobs:
           g.parse_tail('tail_bid/recent_bid.csv','bid',store,None)
           g.parse_tail('tail_ask/recent_ask.csv','ask',store,None)
           events,reject=g.build_events(store)
+          def slim(s):
+            if not s or not s.get('N'): return {'N':0}
+            return {'N':s['N'],'spread':s['spread'],'to1800':s['to_1800_open'],
+                    'to1805':s['exit']['18:05_OPEN'],'1805close':s['exit']['18:05_CLOSE'],
+                    '1806close':s['exit']['18:06_CLOSE'],'1808close':s['exit']['18:08_CLOSE'],
+                    '1810close':s['exit']['18:10_CLOSE'],'missed':s['missed_1800_to_1805_open'],
+                    'avgSwapMult':s['avg_swap_multiplier'],'swapBE':s['break_even_base_swap_price_units_no_extra_slippage'],
+                    'swap025':s['swap_sensitivity_1805_open']['0.25'],
+                    'swap050':s['swap_sensitivity_1805_open']['0.5'],
+                    'swap100':s['swap_sensitivity_1805_open']['1.0'],
+                    'slip025':s['extra_slippage_sensitivity_1805_open']['0.25'],
+                    'slip050':s['extra_slippage_sensitivity_1805_open']['0.5'],
+                    'slip100':s['extra_slippage_sensitivity_1805_open']['1.0']}
           out={'reject':reject,'years':{},'months2026':{},'weekdays2026':{}}
           for y in (2025,2026):
+            out['years'][str(y)]={}
             for typ in ('NORMAL','WEEKEND'):
               es=[e for e in events if e['year']==y and e['type']==typ]
-              z=g.summarize_entries(es)
-              out['years'].setdefault(str(y),{})[typ]=z
+              z={'N':len(es),'entries':{}}
+              for ent in ('16:45','16:46','16:47','16:48','16:49','16:50'):
+                z['entries'][ent]=slim(g.summary_for(es,ent))
+              out['years'][str(y)][typ]=z
           for m in range(1,9):
             es=[e for e in events if e['year']==2026 and e['month']==m and e['type']=='NORMAL']
-            out['months2026'][f'{m:02d}']=g.summarize_entries(es)
+            out['months2026'][f'{m:02d}']={'N':len(es),'entries':{ent:slim(g.summary_for(es,ent)) for ent in ('16:45','16:49')}}
           for wd in range(4):
             es=[e for e in events if e['year']==2026 and e['type']=='NORMAL' and e['entry_weekday_num']==wd]
-            out['weekdays2026'][str(wd)]=g.summarize_entries(es)
-          p='xau-multiyear/reopen-study/FTMO_QUICK_2025_2026_2026-08-27.json'
-          json.dump(out,open(p,'w'),sort_keys=True,indent=2)
-          print(json.dumps({'reject':reject,'N2025':out['years']['2025']['NORMAL']['N'],'N2026':out['years']['2026']['NORMAL']['N']}))
+            out['weekdays2026'][str(wd)]={'N':len(es),'entries':{ent:slim(g.summary_for(es,ent)) for ent in ('16:45','16:49')}}
+          print('FTMO_QUICK_JSON_START')
+          print(json.dumps(out,sort_keys=True))
+          print('FTMO_QUICK_JSON_END')
           PY
-      - name: Commit quick result
-        shell: bash
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add xau-multiyear/reopen-study/FTMO_QUICK_2025_2026_2026-08-27.json
-          git commit -m 'results: add FTMO quick 2025-2026 output' || exit 0
-          git push origin HEAD:agent/gold-reopen-stat-study-2026-08-27
