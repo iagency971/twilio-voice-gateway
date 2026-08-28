@@ -1,0 +1,79 @@
+name: XAU Z4 E1-E3 SELL Aggregate Repair v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-break-retrace-e123-sell-aggregate-repair-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  SOURCE_RUN_ID: '33190866059'
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.SOURCE_RUN_ID }}
+          pattern: z4br-sell-*
+          path: /tmp/evidence
+          merge-multiple: true
+      - name: Aggregate frozen SELL evidence only
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/final
+          python - <<'PY'
+          import hashlib,json,math
+          from pathlib import Path
+          import pandas as pd
+          import numpy as np
+          sessions=['US','ASIA_BROAD','ASIA_CORE_STANDALONE','EUROPE']
+          labels={'US':'08:00-17:00 America/New_York','ASIA_BROAD':'18:00-03:00 America/New_York','ASIA_CORE_STANDALONE':'21:00-03:00 America/New_York standalone','EUROPE':'03:00-08:00 America/New_York'}
+          windows={'H1':(pd.Timestamp('2024-08-01T00:00:00Z'),pd.Timestamp('2025-08-01T00:00:00Z')),'H2':(pd.Timestamp('2025-08-01T00:00:00Z'),pd.Timestamp('2026-08-01T00:00:00Z')),'POOLED':(pd.Timestamp('2024-08-01T00:00:00Z'),pd.Timestamp('2026-08-01T00:00:00Z'))}
+          relmap={'ABOVE_MAIN':'BELOW_MAIN','BELOW_MAIN':'ABOVE_MAIN','INSIDE_MAIN':'INSIDE_MAIN','OVERLAP_MAIN':'OVERLAP_MAIN'}
+          def wilson(tp,n):
+              if not n:return [None,None]
+              p=tp/n; z=1.959963984540054; den=1+z*z/n; c=(p+z*z/(2*n))/den; h=z*math.sqrt(p*(1-p)/n+z*z/(4*n*n))/den
+              return [max(0.,c-h),min(1.,c+h)]
+          def diag(d):
+              if len(d)==0:return {'executed':0,'terminal_n':0,'TP_FIRST':0,'INVALIDATION_FIRST':0,'NEITHER':0,'AMBIGUOUS':0,'terminal_tp_rate':None,'wilson95':[None,None],'expectancy_R_before_costs':None,'profit_factor_R':None}
+              c=d.outcome.astype(str).value_counts().to_dict(); tp=int(c.get('TP_FIRST',0)); sl=int(c.get('INVALIDATION_FIRST',0)); n=tp+sl
+              vals=[float(r.nominal_rr) if r.outcome=='TP_FIRST' else -1.0 for _,r in d[d.outcome.isin(['TP_FIRST','INVALIDATION_FIRST'])].iterrows()]
+              pos=sum(x for x in vals if x>0); neg=-sum(x for x in vals if x<0)
+              pf=float(pos/neg) if neg>0 else None
+              return {'executed':int(len(d)),'terminal_n':n,'TP_FIRST':tp,'INVALIDATION_FIRST':sl,'NEITHER':int(c.get('NEITHER',0)),'AMBIGUOUS':int(c.get('AMBIGUOUS',0)),'terminal_tp_rate':float(tp/n) if n else None,'wilson95':wilson(tp,n),'expectancy_R_before_costs':float(np.mean(vals)) if vals else None,'profit_factor_R':pf}
+          def truthy(s):return s if getattr(s,'dtype',None)==bool else s.astype(str).str.lower().isin(['true','1','yes'])
+          out={'status':'SELL_E1_E2_E3_NO_SCORE_STRUCTURAL_STUDY_COMPLETE','source_run_id':33190866059,'date':'2026-08-28','method':'exact sign-reflection of frozen causal BUY engine; reported back in original price space','score_used':False,'trigger':'bearish M1 close<open and (high-close)/(high-low)>=0.70','main_break':'confirmed M1 close below causal lower main Z4 lower boundary','main_invalidation':'confirmed M1 close strictly above frozen main_zhi; wick above allowed','target':'next lower causal Z4 frozen at breakout; TP at target_zhi','entry_zones':'mirrored causal sticky E1/E2/E3 upper-wick/resistance zones','direct_analogue_of_buy_above_main':'BELOW_MAIN','sessions':{},'production_authorization':'NONE_RETROSPECTIVE_SELL_HYPOTHESIS_STUDY'}
+          for s in sessions:
+              ep=pd.read_csv(f'/tmp/evidence/{s}_EPISODES.csv.gz'); tr=pd.read_csv(f'/tmp/evidence/{s}_TRADES.csv.gz'); co=pd.read_csv(f'/tmp/evidence/{s}_CONTACTS.csv.gz')
+              for df in [ep,tr,co]:
+                  for c in ['breakout_time','contact_time','trigger_time','entry_time','outcome_time','first_retrace_time']:
+                      if c in df.columns:df[c]=pd.to_datetime(df[c],utc=True,errors='coerce')
+              tr['original_relation']=tr.e_main_relation.astype(str).map(relmap) if len(tr) else pd.Series(dtype=str)
+              ss={'label':labels[s]}
+              for w,(lo,hi) in windows.items():
+                  e=ep[(ep.breakout_time>=lo)&(ep.breakout_time<hi)].copy(); t=tr[(tr.breakout_time>=lo)&(tr.breakout_time<hi)].copy(); c=co[(co.breakout_time>=lo)&(co.breakout_time<hi)].copy()
+                  ss[w]={'bearish_breakouts':int(len(e)),'with_next_lower_target':int(e.target_zlo.notna().sum()) if 'target_zlo' in e else 0,'main_retraced_by_wick_or_more':int(truthy(e.main_retrace_seen).sum()) if 'main_retrace_seen' in e else 0,'e_contact_events_after_main_retrace':int(len(c)),'all':diag(t),'by_entry_rank':{r:diag(t[t.entry_label==r]) for r in ['E1','E2','E3']},'by_e_main_relation':{r:diag(t[t.original_relation==r]) for r in ['BELOW_MAIN','INSIDE_MAIN','OVERLAP_MAIN','ABOVE_MAIN']}}
+              out['sessions'][s]=ss
+          p=Path('/tmp/final/SELL_COMBINED_DECISION.json'); p.write_text(json.dumps(out,indent=2,default=str,allow_nan=False))
+          src={x.name:hashlib.sha256(x.read_bytes()).hexdigest() for x in sorted(Path('/tmp/evidence').iterdir())}
+          Path('/tmp/final/SELL_AGGREGATE_MANIFEST.json').write_text(json.dumps({'status':out['status'],'source_run_id':33190866059,'source_files':src},indent=2))
+          print('SELL_AGGREGATE_REPAIR_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-break-retrace-e123-sell-noscore-v1-final-repaired
+          path: /tmp/final/*
+          retention-days: 30
