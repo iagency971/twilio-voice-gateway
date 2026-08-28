@@ -10,17 +10,27 @@ on:
 jobs:
   study:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/gold-reopen-stat-study-2026-08-27
-      - name: Compute focused 2025 2026 risk stats
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Download current BID ASK tail
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p tail_bid tail_ask
+          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p bid -f csv -bs 1 -bp 5000 -dir tail_bid -fn recent_bid -r 5 -rp 10000 -fr
+          sleep 10
+          npx --yes dukascopy-node -i xauusd -from 2026-08-20 -to 2026-08-28 -t m1 -p ask -f csv -bs 1 -bp 5000 -dir tail_ask -fn recent_ask -r 5 -rp 10000 -fr
+      - name: Compute focused 2025 2026 risk stats through Aug 27
         shell: bash
         run: |
           python3 - <<'PY'
           import importlib.util, json
-          from collections import defaultdict
           spec=importlib.util.spec_from_file_location('g','xau-multiyear/reopen-study/gold_reopen_5m_study.py')
           g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
           store={'bid':{},'ask':{}}
@@ -32,6 +42,8 @@ jobs:
           with ThreadPoolExecutor(max_workers=6) as ex:
             for fut in as_completed([ex.submit(g.load_archive_month,*t) for t in tasks]):
               side,y,m,o,mx=fut.result();store[side].update(o)
+          g.parse_tail('tail_bid/recent_bid.csv','bid',store,None)
+          g.parse_tail('tail_ask/recent_ask.csv','ask',store,None)
           events,reject=g.build_events(store)
           out={'events':len(events),'rejected':reject,'year':{},'month':{}}
           for y in (2025,2026):
