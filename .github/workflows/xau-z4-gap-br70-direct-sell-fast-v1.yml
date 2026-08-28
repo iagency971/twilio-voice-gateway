@@ -1,0 +1,110 @@
+name: XAU Standalone Z4 Gap BR70 SELL Fast v1
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-z4-gap-br70-direct-sell-fast-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  FROZEN_Z4_RUN_ID: '33139524456'
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        session: [US, ASIA_BROAD, ASIA_CORE_STANDALONE, EUROPE]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen methodology and implementation guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object xau-wick-zone-pro/session-research/XAUUSD_Z4_GAP_BR70_DIRECT_SELL_PREREG_v1_0_2026-08-28.md)" = "8358749cab0a4cef1cc5afc429e3b72fd665b86a"
+          test "$(git hash-object xau-wick-zone-pro/session-research/xau_z4_gap_br70_direct_sell_fast_v1_0.py)" = "0dc004c942ddaf78ab9e0bd413a5fbdcee6c45f9"
+          test "$(git hash-object xau-wick-zone-pro/session-research/xau_e123_direct_sell_between_above_z4_v1_0.py)" = "60e6783f8c4e530ae403fa298b8abf3959e08518"
+          python -m py_compile xau-wick-zone-pro/session-research/xau_z4_gap_br70_direct_sell_fast_v1_0.py
+      - run: python -m pip install --disable-pip-version-check numpy==2.3.2 pandas==2.3.1 scipy==1.16.1
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_Z4_RUN_ID }}
+          pattern: z4br-frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+      - name: Assemble exact frozen Z4 and raw BID
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/raw /tmp/results
+          python - <<'PY'
+          import glob,hashlib,json,os,subprocess
+          from pathlib import Path
+          import pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl')); assert len(fs)==24
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True);z['time']=pd.to_datetime(z.time,utc=True);z=z.sort_values(['time','side','center']).reset_index(drop=True);assert set(z.columns)=={'time','landmark_i','center','zlo','zhi','side'};z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
+          m=json.load(open(os.environ['MANIFEST'])); rows=[x for x in m['files'] if x['side']=='bid' and '2024-08'<=f"{x['year']}-{x['month']}"<='2026-07'];assert len(rows)==24
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          for x in rows:
+              p=Path('/tmp/raw')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL);assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          PY
+      - name: Run parity-equivalent fast standalone study
+        shell: bash
+        env:
+          SESSION: ${{ matrix.session }}
+        run: |
+          python xau-wick-zone-pro/session-research/xau_z4_gap_br70_direct_sell_fast_v1_0.py \
+            --session "$SESSION" --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl \
+            --output "/tmp/results/${SESSION}_Z4_GAP_RESULT.json" \
+            --trades-csv "/tmp/results/${SESSION}_Z4_GAP_TRADES.csv.gz" \
+            --triggers-csv "/tmp/results/${SESSION}_Z4_GAP_TRIGGERS.csv.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-gap-fast-${{ matrix.session }}
+          path: /tmp/results/*
+          retention-days: 30
+
+  aggregate:
+    needs: study
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: z4-gap-fast-*
+          path: /tmp/evidence
+          merge-multiple: true
+      - name: Build frozen exploratory decision
+        shell: bash
+        run: |
+          set -euo pipefail; mkdir -p /tmp/final
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          names=['US','ASIA_BROAD','ASIA_CORE_STANDALONE','EUROPE'];out={'status':'Z4_GAP_BR70_EXPLORATORY_FAST_AGGREGATE_COMPLETE','sessions':{},'criterion':{},'production_authorization':'NONE_POST_CONTROL_EXPLORATORY'};pos={'H1':0,'H2':0};pool={'H1':[],'H2':[]};opool={'H1':[],'H2':[]}
+          for n in names:
+              r=json.load(open(f'/tmp/evidence/{n}_Z4_GAP_RESULT.json'));out['sessions'][n]=r['results']
+              for w in ['H1','H2']:
+                  x=r['results'][w]['all'];o=r['results'][w]['one_position_at_a_time'];pos[w]+=int(x['expectancy_R'] is not None and x['expectancy_R']>0);pool[w].append((x['terminal_n'],x['expectancy_R']));opool[w].append((o['terminal_n'],o['expectancy_R']))
+          for w in ['H1','H2']:
+              den=sum(n for n,e in pool[w] if e is not None);deno=sum(n for n,e in opool[w] if e is not None);pe=sum(n*e for n,e in pool[w] if e is not None)/den if den else None;oe=sum(n*e for n,e in opool[w] if e is not None)/deno if deno else None;out['criterion'][w]={'positive_sessions':pos[w],'pooled_expectancy_R_weighted_terminal':pe,'one_position_pooled_expectancy_R_weighted_terminal':oe}
+          passed=pos['H1']>=3 and pos['H2']>=3 and out['criterion']['H1']['pooled_expectancy_R_weighted_terminal']>0 and out['criterion']['H2']['pooled_expectancy_R_weighted_terminal']>0 and out['criterion']['H1']['one_position_pooled_expectancy_R_weighted_terminal']>=0 and out['criterion']['H2']['one_position_pooled_expectancy_R_weighted_terminal']>=0;out['criterion']['pass']=passed;out['interpretation_status']='EXPLORATORY_Z4_GAP_BR70_RULE_WORTH_PROSPECTIVE_CONFIRMATION' if passed else 'EXPLORATORY_Z4_GAP_BR70_RULE_NOT_COHERENT_ENOUGH';Path('/tmp/final/Z4_GAP_BR70_EXPLORATORY_DECISION.json').write_text(json.dumps(out,indent=2,allow_nan=False));print(json.dumps(out,indent=2,allow_nan=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: z4-gap-br70-direct-sell-fast-v1-final
+          path: /tmp/final/*
+          retention-days: 30
