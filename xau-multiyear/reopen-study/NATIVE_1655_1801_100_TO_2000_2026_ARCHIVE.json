@@ -1,0 +1,390 @@
+{
+  "N_events_archive": 128,
+  "definition": "Start $100; BUY 16:55 ASK -> BID close 18:00 M1; NORMAL only; size = max(0.01, floor(closed_equity/unit)*0.01); 1 lot=100oz; Dukascopy spread included; archive through 2026-08-20 only; NO broker swap/commission/margin-stopout modeled",
+  "plans": {
+    "100": {
+      "bust": null,
+      "final_equity": 2007.1510000000353,
+      "last_rows": [
+        {
+          "date": "2026-06-16",
+          "equity_close": 1960.7910000000256,
+          "lots": 0.19,
+          "pnl_pt": 2.130000000000109,
+          "trade_no": 90,
+          "trough": 1877.5710000000236
+        },
+        {
+          "date": "2026-06-17",
+          "equity_close": 1925.4510000000319,
+          "lots": 0.19,
+          "pnl_pt": -1.8599999999996726,
+          "trade_no": 91,
+          "trough": 1853.4980000000269
+        },
+        {
+          "date": "2026-06-18",
+          "equity_close": 1959.4610000000312,
+          "lots": 0.19,
+          "pnl_pt": 1.7899999999999636,
+          "trade_no": 92,
+          "trough": 1841.718000000029
+        },
+        {
+          "date": "2026-06-22",
+          "equity_close": 1955.4710000000305,
+          "lots": 0.19,
+          "pnl_pt": -0.21000000000003638,
+          "trade_no": 93,
+          "trough": 1938.5610000000243
+        },
+        {
+          "date": "2026-06-23",
+          "equity_close": 2007.1510000000353,
+          "lots": 0.19,
+          "pnl_pt": 2.7200000000002547,
+          "trade_no": 94,
+          "trough": 1926.4010000000353
+        }
+      ],
+      "max_mtm_drawdown_pct_of_peak": 26.58053655970563,
+      "max_mtm_drawdown_usd": 248.49999999998818,
+      "min_equity": 97.69999999999982,
+      "target": {
+        "date": "2026-06-23",
+        "equity": 2007.1510000000353,
+        "lots": 0.19,
+        "trade_no": 94
+      },
+      "trades_completed": 94,
+      "unit_usd_per_0_01_lot": 100
+    },
+    "125": {
+      "bust": null,
+      "final_equity": 1329.8220000000088,
+      "last_rows": [
+        {
+          "date": "2026-08-13",
+          "equity_close": 1312.9220000000219,
+          "lots": 0.1,
+          "pnl_pt": 3.6099999999996726,
+          "trade_no": 124,
+          "trough": 1256.6220000000208
+        },
+        {
+          "date": "2026-08-17",
+          "equity_close": 1330.9220000000146,
+          "lots": 0.1,
+          "pnl_pt": 1.7999999999992724,
+          "trade_no": 125,
+          "trough": 1294.1220000000208
+        },
+        {
+          "date": "2026-08-18",
+          "equity_close": 1334.1220000000117,
+          "lots": 0.1,
+          "pnl_pt": 0.31999999999970896,
+          "trade_no": 126,
+          "trough": 1283.5220000000168
+        },
+        {
+          "date": "2026-08-19",
+          "equity_close": 1334.0220000000095,
+          "lots": 0.1,
+          "pnl_pt": -0.010000000000218279,
+          "trade_no": 127,
+          "trough": 1290.7220000000102
+        },
+        {
+          "date": "2026-08-20",
+          "equity_close": 1329.8220000000088,
+          "lots": 0.1,
+          "pnl_pt": -0.42000000000007276,
+          "trade_no": 128,
+          "trough": 1271.3220000000142
+        }
+      ],
+      "max_mtm_drawdown_pct_of_peak": 15.175728124985731,
+      "max_mtm_drawdown_usd": 176.12999999999693,
+      "min_equity": 97.69999999999982,
+      "target": null,
+      "trades_completed": 128,
+      "unit_usd_per_0_01_lot": 125
+    },
+    "150": {
+      "bust": null,
+      "final_equity": 903.2840000000069,
+      "last_rows": [
+        {
+          "date": "2026-08-13",
+          "equity_close": 894.9440000000141,
+          "lots": 0.05,
+          "pnl_pt": 3.6099999999996726,
+          "trade_no": 124,
+          "trough": 866.7940000000135
+        },
+        {
+          "date": "2026-08-17",
+          "equity_close": 903.9440000000104,
+          "lots": 0.05,
+          "pnl_pt": 1.7999999999992724,
+          "trade_no": 125,
+          "trough": 885.5440000000135
+        },
+        {
+          "date": "2026-08-18",
+          "equity_close": 905.8640000000087,
+          "lots": 0.06,
+          "pnl_pt": 0.31999999999970896,
+          "trade_no": 126,
+          "trough": 875.5040000000117
+        },
+        {
+          "date": "2026-08-19",
+          "equity_close": 905.8040000000074,
+          "lots": 0.06,
+          "pnl_pt": -0.010000000000218279,
+          "trade_no": 127,
+          "trough": 879.8240000000078
+        },
+        {
+          "date": "2026-08-20",
+          "equity_close": 903.2840000000069,
+          "lots": 0.06,
+          "pnl_pt": -0.42000000000007276,
+          "trade_no": 128,
+          "trough": 868.1840000000102
+        }
+      ],
+      "max_mtm_drawdown_pct_of_peak": 15.175728124985731,
+      "max_mtm_drawdown_usd": 91.79999999999836,
+      "min_equity": 97.69999999999982,
+      "target": null,
+      "trades_completed": 128,
+      "unit_usd_per_0_01_lot": 150
+    },
+    "200": {
+      "bust": null,
+      "final_equity": 607.8380000000006,
+      "last_rows": [
+        {
+          "date": "2026-08-13",
+          "equity_close": 602.7680000000046,
+          "lots": 0.02,
+          "pnl_pt": 3.6099999999996726,
+          "trade_no": 124,
+          "trough": 591.5080000000044
+        },
+        {
+          "date": "2026-08-17",
+          "equity_close": 608.1680000000024,
+          "lots": 0.03,
+          "pnl_pt": 1.7999999999992724,
+          "trade_no": 125,
+          "trough": 597.1280000000042
+        },
+        {
+          "date": "2026-08-18",
+          "equity_close": 609.1280000000015,
+          "lots": 0.03,
+          "pnl_pt": 0.31999999999970896,
+          "trade_no": 126,
+          "trough": 593.948000000003
+        },
+        {
+          "date": "2026-08-19",
+          "equity_close": 609.0980000000009,
+          "lots": 0.03,
+          "pnl_pt": -0.010000000000218279,
+          "trade_no": 127,
+          "trough": 596.1080000000011
+        },
+        {
+          "date": "2026-08-20",
+          "equity_close": 607.8380000000006,
+          "lots": 0.03,
+          "pnl_pt": -0.42000000000007276,
+          "trade_no": 128,
+          "trough": 590.2880000000023
+        }
+      ],
+      "max_mtm_drawdown_pct_of_peak": 15.175728124985731,
+      "max_mtm_drawdown_usd": 39.73400000000038,
+      "min_equity": 97.69999999999982,
+      "target": null,
+      "trades_completed": 128,
+      "unit_usd_per_0_01_lot": 200
+    },
+    "250": {
+      "bust": null,
+      "final_equity": 505.3919999999998,
+      "last_rows": [
+        {
+          "date": "2026-08-13",
+          "equity_close": 502.01200000000244,
+          "lots": 0.01,
+          "pnl_pt": 3.6099999999996726,
+          "trade_no": 124,
+          "trough": 496.38200000000234
+        },
+        {
+          "date": "2026-08-17",
+          "equity_close": 505.612000000001,
+          "lots": 0.02,
+          "pnl_pt": 1.7999999999992724,
+          "trade_no": 125,
+          "trough": 498.2520000000022
+        },
+        {
+          "date": "2026-08-18",
+          "equity_close": 506.2520000000004,
+          "lots": 0.02,
+          "pnl_pt": 0.31999999999970896,
+          "trade_no": 126,
+          "trough": 496.1320000000014
+        },
+        {
+          "date": "2026-08-19",
+          "equity_close": 506.23199999999997,
+          "lots": 0.02,
+          "pnl_pt": -0.010000000000218279,
+          "trade_no": 127,
+          "trough": 497.5720000000001
+        },
+        {
+          "date": "2026-08-20",
+          "equity_close": 505.3919999999998,
+          "lots": 0.02,
+          "pnl_pt": -0.42000000000007276,
+          "trade_no": 128,
+          "trough": 493.6920000000009
+        }
+      ],
+      "max_mtm_drawdown_pct_of_peak": 15.175728124985731,
+      "max_mtm_drawdown_usd": 33.977999999999156,
+      "min_equity": 97.69999999999982,
+      "target": null,
+      "trades_completed": 128,
+      "unit_usd_per_0_01_lot": 250
+    },
+    "50": {
+      "bust": null,
+      "final_equity": 3274.8819999999805,
+      "last_rows": [
+        {
+          "date": "2026-03-30",
+          "equity_close": 1344.2819999999838,
+          "lots": 0.24,
+          "pnl_pt": 5.759999999999309,
+          "trade_no": 47,
+          "trough": 1190.4419999999873
+        },
+        {
+          "date": "2026-03-31",
+          "equity_close": 1747.021999999978,
+          "lots": 0.26,
+          "pnl_pt": 15.489999999999782,
+          "trade_no": 48,
+          "trough": 1302.4219999999686
+        },
+        {
+          "date": "2026-04-01",
+          "equity_close": 1700.7819999999892,
+          "lots": 0.34,
+          "pnl_pt": -1.3599999999996726,
+          "trade_no": 49,
+          "trough": 1658.9619999999732
+        },
+        {
+          "date": "2026-04-06",
+          "equity_close": 1888.1219999999967,
+          "lots": 0.34,
+          "pnl_pt": 5.510000000000218,
+          "trade_no": 50,
+          "trough": 1494.503999999989
+        },
+        {
+          "date": "2026-04-07",
+          "equity_close": 3274.8819999999805,
+          "lots": 0.37,
+          "pnl_pt": 37.47999999999956,
+          "trade_no": 51,
+          "trough": 1543.9479999999749
+        }
+      ],
+      "max_mtm_drawdown_pct_of_peak": 61.05047319557621,
+      "max_mtm_drawdown_usd": 407.30799999999635,
+      "min_equity": 95.39999999999964,
+      "target": {
+        "date": "2026-04-07",
+        "equity": 3274.8819999999805,
+        "lots": 0.37,
+        "trade_no": 51
+      },
+      "trades_completed": 51,
+      "unit_usd_per_0_01_lot": 50
+    },
+    "75": {
+      "bust": null,
+      "final_equity": 2013.9280000000008,
+      "last_rows": [
+        {
+          "date": "2026-04-16",
+          "equity_close": 1576.0980000000081,
+          "lots": 0.19,
+          "pnl_pt": 4.309999999999491,
+          "trade_no": 57,
+          "trough": 1425.2380000000157
+        },
+        {
+          "date": "2026-04-20",
+          "equity_close": 1601.2980000000043,
+          "lots": 0.21,
+          "pnl_pt": 1.199999999999818,
+          "trade_no": 58,
+          "trough": 1552.1580000000204
+        },
+        {
+          "date": "2026-04-21",
+          "equity_close": 1669.1280000000143,
+          "lots": 0.21,
+          "pnl_pt": 3.230000000000473,
+          "trade_no": 59,
+          "trough": 1545.8580000000165
+        },
+        {
+          "date": "2026-04-22",
+          "equity_close": 1807.2880000000087,
+          "lots": 0.22,
+          "pnl_pt": 6.279999999999745,
+          "trade_no": 60,
+          "trough": 1647.7880000000087
+        },
+        {
+          "date": "2026-04-23",
+          "equity_close": 2013.9280000000008,
+          "lots": 0.24,
+          "pnl_pt": 8.609999999999673,
+          "trade_no": 61,
+          "trough": 1790.0080000000025
+        }
+      ],
+      "max_mtm_drawdown_pct_of_peak": 40.501361230919755,
+      "max_mtm_drawdown_usd": 132.40299999999934,
+      "min_equity": 97.69999999999982,
+      "target": {
+        "date": "2026-04-23",
+        "equity": 2013.9280000000008,
+        "lots": 0.24,
+        "trade_no": 61
+      },
+      "trades_completed": 61,
+      "unit_usd_per_0_01_lot": 75
+    }
+  },
+  "reject": {
+    "inactive": 7,
+    "missing": 2,
+    "negative_spread": 0
+  }
+}
