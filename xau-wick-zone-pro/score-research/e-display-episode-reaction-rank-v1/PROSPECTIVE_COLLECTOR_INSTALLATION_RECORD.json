@@ -1,11 +1,65 @@
 {
-  "status": "PROSPECTIVE_COLLECTOR_INSTALLATION_PENDING_EXACT_BLOB_REPLACEMENT",
-  "authorized_gate": "GO_PROSPECTIVE_CONFIRMATION_EXECUTION",
-  "installed_path": ".github/workflows/xau-e-prospective-collector-v1.yml",
-  "required_template_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/prospective_collection_workflow_TEMPLATE_v1.yml",
-  "required_template_git_blob": "83a41bc3fed25a7fb77b8b2c6d6d570626b24f9b",
-  "required_template_sha256": "77d1268a9319001b6327136dfaf39d54da7b527e95d0de72c8a7da388768a679",
-  "prospective_start_session_ny": "2026-08-31",
-  "manual_pre_start_execution": "FORBIDDEN",
-  "scheduled_start": "automatic after first eligible session close"
+  "status": "PROSPECTIVE_COLLECTOR_INSTALLED_AND_AUTHORIZED_OUTCOME_BLIND",
+  "candidate": "E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "authorization_decision": "GO_PROSPECTIVE_CONFIRMATION_EXECUTION",
+  "authorization_scope": "OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT",
+  "active_scheduler": {
+    "branch": "main",
+    "path": ".github/workflows/xau-e-v1-prospective-outcome-blind-collector.yml",
+    "schedule_utc": "30 23 * * 1-5",
+    "workflow_git_blob": "54ac6ea78529ce10dc3d405806d90e016a507b6e",
+    "workflow_sha256": "24311ebb10f946669c8ed80ff328336d01f3f17faf5c9bf23b022fcfa417db52",
+    "content_install_commit": "5c272401259e95ddb7e1ffb65c9583f9f95acdde",
+    "default_branch_commit_at_gate": "71c277e72ed83cf2b9bf364ec359e6eff07b30e8",
+    "single_non_cancelling_concurrency_group": true,
+    "manual_dispatch_present_but_pre_start_guarded": true
+  },
+  "sealed_scientific_reference": {
+    "branch": "agent/xau-wick-zone-pro-dev",
+    "installed_reference_path": ".github/workflows/xau-e-prospective-collector-v1.yml",
+    "template_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/prospective_collection_workflow_TEMPLATE_v1.yml",
+    "template_git_blob": "83a41bc3fed25a7fb77b8b2c6d6d570626b24f9b",
+    "template_sha256": "77d1268a9319001b6327136dfaf39d54da7b527e95d0de72c8a7da388768a679",
+    "scientific_method_changed_by_scheduler_wrapper": false
+  },
+  "pro_execution_gate": {
+    "status": "PRO_PRE_PROSPECTIVE_EXECUTION_GATE_PASS",
+    "decision_file": "E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json",
+    "qa_file": "PRO_PRE_PROSPECTIVE_EXECUTION_INDEPENDENT_QA.json",
+    "workflow_run_id": 33278660304,
+    "workflow_head_sha": "b2199e27c4ce4d57e46c0108b25007f957d2b04f",
+    "workflow_conclusion": "success",
+    "artifact_id": 9722291765,
+    "artifact_digest": "sha256:15433fe0117b31b6a29df84f850ce2d05ca8041311d099e022dde4d0ce203380",
+    "gate_json_git_blob": "fc3715a68d21a4e878491e13346380aa0838875d",
+    "gate_json_sha256": "4ee1c7d3a36baa0583b8c81d8de8c075d1c32222c9deec1207bf4e91f6d10e30",
+    "qa_json_git_blob": "20a8613c5a973dca6f2182c500e4ca271c5b2942",
+    "qa_json_sha256": "a31f97638dbe2164b55ff0667462549a0c9dfe1fd18f9754786ef092733bde51",
+    "publication_commit": "40f128e8d1e1eb1abcaeee4ca136fb4e430106b0"
+  },
+  "prospective_start": {
+    "session_date_ny": "2026-08-31",
+    "session_open_local": "2026-08-31T08:00:00-04:00",
+    "session_open_utc": "2026-08-31T12:00:00Z",
+    "no_backfill_before_start": true,
+    "manual_pre_start_execution": "FORBIDDEN",
+    "scheduled_collection": "automatic after completed eligible sessions when source data is available"
+  },
+  "single_checkpoint": {
+    "minimum_represented_sessions": 90,
+    "minimum_model_eligible_primary_contacts": 1000,
+    "valid_zero_contact_sessions_count_as_represented": true,
+    "interim_performance_opening": "FORBIDDEN",
+    "collector_stops_after_lock": true
+  },
+  "outcome_firewall": {
+    "reaction_labeler_invocation_by_collector": "FORBIDDEN",
+    "checkpoint_evaluator_invocation_by_collector": "FORBIDDEN",
+    "prospective_outcome_generation_before_later_pro_gate": "FORBIDDEN",
+    "prospective_outcome_reading_before_later_pro_gate": "FORBIDDEN",
+    "prospective_performance_scoring_before_later_pro_gate": "FORBIDDEN"
+  },
+  "next_state": "READY_FOR_PRO_AT_LOCKED_PROSPECTIVE_CHECKPOINT",
+  "production_authorization": "NONE",
+  "pine_modification": "FORBIDDEN"
 }
