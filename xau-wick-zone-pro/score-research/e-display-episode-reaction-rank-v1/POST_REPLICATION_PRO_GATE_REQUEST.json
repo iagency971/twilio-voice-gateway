@@ -1,0 +1,78 @@
+{
+  "status": "READY_FOR_PRO_POST_REPLICATION_GATE",
+  "requested_gate": "PRO_POST_REPLICATION_SCIENTIFIC_GATE",
+  "requested_decision": [
+    "GO_PROSPECTIVE_CONFIRMATION_PLANNING",
+    "NO_GO_PROSPECTIVE_CONFIRMATION_PLANNING"
+  ],
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "canonical_replication_authority": {
+    "seal_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/REPLICATION_CANONICAL_SEAL.json",
+    "immutable_directory": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/replication-freeze-canonical-33266656414",
+    "workflow_run_id": 33266656414,
+    "artifact_id": 9719184524,
+    "artifact_digest": "sha256:734bd0e14f9017dc23822175aa21bc341cfa5b27b5058dc5e028eb5fb5997688",
+    "execution_commit": "2aa4abf4839558b42f5c999bf9e16127ece5b655",
+    "materialization_commit": "685efd0dc89e6e71ab542c268f75f76cf8699f76",
+    "immutable_copy_commit": "78af3d80af1a536babef17e05049bc320234c88a"
+  },
+  "replication_evidence_to_review": {
+    "display_episodes": 34007,
+    "primary_contacts": 17454,
+    "sessions_primary": 257,
+    "primary_successes": 8649,
+    "primary_failures": 8805,
+    "overall_primary_success_rate": 0.4955311103471983,
+    "auc": 0.5657692600871821,
+    "auc_minus_0_5": 0.06576926008718209,
+    "auc_minus_0_5_ci95_session_cluster": [0.0568889679606293, 0.0744911973596545],
+    "quartile_success_rates": {
+      "Q1": 0.4449622725255215,
+      "Q2": 0.45660191787558396,
+      "Q3": 0.4867630700778643,
+      "Q4": 0.5925672594619243
+    },
+    "q4_minus_q1": 0.14760498693640284,
+    "q4_minus_q1_ci95_session_cluster": [0.12573139125432922, 0.1692963776824019],
+    "q4_minus_q1_chronological_blocks": [0.1748121353925043, 0.14119328283607624, 0.13106018437298533],
+    "feature_exclusion_rate": 0.0,
+    "unseen_family_rate": 0.0,
+    "support_gate_pass": true,
+    "all_frozen_support_checks_pass": true,
+    "model_refit": false
+  },
+  "comparison_context_DEV": {
+    "dev_auc_minus_0_5": 0.07569283606907873,
+    "dev_q4_minus_q1": 0.16447101561694932,
+    "dev_quartile_success_rates": {
+      "Q1": 0.4282385834109972,
+      "Q2": 0.4452906829144453,
+      "Q3": 0.4891859052247874,
+      "Q4": 0.5927095990279465
+    },
+    "note": "DEV is development evidence only; replication was scored strictly with the immutable DEV model without refit."
+  },
+  "data_quality": {
+    "replication_sessions_in_ledger": 258,
+    "primary_sessions": 257,
+    "partial_sessions_retained": ["2026-06-19", "2026-07-03"],
+    "missing_m1_total": 482,
+    "frozen_missing_rule_respected": true
+  },
+  "frozen_constraints": {
+    "model_refit": "FORBIDDEN",
+    "feature_or_threshold_changes": "FORBIDDEN",
+    "subgroup_rescue": "FORBIDDEN",
+    "post_replication_tuning": "FORBIDDEN",
+    "production": "NONE",
+    "pine_modification": "FORBIDDEN",
+    "prospective_execution": "NOT_AUTHORIZED_BY_THIS_REQUEST"
+  },
+  "gate_instructions": [
+    "Review only the canonical immutable DEV and replication evidence and their hashes.",
+    "Treat historical replication as supporting out-of-sample evidence, not as production validation.",
+    "Do not change or reselect the model, features, target, horizon, quartiles, thresholds, bootstrap or subgroups.",
+    "Decide only whether the combined frozen DEV and historical replication evidence justifies planning a separately preregistered prospective confirmation.",
+    "Even a GO may authorize planning/freezing a prospective protocol only; it does not authorize production trading or Pine modification."
+  ]
+}
