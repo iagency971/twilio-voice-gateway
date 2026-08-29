@@ -2,15 +2,19 @@
   "checks": {
     "association_definition": true,
     "cluster_bootstrap_requested_exact": true,
+    "dev_contact_window_accepts_inside": true,
     "fixed_quartile_labels": true,
+    "frozen_model_roundtrip_scores": true,
     "lexicographic_reference": true,
     "missing_feature_excluded": true,
     "population_sd_positive": true,
     "prospective_blocks_complete_sessions": true,
     "quartiles_strict": true,
     "rank_bounds": true,
+    "separate_dev_replication_tokens": true,
     "three_source_features_only": true,
-    "unseen_family_counted": true
+    "unseen_family_counted": true,
+    "wrong_contact_window_fails_closed": true
   },
   "real_outcomes_used": false,
   "status": "SYNTHETIC_MODEL_EVAL_V1_PASS"
