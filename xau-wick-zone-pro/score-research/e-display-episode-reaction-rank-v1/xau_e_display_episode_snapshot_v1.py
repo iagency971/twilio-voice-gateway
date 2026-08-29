@@ -18,6 +18,14 @@ E_FAMILIES = {
 }
 MODEL_FEATURES = ['zone_width_v', 'display_persistence_c5', 'current_family']
 FORBIDDEN_TOKENS = ('contact', 'trigger', 'rejection', 'exec_', 'tp', 'sl', 'mfe', 'mae', 'success', 'reaction', 'outcome', 'p&l', 'return')
+TIME_FIELDS = {
+    'snapshot_time_utc','bar_open_time_utc','bar_close_time_utc',
+    'feature_available_time_utc','prior_snapshot_time_utc'
+}
+INT_FIELDS = {'display_slot_rank','display_persistence_c5'}
+BOOL_FIELDS = {'is_new_display_episode'}
+FLOAT_FIELDS = {'center','zlo','zhi','v_snapshot','zone_width_v'}
+EMPTY_STRING_FIELDS = {'source_provenance_members'}
 
 
 def parse_args():
@@ -30,22 +38,38 @@ def parse_args():
     return p.parse_args()
 
 
-def canonical(v):
-    if isinstance(v, pd.Timestamp):
-        return v.tz_convert('UTC').isoformat()
+def canonical_field(k, v):
+    if k in EMPTY_STRING_FIELDS:
+        return '' if pd.isna(v) or str(v) == '' else str(v)
+    if k in TIME_FIELDS:
+        if pd.isna(v):
+            return None
+        t = pd.Timestamp(v)
+        if t.tzinfo is None:
+            t = t.tz_localize('UTC')
+        else:
+            t = t.tz_convert('UTC')
+        return t.isoformat()
+    if k in BOOL_FIELDS:
+        if pd.isna(v):
+            return None
+        if isinstance(v, str):
+            s = v.strip().lower()
+            if s in {'true','1'}: return 1
+            if s in {'false','0'}: return 0
+            raise ValueError(f'invalid boolean text for {k}: {v!r}')
+        return int(bool(v))
+    if k in INT_FIELDS:
+        return None if pd.isna(v) else int(v)
+    if k in FLOAT_FIELDS:
+        return None if pd.isna(v) else format(float(v), '.17g')
     if pd.isna(v):
         return None
-    if isinstance(v, (np.integer, int)):
-        return int(v)
-    if isinstance(v, (np.floating, float)):
-        return format(float(v), '.17g')
-    if isinstance(v, (bool, np.bool_)):
-        return bool(v)
     return str(v)
 
 
 def row_hash(row: dict) -> str:
-    payload = {k: canonical(v) for k, v in sorted(row.items()) if k != 'row_sha256'}
+    payload = {k: canonical_field(k, v) for k, v in sorted(row.items()) if k != 'row_sha256'}
     return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
@@ -60,7 +84,7 @@ def session_date_ny(t: pd.Timestamp) -> str:
 
 
 def write_gzip_csv(df: pd.DataFrame, path: str):
-    raw = df.to_csv(index=False, lineterminator='\n').encode('utf-8')
+    raw = df.to_csv(index=False, lineterminator='\n', float_format='%.17g', na_rep='').encode('utf-8')
     with open(path, 'wb') as fh:
         with gzip.GzipFile(fileobj=fh, mode='wb', mtime=0, filename='') as gz:
             gz.write(raw)
@@ -181,7 +205,7 @@ def build(df: pd.DataFrame) -> pd.DataFrame:
 
 def main():
     a = parse_args()
-    src = pd.read_csv(a.candidates, compression='infer')
+    src = pd.read_csv(a.candidates, compression='infer', float_precision='round_trip')
     ledger = build(src)
     dev = ledger[ledger.feature_window == 'DEV_HISTORY'].copy()
     rep = ledger[ledger.feature_window == 'HISTORICAL_REPLICATION_DIAGNOSTIC'].copy()
@@ -195,6 +219,7 @@ def main():
         'status':'E_DISPLAY_EPISODE_SNAPSHOT_V1_BUILT_OUTCOME_BLIND',
         'future_price_outcomes_used':False,
         'model_feature_whitelist':MODEL_FEATURES,
+        'row_hash_canonicalization':'FIELD_AWARE_V2_SERIALIZATION_STABLE',
         'rows':int(len(ledger)), 'episodes':int(ledger.display_episode_id.nunique()), 'sessions':int(ledger.session_date_ny.nunique()),
         'dev_rows':int(len(dev)), 'dev_sessions':int(dev.session_date_ny.nunique()),
         'replication_rows':int(len(rep)), 'replication_sessions':int(rep.session_date_ny.nunique()),
