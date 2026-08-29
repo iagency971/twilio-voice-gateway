@@ -1,0 +1,13 @@
+{
+  "checkpoint_evaluator_invocation": false,
+  "collector_outputs_outcome_blind_only": true,
+  "exact_commit_source_binding": true,
+  "first_acceptance_persisted_before_downstream": true,
+  "incomplete_session_resume": true,
+  "reaction_labeler_invocation": false,
+  "revision_recheck": true,
+  "single_concurrency": true,
+  "source_blob_sha256_bytes_rows_recorded": true,
+  "status": "COLLECTOR_STATIC_FIREWALL_QA_PASS",
+  "valid_zero_contact_sessions_represented": true
+}

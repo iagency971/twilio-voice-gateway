@@ -1,0 +1,9 @@
+{
+  "canonical_full_auc_delta": 0.0,
+  "canonical_full_auc_tolerance": 1e-12,
+  "historical_cross_serialization_tolerance": 5e-07,
+  "independent_full_auc_cross_serialization_delta": 4.464611356169712e-07,
+  "prospective_gate_tolerance": false,
+  "status": "WIDTH_CONTROL_HISTORICAL_NUMERICAL_QA_PASS",
+  "width_auc_cross_serialization_delta": 4.6615795046278663e-07
+}
