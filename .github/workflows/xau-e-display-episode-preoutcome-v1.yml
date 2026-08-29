@@ -74,95 +74,54 @@ jobs:
           import glob,hashlib,json,os,subprocess
           from pathlib import Path
           import pandas as pd
-          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'))
-          assert len(fs)==24, len(fs)
-          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True)
-          z['time']=pd.to_datetime(z.time,utc=True)
-          z=z.sort_values(['time','side','center']).reset_index(drop=True)
-          assert set(z.columns)=={'time','landmark_i','center','zlo','zhi','side'}, set(z.columns)
-          assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z')
-          assert z.time.max()<pd.Timestamp('2026-08-01T00:00:00Z')
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'));assert len(fs)==24,len(fs)
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True);z['time']=pd.to_datetime(z.time,utc=True);z=z.sort_values(['time','side','center']).reset_index(drop=True)
+          assert set(z.columns)=={'time','landmark_i','center','zlo','zhi','side'}
+          assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z') and z.time.max()<pd.Timestamp('2026-08-01T00:00:00Z')
           z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
-          m=json.load(open(os.environ['SOURCE_MANIFEST']))
-          rows=[]
+          m=json.load(open(os.environ['SOURCE_MANIFEST']));rows=[]
           for x in m['files']:
-              if x['side']!='bid': continue
+              if x['side']!='bid':continue
               key=f"{int(x['year']):04d}-{int(x['month']):02d}"
-              if '2024-01'<=key<='2026-07': rows.append(x)
-          assert len(rows)==31, len(rows)
-          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
-          actual={}
+              if '2024-01'<=key<='2026-07':rows.append(x)
+          assert len(rows)==31,len(rows)
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/';actual={}
           for x in rows:
-              p=Path('/tmp/raw')/x['file']
-              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
-              h=hashlib.sha256(p.read_bytes()).hexdigest();assert h==x['sha256'],(x['file'],h,x['sha256'])
-              actual[x['file']]={'expected_sha256':x['sha256'],'actual_sha256':h,'bytes':p.stat().st_size}
+              p=Path('/tmp/raw')/x['file'];subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              h=hashlib.sha256(p.read_bytes()).hexdigest();assert h==x['sha256'];actual[x['file']]={'expected_sha256':x['sha256'],'actual_sha256':h,'bytes':p.stat().st_size}
           zparts={Path(f).name:hashlib.sha256(Path(f).read_bytes()).hexdigest() for f in fs}
           out={'status':'E_DISPLAY_EPISODE_INPUT_QA_PASS','future_price_outcomes_used':False,'bid_months':len(rows),'bid_files':actual,'frozen_z4_run_id':33139524456,'z4_monthly_parts':zparts,'z4_rows':len(z),'z4_first':str(z.time.min()),'z4_last':str(z.time.max())}
-          Path('/tmp/results/DATA_INPUT_MANIFEST.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
-          print(json.dumps({'status':out['status'],'bid_months':len(rows),'z4_parts':len(fs),'z4_rows':len(z)},indent=2))
+          Path('/tmp/results/DATA_INPUT_MANIFEST.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps({'status':out['status'],'bid_months':len(rows),'z4_parts':len(fs),'z4_rows':len(z)},indent=2))
           PY
 
       - name: Rebuild frozen v0.4 display reference outcome-blind
-        shell: bash
         run: |
-          python xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py \
-            --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl \
-            --output /tmp/results/V04_REFERENCE_RESULT.json \
-            --candidates-csv /tmp/results/V04_REFERENCE_CANDIDATES.csv.gz
+          python xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl --output /tmp/results/V04_REFERENCE_RESULT.json --candidates-csv /tmp/results/V04_REFERENCE_CANDIDATES.csv.gz
 
       - name: Instrument provenance with geometry-neutral sidecar
-        shell: bash
         run: |
-          python "$PKG/xau_ebuy_provenance_instrument_v1.py" \
-            --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl \
-            --output-csv /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz \
-            --manifest /tmp/results/E_DISPLAY_PROVENANCE_V1_MANIFEST.json \
-            --reference-v04-csv /tmp/results/V04_REFERENCE_CANDIDATES.csv.gz
-          python "$PKG/xau_e_v04_exact_parity_v1.py" \
-            --reference /tmp/results/V04_REFERENCE_CANDIDATES.csv.gz \
-            --instrumented /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz \
-            --output /tmp/results/E_V04_EXACT_DISPLAY_PARITY.json
+          python "$PKG/xau_ebuy_provenance_instrument_v1.py" --files /tmp/raw/*.csv --z4-pkl /tmp/FROZEN_C5_24M.pkl --output-csv /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz --manifest /tmp/results/E_DISPLAY_PROVENANCE_V1_MANIFEST.json --reference-v04-csv /tmp/results/V04_REFERENCE_CANDIDATES.csv.gz
+          python "$PKG/xau_e_v04_exact_parity_v1.py" --reference /tmp/results/V04_REFERENCE_CANDIDATES.csv.gz --instrumented /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz --output /tmp/results/E_V04_EXACT_DISPLAY_PARITY.json
 
       - name: Build display-episode ledger twice deterministically
-        shell: bash
         run: |
-          python "$PKG/xau_e_display_episode_snapshot_v1.py" \
-            --candidates /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz \
-            --output /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz \
-            --dev-output /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz \
-            --replication-output /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz \
-            --manifest /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_MANIFEST.json
-          python "$PKG/xau_e_display_episode_snapshot_v1.py" \
-            --candidates /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz \
-            --output /tmp/results/REPEAT_LEDGER.csv.gz \
-            --dev-output /tmp/results/REPEAT_DEV.csv.gz \
-            --replication-output /tmp/results/REPEAT_REPLICATION.csv.gz \
-            --manifest /tmp/results/REPEAT_MANIFEST.json
+          python "$PKG/xau_e_display_episode_snapshot_v1.py" --candidates /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz --output /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz --dev-output /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz --replication-output /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz --manifest /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_MANIFEST.json
+          python "$PKG/xau_e_display_episode_snapshot_v1.py" --candidates /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz --output /tmp/results/REPEAT_LEDGER.csv.gz --dev-output /tmp/results/REPEAT_DEV.csv.gz --replication-output /tmp/results/REPEAT_REPLICATION.csv.gz --manifest /tmp/results/REPEAT_MANIFEST.json
           cmp /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz /tmp/results/REPEAT_LEDGER.csv.gz
           cmp /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz /tmp/results/REPEAT_DEV.csv.gz
           cmp /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz /tmp/results/REPEAT_REPLICATION.csv.gz
           rm /tmp/results/REPEAT_*.gz /tmp/results/REPEAT_MANIFEST.json
 
       - name: Independent feature-ledger QA
-        shell: bash
         run: |
-          python "$PKG/xau_e_display_episode_snapshot_qa_v1.py" \
-            --ledger /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz \
-            --dev-ledger /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz \
-            --replication-ledger /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz \
-            --builder-manifest /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_MANIFEST.json \
-            --provenance-manifest /tmp/results/E_DISPLAY_PROVENANCE_V1_MANIFEST.json \
-            --output /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_QA.json
+          python "$PKG/xau_e_display_episode_snapshot_qa_v1.py" --ledger /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz --dev-ledger /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz --replication-ledger /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz --builder-manifest /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_MANIFEST.json --provenance-manifest /tmp/results/E_DISPLAY_PROVENANCE_V1_MANIFEST.json --output /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_QA.json
 
       - name: Synthetic-only reaction and model tests
-        shell: bash
         run: |
           python "$PKG/test_xau_e_display_episode_reaction_labeler_v1.py" | tee /tmp/results/SYNTHETIC_REACTION_LABELER_V1.json
           python "$PKG/test_xau_e_display_episode_model_eval_v1.py" | tee /tmp/results/SYNTHETIC_MODEL_EVAL_V1.json
 
       - name: Freeze hashes and pre-outcome authorization state
-        shell: bash
         env:
           METHOD_COMMIT: ${{ github.sha }}
           RUN_ID: ${{ github.run_id }}
@@ -174,46 +133,28 @@ jobs:
           from pathlib import Path
           pkg=Path(os.environ['PKG']);r=Path('/tmp/results')
           method_files=[
+            Path('.github/workflows/xau-e-display-episode-preoutcome-v1.yml'),
             pkg/'XAUUSD_E_DISPLAY_EPISODE_PRE_OUTCOME_REPAIR_SPEC_v1_0_2026-08-29.md',
             pkg/'XAUUSD_E_DISPLAY_EPISODE_TIMING_ADDENDUM_v1_0_2026-08-29.md',
+            pkg/'XAUUSD_E_DISPLAY_EPISODE_SEQUENTIAL_OUTCOME_OPENING_ADDENDUM_v1_0_2026-08-29.md',
             pkg/'E_DISPLAY_EPISODE_FEATURE_REGISTRY_v1.json',pkg/'requirements-lock.txt',
             pkg/'xau_ebuy_provenance_instrument_v1.py',pkg/'xau_e_v04_exact_parity_v1.py',
             pkg/'xau_e_display_episode_snapshot_v1.py',pkg/'xau_e_display_episode_snapshot_qa_v1.py',
             pkg/'xau_e_display_episode_reaction_labeler_v1.py',pkg/'test_xau_e_display_episode_reaction_labeler_v1.py',
             pkg/'xau_e_display_episode_model_eval_v1.py',pkg/'test_xau_e_display_episode_model_eval_v1.py',
-            Path('xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py'),Path('xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_2.py'),
-            Path('xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_3.py'),Path('xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py'),Path(os.environ['SOURCE_MANIFEST'])]
-          evidence=[p for p in sorted(r.iterdir()) if p.name!='V04_REFERENCE_CANDIDATES.csv.gz']
-          h=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-          qa=json.loads((r/'E_DISPLAY_EPISODE_LEDGER_V1_QA.json').read_text());par=json.loads((r/'E_V04_EXACT_DISPLAY_PARITY.json').read_text())
-          syn1=json.loads((r/'SYNTHETIC_REACTION_LABELER_V1.json').read_text());syn2=json.loads((r/'SYNTHETIC_MODEL_EVAL_V1.json').read_text())
+            Path('xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_1.py'),Path('xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_2.py'),Path('xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_3.py'),Path('xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py'),Path(os.environ['SOURCE_MANIFEST'])]
+          evidence=[p for p in sorted(r.iterdir()) if p.name!='V04_REFERENCE_CANDIDATES.csv.gz'];h=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+          qa=json.loads((r/'E_DISPLAY_EPISODE_LEDGER_V1_QA.json').read_text());par=json.loads((r/'E_V04_EXACT_DISPLAY_PARITY.json').read_text());syn1=json.loads((r/'SYNTHETIC_REACTION_LABELER_V1.json').read_text());syn2=json.loads((r/'SYNTHETIC_MODEL_EVAL_V1.json').read_text())
           ready=qa['status']=='E_DISPLAY_EPISODE_SNAPSHOT_V1_REAL_QA_PASS' and par['status']=='E_V04_EXACT_DISPLAY_PARITY_PASS' and syn1['status']=='SYNTHETIC_REACTION_LABELER_V1_PASS' and syn2['status']=='SYNTHETIC_MODEL_EVAL_V1_PASS'
-          out={'status':'E_DISPLAY_EPISODE_V1_PRE_OUTCOME_REPAIR_PASS' if ready else 'E_DISPLAY_EPISODE_V1_PRE_OUTCOME_REPAIR_FAIL','future_price_outcomes_used':False,'method_commit':os.environ['METHOD_COMMIT'],'workflow_run_id':int(os.environ['RUN_ID']),'frozen_z4_run_id':33139524456,
-            'method_sha256':{str(p):h(p) for p in method_files},'evidence_sha256':{p.name:h(p) for p in evidence},
-            'real_outcome_generation':'FORBIDDEN','real_outcome_reading':'FORBIDDEN','model_fit_on_real_labels':'FORBIDDEN','pine_modification':'FORBIDDEN',
-            'next_authorization':'READY_FOR_NEW_PRO_PRE_OUTCOME_GATE' if ready else 'BLOCK_OUTCOME_OPENING'}
+          out={'status':'E_DISPLAY_EPISODE_V1_PRE_OUTCOME_REPAIR_PASS' if ready else 'E_DISPLAY_EPISODE_V1_PRE_OUTCOME_REPAIR_FAIL','future_price_outcomes_used':False,'method_commit':os.environ['METHOD_COMMIT'],'workflow_run_id':int(os.environ['RUN_ID']),'frozen_z4_run_id':33139524456,'method_sha256':{str(p):h(p) for p in method_files},'evidence_sha256':{p.name:h(p) for p in evidence},'real_outcome_generation':'FORBIDDEN','real_outcome_reading':'FORBIDDEN','model_fit_on_real_labels':'FORBIDDEN','historical_replication_opening_before_dev_model_freeze':'FORBIDDEN','pine_modification':'FORBIDDEN','next_authorization':'READY_FOR_NEW_PRO_PRE_OUTCOME_GATE' if ready else 'BLOCK_OUTCOME_OPENING'}
           (r/'PRE_OUTCOME_PACKAGE_MANIFEST.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps({'status':out['status'],'next_authorization':out['next_authorization']},indent=2))
           if not ready:raise SystemExit(5)
           PY
 
       - name: Stage canonical outcome-blind evidence in repository
-        shell: bash
         run: |
           set -euo pipefail
-          cp /tmp/results/E_DISPLAY_PROVENANCE_V1_24M.csv.gz "$PKG/"
-          cp /tmp/results/E_DISPLAY_PROVENANCE_V1_MANIFEST.json "$PKG/"
-          cp /tmp/results/E_V04_EXACT_DISPLAY_PARITY.json "$PKG/"
-          cp /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz "$PKG/"
-          cp /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz "$PKG/"
-          cp /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz "$PKG/"
-          cp /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_MANIFEST.json "$PKG/"
-          cp /tmp/results/E_DISPLAY_EPISODE_LEDGER_V1_QA.json "$PKG/"
-          cp /tmp/results/SYNTHETIC_REACTION_LABELER_V1.json "$PKG/"
-          cp /tmp/results/SYNTHETIC_MODEL_EVAL_V1.json "$PKG/"
-          cp /tmp/results/DATA_INPUT_MANIFEST.json "$PKG/"
-          cp /tmp/results/ENVIRONMENT.json "$PKG/"
-          cp /tmp/results/PIP_FREEZE.txt "$PKG/"
-          cp /tmp/results/PRE_OUTCOME_PACKAGE_MANIFEST.json "$PKG/"
+          for f in E_DISPLAY_PROVENANCE_V1_24M.csv.gz E_DISPLAY_PROVENANCE_V1_MANIFEST.json E_V04_EXACT_DISPLAY_PARITY.json E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz E_DISPLAY_EPISODE_LEDGER_V1_MANIFEST.json E_DISPLAY_EPISODE_LEDGER_V1_QA.json SYNTHETIC_REACTION_LABELER_V1.json SYNTHETIC_MODEL_EVAL_V1.json DATA_INPUT_MANIFEST.json ENVIRONMENT.json PIP_FREEZE.txt PRE_OUTCOME_PACKAGE_MANIFEST.json; do cp "/tmp/results/$f" "$PKG/"; done
 
       - uses: actions/upload-artifact@v4
         with:
@@ -223,7 +164,6 @@ jobs:
           path: /tmp/results/*
 
       - name: Commit canonical outcome-blind repair package
-        shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
