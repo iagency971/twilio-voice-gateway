@@ -1,0 +1,15 @@
+{
+  "engine_guard": {
+    "git_blob": "ac2448f448df2b873b482fd74c4eddf031790117",
+    "sha256": "3d7f9a5bf4553de933a2ec3c99ca282a5c6cd006fc44cc61d7aa57b0ff1d999d"
+  },
+  "first_time_utc": "2026-07-15T12:00:00+00:00",
+  "future_outcomes_used": false,
+  "geometry_only": true,
+  "last_time_utc": "2026-07-15T20:55:00+00:00",
+  "output_sha256": "c706b25fd3e8a9858bd566ca98f0d1e2329a860fae95c3bdae114ce9e4faeaa6",
+  "rows": 459,
+  "session_date_ny": "2026-07-15",
+  "snapshots_with_zones": 108,
+  "status": "PROSPECTIVE_Z4_SESSION_GEOMETRY_PASS"
+}

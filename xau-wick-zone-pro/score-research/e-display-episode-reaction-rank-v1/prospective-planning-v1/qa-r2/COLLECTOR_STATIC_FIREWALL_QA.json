@@ -1,0 +1,7 @@
+{
+  "checkpoint_evaluator_invocation": false,
+  "collector_outputs_outcome_blind_only": true,
+  "reaction_labeler_invocation": false,
+  "status": "COLLECTOR_STATIC_FIREWALL_QA_PASS",
+  "uses_canonical_planning_entry_wrapper": true
+}

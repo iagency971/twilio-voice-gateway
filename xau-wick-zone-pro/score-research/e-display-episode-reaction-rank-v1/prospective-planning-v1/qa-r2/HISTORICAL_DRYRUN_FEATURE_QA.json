@@ -1,0 +1,16 @@
+{
+  "candidate_rows": 221,
+  "candidate_sha256": "7fb2dedce48c926ed8de788da4819c8b95e3bbcc6927c13096f90b84f510165f",
+  "display_episodes": 164,
+  "feature_rows": 209,
+  "frozen_dev_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
+  "ledger_sha256": "cca61c2c804f31ac23ecd11de978fa23673f5f502d1b017feffa3a503d5ab8b0",
+  "model_feature_exclusion_rate": 0.0,
+  "model_feature_exclusion_rows": 0,
+  "prospective_outcomes_used": false,
+  "session_date_ny": "2026-07-15",
+  "snapshots": 91,
+  "status": "PROSPECTIVE_FEATURE_SESSION_OUTCOME_FREE_PASS",
+  "unseen_family_rate": 0.0,
+  "unseen_family_rows": 0
+}

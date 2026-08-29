@@ -1,0 +1,41 @@
+{
+  "acquired_at_utc": "2026-07-15T21:01:00+00:00",
+  "canonical_overwrite_allowed": false,
+  "canonical_session_path": "/tmp/dry/archive/sessions/2026-07-15.csv.gz",
+  "canonical_warmup_path": "/tmp/dry/archive/warmup/2026-07-15.csv.gz",
+  "chain_record_sha256": "97990ba7ebc52fdaec9ed02756f929d5bbf9517df7672297aa9ff000d0a0cdf0",
+  "conflicting_duplicate_timestamps": 0,
+  "eligible_pre_session_c5_landmarks": 96,
+  "exact_duplicate_rows_removed": 0,
+  "first_missing_utc": null,
+  "frozen_warmup_c5_landmarks": 96,
+  "frozen_z4_lookback_active_m1": 1440,
+  "last_missing_utc": null,
+  "missing_m1": 0,
+  "session_date_ny": "2026-07-15",
+  "session_rows": 540,
+  "session_sha256": "555709aafad4237a4da94b6eb24097ed2eba8bd34cbe6ee015eb5f8889c6e164",
+  "source_metadata": {
+    "files": [
+      {
+        "file": "xauusd_bid_m1_2026_06.csv",
+        "historical_manifest": true,
+        "month": "2026-06",
+        "sha256": "32498557a57cffbc80134be81755f89bb55d95aed6037e95fad259c10a52b284"
+      },
+      {
+        "file": "xauusd_bid_m1_2026_07.csv",
+        "historical_manifest": true,
+        "month": "2026-07",
+        "sha256": "1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286"
+      }
+    ],
+    "historical_dry_run": true
+  },
+  "status": "PROSPECTIVE_SESSION_FIRST_ACCEPTANCE_PASS",
+  "warm_start_active_position_in_available_history": 42478,
+  "warmup_contract": "latest causal start that leaves exactly 96 pre-session C5 landmarks after the 1440-active-M1 Z4 lookback",
+  "warmup_first_utc": "2026-07-14T03:00:00+00:00",
+  "warmup_rows": 2520,
+  "warmup_sha256": "683f190a5b6c597db67905c4536f669a5bab7984af395d77faf3c493667eed08"
+}

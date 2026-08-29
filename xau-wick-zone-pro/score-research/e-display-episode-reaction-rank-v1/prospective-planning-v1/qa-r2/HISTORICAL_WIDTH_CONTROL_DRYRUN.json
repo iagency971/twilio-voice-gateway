@@ -1,0 +1,16 @@
+{
+  "feature_qa": {
+    "feature_excluded_rows": 0,
+    "feature_exclusion_rate": 0.0,
+    "input_rows": 17454,
+    "unseen_family_rate": 0.0,
+    "unseen_family_rows": 0
+  },
+  "full_auc": 0.5657692600871821,
+  "full_minus_width_auc": 0.0007262872180343605,
+  "gating": false,
+  "n": 17454,
+  "rescue_allowed": false,
+  "status": "WIDTH_ONLY_INTERPRETATION_CONTROL_HISTORICAL_DRY_RUN_PASS",
+  "width_only_auc": 0.5650429728691477
+}

@@ -1,0 +1,16 @@
+{
+  "compared": [
+    "snapshot_time_utc",
+    "display_slot_rank",
+    "current_family",
+    "center",
+    "zlo",
+    "zhi",
+    "v_snapshot",
+    "zone_width_v",
+    "display_persistence_c5"
+  ],
+  "rows": 209,
+  "session_date_ny": "2026-07-15",
+  "status": "PROSPECTIVE_FEATURE_HISTORICAL_DRYRUN_PARITY_PASS"
+}

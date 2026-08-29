@@ -1,0 +1,11 @@
+{
+  "status": "PROSPECTIVE_PLANNING_SYNTHETIC_TESTS_PASS",
+  "tests": [
+    "append_only_first_acceptance_revision_hash_chain",
+    "frozen_1440_active_plus_96_C5_warmup_contract",
+    "arming_bar_cannot_contact",
+    "anti_peeking_firewall",
+    "single_checkpoint_first_qualifying_session_lock",
+    "frozen_Z4_engine_guard"
+  ]
+}

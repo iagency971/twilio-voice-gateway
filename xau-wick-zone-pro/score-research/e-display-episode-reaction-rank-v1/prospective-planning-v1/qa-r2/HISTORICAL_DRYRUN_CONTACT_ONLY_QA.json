@@ -1,0 +1,15 @@
+{
+  "episodes": 164,
+  "model_eligible_primary_contacts": 78,
+  "output_sha256": "9e81fa663c4b663b6b2e8f0467776ce27fa621f1e9baff4873b5ed6c09e0feb4",
+  "post_contact_bars_read": 0,
+  "primary_contacts": 78,
+  "prospective_outcomes_generated": false,
+  "prospective_outcomes_read": false,
+  "raw_qa": {
+    "conflicting_duplicate_timestamps": 0,
+    "exact_duplicate_rows_removed": 0
+  },
+  "session_date_ny": "2026-07-15",
+  "status": "PROSPECTIVE_CONTACT_ONLY_PASS"
+}
