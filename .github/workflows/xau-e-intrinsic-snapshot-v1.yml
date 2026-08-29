@@ -36,6 +36,14 @@ jobs:
           SRC='xau-wick-zone-pro/entry-research/ebuy-coverage-v0-4/XAUUSD_Z4_EBUY_STICKY_CANDIDATES_v0_4.csv.gz'
           LEGACY='dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920'
           python "$PKG/xau_e_intrinsic_source_provenance_v1.py" --source "$SRC" --legacy-expected-sha256 "$LEGACY" --output "$PKG/E_INTRINSIC_SNAPSHOT_V1_SOURCE_PROVENANCE.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_SOURCE_PROVENANCE.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='E_V04_SOURCE_PROVENANCE_LEGACY_HASH_RESOLVED', d
+          assert 'decompressed_payload_sha256' in d['legacy_hash_match_modes'], d
+          PY
 
       - name: Build ledger twice from frozen v0.4 source
         shell: bash
@@ -43,9 +51,9 @@ jobs:
           set -euo pipefail
           PKG='xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1'
           SRC='xau-wick-zone-pro/entry-research/ebuy-coverage-v0-4/XAUUSD_Z4_EBUY_STICKY_CANDIDATES_v0_4.csv.gz'
-          EXP='dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920'
-          python "$PKG/xau_e_intrinsic_snapshot_v1.py" --candidates "$SRC" --output "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz" --manifest "$PKG/E_INTRINSIC_SNAPSHOT_V1_MANIFEST.json" --expected-source-sha256 "$EXP"
-          python "$PKG/xau_e_intrinsic_snapshot_v1.py" --candidates "$SRC" --output "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER_REPEAT.csv.gz" --manifest "$PKG/E_INTRINSIC_SNAPSHOT_V1_MANIFEST_REPEAT.json" --expected-source-sha256 "$EXP"
+          EXP_PAYLOAD='dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920'
+          python "$PKG/xau_e_intrinsic_snapshot_v1.py" --candidates "$SRC" --output "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz" --manifest "$PKG/E_INTRINSIC_SNAPSHOT_V1_MANIFEST.json" --expected-source-payload-sha256 "$EXP_PAYLOAD"
+          python "$PKG/xau_e_intrinsic_snapshot_v1.py" --candidates "$SRC" --output "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER_REPEAT.csv.gz" --manifest "$PKG/E_INTRINSIC_SNAPSHOT_V1_MANIFEST_REPEAT.json" --expected-source-payload-sha256 "$EXP_PAYLOAD"
           cmp "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz" "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER_REPEAT.csv.gz"
 
       - name: Independent real-ledger QA
@@ -54,8 +62,8 @@ jobs:
           set -euo pipefail
           PKG='xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1'
           SRC='xau-wick-zone-pro/entry-research/ebuy-coverage-v0-4/XAUUSD_Z4_EBUY_STICKY_CANDIDATES_v0_4.csv.gz'
-          EXP='dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920'
-          python "$PKG/xau_e_intrinsic_snapshot_qa_v1.py" --candidates "$SRC" --ledger "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz" --manifest "$PKG/E_INTRINSIC_SNAPSHOT_V1_MANIFEST.json" --output "$PKG/E_INTRINSIC_SNAPSHOT_V1_QA.json" --expected-source-sha256 "$EXP"
+          EXP_PAYLOAD='dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920'
+          python "$PKG/xau_e_intrinsic_snapshot_qa_v1.py" --candidates "$SRC" --ledger "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz" --manifest "$PKG/E_INTRINSIC_SNAPSHOT_V1_MANIFEST.json" --output "$PKG/E_INTRINSIC_SNAPSHOT_V1_QA.json" --expected-source-payload-sha256 "$EXP_PAYLOAD"
 
       - name: Freeze package hashes and static QA
         shell: bash
@@ -72,6 +80,7 @@ jobs:
             pkg/'XAUUSD_E_INTRINSIC_SNAPSHOT_PREREG_v1_0_2026-08-29.md',
             pkg/'XAUUSD_E_INTRINSIC_REACTION_PREREG_v1_0_2026-08-29.md',
             pkg/'XAUUSD_E_INTRINSIC_MODEL_AND_VALIDATION_GATE_PREREG_v1_0_2026-08-29.md',
+            pkg/'XAUUSD_E_V04_SOURCE_PROVENANCE_RESOLUTION_2026-08-29.md',
             pkg/'xau_e_intrinsic_snapshot_v1.py',pkg/'xau_e_intrinsic_snapshot_qa_v1.py',
             pkg/'xau_e_intrinsic_source_provenance_v1.py',pkg/'test_xau_e_intrinsic_snapshot_v1.py',pkg/'E_INTRINSIC_SNAPSHOT_V1_SCHEMA.json',
             pkg/'E_INTRINSIC_SNAPSHOT_V1_FEATURE_REGISTRY.json',pkg/'E_INTRINSIC_SNAPSHOT_V1_SOURCE_PROVENANCE.json',
@@ -82,7 +91,7 @@ jobs:
           freeze={'status':'E_INTRINSIC_SNAPSHOT_V1_METHOD_CODE_GATES_AND_REAL_LEDGER_FROZEN','git_commit':os.environ['FREEZE_SHA'],'future_price_outcomes_used':False,'sha256':{str(p):h(p) for p in files}}
           (pkg/'E_INTRINSIC_SNAPSHOT_V1_CODE_FREEZE.json').write_text(json.dumps(freeze,indent=2,sort_keys=True)+'\n')
           qa=json.loads((pkg/'E_INTRINSIC_SNAPSHOT_V1_QA.json').read_text())
-          static={'status':'E_INTRINSIC_SNAPSHOT_V1_STATIC_AND_REAL_QA_PASS' if qa['status']=='E_INTRINSIC_SNAPSHOT_V1_REAL_QA_PASS' else 'E_INTRINSIC_SNAPSHOT_V1_QA_FAIL','git_commit':os.environ['FREEZE_SHA'],'future_price_outcomes_used':False,'synthetic_tests':'PASS','deterministic_repeat_cmp':'PASS','real_qa_status':qa['status'],'authorization':'READY_FOR_PRO_PRE_OUTCOME_GATE' if qa['status']=='E_INTRINSIC_SNAPSHOT_V1_REAL_QA_PASS' else 'BLOCK_OUTCOME_OPENING'}
+          static={'status':'E_INTRINSIC_SNAPSHOT_V1_STATIC_AND_REAL_QA_PASS' if qa['status']=='E_INTRINSIC_SNAPSHOT_V1_REAL_QA_PASS' else 'E_INTRINSIC_SNAPSHOT_V1_QA_FAIL','git_commit':os.environ['FREEZE_SHA'],'future_price_outcomes_used':False,'source_provenance':'RESOLVED_PAYLOAD_HASH_MATCH','synthetic_tests':'PASS','deterministic_repeat_cmp':'PASS','real_qa_status':qa['status'],'authorization':'READY_FOR_PRO_PRE_OUTCOME_GATE' if qa['status']=='E_INTRINSIC_SNAPSHOT_V1_REAL_QA_PASS' else 'BLOCK_OUTCOME_OPENING'}
           (pkg/'E_INTRINSIC_SNAPSHOT_V1_STATIC_QA.json').write_text(json.dumps(static,indent=2,sort_keys=True)+'\n')
           if static['authorization']!='READY_FOR_PRO_PRE_OUTCOME_GATE': raise SystemExit(3)
           PY
