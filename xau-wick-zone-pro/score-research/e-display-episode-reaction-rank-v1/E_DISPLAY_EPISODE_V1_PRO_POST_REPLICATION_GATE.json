@@ -1,0 +1,168 @@
+{
+  "status": "PRO_POST_REPLICATION_SCIENTIFIC_GATE_PASS",
+  "decision": "GO_PROSPECTIVE_CONFIRMATION_PLANNING",
+  "gate_date": "2026-08-29",
+  "gate_type": "PRO_POST_REPLICATION_SCIENTIFIC_GATE",
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "authorization_scope": "PLANNING_AND_FREEZE_ONLY_NO_PROSPECTIVE_OUTCOME_EXECUTION",
+  "scientific_interpretation": {
+    "DEV_role": "model-development evidence only",
+    "historical_replication_role": "strict frozen-model out-of-sample supporting evidence",
+    "decision_basis": "The immutable historical replication passed every support condition frozen before its outcomes were opened, retained most of the DEV discrimination and top-versus-bottom separation, and reproduced monotone fixed-DEV quartiles without refit.",
+    "reaction_rank_supported_for_prospective_confirmation": true,
+    "score_validated_for_production": false,
+    "trading_profitability_validated": false,
+    "calibrated_probability_claim": false,
+    "universal_E_strength_claim": false
+  },
+  "canonical_authorities": {
+    "DEV": {
+      "seal_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/DEV_CANONICAL_SEAL.json",
+      "immutable_directory": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/dev-freeze-canonical-33264659057",
+      "workflow_run_id": 33264659057,
+      "artifact_id": 9718487805,
+      "artifact_digest": "sha256:481ad65013241f4dfcdb4f2378f4168476bb92695519de00166149c4a5ac6c0e",
+      "frozen_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1"
+    },
+    "HISTORICAL_REPLICATION": {
+      "seal_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/REPLICATION_CANONICAL_SEAL.json",
+      "immutable_directory": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/replication-freeze-canonical-33266656414",
+      "workflow_run_id": 33266656414,
+      "artifact_id": 9719184524,
+      "artifact_digest": "sha256:734bd0e14f9017dc23822175aa21bc341cfa5b27b5058dc5e028eb5fb5997688",
+      "execution_commit": "2aa4abf4839558b42f5c999bf9e16127ece5b655",
+      "materialization_commit": "685efd0dc89e6e71ab542c268f75f76cf8699f76",
+      "immutable_copy_commit": "78af3d80af1a536babef17e05049bc320234c88a"
+    }
+  },
+  "independent_Pro_integrity_checks": {
+    "replication_workflow_completed_successfully": true,
+    "downloaded_replication_artifact_digest_verified": true,
+    "replication_evidence_hashes_verified": "10/10",
+    "canonical_replication_copy_present": true,
+    "replication_report_reproduced_exactly": true,
+    "frozen_DEV_model_loaded_without_refit": true,
+    "frozen_DEV_model_sha256_unchanged_before_after": true,
+    "partial_sessions_retained_under_frozen_rule": true,
+    "post_replication_tuning_detected": false
+  },
+  "combined_evidence": {
+    "DEV": {
+      "primary_contacts": 16461,
+      "sessions": 257,
+      "overall_success_rate": 0.48867019014640667,
+      "auc": 0.5756928360690787,
+      "auc_minus_0_5": 0.07569283606907873,
+      "auc_minus_0_5_ci95_session_cluster": [0.06617732897303763, 0.08517572540579761],
+      "quartile_success_rates": {
+        "Q1": 0.4282385834109972,
+        "Q2": 0.4452906829144453,
+        "Q3": 0.4891859052247874,
+        "Q4": 0.5927095990279465
+      },
+      "q4_minus_q1": 0.16447101561694932,
+      "q4_minus_q1_ci95_session_cluster": [0.14153971131994397, 0.18741550235736845]
+    },
+    "HISTORICAL_REPLICATION": {
+      "display_episodes": 34007,
+      "primary_contacts": 17454,
+      "sessions": 257,
+      "overall_success_rate": 0.4955311103471983,
+      "auc": 0.5657692600871821,
+      "auc_minus_0_5": 0.06576926008718209,
+      "auc_minus_0_5_ci95_session_cluster": [0.0568889679606293, 0.0744911973596545],
+      "quartile_success_rates": {
+        "Q1": 0.4449622725255215,
+        "Q2": 0.45660191787558396,
+        "Q3": 0.4867630700778643,
+        "Q4": 0.5925672594619243
+      },
+      "q4_minus_q1": 0.14760498693640284,
+      "q4_minus_q1_ci95_session_cluster": [0.12573139125432922, 0.1692963776824019],
+      "q4_minus_q1_chronological_blocks": [0.1748121353925043, 0.14119328283607624, 0.13106018437298533],
+      "feature_exclusion_rate": 0.0,
+      "unseen_family_rate": 0.0,
+      "support_gate_pass": true
+    },
+    "transport": {
+      "auc_excess_retained_fraction": 0.8689033374563444,
+      "q4_minus_q1_retained_fraction": 0.897452881790265,
+      "q4_success_rate_replication_minus_DEV": -0.0001423395660221649,
+      "interpretation": "Moderate expected attenuation occurred out of sample, while the Q4 rate remained effectively unchanged and all fixed gates remained positive."
+    }
+  },
+  "mandatory_semantic_guard": {
+    "finding": "The frozen full score is dominated by zone_width_v.",
+    "post_replication_non_gating_diagnostics_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/POST_REPLICATION_PRO_INTERPRETIVE_DIAGNOSTICS.json",
+    "full_score_width_component_correlation_DEV": 0.9946496592310174,
+    "full_score_width_component_correlation_REPLICATION": 0.9945065552127659,
+    "width_only_auc_DEV": 0.5742615596398731,
+    "width_only_auc_REPLICATION": 0.5650434390270982,
+    "full_minus_width_auc_DEV": 0.0014312764292055968,
+    "full_minus_width_auc_REPLICATION": 0.0007258210600838977,
+    "interpretation": "The historical evidence supports prediction of the frozen reaction event, but does not establish that persistence or family add material information beyond zone width, nor that width represents intrinsic market-level strength. Because invalidation is defined below zlo while the favorable threshold is fixed above zhi, wider zones also receive more geometric room before invalidation. This is a claim limitation, not a license to alter the frozen candidate.",
+    "forbidden_claims": [
+      "intrinsic universal E strength",
+      "quality independent of zone width",
+      "incremental value of persistence and family",
+      "trading expectancy or profitability",
+      "calibrated probability"
+    ]
+  },
+  "planning_authorization": {
+    "authorized_token": "GO_PROSPECTIVE_CONFIRMATION_PLANNING",
+    "authorized_phase": "PROSPECTIVE_CONFIRMATION_PROTOCOL_AND_INFRASTRUCTURE_FREEZE_ONLY",
+    "allowed_operations": [
+      "draft and freeze a complete prospective-confirmation preregistration",
+      "implement prospective data-ingestion, append-only hashing, feature-ledger generation, blinding and checkpoint tooling",
+      "test prospective tooling only on synthetic fixtures and historical dry-runs whose outcomes are not used to alter the frozen candidate",
+      "freeze exact environment, code, data-source, missing-data and revision-handling rules",
+      "define the exact first eligible prospective session using the first complete NY session strictly after the final planning-package seal",
+      "freeze a single stopping/checkpoint rule and a no-interim-performance-peeking firewall",
+      "pre-register an interpretation-only deterministic zone_width_v comparator without refitting or changing the primary candidate"
+    ],
+    "forbidden_operations": [
+      "generate, read, score or summarize prospective reaction outcomes",
+      "use any session whose outcome was knowable before the final planning-package seal as prospective evidence",
+      "refit or alter the frozen DEV model",
+      "change features, coefficients, intercept, transforms, family vocabulary, rank mapping or fixed quartiles",
+      "change contact, arming, favorable, invalidation, ambiguity, horizon or session rules",
+      "change the primary prospective gates",
+      "use the width-only comparator to rescue a failed primary result or to select a new model",
+      "authorize production, trading use or Pine modification"
+    ]
+  },
+  "mandatory_prospective_plan_requirements": {
+    "population": "Same frozen top-3 displayed E episodes in the upper-Z4-conditioned XAUUSD M1 US BUY universe.",
+    "model": "Load the canonical frozen DEV model with no refit or recalibration.",
+    "primary_outcome": "Unchanged frozen 0.50*v0 favorable-before-invalidation reaction outcome with the same contact-bar and 30-available-bar rules.",
+    "start_rule": "The prospective window begins at the 08:00 America/New_York open of the first complete NY session strictly after the final prospective-planning package is sealed. No earlier August 2026 data may be backfilled as prospective evidence.",
+    "single_checkpoint_rule": "Open performance once, immediately after the first completed NY session for which both cumulative conditions are met: at least 90 eligible complete-session dates represented and at least 1000 primary contacts. No discretionary delay or extension based on unseen or partially seen performance.",
+    "interim_firewall": "Feature/contact counts and data-quality status may be monitored; labels, success rates, AUC, quartile outcomes and any performance proxy must remain inaccessible until the single checkpoint.",
+    "data_provenance": "Raw M1 inputs and outcome-free feature snapshots must be captured append-only with acquisition timestamps and SHA-256 manifests under a rule frozen before the first eligible session.",
+    "data_quality": "Missing/duplicate/revised M1 rules and any fail-closed data-quality threshold must be explicit before prospective collection begins.",
+    "primary_gate": [
+      "at least 1000 primary contacts",
+      "at least 90 eligible NY sessions",
+      "AUC minus 0.5 greater than 0 with session-cluster 95% CI lower bound greater than 0",
+      "fixed DEV quartile rates monotone Q1 <= Q2 <= Q3 <= Q4",
+      "fixed DEV Q4 minus Q1 greater than 0 with session-cluster 95% CI lower bound greater than 0",
+      "fixed DEV Q4 minus Q1 positive in all three contiguous complete-session blocks",
+      "feature exclusion rate <= 2%",
+      "unseen-family rate <= 5%",
+      "no frozen component changed"
+    ],
+    "interpretation_control": "Report the deterministic raw-zone-width comparator and paired full-versus-width discrimination as a separately labeled interpretive diagnostic. It cannot alter the primary gate. Absence of incremental full-model value limits the label to a width-dominated reaction rank.",
+    "post_checkpoint": "Regardless of result, stop for a new Pro scientific gate. A prospective pass still does not by itself validate trading profitability."
+  },
+  "next_checkpoint": {
+    "required_status_after_planning": "READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE",
+    "required_Pro_decision": [
+      "GO_PROSPECTIVE_CONFIRMATION_EXECUTION",
+      "NO_GO_PROSPECTIVE_CONFIRMATION_EXECUTION"
+    ],
+    "current_prospective_execution_authorization": "NOT_GRANTED",
+    "production_authorization": "NONE",
+    "pine_modification": "FORBIDDEN"
+  }
+}
