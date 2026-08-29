@@ -1,0 +1,81 @@
+{
+  "version": "E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; upper-Z4-conditioned local top-3 displayed E universe",
+  "future_price_outcomes_used": false,
+  "model_feature_whitelist": {
+    "zone_width_v": {
+      "type": "numeric",
+      "timing": "pre-contact snapshot",
+      "definition": "(zhi-zlo)/v_snapshot",
+      "transform": "DEV mean and population-SD standardization (ddof=0)"
+    },
+    "display_persistence_c5": {
+      "type": "numeric",
+      "timing": "pre-contact display episode",
+      "definition": "contiguous provenance-preserving displayed C5 snapshots, starting at 1",
+      "transform": "log1p then DEV mean and population-SD standardization (ddof=0)",
+      "nonclaim": "display persistence, not intrinsic physical zone age"
+    },
+    "current_family": {
+      "type": "categorical",
+      "timing": "pre-contact snapshot",
+      "transform": "DEV lexicographic vocabulary; first category reference; unseen later categories all-zero and reported"
+    }
+  },
+  "identity_or_qa_only": [
+    "display_episode_id",
+    "source_provenance_id",
+    "source_provenance_members",
+    "snapshot_time_utc",
+    "bar_open_time_utc",
+    "bar_close_time_utc",
+    "feature_available_time_utc",
+    "session_date_ny",
+    "display_slot_rank",
+    "center",
+    "zlo",
+    "zhi",
+    "v_snapshot",
+    "is_new_display_episode",
+    "prior_snapshot_time_utc",
+    "row_sha256"
+  ],
+  "explicitly_excluded_context": [
+    "close",
+    "distance_v",
+    "upper_z4_count",
+    "nearest_upper_z4_dist_v",
+    "display_slot_rank",
+    "Z4_CONTEXT"
+  ],
+  "forbidden_future_or_entry_features": [
+    "contact_*",
+    "trigger_*",
+    "rejection_*",
+    "exec_*",
+    "tp*",
+    "sl*",
+    "mfe*",
+    "mae*",
+    "W5",
+    "W15",
+    "W30",
+    "W60",
+    "success",
+    "reaction",
+    "outcome",
+    "P&L",
+    "return",
+    "R"
+  ],
+  "eligible_families": [
+    "ESM_BOTH_G120M",
+    "EPM_M1_R2_A8H",
+    "EWM_G60M",
+    "ES_M1_8H_R2_T0.50"
+  ],
+  "cross_family_episode_continuation": false,
+  "origin_family_model_feature": false,
+  "contact_information_rule": "feature_available_time_utc <= contact_bar_open_time_utc",
+  "real_outcome_authorization": "FORBIDDEN_PENDING_NEW_PRO_GATE"
+}
