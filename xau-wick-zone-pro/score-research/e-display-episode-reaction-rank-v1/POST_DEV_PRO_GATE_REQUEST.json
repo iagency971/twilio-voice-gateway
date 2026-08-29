@@ -1,0 +1,59 @@
+{
+  "status": "READY_FOR_PRO_POST_DEV_GATE",
+  "requested_gate": "PRO_POST_DEV_SCIENTIFIC_GATE",
+  "requested_decision": [
+    "GO_HISTORICAL_REPLICATION_DIAGNOSTIC",
+    "NO_GO_HISTORICAL_REPLICATION_DIAGNOSTIC"
+  ],
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "canonical_DEV_authority": {
+    "seal_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/DEV_CANONICAL_SEAL.json",
+    "immutable_directory": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/dev-freeze-canonical-33264659057",
+    "workflow_run_id": 33264659057,
+    "artifact_id": 9718487805,
+    "artifact_digest": "sha256:481ad65013241f4dfcdb4f2378f4168476bb92695519de00166149c4a5ac6c0e",
+    "execution_commit": "637ece27b49cc71d0ab972a6d015029ed60a3ddb",
+    "materialization_commit": "8e9bd3166d1e3bab987fb50fa48052b5101a920e",
+    "immutable_copy_commit": "d1e1a32a06a7ae3f6e039360122f042a0ced5f15"
+  },
+  "DEV_evidence_to_review": {
+    "primary_contacts": 16461,
+    "sessions": 257,
+    "primary_successes": 8044,
+    "primary_failures": 8417,
+    "auc_minus_0_5": 0.07569283606907873,
+    "auc_minus_0_5_ci95_session_cluster": [0.06617732897303763, 0.08517572540579761],
+    "quartile_success_rates": {
+      "Q1": 0.4282385834109972,
+      "Q2": 0.4452906829144453,
+      "Q3": 0.4891859052247874,
+      "Q4": 0.5927095990279465
+    },
+    "q4_minus_q1": 0.16447101561694932,
+    "q4_minus_q1_ci95_session_cluster": [0.14153971131994397, 0.18741550235736845],
+    "feature_exclusion_rate": 0.0,
+    "unseen_family_rate": 0.0,
+    "score_roundtrip_exact": true
+  },
+  "frozen_model_constraints": {
+    "features": ["zone_width_v", "display_persistence_c5", "current_family"],
+    "model": "LogisticRegression L2 C=1.0 lbfgs max_iter=5000 no class_weight",
+    "post_DEV_tuning": "FORBIDDEN",
+    "alternative_model_competition": "FORBIDDEN",
+    "DEV_model_must_remain_immutable_if_replication_is_opened": true
+  },
+  "replication_firewall": {
+    "historical_replication_outcomes_generated": false,
+    "historical_replication_outcomes_read": false,
+    "historical_replication_outcomes_scored": false,
+    "GO_HISTORICAL_REPLICATION_DIAGNOSTIC": "NOT_GRANTED",
+    "replication_workflow": "NOT_CREATED_OR_AUTHORIZED_FOR_EXECUTION"
+  },
+  "gate_instructions": [
+    "Review DEV evidence only from the canonical sealed directory and hashes.",
+    "Do not refit or change features, transformations, model, reaction definition, bootstrap, rank mapping or quartiles.",
+    "Decide whether the frozen DEV evidence is scientifically sufficient to justify opening the already-declared historical replication diagnostic.",
+    "Historical replication, if authorized, must load the frozen DEV model without refit and cannot authorize production.",
+    "Production and Pine modification remain forbidden regardless of this gate."
+  ]
+}
