@@ -274,8 +274,11 @@ def assign_episodes(candidates: pd.DataFrame) -> pd.DataFrame:
 
 
 def dataframe_csv_bytes(df: pd.DataFrame) -> bytes:
+    # 17 significant digits preserves round-trip IEEE-754 doubles. This is required
+    # for the independent prefix-invariance/no-repaint QA to compare the persisted
+    # ledger with a fresh historical-prefix reconstruction without serialization loss.
     buf = io.StringIO()
-    df.to_csv(buf, index=False, lineterminator="\n", float_format="%.10g")
+    df.to_csv(buf, index=False, lineterminator="\n", float_format="%.17g")
     return buf.getvalue().encode("utf-8")
 
 
@@ -318,6 +321,11 @@ def build_manifest(source_path: Path, output_path: Path, ledger: pd.DataFrame, e
             "one_to_one": True,
             "slot_rank_is_not_quality": True,
             "new_identity_after_noncontiguous_snapshot": True,
+        },
+        "serialization": {
+            "csv_float_format": "%.17g",
+            "gzip_mtime": 0,
+            "gzip_compresslevel": 9,
         },
         "model_feature_whitelist": list(MODEL_FEATURE_WHITELIST),
         "intrinsic_model_row_eligibility": "current_family != Z4 AND origin_family != Z4",
