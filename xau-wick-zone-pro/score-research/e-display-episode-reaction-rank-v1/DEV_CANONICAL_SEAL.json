@@ -1,0 +1,74 @@
+{
+  "status": "E_DISPLAY_EPISODE_V1_DEV_CANONICAL_SEAL_PASS",
+  "next_authorization": "READY_FOR_PRO_POST_DEV_GATE",
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; DEV_HISTORY only",
+  "canonical_execution": {
+    "strategy": "MONTHLY_SHARDED_EXACT_FROZEN_LABELER",
+    "workflow_run_id": 33264659057,
+    "execution_commit": "637ece27b49cc71d0ab972a6d015029ed60a3ddb",
+    "artifact_id": 9718487805,
+    "artifact_digest": "sha256:481ad65013241f4dfcdb4f2378f4168476bb92695519de00166149c4a5ac6c0e",
+    "materialization_commit": "8e9bd3166d1e3bab987fb50fa48052b5101a920e",
+    "immutable_copy_commit": "d1e1a32a06a7ae3f6e039360122f042a0ced5f15",
+    "immutable_copy_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/dev-freeze-canonical-33264659057"
+  },
+  "method_guards": {
+    "dev_ledger_sha256": "2cf40bfca54494f1609035307390f3e615348492bf8c853f0c79c63555d060e6",
+    "reaction_labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+    "model_eval_sha256": "f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e",
+    "authorized_token_used": "GO_DEV_OUTCOME_OPENING"
+  },
+  "dev_population": {
+    "display_episodes": 32745,
+    "primary_contacts": 16461,
+    "primary_sessions": 257,
+    "primary_binary_0": 8417,
+    "primary_binary_1": 8044,
+    "favorable_first": 8044,
+    "invalidation_first": 7870,
+    "ambiguous_same_bar": 516,
+    "neither": 31
+  },
+  "dev_model_evidence": {
+    "n": 16461,
+    "sessions": 257,
+    "auc_minus_0_5": 0.07569283606907873,
+    "auc_minus_0_5_ci95_session_cluster": [0.06617732897303763, 0.08517572540579761],
+    "q1_success_rate": 0.4282385834109972,
+    "q2_success_rate": 0.4452906829144453,
+    "q3_success_rate": 0.4891859052247874,
+    "q4_success_rate": 0.5927095990279465,
+    "q4_minus_q1": 0.16447101561694932,
+    "q4_minus_q1_ci95_session_cluster": [0.14153971131994397, 0.18741550235736845],
+    "feature_exclusion_rate": 0.0,
+    "unseen_family_rate": 0.0,
+    "logistic_n_iter": 10,
+    "score_roundtrip_exact": true
+  },
+  "replication_firewall": {
+    "historical_replication_outcomes_generated": false,
+    "historical_replication_outcomes_read": false,
+    "historical_replication_outcomes_scored": false,
+    "historical_replication_authorization": "NOT_GRANTED",
+    "replication_m1_files_downloaded_in_canonical_dev_run": 0,
+    "replication_ledger_loaded_in_canonical_dev_run": false
+  },
+  "canonical_evidence_sha256": {
+    "DEV_REACTION_LABELS.csv.gz": "3544534b22d2eafb6ea8bd025173066039077c30529579b335491537d93068ae",
+    "DEV_LABELER_MANIFEST.json": "089e11b331c26e57cc12e35d7965c5ed1d32c819b53ce46d7fc0ae2b1b8ed25a",
+    "DEV_LABELS_QA.json": "608dce38066161d1c80796c3e0359e7f34c4a9721851b47898f3bf55278ba9b6",
+    "DEV_FROZEN_MODEL.json": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
+    "DEV_MODEL_REPORT.json": "38071b3e02ea4dff56e76e167ad8644cedc4b42a02cf8aede4aa471e610a10fb",
+    "DEV_MODEL_QA.json": "f6e0b00e7e980fa4089a5aef5499e13a026418bc7c3b4f3c858c72aa0c9f3824",
+    "DEV_INPUT_MANIFEST.json": "893edbfe307f96c88a8b8311fc0f565a26cc7def7c921af0ee23006419faf12a",
+    "ENVIRONMENT_DEV.json": "c54b46043ee49c9b4945c42f0cdabc540f85df1938ae60bae95e9f46d91f5de6",
+    "PIP_FREEZE_DEV.txt": "317479fc3e6fff3d3c2ed69d32ab22de771dd60b16b0c249b9de183e3cae3cc0"
+  },
+  "non_authorizations": {
+    "historical_replication": "CLOSED_PENDING_PRO_POST_DEV_GATE",
+    "production": "NONE",
+    "pine_modification": "FORBIDDEN",
+    "post_DEV_tuning": "FORBIDDEN"
+  },
+  "note": "A slower monolithic DEV workflow was launched earlier but is non-canonical. This seal and immutable-copy directory remain the authority even if that older run later finishes."
+}
