@@ -13,8 +13,9 @@ import pandas as pd
 HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE))
 import prospective_planning_tool_v1 as core
-core.ENTRY=core.PKG.parents[1]/'entry-research'
-core.ENGINE=core.ENTRY/'geometry-shifted-grid-parity'/'xau_z4_c5_geometry_shifted_grid_equivalent.py'
+# Importing the canonical CLI entry applies only the frozen prospective schema
+# and warm-up adapters around the untouched historical source engines.
+import prospective_planning_entry_v1 as entry  # noqa: F401
 
 
 def ns(**kw):return argparse.Namespace(**kw)
@@ -37,6 +38,9 @@ def test_ingest_append_only(tmp:Path):
     root=tmp/'archive';m1=tmp/'m1.json'
     a=ns(files=[str(src)],session_date=session,acquired_at='2026-07-15T21:01:00Z',archive_root=str(root),manifest=str(m1),source_meta_json=str(meta),historical_dry_run=True)
     r1=core.ingest_session(a);assert r1['status']=='PROSPECTIVE_SESSION_FIRST_ACCEPTANCE_PASS'
+    assert r1['frozen_z4_lookback_active_m1']==1440
+    assert r1['frozen_warmup_c5_landmarks']==96
+    assert r1['eligible_pre_session_c5_landmarks']==96
     canonical=(root/'sessions'/f'{session}.csv.gz').read_bytes();warm=(root/'warmup'/f'{session}.csv.gz').read_bytes()
     r2=core.ingest_session(a);assert r2['status']=='PROSPECTIVE_SESSION_ALREADY_ACCEPTED_IDENTICAL';assert (root/'sessions'/f'{session}.csv.gz').read_bytes()==canonical
     d=pd.read_csv(src);idx=int(d[(pd.to_datetime(d.timestamp,unit='ms',utc=True)>=pd.Timestamp('2026-07-15T12:00:00Z'))].index[5]);d.loc[idx,'close']+=.5;d.to_csv(src,index=False)
@@ -86,7 +90,7 @@ def test_engine_guard():
 def main():
     with tempfile.TemporaryDirectory(prefix='pros_tests_') as td:
         tmp=Path(td);test_ingest_append_only(tmp/'ingest');test_contact_only_arm_bar_cannot_contact();test_firewall(tmp/'fw');test_single_checkpoint_lock(tmp/'status');test_engine_guard()
-    out={'status':'PROSPECTIVE_PLANNING_SYNTHETIC_TESTS_PASS','tests':['append_only_first_acceptance_revision_hash_chain','arming_bar_cannot_contact','anti_peeking_firewall','single_checkpoint_first_qualifying_session_lock','frozen_Z4_engine_guard']}
+    out={'status':'PROSPECTIVE_PLANNING_SYNTHETIC_TESTS_PASS','tests':['append_only_first_acceptance_revision_hash_chain','frozen_1440_active_plus_96_C5_warmup_contract','arming_bar_cannot_contact','anti_peeking_firewall','single_checkpoint_first_qualifying_session_lock','frozen_Z4_engine_guard']}
     print(json.dumps(out,indent=2,sort_keys=True));return out
 
 if __name__=='__main__':main()
