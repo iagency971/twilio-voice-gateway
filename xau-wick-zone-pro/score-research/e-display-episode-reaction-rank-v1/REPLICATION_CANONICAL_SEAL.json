@@ -1,0 +1,101 @@
+{
+  "status": "E_DISPLAY_EPISODE_V1_REPLICATION_CANONICAL_SEAL_PASS",
+  "next_authorization": "READY_FOR_PRO_POST_REPLICATION_GATE",
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; HISTORICAL_REPLICATION_DIAGNOSTIC only",
+  "canonical_execution": {
+    "strategy": "MONTHLY_SHARDED_EXACT_FROZEN_LABELER",
+    "workflow_run_id": 33266656414,
+    "execution_commit": "2aa4abf4839558b42f5c999bf9e16127ece5b655",
+    "artifact_id": 9719184524,
+    "artifact_digest": "sha256:734bd0e14f9017dc23822175aa21bc341cfa5b27b5058dc5e028eb5fb5997688",
+    "materialization_commit": "685efd0dc89e6e71ab542c268f75f76cf8699f76",
+    "immutable_copy_commit": "78af3d80af1a536babef17e05049bc320234c88a",
+    "immutable_copy_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/replication-freeze-canonical-33266656414"
+  },
+  "integrity_verification": {
+    "downloaded_artifact_digest_verified": true,
+    "artifact_digest_observed": "sha256:734bd0e14f9017dc23822175aa21bc341cfa5b27b5058dc5e028eb5fb5997688",
+    "artifact_files": 11,
+    "evidence_file_hashes_verified_against_freeze_manifest": "10/10",
+    "replication_report_reproduced_exactly": true,
+    "frozen_dev_model_loaded_without_refit": true,
+    "frozen_dev_model_sha256_before_after_unchanged": true
+  },
+  "method_guards": {
+    "replication_ledger_sha256": "a3baa2f48b9d397ebcdd3e0be936e5947e49caa4ca77dec531f726c321f586a6",
+    "frozen_dev_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
+    "reaction_labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+    "model_eval_sha256": "f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e",
+    "authorized_token_used": "GO_HISTORICAL_REPLICATION_DIAGNOSTIC",
+    "model_refit": false
+  },
+  "replication_population": {
+    "display_episodes": 34007,
+    "primary_contacts": 17454,
+    "primary_sessions": 257,
+    "primary_binary_0": 8805,
+    "primary_binary_1": 8649,
+    "overall_primary_success_rate": 0.4955311103471983,
+    "favorable_first": 8649,
+    "invalidation_first": 8227,
+    "ambiguous_same_bar": 541,
+    "neither": 37
+  },
+  "replication_model_evidence": {
+    "n": 17454,
+    "sessions": 257,
+    "auc": 0.5657692600871821,
+    "auc_minus_0_5": 0.06576926008718209,
+    "auc_minus_0_5_ci95_session_cluster": [0.0568889679606293, 0.0744911973596545],
+    "q1_success_rate": 0.4449622725255215,
+    "q2_success_rate": 0.45660191787558396,
+    "q3_success_rate": 0.4867630700778643,
+    "q4_success_rate": 0.5925672594619243,
+    "q4_minus_q1": 0.14760498693640284,
+    "q4_minus_q1_ci95_session_cluster": [0.12573139125432922, 0.1692963776824019],
+    "chronological_block_q4_minus_q1": [0.1748121353925043, 0.14119328283607624, 0.13106018437298533],
+    "feature_exclusion_rate": 0.0,
+    "unseen_family_rate": 0.0,
+    "replication_support_gate_pass": true
+  },
+  "replication_support_gate_checks": {
+    "threshold_episodes_ge_1000": true,
+    "threshold_sessions_ge_90": true,
+    "auc_positive": true,
+    "auc_ci_lower_gt_0": true,
+    "quartiles_all_nonempty": true,
+    "quartiles_monotone": true,
+    "q4_q1_positive": true,
+    "q4_q1_ci_lower_gt_0": true,
+    "q4_q1_positive_all_3_blocks": true,
+    "feature_exclusion_le_2pct": true,
+    "unseen_family_le_5pct": true,
+    "all_checks_required_and_passed": true
+  },
+  "m1_availability": {
+    "sessions": 258,
+    "complete_data_sessions": 256,
+    "partial_sessions_retained": ["2026-06-19", "2026-07-03"],
+    "missing_m1": 482,
+    "missing_rule": "skipped as unavailable bars; partial sessions retained"
+  },
+  "canonical_evidence_sha256": {
+    "REPLICATION_REACTION_LABELS.csv.gz": "f04decd3c4d2bcc4912995e79ab0d44ce5e2d8d1135e848b4783f4e5a96f1f74",
+    "REPLICATION_LABELER_MANIFEST.json": "467e32ca1300942677662fb1ff29f3cc204d307ce0afb3186920cefaf88ff16a",
+    "REPLICATION_LABELS_QA.json": "238c1eec73c44231bdb995643a3912242217d3e64bd5807eeea769197cd69db1",
+    "REPLICATION_MODEL_REPORT.json": "300d1c1349569a036283f11f05274fa3a4bb768c53701c1a31364de4393c01aa",
+    "REPLICATION_MODEL_QA.json": "0cfe777555c7f9c08b547e7d21d925365594d5b020f04ee8045c6c6c888bcfba",
+    "REPLICATION_INPUT_MANIFEST.json": "f175e6ac4b2ffa4742b2b9c322e19cd3e4c30908340a9840fdd67daf0194d5b6",
+    "REPLICATION_M1_AVAILABILITY_QA.json": "41fc6c853a8fcfe79220eba05530392a00aafa7567dacfbda1616ed659db49ee",
+    "REPLICATION_SUPPORT_GATE.json": "e4f90efe40b0669f8a5b33150c4df142964319c94645bea40c3a95ce9147ba7f",
+    "ENVIRONMENT_REPLICATION.json": "c54b46043ee49c9b4945c42f0cdabc540f85df1938ae60bae95e9f46d91f5de6",
+    "PIP_FREEZE_REPLICATION.txt": "317479fc3e6fff3d3c2ed69d32ab22de771dd60b16b0c249b9de183e3cae3cc0"
+  },
+  "non_authorizations": {
+    "production": "NONE",
+    "pine_modification": "FORBIDDEN",
+    "model_refit": "FORBIDDEN",
+    "post_replication_tuning": "FORBIDDEN",
+    "prospective_execution": "CLOSED_PENDING_PRO_POST_REPLICATION_GATE"
+  }
+}
