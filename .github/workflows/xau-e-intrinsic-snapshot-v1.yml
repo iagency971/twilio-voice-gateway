@@ -28,6 +28,15 @@ jobs:
         working-directory: xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1
         run: python test_xau_e_intrinsic_snapshot_v1.py | tee E_INTRINSIC_SNAPSHOT_V1_SYNTHETIC_TESTS.json
 
+      - name: Outcome-blind source provenance hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          PKG='xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1'
+          SRC='xau-wick-zone-pro/entry-research/ebuy-coverage-v0-4/XAUUSD_Z4_EBUY_STICKY_CANDIDATES_v0_4.csv.gz'
+          LEGACY='dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920'
+          python "$PKG/xau_e_intrinsic_source_provenance_v1.py" --source "$SRC" --legacy-expected-sha256 "$LEGACY" --output "$PKG/E_INTRINSIC_SNAPSHOT_V1_SOURCE_PROVENANCE.json"
+
       - name: Build ledger twice from frozen v0.4 source
         shell: bash
         run: |
@@ -64,8 +73,8 @@ jobs:
             pkg/'XAUUSD_E_INTRINSIC_REACTION_PREREG_v1_0_2026-08-29.md',
             pkg/'XAUUSD_E_INTRINSIC_MODEL_AND_VALIDATION_GATE_PREREG_v1_0_2026-08-29.md',
             pkg/'xau_e_intrinsic_snapshot_v1.py',pkg/'xau_e_intrinsic_snapshot_qa_v1.py',
-            pkg/'test_xau_e_intrinsic_snapshot_v1.py',pkg/'E_INTRINSIC_SNAPSHOT_V1_SCHEMA.json',
-            pkg/'E_INTRINSIC_SNAPSHOT_V1_FEATURE_REGISTRY.json',
+            pkg/'xau_e_intrinsic_source_provenance_v1.py',pkg/'test_xau_e_intrinsic_snapshot_v1.py',pkg/'E_INTRINSIC_SNAPSHOT_V1_SCHEMA.json',
+            pkg/'E_INTRINSIC_SNAPSHOT_V1_FEATURE_REGISTRY.json',pkg/'E_INTRINSIC_SNAPSHOT_V1_SOURCE_PROVENANCE.json',
             Path('xau-wick-zone-pro/entry-research/ebuy-coverage-v0-4/XAUUSD_Z4_EBUY_STICKY_CANDIDATES_v0_4.csv.gz'),
             pkg/'E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz',pkg/'E_INTRINSIC_SNAPSHOT_V1_QA.json'
           ]
@@ -91,6 +100,7 @@ jobs:
             xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_STATIC_QA.json
             xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_CODE_FREEZE.json
             xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_SYNTHETIC_TESTS.json
+            xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_SOURCE_PROVENANCE.json
 
       - name: Commit frozen real-ledger QA results to branch
         shell: bash
@@ -105,6 +115,7 @@ jobs:
             "$PKG/E_INTRINSIC_SNAPSHOT_V1_QA.json" \
             "$PKG/E_INTRINSIC_SNAPSHOT_V1_STATIC_QA.json" \
             "$PKG/E_INTRINSIC_SNAPSHOT_V1_CODE_FREEZE.json" \
-            "$PKG/E_INTRINSIC_SNAPSHOT_V1_SYNTHETIC_TESTS.json"
+            "$PKG/E_INTRINSIC_SNAPSHOT_V1_SYNTHETIC_TESTS.json" \
+            "$PKG/E_INTRINSIC_SNAPSHOT_V1_SOURCE_PROVENANCE.json"
           git commit -m 'freeze real outcome-blind E intrinsic V1 ledger and QA'
           git push origin HEAD:agent/xau-wick-zone-pro-dev
