@@ -1,0 +1,48 @@
+{
+  "version": "E_INTRINSIC_SNAPSHOT_V1",
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York",
+  "outcome_blind": true,
+  "model_feature_whitelist": {
+    "zone_width_v": {
+      "type": "numeric",
+      "timing": "snapshot",
+      "intrinsic": true,
+      "transform_for_model": "standardize on DEV only"
+    },
+    "episode_age_c5": {
+      "type": "numeric",
+      "timing": "snapshot",
+      "intrinsic": true,
+      "transform_for_model": "log1p then standardize on DEV only"
+    },
+    "current_family": {
+      "type": "categorical",
+      "timing": "snapshot",
+      "intrinsic": "descriptive provenance",
+      "transform_for_model": "one-hot categories frozen from DEV"
+    },
+    "origin_family": {
+      "type": "categorical",
+      "timing": "episode birth",
+      "intrinsic": "descriptive provenance",
+      "transform_for_model": "one-hot categories frozen from DEV"
+    }
+  },
+  "qa_or_identity_only": [
+    "episode_id","episode_seq","snapshot_time_utc","session_date_ny","display_slot_rank",
+    "center","zlo","zhi","v_snapshot","is_new_episode","prior_snapshot_time_utc",
+    "prior_display_slot_rank","family_changed","center_shift_v","zlo_shift_v","zhi_shift_v","row_sha256"
+  ],
+  "explicitly_excluded_context": [
+    "close","distance_v","upper_z4_count","nearest_upper_z4_dist_v","slot_rank"
+  ],
+  "forbidden_future_or_entry_features": [
+    "contact_*","trigger_*","BULL_REJECTION","exec_*","tp*","sl*","mfe*","mae*",
+    "W5","W15","W30","W60","success","reaction","outcome","P&L","R"
+  ],
+  "note": "V1 intentionally does not fabricate density/count/freshness features that are not preserved in the frozen v0.4 sticky candidate ledger. Such provenance may only enter a later version after a separate outcome-blind generator instrumentation preregistration.",
+  "intrinsic_model_row_eligibility": {
+    "rule": "current_family != 'Z4' AND origin_family != 'Z4'",
+    "reason": "Z4 is structural context and must not enter the intrinsic E model."
+  }
+}
