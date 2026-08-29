@@ -1,0 +1,22 @@
+{
+  "future_price_outcomes_used": false,
+  "git_commit": "111045c8e04af81d0d42ee5c6b113490a1dbc58b",
+  "sha256": {
+    "xau-wick-zone-pro/entry-research/ebuy-coverage-v0-4/XAUUSD_Z4_EBUY_STICKY_CANDIDATES_v0_4.csv.gz": "1a6fc6451b80d7b57a7ce37d005586b59ccf94235d11fc32486a6b9dca7f4a3c",
+    "xau-wick-zone-pro/score-research/XAUUSD_E_SCORE_OUTCOME_BLIND_METHOD_AUDIT_US_BUY_2026-08-28.md": "55972f6280e731225a924ec02e2bc016e9b9f7005bc637dac824e87afb22d167",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_FEATURE_REGISTRY.json": "09824065d950987a92c759af8c9b1c25163e410888390fe006d628efbb7cc9b6",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz": "3be6b594c515efc2ca2df6aaa1a8ff63525cbd91ef5b9cfae9956c515ac3d740",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_QA.json": "5124b94e2dc14d840ffb437adc5a8130f00450003a9fa6307d1ef99ff6b5c382",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_SCHEMA.json": "01deea29390bd9771616ff0da15d537ad0cc0b0a6b8cc6c65d1b260c10979a23",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_SOURCE_PROVENANCE.json": "802a27a8ce20ba81d0ab76c2b8d9befcbb82c013035eaca7f1c9b66cf4ca0b5b",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/XAUUSD_E_INTRINSIC_MODEL_AND_VALIDATION_GATE_PREREG_v1_0_2026-08-29.md": "334b32f37c290c6594b045814c3d20d35b5172fa962f590a7fed40b63d7ffc9a",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/XAUUSD_E_INTRINSIC_REACTION_PREREG_v1_0_2026-08-29.md": "7f9ed0961ffa50df512c6ef55e2a5de12e951d3181fbb5c41468972b78b9ac17",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/XAUUSD_E_INTRINSIC_SNAPSHOT_PREREG_v1_0_2026-08-29.md": "aa4ed6c3a1a84c570a3948efafa74f57cb0900ab6d2f147f595750bb38dda416",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/XAUUSD_E_V04_SOURCE_PROVENANCE_RESOLUTION_2026-08-29.md": "90cc0f520e964116feffba1682ac84e5bd2b2370bbfbc8e118360534d7071928",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/test_xau_e_intrinsic_snapshot_v1.py": "daddf716b020d301b34f60868dcdcff8b95f339302213f207c66ac939390db5b",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/xau_e_intrinsic_snapshot_qa_v1.py": "959515225d770003ca9ff5be534c201040f429251a490670871389d49a46e7e0",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/xau_e_intrinsic_snapshot_v1.py": "b374975d138137629a6d754fad5c50a1c00f8c4f9baa2215c22d72554e55823b",
+    "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/xau_e_intrinsic_source_provenance_v1.py": "20debc92203cbea68ecb72a796516542c03d0a7cf3eeb4a0ee4d6b4676de97b6"
+  },
+  "status": "E_INTRINSIC_SNAPSHOT_V1_METHOD_CODE_GATES_AND_REAL_LEDGER_FROZEN"
+}

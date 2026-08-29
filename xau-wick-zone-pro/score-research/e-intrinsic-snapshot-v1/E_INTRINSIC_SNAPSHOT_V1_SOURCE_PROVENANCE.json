@@ -1,0 +1,22 @@
+{
+  "csv_data_row_count": 27636,
+  "csv_header": "time,close,v60,upper_z4_count,nearest_upper_z4_dist_v,entry_rank,family,center,zlo,zhi,distance_v",
+  "decompressed_size_bytes": 4028000,
+  "future_price_outcomes_used": false,
+  "legacy_hash_match_modes": [
+    "decompressed_payload_sha256",
+    "normalized_lf_payload_sha256",
+    "normalized_lf_single_final_newline_sha256"
+  ],
+  "legacy_manifest_expected_sha256": "dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920",
+  "note": "This tool hashes source representations only. It does not inspect any future reaction or trading outcome.",
+  "sha256_variants": {
+    "compressed_gzip_binary_sha256": "1a6fc6451b80d7b57a7ce37d005586b59ccf94235d11fc32486a6b9dca7f4a3c",
+    "decompressed_payload_sha256": "dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920",
+    "normalized_lf_payload_sha256": "dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920",
+    "normalized_lf_single_final_newline_sha256": "dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920"
+  },
+  "source_path": "xau-wick-zone-pro/entry-research/ebuy-coverage-v0-4/XAUUSD_Z4_EBUY_STICKY_CANDIDATES_v0_4.csv.gz",
+  "source_size_bytes": 950353,
+  "status": "E_V04_SOURCE_PROVENANCE_LEGACY_HASH_RESOLVED"
+}

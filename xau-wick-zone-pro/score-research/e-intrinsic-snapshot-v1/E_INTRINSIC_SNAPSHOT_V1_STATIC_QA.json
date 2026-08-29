@@ -1,0 +1,10 @@
+{
+  "authorization": "READY_FOR_PRO_PRE_OUTCOME_GATE",
+  "deterministic_repeat_cmp": "PASS",
+  "future_price_outcomes_used": false,
+  "git_commit": "111045c8e04af81d0d42ee5c6b113490a1dbc58b",
+  "real_qa_status": "E_INTRINSIC_SNAPSHOT_V1_REAL_QA_PASS",
+  "source_provenance": "RESOLVED_PAYLOAD_HASH_MATCH",
+  "status": "E_INTRINSIC_SNAPSHOT_V1_STATIC_AND_REAL_QA_PASS",
+  "synthetic_tests": "PASS"
+}

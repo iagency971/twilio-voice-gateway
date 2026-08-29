@@ -1,0 +1,55 @@
+{
+  "explicitly_excluded_from_intrinsic_model": [
+    "display_slot_rank",
+    "upper_z4_count",
+    "nearest_upper_z4_dist_v",
+    "distance_v",
+    "center",
+    "zlo",
+    "zhi",
+    "v_snapshot",
+    "is_new_episode",
+    "family_changed",
+    "center_shift_v",
+    "zlo_shift_v",
+    "zhi_shift_v"
+  ],
+  "future_price_outcomes_used": false,
+  "identity_rule": {
+    "contiguous_snapshot_minutes": 5,
+    "match": "overlap OR abs(center_old-center_new) <= 0.25*max(v_old,v_new)",
+    "new_identity_after_noncontiguous_snapshot": true,
+    "one_to_one": true,
+    "slot_rank_is_not_quality": true
+  },
+  "intrinsic_model_row_eligibility": "current_family != Z4 AND origin_family != Z4",
+  "ledger": {
+    "episodes": 15835,
+    "first_snapshot_utc": "2024-01-03T13:00:00+00:00",
+    "last_snapshot_utc": "2024-07-31T20:55:00+00:00",
+    "path": "xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz",
+    "rows": 27636,
+    "sha256": "3be6b594c515efc2ca2df6aaa1a8ff63525cbd91ef5b9cfae9956c515ac3d740",
+    "snapshots": 12561
+  },
+  "model_feature_whitelist": [
+    "zone_width_v",
+    "episode_age_c5",
+    "current_family",
+    "origin_family"
+  ],
+  "scope": "XAUUSD_M1_BUY_US_0800_1700_AMERICA_NEW_YORK",
+  "serialization": {
+    "csv_float_format": "%.17g",
+    "gzip_compresslevel": 9,
+    "gzip_mtime": 0
+  },
+  "source": {
+    "compressed_binary_sha256": "1a6fc6451b80d7b57a7ce37d005586b59ccf94235d11fc32486a6b9dca7f4a3c",
+    "decompressed_payload_sha256": "dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920",
+    "expected_decompressed_payload_sha256": "dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920",
+    "legacy_v04_manifest_hash_representation": "decompressed CSV payload",
+    "path": "xau-wick-zone-pro/entry-research/ebuy-coverage-v0-4/XAUUSD_Z4_EBUY_STICKY_CANDIDATES_v0_4.csv.gz"
+  },
+  "status": "E_INTRINSIC_SNAPSHOT_V1_LEDGER_BUILT_OUTCOME_BLIND"
+}
