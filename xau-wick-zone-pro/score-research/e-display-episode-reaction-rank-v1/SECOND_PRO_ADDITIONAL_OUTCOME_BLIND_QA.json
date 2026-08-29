@@ -1,0 +1,99 @@
+{
+  "artifact_digest": "sha256:03b663d36993c34dc49c0fcecf6a6515e47198eaead63ab1c1aeca9521fe76d2",
+  "artifact_id": 9717328401,
+  "canonical_run_id": 33259414496,
+  "dev_episode_identity_and_features_exact_except_sub_tolerance_float_serialization": true,
+  "dev_feature_float_qa": {
+    "center": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "v_snapshot": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "zhi": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "zlo": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "zone_width_v": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    }
+  },
+  "dev_feature_rows_compared": 41210,
+  "dev_prefix_cutoff_utc": "2025-08-01T00:00:00+00:00",
+  "dev_provenance_float_qa": {
+    "center": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "close": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "distance_v": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "nearest_upper_z4_dist_v": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "v60": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "zhi": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    },
+    "zlo": {
+      "max_abs_diff": 0.0,
+      "mismatch_gt_tolerance": 0
+    }
+  },
+  "dev_provenance_floats_within_frozen_tolerance": true,
+  "dev_provenance_identity_and_structure_exact": true,
+  "dev_provenance_rows_compared": 43511,
+  "future_price_outcomes_used": false,
+  "m1_availability": {
+    "all": {
+      "expected_m1": 278100,
+      "max_missing_in_session": 241,
+      "missing_m1": 482,
+      "missing_rate": 0.0017331895001797915,
+      "sessions": 515,
+      "sessions_with_missing": 2
+    },
+    "dev": {
+      "expected_m1": 138780,
+      "max_missing_in_session": 0,
+      "missing_m1": 0,
+      "missing_rate": 0.0,
+      "sessions": 257,
+      "sessions_with_missing": 0
+    },
+    "replication": {
+      "expected_m1": 139320,
+      "max_missing_in_session": 241,
+      "missing_m1": 482,
+      "missing_rate": 0.0034596612115991962,
+      "sessions": 258,
+      "sessions_with_missing": 2
+    }
+  },
+  "missing_minutes_rule": "missing M1 opens are skipped as unavailable bars; counts are reported here before outcomes",
+  "numeric_comparison_atol": 1e-12,
+  "prefix_row_hashes_equal_count": 41210,
+  "prefix_row_hashes_total": 41210,
+  "real_outcome_generation": "FORBIDDEN",
+  "real_outcome_reading": "FORBIDDEN",
+  "source_artifact_json_sha256": "5077b0eac5221b253ef489fd89e252101f4a2d275f63d87d888d6aecf8a922e9",
+  "status": "SECOND_PRO_ADDITIONAL_OUTCOME_BLIND_QA_PASS",
+  "workflow_run_id": 33261123749
+}
