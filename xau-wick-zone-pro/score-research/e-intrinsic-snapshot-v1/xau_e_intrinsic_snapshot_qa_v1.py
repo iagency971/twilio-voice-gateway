@@ -2,9 +2,7 @@
 from __future__ import annotations
 
 import argparse
-import gzip
 import hashlib
-import io
 import json
 from pathlib import Path
 
@@ -20,7 +18,7 @@ def parse_args():
     p.add_argument('--ledger', required=True)
     p.add_argument('--manifest', required=True)
     p.add_argument('--output', required=True)
-    p.add_argument('--expected-source-sha256', default=None)
+    p.add_argument('--expected-source-payload-sha256', default=None)
     return p.parse_args()
 
 
@@ -42,7 +40,6 @@ def read_ledger(path: Path) -> pd.DataFrame:
 
 
 def independent_reconstruct(candidates: pd.DataFrame) -> pd.DataFrame:
-    # Deliberately separate implementation of the frozen identity rule.
     rows=[]; prev=[]; prev_t=None; nxt=1
     for t,g in candidates.groupby('time',sort=True):
         t=pd.Timestamp(t); g=g.sort_values(['entry_rank','center','family'],kind='mergesort')
@@ -91,11 +88,16 @@ def prefix_invariance(candidates: pd.DataFrame, ledger: pd.DataFrame) -> bool:
 
 def main():
     a=parse_args(); cand_path=Path(a.candidates); led_path=Path(a.ledger); man_path=Path(a.manifest)
+    hashes=core.source_hashes(cand_path)
+    binary_sha=hashes['compressed_binary_sha256']; payload_sha=hashes['decompressed_payload_sha256']
+    if a.expected_source_payload_sha256 and payload_sha != a.expected_source_payload_sha256:
+        raise AssertionError(f'source payload SHA mismatch before QA: got {payload_sha}, expected {a.expected_source_payload_sha256}')
+
     cand=core.read_candidates(cand_path); led=read_ledger(led_path); man=json.loads(man_path.read_text())
     checks={}
-    source_sha=sha256_file(cand_path)
-    checks['source_sha_matches_expected']= (a.expected_source_sha256 is None or source_sha==a.expected_source_sha256)
-    checks['manifest_source_sha_matches']= man['source']['sha256']==source_sha
+    checks['source_payload_sha_matches_expected']= (a.expected_source_payload_sha256 is None or payload_sha==a.expected_source_payload_sha256)
+    checks['manifest_source_payload_sha_matches']= man['source']['decompressed_payload_sha256']==payload_sha
+    checks['manifest_source_binary_sha_matches']= man['source']['compressed_binary_sha256']==binary_sha
     checks['manifest_ledger_sha_matches']= man['ledger']['sha256']==sha256_file(led_path)
     checks['row_count_matches']= len(led)==len(cand)
     checks['max_three_per_snapshot']= int(led.groupby('snapshot_time_utc').size().max())<=3
@@ -125,7 +127,6 @@ def main():
     checks['independent_identity_parity']=left.reset_index(drop=True).equals(right.reset_index(drop=True))
     checks['prefix_invariance_no_repaint']=prefix_invariance(cand,led)
 
-    # Deterministic row hashes independently recomputed.
     hashes_ok=True
     for _,r in led.iterrows():
         rec={k:r[k] for k in core.OUTPUT_COLUMNS if k!='row_sha256'}
@@ -142,7 +143,8 @@ def main():
       'future_price_outcomes_used':False,
       'checks':checks,
       'counts':{'rows':int(len(led)),'episodes':int(led.episode_id.nunique()),'snapshots':int(led.snapshot_time_utc.nunique()),'sessions_ny':int(led.session_date_ny.nunique())},
-      'source_sha256':source_sha,
+      'source_compressed_binary_sha256':binary_sha,
+      'source_decompressed_payload_sha256':payload_sha,
       'ledger_sha256':sha256_file(led_path),
       'authorization': 'READY_FOR_PRO_PRE_OUTCOME_GATE' if passed else 'BLOCK_OUTCOME_OPENING'
     }
