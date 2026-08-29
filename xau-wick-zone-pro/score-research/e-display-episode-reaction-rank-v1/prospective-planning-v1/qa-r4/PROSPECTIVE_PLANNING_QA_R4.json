@@ -14,7 +14,7 @@
     "z4_rows": 459
   },
   "job_name": "planning-qa-r4",
-  "method_commit": "860d218266f832c93078064dc89d4de50fc5d3ff",
+  "method_commit": "786342cfb69aaceff17cbcfb6284bb8c4d611d0d",
   "method_hashes": {
     "PROSPECTIVE_CONFIRMATION_POLICY_v1.json": "6f3d4682ae12bbb31d9d927335492a95f105d7c68d8876d37e0e9d1c97752120",
     "XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_CONFIRMATION_PREREG_v1_0_2026-08-29.md": "647c36558f070c9105bae7a324e0daeb9a28ed22d3dcccf663f2de9c3b2e478f",
@@ -62,5 +62,5 @@
   "single_checkpoint": true,
   "status": "PROSPECTIVE_PLANNING_QA_R4_PASS",
   "workflow_run_attempt": "1",
-  "workflow_run_id": "33275008731"
+  "workflow_run_id": "33275153603"
 }
