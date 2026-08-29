@@ -1,0 +1,226 @@
+name: XAU E display episode V1 prospective planning QA R3
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-e-prospective-planning-v1-r3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  PKG: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1
+  PLAN: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1
+  SOURCE_MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  DRY_SESSION: '2026-07-15'
+  EXPECTED_MODEL_SHA256: 72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1
+  EXPECTED_LABELER_SHA256: 08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8
+  EXPECTED_MODEL_EVAL_SHA256: f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e
+
+jobs:
+  planning-qa-r3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify planning authorization and frozen historical authorities
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          pkg=Path(os.environ['PKG']); plan=Path(os.environ['PLAN'])
+          gate=json.loads((pkg/'E_DISPLAY_EPISODE_V1_PRO_POST_REPLICATION_GATE.json').read_text())
+          assert gate['status']=='PRO_POST_REPLICATION_SCIENTIFIC_GATE_PASS'
+          assert gate['decision']=='GO_PROSPECTIVE_CONFIRMATION_PLANNING'
+          assert gate['authorization_scope']=='PLANNING_AND_FREEZE_ONLY_NO_PROSPECTIVE_OUTCOME_EXECUTION'
+          assert gate['next_checkpoint']['current_prospective_execution_authorization']=='NOT_GRANTED'
+          h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          assert h(pkg/'dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json')==os.environ['EXPECTED_MODEL_SHA256']
+          assert h(pkg/'xau_e_display_episode_reaction_labeler_v1.py')==os.environ['EXPECTED_LABELER_SHA256']
+          assert h(pkg/'xau_e_display_episode_model_eval_v1.py')==os.environ['EXPECTED_MODEL_EVAL_SHA256']
+          required=[
+            'XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_CONFIRMATION_PREREG_v1_0_2026-08-29.md',
+            'PROSPECTIVE_CONFIRMATION_POLICY_v1.json',
+            'XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_A_WARMUP_AND_NUMERICAL_TOLERANCE_2026-08-29.md',
+            'XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_B_OPERATIONAL_ATOMICITY_AND_ZERO_CONTACT_SESSIONS_2026-08-29.md',
+            'prospective_planning_tool_v1.py','prospective_planning_entry_v1.py',
+            'prospective_checkpoint_evaluator_v1.py','test_prospective_planning_v1.py',
+            'prospective_collection_workflow_TEMPLATE_v1.yml'
+          ]
+          for f in required: assert (plan/f).is_file(),f
+          assert not (pkg/'prospective-live-v1').exists()
+          print('PLANNING_AUTHORIZATION_FROZEN_AUTHORITIES_AND_NO_LIVE_STORE_PASS')
+          PY
+
+      - name: Install frozen environment and run expanded synthetic fail-closed tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
+          mkdir -p /tmp/results /tmp/raw /tmp/ref /tmp/dry
+          python -m pip freeze | sort > /tmp/results/PIP_FREEZE_PROSPECTIVE_PLANNING.txt
+          python - <<'PY' > /tmp/results/ENVIRONMENT_PROSPECTIVE_PLANNING.json
+          import json,platform,numpy,pandas,scipy,sklearn
+          out={'python':platform.python_version(),'numpy':numpy.__version__,'pandas':pandas.__version__,'scipy':scipy.__version__,'scikit_learn':sklearn.__version__}
+          assert out=={'python':'3.11.16','numpy':'2.3.2','pandas':'2.3.1','scipy':'1.16.1','scikit_learn':'1.7.1'},out
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+          python -m py_compile "$PLAN/prospective_planning_tool_v1.py" "$PLAN/prospective_planning_entry_v1.py" "$PLAN/prospective_checkpoint_evaluator_v1.py" "$PLAN/test_prospective_planning_v1.py"
+          python "$PLAN/test_prospective_planning_v1.py" | tee /tmp/results/SYNTHETIC_PROSPECTIVE_PLANNING_TESTS.json
+          if python "$PLAN/prospective_checkpoint_evaluator_v1.py" --raw-files /tmp/no.csv --ledger-files /tmp/no.csv --checkpoint-lock /tmp/no.json --output-labels /tmp/no.gz --output-report /tmp/no-report.json --output-manifest /tmp/no-manifest.json 2>/tmp/blocked.txt; then exit 1; fi
+          grep -q 'PROSPECTIVE_OUTCOME_OPENING_BLOCKED' /tmp/blocked.txt
+          python - <<'PY'
+          import importlib.util,json,sys
+          from pathlib import Path
+          import pandas as pd
+          p=Path('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/prospective_checkpoint_evaluator_v1.py')
+          s=importlib.util.spec_from_file_location('ev',p);m=importlib.util.module_from_spec(s);sys.modules['ev']=m;s.loader.exec_module(m)
+          dates=pd.bdate_range('2026-08-31',periods=90).date.astype(str).tolist()
+          cp={'session_date_ny':dates[-1],'represented_sessions':90,'represented_session_dates':dates,'model_eligible_primary_contacts':1080}
+          assert m.validate_checkpoint(cp)==dates
+          Path('/tmp/results/FUTURE_OUTCOME_OPENING_GUARD_QA.json').write_text(json.dumps({'status':'FUTURE_OUTCOME_OPENING_GUARD_PASS','prospective_outcome_execution_authorized':False,'unauthorized_evaluator_blocked':True,'checkpoint_session_list_validation':True},indent=2,sort_keys=True)+'\n')
+          PY
+
+      - name: Download hash-verified historical dry-run inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          m=json.load(open(os.environ['SOURCE_MANIFEST'])); ix={f"{int(x['year']):04d}-{int(x['month']):02d}":x for x in m['files'] if x['side']=='bid'}
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          meta=[]
+          for key in ['2026-06','2026-07']:
+              x=ix[key]; p=Path('/tmp/raw')/x['file']; subprocess.run(['curl','--fail','--location','--retry','5',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              got=hashlib.sha256(p.read_bytes()).hexdigest(); assert got==x['sha256']; meta.append({'month':key,'file':x['file'],'sha256':got,'historical_manifest':True})
+          Path('/tmp/dry/source_meta.json').write_text(json.dumps({'historical_dry_run':True,'files':meta},indent=2,sort_keys=True)+'\n')
+          print('HISTORICAL_DRYRUN_SOURCE_HASH_PASS')
+          PY
+
+      - name: First-seen archive and exact Z4 dry-run parity
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TOOL="$PLAN/prospective_planning_entry_v1.py"
+          python "$TOOL" ingest-session --files /tmp/raw/*.csv --session-date "$DRY_SESSION" --acquired-at 2026-07-15T21:01:00Z --archive-root /tmp/dry/archive --manifest /tmp/results/HISTORICAL_DRYRUN_INGEST_QA.json --source-meta-json /tmp/dry/source_meta.json --historical-dry-run
+          python "$TOOL" z4-session --files "/tmp/dry/archive/warmup/$DRY_SESSION.csv.gz" --session-date "$DRY_SESSION" --output /tmp/dry/z4_session.pkl --manifest /tmp/results/HISTORICAL_DRYRUN_Z4_QA.json
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/iagency971/twilio-voice-gateway/actions/artifacts/9673431120/zip -o /tmp/ref/july.zip
+          echo '7f3d02ddfcff0c00882de7c24d6823d6b652dd915c2886ba0b1d44313aaee6e6  /tmp/ref/july.zip' | sha256sum -c -
+          unzip -q /tmp/ref/july.zip -d /tmp/ref/july
+          python - <<'PY'
+          import pandas as pd
+          d=pd.read_pickle('/tmp/ref/july/z4_2026_07.pkl'); d['time']=pd.to_datetime(d.time,utc=True); ny=d.time.dt.tz_convert('America/New_York'); q=d[(ny.dt.date.astype(str)=='2026-07-15')&(ny.dt.hour>=8)&(ny.dt.hour<17)].copy(); q.to_pickle('/tmp/ref/z4_session.pkl')
+          PY
+          python "$TOOL" z4-parity --a /tmp/dry/z4_session.pkl --b /tmp/ref/z4_session.pkl --output /tmp/results/HISTORICAL_DRYRUN_Z4_EXACT_PARITY.json
+
+      - name: Prove Z4 prefix invariance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import pandas as pd
+          warm=pd.read_csv('/tmp/dry/archive/warmup/2026-07-15.csv.gz'); jul=pd.read_csv('/tmp/raw/xauusd_bid_m1_2026_07.csv'); jul['time']=pd.to_datetime(jul.timestamp,unit='ms',utc=True); future=jul[(jul.time>=pd.Timestamp('2026-07-15T21:00:00Z'))&(jul.time<pd.Timestamp('2026-07-17T00:00:00Z'))].drop(columns=['time']); pd.concat([warm,future],ignore_index=True).to_csv('/tmp/dry/warmup_plus_future.csv',index=False)
+          PY
+          python "$PLAN/prospective_planning_entry_v1.py" z4-session --files /tmp/dry/warmup_plus_future.csv --session-date "$DRY_SESSION" --output /tmp/dry/z4_with_future.pkl --manifest /tmp/dry/z4_with_future.json
+          python "$PLAN/prospective_planning_entry_v1.py" z4-parity --a /tmp/dry/z4_session.pkl --b /tmp/dry/z4_with_future.pkl --output /tmp/results/HISTORICAL_DRYRUN_Z4_PREFIX_INVARIANCE.json
+
+      - name: Prove prospective feature and contact-only parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/dry/features
+          TOOL="$PLAN/prospective_planning_entry_v1.py"
+          python "$TOOL" feature-session --files "/tmp/dry/archive/warmup/$DRY_SESSION.csv.gz" --z4-pkl /tmp/dry/z4_session.pkl --session-date "$DRY_SESSION" --candidates-output /tmp/dry/features/candidates.csv.gz --ledger-output /tmp/dry/features/ledger.csv.gz --manifest /tmp/results/HISTORICAL_DRYRUN_FEATURE_QA.json
+          python "$TOOL" feature-parity --got /tmp/dry/features/ledger.csv.gz --canonical "$PKG/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz" --session-date "$DRY_SESSION" --output /tmp/results/HISTORICAL_DRYRUN_FEATURE_PARITY.json
+          python - <<'PY'
+          import pandas as pd
+          src=pd.read_csv('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz',compression='gzip',float_precision='round_trip'); t=pd.to_datetime(src.snapshot_time_utc,utc=True); ny=t.dt.tz_convert('America/New_York'); q=src[ny.dt.date.astype(str)=='2026-07-15'].copy(); q.to_csv('/tmp/dry/canonical_ledger_session.csv.gz',index=False,compression={'method':'gzip','mtime':0},float_format='%.17g')
+          PY
+          python "$TOOL" contact-only --files /tmp/raw/xauusd_bid_m1_2026_07.csv --ledger /tmp/dry/canonical_ledger_session.csv.gz --session-date "$DRY_SESSION" --output /tmp/dry/contact_only.csv.gz --manifest /tmp/results/HISTORICAL_DRYRUN_CONTACT_ONLY_QA.json
+          python "$TOOL" contact-parity --got /tmp/dry/contact_only.csv.gz --frozen-labels "$PKG/replication-freeze-canonical-33266656414/REPLICATION_REACTION_LABELS.csv.gz" --session-date "$DRY_SESSION" --output /tmp/results/HISTORICAL_DRYRUN_CONTACT_ONLY_PARITY.json
+
+      - name: Freeze width control and audit collector operational invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PLAN/prospective_planning_entry_v1.py" width-historical-dryrun --labels "$PKG/replication-freeze-canonical-33266656414/REPLICATION_REACTION_LABELS.csv.gz" --output /tmp/results/HISTORICAL_WIDTH_CONTROL_DRYRUN.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.load(open('/tmp/results/HISTORICAL_WIDTH_CONTROL_DRYRUN.json')); ref=json.load(open('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/POST_REPLICATION_PRO_INTERPRETIVE_DIAGNOSTICS.json'))['REPLICATION']
+          dw=abs(d['width_only_auc']-ref['width_only_auc']); df=abs(d['full_auc']-ref['independent_recomputed_full_auc'])
+          assert df<1e-12,(df,d,ref); assert dw<=5e-7,(dw,d,ref)
+          assert d['gating'] is False and d['rescue_allowed'] is False
+          Path('/tmp/results/HISTORICAL_WIDTH_CONTROL_NUMERICAL_QA.json').write_text(json.dumps({'status':'WIDTH_CONTROL_HISTORICAL_NUMERICAL_QA_PASS','canonical_full_auc_tolerance':1e-12,'historical_cross_serialization_width_auc_tolerance':5e-7,'full_auc_delta':df,'width_auc_delta':dw,'prospective_gate_tolerance':False},indent=2,sort_keys=True)+'\n')
+          PY
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          t=Path('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/prospective_collection_workflow_TEMPLATE_v1.yml').read_text()
+          required=['concurrency:','cancel-in-progress: false','raw.githubusercontent.com/kevingtlin/Market-Data-Lab/{head}/','upstream_blob_sha','source_sha256','\'rows\':rows','append first-seen prospective M1 evidence','PROSPECTIVE_SOURCE_REVISION_RECORDED_CANONICAL_UNCHANGED','contacts/$S.json','planning_seal_sha256','collector_template_sha256']
+          for x in required: assert x in t,x
+          assert 'if test -s "$LIVE/archive/manifests/$S.json"; then continue' not in t
+          assert 'prospective_checkpoint_evaluator_v1.py" --' not in t
+          assert 'xau_e_display_episode_reaction_labeler_v1.py" --' not in t
+          assert t.index('append first-seen prospective M1 evidence') < t.index('z4-session --files')
+          Path('/tmp/results/COLLECTOR_STATIC_FIREWALL_QA.json').write_text(json.dumps({'status':'COLLECTOR_STATIC_FIREWALL_QA_PASS','single_concurrency':True,'exact_commit_source_binding':True,'source_blob_sha256_bytes_rows_recorded':True,'first_acceptance_persisted_before_downstream':True,'incomplete_session_resume':True,'revision_recheck':True,'reaction_labeler_invocation':False,'checkpoint_evaluator_invocation':False,'collector_outputs_outcome_blind_only':True},indent=2,sort_keys=True)+'\n')
+          PY
+
+      - name: Build R3 planning evidence manifest
+        shell: bash
+        env:
+          METHOD_COMMIT: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          import pandas as pd
+          r=Path('/tmp/results'); plan=Path(os.environ['PLAN']); pkg=Path(os.environ['PKG'])
+          assert pd.Timestamp.now(tz='UTC')<pd.Timestamp('2026-08-31T12:00:00Z')
+          required=['SYNTHETIC_PROSPECTIVE_PLANNING_TESTS.json','FUTURE_OUTCOME_OPENING_GUARD_QA.json','HISTORICAL_DRYRUN_INGEST_QA.json','HISTORICAL_DRYRUN_Z4_QA.json','HISTORICAL_DRYRUN_Z4_EXACT_PARITY.json','HISTORICAL_DRYRUN_Z4_PREFIX_INVARIANCE.json','HISTORICAL_DRYRUN_FEATURE_QA.json','HISTORICAL_DRYRUN_FEATURE_PARITY.json','HISTORICAL_DRYRUN_CONTACT_ONLY_QA.json','HISTORICAL_DRYRUN_CONTACT_ONLY_PARITY.json','HISTORICAL_WIDTH_CONTROL_DRYRUN.json','HISTORICAL_WIDTH_CONTROL_NUMERICAL_QA.json','COLLECTOR_STATIC_FIREWALL_QA.json']
+          for f in required: assert (r/f).is_file(),f
+          methods=['XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_CONFIRMATION_PREREG_v1_0_2026-08-29.md','PROSPECTIVE_CONFIRMATION_POLICY_v1.json','XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_A_WARMUP_AND_NUMERICAL_TOLERANCE_2026-08-29.md','XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_B_OPERATIONAL_ATOMICITY_AND_ZERO_CONTACT_SESSIONS_2026-08-29.md','prospective_planning_tool_v1.py','prospective_planning_entry_v1.py','prospective_checkpoint_evaluator_v1.py','test_prospective_planning_v1.py','prospective_collection_workflow_TEMPLATE_v1.yml']
+          h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          ingest=json.load(open(r/'HISTORICAL_DRYRUN_INGEST_QA.json')); z4=json.load(open(r/'HISTORICAL_DRYRUN_Z4_QA.json')); feat=json.load(open(r/'HISTORICAL_DRYRUN_FEATURE_QA.json')); contact=json.load(open(r/'HISTORICAL_DRYRUN_CONTACT_ONLY_QA.json'))
+          out={'status':'PROSPECTIVE_PLANNING_QA_R3_PASS','decision':'READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE','prospective_start_session_ny':'2026-08-31','prospective_start_utc':'2026-08-31T12:00:00Z','minimum_sessions':90,'minimum_model_eligible_primary_contacts':1000,'single_checkpoint':True,'prospective_outcomes_opened':False,'prospective_outcome_execution_authorized':False,'pine_production_modified':False,'method_commit':os.environ['METHOD_COMMIT'],'workflow_run_id':os.environ['RUN_ID'],'workflow_run_attempt':os.environ['RUN_ATTEMPT'],'job_name':'planning-qa-r3','frozen_dev_model_sha256':h(pkg/'dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json'),'frozen_reaction_labeler_sha256':h(pkg/'xau_e_display_episode_reaction_labeler_v1.py'),'frozen_model_eval_sha256':h(pkg/'xau_e_display_episode_model_eval_v1.py'),'method_hashes':{f:h(plan/f) for f in methods},'qa_evidence_hashes':{f:h(r/f) for f in required},'historical_dryrun_session_ny':'2026-07-15','historical_dryrun_session_rows':ingest['session_rows'],'historical_dryrun_warmup_rows':ingest['warmup_rows'],'historical_dryrun_z4_rows':z4['rows'],'historical_dryrun_feature_rows':feat['feature_rows'],'historical_dryrun_episodes':contact['episodes'],'historical_dryrun_primary_contacts':contact['primary_contacts'],'operational_hardening':{'atomic_exact_commit_source':True,'immediate_first_acceptance_persistence':True,'resume_after_downstream_failure':True,'revision_monitoring':True,'single_concurrency':True,'valid_zero_contact_sessions_represented':True,'checkpoint_session_list_locked':True,'final_contact_counter_parity_required':True}}
+          (r/'PROSPECTIVE_PLANNING_QA_R3.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-e-prospective-planning-v1-r3
+          path: /tmp/results
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Materialize R3 QA evidence on branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$PLAN/qa-r3"
+          rm -rf "$OUT"; mkdir -p "$OUT"; cp /tmp/results/* "$OUT/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$OUT"
+          git commit -m 'record hardened E V1 prospective planning QA R3 evidence'
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
