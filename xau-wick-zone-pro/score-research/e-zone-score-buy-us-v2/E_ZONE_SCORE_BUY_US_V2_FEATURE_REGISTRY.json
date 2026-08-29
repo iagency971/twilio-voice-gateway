@@ -1,0 +1,112 @@
+{
+  "status": "E_ZONE_SCORE_BUY_US_V2_FEATURE_REGISTRY_FROZEN",
+  "frozen_at_utc": "2026-08-29T23:00:00Z",
+  "scope": {
+    "instrument": "XAUUSD Dukascopy BID M1",
+    "direction": "BUY_ONLY",
+    "session": "08:00-17:00 America/New_York",
+    "display_universe": "upper-Z4-conditioned local v0.4 sticky display",
+    "display_slots": [1, 2, 3],
+    "zone_families": [
+      "ESM_BOTH_G120M",
+      "EPM_M1_R2_A8H",
+      "EWM_G60M",
+      "ES_M1_8H_R2_T0.50"
+    ],
+    "excluded_from_E_population": ["Z4"],
+    "slot_semantics": "E1/E2/E3 are original v0.4 display slots. A displayed Z4 row is excluded from the E score population and the remaining E rows are not renumbered. Slot is location/order, never a quality label."
+  },
+  "strength_features_allowed_in_displayed_score": {
+    "native_evidence_family_percentile": {
+      "type": "numeric",
+      "definition": "DEV-frozen empirical midrank percentile, within current_family, of native_evidence_raw",
+      "native_evidence_raw_by_family": {
+        "EWM_G60M": "native_rank_raw * (1 + distance_v) = wick prominence / sqrt(background + 1)",
+        "ES_M1_8H_R2_T0.50": "native_rank_raw * (1 + distance_v) = causal pivot count in the source cluster",
+        "EPM_M1_R2_A8H": "native_rank_raw * (1 + distance_v) = 1 / (1 + causal source age hours / 8)",
+        "ESM_BOTH_G120M": "1.0 for every observation; DEV within-family percentile fixed to 0.5"
+      },
+      "distance_factor_removed": true,
+      "future_information_allowed": false
+    },
+    "log1p_display_persistence_c5": {
+      "type": "numeric",
+      "definition": "log1p(display_persistence_c5) from the causal display episode identity",
+      "future_information_allowed": false
+    },
+    "confluence_count_e_families": {
+      "type": "integer",
+      "range": [1, 4],
+      "definition": "Number of distinct causal E families in the pre-dedup full candidate pool overlapping the displayed E interval or within 0.20*v by center at the same snapshot; Z4 excluded",
+      "future_information_allowed": false
+    },
+    "center_stability_3_c5": {
+      "type": "numeric",
+      "range": [0.0, 1.0],
+      "definition": "exp(-median normalized absolute center drift) over up to the three prior contiguous snapshots of the same display episode; 0.0 when no prior snapshot exists",
+      "normalization": "abs(center_t - center_prior) / v_snapshot_t",
+      "future_information_allowed": false
+    },
+    "current_family": {
+      "type": "categorical",
+      "categories": [
+        "EPM_M1_R2_A8H",
+        "ESM_BOTH_G120M",
+        "ES_M1_8H_R2_T0.50",
+        "EWM_G60M"
+      ],
+      "reference_category": "EPM_M1_R2_A8H",
+      "future_information_allowed": false
+    }
+  },
+  "nuisance_features_required_but_forbidden_from_displayed_score": {
+    "log1p_zone_width_v": "log1p((zhi-zlo)/v_snapshot)",
+    "log1p_zone_width_v_squared": "square of log1p_zone_width_v",
+    "distance_v": "(snapshot_close-center)/v_snapshot",
+    "distance_v_squared": "distance_v squared",
+    "display_slot_rank": "categorical E1/E2/E3",
+    "log_v_snapshot": "log(v_snapshot)",
+    "minute_bin_30m": "categorical 30-minute bin inside the 08:00-17:00 NY session",
+    "upper_z4_count_bucket": "categorical 1, 2, or 3+",
+    "nearest_upper_z4_dist_v": "causal distance to nearest upper Z4",
+    "trend15_v": "15-active-M1 close change divided by v_snapshot",
+    "trend60_v": "60-active-M1 close change divided by v_snapshot",
+    "trend240_v": "240-active-M1 close change divided by v_snapshot",
+    "weekday_ny": "categorical NY weekday"
+  },
+  "explicitly_forbidden_features": [
+    "future price or future zone state",
+    "reaction outcome",
+    "contact result",
+    "MFE or MAE",
+    "TP or SL result",
+    "post-contact bar",
+    "old V1 width-dominated score",
+    "Z4 outcome fields",
+    "manual chart annotation",
+    "post-outcome selected subgroup",
+    "display slot used as a positive quality contribution",
+    "zone width used in the displayed score contribution"
+  ],
+  "model_design": {
+    "nuisance_model": "L2 logistic regression using only the nuisance design",
+    "full_model": "L2 logistic regression using the identical nuisance design plus the frozen strength features",
+    "solver": "lbfgs",
+    "C": 1.0,
+    "max_iter": 5000,
+    "class_weight": null,
+    "numeric_standardization": "DEV mean and population SD ddof=0",
+    "categorical_encoding": "lexicographic one-hot with first category as reference",
+    "hyperparameter_search": "FORBIDDEN",
+    "displayed_raw_score": "Only the fitted linear-predictor contribution of the strength features and current_family; intercept and every nuisance coefficient excluded",
+    "displayed_score_0_100": "100 times the DEV-frozen empirical midrank CDF of displayed_raw_score",
+    "score_tiers_after_final_Pro_pass_only": {
+      "0-24": "FAIBLE",
+      "25-49": "MOYENNE",
+      "50-74": "FORTE",
+      "75-100": "TRES_FORTE"
+    },
+    "same_formula_for_E1_E2_E3": true,
+    "calibrated_probability_claim": false
+  }
+}
