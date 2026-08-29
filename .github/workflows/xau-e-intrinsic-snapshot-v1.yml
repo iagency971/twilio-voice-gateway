@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-real-outcome-blind-ledger:
@@ -91,3 +91,20 @@ jobs:
             xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_STATIC_QA.json
             xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_CODE_FREEZE.json
             xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1/E_INTRINSIC_SNAPSHOT_V1_SYNTHETIC_TESTS.json
+
+      - name: Commit frozen real-ledger QA results to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          PKG='xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz" \
+            "$PKG/E_INTRINSIC_SNAPSHOT_V1_MANIFEST.json" \
+            "$PKG/E_INTRINSIC_SNAPSHOT_V1_QA.json" \
+            "$PKG/E_INTRINSIC_SNAPSHOT_V1_STATIC_QA.json" \
+            "$PKG/E_INTRINSIC_SNAPSHOT_V1_CODE_FREEZE.json" \
+            "$PKG/E_INTRINSIC_SNAPSHOT_V1_SYNTHETIC_TESTS.json"
+          git commit -m 'freeze real outcome-blind E intrinsic V1 ledger and QA'
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
