@@ -2,6 +2,9 @@
   "status": "PROSPECTIVE_CONFIRMATION_POLICY_FROZEN_PLANNING_ONLY",
   "candidate": "E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
   "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; upper-Z4-conditioned local top-3 displayed E universe",
+  "planning_addenda": [
+    "XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_A_WARMUP_AND_NUMERICAL_TOLERANCE_2026-08-29.md"
+  ],
   "authorization": {
     "current_token": "GO_PROSPECTIVE_CONFIRMATION_PLANNING",
     "prospective_outcome_execution": "FORBIDDEN_PENDING_PRO_GATE",
@@ -32,7 +35,13 @@
   },
   "session_archive": {
     "canonical_session_slice": "08:00 <= M1 open < 17:00 America/New_York",
-    "warmup": "include raw rows back through at least 1440 previous active M1 bars plus target session",
+    "warmup": {
+      "z4_lookback_active_m1": 1440,
+      "pre_session_c5_landmarks_after_lookback": 96,
+      "rule": "latest causal active-M1 start that leaves exactly 96 eligible pre-session C5 landmarks after the frozen 1440-active-M1 lookback",
+      "selection_uses_only_pre_session_data": true,
+      "fail_closed_if_insufficient": true
+    },
     "hash_chain": true,
     "hash": "SHA-256",
     "exact_duplicates": "deduplicate and count",
@@ -113,7 +122,13 @@
     "at_final_checkpoint_report": ["width-only AUC", "full-model AUC", "full-minus-width AUC", "paired session-bootstrap difference descriptive"],
     "gating": false,
     "rescue_allowed": false,
-    "model_selection_allowed": false
+    "model_selection_allowed": false,
+    "historical_planning_qa_only": {
+      "canonical_full_auc_absolute_tolerance": 1e-12,
+      "cross_serialization_width_auc_absolute_tolerance": 5e-7,
+      "cross_serialization_full_minus_width_absolute_tolerance": 5e-7,
+      "rationale": "post-replication Pro diagnostic already documented <5e-7 recomputation drift from serialized artifact floats; these tolerances are not prospective pass thresholds"
+    }
   },
   "required_planning_QA": [
     "Z4 historical geometry parity",
@@ -121,6 +136,7 @@
     "prospective feature historical dry-run parity",
     "contact-only exact historical parity",
     "append-only/revision/hash-chain tests",
+    "frozen 1440-active-M1 plus 96 pre-session C5 warmup contract",
     "anti-peeking firewall tests",
     "single-checkpoint lock tests",
     "width comparator determinism",
