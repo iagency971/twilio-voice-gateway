@@ -1,0 +1,20 @@
+name: Dispatch repaired E V1 prospective planning QA
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-e-prospective-planning-trigger-v1.yml'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch canonical planning QA on latest branch head
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run xau-e-prospective-planning-v1-1.yml --repo iagency971/twilio-voice-gateway --ref agent/xau-wick-zone-pro-dev
