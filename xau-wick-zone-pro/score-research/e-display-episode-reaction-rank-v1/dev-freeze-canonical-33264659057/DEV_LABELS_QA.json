@@ -1,0 +1,26 @@
+{
+  "episodes_total": 32745,
+  "execution_strategy": "MONTHLY_SHARDED_EXACT_FROZEN_LABELER",
+  "feature_hash_linkage_all_pass": true,
+  "first_contact_utc": "2024-08-02T12:07:00+00:00",
+  "last_contact_utc": "2025-07-31T20:59:00+00:00",
+  "primary_binary_counts": {
+    "0": 8417,
+    "1": 8044
+  },
+  "primary_class_counts": {
+    "AMBIGUOUS_SAME_BAR": 516,
+    "FAVORABLE_FIRST": 8044,
+    "INVALIDATION_FIRST": 7870,
+    "NEITHER": 31
+  },
+  "primary_contacts": 16461,
+  "replication_outcomes_accessed": false,
+  "selection_status_counts": {
+    "NEVER_ARMED": 3317,
+    "NO_CONTACT_BEFORE_EPISODE_END": 12967,
+    "PRIMARY_CONTACT": 16461
+  },
+  "sessions_primary": 257,
+  "status": "DEV_LABELS_INDEPENDENT_QA_PASS"
+}
