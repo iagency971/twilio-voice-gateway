@@ -49,8 +49,12 @@ jobs:
           assert h(p/'dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json')==os.environ['EXPECTED_MODEL_SHA256']
           assert h(p/'xau_e_display_episode_reaction_labeler_v1.py')==os.environ['EXPECTED_LABELER_SHA256']
           assert h(p/'xau_e_display_episode_model_eval_v1.py')==os.environ['EXPECTED_MODEL_EVAL_SHA256']
-          for f in ['XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_CONFIRMATION_PREREG_v1_0_2026-08-29.md','PROSPECTIVE_CONFIRMATION_POLICY_v1.json','prospective_planning_tool_v1.py','prospective_planning_entry_v1.py','prospective_checkpoint_evaluator_v1.py','test_prospective_planning_v1.py','prospective_collection_workflow_TEMPLATE_v1.yml']:
-              assert (plan/f).is_file(),f
+          required=['XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_CONFIRMATION_PREREG_v1_0_2026-08-29.md','XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_A_WARMUP_AND_NUMERICAL_TOLERANCE_2026-08-29.md','PROSPECTIVE_CONFIRMATION_POLICY_v1.json','prospective_planning_tool_v1.py','prospective_planning_entry_v1.py','prospective_checkpoint_evaluator_v1.py','test_prospective_planning_v1.py','prospective_collection_workflow_TEMPLATE_v1.yml']
+          for f in required: assert (plan/f).is_file(),f
+          policy=json.loads((plan/'PROSPECTIVE_CONFIRMATION_POLICY_v1.json').read_text())
+          assert policy['session_archive']['warmup']['z4_lookback_active_m1']==1440
+          assert policy['session_archive']['warmup']['pre_session_c5_landmarks_after_lookback']==96
+          assert policy['width_interpretation_control']['historical_planning_qa_only']['cross_serialization_width_auc_absolute_tolerance']==5e-7
           assert not (p/'prospective-live-v1').exists()
           print('PLANNING_AUTHORIZATION_AND_FROZEN_OBJECTS_PASS')
           PY
@@ -137,34 +141,47 @@ jobs:
           python "$PLAN/prospective_planning_entry_v1.py" width-historical-dryrun --labels "$PKG/replication-freeze-canonical-33266656414/REPLICATION_REACTION_LABELS.csv.gz" --output /tmp/results/HISTORICAL_WIDTH_CONTROL_DRYRUN.json
           python - <<'PY'
           import json
+          from pathlib import Path
           d=json.load(open('/tmp/results/HISTORICAL_WIDTH_CONTROL_DRYRUN.json')); ref=json.load(open('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/POST_REPLICATION_PRO_INTERPRETIVE_DIAGNOSTICS.json'))['REPLICATION']
-          assert abs(d['width_only_auc']-ref['width_only_auc'])<1e-12
-          assert abs(d['full_auc']-ref['independent_recomputed_full_auc'])<1e-12
+          tol=5e-7
+          deltas={'full_auc_vs_canonical':abs(d['full_auc']-ref['canonical_full_auc']),'width_only_auc_cross_serialization':abs(d['width_only_auc']-ref['width_only_auc']),'full_minus_width_cross_serialization':abs(d['full_minus_width_auc']-ref['full_minus_width_auc_using_canonical_full'])}
+          assert deltas['full_auc_vs_canonical']<1e-12,deltas
+          assert deltas['width_only_auc_cross_serialization']<=tol,deltas
+          assert deltas['full_minus_width_cross_serialization']<=tol,deltas
           assert d['gating'] is False and d['rescue_allowed'] is False
-          print('WIDTH_CONTROL_HISTORICAL_PARITY_PASS')
+          Path('/tmp/results/HISTORICAL_WIDTH_CONTROL_NUMERICAL_QA.json').write_text(json.dumps({'status':'WIDTH_CONTROL_HISTORICAL_NUMERICAL_QA_PASS','absolute_tolerance_cross_serialization':tol,'canonical_full_auc_tolerance':1e-12,'deltas':deltas,'prospective_gate_tolerance':False},indent=2,sort_keys=True)+'\n')
+          print('WIDTH_CONTROL_HISTORICAL_PARITY_PASS',deltas)
           PY
       - name: Static anti-peeking audit and planning evidence manifest
         shell: bash
         env:
           METHOD_COMMIT: ${{ github.sha }}
           RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          JOB_NAME: planning-qa-r2
         run: |
           set -euo pipefail
           T="$PLAN/prospective_collection_workflow_TEMPLATE_v1.yml"
           ! grep -E 'python .*prospective_checkpoint_evaluator_v1.py|python .*xau_e_display_episode_reaction_labeler_v1.py' "$T"
+          grep -q 'prospective_planning_entry_v1.py' "$T"
           python - <<'PY'
           import hashlib,json,os
           from pathlib import Path
           import pandas as pd
           r=Path('/tmp/results'); p=Path(os.environ['PLAN']); pkg=Path(os.environ['PKG'])
-          Path('/tmp/results/COLLECTOR_STATIC_FIREWALL_QA.json').write_text(json.dumps({'status':'COLLECTOR_STATIC_FIREWALL_QA_PASS','reaction_labeler_invocation':False,'checkpoint_evaluator_invocation':False,'collector_outputs_outcome_blind_only':True},indent=2,sort_keys=True)+'\n')
+          Path('/tmp/results/COLLECTOR_STATIC_FIREWALL_QA.json').write_text(json.dumps({'status':'COLLECTOR_STATIC_FIREWALL_QA_PASS','reaction_labeler_invocation':False,'checkpoint_evaluator_invocation':False,'collector_outputs_outcome_blind_only':True,'uses_canonical_planning_entry_wrapper':True},indent=2,sort_keys=True)+'\n')
           now=pd.Timestamp.now(tz='UTC'); start=pd.Timestamp('2026-08-31T12:00:00Z'); assert now<start,(now,start)
-          required=['SYNTHETIC_PROSPECTIVE_PLANNING_TESTS.json','FUTURE_OUTCOME_OPENING_GUARD_QA.json','HISTORICAL_DRYRUN_INGEST_QA.json','HISTORICAL_DRYRUN_Z4_QA.json','HISTORICAL_DRYRUN_Z4_EXACT_PARITY.json','HISTORICAL_DRYRUN_Z4_PREFIX_INVARIANCE.json','HISTORICAL_DRYRUN_FEATURE_QA.json','HISTORICAL_DRYRUN_FEATURE_PARITY.json','HISTORICAL_DRYRUN_CONTACT_ONLY_QA.json','HISTORICAL_DRYRUN_CONTACT_ONLY_PARITY.json','HISTORICAL_WIDTH_CONTROL_DRYRUN.json','COLLECTOR_STATIC_FIREWALL_QA.json']
+          required=['SYNTHETIC_PROSPECTIVE_PLANNING_TESTS.json','FUTURE_OUTCOME_OPENING_GUARD_QA.json','HISTORICAL_DRYRUN_INGEST_QA.json','HISTORICAL_DRYRUN_Z4_QA.json','HISTORICAL_DRYRUN_Z4_EXACT_PARITY.json','HISTORICAL_DRYRUN_Z4_PREFIX_INVARIANCE.json','HISTORICAL_DRYRUN_FEATURE_QA.json','HISTORICAL_DRYRUN_FEATURE_PARITY.json','HISTORICAL_DRYRUN_CONTACT_ONLY_QA.json','HISTORICAL_DRYRUN_CONTACT_ONLY_PARITY.json','HISTORICAL_WIDTH_CONTROL_DRYRUN.json','HISTORICAL_WIDTH_CONTROL_NUMERICAL_QA.json','COLLECTOR_STATIC_FIREWALL_QA.json']
           for f in required: assert (r/f).is_file(),f
           h=lambda x: hashlib.sha256(Path(x).read_bytes()).hexdigest()
           evidence={f:h(r/f) for f in required}
-          methods={f:h(p/f) for f in ['XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_CONFIRMATION_PREREG_v1_0_2026-08-29.md','PROSPECTIVE_CONFIRMATION_POLICY_v1.json','prospective_planning_tool_v1.py','prospective_planning_entry_v1.py','prospective_checkpoint_evaluator_v1.py','test_prospective_planning_v1.py','prospective_collection_workflow_TEMPLATE_v1.yml']}
-          out={'status':'PROSPECTIVE_PLANNING_QA_PASS','decision':'READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE','prospective_start_session_ny':'2026-08-31','prospective_start_utc':'2026-08-31T12:00:00Z','minimum_sessions':90,'minimum_model_eligible_primary_contacts':1000,'single_checkpoint':True,'prospective_outcomes_opened':False,'prospective_outcome_execution_authorized':False,'pine_production_modified':False,'method_commit':os.environ['METHOD_COMMIT'],'workflow_run_id':os.environ['RUN_ID'],'frozen_dev_model_sha256':h(pkg/'dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json'),'method_hashes':methods,'qa_evidence_hashes':evidence}
+          method_names=['XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_CONFIRMATION_PREREG_v1_0_2026-08-29.md','XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_A_WARMUP_AND_NUMERICAL_TOLERANCE_2026-08-29.md','PROSPECTIVE_CONFIRMATION_POLICY_v1.json','prospective_planning_tool_v1.py','prospective_planning_entry_v1.py','prospective_checkpoint_evaluator_v1.py','test_prospective_planning_v1.py','prospective_collection_workflow_TEMPLATE_v1.yml']
+          methods={f:h(p/f) for f in method_names}
+          ingest=json.load(open(r/'HISTORICAL_DRYRUN_INGEST_QA.json')); feat=json.load(open(r/'HISTORICAL_DRYRUN_FEATURE_PARITY.json')); contact=json.load(open(r/'HISTORICAL_DRYRUN_CONTACT_ONLY_PARITY.json'))
+          assert ingest['eligible_pre_session_c5_landmarks']==96
+          assert feat['rows']==209
+          assert contact['episodes']==164 and contact['primary_contacts']==78
+          out={'status':'PROSPECTIVE_PLANNING_QA_PASS','decision':'READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE','prospective_start_session_ny':'2026-08-31','prospective_start_utc':'2026-08-31T12:00:00Z','minimum_sessions':90,'minimum_model_eligible_primary_contacts':1000,'single_checkpoint':True,'historical_dryrun_session_ny':'2026-07-15','historical_dryrun_feature_rows':209,'historical_dryrun_episodes':164,'historical_dryrun_primary_contacts':78,'prospective_outcomes_opened':False,'prospective_outcome_execution_authorized':False,'pine_production_modified':False,'method_commit':os.environ['METHOD_COMMIT'],'workflow_run_id':os.environ['RUN_ID'],'workflow_run_attempt':os.environ['RUN_ATTEMPT'],'job_name':os.environ['JOB_NAME'],'frozen_dev_model_sha256':h(pkg/'dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json'),'frozen_reaction_labeler_sha256':h(pkg/'xau_e_display_episode_reaction_labeler_v1.py'),'frozen_model_eval_sha256':h(pkg/'xau_e_display_episode_model_eval_v1.py'),'z4_engine_git_blob':'ac2448f448df2b873b482fd74c4eddf031790117','method_hashes':methods,'qa_evidence_hashes':evidence}
           (r/'PROSPECTIVE_PLANNING_QA.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
           print(json.dumps(out,indent=2,sort_keys=True))
           PY
