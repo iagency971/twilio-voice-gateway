@@ -1,0 +1,65 @@
+{
+  "environment": {
+    "numpy": "2.3.2",
+    "pandas": "2.3.1",
+    "python": "3.11.16",
+    "scikit_learn": "1.7.1",
+    "scipy": "1.16.1"
+  },
+  "frozen_dev_model_status": "LOADED_NO_REFIT",
+  "historical_replication_diagnostic": {
+    "auc_cluster_bootstrap": {
+      "ci95_percentile": [
+        0.0568889679606293,
+        0.0744911973596545
+      ],
+      "ci_available": true,
+      "invalid": 0,
+      "minimum_valid_required": 4750,
+      "requested": 5000,
+      "valid": 5000
+    },
+    "auc_minus_0_5": 0.06576926008718209,
+    "fixed_quartiles": {
+      "Q1": {
+        "n": 4506,
+        "success_rate": 0.4449622725255215
+      },
+      "Q2": {
+        "n": 4067,
+        "success_rate": 0.45660191787558396
+      },
+      "Q3": {
+        "n": 4495,
+        "success_rate": 0.4867630700778643
+      },
+      "Q4": {
+        "n": 4386,
+        "success_rate": 0.5925672594619243
+      }
+    },
+    "n": 17454,
+    "q4_minus_q1": 0.14760498693640284,
+    "q4_minus_q1_cluster_bootstrap": {
+      "ci95_percentile": [
+        0.12573139125432922,
+        0.1692963776824019
+      ],
+      "ci_available": true,
+      "invalid": 0,
+      "minimum_valid_required": 4750,
+      "requested": 5000,
+      "valid": 5000
+    },
+    "sessions": 257
+  },
+  "production_authorization": "NONE_HISTORICAL_REPLICATION_CANNOT_AUTHORIZE",
+  "replication_transform_qa": {
+    "feature_excluded_rows": 0,
+    "feature_exclusion_rate": 0.0,
+    "input_rows": 17454,
+    "unseen_family_rate": 0.0,
+    "unseen_family_rows": 0
+  },
+  "status": "E_DISPLAY_EPISODE_HISTORICAL_REPLICATION_DIAGNOSTIC_COMPLETE"
+}

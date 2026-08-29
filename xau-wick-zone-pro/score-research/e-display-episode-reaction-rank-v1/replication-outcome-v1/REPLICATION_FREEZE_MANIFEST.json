@@ -1,0 +1,47 @@
+{
+  "authorized_token_used": "GO_HISTORICAL_REPLICATION_DIAGNOSTIC",
+  "evidence_sha256": {
+    "ENVIRONMENT_REPLICATION.json": "c54b46043ee49c9b4945c42f0cdabc540f85df1938ae60bae95e9f46d91f5de6",
+    "PIP_FREEZE_REPLICATION.txt": "317479fc3e6fff3d3c2ed69d32ab22de771dd60b16b0c249b9de183e3cae3cc0",
+    "REPLICATION_INPUT_MANIFEST.json": "f175e6ac4b2ffa4742b2b9c322e19cd3e4c30908340a9840fdd67daf0194d5b6",
+    "REPLICATION_LABELER_MANIFEST.json": "467e32ca1300942677662fb1ff29f3cc204d307ce0afb3186920cefaf88ff16a",
+    "REPLICATION_LABELS_QA.json": "238c1eec73c44231bdb995643a3912242217d3e64bd5807eeea769197cd69db1",
+    "REPLICATION_M1_AVAILABILITY_QA.json": "41fc6c853a8fcfe79220eba05530392a00aafa7567dacfbda1616ed659db49ee",
+    "REPLICATION_MODEL_QA.json": "0cfe777555c7f9c08b547e7d21d925365594d5b020f04ee8045c6c6c888bcfba",
+    "REPLICATION_MODEL_REPORT.json": "300d1c1349569a036283f11f05274fa3a4bb768c53701c1a31364de4393c01aa",
+    "REPLICATION_REACTION_LABELS.csv.gz": "f04decd3c4d2bcc4912995e79ab0d44ce5e2d8d1135e848b4783f4e5a96f1f74",
+    "REPLICATION_SUPPORT_GATE.json": "e4f90efe40b0669f8a5b33150c4df142964319c94645bea40c3a95ce9147ba7f"
+  },
+  "execution_commit": "2aa4abf4839558b42f5c999bf9e16127ece5b655",
+  "execution_strategy": "MONTHLY_SHARDED_EXACT_FROZEN_LABELER",
+  "frozen_dev_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
+  "missing_m1": 482,
+  "model_eval_sha256": "f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e",
+  "model_refit": false,
+  "next_authorization": "READY_FOR_PRO_POST_REPLICATION_GATE",
+  "partial_sessions": [
+    {
+      "expected_m1": 540,
+      "first_missing_utc": "2026-06-19T16:59:00+00:00",
+      "last_missing_utc": "2026-06-19T20:59:00+00:00",
+      "missing_m1": 241,
+      "session_date_ny": "2026-06-19"
+    },
+    {
+      "expected_m1": 540,
+      "first_missing_utc": "2026-07-03T16:59:00+00:00",
+      "last_missing_utc": "2026-07-03T20:59:00+00:00",
+      "missing_m1": 241,
+      "session_date_ny": "2026-07-03"
+    }
+  ],
+  "pine_modification": "FORBIDDEN",
+  "primary_contacts": 17454,
+  "production_authorization": "NONE",
+  "reaction_labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+  "replication_ledger_sha256": "a3baa2f48b9d397ebcdd3e0be936e5947e49caa4ca77dec531f726c321f586a6",
+  "sessions_primary": 257,
+  "status": "E_DISPLAY_EPISODE_V1_REPLICATION_FREEZE_PASS",
+  "support_gate_pass": true,
+  "workflow_run_id": 33266656414
+}

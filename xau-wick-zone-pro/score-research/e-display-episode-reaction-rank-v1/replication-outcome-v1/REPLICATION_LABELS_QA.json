@@ -1,0 +1,29 @@
+{
+  "episodes_total": 34007,
+  "feature_hash_linkage_all_pass": true,
+  "first_contact_utc": "2025-08-01T12:08:00+00:00",
+  "last_contact_utc": "2026-07-31T20:53:00+00:00",
+  "model_refit": false,
+  "partial_sessions_retained": [
+    "2026-06-19",
+    "2026-07-03"
+  ],
+  "primary_binary_counts": {
+    "0": 8805,
+    "1": 8649
+  },
+  "primary_class_counts": {
+    "AMBIGUOUS_SAME_BAR": 541,
+    "FAVORABLE_FIRST": 8649,
+    "INVALIDATION_FIRST": 8227,
+    "NEITHER": 37
+  },
+  "primary_contacts": 17454,
+  "selection_status_counts": {
+    "NEVER_ARMED": 3572,
+    "NO_CONTACT_BEFORE_EPISODE_END": 12981,
+    "PRIMARY_CONTACT": 17454
+  },
+  "sessions_primary": 257,
+  "status": "REPLICATION_LABELS_INDEPENDENT_QA_PASS"
+}
