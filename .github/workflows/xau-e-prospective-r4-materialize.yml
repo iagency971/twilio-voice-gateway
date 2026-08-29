@@ -1,0 +1,66 @@
+name: Materialize E V1 prospective planning QA R4
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-e-prospective-r4-materialize.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 1
+
+      - name: Download and verify canonical R4 artifact
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            https://api.github.com/repos/iagency971/twilio-voice-gateway/actions/artifacts/9721233834/zip \
+            -o /tmp/r4.zip
+          echo 'cd74f973bf42b423b156daca6d9fa7fd8af0f18fdf177e3e8cf608aac8af5689  /tmp/r4.zip' | sha256sum -c -
+          rm -rf /tmp/r4
+          mkdir -p /tmp/r4
+          unzip -q /tmp/r4.zip -d /tmp/r4
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/r4/PROSPECTIVE_PLANNING_QA_R4.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='PROSPECTIVE_PLANNING_QA_R4_PASS',d
+          assert d['decision']=='READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE',d
+          assert d['method_commit']=='860d218266f832c93078064dc89d4de50fc5d3ff',d
+          assert d['prospective_outcomes_opened'] is False,d
+          assert d['prospective_outcome_execution_authorized'] is False,d
+          assert len(list(Path('/tmp/r4').glob('*')))==16
+          print('R4_ARTIFACT_VERIFIED')
+          PY
+
+      - name: Commit verified R4 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/qa-r4
+          rm -rf "$OUT"
+          mkdir -p "$OUT"
+          cp /tmp/r4/* "$OUT/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$OUT"
+          git commit -m 'materialize verified E V1 prospective planning QA R4 evidence'
+          git reset --hard HEAD
+          git clean -fd
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
