@@ -24,11 +24,6 @@ REQUIRED_INPUT = (
 CONTEXT_INPUT_ALLOWED_BUT_DROPPED = {
     "close", "upper_z4_count", "nearest_upper_z4_dist_v", "distance_v"
 }
-FORBIDDEN_PATTERNS = (
-    "mfe", "mae", "tp", "sl", "profit", "pnl", "expect", "payoff", "winrate",
-    "success", "reaction", "favorable_first", "adverse_first", "invalidation",
-    "w5", "w15", "w30", "w60", "future", "outcome", "return_", "r_multiple"
-)
 
 OUTPUT_COLUMNS = (
     "episode_id",
@@ -82,8 +77,13 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--candidates", required=True, help="Frozen v0.4 sticky candidate CSV/CSV.GZ")
     p.add_argument("--output", required=True, help="Deterministic CSV.GZ output")
     p.add_argument("--manifest", required=True, help="JSON manifest output")
-    p.add_argument("--expected-source-sha256", default=None)
+    p.add_argument("--expected-source-payload-sha256", default=None,
+                   help="Expected SHA-256 of the decompressed CSV payload; this is the representation used by the legacy v0.4 manifest")
     return p.parse_args()
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
 
 
 def sha256_file(path: Path) -> str:
@@ -94,13 +94,25 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def source_hashes(path: Path) -> dict[str, str]:
+    binary = path.read_bytes()
+    if path.suffix.lower() == ".gz":
+        payload = gzip.decompress(binary)
+    else:
+        payload = binary
+    return {
+        "compressed_binary_sha256": sha256_bytes(binary),
+        "decompressed_payload_sha256": sha256_bytes(payload),
+    }
+
+
 def _forbidden_input_columns(columns: Iterable[str]) -> list[str]:
     bad = []
     exact_tokens = {"mfe","mae","tp","tp1","tp2","sl","profit","pnl","expectancy","payoff","winrate","success","reaction","outcome","future","invalidation"}
     for c in columns:
         lc = str(c).lower()
         toks = [t for t in lc.replace("-","_").split("_") if t]
-        token_bad = any(t in exact_tokens or t.startswith("mfe") or t.startswith("mae") or t.startswith("tp") and t[2:].isdigit() for t in toks)
+        token_bad = any(t in exact_tokens or t.startswith("mfe") or t.startswith("mae") or (t.startswith("tp") and t[2:].isdigit()) for t in toks)
         phrase_bad = any(pat in lc for pat in ("favorable_first","adverse_first","r_multiple","return_"))
         window_bad = any(t in {"w5","w15","w30","w60"} for t in toks)
         if token_bad or phrase_bad or window_bad:
@@ -153,6 +165,7 @@ def _canonical_value(v):
     if isinstance(v, pd.Timestamp):
         return v.isoformat()
     return str(v) if not isinstance(v, (str, bool)) else v
+
 
 def deterministic_row_hash(values: dict) -> str:
     canonical = {str(k): _canonical_value(v) for k, v in values.items()}
@@ -274,18 +287,21 @@ def write_deterministic_gzip(df: pd.DataFrame, path: Path) -> None:
             gz.write(raw)
 
 
-def build_manifest(source_path: Path, output_path: Path, ledger: pd.DataFrame, expected_source_sha256: str | None) -> dict:
-    source_sha = sha256_file(source_path)
-    if expected_source_sha256 and source_sha != expected_source_sha256:
-        raise ValueError(f"candidate source SHA256 mismatch: got {source_sha}, expected {expected_source_sha256}")
+def build_manifest(source_path: Path, output_path: Path, ledger: pd.DataFrame, expected_source_payload_sha256: str | None) -> dict:
+    hashes = source_hashes(source_path)
+    payload_sha = hashes["decompressed_payload_sha256"]
+    if expected_source_payload_sha256 and payload_sha != expected_source_payload_sha256:
+        raise ValueError(f"candidate source payload SHA256 mismatch: got {payload_sha}, expected {expected_source_payload_sha256}")
     return {
         "status": "E_INTRINSIC_SNAPSHOT_V1_LEDGER_BUILT_OUTCOME_BLIND",
         "scope": "XAUUSD_M1_BUY_US_0800_1700_AMERICA_NEW_YORK",
         "future_price_outcomes_used": False,
         "source": {
             "path": str(source_path),
-            "sha256": source_sha,
-            "expected_sha256": expected_source_sha256,
+            "compressed_binary_sha256": hashes["compressed_binary_sha256"],
+            "decompressed_payload_sha256": payload_sha,
+            "expected_decompressed_payload_sha256": expected_source_payload_sha256,
+            "legacy_v04_manifest_hash_representation": "decompressed CSV payload",
         },
         "ledger": {
             "path": str(output_path),
@@ -313,11 +329,16 @@ def build_manifest(source_path: Path, output_path: Path, ledger: pd.DataFrame, e
     }
 
 
-def run(candidates_path: Path, output_path: Path, manifest_path: Path, expected_source_sha256: str | None = None) -> tuple[pd.DataFrame, dict]:
+def run(candidates_path: Path, output_path: Path, manifest_path: Path, expected_source_payload_sha256: str | None = None) -> tuple[pd.DataFrame, dict]:
+    hashes = source_hashes(candidates_path)
+    if expected_source_payload_sha256 and hashes["decompressed_payload_sha256"] != expected_source_payload_sha256:
+        raise ValueError(
+            f"candidate source payload SHA256 mismatch before parsing: got {hashes['decompressed_payload_sha256']}, expected {expected_source_payload_sha256}"
+        )
     d = read_candidates(candidates_path)
     ledger = assign_episodes(d)
     write_deterministic_gzip(ledger, output_path)
-    manifest = build_manifest(candidates_path, output_path, ledger, expected_source_sha256)
+    manifest = build_manifest(candidates_path, output_path, ledger, expected_source_payload_sha256)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return ledger, manifest
@@ -325,11 +346,13 @@ def run(candidates_path: Path, output_path: Path, manifest_path: Path, expected_
 
 def main() -> None:
     a = parse_args()
-    ledger, manifest = run(Path(a.candidates), Path(a.output), Path(a.manifest), a.expected_source_sha256)
+    ledger, manifest = run(Path(a.candidates), Path(a.output), Path(a.manifest), a.expected_source_payload_sha256)
     print(json.dumps({
         "status": manifest["status"],
         "rows": len(ledger),
         "episodes": ledger["episode_id"].nunique(),
+        "source_payload_sha256": manifest["source"]["decompressed_payload_sha256"],
+        "source_binary_sha256": manifest["source"]["compressed_binary_sha256"],
         "ledger_sha256": manifest["ledger"]["sha256"],
     }, indent=2))
 
