@@ -12,6 +12,14 @@ import pandas as pd
 FEATURES = ['zone_width_v','display_persistence_c5','current_family']
 EXACT = {'ESM_BOTH_G120M','EPM_M1_R2_A8H','EWM_G60M'}
 ES = 'ES_M1_8H_R2_T0.50'
+TIME_FIELDS = {
+    'snapshot_time_utc','bar_open_time_utc','bar_close_time_utc',
+    'feature_available_time_utc','prior_snapshot_time_utc'
+}
+INT_FIELDS = {'display_slot_rank','display_persistence_c5'}
+BOOL_FIELDS = {'is_new_display_episode'}
+FLOAT_FIELDS = {'center','zlo','zhi','v_snapshot','zone_width_v'}
+EMPTY_STRING_FIELDS = {'source_provenance_members'}
 
 
 def args():
@@ -25,19 +33,33 @@ def args():
     return p.parse_args()
 
 
-def canon(v):
-    if isinstance(v,pd.Timestamp): return v.tz_convert('UTC').isoformat()
+def canon_field(k,v):
+    if k in EMPTY_STRING_FIELDS:
+        return '' if pd.isna(v) or str(v)=='' else str(v)
+    if k in TIME_FIELDS:
+        if pd.isna(v): return None
+        t=pd.Timestamp(v)
+        if t.tzinfo is None: t=t.tz_localize('UTC')
+        else: t=t.tz_convert('UTC')
+        return t.isoformat()
+    if k in BOOL_FIELDS:
+        if pd.isna(v): return None
+        if isinstance(v,str):
+            s=v.strip().lower()
+            if s in {'true','1'}: return 1
+            if s in {'false','0'}: return 0
+            raise ValueError(f'invalid boolean text for {k}: {v!r}')
+        return int(bool(v))
+    if k in INT_FIELDS:
+        return None if pd.isna(v) else int(v)
+    if k in FLOAT_FIELDS:
+        return None if pd.isna(v) else format(float(v),'.17g')
     if pd.isna(v): return None
-    # Builder hashes Python bool through the integer branch (bool is a subclass of int).
-    # pandas round-trip yields numpy.bool_; normalize both representations identically.
-    if isinstance(v,(bool,np.bool_)): return int(v)
-    if isinstance(v,(np.integer,int)): return int(v)
-    if isinstance(v,(np.floating,float)): return format(float(v),'.17g')
     return str(v)
 
 
 def rh(row):
-    d={k:canon(v) for k,v in sorted(row.items()) if k!='row_sha256'}
+    d={k:canon_field(k,v) for k,v in sorted(row.items()) if k!='row_sha256'}
     return hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
 
@@ -47,8 +69,8 @@ def ms(x):
 
 
 def load(p):
-    d=pd.read_csv(p,compression='infer')
-    for c in ['snapshot_time_utc','bar_open_time_utc','bar_close_time_utc','feature_available_time_utc','prior_snapshot_time_utc']:
+    d=pd.read_csv(p,compression='infer',float_precision='round_trip')
+    for c in TIME_FIELDS:
         d[c]=pd.to_datetime(d[c],utc=True,errors='coerce')
     return d
 
@@ -60,6 +82,7 @@ def main():
     checks['provenance_geometry_parity_pass']=pm.get('geometry_parity',{}).get('pass') is True
     checks['builder_outcome_blind']=bm.get('future_price_outcomes_used') is False
     checks['feature_whitelist_exact']=bm.get('model_feature_whitelist')==FEATURES
+    checks['hash_canonicalization_field_aware']=bm.get('row_hash_canonicalization')=='FIELD_AWARE_V2_SERIALIZATION_STABLE'
     checks['nonempty']=len(d)>0
     checks['no_z4_rows']=not bool((d.current_family=='Z4').any())
     checks['unique_episode_snapshot']=not bool(d.duplicated(['display_episode_id','snapshot_time_utc']).any())
@@ -93,12 +116,17 @@ def main():
     checks['episode_c5_contiguous']=contig_ok
     checks['provenance_continuity_rule']=prov_ok
 
-    # Independently recompute row hashes using the serialized ledger values.
-    hash_ok=True
-    for _,r in d.iterrows():
-        x=r.to_dict();exp=str(x.pop('row_sha256'));x['row_sha256']=exp
-        if rh(x)!=exp:
-            hash_ok=False;break
+    hash_ok=True;first_hash_mismatch=None
+    for idx,r in d.iterrows():
+        x=r.to_dict();exp=str(x.get('row_sha256'))
+        got=rh(x)
+        if got!=exp:
+            hash_ok=False
+            first_hash_mismatch={
+                'row_index':int(idx),'expected':exp,'recomputed':got,
+                'canonical_payload':{k:canon_field(k,v) for k,v in sorted(x.items()) if k!='row_sha256'}
+            }
+            break
     checks['row_hashes_recompute']=hash_ok
 
     forbidden=[c for c in d.columns if any(t in c.lower() for t in ['contact','trigger','mfe','mae','success','outcome','reaction','p&l','return'])]
@@ -113,6 +141,7 @@ def main():
       'replication_rows':int(len(rep)),'replication_sessions':int(rep.session_date_ny.nunique()),
       'single_snapshot_episode_rate':float((lengths==1).mean()),
       'episode_length_median':float(lengths.median()),'episode_length_p90':float(lengths.quantile(.90)),
+      'row_hash_first_mismatch':first_hash_mismatch,
       'authorization':'READY_FOR_NEW_PRO_PRE_OUTCOME_GATE' if passed else 'BLOCK_OUTCOME_OPENING',
       'real_outcome_generation':'FORBIDDEN'
     }
