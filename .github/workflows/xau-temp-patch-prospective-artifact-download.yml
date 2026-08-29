@@ -33,34 +33,37 @@ jobs:
           text = text.replace(old_import, new_import)
 
           anchor = "          h = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()\n"
-          helper = '''          def github_artifact_bytes(url, headers):
-              class NoRedirect(urllib.request.HTTPRedirectHandler):
-                  def redirect_request(self, req, fp, code, msg, response_headers, newurl):
-                      return None
-              opener = urllib.request.build_opener(NoRedirect())
-              try:
-                  opener.open(urllib.request.Request(url, headers=headers), timeout=60).read()
-              except urllib.error.HTTPError as exc:
-                  if exc.code not in {301, 302, 303, 307, 308}:
-                      raise
-                  location = exc.headers.get('Location')
-                  if not location:
-                      raise RuntimeError('GitHub artifact redirect has no Location header') from exc
-              else:
-                  raise RuntimeError('GitHub artifact endpoint unexpectedly returned no redirect')
-              return urllib.request.urlopen(
-                  urllib.request.Request(location, headers={'User-Agent': headers.get('User-Agent', 'xau-e-v1')}),
-                  timeout=120,
-              ).read()
-
-'''
+          helper = "\n".join([
+              "          def github_artifact_bytes(url, headers):",
+              "              class NoRedirect(urllib.request.HTTPRedirectHandler):",
+              "                  def redirect_request(self, req, fp, code, msg, response_headers, newurl):",
+              "                      return None",
+              "              opener = urllib.request.build_opener(NoRedirect())",
+              "              try:",
+              "                  opener.open(urllib.request.Request(url, headers=headers), timeout=60).read()",
+              "              except urllib.error.HTTPError as exc:",
+              "                  if exc.code not in {301, 302, 303, 307, 308}:",
+              "                      raise",
+              "                  location = exc.headers.get('Location')",
+              "                  if not location:",
+              "                      raise RuntimeError('GitHub artifact redirect has no Location header') from exc",
+              "              else:",
+              "                  raise RuntimeError('GitHub artifact endpoint unexpectedly returned no redirect')",
+              "              return urllib.request.urlopen(",
+              "                  urllib.request.Request(location, headers={'User-Agent': headers.get('User-Agent', 'xau-e-v1')}),",
+              "                  timeout=120,",
+              "              ).read()",
+              "",
+              "",
+          ])
           assert text.count(anchor) == 1, text.count(anchor)
           text = text.replace(anchor, anchor + helper)
 
-          old_download = '''              artifact_bytes = urllib.request.urlopen(
-                  urllib.request.Request(artifact_url, headers=headers), timeout=120
-              ).read()
-'''
+          old_download = (
+              "              artifact_bytes = urllib.request.urlopen(\n"
+              "                  urllib.request.Request(artifact_url, headers=headers), timeout=120\n"
+              "              ).read()\n"
+          )
           new_download = "              artifact_bytes = github_artifact_bytes(artifact_url, headers)\n"
           assert text.count(old_download) == 1, text.count(old_download)
           text = text.replace(old_download, new_download)
