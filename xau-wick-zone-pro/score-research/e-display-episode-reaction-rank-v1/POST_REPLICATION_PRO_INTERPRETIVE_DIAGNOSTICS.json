@@ -1,0 +1,48 @@
+{
+  "DEV": {
+    "canonical_full_auc": 0.5756928360690787,
+    "family_proportions": {
+      "EPM_M1_R2_A8H": 0.1729542555130308,
+      "ESM_BOTH_G120M": 0.4328412611627483,
+      "ES_M1_8H_R2_T0.50": 0.14136443715448635,
+      "EWM_G60M": 0.25284004616973454
+    },
+    "full_minus_width_auc_using_canonical_full": 0.0014312764292055968,
+    "full_score_width_component_correlation": 0.9946496592310174,
+    "independent_recomputed_full_auc": 0.5756927769904234,
+    "n": 16461,
+    "persistence_mean": 1.152663872182735,
+    "score_mean": -0.03924523706627407,
+    "score_sd": 0.3259027639419615,
+    "sessions": 257,
+    "width_mean": 0.37016640804471646,
+    "width_only_auc": 0.5742615596398731
+  },
+  "REPLICATION": {
+    "canonical_full_auc": 0.5657692600871821,
+    "family_proportions": {
+      "EPM_M1_R2_A8H": 0.17296894694625875,
+      "ESM_BOTH_G120M": 0.42626332072877277,
+      "ES_M1_8H_R2_T0.50": 0.1424315343187808,
+      "EWM_G60M": 0.2583361980061877
+    },
+    "full_minus_width_auc_using_canonical_full": 0.0007258210600838977,
+    "full_score_width_component_correlation": 0.9945065552127659,
+    "independent_recomputed_full_auc": 0.5657697065483177,
+    "n": 17454,
+    "persistence_mean": 1.1579580611894122,
+    "score_mean": -0.038384208101994395,
+    "score_sd": 0.32201224534404443,
+    "sessions": 257,
+    "width_mean": 0.3704103344363948,
+    "width_only_auc": 0.5650434390270982
+  },
+  "effect_retention": {
+    "auc_excess_replication_over_dev": 0.8689033374563444,
+    "q4_minus_q1_replication_over_dev": 0.897452881790265,
+    "q4_success_rate_replication_minus_dev": -0.0001423395660221649
+  },
+  "interpretation": "Post-replication Pro diagnostic only. Not a preregistered gate; forbidden for tuning, rescue, or redefinition of the frozen candidate.",
+  "numerical_note": "Independent recomputation of full AUC differs from the canonical report by less than 5e-7 because the artifact labels are parsed from serialized floats; the canonical full AUC remains authoritative.",
+  "scientific_caveat": "The frozen full score is almost perfectly correlated with its zone-width component, and its AUC is only marginally above the deterministic width-only AUC. This does not invalidate the frozen reaction-rank result, but it blocks any claim that persistence and family add material validated information or that the rank measures universal zone strength."
+}
