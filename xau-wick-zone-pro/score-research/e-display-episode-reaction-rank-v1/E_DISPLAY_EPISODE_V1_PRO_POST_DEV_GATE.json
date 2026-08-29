@@ -1,0 +1,135 @@
+{
+  "status": "PRO_POST_DEV_SCIENTIFIC_GATE_PASS",
+  "decision": "GO_HISTORICAL_REPLICATION_DIAGNOSTIC",
+  "gate_date": "2026-08-29",
+  "gate_type": "PRO_POST_DEV_SCIENTIFIC_GATE",
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "scientific_interpretation": {
+    "DEV_role": "model development and freeze only; in-sample evidence is not validation",
+    "decision_basis": "The preregistered DEV association, ordering and QA evidence is sufficiently strong and internally coherent to justify one already-declared, strictly frozen historical replication diagnostic.",
+    "score_validation": "NOT_GRANTED",
+    "production_validation": "NOT_GRANTED",
+    "universal_E_strength_claim": "FORBIDDEN"
+  },
+  "canonical_DEV_authority": {
+    "seal_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/DEV_CANONICAL_SEAL.json",
+    "immutable_directory": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/dev-freeze-canonical-33264659057",
+    "workflow_run_id": 33264659057,
+    "artifact_id": 9718487805,
+    "artifact_digest": "sha256:481ad65013241f4dfcdb4f2378f4168476bb92695519de00166149c4a5ac6c0e",
+    "execution_commit": "637ece27b49cc71d0ab972a6d015029ed60a3ddb",
+    "materialization_commit": "8e9bd3166d1e3bab987fb50fa48052b5101a920e",
+    "immutable_copy_commit": "d1e1a32a06a7ae3f6e039360122f042a0ced5f15",
+    "frozen_model_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json",
+    "frozen_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1"
+  },
+  "independent_Pro_integrity_checks": {
+    "downloaded_artifact_digest_verified": true,
+    "artifact_digest_observed": "sha256:481ad65013241f4dfcdb4f2378f4168476bb92695519de00166149c4a5ac6c0e",
+    "evidence_files_hash_verified": "9/9",
+    "frozen_DEV_scores_reproduced_exactly": true,
+    "DEV_point_metrics_reproduced_exactly": true,
+    "replication_outcomes_accessed_during_gate": false,
+    "post_DEV_model_or_feature_change_detected": false
+  },
+  "DEV_evidence": {
+    "display_episodes": 32745,
+    "primary_contacts": 16461,
+    "sessions": 257,
+    "primary_successes": 8044,
+    "primary_failures": 8417,
+    "overall_primary_success_rate": 0.48867019014640667,
+    "auc": 0.5756928360690787,
+    "auc_minus_0_5": 0.07569283606907873,
+    "auc_minus_0_5_ci95_session_cluster": [0.06617732897303763, 0.08517572540579761],
+    "quartile_success_rates": {
+      "Q1": 0.4282385834109972,
+      "Q2": 0.4452906829144453,
+      "Q3": 0.4891859052247874,
+      "Q4": 0.5927095990279465
+    },
+    "quartile_order_monotone": true,
+    "q4_minus_q1": 0.16447101561694932,
+    "q4_minus_q1_ci95_session_cluster": [0.14153971131994397, 0.18741550235736845],
+    "feature_exclusion_rate": 0.0,
+    "score_roundtrip_exact": true,
+    "logistic_converged": true,
+    "logistic_n_iter": 10
+  },
+  "non_gating_robustness_note": {
+    "description": "An independent descriptive split of DEV into three contiguous session-count blocks was checked only for gross temporal concentration; it was not used to tune or replace any preregistered metric.",
+    "q4_minus_q1_by_block": [0.15601469997400325, 0.16199711431786562, 0.17471598091067397],
+    "all_positive": true
+  },
+  "authorization": {
+    "authorized_token": "GO_HISTORICAL_REPLICATION_DIAGNOSTIC",
+    "authorized_phase": "HISTORICAL_REPLICATION_DIAGNOSTIC_ONLY",
+    "authorized_contact_window": {
+      "start_inclusive_utc": "2025-08-01T00:00:00Z",
+      "end_exclusive_utc": "2026-08-01T00:00:00Z"
+    },
+    "authorized_replication_ledger": {
+      "path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz",
+      "sha256": "a3baa2f48b9d397ebcdd3e0be936e5947e49caa4ca77dec531f726c321f586a6"
+    },
+    "authorized_frozen_DEV_model": {
+      "path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json",
+      "sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
+      "refit": "FORBIDDEN"
+    },
+    "method_guards": {
+      "reaction_labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+      "model_eval_sha256": "f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e",
+      "requirements_lock_sha256": "4cb67a768b857847b7ecad790e77637174a79e7cb299176b5543edc12a1b82cf",
+      "environment": {
+        "python": "3.11.16",
+        "numpy": "2.3.2",
+        "pandas": "2.3.1",
+        "scipy": "1.16.1",
+        "scikit_learn": "1.7.1"
+      }
+    },
+    "M1_input_rule": "Use only the 12 hash-verified Dukascopy BID M1 files 2025-08 through 2026-07 declared in the frozen data-input manifest.",
+    "missing_M1_rule": "Retain and report the two known partial sessions and all 482 missing M1 opens; skip missing opens as unavailable bars exactly as preregistered. No post-outcome session deletion or alternate treatment is permitted.",
+    "allowed_operations": [
+      "generate historical-replication reaction labels only",
+      "load the immutable frozen DEV model without refit",
+      "apply the frozen DEV preprocessing, coefficients, score distribution, rank mapping and quartile cutpoints",
+      "compute and report the preregistered replication diagnostics",
+      "freeze and hash the complete replication evidence package"
+    ],
+    "forbidden_operations": [
+      "refit or alter the frozen DEV model",
+      "change features, transformations, family vocabulary, reaction definition, horizon, ambiguity handling, rank mapping, quartile cutpoints, bootstrap or gates",
+      "load DEV labels for refitting or model selection",
+      "compare alternative models or thresholds",
+      "drop the two partial replication sessions after outcome access",
+      "authorize production or modify Pine",
+      "call the rank a calibrated probability or universal E strength"
+    ]
+  },
+  "replication_support_rule_frozen_before_opening": {
+    "purpose": "Prevents subjective rescue after replication is read. Passing can authorize only a later prospective-confirmation planning gate, never production.",
+    "checks": [
+      "at least 1000 primary eligible episodes",
+      "at least 90 completed NY sessions represented",
+      "AUC minus 0.5 greater than 0",
+      "session-cluster 95% CI lower bound for AUC minus 0.5 greater than 0",
+      "fixed DEV quartile success rates satisfy Q1 <= Q2 <= Q3 <= Q4",
+      "fixed DEV Q4 minus Q1 greater than 0",
+      "session-cluster 95% CI lower bound for Q4 minus Q1 greater than 0",
+      "fixed DEV Q4 minus Q1 positive in all three contiguous complete-session blocks",
+      "feature exclusion rate no greater than 2%",
+      "unseen-family rate no greater than 5%",
+      "no frozen method or data-definition component changed"
+    ],
+    "all_checks_required": true,
+    "failure_policy": "No retrospective tuning or alternate candidate rescue; return to a newly preregistered research cycle if further work is desired."
+  },
+  "next_checkpoint": {
+    "required_status_after_execution": "READY_FOR_PRO_POST_REPLICATION_GATE",
+    "required_evidence": "Immutable replication labels, input manifest, label QA, frozen-model load/no-refit QA, replication report, environment, hashes, workflow run and artifact digest.",
+    "production_authorization": "NONE",
+    "pine_modification": "FORBIDDEN"
+  }
+}
