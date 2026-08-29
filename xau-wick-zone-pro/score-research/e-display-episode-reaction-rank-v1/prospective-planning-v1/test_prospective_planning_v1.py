@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
 import sys
 import tempfile
@@ -22,6 +21,7 @@ def ns(**kw):return argparse.Namespace(**kw)
 
 
 def write_raw(path,start,periods,change_index=None):
+    path.parent.mkdir(parents=True,exist_ok=True)
     t=pd.date_range(start=start,periods=periods,freq='min',tz='UTC')
     x=np.arange(periods,dtype=float)
     d=pd.DataFrame({'timestamp':(t.view('int64')//1_000_000).astype(np.int64),'open':2000+x*.001,'high':2000.2+x*.001,'low':1999.8+x*.001,'close':2000.05+x*.001})
@@ -30,6 +30,7 @@ def write_raw(path,start,periods,change_index=None):
 
 
 def test_ingest_append_only(tmp:Path):
+    tmp.mkdir(parents=True,exist_ok=True)
     session='2026-07-15';start=pd.Timestamp('2026-07-14T00:00:00Z');periods=2700
     src=tmp/'source.csv';write_raw(src,start,periods)
     meta=tmp/'meta.json';meta.write_text(json.dumps({'upstream_head_commit':'dryrun','upstream_blob_sha':'dryrun'}))
@@ -56,6 +57,7 @@ def test_contact_only_arm_bar_cannot_contact():
 
 
 def test_firewall(tmp:Path):
+    tmp.mkdir(parents=True,exist_ok=True)
     live=tmp/'live';(live/'contacts').mkdir(parents=True);(live/'contacts'/'2026-08-31.json').write_text(json.dumps({'status':'PROSPECTIVE_CONTACT_ONLY_PASS','session_date_ny':'2026-08-31','model_eligible_primary_contacts':12}))
     out=tmp/'fw.json';r=core.firewall(ns(live_root=str(live),output=str(out)));assert r['status']=='PROSPECTIVE_ANTI_PEEKING_FIREWALL_PASS'
     (live/'status').mkdir();(live/'status'/'bad.json').write_text(json.dumps({'auc':0.6}))
@@ -66,6 +68,7 @@ def test_firewall(tmp:Path):
 
 
 def test_single_checkpoint_lock(tmp:Path):
+    tmp.mkdir(parents=True,exist_ok=True)
     live=tmp/'live';c=live/'contacts';c.mkdir(parents=True)
     dates=pd.bdate_range('2026-08-31',periods=95).date.astype(str)
     for s in dates:
