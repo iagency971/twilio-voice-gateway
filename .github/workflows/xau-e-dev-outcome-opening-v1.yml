@@ -1,0 +1,263 @@
+name: XAU E display episode V1 DEV outcome opening
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-e-dev-outcome-opening-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  PKG: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1
+  DEVOUT: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/dev-outcome-v1
+  SOURCE_MANIFEST: xau-wick-zone-pro/cadence-sensitivity/c5-replication-v0-2/XAUUSD_Z4_C5_HISTORICAL_SOURCE_MANIFEST_v0_2.json
+  GO_TOKEN: GO_DEV_OUTCOME_OPENING
+  DEV_START: '2024-08-01T00:00:00Z'
+  DEV_END: '2025-08-01T00:00:00Z'
+  EXPECTED_DEV_LEDGER_SHA256: 2cf40bfca54494f1609035307390f3e615348492bf8c853f0c79c63555d060e6
+  EXPECTED_LABELER_SHA256: 08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8
+  EXPECTED_MODEL_SHA256: f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e
+  EXPECTED_REQUIREMENTS_SHA256: 4cb67a768b857847b7ecad790e77637174a79e7cb299176b5543edc12a1b82cf
+  EXPECTED_DATA_MANIFEST_SHA256: 041963e0a458e3f25a5ead4d2e2a6922fda758dcd8afe474f6e04040dd055db1
+  EXPECTED_PREOUTCOME_MANIFEST_SHA256: 49098a886015f25d1f754400f04066b0cec97a548b309c7af337774ad2bd4047
+
+jobs:
+  dev-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify Pro authorization and immutable DEV method
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum "$PKG/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz"
+          test "$(sha256sum "$PKG/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz" | awk '{print $1}')" = "$EXPECTED_DEV_LEDGER_SHA256"
+          test "$(sha256sum "$PKG/xau_e_display_episode_reaction_labeler_v1.py" | awk '{print $1}')" = "$EXPECTED_LABELER_SHA256"
+          test "$(sha256sum "$PKG/xau_e_display_episode_model_eval_v1.py" | awk '{print $1}')" = "$EXPECTED_MODEL_SHA256"
+          test "$(sha256sum "$PKG/requirements-lock.txt" | awk '{print $1}')" = "$EXPECTED_REQUIREMENTS_SHA256"
+          test "$(sha256sum "$PKG/DATA_INPUT_MANIFEST.json" | awk '{print $1}')" = "$EXPECTED_DATA_MANIFEST_SHA256"
+          test "$(sha256sum "$PKG/PRE_OUTCOME_PACKAGE_MANIFEST.json" | awk '{print $1}')" = "$EXPECTED_PREOUTCOME_MANIFEST_SHA256"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['PKG'])
+          gate=json.loads((p/'E_DISPLAY_EPISODE_V1_SECOND_PRO_PRE_OUTCOME_GATE.json').read_text())
+          assert gate['status']=='SECOND_PRO_PRE_OUTCOME_GATE_PASS',gate
+          assert gate['decision']=='GO_DEV_OUTCOME_OPENING',gate
+          a=gate['authorization']
+          assert a['scope']=='DEV_HISTORY_ONLY',a
+          assert a['authorized_token']==os.environ['GO_TOKEN'],a
+          assert a['authorized_ledger']['sha256']==os.environ['EXPECTED_DEV_LEDGER_SHA256'],a
+          assert gate['next_required_checkpoint_after_DEV']['historical_replication_authorization']=='NOT_GRANTED',gate
+          assert gate['outcome_blind_attestation']['replication_outcomes_accessed'] is False,gate
+          print('SECOND_PRO_GO_DEV_AUTHORIZATION_VERIFIED')
+          PY
+          mkdir -p /tmp/dev_isolated /tmp/dev_raw /tmp/results /tmp/repeat
+          cp "$PKG/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz" /tmp/dev_isolated/DEV_LEDGER.csv.gz
+          # Remove non-DEV feature ledgers from the execution workspace before real labeling.
+          rm -f "$PKG/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz" "$PKG/E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz" "$PKG/E_DISPLAY_PROVENANCE_V1_24M.csv.gz"
+          test ! -e "$PKG/E_DISPLAY_EPISODE_LEDGER_V1_REPLICATION.csv.gz"
+          test ! -e "$PKG/E_DISPLAY_EPISODE_LEDGER_V1_24M.csv.gz"
+
+      - name: Install frozen scientific environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
+          python -m pip freeze | sort > /tmp/results/PIP_FREEZE_DEV.txt
+          python - <<'PY' > /tmp/results/ENVIRONMENT_DEV.json
+          import json,platform,numpy,pandas,scipy,sklearn
+          print(json.dumps({'python':platform.python_version(),'numpy':numpy.__version__,'pandas':pandas.__version__,'scipy':scipy.__version__,'scikit_learn':sklearn.__version__},indent=2,sort_keys=True))
+          PY
+
+      - name: Acquire only the 12 hash-verified DEV BID M1 files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          import pandas as pd
+          src=json.load(open(os.environ['SOURCE_MANIFEST']))
+          root='https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/'
+          selected=[]
+          for x in src['files']:
+              if x['side']!='bid': continue
+              key=f"{int(x['year']):04d}-{int(x['month']):02d}"
+              if '2024-08'<=key<='2025-07': selected.append((key,x))
+          selected=sorted(selected,key=lambda q:q[0])
+          assert len(selected)==12,[k for k,_ in selected]
+          assert selected[0][0]=='2024-08' and selected[-1][0]=='2025-07'
+          files=[];meta=[]
+          for key,x in selected:
+              p=Path('/tmp/dev_raw')/x['file']
+              subprocess.run(['curl','--fail','--location','--retry','5','--retry-delay','2',root+x['file'],'-o',str(p)],check=True,stdout=subprocess.DEVNULL)
+              h=hashlib.sha256(p.read_bytes()).hexdigest();assert h==x['sha256'],(x['file'],h,x['sha256'])
+              files.append(p);meta.append({'month':key,'file':x['file'],'sha256':h,'bytes':p.stat().st_size})
+          frames=[pd.read_csv(p) for p in files]
+          raw=pd.concat(frames,ignore_index=True)
+          if 'time' in raw.columns: t=pd.to_datetime(raw['time'],utc=True)
+          elif 'timestamp' in raw.columns: t=pd.to_datetime(raw['timestamp'],unit='ms',utc=True)
+          else: raise RuntimeError('M1 time column missing')
+          assert t.min()<pd.Timestamp(os.environ['DEV_START'])+pd.Timedelta(days=2)
+          assert t.max()<pd.Timestamp(os.environ['DEV_END'])
+          raw.to_csv('/tmp/dev_isolated/DEV_M1.csv',index=False)
+          out={'status':'DEV_M1_INPUT_QA_PASS','dev_files':meta,'dev_file_count':12,'replication_m1_files_downloaded':0,'raw_rows':int(len(raw)),'first_m1_utc':t.min().isoformat(),'last_m1_utc':t.max().isoformat(),'dev_ledger_sha256':os.environ['EXPECTED_DEV_LEDGER_SHA256'],'replication_ledger_loaded':False,'future_replication_outcomes_accessed':False}
+          Path('/tmp/results/DEV_INPUT_MANIFEST.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'status':out['status'],'dev_file_count':12,'raw_rows':len(raw),'first':out['first_m1_utc'],'last':out['last_m1_utc']},indent=2))
+          PY
+          test "$(find /tmp/dev_raw -maxdepth 1 -type f | wc -l)" -eq 12
+
+      - name: Generate real DEV labels only under Pro token
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_display_episode_reaction_labeler_v1.py" \
+            --m1 /tmp/dev_isolated/DEV_M1.csv \
+            --ledger /tmp/dev_isolated/DEV_LEDGER.csv.gz \
+            --output /tmp/results/DEV_REACTION_LABELS.csv.gz \
+            --manifest /tmp/results/DEV_LABELER_MANIFEST.json \
+            --declared-window DEV_HISTORY \
+            --authorization-token "$GO_TOKEN"
+
+      - name: Independent DEV label QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          import pandas as pd
+          labels=pd.read_csv('/tmp/results/DEV_REACTION_LABELS.csv.gz',compression='gzip',float_precision='round_trip')
+          ledger=pd.read_csv('/tmp/dev_isolated/DEV_LEDGER.csv.gz',compression='gzip',float_precision='round_trip')
+          man=json.load(open('/tmp/results/DEV_LABELER_MANIFEST.json'))
+          assert man['status']=='E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE',man
+          assert man['declared_window']=='DEV_HISTORY',man
+          assert len(labels)==ledger.display_episode_id.nunique(),(len(labels),ledger.display_episode_id.nunique())
+          assert not labels.display_episode_id.duplicated().any()
+          allowed={'NEVER_ARMED','NO_CONTACT_BEFORE_EPISODE_END','PRIMARY_CONTACT'}
+          assert set(labels.selection_status.astype(str).unique()).issubset(allowed)
+          pri=labels[labels.selection_status=='PRIMARY_CONTACT'].copy()
+          assert len(pri)>0
+          t=pd.to_datetime(pri.contact_bar_open_time_utc,utc=True,errors='raise')
+          assert ((t>=pd.Timestamp(os.environ['DEV_START']))&(t<pd.Timestamp(os.environ['DEV_END']))).all()
+          hashes=set(ledger.row_sha256.astype(str)); assert pri.feature_row_sha256.astype(str).isin(hashes).all()
+          lkp=ledger.set_index('row_sha256')
+          for _,r in pri.iterrows():
+              q=lkp.loc[str(r.feature_row_sha256)]
+              assert str(q.current_family)==str(r.current_family)
+              assert int(q.display_persistence_c5)==int(r.display_persistence_c5)
+              assert abs(float(q.zone_width_v)-float(r.zone_width_v))<=1e-12
+          classes=pri.primary_class.astype(str).value_counts().sort_index().to_dict()
+          binary=pri.primary_binary_label.astype(int).value_counts().sort_index().to_dict()
+          out={'status':'DEV_LABELS_INDEPENDENT_QA_PASS','episodes_total':int(len(labels)),'primary_contacts':int(len(pri)),'sessions_primary':int(pri.session_date_ny.nunique()),'selection_status_counts':{str(k):int(v) for k,v in labels.selection_status.value_counts().sort_index().items()},'primary_class_counts':{str(k):int(v) for k,v in classes.items()},'primary_binary_counts':{str(k):int(v) for k,v in binary.items()},'first_contact_utc':t.min().isoformat(),'last_contact_utc':t.max().isoformat(),'feature_hash_linkage_all_pass':True,'replication_outcomes_accessed':False}
+          Path('/tmp/results/DEV_LABELS_QA.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - name: Fit the single preregistered DEV model only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_display_episode_model_eval_v1.py" \
+            --phase DEV_FIT \
+            --labels /tmp/results/DEV_REACTION_LABELS.csv.gz \
+            --model-json /tmp/results/DEV_FROZEN_MODEL.json \
+            --report-json /tmp/results/DEV_MODEL_REPORT.json \
+            --authorization-token "$GO_TOKEN"
+
+      - name: Reproduce frozen DEV scores and validate no replication access
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import importlib.util,json,os,sys
+          from pathlib import Path
+          import numpy as np
+          import pandas as pd
+          pkg=Path(os.environ['PKG'])
+          spec=importlib.util.spec_from_file_location('me',pkg/'xau_e_display_episode_model_eval_v1.py')
+          me=importlib.util.module_from_spec(spec);sys.modules[spec.name]=me;spec.loader.exec_module(me)
+          report=json.load(open('/tmp/results/DEV_MODEL_REPORT.json')); mj=json.load(open('/tmp/results/DEV_FROZEN_MODEL.json'))
+          assert report['status']=='E_DISPLAY_EPISODE_MODEL_V1_FROZEN_AFTER_DEV',report
+          assert report['historical_replication_outcomes_read'] is False and report['historical_replication_outcomes_scored'] is False
+          assert report['next_authorization']=='FREEZE_DEV_MODEL_BEFORE_HISTORICAL_REPLICATION'
+          assert mj['status']=='E_DISPLAY_EPISODE_DEV_MODEL_V1_FROZEN' and mj['replication_outcomes_used_to_fit'] is False
+          labels=pd.read_csv('/tmp/results/DEV_REACTION_LABELS.csv.gz',compression='gzip')
+          pri=labels[labels.selection_status=='PRIMARY_CONTACT'].copy()
+          m=me.load_model('/tmp/results/DEV_FROZEN_MODEL.json'); scored,qa=me.transform_score(pri,m)
+          assert len(scored)==len(m.dev_scores)
+          assert np.array_equal(scored.continuous_logit.to_numpy(float),np.asarray(m.dev_scores,float))
+          assert set(scored.fixed_quartile.unique()).issubset({'Q1','Q2','Q3','Q4'})
+          out={'status':'DEV_MODEL_INDEPENDENT_QA_PASS','scored_rows':int(len(scored)),'score_roundtrip_exact':True,'feature_excluded_rows':int(qa['feature_excluded_rows']),'feature_exclusion_rate':qa['feature_exclusion_rate'],'unseen_family_rows':int(qa['unseen_family_rows']),'unseen_family_rate':qa['unseen_family_rate'],'categories':m.categories,'reference_category':m.reference_category,'coef_n':len(m.coef),'historical_replication_outcomes_read':False,'historical_replication_outcomes_scored':False}
+          Path('/tmp/results/DEV_MODEL_QA.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - name: Freeze DEV outputs, hashes and next authorization state
+        shell: bash
+        env:
+          EXECUTION_COMMIT: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          r=Path('/tmp/results');pkg=Path(os.environ['PKG'])
+          h=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+          labelqa=json.loads((r/'DEV_LABELS_QA.json').read_text());modelqa=json.loads((r/'DEV_MODEL_QA.json').read_text());report=json.loads((r/'DEV_MODEL_REPORT.json').read_text());inp=json.loads((r/'DEV_INPUT_MANIFEST.json').read_text())
+          assert labelqa['status']=='DEV_LABELS_INDEPENDENT_QA_PASS'
+          assert modelqa['status']=='DEV_MODEL_INDEPENDENT_QA_PASS'
+          assert report['historical_replication_outcomes_read'] is False and report['historical_replication_outcomes_scored'] is False
+          assert inp['replication_m1_files_downloaded']==0 and inp['replication_ledger_loaded'] is False
+          method={
+            'reaction_labeler':h(pkg/'xau_e_display_episode_reaction_labeler_v1.py'),
+            'model_eval':h(pkg/'xau_e_display_episode_model_eval_v1.py'),
+            'requirements_lock':h(pkg/'requirements-lock.txt'),
+            'second_pro_gate':h(pkg/'E_DISPLAY_EPISODE_V1_SECOND_PRO_PRE_OUTCOME_GATE.json'),
+            'dev_workflow':h(Path('.github/workflows/xau-e-dev-outcome-opening-v1.yml')),
+          }
+          assert method['reaction_labeler']==os.environ['EXPECTED_LABELER_SHA256']
+          assert method['model_eval']==os.environ['EXPECTED_MODEL_SHA256']
+          assert method['requirements_lock']==os.environ['EXPECTED_REQUIREMENTS_SHA256']
+          files=[p for p in sorted(r.iterdir()) if p.name!='DEV_FREEZE_MANIFEST.json']
+          out={'status':'E_DISPLAY_EPISODE_V1_DEV_MODEL_FREEZE_PASS','authorization_used':'GO_DEV_OUTCOME_OPENING','scope':'DEV_HISTORY_ONLY','execution_commit':os.environ['EXECUTION_COMMIT'],'workflow_run_id':int(os.environ['RUN_ID']),'dev_window':[os.environ['DEV_START'],os.environ['DEV_END']],'dev_ledger_sha256':os.environ['EXPECTED_DEV_LEDGER_SHA256'],'method_sha256':method,'output_sha256':{p.name:h(p) for p in files},'replication_m1_files_downloaded':0,'replication_ledger_loaded':False,'historical_replication_outcomes_generated':False,'historical_replication_outcomes_read':False,'historical_replication_outcomes_scored':False,'dev_model_frozen':True,'next_authorization':'READY_FOR_PRO_POST_DEV_GATE','historical_replication_authorization':'NOT_GRANTED','production_authorization':'NONE','pine_modification':'FORBIDDEN'}
+          (r/'DEV_FREEZE_MANIFEST.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          status=f'''# E display episode reaction rank V1 — status\n\n**Updated:** 2026-08-29  \n**Scope:** XAUUSD M1, BUY, US 08:00–17:00 America/New_York\n\n## Current scientific state\n\n- Second Pro pre-outcome gate: `PASS`\n- DEV outcome opening: `COMPLETE`\n- DEV model freeze: `PASS`\n- Current authorization: `READY_FOR_PRO_POST_DEV_GATE`\n- Historical replication outcomes: `CLOSED`\n- Token `GO_HISTORICAL_REPLICATION_DIAGNOSTIC`: `FORBIDDEN`\n- Production authorization: `NONE`\n- Pine modification: `FORBIDDEN`\n\n## Frozen DEV references\n\n- DEV execution run: `{os.environ['RUN_ID']}`\n- DEV execution commit: `{os.environ['EXECUTION_COMMIT']}`\n- DEV ledger SHA-256: `{os.environ['EXPECTED_DEV_LEDGER_SHA256']}`\n\n## Mandatory next checkpoint\n\nA Pro post-DEV gate must review the frozen DEV labels/model/report and decide whether the candidate is abandoned or a separate historical-replication diagnostic may be authorized. Replication remains closed until an explicit later token is granted.\n'''
+          (r/'STATUS_POST_DEV.md').write_text(status)
+          print(json.dumps({'status':out['status'],'next_authorization':out['next_authorization'],'workflow_run_id':out['workflow_run_id']},indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: e-display-episode-v1-dev-frozen
+          if-no-files-found: error
+          retention-days: 90
+          path: /tmp/results/*
+
+      - name: Materialize immutable DEV freeze package in repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$DEVOUT"
+          for f in DEV_REACTION_LABELS.csv.gz DEV_LABELER_MANIFEST.json DEV_LABELS_QA.json DEV_FROZEN_MODEL.json DEV_MODEL_REPORT.json DEV_MODEL_QA.json DEV_INPUT_MANIFEST.json ENVIRONMENT_DEV.json PIP_FREEZE_DEV.txt DEV_FREEZE_MANIFEST.json; do cp "/tmp/results/$f" "$DEVOUT/$f"; done
+          cp /tmp/results/STATUS_POST_DEV.md "$PKG/STATUS.md"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$DEVOUT" "$PKG/STATUS.md"
+          git commit -m 'freeze E display V1 DEV outcomes and model'
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
