@@ -1,140 +1,166 @@
 {
-  "status": "E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS",
-  "decision": "READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE",
-  "candidate": "E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
-  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; upper-Z4-conditioned local top-3 displayed E universe",
-  "authorization": {
+  "anti_peeking": {
+    "checkpoint_evaluator_invoked_by_collector": false,
+    "collector_template_installed_as_live_workflow": false,
+    "prospective_live_store_exists_at_qa_materialization": false,
+    "prospective_performance_visible": false,
+    "reaction_labeler_invoked_by_collector": false,
+    "unauthorized_future_evaluator_blocked": true
+  },
+  "authorization_at_seal": {
+    "model_refit": "FORBIDDEN",
+    "pine_modification": "FORBIDDEN",
+    "production": "NONE",
     "prospective_collection_execution": "FORBIDDEN_PENDING_PRO_GATE",
     "prospective_outcome_generation": "FORBIDDEN",
     "prospective_outcome_reading": "FORBIDDEN",
-    "prospective_performance_scoring": "FORBIDDEN",
-    "model_refit": "FORBIDDEN",
-    "production": "NONE",
-    "pine_modification": "FORBIDDEN"
+    "prospective_performance_scoring": "FORBIDDEN"
   },
-  "prospective_start": {
-    "session_date_ny": "2026-08-31",
-    "session_open_local": "2026-08-31T08:00:00-04:00",
-    "session_open_utc": "2026-08-31T12:00:00Z",
-    "no_backfill_before_start": true,
-    "pre_start_use": "causal warmup only"
-  },
-  "single_checkpoint": {
-    "minimum_represented_sessions": 90,
-    "minimum_model_eligible_primary_contacts": 1000,
-    "lock_rule": "first completed accepted NY session where both cumulative thresholds are true",
-    "interim_performance_peeking": false,
-    "discretionary_extension": false
-  },
-  "causal_warmup": {
-    "z4_lookback_active_m1": 1440,
-    "eligible_pre_session_c5_landmarks_after_lookback": 96,
-    "rule": "latest causal active-M1 start leaving exactly 96 eligible pre-session C5 landmarks after the frozen 1440-active-M1 lookback",
-    "selection_uses_only_pre_session_data": true
-  },
-  "two_stage_seal": {
-    "method_commit": "1b84889b389d03a0ae79595cb9b58865a1934c27",
-    "qa_materialization_commit": "b429bd0fac77ba9e3b2307c61672a1031c18c066",
+  "candidate": "E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "canonical_R4_authority": {
+    "artifact_digest": "sha256:6765d3d5d10854cf5b9437584e5cdc5485897a86f5a2b75e78877e0b66263ccf",
+    "artifact_id": 9721274589,
+    "artifact_name": "xau-e-prospective-planning-v1-r4",
+    "artifact_retention_days": 90,
+    "job_id": 99160455323,
+    "job_name": "planning-qa-r4",
+    "method_commit": "786342cfb69aaceff17cbcfb6284bb8c4d611d0d",
+    "qa_manifest_git_blob": "ada470f912b9e44e6a944c6f3afdee7cb99816bc",
+    "qa_manifest_path": "prospective-planning-v1/qa-r4/PROSPECTIVE_PLANNING_QA_R4.json",
+    "qa_materialization_commit": "3b07f5eef345bcb353c159b55bf501701049fd52",
     "qa_materialization_parent_is_method_commit": true,
-    "workflow_path": ".github/workflows/xau-e-prospective-planning-v1-r2.yml",
-    "workflow_git_blob": "ca8398ed0d17b523fb482eafa5d8230b5fe3bb72",
-    "workflow_run_id": 33273228430,
-    "workflow_run_number": 2,
+    "qa_status": "PROSPECTIVE_PLANNING_QA_R4_PASS",
+    "workflow_git_blob": "65b33619c2d1520b96f041469d4bb5ef447e9fe1",
+    "workflow_path": ".github/workflows/xau-e-prospective-planning-v1-r4.yml",
     "workflow_run_attempt": 1,
     "workflow_run_conclusion": "success",
-    "job_id": 99155361926,
-    "job_name": "planning-qa-r2",
-    "artifact_id": 9720724299,
-    "artifact_name": "xau-e-prospective-planning-v1-r2",
-    "artifact_digest": "sha256:c12623d52dd75bbd890c0cb5b084613a90ca9b668ff86b5d418c510fa7ed4335",
-    "artifact_retention_days": 90
+    "workflow_run_id": 33275153603,
+    "workflow_run_number": 2
+  },
+  "causal_warmup": {
+    "eligible_pre_session_c5_landmarks_after_lookback": 96,
+    "rule": "latest causal active-M1 start leaving exactly 96 eligible pre-session C5 landmarks after the frozen 1440-active-M1 lookback",
+    "selection_uses_only_pre_session_data": true,
+    "z4_lookback_active_m1": 1440
+  },
+  "decision": "READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE",
+  "environment": {
+    "numpy": "2.3.2",
+    "pandas": "2.3.1",
+    "python": "3.11.16",
+    "scikit_learn": "1.7.1",
+    "scipy": "1.16.1"
   },
   "frozen_authorities": {
     "dev_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
-    "reaction_labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
     "model_eval_sha256": "f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e",
+    "reaction_labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+    "requirements_lock_sha256": "4cb67a768b857847b7ecad790e77637174a79e7cb299176b5543edc12a1b82cf",
     "z4_engine_git_blob": "ac2448f448df2b873b482fd74c4eddf031790117",
-    "z4_engine_sha256": "3d7f9a5bf4553de933a2ec3c99ca282a5c6cd006fc44cc61d7aa57b0ff1d999d",
-    "requirements_lock_sha256": "4cb67a768b857847b7ecad790e77637174a79e7cb299176b5543edc12a1b82cf"
+    "z4_engine_sha256": "3d7f9a5bf4553de933a2ec3c99ca282a5c6cd006fc44cc61d7aa57b0ff1d999d"
+  },
+  "future_final_opening_requirements": {
+    "checkpoint_eligible_count_must_equal_frozen_model_scored_count": true,
+    "collector_scope": "outcome-blind collection only until checkpoint lock",
+    "exact_contact_counter_parity": true,
+    "performance_opening": "only by separately invoked checkpoint evaluator after lock",
+    "post_checkpoint_required_status": "READY_FOR_PRO_POST_PROSPECTIVE_GATE",
+    "separate_Pro_authorization_token": "GO_PROSPECTIVE_CONFIRMATION_EXECUTION"
+  },
+  "historical_dryrun": {
+    "contact_exact_parity": true,
+    "display_episodes": 164,
+    "eligible_pre_session_c5_landmarks": 96,
+    "feature_exact_parity": true,
+    "feature_rows": 209,
+    "missing_m1": 0,
+    "model_eligible_primary_contacts": 78,
+    "post_contact_bars_read": 0,
+    "primary_contacts": 78,
+    "prospective_outcomes_generated": false,
+    "prospective_outcomes_read": false,
+    "session_date_ny": "2026-07-15",
+    "session_rows": 540,
+    "warmup_rows": 2520,
+    "z4_exact_parity": true,
+    "z4_prefix_invariance": true,
+    "z4_rows": 459
   },
   "method_sha256": {
     "PROSPECTIVE_CONFIRMATION_POLICY_v1.json": "6f3d4682ae12bbb31d9d927335492a95f105d7c68d8876d37e0e9d1c97752120",
     "XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_CONFIRMATION_PREREG_v1_0_2026-08-29.md": "647c36558f070c9105bae7a324e0daeb9a28ed22d3dcccf663f2de9c3b2e478f",
     "XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_A_WARMUP_AND_NUMERICAL_TOLERANCE_2026-08-29.md": "b20f83a3205a0f5c252d23aca2e7a94ad00dd6dd2cacebcb4074551c5abab6c2",
-    "prospective_checkpoint_evaluator_v1.py": "51b2e099ef3dfcde6bb399b0ee080d64ef58f113ae8740dc0901287b03cc8746",
-    "prospective_collection_workflow_TEMPLATE_v1.yml": "f8464d362311f2b07c067e8180a88b40683bc94bdaf56c9179929e6ed2ec017b",
-    "prospective_planning_entry_v1.py": "79f1a100d3de25f4e528beeebf869df0e05ebc65ee26032d1a83c7eac1a66173",
+    "XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_B_OPERATIONAL_ATOMICITY_AND_ZERO_CONTACT_SESSIONS_2026-08-29.md": "f131b58bf8d9858712aac2d642c209b49ccfa0b571d1d0f7aabb15584dfea3a7",
+    "prospective_checkpoint_evaluator_v1.py": "2facd467b9276a48c6c558677c3f2bd81ebf1dca7560c51d599b8a078bd41524",
+    "prospective_collection_workflow_TEMPLATE_v1.yml": "77d1268a9319001b6327136dfaf39d54da7b527e95d0de72c8a7da388768a679",
+    "prospective_planning_entry_v1.py": "18a57893c92ccbcb9fbee0bded6c8fc89f2caf98c89194bcc696ba4f3571ea16",
     "prospective_planning_tool_v1.py": "1635272ff438d836fc782721cd4d084026a132e48e5d064b0c3fef6f22f57e8d",
-    "test_prospective_planning_v1.py": "b81ba64795e07e6452decebc1698d4df0c362ec641444a758f76e187b2ba000f"
+    "run_prospective_planning_qa_r4.sh": "4d46aee356c322a1dc05d38d1928452b11bd6fae712dc3f36bf383fea9e98be0",
+    "test_prospective_planning_v1.py": "74d6350b3fa2db05fae4ef677dd268dc1952f4ca8d5bd844202fff09dc0a9a53"
+  },
+  "next_required_decision": [
+    "GO_PROSPECTIVE_CONFIRMATION_EXECUTION",
+    "NO_GO_PROSPECTIVE_CONFIRMATION_EXECUTION"
+  ],
+  "next_required_mode": "PRO",
+  "operational_hardening": {
+    "duplicate_revision_event_suppression": true,
+    "final_frozen_labeler_vs_contact_counter_exact_parity_required": true,
+    "first_acceptance_committed_before_downstream_processing": true,
+    "git_blob_sha_verified_from_downloaded_bytes": true,
+    "one_exact_upstream_commit_per_collector_observation": true,
+    "raw_download_pinned_to_exact_commit": true,
+    "resume_after_downstream_failure": true,
+    "revision_monitoring_for_current_and_previous_month": true,
+    "sha256_bytes_and_row_count_recorded": true,
+    "single_non_cancelling_concurrency_group": true,
+    "valid_zero_zone_candidate_contact_sessions_represented": true
+  },
+  "prospective_start": {
+    "no_backfill_before_start": true,
+    "pre_start_use": "causal warmup only",
+    "session_date_ny": "2026-08-31",
+    "session_open_local": "2026-08-31T08:00:00-04:00",
+    "session_open_utc": "2026-08-31T12:00:00Z"
   },
   "qa_evidence_sha256": {
-    "COLLECTOR_STATIC_FIREWALL_QA.json": "b74fe842c9cb8b494b6e49e3d754694628372b93f773aa56af20ec211f903d0d",
-    "FUTURE_OUTCOME_OPENING_GUARD_QA.json": "d3f0d2ac36cc918c1598df58b593364dc0317af755c85c58c85976eb3182b061",
+    "COLLECTOR_STATIC_FIREWALL_QA.json": "6a79c531020fe2abdf6f26a4dadbba5916a900d696c60e854aec08575d20c5b6",
+    "FUTURE_OUTCOME_OPENING_GUARD_QA.json": "ab7ac6fcdd37d5b11e52f8a99c8c9224903eefda9959cb32ffc21cc29c5a91ae",
     "HISTORICAL_DRYRUN_CONTACT_ONLY_PARITY.json": "91a5cdd259abbb5be1db382636ce737ec36f36644bac728361c5b03df859c7ed",
     "HISTORICAL_DRYRUN_CONTACT_ONLY_QA.json": "0c946a317ae92782a3215049f2d86175fa4691ce2c57c480dbe578018e6085e9",
     "HISTORICAL_DRYRUN_FEATURE_PARITY.json": "7e2e66b90fc3b57fff720d3a72f7a703b0ff255daf4a6e48971733ede06485ed",
-    "HISTORICAL_DRYRUN_FEATURE_QA.json": "40b8432335e3cf0606ad8085e7d5930c92858ad6a7bb53f7531f554f65915b37",
-    "HISTORICAL_DRYRUN_INGEST_QA.json": "989fb87e71ca21f54d39583776361c61380d61b4fc0e27d8bda1c7e307cdfb6f",
+    "HISTORICAL_DRYRUN_FEATURE_QA.json": "0303ea4873d5be2f5fe5a55d2b1638752d43668d80f47d4c234597f907daa1e6",
+    "HISTORICAL_DRYRUN_INGEST_QA.json": "8e5eca29fdfaf6d8ec7fd167b2d59318c6c71ddfb9b91a302078b082fa2ca9c8",
     "HISTORICAL_DRYRUN_Z4_EXACT_PARITY.json": "b6ddcf207978add4d372eedb12a8586b6cb1e8a306c76d16e21f7132756c1fc3",
     "HISTORICAL_DRYRUN_Z4_PREFIX_INVARIANCE.json": "b6ddcf207978add4d372eedb12a8586b6cb1e8a306c76d16e21f7132756c1fc3",
     "HISTORICAL_DRYRUN_Z4_QA.json": "f6b2f028ab7fc6429fc83b6dad538225ba218d172b8d542002c44a0f2db87a62",
     "HISTORICAL_WIDTH_CONTROL_DRYRUN.json": "2979dc03c928643411db2fc060d1bb8afcf2e52a3539193a57ee2dd1f6dc336a",
-    "HISTORICAL_WIDTH_CONTROL_NUMERICAL_QA.json": "376ad9d742f95e43554542497cde8c198aee7865941147b316202ab7f7dee8fb",
-    "SYNTHETIC_PROSPECTIVE_PLANNING_TESTS.json": "45b7b8e347bd4f6869be130001c1ab0cf63f91f75e8b6df2e0a33fdb3d19ed9d"
+    "HISTORICAL_WIDTH_CONTROL_NUMERICAL_QA.json": "0ab5be9fad0642d0d18faef83efd4bf7fffc1632643046767e8fb3e5034fb9d4",
+    "SYNTHETIC_PROSPECTIVE_PLANNING_TESTS.json": "1c47477e8a822c001efb83c9e3d304f6e657dd00e2c7d30f96cefa081f05ce2a"
   },
-  "environment": {
-    "python": "3.11.16",
-    "numpy": "2.3.2",
-    "pandas": "2.3.1",
-    "scipy": "1.16.1",
-    "scikit_learn": "1.7.1",
-    "environment_json_sha256": "c54b46043ee49c9b4945c42f0cdabc540f85df1938ae60bae95e9f46d91f5de6",
-    "pip_freeze_sha256": "317479fc3e6fff3d3c2ed69d32ab22de771dd60b16b0c249b9de183e3cae3cc0"
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; upper-Z4-conditioned local top-3 displayed E universe",
+  "seal_revision": "R4_OPERATIONALLY_HARDENED",
+  "single_checkpoint": {
+    "discretionary_extension": false,
+    "interim_performance_peeking": false,
+    "lock_contains_exact_sorted_represented_session_dates": true,
+    "lock_rule": "first completed accepted NY session where both cumulative thresholds are true",
+    "minimum_model_eligible_primary_contacts": 1000,
+    "minimum_represented_sessions": 90,
+    "valid_zero_contact_sessions_count_as_represented": true
   },
-  "historical_dryrun": {
-    "session_date_ny": "2026-07-15",
-    "session_rows": 540,
-    "missing_m1": 0,
-    "warmup_rows": 2520,
-    "eligible_pre_session_c5_landmarks": 96,
-    "z4_rows": 459,
-    "z4_exact_parity": true,
-    "z4_prefix_invariance": true,
-    "feature_rows": 209,
-    "feature_exact_parity": true,
-    "display_episodes": 164,
-    "primary_contacts": 78,
-    "model_eligible_primary_contacts": 78,
-    "contact_exact_parity": true,
-    "post_contact_bars_read": 0,
-    "prospective_outcomes_generated": false,
-    "prospective_outcomes_read": false
+  "status": "E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS",
+  "supersedes": {
+    "previous_seal_commit": "cacac18ab55cd8162b4dce24e14e2710320f88bc",
+    "reason": "Pro pre-execution review found and repaired source atomicity, resume, concurrency, zero-contact-session and final contact-parity gaps before any prospective execution."
   },
   "width_only_interpretation_control": {
+    "canonical_full_auc_delta": 0.0,
     "gating": false,
+    "historical_cross_serialization_tolerance": 5e-07,
+    "independent_full_auc_cross_serialization_delta": 4.464611356169712e-07,
+    "prospective_gate_tolerance": false,
     "rescue_allowed": false,
-    "historical_cross_serialization_tolerance": 5e-7,
-    "observed_width_auc_delta": 4.6615795046278663e-7,
-    "observed_full_minus_width_delta": 4.6615795046278663e-7,
-    "prospective_gate_tolerance": false
-  },
-  "anti_peeking": {
-    "collector_template_installed_as_live_workflow": false,
-    "prospective_live_store_exists_at_seal_parent": false,
-    "reaction_labeler_invoked_by_collector": false,
-    "checkpoint_evaluator_invoked_by_collector": false,
-    "unauthorized_future_evaluator_blocked": true,
-    "prospective_performance_visible": false
-  },
-  "qa_manifest": {
-    "path": "prospective-planning-v1/qa-r2/PROSPECTIVE_PLANNING_QA.json",
-    "git_blob": "4a4efb49a33b88580747ef1add75eafc2ae2849d",
-    "status": "PROSPECTIVE_PLANNING_QA_PASS",
-    "decision": "READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE"
-  },
-  "next_required_mode": "PRO",
-  "next_required_decision": [
-    "GO_PROSPECTIVE_CONFIRMATION_EXECUTION",
-    "NO_GO_PROSPECTIVE_CONFIRMATION_EXECUTION"
-  ]
+    "width_auc_cross_serialization_delta": 4.6615795046278663e-07
+  }
 }
