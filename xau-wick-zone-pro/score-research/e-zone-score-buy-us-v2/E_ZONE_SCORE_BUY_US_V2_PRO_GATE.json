@@ -1,0 +1,246 @@
+{
+  "status": "PRO_E_ZONE_SCORE_BUY_US_V2_METHODOLOGICAL_GATE_PASS",
+  "decision": "GO_E_ZONE_SCORE_BUY_US_V2_SEQUENTIAL_HISTORICAL_EXECUTION",
+  "gate_date": "2026-08-29",
+  "gate_type": "TARGETED_PRO_PRE_OUTCOME_METHOD_GATE",
+  "reviewed_branch_head_before_gate": "a7e61498a0f90e8aa761686f6dc440abf1735ef7",
+  "scope": {
+    "instrument": "XAUUSD Dukascopy BID M1",
+    "direction": "BUY_ONLY",
+    "session": "08:00-17:00 America/New_York",
+    "zones": "v0.4 sticky displayed E slots E1/E2/E3 only",
+    "upper_context": "at least one causal Z4 strictly above current close",
+    "families": [
+      "ESM_BOTH_G120M",
+      "EPM_M1_R2_A8H",
+      "EWM_G60M",
+      "ES_M1_8H_R2_T0.50"
+    ],
+    "excluded": [
+      "SELL",
+      "non-US sessions",
+      "timeframes other than the frozen M1 study",
+      "Z4 rows as score candidates",
+      "trading profitability",
+      "Pine implementation during this phase"
+    ]
+  },
+  "existing_evidence_and_problem_statement": {
+    "V1_DEV_contacts": 16461,
+    "V1_DEV_auc": 0.5756928360690787,
+    "V1_DEV_q4_minus_q1": 0.16447101561694932,
+    "V1_replication_contacts": 17454,
+    "V1_replication_auc": 0.5657692600871821,
+    "V1_replication_q4_minus_q1": 0.14760498693640284,
+    "V1_full_score_width_component_correlation_DEV": 0.9946496592310174,
+    "V1_full_score_width_component_correlation_REPLICATION": 0.9945065552127659,
+    "V1_full_minus_width_auc_DEV": 0.0014312764292055968,
+    "V1_full_minus_width_auc_REPLICATION": 0.0007258210600838977,
+    "scientific_conclusion": "The historical V1 rank is reproducible but is not an acceptable general zone-quality score because its endpoint gives wider zones more room before invalidation and the fitted rank is almost entirely a width rank.",
+    "V1_reuse_in_V2_score": "FORBIDDEN"
+  },
+  "detector_authority": {
+    "architecture": "Z4 + ESM_BOTH_G120M + EPM_M1_R2_A8H + EWM_G60M + ES_M1_8H_R2_T0.50, v0.4 sticky max-3 display",
+    "v04_path": "xau-wick-zone-pro/entry-research/xau_ebuy_coverage_v0_4_sticky.py",
+    "v04_git_blob": "bfb0d65efce0f5773b2045eaf4c31ed6bc07740f",
+    "v01_git_blob": "ef45037d2a99a705ddf9bfbc3ebc666f88119a80",
+    "v02_git_blob": "8d7a7d93e7259d98b0a69a5ebcb50960be7be1bb",
+    "v03_git_blob": "10747fcf3bc9fa4e362fc7b42592d3eebba2fe12",
+    "provenance_instrument_git_blob": "25365deca0563dada9bb862b74764932e0ce7ba3",
+    "snapshot_builder_git_blob": "1cf0eb455d217de964d633d44d30bbc541a67f8a",
+    "geometry_change": "FORBIDDEN",
+    "required_overlap_parity": "The V2 instrumented detector must reproduce time, original slot, family, center, zlo and zhi exactly on every overlapping 2024-08-01 through 2026-08-01 v0.4 row before any V2 outcome is opened."
+  },
+  "historical_windows": {
+    "warmup_rule": "Each window receives at least 35 preceding calendar days of M1 data for the 1440-active-M1 Z4 lookback, 96 C5 warmup landmarks and stateful E memory; only contacts inside the declared window count.",
+    "DEVELOPMENT_V2": {
+      "start_inclusive_utc": "2020-01-01T00:00:00Z",
+      "end_exclusive_utc": "2022-01-01T00:00:00Z",
+      "purpose": "fit the unique V2 model and freeze every transform, coefficient and score map"
+    },
+    "VALIDATION_V2": {
+      "start_inclusive_utc": "2022-01-01T00:00:00Z",
+      "end_exclusive_utc": "2023-01-01T00:00:00Z",
+      "purpose": "first forward frozen-model gate"
+    },
+    "REPLICATION_V2": {
+      "start_inclusive_utc": "2023-01-01T00:00:00Z",
+      "end_exclusive_utc": "2024-01-01T00:00:00Z",
+      "purpose": "second forward frozen-model gate"
+    },
+    "ARCHITECTURE_OVERLAP_ROBUSTNESS_ONLY": {
+      "start_inclusive_utc": "2024-01-01T00:00:00Z",
+      "end_exclusive_utc": "2024-08-01T00:00:00Z",
+      "role": "non-gating report opened only after REPLICATION_V2 because this interval participated in outcome-blind detector coverage selection"
+    },
+    "KNOWN_V1_INTERVAL": {
+      "start_inclusive_utc": "2024-08-01T00:00:00Z",
+      "end_exclusive_utc": "2026-08-01T00:00:00Z",
+      "role": "known V1 evidence; prohibited for V2 fitting, feature selection, thresholds or gates"
+    }
+  },
+  "data_provenance": {
+    "source_repository": "kevingtlin/Market-Data-Lab",
+    "source_path_pattern": "xauusd/bid/m1/xauusd_bid_m1_YYYY_MM.csv",
+    "source_branch": "main",
+    "execution_rule": "Pin one exact upstream commit before downloading; verify each downloaded Git blob and SHA-256; record bytes, rows, first/last timestamp and missing/duplicate M1 opens.",
+    "z4_rule": "Generate causal geometry only. Z4 reaction/outcome columns may not be computed, loaded or consulted by the V2 detector.",
+    "missing_data_rule": "No imputation. Missing M1 opens are unavailable bars and do not consume the 30-available-bar outcome horizon. Session-level quality is reported and frozen before outcome interpretation."
+  },
+  "V2_width_neutral_reaction_outcome": {
+    "population": "first primary contact of each armed displayed E episode",
+    "arming": "A zone may arm only after its feature_available_time and only when the latest available M1 close is strictly above the current zhi. The arming bar cannot also be the contact bar.",
+    "contact": "The first later available M1 whose [low, high] intersects the current causal E interval while the display episode remains live.",
+    "frozen_v": "v_snapshot from the last causal displayed snapshot available before contact",
+    "anchor": "close of the contact M1 bar",
+    "favorable_threshold": "contact_close + 0.50 * frozen_v",
+    "adverse_threshold": "contact_close - 0.50 * frozen_v",
+    "contact_bar": "Its high and low are ignored for outcome classification; classification starts with the next available M1.",
+    "horizon": "30 subsequent available M1 bars, truncated at 17:00 America/New_York",
+    "success": "high reaches favorable_threshold before low reaches adverse_threshold",
+    "failure": "low reaches adverse_threshold first",
+    "same_bar_both": "AMBIGUOUS_SAME_BAR, primary binary label 0",
+    "neither": "NEITHER, primary binary label 0",
+    "zone_width_in_thresholds": false,
+    "reason": "The endpoint is symmetric around the post-contact close, so zlo/zhi width cannot mechanically move the favorable/adverse distances."
+  },
+  "matched_placebo_zone_test": {
+    "purpose": "Test whether a displayed E episode identifies a better BUY reaction location than a geometrically and contextually matched level that is not a real E or Z4.",
+    "controls_per_real_episode": 5,
+    "control_construction": "Deterministic session-transplant of the donor episode's complete normalized geometry path into other sessions of the same historical window.",
+    "recipient_exact_matches": [
+      "same 5-minute NY slot at episode start",
+      "same NY weekday",
+      "same original display slot E1/E2/E3",
+      "same upper_z4_count bucket 1, 2, or 3+"
+    ],
+    "recipient_calipers": {
+      "absolute_log_v_ratio": 0.20,
+      "nearest_upper_z4_distance_v": 0.25
+    },
+    "nearest_neighbor_variables": [
+      "trend15_v",
+      "trend60_v",
+      "trend240_v",
+      "nearest_upper_z4_dist_v",
+      "log_v_snapshot"
+    ],
+    "recipient_session_rule": "Different session and at least 10 represented sessions away from the donor session. Selection uses no future price and uses SHA-256 lexical tie-breaking with seed text E_ZONE_SCORE_BUY_US_V2_20260829.",
+    "path_transplant": {
+      "center": "recipient_close_t - donor_distance_v_t * recipient_v_t",
+      "lower_half_width": "donor_(center-zlo)_v_t * recipient_v_t",
+      "upper_half_width": "donor_(zhi-center)_v_t * recipient_v_t",
+      "snapshot_offsets": "same contiguous C5 offsets as the donor episode",
+      "family_and_slot": "copied from donor only as labels; they do not make the placebo a real zone"
+    },
+    "neutrality_exclusion": "At every transplanted snapshot, exclude the placebo if its interval overlaps any causal real E or Z4 full-pool interval, or if its center lies within 0.20*v of such a center. Truncate at the first unavailable or ineligible recipient snapshot.",
+    "same_labeler": "Placebos use the identical arming, contact and width-neutral reaction outcome rules.",
+    "primary_matched_set": "A real contacted E episode with at least two contacted neutral placebos; each real episode has weight one and its placebo comparator is the mean outcome of its valid contacted controls.",
+    "primary_effect": "mean(real outcome - matched-placebo mean outcome)",
+    "secondary_effects": [
+      "episode-level unconditional favorable rate with no-contact coded 0",
+      "contact-rate difference real minus placebo",
+      "time-to-contact difference"
+    ],
+    "inference": "5000 fixed-seed multiway Poisson session-cluster bootstrap draws; independent Poisson(1) weights by every donor and recipient NY session, pair weight equal to the product; percentile 95% CI; at least 4750 valid draws.",
+    "quality_gates": {
+      "minimum_primary_matched_real_contacts": 1000,
+      "minimum_donor_sessions": 90,
+      "minimum_fraction_of_real_contacts_with_at_least_two_contacted_controls": 0.70,
+      "maximum_absolute_standardized_mean_difference": 0.10,
+      "required_balanced_variables": [
+        "zone_width_v",
+        "distance_v",
+        "log_v_snapshot",
+        "minute_of_session",
+        "nearest_upper_z4_dist_v",
+        "trend15_v",
+        "trend60_v",
+        "trend240_v"
+      ]
+    },
+    "primary_zone_pass_rule": "In both VALIDATION_V2 and REPLICATION_V2, the pooled primary effect must be positive and its 95% bootstrap lower bound must be greater than 0, with every quality gate passing.",
+    "slot_specific_status": "E1, E2 and E3 are adjudicated separately in REPLICATION_V2. A slot is individually VALIDATED only with at least 300 matched real contacts, at least 60 donor sessions, a positive effect, and Holm-adjusted one-sided bootstrap p < 0.05 across the three slots. Failure of one slot does not erase a pooled result but that slot cannot be called validated."
+  },
+  "score_construction": {
+    "feature_registry_path": "xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/E_ZONE_SCORE_BUY_US_V2_FEATURE_REGISTRY.json",
+    "outcome": "V2 width-neutral reaction outcome on real contacted E episodes only",
+    "fit_period": "DEVELOPMENT_V2 only",
+    "model": "One fixed L2 logistic regression with C=1.0, lbfgs, max_iter=5000, no class weighting and no hyperparameter search",
+    "comparison_model": "Identical fixed nuisance-only logistic regression",
+    "displayed_score": "Strength-only contribution from the full model; intercept and all width/location/context nuisance contributions removed; mapped to 0-100 by DEV empirical midrank and frozen thereafter.",
+    "refit_after_DEV": "FORBIDDEN",
+    "separate_E1_E2_E3_models": "FORBIDDEN"
+  },
+  "score_validation_gates": {
+    "required_in_both_VALIDATION_V2_and_REPLICATION_V2": [
+      "at least 1000 eligible real contacts and at least 90 NY sessions",
+      "AUC(displayed_raw_score) > 0.5 and session-cluster bootstrap 95% lower bound > 0.5",
+      "fixed DEV score quartile rates satisfy Q1 <= Q2 <= Q3 <= Q4",
+      "fixed DEV Q4 minus Q1 > 0 and session-cluster 95% lower bound > 0",
+      "AUC(full model) minus AUC(nuisance-only model) > 0 and paired session-cluster 95% lower bound > 0",
+      "feature exclusion rate <= 2%",
+      "unseen-family rate <= 5%",
+      "absolute Spearman correlation between displayed score and zone_width_v <= 0.20 overall",
+      "absolute within-family score-width Spearman correlation <= 0.30 for every family with at least 200 contacts",
+      "fixed DEV Q4 minus Q1 is positive in at least four of five fixed DEV width quintiles and no width quintile effect is below -0.02",
+      "no frozen detector, outcome, feature, control, transform, coefficient, score map or gate changed"
+    ],
+    "slot_diagnostics": "Report AUC, quartile rates and Q4-Q1 separately for E1, E2 and E3 using the same frozen formula. No slot-specific refit or threshold is allowed.",
+    "score_pass_rule": "Every required gate must pass in both forward periods. If zone validity passes but score validity fails, zones may be retained with their validated slot status but no quality score may be promoted to Pine."
+  },
+  "sequential_execution_authorization": {
+    "token": "GO_E_ZONE_SCORE_BUY_US_V2_SEQUENTIAL_HISTORICAL_EXECUTION",
+    "mode": "TRES_ELEVE",
+    "no_intermediate_Pro_gate_required": true,
+    "required_order": [
+      "implement geometry-only Z4, V2 instrumentation, placebo generator, labeler, model and independent QA",
+      "prove exact v0.4 overlap geometry parity and run synthetic/no-lookahead tests",
+      "freeze and hash the complete pre-outcome package",
+      "open DEVELOPMENT_V2 only, fit once and freeze model/transforms/score map",
+      "open VALIDATION_V2 only and evaluate frozen gates",
+      "open REPLICATION_V2 only if the complete validation continuation gate passes; otherwise stop without replication outcomes",
+      "after replication, optionally open the non-gating 2024-01 through 2024-07 robustness interval",
+      "freeze labels, controls, balance, model, scores, reports, environment, hashes, workflow, artifact and immutable copy"
+    ],
+    "post_DEV_changes": "FORBIDDEN except correction of a proven implementation defect that forces invalidation and complete restart from the pre-outcome package; no partial reuse",
+    "forbidden_operations": [
+      "SELL analysis",
+      "non-US analysis",
+      "alternate outcomes or thresholds",
+      "alternate control design after any V2 outcome is read",
+      "feature selection after any V2 outcome is read",
+      "hyperparameter search",
+      "subgroup rescue",
+      "using 2024-08 through 2026-07 V1 outcomes to tune V2",
+      "Pine modification",
+      "production or trading claim"
+    ]
+  },
+  "decision_tree": {
+    "zones_fail": "No statistical validation of E zones; do not create or display a quality score.",
+    "pooled_zones_pass_some_slots_fail": "Retain only explicit slot-level validation labels; unvalidated E slots cannot be presented as statistically supported zones.",
+    "zones_pass_score_fails": "Zones are supported as reaction locations, but no justified 0-100 quality score exists.",
+    "zones_and_score_pass": "Return to Pro for final scientific interpretation and only then specify the Pine 0-100 formula and labels.",
+    "profitability_claim": "Never implied by a reaction-location or ranking pass."
+  },
+  "parallel_prospective_V1_relation": {
+    "status": "SEPARATE_NONBLOCKING_RESEARCH_STREAM",
+    "effect_on_this_V2_study": "NONE",
+    "may_be_used_to_tune_V2": false,
+    "does_not_require_waiting_until_2026_08_31": true
+  },
+  "next_checkpoint": {
+    "required_status": "READY_FOR_PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE",
+    "required_Pro_decisions": [
+      "VALIDATE_OR_REJECT_POOLED_E_ZONE_EFFECT",
+      "VALIDATE_OR_REJECT_E1",
+      "VALIDATE_OR_REJECT_E2",
+      "VALIDATE_OR_REJECT_E3",
+      "VALIDATE_OR_REJECT_WIDTH_NEUTRAL_SCORE",
+      "AUTHORIZE_OR_FORBID_PINE_SCORE_SPECIFICATION"
+    ],
+    "production_authorization": "NONE",
+    "pine_modification": "FORBIDDEN_UNTIL_FINAL_PRO_GATE"
+  }
+}
