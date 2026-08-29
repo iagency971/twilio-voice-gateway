@@ -1,0 +1,67 @@
+name: XAU E display episode V1 prospective planning QA R4
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - '.github/workflows/xau-e-prospective-planning-v1-r4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  planning-qa-r4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install frozen scientific environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/requirements-lock.txt
+
+      - name: Run complete prospective planning QA R4
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          METHOD_COMMIT: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          JOB_NAME: planning-qa-r4
+        run: |
+          set -euo pipefail
+          bash xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/run_prospective_planning_qa_r4.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-e-prospective-planning-v1-r4
+          path: /tmp/pros-r4/results
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Materialize R4 QA evidence on branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          PLAN=xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1
+          OUT="$PLAN/qa-r4"
+          rm -rf "$OUT"
+          mkdir -p "$OUT"
+          cp /tmp/pros-r4/results/* "$OUT/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$OUT"
+          git commit -m 'record hardened E V1 prospective planning QA R4 evidence'
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
