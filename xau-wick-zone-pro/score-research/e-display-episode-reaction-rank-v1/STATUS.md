@@ -1,7 +1,8 @@
 # E display episode reaction rank V1 — status
 
 **Updated:** 2026-08-29  
-**Scope:** XAUUSD M1, BUY, US 08:00–17:00 America/New_York
+**Scope:** XAUUSD M1, BUY, US 08:00–17:00 America/New_York  
+**Candidate:** `E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1`
 
 ## Current scientific state
 
@@ -14,9 +15,13 @@
 - Replication freeze: `E_DISPLAY_EPISODE_V1_REPLICATION_FREEZE_PASS`
 - Replication support gate: `PASS`
 - Pro post-replication scientific gate: `PASS`
-- Current authorization: `GO_PROSPECTIVE_CONFIRMATION_PLANNING`
-- Authorized phase: `PROSPECTIVE_CONFIRMATION_PROTOCOL_AND_INFRASTRUCTURE_FREEZE_ONLY`
-- Prospective outcome execution: `NOT_AUTHORIZED`
+- Prospective-confirmation planning: `COMPLETE_AND_FROZEN`
+- Prospective planning QA: `PROSPECTIVE_PLANNING_QA_PASS`
+- Prospective planning canonical seal: `E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS`
+- Current checkpoint: `READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE`
+- Prospective collection execution: `NOT_AUTHORIZED`
+- Prospective reaction outcomes: `CLOSED`
+- Prospective performance statistics: `CLOSED`
 - Frozen DEV model refit: `FORBIDDEN`
 - Post-DEV / post-replication tuning: `FORBIDDEN`
 - Production authorization: `NONE`
@@ -61,45 +66,117 @@
 - Feature exclusion rate: `0.0`
 - Unseen-family rate: `0.0`
 - Frozen DEV model loaded without refit: `PASS`
-- Known partial sessions retained: `2026-06-19`, `2026-07-03`
-- Missing M1 opens retained under frozen rule: `482`
 
-All frozen historical-replication support checks passed. Historical replication remains supporting evidence and cannot authorize production.
+Interpretation remains constrained: the frozen candidate is a **width-dominated reaction rank** in the upper-Z4-conditioned local top-3 displayed-E universe. It is not a universal intrinsic E-strength score and does not establish trading profitability.
 
-## Pro post-replication decision
+## Prospective planning canonical authority
 
-- Decision file: `E_DISPLAY_EPISODE_V1_PRO_POST_REPLICATION_GATE.json`
-- Memo: `XAUUSD_E_DISPLAY_EPISODE_PRO_POST_REPLICATION_GATE_2026-08-29.md`
-- Interpretive diagnostic: `POST_REPLICATION_PRO_INTERPRETIVE_DIAGNOSTICS.json`
-- Decision: `GO_PROSPECTIVE_CONFIRMATION_PLANNING`
+Canonical seal:
 
-The historical evidence supports prospective confirmation of the frozen reaction rank. It does not validate trading profitability or a universal E-strength score.
+`PROSPECTIVE_PLANNING_CANONICAL_SEAL.json`
 
-A mandatory semantic caveat is now recorded: the frozen score is almost entirely driven by `zone_width_v`. The future plan must include a deterministic width-only comparator as an interpretation control, without changing or rescuing the primary candidate.
+Seal commit:
+
+`cacac18ab55cd8162b4dce24e14e2710320f88bc`
+
+Seal commit timestamp:
+
+`2026-08-29T20:24:32Z`
+
+The seal therefore precedes the frozen prospective start `2026-08-31T12:00:00Z`.
+
+Two-stage planning evidence:
+
+- method commit: `1b84889b389d03a0ae79595cb9b58865a1934c27`
+- QA materialization commit: `b429bd0fac77ba9e3b2307c61672a1031c18c066`
+- QA workflow: `.github/workflows/xau-e-prospective-planning-v1-r2.yml`
+- QA workflow run: `33273228430`
+- run number / attempt: `2 / 1`
+- QA job: `99155361926` (`planning-qa-r2`)
+- run conclusion: `success`
+- artifact: `9720724299`
+- artifact name: `xau-e-prospective-planning-v1-r2`
+- artifact digest: `sha256:c12623d52dd75bbd890c0cb5b084613a90ca9b668ff86b5d418c510fa7ed4335`
+
+Frozen prospective start if the next Pro gate authorizes execution:
+
+- first eligible session: `2026-08-31`
+- New York open: `08:00 America/New_York`
+- UTC open: `2026-08-31T12:00:00Z`
+- no backfill before start
+- pre-start data permitted only as causal warm-up
+
+Frozen single checkpoint:
+
+- minimum represented NY sessions: `90`
+- minimum model-eligible primary contacts: `1000`
+- lock at the first completed accepted session where both thresholds are satisfied
+- no interim performance peeking
+- no discretionary extension or early stop
+
+## Causal warm-up repair frozen before prospective execution
+
+Historical dry-run QA exposed a source-semantics requirement already present in the frozen E generator:
+
+- Z4 active-M1 lookback: `1440`
+- additional pre-session C5 landmarks after that lookback: `96`
+
+The prospective archive now uses the latest causal active-M1 start that leaves exactly 96 eligible pre-session C5 landmarks after the 1,440-active-M1 lookback. This rule uses only pre-session information and is frozen in:
+
+`XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_A_WARMUP_AND_NUMERICAL_TOLERANCE_2026-08-29.md`
+
+## Final historical dry-run QA
+
+Preselected session: `2026-07-15`.
+
+- session M1 rows: `540`
+- missing M1: `0`
+- warm-up rows: `2520`
+- eligible pre-session C5 landmarks: `96`
+- Z4 rows: `459`
+- exact historical Z4 parity: `PASS`
+- Z4 prefix invariance to later bars: `PASS`
+- prospective feature rows: `209`
+- exact canonical feature parity: `PASS`
+- display episodes: `164`
+- primary contacts: `78`
+- model-eligible primary contacts: `78`
+- exact contact-only parity: `PASS`
+- post-contact bars read by contact counter: `0`
+- prospective outcomes generated: `false`
+- prospective outcomes read: `false`
+
+## Width-only interpretation control
+
+`zone_width_v` remains a deterministic interpretation-only comparator.
+
+- gating: `false`
+- rescue allowed: `false`
+- model selection allowed: `false`
+- historical cross-serialization QA tolerance: `5e-7` only
+- observed width-AUC recomputation delta: `4.6615795046278663e-7`
+- observed full-minus-width delta: `4.6615795046278663e-7`
+- this tolerance is **not** a prospective scientific pass threshold
+
+## Anti-peeking / execution state
+
+- Collector exists only as `prospective_collection_workflow_TEMPLATE_v1.yml`.
+- It is **not** installed as a live scheduled workflow.
+- `prospective-live-v1/` does not exist at the planning seal.
+- The collector does not invoke the frozen reaction labeler.
+- The collector does not invoke the prospective checkpoint evaluator.
+- Unauthorized prospective outcome evaluation fails closed.
+- No prospective reaction outcome or prospective performance statistic has been generated or read.
 
 ## Mandatory next checkpoint
 
-Switch to **Très élevé** and build the complete prospective-confirmation planning package without opening any prospective outcome.
+The **Très élevé** prospective-planning phase is complete.
 
-The planning package must freeze:
+Next mode: **Pro**.
 
-- the first eligible prospective-session rule;
-- append-only data acquisition and SHA-256 provenance;
-- outcome-free feature snapshots;
-- the anti-peeking firewall;
-- missing/duplicate/revision data rules;
-- the single checkpoint at the first completed session satisfying both `>=90` eligible sessions and `>=1000` primary contacts;
-- the unchanged model, target, ranks, quartiles, bootstrap and primary gates;
-- the separate non-rescue width-only interpretation control;
-- synthetic tests, historical dry-runs, environment and immutable hashes.
-
-The planning phase must stop at:
-
-`READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE`
-
-Then return to **Pro** for one decision only:
+The next Pro review has one purpose only: audit the frozen prospective-planning package and decide either:
 
 - `GO_PROSPECTIVE_CONFIRMATION_EXECUTION`, or
 - `NO_GO_PROSPECTIVE_CONFIRMATION_EXECUTION`.
 
-Until that decision, no prospective label, performance statistic, production use or Pine modification is authorized.
+If Pro returns GO, execution remains limited to **outcome-blind prospective collection until the mechanically locked single checkpoint**. Even then, reaction outcomes remain unopened until the separately frozen checkpoint-opening conditions and authorization are satisfied.
