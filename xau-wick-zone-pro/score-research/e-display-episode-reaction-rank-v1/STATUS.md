@@ -1,182 +1,116 @@
 # E display episode reaction rank V1 — status
 
 **Updated:** 2026-08-29  
-**Scope:** XAUUSD M1, BUY, US 08:00–17:00 America/New_York  
+**Scope:** XAUUSD M1, BUY, US 08:00–17:00 `America/New_York`  
 **Candidate:** `E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1`
 
 ## Current scientific state
 
 - Canonical outcome-free package: `PASS`
-- Second Pro pre-outcome gate: `PASS`
-- DEV outcome phase: `COMPLETE_AND_FROZEN`
-- DEV freeze: `E_DISPLAY_EPISODE_V1_DEV_FREEZE_PASS`
-- Pro post-DEV scientific gate: `PASS`
-- Historical replication phase: `COMPLETE_AND_FROZEN`
-- Replication freeze: `E_DISPLAY_EPISODE_V1_REPLICATION_FREEZE_PASS`
-- Replication support gate: `PASS`
-- Pro post-replication scientific gate: `PASS`
-- Prospective-confirmation planning: `COMPLETE_AND_FROZEN`
-- Prospective planning QA: `PROSPECTIVE_PLANNING_QA_PASS`
-- Prospective planning canonical seal: `E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS`
-- Current checkpoint: `READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE`
-- Prospective collection execution: `NOT_AUTHORIZED`
-- Prospective reaction outcomes: `CLOSED`
-- Prospective performance statistics: `CLOSED`
+- DEV phase and freeze: `COMPLETE_AND_FROZEN`
+- Historical replication and freeze: `COMPLETE_AND_FROZEN`
+- Pro post-replication gate: `PASS`
+- Prospective planning R4: `PROSPECTIVE_PLANNING_QA_R4_PASS`
+- Prospective planning canonical seal: `PASS`
+- Pro pre-prospective execution gate: `PASS`
+- Current authorization: `GO_PROSPECTIVE_CONFIRMATION_EXECUTION`
+- Authorization scope: `OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT`
+- Prospective collection: `AUTHORIZED`
+- Prospective start: `2026-08-31 08:00 America/New_York / 12:00 UTC`
+- Backfill before start: `FORBIDDEN`
+- Prospective reaction outcomes before checkpoint: `CLOSED`
+- Prospective performance before checkpoint: `CLOSED`
 - Frozen DEV model refit: `FORBIDDEN`
 - Post-DEV / post-replication tuning: `FORBIDDEN`
 - Production authorization: `NONE`
 - Pine modification: `FORBIDDEN`
 
-## Canonical DEV authority
+## Canonical historical authorities
 
-- DEV workflow run: `33264659057`
-- DEV artifact: `9718487805`
-- DEV artifact digest: `sha256:481ad65013241f4dfcdb4f2378f4168476bb92695519de00166149c4a5ac6c0e`
-- DEV immutable directory: `dev-freeze-canonical-33264659057/`
-- Frozen DEV model SHA-256: `72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1`
-- DEV canonical seal: `DEV_CANONICAL_SEAL.json`
+### DEV
 
-## Canonical historical replication authority
+- Run: `33264659057`
+- Artifact: `9718487805`
+- Artifact digest: `sha256:481ad65013241f4dfcdb4f2378f4168476bb92695519de00166149c4a5ac6c0e`
+- Frozen model SHA-256: `72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1`
 
-- Replication workflow run: `33266656414`
-- Replication artifact: `9719184524`
-- Replication artifact digest: `sha256:734bd0e14f9017dc23822175aa21bc341cfa5b27b5058dc5e028eb5fb5997688`
-- Execution commit: `2aa4abf4839558b42f5c999bf9e16127ece5b655`
-- Materialization commit: `685efd0dc89e6e71ab542c268f75f76cf8699f76`
-- Immutable copy commit: `78af3d80af1a536babef17e05049bc320234c88a`
-- Immutable directory: `replication-freeze-canonical-33266656414/`
-- Replication canonical seal: `REPLICATION_CANONICAL_SEAL.json`
+### Historical replication
 
-## Frozen replication evidence
-
-- Display episodes: `34,007`
+- Run: `33266656414`
+- Artifact: `9719184524`
+- Artifact digest: `sha256:734bd0e14f9017dc23822175aa21bc341cfa5b27b5058dc5e028eb5fb5997688`
 - Primary contacts: `17,454`
-- Primary NY sessions: `257`
-- Overall primary success rate: `49.5531%`
+- Sessions: `257`
 - AUC: `0.5657692600871821`
-- AUC minus 0.5: `0.06576926008718209`
-- Session-cluster 95% CI for AUC minus 0.5: `[0.0568889679606293, 0.0744911973596545]`
-- Q1: `44.4962%`
-- Q2: `45.6602%`
-- Q3: `48.6763%`
-- Q4: `59.2567%`
-- Q4-Q1: `14.7605 percentage points`
-- Q4-Q1 session-cluster 95% CI: `[12.5731, 16.9296] percentage points`
-- Q4-Q1 chronological blocks: `[17.4812, 14.1193, 13.1060] percentage points`
-- Feature exclusion rate: `0.0`
-- Unseen-family rate: `0.0`
-- Frozen DEV model loaded without refit: `PASS`
+- Q4-Q1: `0.147605`
+- Model refit: `NO`
 
-Interpretation remains constrained: the frozen candidate is a **width-dominated reaction rank** in the upper-Z4-conditioned local top-3 displayed-E universe. It is not a universal intrinsic E-strength score and does not establish trading profitability.
+Historical evidence supports prospective confirmation only. It does not establish production readiness or trading profitability.
 
-## Prospective planning canonical authority
+## Canonical prospective planning authority
 
-Canonical seal:
+- Seal path: `PROSPECTIVE_PLANNING_CANONICAL_SEAL.json`
+- Seal SHA-256: `f088d1a18f5686c628e9e00811438dff09902c38290c84ce8c946a5e55d4d49a`
+- Seal commit: `92ec56635234ce791f702747b1343e954ad3a8ff`
+- Method commit: `786342cfb69aaceff17cbcfb6284bb8c4d611d0d`
+- QA materialization commit: `3b07f5eef345bcb353c159b55bf501701049fd52`
+- QA run: `33275153603`
+- QA artifact: `9721274589`
+- QA artifact digest: `sha256:6765d3d5d10854cf5b9437584e5cdc5485897a86f5a2b75e78877e0b66263ccf`
+- QA manifest: `prospective-planning-v1/qa-r4/PROSPECTIVE_PLANNING_QA_R4.json`
 
-`PROSPECTIVE_PLANNING_CANONICAL_SEAL.json`
+R4 closes the pre-execution source-atomicity, persistence/resume, concurrency, zero-contact-session, checkpoint-list and final contact-parity gaps. No prospective outcome was generated or read during planning or the Pro gate.
 
-Seal commit:
+## Pro pre-execution authority
 
-`cacac18ab55cd8162b4dce24e14e2710320f88bc`
+- Decision file: `E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json`
+- Memo: `XAUUSD_E_DISPLAY_EPISODE_PRO_PRE_PROSPECTIVE_EXECUTION_GATE_2026-08-29.md`
+- Decision: `GO_PROSPECTIVE_CONFIRMATION_EXECUTION`
+- Scope: `OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT`
+- Gate commit: `efa2d4ecea3e4c15e0e5e7f2e1058f00cb11c9c8`
 
-Seal commit timestamp:
+## Active prospective protocol
 
-`2026-08-29T20:24:32Z`
+### Collector
 
-The seal therefore precedes the frozen prospective start `2026-08-31T12:00:00Z`.
+- Workflow: `.github/workflows/xau-e-prospective-collector-v1.yml`
+- Template SHA-256: `77d1268a9319001b6327136dfaf39d54da7b527e95d0de72c8a7da388768a679`
+- Schedule: `23:30 UTC`, Monday–Friday
+- Concurrency: single non-cancelling collector
+- Source: exact-commit-pinned Dukascopy BID M1 mirror
+- First accepted session bytes: immutable
+- Revisions: append-only
+- Valid zero-contact sessions: represented
+- Reaction labeler in collector: `FORBIDDEN`
+- Checkpoint evaluator in collector: `FORBIDDEN`
 
-Two-stage planning evidence:
+### Single checkpoint
 
-- method commit: `1b84889b389d03a0ae79595cb9b58865a1934c27`
-- QA materialization commit: `b429bd0fac77ba9e3b2307c61672a1031c18c066`
-- QA workflow: `.github/workflows/xau-e-prospective-planning-v1-r2.yml`
-- QA workflow run: `33273228430`
-- run number / attempt: `2 / 1`
-- QA job: `99155361926` (`planning-qa-r2`)
-- run conclusion: `success`
-- artifact: `9720724299`
-- artifact name: `xau-e-prospective-planning-v1-r2`
-- artifact digest: `sha256:c12623d52dd75bbd890c0cb5b084613a90ca9b668ff86b5d418c510fa7ed4335`
+The first completed accepted NY session where both thresholds are true:
 
-Frozen prospective start if the next Pro gate authorizes execution:
+- represented sessions `>= 90`;
+- model-eligible primary contacts `>= 1000`.
 
-- first eligible session: `2026-08-31`
-- New York open: `08:00 America/New_York`
-- UTC open: `2026-08-31T12:00:00Z`
-- no backfill before start
-- pre-start data permitted only as causal warm-up
+The lock includes the exact sorted represented-session list. No performance may be viewed before it exists.
 
-Frozen single checkpoint:
+### Final checkpoint evaluator
 
-- minimum represented NY sessions: `90`
-- minimum model-eligible primary contacts: `1000`
-- lock at the first completed accepted session where both thresholds are satisfied
-- no interim performance peeking
-- no discretionary extension or early stop
+- SHA-256: `2facd467b9276a48c6c558677c3f2bd81ebf1dca7560c51d599b8a078bd41524`
+- Exact contact-counter parity: mandatory
+- Frozen-model scored count must equal lock count
+- Model refit: forbidden
+- Result package: immutable and hashed
 
-## Causal warm-up repair frozen before prospective execution
+## Interpretation constraint
 
-Historical dry-run QA exposed a source-semantics requirement already present in the frozen E generator:
+The candidate is a **width-dominated reaction rank** for the upper-Z4-conditioned local top-3 displayed-E universe. It is not a calibrated probability, a universal E-strength score or proof of a profitable trading strategy.
 
-- Z4 active-M1 lookback: `1440`
-- additional pre-session C5 landmarks after that lookback: `96`
+## Next checkpoint
 
-The prospective archive now uses the latest causal active-M1 start that leaves exactly 96 eligible pre-session C5 landmarks after the 1,440-active-M1 lookback. This rule uses only pre-session information and is frozen in:
+Until the single lock is reached, only outcome-blind collection/status is authorized.
 
-`XAUUSD_E_DISPLAY_EPISODE_PROSPECTIVE_PLANNING_QA_ADDENDUM_A_WARMUP_AND_NUMERICAL_TOLERANCE_2026-08-29.md`
+After the frozen single-checkpoint result package exists, stop at:
 
-## Final historical dry-run QA
+`READY_FOR_PRO_POST_PROSPECTIVE_GATE`
 
-Preselected session: `2026-07-15`.
-
-- session M1 rows: `540`
-- missing M1: `0`
-- warm-up rows: `2520`
-- eligible pre-session C5 landmarks: `96`
-- Z4 rows: `459`
-- exact historical Z4 parity: `PASS`
-- Z4 prefix invariance to later bars: `PASS`
-- prospective feature rows: `209`
-- exact canonical feature parity: `PASS`
-- display episodes: `164`
-- primary contacts: `78`
-- model-eligible primary contacts: `78`
-- exact contact-only parity: `PASS`
-- post-contact bars read by contact counter: `0`
-- prospective outcomes generated: `false`
-- prospective outcomes read: `false`
-
-## Width-only interpretation control
-
-`zone_width_v` remains a deterministic interpretation-only comparator.
-
-- gating: `false`
-- rescue allowed: `false`
-- model selection allowed: `false`
-- historical cross-serialization QA tolerance: `5e-7` only
-- observed width-AUC recomputation delta: `4.6615795046278663e-7`
-- observed full-minus-width delta: `4.6615795046278663e-7`
-- this tolerance is **not** a prospective scientific pass threshold
-
-## Anti-peeking / execution state
-
-- Collector exists only as `prospective_collection_workflow_TEMPLATE_v1.yml`.
-- It is **not** installed as a live scheduled workflow.
-- `prospective-live-v1/` does not exist at the planning seal.
-- The collector does not invoke the frozen reaction labeler.
-- The collector does not invoke the prospective checkpoint evaluator.
-- Unauthorized prospective outcome evaluation fails closed.
-- No prospective reaction outcome or prospective performance statistic has been generated or read.
-
-## Mandatory next checkpoint
-
-The **Très élevé** prospective-planning phase is complete.
-
-Next mode: **Pro**.
-
-The next Pro review has one purpose only: audit the frozen prospective-planning package and decide either:
-
-- `GO_PROSPECTIVE_CONFIRMATION_EXECUTION`, or
-- `NO_GO_PROSPECTIVE_CONFIRMATION_EXECUTION`.
-
-If Pro returns GO, execution remains limited to **outcome-blind prospective collection until the mechanically locked single checkpoint**. Even then, reaction outcomes remain unopened until the separately frozen checkpoint-opening conditions and authorization are satisfied.
+Then perform one Pro scientific review. Production and Pine remain forbidden.
