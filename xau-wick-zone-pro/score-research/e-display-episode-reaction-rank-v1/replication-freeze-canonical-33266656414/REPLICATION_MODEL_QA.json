@@ -1,0 +1,31 @@
+{
+  "categories": [
+    "EPM_M1_R2_A8H",
+    "ESM_BOTH_G120M",
+    "ES_M1_8H_R2_T0.50",
+    "EWM_G60M"
+  ],
+  "coef": [
+    0.31788024673171933,
+    0.01759082577799318,
+    -0.055319040871949915,
+    -0.025886357711011686,
+    0.013292137958728563
+  ],
+  "feature_excluded_rows": 0,
+  "feature_exclusion_rate": 0.0,
+  "frozen_dev_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
+  "intercept": -0.015002248036328294,
+  "model_refit": false,
+  "quartiles": [
+    -0.21774373459042662,
+    -0.1670938543047079,
+    -0.002000563268151054
+  ],
+  "reference_category": "EPM_M1_R2_A8H",
+  "replication_report_reproduced_exactly": true,
+  "scored_rows": 17454,
+  "status": "REPLICATION_MODEL_INDEPENDENT_QA_PASS",
+  "unseen_family_rate": 0.0,
+  "unseen_family_rows": 0
+}

@@ -1,0 +1,215 @@
+{
+  "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+  "episodes": 34007,
+  "execution_strategy": "MONTHLY_SHARDED_EXACT_FROZEN_LABELER",
+  "labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+  "model_refit": false,
+  "monthly_manifests": [
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 2572,
+      "month": "2025-08",
+      "primary_contacts": 1300,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1300
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 2500,
+      "month": "2025-09",
+      "primary_contacts": 1257,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1257
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 2918,
+      "month": "2025-10",
+      "primary_contacts": 1422,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1422
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 2471,
+      "month": "2025-11",
+      "primary_contacts": 1238,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1238
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 2897,
+      "month": "2025-12",
+      "primary_contacts": 1527,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1527
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 2375,
+      "month": "2026-01",
+      "primary_contacts": 1170,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1170
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 2368,
+      "month": "2026-02",
+      "primary_contacts": 1198,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1198
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 3160,
+      "month": "2026-03",
+      "primary_contacts": 1650,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1650
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 3190,
+      "month": "2026-04",
+      "primary_contacts": 1684,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1684
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 2960,
+      "month": "2026-05",
+      "primary_contacts": 1534,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1534
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 3292,
+      "month": "2026-06",
+      "primary_contacts": 1752,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1752
+      }
+    },
+    {
+      "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "episodes": 3304,
+      "month": "2026-07",
+      "primary_contacts": 1722,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2026-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2025-08-01T00:00:00+00:00",
+        "declared_window": "HISTORICAL_REPLICATION_DIAGNOSTIC",
+        "primary_contacts_checked": 1722
+      }
+    }
+  ],
+  "primary_contacts": 17454,
+  "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE"
+}

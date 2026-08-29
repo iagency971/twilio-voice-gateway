@@ -1,0 +1,25 @@
+{
+  "complete_data_sessions": 256,
+  "expected_m1": 139320,
+  "frozen_rule": "missing M1 opens are skipped as unavailable bars; partial sessions are retained",
+  "missing_m1": 482,
+  "partial_sessions": [
+    {
+      "expected_m1": 540,
+      "first_missing_utc": "2026-06-19T16:59:00+00:00",
+      "last_missing_utc": "2026-06-19T20:59:00+00:00",
+      "missing_m1": 241,
+      "session_date_ny": "2026-06-19"
+    },
+    {
+      "expected_m1": 540,
+      "first_missing_utc": "2026-07-03T16:59:00+00:00",
+      "last_missing_utc": "2026-07-03T20:59:00+00:00",
+      "missing_m1": 241,
+      "session_date_ny": "2026-07-03"
+    }
+  ],
+  "sessions": 258,
+  "sessions_with_missing": 2,
+  "status": "REPLICATION_M1_AVAILABILITY_QA_PASS"
+}
