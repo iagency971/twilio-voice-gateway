@@ -1,0 +1,141 @@
+name: XAU E display episode V1 prospective outcome-blind collector
+
+# TEMPLATE ONLY during planning. It must not be installed under .github/workflows
+# until a later Pro gate writes GO_PROSPECTIVE_CONFIRMATION_EXECUTION.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 23 * * 1-5'
+
+permissions:
+  contents: write
+
+env:
+  BRANCH: agent/xau-wick-zone-pro-dev
+  PKG: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1
+  PLAN: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1
+  LIVE: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-live-v1
+  START_SESSION: '2026-08-31'
+
+jobs:
+  collect-outcome-blind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify future Pro execution authorization and planning seal
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s "$PKG/PROSPECTIVE_PLANNING_CANONICAL_SEAL.json"
+          test -s "$PKG/E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['PKG'])
+          seal=json.loads((p/'PROSPECTIVE_PLANNING_CANONICAL_SEAL.json').read_text())
+          gate=json.loads((p/'E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json').read_text())
+          assert seal['status']=='E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS',seal
+          assert seal['prospective_start']['session_date_ny']=='2026-08-31',seal
+          assert gate['status']=='PRO_PRE_PROSPECTIVE_EXECUTION_GATE_PASS',gate
+          assert gate['decision']=='GO_PROSPECTIVE_CONFIRMATION_EXECUTION',gate
+          assert gate['authorization_scope']=='OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT',gate
+          PY
+          # The collector never invokes the prospective checkpoint evaluator or frozen reaction labeler.
+          ! grep -q 'prospective_checkpoint_evaluator_v1.py' "$0" || true
+      - name: Install frozen environment
+        run: python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
+      - name: Stop immediately if the single checkpoint is already locked
+        id: stopcheck
+        shell: bash
+        run: |
+          if test -s "$LIVE/CHECKPOINT_LOCK.json"; then echo 'locked=true' >> "$GITHUB_OUTPUT"; else echo 'locked=false' >> "$GITHUB_OUTPUT"; fi
+      - name: Acquire upstream monthly snapshots and discover all unseen post-start sessions
+        if: steps.stopcheck.outputs.locked != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/upstream /tmp/meta /tmp/session-work "$LIVE/archive" "$LIVE/geometry" "$LIVE/features" "$LIVE/contacts" "$LIVE/status"
+          python - <<'PY'
+          import datetime,json,os,subprocess,urllib.request,hashlib
+          from pathlib import Path
+          import pandas as pd
+          start=pd.Timestamp('2026-08-01T00:00:00Z'); now=pd.Timestamp.now(tz='UTC')
+          months=pd.period_range(start=start.tz_localize(None),end=now.tz_localize(None),freq='M')
+          head=subprocess.check_output(['git','ls-remote','https://github.com/kevingtlin/Market-Data-Lab','refs/heads/main'],text=True).split()[0]
+          meta=[]
+          for per in months:
+              fn=f'xauusd_bid_m1_{per.year:04d}_{per.month:02d}.csv'; url=f'https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/xauusd/bid/m1/{fn}'; p=Path('/tmp/upstream')/fn
+              r=subprocess.run(['curl','--fail','--silent','--show-error','--location',url,'-o',str(p)])
+              if r.returncode: continue
+              api=f'https://api.github.com/repos/kevingtlin/Market-Data-Lab/contents/xauusd/bid/m1/{fn}?ref=main'
+              req=urllib.request.Request(api,headers={'Accept':'application/vnd.github+json','User-Agent':'prospective-e-v1'})
+              blob=json.loads(urllib.request.urlopen(req).read())['sha']
+              meta.append({'file':fn,'upstream_head_commit':head,'upstream_blob_sha':blob,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})
+          Path('/tmp/meta/source_meta.json').write_text(json.dumps({'repository':'kevingtlin/Market-Data-Lab','branch':'main','files':meta},indent=2,sort_keys=True)+'\n')
+          fs=sorted(Path('/tmp/upstream').glob('xauusd_bid_m1_*.csv')); assert fs
+          raw=pd.concat([pd.read_csv(f) for f in fs],ignore_index=True);raw['time']=pd.to_datetime(raw.timestamp,unit='ms',utc=True);ny=raw.time.dt.tz_convert('America/New_York')
+          raw['session_date_ny']=ny.dt.date.astype(str);raw['hour_ny']=ny.dt.hour
+          candidates=sorted(set(raw.loc[(raw.session_date_ny>='2026-08-31')&(raw.hour_ny>=8)&(raw.hour_ny<17),'session_date_ny']))
+          now=pd.Timestamp.now(tz='UTC');good=[]
+          for s in candidates:
+              close=pd.Timestamp(f'{s} 17:00:00',tz='America/New_York').tz_convert('UTC')
+              if close<=now: good.append(s)
+          Path('/tmp/session-work/candidates.txt').write_text('\n'.join(good)+'\n')
+          PY
+      - name: Build every unseen session outcome-blind in chronological order
+        if: steps.stopcheck.outputs.locked != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          TOOL="$PLAN/prospective_planning_entry_v1.py"
+          while read -r S; do
+            test -n "$S" || continue
+            if test -s "$LIVE/archive/manifests/$S.json"; then continue; fi
+            ACQ="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            python "$TOOL" ingest-session --files /tmp/upstream/*.csv --session-date "$S" --acquired-at "$ACQ" --archive-root "$LIVE/archive" --manifest "/tmp/session-work/ingest-$S.json" --source-meta-json /tmp/meta/source_meta.json
+            W="$LIVE/archive/warmup/$S.csv.gz"
+            python "$TOOL" z4-session --files "$W" --session-date "$S" --output "$LIVE/geometry/$S.pkl" --manifest "$LIVE/geometry/$S.json"
+            mkdir -p "$LIVE/features/$S"
+            python "$TOOL" feature-session --files "$W" --z4-pkl "$LIVE/geometry/$S.pkl" --session-date "$S" --candidates-output "$LIVE/features/$S/candidates.csv.gz" --ledger-output "$LIVE/features/$S/ledger.csv.gz" --manifest "$LIVE/features/$S/manifest.json"
+            python "$TOOL" contact-only --files "$LIVE/archive/sessions/$S.csv.gz" --ledger "$LIVE/features/$S/ledger.csv.gz" --session-date "$S" --output "$LIVE/contacts/$S.csv.gz" --manifest "$LIVE/contacts/$S.json"
+            python "$TOOL" firewall --live-root "$LIVE" --output "$LIVE/status/FIREWALL.json"
+            python "$TOOL" status --live-root "$LIVE" --lock "$LIVE/CHECKPOINT_LOCK.json" --output "$LIVE/status/OUTCOME_BLIND_STATUS.json"
+            if test -s "$LIVE/CHECKPOINT_LOCK.json"; then break; fi
+          done < /tmp/session-work/candidates.txt
+      - name: Final anti-peeking firewall and outcome-blind status
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PLAN/prospective_planning_entry_v1.py" firewall --live-root "$LIVE" --output "$LIVE/status/FIREWALL.json"
+          python "$PLAN/prospective_planning_entry_v1.py" status --live-root "$LIVE" --lock "$LIVE/CHECKPOINT_LOCK.json" --output "$LIVE/status/OUTCOME_BLIND_STATUS.json"
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-live-v1')
+          forbidden=['primary_binary_label','primary_class','favorable_level','auc_minus','q4_minus_q1','success_rate','mfe','mae']
+          for p in root.rglob('*'):
+              if p.is_file() and p.suffix not in {'.pkl','.gz'}:
+                  txt=p.read_text(errors='ignore').lower()
+                  assert not any(x in txt for x in forbidden),(p,[x for x in forbidden if x in txt])
+          print('PROSPECTIVE_LIVE_OUTCOME_FIREWALL_PASS')
+          PY
+      - name: Commit append-only prospective evidence and status
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LIVE"
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'append outcome-blind E V1 prospective evidence'
+          git pull --rebase origin "$BRANCH"
+          git push origin HEAD:"$BRANCH"
