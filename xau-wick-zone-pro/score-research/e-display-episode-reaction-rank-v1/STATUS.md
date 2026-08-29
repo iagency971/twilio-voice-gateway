@@ -10,66 +10,93 @@
 - DEV outcome phase: `COMPLETE_AND_FROZEN`
 - DEV freeze: `E_DISPLAY_EPISODE_V1_DEV_FREEZE_PASS`
 - Pro post-DEV scientific gate: `PASS`
-- Current authorization: `GO_HISTORICAL_REPLICATION_DIAGNOSTIC`
-- Authorized phase: `HISTORICAL_REPLICATION_DIAGNOSTIC_ONLY`
-- Historical replication outcomes: `AUTHORIZED_BUT_NOT_YET_OPENED`
+- Historical replication phase: `COMPLETE_AND_FROZEN`
+- Replication freeze: `E_DISPLAY_EPISODE_V1_REPLICATION_FREEZE_PASS`
+- Replication support gate: `PASS`
+- Current checkpoint: `READY_FOR_PRO_POST_REPLICATION_GATE`
+- Current execution authorization: `NONE_PENDING_PRO_REVIEW`
 - Frozen DEV model refit: `FORBIDDEN`
-- Post-DEV tuning: `FORBIDDEN`
-- Prospective outcomes: `CLOSED`
+- Post-DEV / post-replication tuning: `FORBIDDEN`
+- Prospective execution: `CLOSED`
 - Production authorization: `NONE`
 - Pine modification: `FORBIDDEN`
 
 ## Canonical DEV authority
 
-- DEV execution strategy: `MONTHLY_SHARDED_EXACT_FROZEN_LABELER`
 - DEV workflow run: `33264659057`
 - DEV artifact: `9718487805`
 - DEV artifact digest: `sha256:481ad65013241f4dfcdb4f2378f4168476bb92695519de00166149c4a5ac6c0e`
-- Execution commit: `637ece27b49cc71d0ab972a6d015029ed60a3ddb`
-- Materialization commit: `8e9bd3166d1e3bab987fb50fa48052b5101a920e`
-- Immutable copy commit: `d1e1a32a06a7ae3f6e039360122f042a0ced5f15`
-- Immutable copy directory: `dev-freeze-canonical-33264659057/`
+- DEV immutable directory: `dev-freeze-canonical-33264659057/`
 - Frozen DEV model SHA-256: `72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1`
 - DEV canonical seal: `DEV_CANONICAL_SEAL.json`
 
-## Frozen DEV evidence
+## Canonical historical replication authority
 
-- Display episodes labeled: `32,745`
-- Primary contacts: `16,461`
+- Replication execution strategy: `MONTHLY_SHARDED_EXACT_FROZEN_LABELER`
+- Replication workflow run: `33266656414`
+- Replication artifact: `9719184524`
+- Replication artifact digest: `sha256:734bd0e14f9017dc23822175aa21bc341cfa5b27b5058dc5e028eb5fb5997688`
+- Execution commit: `2aa4abf4839558b42f5c999bf9e16127ece5b655`
+- Materialization commit: `685efd0dc89e6e71ab542c268f75f76cf8699f76`
+- Immutable copy commit: `78af3d80af1a536babef17e05049bc320234c88a`
+- Immutable directory: `replication-freeze-canonical-33266656414/`
+- Replication canonical seal: `REPLICATION_CANONICAL_SEAL.json`
+- Post-replication Pro request: `POST_REPLICATION_PRO_GATE_REQUEST.json`
+- Post-replication checkpoint memo: `XAUUSD_E_DISPLAY_EPISODE_POST_REPLICATION_CHECKPOINT_2026-08-29.md`
+
+The replication workflow was removed after canonical freeze to prevent accidental re-execution before Pro review.
+
+## Frozen replication evidence
+
+- Display episodes labeled: `34,007`
+- Primary contacts: `17,454`
 - Primary NY sessions: `257`
-- Favorable-first: `8,044`
-- Primary binary failures: `8,417`
-- AUC: `0.5756928360690787`
-- AUC minus 0.5: `0.07569283606907873`
-- Session-cluster 95% CI: `[0.06617732897303763, 0.08517572540579761]`
-- Q1 success rate: `0.4282385834109972`
-- Q2 success rate: `0.4452906829144453`
-- Q3 success rate: `0.4891859052247874`
-- Q4 success rate: `0.5927095990279465`
-- Q4-Q1: `0.16447101561694932`
-- Q4-Q1 session-cluster 95% CI: `[0.14153971131994397, 0.18741550235736845]`
+- Favorable-first: `8,649`
+- Primary binary failures: `8,805`
+- Overall primary success rate: `0.4955311103471983`
+- AUC: `0.5657692600871821`
+- AUC minus 0.5: `0.06576926008718209`
+- Session-cluster 95% CI for AUC minus 0.5: `[0.0568889679606293, 0.0744911973596545]`
+- Q1 success rate: `0.4449622725255215`
+- Q2 success rate: `0.45660191787558396`
+- Q3 success rate: `0.4867630700778643`
+- Q4 success rate: `0.5925672594619243`
+- Q4-Q1: `0.14760498693640284`
+- Q4-Q1 session-cluster 95% CI: `[0.12573139125432922, 0.1692963776824019]`
+- Q4-Q1 chronological blocks: `[0.1748121353925043, 0.14119328283607624, 0.13106018437298533]`
 - Feature exclusion rate: `0.0`
-- Frozen-score roundtrip: `EXACT`
+- Unseen-family rate: `0.0`
+- Frozen DEV model loaded without refit: `PASS`
+- Known partial sessions retained: `2026-06-19`, `2026-07-03`
+- Missing M1 opens retained under frozen rule: `482`
 
-DEV is model-development evidence, not validation. It is sufficient only to justify the frozen historical replication diagnostic.
+## Frozen replication support gate
 
-## Pro post-DEV gate
+All predeclared support checks passed:
 
-- Decision file: `E_DISPLAY_EPISODE_V1_PRO_POST_DEV_GATE.json`
-- Memo: `XAUUSD_E_DISPLAY_EPISODE_PRO_POST_DEV_GATE_2026-08-29.md`
-- Decision: `GO_HISTORICAL_REPLICATION_DIAGNOSTIC`
-- Authorized replication ledger SHA-256: `a3baa2f48b9d397ebcdd3e0be936e5947e49caa4ca77dec531f726c321f586a6`
-- Authorized model: immutable DEV model, no refit
-- Replication window: `2025-08-01T00:00:00Z <= contact < 2026-08-01T00:00:00Z`
+- `threshold_episodes_ge_1000`: PASS
+- `threshold_sessions_ge_90`: PASS
+- `auc_positive`: PASS
+- `auc_ci_lower_gt_0`: PASS
+- `quartiles_all_nonempty`: PASS
+- `quartiles_monotone`: PASS
+- `q4_q1_positive`: PASS
+- `q4_q1_ci_lower_gt_0`: PASS
+- `q4_q1_positive_all_3_blocks`: PASS
+- `feature_exclusion_le_2pct`: PASS
+- `unseen_family_le_5pct`: PASS
+
+Historical replication is supporting out-of-sample evidence only. It does not authorize production.
 
 ## Mandatory next checkpoint
 
-Switch to **Très élevé** and execute the authorized historical replication diagnostic exactly once under the frozen protocol.
+Switch to **Pro** for:
 
-The replication execution must use only the replication ledger, the 12 hash-verified BID M1 files August 2025 through July 2026 and the immutable DEV model. It must retain/report the two known partial sessions and 482 missing M1 opens. No refit, threshold change, subgroup rescue or Pine modification is allowed.
+`PRO_POST_REPLICATION_SCIENTIFIC_GATE`
 
-After labels, diagnostics and all QA are frozen and hashed, stop at:
+Pro must review the immutable DEV and historical replication evidence and decide only whether the evidence justifies a separately preregistered prospective-confirmation plan:
 
-`READY_FOR_PRO_POST_REPLICATION_GATE`
+- `GO_PROSPECTIVE_CONFIRMATION_PLANNING`, or
+- `NO_GO_PROSPECTIVE_CONFIRMATION_PLANNING`.
 
-Then return to **Pro** for the post-replication scientific verdict. Historical replication cannot authorize production.
+Until that verdict, no prospective outcome execution, model change, threshold change, subgroup rescue, production use or Pine modification is authorized.
