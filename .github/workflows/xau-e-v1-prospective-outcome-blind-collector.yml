@@ -1,0 +1,291 @@
+name: XAU E V1 prospective outcome-blind collector
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 23 * * 1-5'
+
+concurrency:
+  group: xau-e-v1-prospective-outcome-blind-collector
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  BRANCH: agent/xau-wick-zone-pro-dev
+  PKG: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1
+  PLAN: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1
+  LIVE: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-live-v1
+  SCHEDULER_PATH: .github/workflows/xau-e-v1-prospective-outcome-blind-collector.yml
+  START_SESSION: '2026-08-31'
+  START_UTC: '2026-08-31T12:00:00Z'
+
+jobs:
+  collect-outcome-blind:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 1
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Verify Pro execution authorization, scheduler identity, planning seal and every frozen hash
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import datetime, hashlib, json, os, subprocess, urllib.request
+          from pathlib import Path
+
+          pkg = Path(os.environ['PKG'])
+          plan = Path(os.environ['PLAN'])
+          seal_path = pkg / 'PROSPECTIVE_PLANNING_CANONICAL_SEAL.json'
+          gate_path = pkg / 'E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json'
+          if not seal_path.is_file() or not gate_path.is_file():
+              raise RuntimeError('prospective execution gate or planning seal absent')
+          seal = json.loads(seal_path.read_text())
+          gate = json.loads(gate_path.read_text())
+          h = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          blob = lambda b: hashlib.sha1(f'blob {len(b)}\0'.encode() + b).hexdigest()
+
+          assert seal['status'] == 'E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS', seal
+          assert seal['decision'] == 'READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE', seal
+          assert gate['status'] == 'PRO_PRE_PROSPECTIVE_EXECUTION_GATE_PASS', gate
+          assert gate['decision'] == 'GO_PROSPECTIVE_CONFIRMATION_EXECUTION', gate
+          assert gate['authorization_scope'] == 'OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT', gate
+          assert gate['prospective_outcome_generation'] == 'FORBIDDEN_BEFORE_LATER_PRO_CHECKPOINT_GATE', gate
+          assert gate['prospective_performance_scoring'] == 'FORBIDDEN_BEFORE_LATER_PRO_CHECKPOINT_GATE', gate
+          assert gate['planning_seal_sha256'] == h(seal_path), gate
+          assert gate['prospective_start_utc'] == os.environ['START_UTC'], gate
+          assert gate['prospective_start_session_ny'] == os.environ['START_SESSION'], gate
+
+          now = datetime.datetime.now(datetime.timezone.utc)
+          start = datetime.datetime.fromisoformat(os.environ['START_UTC'].replace('Z', '+00:00'))
+          if now < start:
+              raise RuntimeError(f'prospective collection cannot run before {start.isoformat()}')
+
+          ref = os.environ.get('GITHUB_WORKFLOW_REF', '')
+          sha = os.environ.get('GITHUB_WORKFLOW_SHA', '')
+          expected_ref = f"{os.environ.get('GITHUB_REPOSITORY')}/{os.environ['SCHEDULER_PATH']}@refs/heads/main"
+          assert ref == expected_ref, (ref, expected_ref)
+          assert len(sha) == 40, sha
+          raw_url = f"https://raw.githubusercontent.com/{os.environ['GITHUB_REPOSITORY']}/{sha}/{os.environ['SCHEDULER_PATH']}"
+          req = urllib.request.Request(raw_url, headers={'User-Agent': 'xau-e-v1-prospective-collector'})
+          scheduler_bytes = urllib.request.urlopen(req, timeout=60).read()
+          assert blob(scheduler_bytes) == gate['scheduler_workflow_git_blob'], (blob(scheduler_bytes), gate['scheduler_workflow_git_blob'])
+          assert hashlib.sha256(scheduler_bytes).hexdigest() == gate['scheduler_workflow_sha256']
+
+          for name, expected in seal['method_sha256'].items():
+              p = plan / name
+              assert p.is_file() and h(p) == expected, (name, h(p) if p.is_file() else None, expected)
+          auth = seal['frozen_authorities']
+          checks = {
+              pkg / 'dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json': auth['dev_model_sha256'],
+              pkg / 'xau_e_display_episode_reaction_labeler_v1.py': auth['reaction_labeler_sha256'],
+              pkg / 'xau_e_display_episode_model_eval_v1.py': auth['model_eval_sha256'],
+              pkg / 'requirements-lock.txt': auth['requirements_lock_sha256'],
+          }
+          for p, expected in checks.items():
+              assert h(p) == expected, (str(p), h(p), expected)
+          engine = Path('xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py')
+          eb = engine.read_bytes()
+          assert blob(eb) == auth['z4_engine_git_blob']
+          assert hashlib.sha256(eb).hexdigest() == auth['z4_engine_sha256']
+          print('PROSPECTIVE_EXECUTION_AUTHORIZATION_AND_ALL_FROZEN_HASHES_PASS')
+          PY
+      - name: Install frozen scientific environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
+      - name: Stop immediately if the single checkpoint is already locked
+        id: stopcheck
+        shell: bash
+        run: |
+          if test -s "$LIVE/CHECKPOINT_LOCK.json"; then
+            echo 'locked=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'locked=false' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Acquire one commit-pinned first-observed upstream snapshot and discover completed sessions
+        if: steps.stopcheck.outputs.locked != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/upstream /tmp/meta /tmp/session-work "$LIVE/archive" "$LIVE/geometry" "$LIVE/features" "$LIVE/contacts" "$LIVE/status"
+          python - <<'PY'
+          import datetime, hashlib, json, os, subprocess, urllib.error, urllib.request
+          from pathlib import Path
+          import pandas as pd
+
+          repo = 'kevingtlin/Market-Data-Lab'
+          head = subprocess.check_output(['git', 'ls-remote', f'https://github.com/{repo}', 'refs/heads/main'], text=True).split()[0]
+          observed = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat().replace('+00:00', 'Z')
+          start = pd.Timestamp('2026-08-01T00:00:00Z')
+          now = pd.Timestamp.now(tz='UTC')
+          months = pd.period_range(start=start.tz_localize(None), end=now.tz_localize(None), freq='M')
+          token = os.environ.get('GH_TOKEN', '')
+          meta = []
+          frames = []
+          for per in months:
+              fn = f'xauusd_bid_m1_{per.year:04d}_{per.month:02d}.csv'
+              rel = f'xauusd/bid/m1/{fn}'
+              api = f'https://api.github.com/repos/{repo}/contents/{rel}?ref={head}'
+              headers = {'Accept': 'application/vnd.github+json', 'User-Agent': 'xau-e-v1-prospective-collector'}
+              if token:
+                  headers['Authorization'] = f'Bearer {token}'
+              try:
+                  info = json.loads(urllib.request.urlopen(urllib.request.Request(api, headers=headers), timeout=60).read())
+              except urllib.error.HTTPError as e:
+                  if e.code == 404:
+                      continue
+                  raise
+              raw_url = f'https://raw.githubusercontent.com/{repo}/{head}/{rel}'
+              data = urllib.request.urlopen(urllib.request.Request(raw_url, headers={'User-Agent': 'xau-e-v1-prospective-collector'}), timeout=120).read()
+              git_blob = hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest()
+              if git_blob != info['sha']:
+                  raise RuntimeError(f'commit-pinned source blob mismatch for {fn}: {git_blob} != {info["sha"]}')
+              p = Path('/tmp/upstream') / fn
+              p.write_bytes(data)
+              d = pd.read_csv(p)
+              required = ['timestamp', 'open', 'high', 'low', 'close']
+              if list(d.columns) != required:
+                  raise RuntimeError(f'{fn}: schema drift {list(d.columns)} != {required}')
+              frames.append(d)
+              meta.append({
+                  'file': fn,
+                  'path': rel,
+                  'observed_at_utc': observed,
+                  'upstream_head_commit': head,
+                  'upstream_blob_sha': info['sha'],
+                  'verified_download_git_blob_sha': git_blob,
+                  'source_sha256': hashlib.sha256(data).hexdigest(),
+                  'bytes': len(data),
+                  'rows': int(len(d)),
+              })
+          if not frames:
+              raise RuntimeError('no prospective source files available at pinned upstream commit')
+          Path('/tmp/meta/source_meta.json').write_text(json.dumps({
+              'status': 'COMMIT_PINNED_FIRST_OBSERVED_SOURCE_SNAPSHOT_PASS',
+              'repository': repo,
+              'branch': 'main',
+              'observed_at_utc': observed,
+              'upstream_head_commit': head,
+              'files': meta,
+          }, indent=2, sort_keys=True) + '\n')
+          Path('/tmp/meta/acquired_at.txt').write_text(observed + '\n')
+
+          raw = pd.concat(frames, ignore_index=True)
+          raw['time'] = pd.to_datetime(raw['timestamp'], unit='ms', utc=True)
+          ny = raw['time'].dt.tz_convert('America/New_York')
+          raw['session_date_ny'] = ny.dt.date.astype(str)
+          raw['hour_ny'] = ny.dt.hour
+          candidates = sorted(set(raw.loc[
+              (raw.session_date_ny >= os.environ['START_SESSION']) &
+              (raw.hour_ny >= 8) & (raw.hour_ny < 17),
+              'session_date_ny'
+          ]))
+          good = []
+          for s in candidates:
+              close = pd.Timestamp(f'{s} 17:00:00', tz='America/New_York').tz_convert('UTC')
+              if close <= now:
+                  good.append(s)
+          Path('/tmp/session-work/candidates.txt').write_text(('\n'.join(good) + '\n') if good else '')
+          print(json.dumps({'pinned_head': head, 'observed_at_utc': observed, 'files': len(meta), 'completed_candidate_sessions': len(good)}, sort_keys=True))
+          PY
+      - name: Recheck revisions and build every unseen session outcome-blind in chronological order
+        if: steps.stopcheck.outputs.locked != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          TOOL="$PLAN/prospective_planning_entry_v1.py"
+          ACQ="$(tr -d '\n' < /tmp/meta/acquired_at.txt)"
+          while read -r S; do
+            test -n "$S" || continue
+            if test -s "$LIVE/CHECKPOINT_LOCK.json"; then break; fi
+
+            # Always invoke ingest: an already accepted session is rechecked for an
+            # upstream revision; the canonical first acceptance is never overwritten.
+            python "$TOOL" ingest-session \
+              --files /tmp/upstream/*.csv \
+              --session-date "$S" \
+              --acquired-at "$ACQ" \
+              --archive-root "$LIVE/archive" \
+              --manifest "/tmp/session-work/ingest-$S.json" \
+              --source-meta-json /tmp/meta/source_meta.json
+
+            # Existing frozen contact evidence is never recomputed. Revisions have
+            # already been recorded by ingest-session above and leave canonical data unchanged.
+            if test -s "$LIVE/contacts/$S.json"; then continue; fi
+
+            W="$LIVE/archive/warmup/$S.csv.gz"
+            python "$TOOL" z4-session \
+              --files "$W" \
+              --session-date "$S" \
+              --output "$LIVE/geometry/$S.pkl" \
+              --manifest "$LIVE/geometry/$S.json"
+            mkdir -p "$LIVE/features/$S"
+            python "$TOOL" feature-session \
+              --files "$W" \
+              --z4-pkl "$LIVE/geometry/$S.pkl" \
+              --session-date "$S" \
+              --candidates-output "$LIVE/features/$S/candidates.csv.gz" \
+              --ledger-output "$LIVE/features/$S/ledger.csv.gz" \
+              --manifest "$LIVE/features/$S/manifest.json"
+            python "$TOOL" contact-only \
+              --files "$LIVE/archive/sessions/$S.csv.gz" \
+              --ledger "$LIVE/features/$S/ledger.csv.gz" \
+              --session-date "$S" \
+              --output "$LIVE/contacts/$S.csv.gz" \
+              --manifest "$LIVE/contacts/$S.json"
+            python "$TOOL" firewall \
+              --live-root "$LIVE" \
+              --output "$LIVE/status/FIREWALL.json"
+            python "$TOOL" status \
+              --live-root "$LIVE" \
+              --lock "$LIVE/CHECKPOINT_LOCK.json" \
+              --output "$LIVE/status/PRECHECKPOINT_STATUS.json"
+          done < /tmp/session-work/candidates.txt
+      - name: Final anti-peeking firewall and outcome-blind status only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$LIVE/status"
+          python "$PLAN/prospective_planning_entry_v1.py" firewall \
+            --live-root "$LIVE" \
+            --output "$LIVE/status/FIREWALL.json"
+          python "$PLAN/prospective_planning_entry_v1.py" status \
+            --live-root "$LIVE" \
+            --lock "$LIVE/CHECKPOINT_LOCK.json" \
+            --output "$LIVE/status/PRECHECKPOINT_STATUS.json"
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-live-v1')
+          forbidden = ['primary_binary_label', 'primary_class', 'favorable_level', 'event_bar_open_time_utc', 'auc_minus', 'q4_minus_q1', 'success_rate', 'mfe', 'mae']
+          for p in root.rglob('*'):
+              if p.is_file() and p.suffix not in {'.pkl', '.gz'}:
+                  txt = p.read_text(errors='ignore').lower()
+                  hit = [x for x in forbidden if x in txt]
+                  if hit:
+                      raise RuntimeError((str(p), hit))
+          print('PROSPECTIVE_LIVE_OUTCOME_FIREWALL_PASS')
+          PY
+      - name: Commit append-only prospective evidence and restricted status
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LIVE"
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'append outcome-blind E V1 prospective evidence'
+          git pull --rebase origin "$BRANCH"
+          git push origin HEAD:"$BRANCH"
