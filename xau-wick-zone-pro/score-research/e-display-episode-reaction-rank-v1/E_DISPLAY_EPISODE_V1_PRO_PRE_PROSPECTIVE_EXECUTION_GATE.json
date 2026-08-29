@@ -1,0 +1,174 @@
+{
+  "authorization_scope": "OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT",
+  "candidate": "E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "collector_authorization": {
+    "cancel_in_progress": false,
+    "checkpoint_evaluator_invocation": "FORBIDDEN_IN_COLLECTOR",
+    "collector_outputs": "raw/session/warmup provenance, geometry, outcome-free features/frozen scores, contact-only rows and outcome-blind status only",
+    "collector_template_git_blob": "83a41bc3fed25a7fb77b8b2c6d6d570626b24f9b",
+    "collector_template_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/prospective_collection_workflow_TEMPLATE_v1.yml",
+    "collector_template_sha256": "77d1268a9319001b6327136dfaf39d54da7b527e95d0de72c8a7da388768a679",
+    "installed_workflow_must_be_byte_identical_to_template": true,
+    "installed_workflow_path": ".github/workflows/xau-e-prospective-collector-v1.yml",
+    "manual_dispatch_allowed": true,
+    "reaction_labeler_invocation": "FORBIDDEN_IN_COLLECTOR",
+    "schedule_utc": "30 23 * * 1-5",
+    "single_concurrency_group": "xau-e-display-episode-v1-prospective-collector"
+  },
+  "decision": "GO_PROSPECTIVE_CONFIRMATION_EXECUTION",
+  "frozen_method_guards": {
+    "checkpoint_evaluator_sha256": "2facd467b9276a48c6c558677c3f2bd81ebf1dca7560c51d599b8a078bd41524",
+    "dev_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
+    "environment": {
+      "numpy": "2.3.2",
+      "pandas": "2.3.1",
+      "python": "3.11.16",
+      "scikit_learn": "1.7.1",
+      "scipy": "1.16.1"
+    },
+    "feature_or_target_change": "FORBIDDEN",
+    "model_eval_sha256": "f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e",
+    "model_refit": "FORBIDDEN",
+    "planning_entry_sha256": "18a57893c92ccbcb9fbee0bded6c8fc89f2caf98c89194bcc696ba4f3571ea16",
+    "planning_tool_sha256": "1635272ff438d836fc782721cd4d084026a132e48e5d064b0c3fef6f22f57e8d",
+    "rank_or_quartile_recalibration": "FORBIDDEN",
+    "reaction_labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+    "requirements_lock_sha256": "4cb67a768b857847b7ecad790e77637174a79e7cb299176b5543edc12a1b82cf",
+    "z4_engine_git_blob": "ac2448f448df2b873b482fd74c4eddf031790117"
+  },
+  "gate_date": "2026-08-29",
+  "gate_type": "PRO_PRE_PROSPECTIVE_EXECUTION_GATE",
+  "independent_Pro_review": {
+    "all_blockers_repaired_before_prospective_start": true,
+    "checkpoint_session_list_test_pass": true,
+    "expanded_synthetic_tests_pass": true,
+    "frozen_model_or_target_changed": false,
+    "historical_Z4_exact_parity_pass": true,
+    "historical_Z4_prefix_invariance_pass": true,
+    "historical_contact_only_exact_parity_pass": true,
+    "historical_display_episodes_checked": 164,
+    "historical_feature_exact_parity_pass": true,
+    "historical_post_contact_bars_read_by_counter": 0,
+    "historical_primary_contacts_checked": 78,
+    "initial_pre_execution_blockers_found": [
+      "moving-branch source/metadata race",
+      "first accepted session not guaranteed to persist before downstream failure",
+      "incomplete session could be skipped forever",
+      "collector overlap/cancellation risk",
+      "valid zero-zone or zero-contact sessions could be silently excluded",
+      "checkpoint lock did not preserve exact represented-session list",
+      "final evaluator did not require exact parity with the contact-only counter"
+    ],
+    "prospective_live_store_present_at_gate": false,
+    "prospective_outcomes_generated_or_read": false,
+    "revision_dedup_test_pass": true,
+    "unauthorized_outcome_evaluator_blocked": true,
+    "valid_zero_contact_session_test_pass": true
+  },
+  "next_state": {
+    "after_checkpoint_package": "READY_FOR_PRO_POST_PROSPECTIVE_GATE",
+    "after_gate_commit": "PROSPECTIVE_COLLECTION_AUTHORIZED_OUTCOME_BLIND",
+    "pine_modification": "FORBIDDEN",
+    "production_authorization": "NONE"
+  },
+  "planning_authority": {
+    "artifact_digest": "sha256:6765d3d5d10854cf5b9437584e5cdc5485897a86f5a2b75e78877e0b66263ccf",
+    "artifact_id": 9721274589,
+    "method_commit": "786342cfb69aaceff17cbcfb6284bb8c4d611d0d",
+    "planning_seal_commit": "92ec56635234ce791f702747b1343e954ad3a8ff",
+    "planning_seal_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/PROSPECTIVE_PLANNING_CANONICAL_SEAL.json",
+    "planning_seal_sha256": "f088d1a18f5686c628e9e00811438dff09902c38290c84ce8c946a5e55d4d49a",
+    "qa_manifest_git_blob": "ada470f912b9e44e6a944c6f3afdee7cb99816bc",
+    "qa_manifest_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/qa-r4/PROSPECTIVE_PLANNING_QA_R4.json",
+    "qa_materialization_commit": "3b07f5eef345bcb353c159b55bf501701049fd52",
+    "seal_revision": "R4_OPERATIONALLY_HARDENED",
+    "workflow_run_conclusion": "success",
+    "workflow_run_id": 33275153603
+  },
+  "primary_prospective_gate_frozen": {
+    "all_checks_required": true,
+    "checks": [
+      "at least 1000 model-eligible primary contacts",
+      "at least 90 represented eligible NY sessions",
+      "AUC minus 0.5 greater than 0 and session-cluster 95% CI lower bound greater than 0",
+      "fixed DEV quartile rates monotone Q1 <= Q2 <= Q3 <= Q4",
+      "fixed DEV Q4 minus Q1 greater than 0 and session-cluster 95% CI lower bound greater than 0",
+      "fixed DEV Q4 minus Q1 positive in all three blocks of the locked represented-session list",
+      "feature exclusion rate no greater than 2%",
+      "unseen-family rate no greater than 5%",
+      "no frozen component changed"
+    ],
+    "failure_rescue_or_tuning": "FORBIDDEN",
+    "width_only_comparator": "NON_GATING_NON_RESCUE_INTERPRETATION_CONTROL"
+  },
+  "prohibitions": [
+    "no prospective reaction outcome or performance statistic before the locked checkpoint",
+    "no model refit or alternative model",
+    "no feature, threshold, target, horizon, ambiguity, rank or quartile change",
+    "no selective session deletion or extension",
+    "no subgroup rescue",
+    "no calibrated-probability, universal-strength or profitability claim",
+    "no production use",
+    "no Pine modification"
+  ],
+  "prospective_start": {
+    "no_backfill_before_start": true,
+    "planning_seal_precedes_start": true,
+    "pre_start_data_use": "causal warmup only",
+    "session_date_ny": "2026-08-31",
+    "session_open_local": "2026-08-31T08:00:00-04:00",
+    "session_open_utc": "2026-08-31T12:00:00Z"
+  },
+  "scientific_interpretation": {
+    "calibrated_probability_claim": "FORBIDDEN",
+    "candidate_status": "historically replicated reaction rank, pending genuinely prospective confirmation",
+    "production_validation": "NOT_GRANTED",
+    "trading_profitability_claim": "NOT_ESTABLISHED",
+    "universal_E_strength_claim": "FORBIDDEN",
+    "width_dominance_caveat": "mandatory; the rank is almost entirely driven by zone_width_v"
+  },
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; upper-Z4-conditioned local top-3 displayed E universe",
+  "single_checkpoint": {
+    "checkpoint": "first completed accepted NY session where both thresholds are true",
+    "collector_stops_after_lock": true,
+    "discretionary_early_stop_or_extension": "FORBIDDEN",
+    "interim_performance_opening": "FORBIDDEN",
+    "lock_exact_sorted_represented_session_dates": true,
+    "minimum_model_eligible_primary_contacts": 1000,
+    "minimum_represented_sessions": 90,
+    "valid_zero_contact_sessions_in_session_count": true
+  },
+  "single_checkpoint_outcome_opening": {
+    "authorization_token": "GO_PROSPECTIVE_CONFIRMATION_EXECUTION",
+    "checkpoint_evaluator_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/prospective_checkpoint_evaluator_v1.py",
+    "checkpoint_evaluator_sha256": "2facd467b9276a48c6c558677c3f2bd81ebf1dca7560c51d599b8a078bd41524",
+    "exact_frozen_labeler_vs_contact_counter_parity_required": [
+      "selection_status for every display episode",
+      "first contact timestamp for every primary contact",
+      "feature row SHA-256 for every primary contact"
+    ],
+    "locked_eligible_contact_count_must_equal_frozen_model_scored_count": true,
+    "one_performance_opening_only": true,
+    "opening_allowed_only_after_valid_checkpoint_lock": true,
+    "represented_session_blocks_use_exact_locked_session_list": true,
+    "required_next_status": "READY_FOR_PRO_POST_PROSPECTIVE_GATE",
+    "result_package_must_be_frozen_and_hashed": true
+  },
+  "source_and_archive_guards": {
+    "canonical_first_acceptance_overwrite": false,
+    "changed_current_or_previous_month_revision_recheck": true,
+    "download_urls_pinned_to_exact_commit": true,
+    "downloaded_bytes_git_blob_verification": true,
+    "duplicate_revision_chain_events": "FORBIDDEN",
+    "first_acceptance_committed_before_Z4_or_features": true,
+    "missing_M1_imputation": "FORBIDDEN",
+    "one_exact_upstream_commit_per_observation": true,
+    "record_sha256_bytes_rows_and_observed_time": true,
+    "resume_after_downstream_failure": true,
+    "source": "Dukascopy XAUUSD BID M1 via kevingtlin/Market-Data-Lab",
+    "valid_session_with_missing_M1": "RETAIN_AND_REPORT",
+    "valid_zero_Z4_candidate_or_contact_session": "REPRESENTED_WITH_ZERO_CONTACTS",
+    "zero_usable_US_session_rows": "NOT_REPRESENTED_UNTIL_USABLE_SOURCE_EXISTS"
+  },
+  "status": "PRO_PRE_PROSPECTIVE_EXECUTION_GATE_PASS"
+}
