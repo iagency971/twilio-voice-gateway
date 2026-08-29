@@ -1,0 +1,130 @@
+{
+  "status": "PROSPECTIVE_CONFIRMATION_POLICY_FROZEN_PLANNING_ONLY",
+  "candidate": "E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1",
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York; upper-Z4-conditioned local top-3 displayed E universe",
+  "authorization": {
+    "current_token": "GO_PROSPECTIVE_CONFIRMATION_PLANNING",
+    "prospective_outcome_execution": "FORBIDDEN_PENDING_PRO_GATE",
+    "model_refit": "FORBIDDEN",
+    "production": "NONE",
+    "pine_modification": "FORBIDDEN"
+  },
+  "start_rule": {
+    "general": "first complete NY session strictly after final planning-package seal",
+    "expected_if_seal_before_start": {
+      "session_date_ny": "2026-08-31",
+      "session_open_local": "2026-08-31T08:00:00-04:00",
+      "session_open_utc": "2026-08-31T12:00:00Z"
+    },
+    "no_backfill_before_start": true,
+    "pre_start_data_use": "causal warmup only; never prospective evidence"
+  },
+  "price_source": {
+    "vendor_lineage": "Dukascopy XAUUSD BID M1 UTC",
+    "mirror_repository": "kevingtlin/Market-Data-Lab",
+    "mirror_branch": "main",
+    "monthly_path_template": "xauusd/bid/m1/xauusd_bid_m1_YYYY_MM.csv",
+    "schema": ["timestamp", "open", "high", "low", "close"],
+    "prospective_rule": "first collector-observed upstream version after session close that contains the session",
+    "record": ["acquired_at_utc", "upstream_head_commit", "upstream_blob_sha", "source_sha256", "bytes", "rows"],
+    "canonical_session_overwrite": false,
+    "revision_policy": "later differences are append-only revision events; canonical first accepted session is unchanged"
+  },
+  "session_archive": {
+    "canonical_session_slice": "08:00 <= M1 open < 17:00 America/New_York",
+    "warmup": "include raw rows back through at least 1440 previous active M1 bars plus target session",
+    "hash_chain": true,
+    "hash": "SHA-256",
+    "exact_duplicates": "deduplicate and count",
+    "conflicting_duplicates": "fail closed",
+    "missing_m1": "no imputation; skip as unavailable bars and report",
+    "session_with_missing": "retain if usable data exists",
+    "zero_usable_session_rows": "not represented until source data exists"
+  },
+  "z4_geometry": {
+    "engine": "xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py",
+    "expected_git_blob": "ac2448f448df2b873b482fd74c4eddf031790117",
+    "geometry_only_anchor": "    m=len(Z)\\n",
+    "saved_columns": ["time", "landmark_i", "center", "zlo", "zhi", "side"],
+    "historical_method": "same geometry-only cut used by successful run 33139524456",
+    "future_input": "canonical first-seen warmup-plus-session slice only",
+    "outcome_fields_allowed": false
+  },
+  "display_and_features": {
+    "architecture": "Z4 + ESM_BOTH_G120M + EPM_M1_R2_A8H + EWM_G60M + ES_M1_8H_R2_T0.50; max 3 sticky displayed zones",
+    "features": ["zone_width_v", "display_persistence_c5", "current_family"],
+    "frozen_dev_model": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json",
+    "frozen_dev_model_sha256": "72e7548de826e2ae2ba66ddcaaf6b2fa7cd35ada0f5f2cd9db585d9734fd48e1",
+    "allowed_outcome_free_predictions": ["continuous_logit", "empirical_DEV_rank", "fixed_DEV_quartile", "zone_width_v_comparator"]
+  },
+  "contact_counter": {
+    "outcome_free": true,
+    "rules": "same frozen episode liveness, arming and first-contact logic; stop reading at first contact",
+    "post_contact_bar_access": false,
+    "historical_parity_required": ["selection_status", "contact_bar_open_time_utc", "feature_row_sha256"]
+  },
+  "anti_peeking": {
+    "before_checkpoint_forbidden": [
+      "reaction labels/classes",
+      "primary binary label",
+      "success/failure rate",
+      "AUC or outcome association statistic",
+      "quartile outcome rates",
+      "Q4-Q1 outcome separation",
+      "favorable/invalidation event",
+      "MFE/MAE or post-contact outcome proxy"
+    ],
+    "pre_checkpoint_status_allowed": [
+      "represented_session_count",
+      "model_eligible_primary_contact_count",
+      "missing_m1_count",
+      "exact_duplicate_count",
+      "revision_event_count",
+      "feature_exclusion_count_and_rate",
+      "unseen_family_count_and_rate",
+      "checkpoint_reached_boolean",
+      "locked_checkpoint_session_if_reached"
+    ]
+  },
+  "single_checkpoint": {
+    "min_sessions": 90,
+    "min_model_eligible_primary_contacts": 1000,
+    "rule": "first completed accepted NY session where both cumulative thresholds are true",
+    "lock_end_session": true,
+    "discretionary_extension": false,
+    "interim_performance_peeking": false
+  },
+  "primary_gate": {
+    "all_required": true,
+    "checks": [
+      "primary contacts >= 1000",
+      "represented eligible NY sessions >= 90",
+      "AUC minus 0.5 > 0 and session-cluster 95% CI lower bound > 0",
+      "fixed DEV quartile rates monotone Q1 <= Q2 <= Q3 <= Q4",
+      "fixed DEV Q4-Q1 > 0 and session-cluster 95% CI lower bound > 0",
+      "fixed DEV Q4-Q1 > 0 in all three contiguous session-count blocks",
+      "feature exclusion rate <= 2%",
+      "unseen-family rate <= 5%",
+      "no frozen component changed"
+    ]
+  },
+  "width_interpretation_control": {
+    "score": "raw zone_width_v; deterministic",
+    "at_final_checkpoint_report": ["width-only AUC", "full-model AUC", "full-minus-width AUC", "paired session-bootstrap difference descriptive"],
+    "gating": false,
+    "rescue_allowed": false,
+    "model_selection_allowed": false
+  },
+  "required_planning_QA": [
+    "Z4 historical geometry parity",
+    "Z4 prefix invariance",
+    "prospective feature historical dry-run parity",
+    "contact-only exact historical parity",
+    "append-only/revision/hash-chain tests",
+    "anti-peeking firewall tests",
+    "single-checkpoint lock tests",
+    "width comparator determinism",
+    "environment and method hash freeze"
+  ],
+  "next_required_status": "READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE"
+}
