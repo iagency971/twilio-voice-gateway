@@ -19,7 +19,11 @@ env:
   BRANCH: agent/xau-wick-zone-pro-dev
   PKG: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1
   PLAN: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1
+  LIVE: xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-live-v1
   SCHEDULER_PATH: .github/workflows/xau-e-v1-prospective-outcome-blind-collector.yml
+  SEALED_REFERENCE_PATH: .github/workflows/xau-e-prospective-collector-v1.yml
+  GATE_WORKFLOW_PATH: .github/workflows/xau-e-v1-pro-pre-prospective-execution-gate.yml
+  GATE_ARTIFACT_NAME: xau-e-v1-pro-pre-prospective-execution-gate
   START_SESSION: '2026-08-31'
   START_UTC: '2026-08-31T12:00:00Z'
 
@@ -32,10 +36,12 @@ jobs:
         with:
           ref: agent/xau-wick-zone-pro-dev
           fetch-depth: 2
+
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.11'
-      - name: Verify planning seal, QA artifact, frozen hashes and absence of prospective evidence
+
+      - name: Verify canonical R4 authority, artifact, frozen hashes and hardened default-branch scheduler
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -43,30 +49,42 @@ jobs:
           set -euo pipefail
           mkdir -p /tmp/pro-gate
           python - <<'PY'
-          import datetime, hashlib, json, os, subprocess, urllib.request
+          import datetime
+          import hashlib
+          import io
+          import json
+          import os
+          import subprocess
+          import urllib.error
+          import urllib.request
+          import zipfile
           from pathlib import Path
 
           pkg = Path(os.environ['PKG'])
           plan = Path(os.environ['PLAN'])
+          live = Path(os.environ['LIVE'])
           seal_path = pkg / 'PROSPECTIVE_PLANNING_CANONICAL_SEAL.json'
           seal = json.loads(seal_path.read_text())
           h = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
           blob = lambda b: hashlib.sha1(f'blob {len(b)}\0'.encode() + b).hexdigest()
-          assert seal['status'] == 'E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS'
-          assert seal['decision'] == 'READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE'
-          assert seal['prospective_start']['session_date_ny'] == os.environ['START_SESSION']
-          assert seal['prospective_start']['session_open_utc'] == os.environ['START_UTC']
+
+          assert seal['status'] == 'E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS', seal
+          assert seal['decision'] == 'READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE', seal
+          assert seal['seal_revision'] == 'R4_OPERATIONALLY_HARDENED', seal
+          assert seal['prospective_start']['session_date_ny'] == os.environ['START_SESSION'], seal
+          assert seal['prospective_start']['session_open_utc'] == os.environ['START_UTC'], seal
           now = datetime.datetime.now(datetime.timezone.utc)
           start = datetime.datetime.fromisoformat(os.environ['START_UTC'].replace('Z', '+00:00'))
           assert now < start, (now, start)
-          assert not (pkg / 'prospective-live-v1').exists()
+          assert not live.exists(), 'prospective live evidence exists before the Pro execution gate'
 
           for name, expected in seal['method_sha256'].items():
               p = plan / name
               assert p.is_file() and h(p) == expected, (name, h(p) if p.is_file() else None, expected)
           for name, expected in seal['qa_evidence_sha256'].items():
-              p = plan / 'qa-r2' / name
+              p = plan / 'qa-r4' / name
               assert p.is_file() and h(p) == expected, (name, h(p) if p.is_file() else None, expected)
+
           auth = seal['frozen_authorities']
           fixed = {
               pkg / 'dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json': auth['dev_model_sha256'],
@@ -75,42 +93,115 @@ jobs:
               pkg / 'requirements-lock.txt': auth['requirements_lock_sha256'],
           }
           for p, expected in fixed.items():
-              assert h(p) == expected, (str(p), h(p), expected)
+              assert p.is_file() and h(p) == expected, (str(p), h(p) if p.is_file() else None, expected)
           engine = Path('xau-wick-zone-pro/entry-research/geometry-shifted-grid-parity/xau_z4_c5_geometry_shifted_grid_equivalent.py')
           eb = engine.read_bytes()
-          assert blob(eb) == auth['z4_engine_git_blob']
+          assert blob(eb) == auth['z4_engine_git_blob'], (blob(eb), auth['z4_engine_git_blob'])
           assert hashlib.sha256(eb).hexdigest() == auth['z4_engine_sha256']
 
-          # Verify the exact planning artifact independently.
-          artifact = seal['two_stage_seal']
-          url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/actions/artifacts/{artifact['artifact_id']}/zip"
-          headers = {'Accept': 'application/vnd.github+json', 'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'User-Agent': 'xau-e-v1-pro-gate'}
-          data = urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=120).read()
-          digest = 'sha256:' + hashlib.sha256(data).hexdigest()
-          assert digest == artifact['artifact_digest'], (digest, artifact['artifact_digest'])
-          Path('/tmp/pro-gate/planning-artifact.zip').write_bytes(data)
+          authority = seal['canonical_R4_authority']
+          assert authority['qa_status'] == 'PROSPECTIVE_PLANNING_QA_R4_PASS', authority
+          assert authority['workflow_run_conclusion'] == 'success', authority
+          assert authority['qa_materialization_parent_is_method_commit'] is True, authority
+          manifest_path = plan / 'qa-r4' / 'PROSPECTIVE_PLANNING_QA_R4.json'
+          assert manifest_path.is_file()
+          assert blob(manifest_path.read_bytes()) == authority['qa_manifest_git_blob']
+          qa_manifest = json.loads(manifest_path.read_text())
+          assert qa_manifest['status'] == 'PROSPECTIVE_PLANNING_QA_R4_PASS', qa_manifest
+          assert qa_manifest['decision'] == 'READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE', qa_manifest
+          assert qa_manifest['method_hashes'] == seal['method_sha256'], qa_manifest
+          assert qa_manifest['qa_evidence_hashes'] == seal['qa_evidence_sha256'], qa_manifest
 
-          # Resolve and freeze the executable scheduler from the repository default branch.
-          api_headers = {'Accept': 'application/vnd.github+json', 'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'User-Agent': 'xau-e-v1-pro-gate'}
-          repo_info = json.loads(urllib.request.urlopen(urllib.request.Request(f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}", headers=api_headers), timeout=60).read())
+          headers = {
+              'Accept': 'application/vnd.github+json',
+              'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+              'User-Agent': 'xau-e-v1-pro-gate',
+          }
+          artifact_url = (
+              f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}"
+              f"/actions/artifacts/{authority['artifact_id']}/zip"
+          )
+          artifact_bytes = urllib.request.urlopen(
+              urllib.request.Request(artifact_url, headers=headers), timeout=120
+          ).read()
+          artifact_digest = 'sha256:' + hashlib.sha256(artifact_bytes).hexdigest()
+          assert artifact_digest == authority['artifact_digest'], (artifact_digest, authority['artifact_digest'])
+          Path('/tmp/pro-gate/planning-artifact.zip').write_bytes(artifact_bytes)
+          with zipfile.ZipFile(io.BytesIO(artifact_bytes)) as zf:
+              names = set(zf.namelist())
+              assert 'PROSPECTIVE_PLANNING_QA_R4.json' in names, sorted(names)
+              for name, expected in seal['qa_evidence_sha256'].items():
+                  assert name in names, name
+                  assert hashlib.sha256(zf.read(name)).hexdigest() == expected, name
+              artifact_manifest = json.loads(zf.read('PROSPECTIVE_PLANNING_QA_R4.json'))
+              assert artifact_manifest == qa_manifest
+
+          template = plan / 'prospective_collection_workflow_TEMPLATE_v1.yml'
+          installed_reference = Path(os.environ['SEALED_REFERENCE_PATH'])
+          assert installed_reference.is_file()
+          assert installed_reference.read_bytes() == template.read_bytes()
+          assert blob(template.read_bytes()) == authority.get(
+              'collector_template_git_blob', blob(template.read_bytes())
+          )
+          assert blob(template.read_bytes()) == '83a41bc3fed25a7fb77b8b2c6d6d570626b24f9b'
+
+          repo_api = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}"
+          repo_info = json.loads(
+              urllib.request.urlopen(urllib.request.Request(repo_api, headers=headers), timeout=60).read()
+          )
           assert repo_info['default_branch'] == 'main', repo_info['default_branch']
-          main_head = subprocess.check_output(['git', 'ls-remote', f"https://github.com/{os.environ['GITHUB_REPOSITORY']}", 'refs/heads/main'], text=True).split()[0]
-          scheduler_url = f"https://raw.githubusercontent.com/{os.environ['GITHUB_REPOSITORY']}/{main_head}/{os.environ['SCHEDULER_PATH']}"
-          scheduler = urllib.request.urlopen(urllib.request.Request(scheduler_url, headers={'User-Agent': 'xau-e-v1-pro-gate'}), timeout=60).read()
+          main_head = subprocess.check_output(
+              ['git', 'ls-remote', f"https://github.com/{os.environ['GITHUB_REPOSITORY']}", 'refs/heads/main'],
+              text=True,
+          ).split()[0]
+          scheduler_url = (
+              f"https://raw.githubusercontent.com/{os.environ['GITHUB_REPOSITORY']}"
+              f"/{main_head}/{os.environ['SCHEDULER_PATH']}"
+          )
+          scheduler = urllib.request.urlopen(
+              urllib.request.Request(scheduler_url, headers={'User-Agent': 'xau-e-v1-pro-gate'}),
+              timeout=60,
+          ).read()
           Path('/tmp/pro-gate/scheduler.yml').write_bytes(scheduler)
           txt = scheduler.decode()
 
+          # The exact sealed template remains a non-default-branch reference only.
+          sealed_default_url = (
+              f"https://raw.githubusercontent.com/{os.environ['GITHUB_REPOSITORY']}"
+              f"/{main_head}/{os.environ['SEALED_REFERENCE_PATH']}"
+          )
+          try:
+              urllib.request.urlopen(
+                  urllib.request.Request(sealed_default_url, headers={'User-Agent': 'xau-e-v1-pro-gate'}),
+                  timeout=30,
+              ).read()
+          except urllib.error.HTTPError as exc:
+              assert exc.code == 404, exc
+          else:
+              raise RuntimeError('sealed reference workflow unexpectedly executable from default branch')
+
           required_literals = [
-              'concurrency:', 'cancel-in-progress: false', 'runs-on: ubuntu-24.04',
+              'concurrency:',
+              'cancel-in-progress: false',
+              'runs-on: ubuntu-24.04',
               'actions/checkout@11d5960a326750d5838078e36cf38b85af677262',
               'actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065',
               "assert gate['decision'] == 'GO_PROSPECTIVE_CONFIRMATION_EXECUTION'",
-              "gate['scheduler_workflow_git_blob']", "gate['scheduler_workflow_sha256']",
-              "raw_url = f'https://raw.githubusercontent.com/{repo}/{head}/{rel}'",
-              "if git_blob != info['sha']", "'rows': int(len(d))",
-              'Always invoke ingest', 'REVISION', 'PRECHECKPOINT_STATUS.json',
+              "gate['scheduler_workflow_git_blob']",
+              "gate['scheduler_workflow_sha256']",
+              "gate['gate_workflow_run_id']",
+              'AUTHORIZATION_ANCHOR.json',
+              'gate_artifact_bytes_verified',
+              "url = f'https://raw.githubusercontent.com/{repo}/{head}/{rel}'",
+              "if git_blob != info['sha']",
+              "'verified_download_git_blob_sha': git_blob",
+              "selected = [x['file'] for x in files if x['month'] in {curkey, prevkey}]",
+              'Persist the first accepted canonical session or a new revision before downstream calculation.',
+              'commit_live "append first-seen prospective M1 evidence for $S"',
+              'PRECHECKPOINT_STATUS.json',
               'if test -s "$LIVE/CHECKPOINT_LOCK.json"; then break; fi',
-              'post-contact', 'PROSPECTIVE_LIVE_OUTCOME_FIREWALL_PASS',
+              'PROSPECTIVE_LIVE_OUTCOME_FIREWALL_PASS',
+              'SOURCE_SNAPSHOT.json',
           ]
           missing = [x for x in required_literals if x not in txt]
           assert not missing, missing
@@ -120,20 +211,29 @@ jobs:
               'python "$PKG/xau_e_display_episode_reaction_labeler_v1.py"',
               'raw.githubusercontent.com/kevingtlin/Market-Data-Lab/main/',
               'contents/xauusd/bid/m1/{fn}?ref=main',
+              '--files /tmp/upstream/*.csv',
           ]
           present = [x for x in forbidden_literals if x in txt]
           assert not present, present
 
           preliminary = {
               'status': 'PRO_PRE_PROSPECTIVE_EXECUTION_INDEPENDENT_QA_PASS',
-              'checked_at_utc': now.isoformat(),
+              'checked_at_utc': now.replace(microsecond=0).isoformat().replace('+00:00', 'Z'),
               'planning_seal_sha256': h(seal_path),
-              'planning_artifact_digest_verified': digest,
+              'planning_seal_revision': seal['seal_revision'],
+              'planning_artifact_id': int(authority['artifact_id']),
+              'planning_artifact_digest_verified': artifact_digest,
+              'planning_qa_manifest_git_blob': authority['qa_manifest_git_blob'],
+              'planning_qa_manifest_exact_artifact_parity': True,
               'default_branch': repo_info['default_branch'],
               'scheduler_default_branch_commit': main_head,
               'scheduler_workflow_path': os.environ['SCHEDULER_PATH'],
               'scheduler_workflow_git_blob': blob(scheduler),
               'scheduler_workflow_sha256': hashlib.sha256(scheduler).hexdigest(),
+              'sealed_reference_workflow_path': os.environ['SEALED_REFERENCE_PATH'],
+              'sealed_reference_template_git_blob': blob(template.read_bytes()),
+              'sealed_reference_template_sha256': h(template),
+              'sealed_reference_absent_from_default_branch': True,
               'prospective_start_session_ny': os.environ['START_SESSION'],
               'prospective_start_utc': os.environ['START_UTC'],
               'prospective_live_store_absent': True,
@@ -141,59 +241,102 @@ jobs:
               'frozen_hashes_verified': True,
               'operational_hardening': {
                   'scheduler_on_default_branch': True,
+                  'scheduler_self_identity_frozen_by_gate_hash': True,
+                  'gate_success_and_artifact_bytes_required_at_first_execution': True,
+                  'durable_authorization_anchor_before_source_processing': True,
                   'workflow_and_actions_pinned': True,
-                  'single_run_concurrency': True,
+                  'single_non_cancelling_concurrency_group': True,
                   'source_commit_pinned': True,
                   'download_git_blob_verified': True,
-                  'source_rows_recorded': True,
+                  'source_sha256_bytes_rows_and_time_range_recorded': True,
+                  'current_previous_month_session_selection': True,
                   'accepted_sessions_rechecked_for_revisions': True,
+                  'duplicate_revision_event_suppression': True,
                   'canonical_first_acceptance_overwrite_forbidden': True,
+                  'first_acceptance_persisted_before_downstream_processing': True,
+                  'resume_after_downstream_failure': True,
+                  'valid_zero_zone_or_zero_contact_session_represented': True,
+                  'exact_locked_represented_session_list': True,
                   'safe_precheckpoint_status_filename': True,
                   'collector_has_no_reaction_labeler_invocation': True,
                   'collector_has_no_checkpoint_evaluator_invocation': True,
               },
           }
-          Path('/tmp/pro-gate/PRE_EXECUTION_INDEPENDENT_QA.json').write_text(json.dumps(preliminary, indent=2, sort_keys=True) + '\n')
+          Path('/tmp/pro-gate/PRE_EXECUTION_INDEPENDENT_QA.json').write_text(
+              json.dumps(preliminary, indent=2, sort_keys=True) + '\n'
+          )
           PY
-      - name: Re-run frozen synthetic, fail-closed and static anti-peeking tests
+
+      - name: Re-run frozen environment, synthetic, fail-closed and anti-peeking tests
         shell: bash
         run: |
           set -euo pipefail
           python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
-          python -m py_compile "$PLAN/prospective_planning_tool_v1.py" "$PLAN/prospective_planning_entry_v1.py" "$PLAN/prospective_checkpoint_evaluator_v1.py" "$PLAN/test_prospective_planning_v1.py"
+          python - <<'PY'
+          import platform, numpy, pandas, scipy, sklearn
+          assert platform.python_version() == '3.11.16'
+          assert numpy.__version__ == '2.3.2'
+          assert pandas.__version__ == '2.3.1'
+          assert scipy.__version__ == '1.16.1'
+          assert sklearn.__version__ == '1.7.1'
+          print('PROSPECTIVE_FROZEN_ENVIRONMENT_PASS')
+          PY
+          python -m py_compile \
+            "$PLAN/prospective_planning_tool_v1.py" \
+            "$PLAN/prospective_planning_entry_v1.py" \
+            "$PLAN/prospective_checkpoint_evaluator_v1.py" \
+            "$PLAN/test_prospective_planning_v1.py"
           python "$PLAN/test_prospective_planning_v1.py" > /tmp/pro-gate/SYNTHETIC_TESTS_RECHECK.json
           if python "$PLAN/prospective_checkpoint_evaluator_v1.py" \
-            --raw-files /tmp/no.csv --ledger-files /tmp/no.csv \
-            --checkpoint-lock /tmp/no.json --output-labels /tmp/no.gz \
-            --output-report /tmp/no-report.json --output-manifest /tmp/no-manifest.json \
+            --raw-files /tmp/no.csv \
+            --ledger-files /tmp/no.csv \
+            --checkpoint-lock /tmp/no.json \
+            --output-labels /tmp/no.gz \
+            --output-report /tmp/no-report.json \
+            --output-manifest /tmp/no-manifest.json \
             2>/tmp/pro-gate/evaluator-blocked.txt; then
             echo 'future evaluator unexpectedly opened'; exit 1
           fi
           grep -q 'PROSPECTIVE_OUTCOME_OPENING_BLOCKED' /tmp/pro-gate/evaluator-blocked.txt
+          mkdir -p /tmp/pro-gate/empty-live
+          python "$PLAN/prospective_planning_entry_v1.py" firewall \
+            --live-root /tmp/pro-gate/empty-live \
+            --output /tmp/pro-gate/EMPTY_LIVE_FIREWALL.json
           python - <<'PY'
           import json
           from pathlib import Path
           q = json.loads(Path('/tmp/pro-gate/PRE_EXECUTION_INDEPENDENT_QA.json').read_text())
+          q['frozen_environment_rechecked'] = True
           q['synthetic_tests_rechecked'] = True
+          q['empty_live_firewall_rechecked'] = True
           q['unauthorized_future_evaluator_blocked'] = True
           q['current_execution_authorizes_outcome_blind_collection_only'] = True
           q['reaction_outcome_generation_before_later_checkpoint_gate'] = False
           q['performance_scoring_before_later_checkpoint_gate'] = False
-          Path('/tmp/pro-gate/PRE_EXECUTION_INDEPENDENT_QA.json').write_text(json.dumps(q, indent=2, sort_keys=True) + '\n')
+          Path('/tmp/pro-gate/PRE_EXECUTION_INDEPENDENT_QA.json').write_text(
+              json.dumps(q, indent=2, sort_keys=True) + '\n'
+          )
           PY
+
       - name: Materialize final Pro execution gate and immutable QA evidence
         shell: bash
         env:
           PRO_GATE_RUN_ID: ${{ github.run_id }}
+          PRO_GATE_HEAD_SHA: ${{ github.sha }}
           PRO_GATE_JOB: pro-pre-execution-gate
         run: |
           set -euo pipefail
           python - <<'PY'
-          import hashlib, json, os
+          import hashlib
+          import json
+          import os
           from pathlib import Path
+
           pkg = Path(os.environ['PKG'])
+          plan = Path(os.environ['PLAN'])
           qa = json.loads(Path('/tmp/pro-gate/PRE_EXECUTION_INDEPENDENT_QA.json').read_text())
           seal_path = pkg / 'PROSPECTIVE_PLANNING_CANONICAL_SEAL.json'
+          seal = json.loads(seal_path.read_text())
           gate = {
               'status': 'PRO_PRE_PROSPECTIVE_EXECUTION_GATE_PASS',
               'decision': 'GO_PROSPECTIVE_CONFIRMATION_EXECUTION',
@@ -202,22 +345,46 @@ jobs:
               'candidate': 'E_DISPLAY_EPISODE_REACTION_RANK_US_BUY_V1',
               'scope': 'XAUUSD M1 BUY US 08:00-17:00 America/New_York; upper-Z4-conditioned local top-3 displayed E universe',
               'authorization_scope': 'OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT',
-              'planning_seal_sha256': qa['planning_seal_sha256'],
               'planning_seal_path': str(seal_path),
+              'planning_seal_sha256': qa['planning_seal_sha256'],
+              'planning_seal_revision': qa['planning_seal_revision'],
+              'planning_artifact_id': qa['planning_artifact_id'],
               'planning_artifact_digest': qa['planning_artifact_digest_verified'],
+              'planning_qa_manifest_git_blob': qa['planning_qa_manifest_git_blob'],
+              'collector_template_path': str(plan / 'prospective_collection_workflow_TEMPLATE_v1.yml'),
+              'collector_template_git_blob': qa['sealed_reference_template_git_blob'],
+              'collector_template_sha256': qa['sealed_reference_template_sha256'],
+              'checkpoint_evaluator_path': str(plan / 'prospective_checkpoint_evaluator_v1.py'),
+              'checkpoint_evaluator_sha256': seal['method_sha256']['prospective_checkpoint_evaluator_v1.py'],
               'scheduler_workflow_path': qa['scheduler_workflow_path'],
               'scheduler_workflow_git_blob': qa['scheduler_workflow_git_blob'],
               'scheduler_workflow_sha256': qa['scheduler_workflow_sha256'],
               'scheduler_default_branch': qa['default_branch'],
               'scheduler_default_branch_commit_at_gate': qa['scheduler_default_branch_commit'],
+              'sealed_reference_workflow_path': qa['sealed_reference_workflow_path'],
+              'sealed_reference_absent_from_default_branch': True,
+              'gate_workflow_path': os.environ['GATE_WORKFLOW_PATH'],
+              'gate_workflow_head_sha': os.environ['PRO_GATE_HEAD_SHA'],
+              'gate_workflow_run_id': int(os.environ['PRO_GATE_RUN_ID']),
+              'gate_workflow_job': os.environ['PRO_GATE_JOB'],
+              'gate_artifact_name': os.environ['GATE_ARTIFACT_NAME'],
               'prospective_start_session_ny': qa['prospective_start_session_ny'],
               'prospective_start_utc': qa['prospective_start_utc'],
               'no_backfill_before_start': True,
+              'execution_layer_relation': {
+                  'scientific_method': 'byte-identical sealed R4 method files and exact non-default-branch collector reference',
+                  'default_branch_scheduler': 'operationally hardened wrapper preserving R4 session construction, features, frozen score, contact counter and checkpoint rules',
+                  'scientific_method_changed': False,
+                  'outcome_definition_changed': False,
+                  'model_or_threshold_changed': False,
+              },
               'single_checkpoint': {
                   'minimum_represented_sessions': 90,
                   'minimum_model_eligible_primary_contacts': 1000,
                   'rule': 'first completed accepted NY session where both thresholds are true',
-                  'lock_end_session': True,
+                  'lock_exact_sorted_represented_session_dates': True,
+                  'valid_zero_contact_sessions_count_as_represented': True,
+                  'collector_stops_after_lock': True,
                   'interim_performance_peeking': False,
                   'discretionary_extension': False,
               },
@@ -234,21 +401,36 @@ jobs:
               'prospective_performance_scoring': 'FORBIDDEN_BEFORE_LATER_PRO_CHECKPOINT_GATE',
               'model_refit': 'FORBIDDEN',
               'model_or_threshold_change': 'FORBIDDEN',
+              'rank_or_quartile_recalibration': 'FORBIDDEN',
+              'selective_session_deletion_or_extension': 'FORBIDDEN',
+              'subgroup_rescue': 'FORBIDDEN',
               'production_authorization': 'NONE',
               'pine_modification': 'FORBIDDEN',
               'width_only_comparator': 'OUTCOME_FREE_SCORE_STORED; FINAL_INTERPRETATION_ONLY; NON_GATING; NON_RESCUE',
+              'scientific_interpretation': {
+                  'candidate_status': 'historically replicated reaction rank pending genuinely prospective confirmation',
+                  'calibrated_probability_claim': 'FORBIDDEN',
+                  'universal_E_strength_claim': 'FORBIDDEN',
+                  'trading_profitability_claim': 'NOT_ESTABLISHED',
+                  'width_dominance_caveat': 'mandatory; the rank is almost entirely driven by zone_width_v',
+              },
               'independent_QA': qa,
-              'gate_workflow_run_id': int(os.environ['PRO_GATE_RUN_ID']),
-              'gate_workflow_job': os.environ['PRO_GATE_JOB'],
               'next_checkpoint': 'READY_FOR_PRO_AT_LOCKED_PROSPECTIVE_CHECKPOINT',
-              'checkpoint_opening_rule': 'When CHECKPOINT_LOCK.json is first created, collection stops. Return to Pro. A separate later Pro gate is required before any reaction label, AUC, quartile outcome rate or other performance statistic may be generated or read.',
+              'checkpoint_opening_rule': (
+                  'When CHECKPOINT_LOCK.json is first created, collection stops. Return to Pro. '
+                  'A separate later Pro gate is required before any reaction label, AUC, quartile '
+                  'outcome rate or other performance statistic may be generated or read.'
+              ),
           }
           qa_path = pkg / 'PRO_PRE_PROSPECTIVE_EXECUTION_INDEPENDENT_QA.json'
           gate_path = pkg / 'E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json'
           qa_path.write_text(json.dumps(qa, indent=2, sort_keys=True) + '\n')
           gate_path.write_text(json.dumps(gate, indent=2, sort_keys=True) + '\n')
-          Path('/tmp/pro-gate/GATE_SHA256.txt').write_text(hashlib.sha256(gate_path.read_bytes()).hexdigest() + '  ' + str(gate_path) + '\n')
+          Path('/tmp/pro-gate/GATE_SHA256.txt').write_text(
+              hashlib.sha256(gate_path.read_bytes()).hexdigest() + '  ' + str(gate_path) + '\n'
+          )
           PY
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: xau-e-v1-pro-pre-prospective-execution-gate
@@ -256,17 +438,21 @@ jobs:
             /tmp/pro-gate/PRE_EXECUTION_INDEPENDENT_QA.json
             /tmp/pro-gate/SYNTHETIC_TESTS_RECHECK.json
             /tmp/pro-gate/evaluator-blocked.txt
+            /tmp/pro-gate/EMPTY_LIVE_FIREWALL.json
             /tmp/pro-gate/GATE_SHA256.txt
             ${{ env.PKG }}/PRO_PRE_PROSPECTIVE_EXECUTION_INDEPENDENT_QA.json
             ${{ env.PKG }}/E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json
           retention-days: 90
+
       - name: Commit final Pro execution gate to the research branch
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$PKG/PRO_PRE_PROSPECTIVE_EXECUTION_INDEPENDENT_QA.json" "$PKG/E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json"
-          git commit -m 'authorize frozen outcome-blind E V1 prospective collection'
+          git add \
+            "$PKG/PRO_PRE_PROSPECTIVE_EXECUTION_INDEPENDENT_QA.json" \
+            "$PKG/E_DISPLAY_EPISODE_V1_PRO_PRE_PROSPECTIVE_EXECUTION_GATE.json"
+          git commit -m 'authorize hardened frozen outcome-blind E V1 prospective collection'
           git pull --rebase origin "$BRANCH"
           git push origin HEAD:"$BRANCH"
