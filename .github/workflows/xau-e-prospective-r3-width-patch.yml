@@ -25,19 +25,17 @@ jobs:
           from pathlib import Path
           p=Path('.github/workflows/xau-e-prospective-planning-v1-r3.yml')
           s=p.read_text()
-          old="""          dw=abs(d['width_only_auc']-ref['width_only_auc']); df=abs(d['full_auc']-ref['independent_recomputed_full_auc'])
-          assert df<1e-12,(df,d,ref); assert dw<=5e-7,(dw,d,ref)
-          assert d['gating'] is False and d['rescue_allowed'] is False
-          Path('/tmp/results/HISTORICAL_WIDTH_CONTROL_NUMERICAL_QA.json').write_text(json.dumps({'status':'WIDTH_CONTROL_HISTORICAL_NUMERICAL_QA_PASS','canonical_full_auc_tolerance':1e-12,'historical_cross_serialization_width_auc_tolerance':5e-7,'full_auc_delta':df,'width_auc_delta':dw,'prospective_gate_tolerance':False},indent=2,sort_keys=True)+'\\n')
-"""
-          new="""          dw=abs(d['width_only_auc']-ref['width_only_auc']); dfcanon=abs(d['full_auc']-ref['canonical_full_auc']); dfind=abs(d['full_auc']-ref['independent_recomputed_full_auc'])
-          assert dfcanon<1e-12,(dfcanon,d,ref); assert dw<=5e-7,(dw,d,ref); assert dfind<=5e-7,(dfind,d,ref)
-          assert d['gating'] is False and d['rescue_allowed'] is False
-          Path('/tmp/results/HISTORICAL_WIDTH_CONTROL_NUMERICAL_QA.json').write_text(json.dumps({'status':'WIDTH_CONTROL_HISTORICAL_NUMERICAL_QA_PASS','canonical_full_auc_tolerance':1e-12,'historical_cross_serialization_tolerance':5e-7,'canonical_full_auc_delta':dfcanon,'independent_full_auc_cross_serialization_delta':dfind,'width_auc_cross_serialization_delta':dw,'prospective_gate_tolerance':False},indent=2,sort_keys=True)+'\\n')
-"""
-          if s.count(old)!=1:
-              raise SystemExit(f'patch anchor count={s.count(old)}')
-          p.write_text(s.replace(old,new))
+          old1="dw=abs(d['width_only_auc']-ref['width_only_auc']); df=abs(d['full_auc']-ref['independent_recomputed_full_auc'])"
+          new1="dw=abs(d['width_only_auc']-ref['width_only_auc']); dfcanon=abs(d['full_auc']-ref['canonical_full_auc']); dfind=abs(d['full_auc']-ref['independent_recomputed_full_auc'])"
+          old2="assert df<1e-12,(df,d,ref); assert dw<=5e-7,(dw,d,ref)"
+          new2="assert dfcanon<1e-12,(dfcanon,d,ref); assert dw<=5e-7,(dw,d,ref); assert dfind<=5e-7,(dfind,d,ref)"
+          old3="{'status':'WIDTH_CONTROL_HISTORICAL_NUMERICAL_QA_PASS','canonical_full_auc_tolerance':1e-12,'historical_cross_serialization_width_auc_tolerance':5e-7,'full_auc_delta':df,'width_auc_delta':dw,'prospective_gate_tolerance':False}"
+          new3="{'status':'WIDTH_CONTROL_HISTORICAL_NUMERICAL_QA_PASS','canonical_full_auc_tolerance':1e-12,'historical_cross_serialization_tolerance':5e-7,'canonical_full_auc_delta':dfcanon,'independent_full_auc_cross_serialization_delta':dfind,'width_auc_cross_serialization_delta':dw,'prospective_gate_tolerance':False}"
+          for old in (old1,old2,old3):
+              if s.count(old)!=1:
+                  raise SystemExit(f'patch anchor count for {old[:40]} = {s.count(old)}')
+          s=s.replace(old1,new1).replace(old2,new2).replace(old3,new3)
+          p.write_text(s)
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
