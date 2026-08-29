@@ -118,6 +118,10 @@ jobs:
           PKG='xau-wick-zone-pro/score-research/e-intrinsic-snapshot-v1'
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # Absorb any documentation-only commits that landed while this run was executing.
+          # Generated files are still untracked here, so the rebase does not modify their contents.
+          git fetch origin agent/xau-wick-zone-pro-dev
+          git rebase origin/agent/xau-wick-zone-pro-dev
           git add \
             "$PKG/E_INTRINSIC_SNAPSHOT_V1_LEDGER.csv.gz" \
             "$PKG/E_INTRINSIC_SNAPSHOT_V1_MANIFEST.json" \
