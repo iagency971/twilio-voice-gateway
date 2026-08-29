@@ -1,0 +1,215 @@
+{
+  "declared_window": "DEV_HISTORY",
+  "episodes": 32745,
+  "execution_strategy": "MONTHLY_SHARDED_EXACT_FROZEN_LABELER",
+  "labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+  "monthly_manifests": [
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2629,
+      "month": "2024-08",
+      "primary_contacts": 1304,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1304
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2416,
+      "month": "2024-09",
+      "primary_contacts": 1160,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1160
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2591,
+      "month": "2024-10",
+      "primary_contacts": 1275,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1275
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2767,
+      "month": "2024-11",
+      "primary_contacts": 1370,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1370
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 3002,
+      "month": "2024-12",
+      "primary_contacts": 1580,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1580
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2439,
+      "month": "2025-01",
+      "primary_contacts": 1325,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1325
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2585,
+      "month": "2025-02",
+      "primary_contacts": 1301,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1301
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2605,
+      "month": "2025-03",
+      "primary_contacts": 1271,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1271
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2713,
+      "month": "2025-04",
+      "primary_contacts": 1347,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1347
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2923,
+      "month": "2025-05",
+      "primary_contacts": 1443,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1443
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 2864,
+      "month": "2025-06",
+      "primary_contacts": 1472,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1472
+      }
+    },
+    {
+      "declared_window": "DEV_HISTORY",
+      "episodes": 3211,
+      "month": "2025-07",
+      "primary_contacts": 1613,
+      "qa": {
+        "conflicting_duplicate_timestamps": 0,
+        "exact_duplicate_rows_removed": 0
+      },
+      "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE",
+      "window_qa": {
+        "contact_window_end_utc": "2025-08-01T00:00:00+00:00",
+        "contact_window_start_utc": "2024-08-01T00:00:00+00:00",
+        "declared_window": "DEV_HISTORY",
+        "primary_contacts_checked": 1613
+      }
+    }
+  ],
+  "primary_contacts": 16461,
+  "replication_outcomes_accessed": false,
+  "status": "E_DISPLAY_EPISODE_REACTION_LABELER_V1_COMPLETE"
+}

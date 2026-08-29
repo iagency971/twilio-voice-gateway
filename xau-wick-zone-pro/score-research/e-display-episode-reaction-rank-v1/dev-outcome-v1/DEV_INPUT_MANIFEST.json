@@ -1,0 +1,96 @@
+{
+  "dev_file_count": 12,
+  "dev_files": [
+    {
+      "bytes": 2231775,
+      "file": "xauusd_bid_m1_2024_08.csv",
+      "month": "2024-08",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2024_08.csv",
+      "sha256": "69a43d059dbdb9bce3bed1be13db378437ed4131cd109d04690fadf2aa17a476"
+    },
+    {
+      "bytes": 2159940,
+      "file": "xauusd_bid_m1_2024_09.csv",
+      "month": "2024-09",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2024_09.csv",
+      "sha256": "b9548afce3bc91d47831654ff5745b2165241e5729fc40cdb82d2df76b3c0668"
+    },
+    {
+      "bytes": 2231815,
+      "file": "xauusd_bid_m1_2024_10.csv",
+      "month": "2024-10",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2024_10.csv",
+      "sha256": "7eaccb67908ef0ce451a230ee9e723cd2ed3e618f8e1ca9eb8148fc4457cd6d7"
+    },
+    {
+      "bytes": 2159626,
+      "file": "xauusd_bid_m1_2024_11.csv",
+      "month": "2024-11",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2024_11.csv",
+      "sha256": "8bdd99624cdebcc843d41420bbced1e57f91d9bebeb42279b85e6c9450232f8f"
+    },
+    {
+      "bytes": 2231444,
+      "file": "xauusd_bid_m1_2024_12.csv",
+      "month": "2024-12",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2024_12.csv",
+      "sha256": "c086505bd4ae2f98095bae1c80e6b80ade803ae8f56de6e558e37a0153f967cd"
+    },
+    {
+      "bytes": 2231746,
+      "file": "xauusd_bid_m1_2025_01.csv",
+      "month": "2025-01",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2025_01.csv",
+      "sha256": "4596e50b3fb203e12a9eee24942e0d22db8a2e409b71f9546a1e6ee6f80233a0"
+    },
+    {
+      "bytes": 2015844,
+      "file": "xauusd_bid_m1_2025_02.csv",
+      "month": "2025-02",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2025_02.csv",
+      "sha256": "59c6380fcccc11883f74d09bbc3fc7cddf093d0e8c00e8d6826cf19fe7350e58"
+    },
+    {
+      "bytes": 2231490,
+      "file": "xauusd_bid_m1_2025_03.csv",
+      "month": "2025-03",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2025_03.csv",
+      "sha256": "24b0bfbf3baa5d2bd314cb081a78835b182e1bb410d916e47479a780618874cb"
+    },
+    {
+      "bytes": 2159648,
+      "file": "xauusd_bid_m1_2025_04.csv",
+      "month": "2025-04",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2025_04.csv",
+      "sha256": "4e2364e526b266b788b7e980902e9e457653357b58ad5d9caff17814e4bce832"
+    },
+    {
+      "bytes": 2231564,
+      "file": "xauusd_bid_m1_2025_05.csv",
+      "month": "2025-05",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2025_05.csv",
+      "sha256": "d0f3a257cf9f9259d4ccc8b3a9525cfeed0413e281bb31521263d69d0aca2be0"
+    },
+    {
+      "bytes": 2159802,
+      "file": "xauusd_bid_m1_2025_06.csv",
+      "month": "2025-06",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2025_06.csv",
+      "sha256": "2440bcdc23708b6dcaea4e0d2cc8cab57b373dc5be3c287fc8086e82ee84d44e"
+    },
+    {
+      "bytes": 2231995,
+      "file": "xauusd_bid_m1_2025_07.csv",
+      "month": "2025-07",
+      "path": "/tmp/dev_raw/xauusd_bid_m1_2025_07.csv",
+      "sha256": "865435434eedc5fec42bd94bce881847be253092e44975228ce2e70959b47434"
+    }
+  ],
+  "dev_ledger_rows": 41210,
+  "dev_ledger_sha256": "2cf40bfca54494f1609035307390f3e615348492bf8c853f0c79c63555d060e6",
+  "execution_strategy": "MONTHLY_SHARDED_EXACT_FROZEN_LABELER",
+  "replication_ledger_loaded": false,
+  "replication_m1_files_downloaded": 0,
+  "replication_outcomes_accessed": false,
+  "status": "DEV_SHARDED_INPUT_QA_PASS"
+}

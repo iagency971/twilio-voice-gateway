@@ -1,0 +1,19 @@
+{
+  "categories": [
+    "EPM_M1_R2_A8H",
+    "ESM_BOTH_G120M",
+    "ES_M1_8H_R2_T0.50",
+    "EWM_G60M"
+  ],
+  "coef_n": 5,
+  "feature_excluded_rows": 0,
+  "feature_exclusion_rate": 0.0,
+  "historical_replication_outcomes_read": false,
+  "historical_replication_outcomes_scored": false,
+  "reference_category": "EPM_M1_R2_A8H",
+  "score_roundtrip_exact": true,
+  "scored_rows": 16461,
+  "status": "DEV_MODEL_INDEPENDENT_QA_PASS",
+  "unseen_family_rate": 0.0,
+  "unseen_family_rows": 0
+}
