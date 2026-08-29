@@ -57,11 +57,11 @@ jobs:
           assert gate['status']=='PRO_PRE_PROSPECTIVE_EXECUTION_GATE_PASS',gate
           assert gate['decision']=='GO_PROSPECTIVE_CONFIRMATION_EXECUTION',gate
           assert gate['authorization_scope']=='OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT',gate
-          assert h(seal_path)==gate['planning_authority']['planning_seal_sha256'],gate
+          assert h(seal_path)==gate['planning_seal_sha256'],gate
           for name,expected in seal['method_sha256'].items():
               assert h(plan/name)==expected,(name,h(plan/name),expected)
-          assert h(plan/'prospective_collection_workflow_TEMPLATE_v1.yml')==gate['collector_authorization']['collector_template_sha256'],gate
-          assert h(plan/'prospective_checkpoint_evaluator_v1.py')==gate['single_checkpoint_outcome_opening']['checkpoint_evaluator_sha256'],gate
+          assert h(plan/'prospective_collection_workflow_TEMPLATE_v1.yml')==gate['collector_template_sha256'],gate
+          assert h(plan/'prospective_checkpoint_evaluator_v1.py')==gate['checkpoint_evaluator_sha256'],gate
           assert h(pkg/'dev-freeze-canonical-33264659057/DEV_FROZEN_MODEL.json')==seal['frozen_authorities']['dev_model_sha256']
           assert h(pkg/'xau_e_display_episode_reaction_labeler_v1.py')==seal['frozen_authorities']['reaction_labeler_sha256']
           assert h(pkg/'xau_e_display_episode_model_eval_v1.py')==seal['frozen_authorities']['model_eval_sha256']
@@ -74,7 +74,7 @@ jobs:
           set -euo pipefail
           python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
           python - <<'PY'
-          import platform,numpy,pandas,scipy,sklearn
+          import json,platform,numpy,pandas,scipy,sklearn
           assert platform.python_version()=='3.11.16'
           assert numpy.__version__=='2.3.2'
           assert pandas.__version__=='2.3.1'
@@ -224,6 +224,7 @@ jobs:
               mkdir -p "$LIVE/archive/acquisitions/$S"
               cp "/tmp/session-work/ingest-$S.json" "$LIVE/archive/acquisitions/$S/${ACQ//:/-}.json"
             fi
+            # Persist the first accepted canonical session before any downstream calculation.
             commit_live "append first-seen prospective M1 evidence for $S"
 
             if test -s "$LIVE/contacts/$S.json"; then continue; fi
