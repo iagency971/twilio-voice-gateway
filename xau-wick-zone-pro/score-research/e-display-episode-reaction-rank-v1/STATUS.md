@@ -13,11 +13,12 @@
 - Historical replication phase: `COMPLETE_AND_FROZEN`
 - Replication freeze: `E_DISPLAY_EPISODE_V1_REPLICATION_FREEZE_PASS`
 - Replication support gate: `PASS`
-- Current checkpoint: `READY_FOR_PRO_POST_REPLICATION_GATE`
-- Current execution authorization: `NONE_PENDING_PRO_REVIEW`
+- Pro post-replication scientific gate: `PASS`
+- Current authorization: `GO_PROSPECTIVE_CONFIRMATION_PLANNING`
+- Authorized phase: `PROSPECTIVE_CONFIRMATION_PROTOCOL_AND_INFRASTRUCTURE_FREEZE_ONLY`
+- Prospective outcome execution: `NOT_AUTHORIZED`
 - Frozen DEV model refit: `FORBIDDEN`
 - Post-DEV / post-replication tuning: `FORBIDDEN`
-- Prospective execution: `CLOSED`
 - Production authorization: `NONE`
 - Pine modification: `FORBIDDEN`
 
@@ -32,7 +33,6 @@
 
 ## Canonical historical replication authority
 
-- Replication execution strategy: `MONTHLY_SHARDED_EXACT_FROZEN_LABELER`
 - Replication workflow run: `33266656414`
 - Replication artifact: `9719184524`
 - Replication artifact digest: `sha256:734bd0e14f9017dc23822175aa21bc341cfa5b27b5058dc5e028eb5fb5997688`
@@ -41,62 +41,65 @@
 - Immutable copy commit: `78af3d80af1a536babef17e05049bc320234c88a`
 - Immutable directory: `replication-freeze-canonical-33266656414/`
 - Replication canonical seal: `REPLICATION_CANONICAL_SEAL.json`
-- Post-replication Pro request: `POST_REPLICATION_PRO_GATE_REQUEST.json`
-- Post-replication checkpoint memo: `XAUUSD_E_DISPLAY_EPISODE_POST_REPLICATION_CHECKPOINT_2026-08-29.md`
-
-The replication workflow was removed after canonical freeze to prevent accidental re-execution before Pro review.
 
 ## Frozen replication evidence
 
-- Display episodes labeled: `34,007`
+- Display episodes: `34,007`
 - Primary contacts: `17,454`
 - Primary NY sessions: `257`
-- Favorable-first: `8,649`
-- Primary binary failures: `8,805`
-- Overall primary success rate: `0.4955311103471983`
+- Overall primary success rate: `49.5531%`
 - AUC: `0.5657692600871821`
 - AUC minus 0.5: `0.06576926008718209`
 - Session-cluster 95% CI for AUC minus 0.5: `[0.0568889679606293, 0.0744911973596545]`
-- Q1 success rate: `0.4449622725255215`
-- Q2 success rate: `0.45660191787558396`
-- Q3 success rate: `0.4867630700778643`
-- Q4 success rate: `0.5925672594619243`
-- Q4-Q1: `0.14760498693640284`
-- Q4-Q1 session-cluster 95% CI: `[0.12573139125432922, 0.1692963776824019]`
-- Q4-Q1 chronological blocks: `[0.1748121353925043, 0.14119328283607624, 0.13106018437298533]`
+- Q1: `44.4962%`
+- Q2: `45.6602%`
+- Q3: `48.6763%`
+- Q4: `59.2567%`
+- Q4-Q1: `14.7605 percentage points`
+- Q4-Q1 session-cluster 95% CI: `[12.5731, 16.9296] percentage points`
+- Q4-Q1 chronological blocks: `[17.4812, 14.1193, 13.1060] percentage points`
 - Feature exclusion rate: `0.0`
 - Unseen-family rate: `0.0`
 - Frozen DEV model loaded without refit: `PASS`
 - Known partial sessions retained: `2026-06-19`, `2026-07-03`
 - Missing M1 opens retained under frozen rule: `482`
 
-## Frozen replication support gate
+All frozen historical-replication support checks passed. Historical replication remains supporting evidence and cannot authorize production.
 
-All predeclared support checks passed:
+## Pro post-replication decision
 
-- `threshold_episodes_ge_1000`: PASS
-- `threshold_sessions_ge_90`: PASS
-- `auc_positive`: PASS
-- `auc_ci_lower_gt_0`: PASS
-- `quartiles_all_nonempty`: PASS
-- `quartiles_monotone`: PASS
-- `q4_q1_positive`: PASS
-- `q4_q1_ci_lower_gt_0`: PASS
-- `q4_q1_positive_all_3_blocks`: PASS
-- `feature_exclusion_le_2pct`: PASS
-- `unseen_family_le_5pct`: PASS
+- Decision file: `E_DISPLAY_EPISODE_V1_PRO_POST_REPLICATION_GATE.json`
+- Memo: `XAUUSD_E_DISPLAY_EPISODE_PRO_POST_REPLICATION_GATE_2026-08-29.md`
+- Interpretive diagnostic: `POST_REPLICATION_PRO_INTERPRETIVE_DIAGNOSTICS.json`
+- Decision: `GO_PROSPECTIVE_CONFIRMATION_PLANNING`
 
-Historical replication is supporting out-of-sample evidence only. It does not authorize production.
+The historical evidence supports prospective confirmation of the frozen reaction rank. It does not validate trading profitability or a universal E-strength score.
+
+A mandatory semantic caveat is now recorded: the frozen score is almost entirely driven by `zone_width_v`. The future plan must include a deterministic width-only comparator as an interpretation control, without changing or rescuing the primary candidate.
 
 ## Mandatory next checkpoint
 
-Switch to **Pro** for:
+Switch to **Très élevé** and build the complete prospective-confirmation planning package without opening any prospective outcome.
 
-`PRO_POST_REPLICATION_SCIENTIFIC_GATE`
+The planning package must freeze:
 
-Pro must review the immutable DEV and historical replication evidence and decide only whether the evidence justifies a separately preregistered prospective-confirmation plan:
+- the first eligible prospective-session rule;
+- append-only data acquisition and SHA-256 provenance;
+- outcome-free feature snapshots;
+- the anti-peeking firewall;
+- missing/duplicate/revision data rules;
+- the single checkpoint at the first completed session satisfying both `>=90` eligible sessions and `>=1000` primary contacts;
+- the unchanged model, target, ranks, quartiles, bootstrap and primary gates;
+- the separate non-rescue width-only interpretation control;
+- synthetic tests, historical dry-runs, environment and immutable hashes.
 
-- `GO_PROSPECTIVE_CONFIRMATION_PLANNING`, or
-- `NO_GO_PROSPECTIVE_CONFIRMATION_PLANNING`.
+The planning phase must stop at:
 
-Until that verdict, no prospective outcome execution, model change, threshold change, subgroup rescue, production use or Pine modification is authorized.
+`READY_FOR_PRO_PRE_PROSPECTIVE_EXECUTION_GATE`
+
+Then return to **Pro** for one decision only:
+
+- `GO_PROSPECTIVE_CONFIRMATION_EXECUTION`, or
+- `NO_GO_PROSPECTIVE_CONFIRMATION_EXECUTION`.
+
+Until that decision, no prospective label, performance statistic, production use or Pine modification is authorized.
