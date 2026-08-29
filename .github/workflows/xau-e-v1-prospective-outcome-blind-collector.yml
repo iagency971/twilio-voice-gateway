@@ -45,7 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           python - <<'PY'
-          import datetime, hashlib, io, json, os, urllib.request, zipfile
+          import datetime, hashlib, io, json, os, urllib.error, urllib.request, zipfile
           from pathlib import Path
 
           pkg = Path(os.environ['PKG'])
@@ -58,6 +58,26 @@ jobs:
           seal = json.loads(seal_path.read_text())
           gate = json.loads(gate_path.read_text())
           h = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          def github_artifact_bytes(url, headers):
+              class NoRedirect(urllib.request.HTTPRedirectHandler):
+                  def redirect_request(self, req, fp, code, msg, response_headers, newurl):
+                      return None
+              opener = urllib.request.build_opener(NoRedirect())
+              try:
+                  opener.open(urllib.request.Request(url, headers=headers), timeout=60).read()
+              except urllib.error.HTTPError as exc:
+                  if exc.code not in {301, 302, 303, 307, 308}:
+                      raise
+                  location = exc.headers.get('Location')
+                  if not location:
+                      raise RuntimeError('GitHub artifact redirect has no Location header') from exc
+              else:
+                  raise RuntimeError('GitHub artifact endpoint unexpectedly returned no redirect')
+              return urllib.request.urlopen(
+                  urllib.request.Request(location, headers={'User-Agent': headers.get('User-Agent', 'xau-e-v1')}),
+                  timeout=120,
+              ).read()
+
           blob = lambda b: hashlib.sha1(f'blob {len(b)}\0'.encode() + b).hexdigest()
 
           assert seal['status'] == 'E_DISPLAY_EPISODE_V1_PROSPECTIVE_PLANNING_CANONICAL_SEAL_PASS', seal
@@ -142,9 +162,7 @@ jobs:
               matches = [a for a in artifacts if a['name'] == os.environ['GATE_ARTIFACT_NAME'] and not a['expired']]
               assert len(matches) == 1, matches
               artifact_url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/actions/artifacts/{matches[0]['id']}/zip"
-              artifact_bytes = urllib.request.urlopen(
-                  urllib.request.Request(artifact_url, headers=headers), timeout=120
-              ).read()
+              artifact_bytes = github_artifact_bytes(artifact_url, headers)
               with zipfile.ZipFile(io.BytesIO(artifact_bytes)) as zf:
                   members = [n for n in zf.namelist() if Path(n).name == gate_path.name]
                   assert len(members) == 1, members
