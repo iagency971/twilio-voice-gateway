@@ -1,0 +1,97 @@
+{
+  "authorization": {
+    "allowed_operations": [
+      "generate DEV_HISTORY reaction labels only",
+      "read and summarize DEV_HISTORY labels only",
+      "fit the single preregistered DEV logistic model only",
+      "freeze DEV preprocessing, coefficients, empirical rank mapping and quartile cutpoints",
+      "write and hash DEV-only labels, model and report"
+    ],
+    "authorized_contact_window": {
+      "end_exclusive_utc": "2025-08-01T00:00:00Z",
+      "start_inclusive_utc": "2024-08-01T00:00:00Z"
+    },
+    "authorized_ledger": {
+      "path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/E_DISPLAY_EPISODE_LEDGER_V1_DEV.csv.gz",
+      "sha256": "2cf40bfca54494f1609035307390f3e615348492bf8c853f0c79c63555d060e6"
+    },
+    "authorized_token": "GO_DEV_OUTCOME_OPENING",
+    "forbidden_operations": [
+      "load, label, read, score or summarize any HISTORICAL_REPLICATION_DIAGNOSTIC outcome",
+      "supply GO_HISTORICAL_REPLICATION_DIAGNOSTIC",
+      "refit, compare or tune alternative models",
+      "change features, transformations, thresholds, labels, horizons, bootstrap rules or gates after DEV is opened",
+      "modify production Pine",
+      "claim production validation or universal E strength"
+    ],
+    "m1_input_rule": "Only the 12 hash-verified BID M1 files 2024-08 through 2025-07 declared in DATA_INPUT_MANIFEST.json may be supplied to the DEV labeler; replication-era M1 files must not be loaded in the DEV execution.",
+    "scope": "DEV_HISTORY_ONLY"
+  },
+  "blocker_closure": {
+    "B1_temporal_coverage": "CLOSED",
+    "B2_episode_identity_and_prefix_invariance": "CLOSED",
+    "B3_reaction_labeler_implementation": "CLOSED",
+    "B4_contact_bar_ordering": "CLOSED",
+    "B5_unique_model_pipeline": "CLOSED",
+    "B6_statistics_and_gates": "CLOSED",
+    "B7_scope_provenance_environment_and_seal": "CLOSED"
+  },
+  "canonical_package": {
+    "artifact_digest": "sha256:62932d000b46a6ad14bdfd8d1d3b47513be0094c72acbfe1028511684b0c707e",
+    "artifact_id": 9716948881,
+    "canonical_run_id": 33259414496,
+    "evidence_materialization_commit": "43136be3e2a7459c3b8e1c189aa7ab933b7084a4",
+    "method_commit": "7ef065e209c94e21950c346eed9d4ae0a2d786da",
+    "pre_outcome_manifest_sha256": "49098a886015f25d1f754400f04066b0cec97a548b309c7af337774ad2bd4047"
+  },
+  "decision": "GO_DEV_OUTCOME_OPENING",
+  "environment": {
+    "numpy": "2.3.2",
+    "pandas": "2.3.1",
+    "python": "3.11.16",
+    "scikit_learn": "1.7.1",
+    "scipy": "1.16.1"
+  },
+  "exact_method_guards": {
+    "data_input_manifest_sha256": "041963e0a458e3f25a5ead4d2e2a6922fda758dcd8afe474f6e04040dd055db1",
+    "environment_json_sha256": "c54b46043ee49c9b4945c42f0cdabc540f85df1938ae60bae95e9f46d91f5de6",
+    "model_eval_sha256": "f547853609f16b00080049629f708fc0d4170c54071fd22a99228c807cd6dd2e",
+    "reaction_labeler_sha256": "08ed29422ede890c300073789daa4669a22fbe48b74171c68402310c00aebef8",
+    "requirements_lock_sha256": "4cb67a768b857847b7ecad790e77637174a79e7cb299176b5543edc12a1b82cf"
+  },
+  "gate_date": "2026-08-29",
+  "gate_scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York",
+  "gate_type": "SECOND_PRO_PRE_OUTCOME_STRICTLY_OUTCOME_BLIND",
+  "independent_additional_qa": {
+    "artifact_digest": "sha256:03b663d36993c34dc49c0fcecf6a6515e47198eaead63ab1c1aeca9521fe76d2",
+    "artifact_id": 9717328401,
+    "dev_feature_rows_prefix_compared": 41210,
+    "dev_m1_missing_minutes": 0,
+    "dev_m1_sessions_checked": 257,
+    "dev_provenance_rows_prefix_compared": 43511,
+    "prefix_row_hashes_equal": "41210/41210",
+    "replication_missing_minutes_noted_but_not_opened": 482,
+    "replication_sessions_with_missing_minutes": 2,
+    "status": "SECOND_PRO_ADDITIONAL_OUTCOME_BLIND_QA_PASS",
+    "workflow_run_id": 33261123749
+  },
+  "limitations_not_blocking_DEV": [
+    "80.3915987535954% of display episodes contain one C5 snapshot; persistence may therefore carry limited information.",
+    "The estimand is conditional on top-3 displayed E episodes in the upper-Z4-conditioned US BUY universe, not all possible E zones.",
+    "The target is a BID-price reaction outcome, not a trade-profitability or execution-cost outcome.",
+    "Historical replication remains unopened and cannot authorize production.",
+    "Two replication-period sessions contain 482 missing M1 opens in total; this has no effect on DEV, which has zero missing M1 opens, and must be retained in the later replication QA."
+  ],
+  "next_required_checkpoint_after_DEV": {
+    "historical_replication_authorization": "NOT_GRANTED",
+    "required_action": "Commit and hash the immutable DEV labels, frozen model, preprocessing/rank/quartile mapping, DEV report, environment and a model-freeze manifest; then obtain a separate authorization before opening historical replication.",
+    "token_status": "GO_HISTORICAL_REPLICATION_DIAGNOSTIC_FORBIDDEN"
+  },
+  "outcome_blind_attestation": {
+    "future_price_outcomes_generated": false,
+    "future_price_outcomes_read": false,
+    "model_fit_on_real_labels": false,
+    "replication_outcomes_accessed": false
+  },
+  "status": "SECOND_PRO_PRE_OUTCOME_GATE_PASS"
+}
