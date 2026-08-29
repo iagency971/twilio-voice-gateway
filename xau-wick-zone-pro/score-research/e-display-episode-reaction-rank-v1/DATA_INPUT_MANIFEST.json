@@ -1,0 +1,192 @@
+{
+  "bid_files": {
+    "xauusd_bid_m1_2024_01.csv": {
+      "actual_sha256": "7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d",
+      "bytes": 2231993,
+      "expected_sha256": "7414d1cf6a02cf4fff5347e79602e9109549622cb73b152e5462188cc797135d"
+    },
+    "xauusd_bid_m1_2024_02.csv": {
+      "actual_sha256": "45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f",
+      "bytes": 2087847,
+      "expected_sha256": "45060c59ccfc0ef3d5f78b49d793b7e3f97757a7659c604b887850068346621f"
+    },
+    "xauusd_bid_m1_2024_03.csv": {
+      "actual_sha256": "28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14",
+      "bytes": 2231983,
+      "expected_sha256": "28c82e54e1bd7f586f5d22c0c39d9217618f62e8dfdd7eab94602c2c2bb81a14"
+    },
+    "xauusd_bid_m1_2024_04.csv": {
+      "actual_sha256": "ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9",
+      "bytes": 2159936,
+      "expected_sha256": "ce55b0d9acdf20c694c37e3c53233455cc8b772269eb39f60357808abe37b9c9"
+    },
+    "xauusd_bid_m1_2024_05.csv": {
+      "actual_sha256": "18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6",
+      "bytes": 2232006,
+      "expected_sha256": "18084ecf8e9d5cef352cc290a55de29f27f006653b5da24a6520f8a02488f4f6"
+    },
+    "xauusd_bid_m1_2024_06.csv": {
+      "actual_sha256": "f7cad6452e9666b37f6f7830bb69a61439095919bb1609daa80839fdb3a8fd39",
+      "bytes": 2159852,
+      "expected_sha256": "f7cad6452e9666b37f6f7830bb69a61439095919bb1609daa80839fdb3a8fd39"
+    },
+    "xauusd_bid_m1_2024_07.csv": {
+      "actual_sha256": "a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52",
+      "bytes": 2231718,
+      "expected_sha256": "a1c432b64a36118f1934c9c838cee83c1f05181fbfd602452fd3d46acdd4fd52"
+    },
+    "xauusd_bid_m1_2024_08.csv": {
+      "actual_sha256": "69a43d059dbdb9bce3bed1be13db378437ed4131cd109d04690fadf2aa17a476",
+      "bytes": 2231775,
+      "expected_sha256": "69a43d059dbdb9bce3bed1be13db378437ed4131cd109d04690fadf2aa17a476"
+    },
+    "xauusd_bid_m1_2024_09.csv": {
+      "actual_sha256": "b9548afce3bc91d47831654ff5745b2165241e5729fc40cdb82d2df76b3c0668",
+      "bytes": 2159940,
+      "expected_sha256": "b9548afce3bc91d47831654ff5745b2165241e5729fc40cdb82d2df76b3c0668"
+    },
+    "xauusd_bid_m1_2024_10.csv": {
+      "actual_sha256": "7eaccb67908ef0ce451a230ee9e723cd2ed3e618f8e1ca9eb8148fc4457cd6d7",
+      "bytes": 2231815,
+      "expected_sha256": "7eaccb67908ef0ce451a230ee9e723cd2ed3e618f8e1ca9eb8148fc4457cd6d7"
+    },
+    "xauusd_bid_m1_2024_11.csv": {
+      "actual_sha256": "8bdd99624cdebcc843d41420bbced1e57f91d9bebeb42279b85e6c9450232f8f",
+      "bytes": 2159626,
+      "expected_sha256": "8bdd99624cdebcc843d41420bbced1e57f91d9bebeb42279b85e6c9450232f8f"
+    },
+    "xauusd_bid_m1_2024_12.csv": {
+      "actual_sha256": "c086505bd4ae2f98095bae1c80e6b80ade803ae8f56de6e558e37a0153f967cd",
+      "bytes": 2231444,
+      "expected_sha256": "c086505bd4ae2f98095bae1c80e6b80ade803ae8f56de6e558e37a0153f967cd"
+    },
+    "xauusd_bid_m1_2025_01.csv": {
+      "actual_sha256": "4596e50b3fb203e12a9eee24942e0d22db8a2e409b71f9546a1e6ee6f80233a0",
+      "bytes": 2231746,
+      "expected_sha256": "4596e50b3fb203e12a9eee24942e0d22db8a2e409b71f9546a1e6ee6f80233a0"
+    },
+    "xauusd_bid_m1_2025_02.csv": {
+      "actual_sha256": "59c6380fcccc11883f74d09bbc3fc7cddf093d0e8c00e8d6826cf19fe7350e58",
+      "bytes": 2015844,
+      "expected_sha256": "59c6380fcccc11883f74d09bbc3fc7cddf093d0e8c00e8d6826cf19fe7350e58"
+    },
+    "xauusd_bid_m1_2025_03.csv": {
+      "actual_sha256": "24b0bfbf3baa5d2bd314cb081a78835b182e1bb410d916e47479a780618874cb",
+      "bytes": 2231490,
+      "expected_sha256": "24b0bfbf3baa5d2bd314cb081a78835b182e1bb410d916e47479a780618874cb"
+    },
+    "xauusd_bid_m1_2025_04.csv": {
+      "actual_sha256": "4e2364e526b266b788b7e980902e9e457653357b58ad5d9caff17814e4bce832",
+      "bytes": 2159648,
+      "expected_sha256": "4e2364e526b266b788b7e980902e9e457653357b58ad5d9caff17814e4bce832"
+    },
+    "xauusd_bid_m1_2025_05.csv": {
+      "actual_sha256": "d0f3a257cf9f9259d4ccc8b3a9525cfeed0413e281bb31521263d69d0aca2be0",
+      "bytes": 2231564,
+      "expected_sha256": "d0f3a257cf9f9259d4ccc8b3a9525cfeed0413e281bb31521263d69d0aca2be0"
+    },
+    "xauusd_bid_m1_2025_06.csv": {
+      "actual_sha256": "2440bcdc23708b6dcaea4e0d2cc8cab57b373dc5be3c287fc8086e82ee84d44e",
+      "bytes": 2159802,
+      "expected_sha256": "2440bcdc23708b6dcaea4e0d2cc8cab57b373dc5be3c287fc8086e82ee84d44e"
+    },
+    "xauusd_bid_m1_2025_07.csv": {
+      "actual_sha256": "865435434eedc5fec42bd94bce881847be253092e44975228ce2e70959b47434",
+      "bytes": 2231995,
+      "expected_sha256": "865435434eedc5fec42bd94bce881847be253092e44975228ce2e70959b47434"
+    },
+    "xauusd_bid_m1_2025_08.csv": {
+      "actual_sha256": "eceee53a978775a2d7dab296a521890ff792d2cd426e7ba5eb094b63c97b83a5",
+      "bytes": 2231992,
+      "expected_sha256": "eceee53a978775a2d7dab296a521890ff792d2cd426e7ba5eb094b63c97b83a5"
+    },
+    "xauusd_bid_m1_2025_09.csv": {
+      "actual_sha256": "56855187ac9d16e19e422a76c198dde83be9f0be15c87e25d7561d1d7c5cd305",
+      "bytes": 2159764,
+      "expected_sha256": "56855187ac9d16e19e422a76c198dde83be9f0be15c87e25d7561d1d7c5cd305"
+    },
+    "xauusd_bid_m1_2025_10.csv": {
+      "actual_sha256": "ead56d0f295b545c8e291b4ef88a1fdd6e232b1a0fa0839051cbfb9135fa02b7",
+      "bytes": 2231779,
+      "expected_sha256": "ead56d0f295b545c8e291b4ef88a1fdd6e232b1a0fa0839051cbfb9135fa02b7"
+    },
+    "xauusd_bid_m1_2025_11.csv": {
+      "actual_sha256": "0a4ad6343d60a96c78d5b72b1cf8386c9772617c500e4e5fbe3f38abc2229666",
+      "bytes": 2159800,
+      "expected_sha256": "0a4ad6343d60a96c78d5b72b1cf8386c9772617c500e4e5fbe3f38abc2229666"
+    },
+    "xauusd_bid_m1_2025_12.csv": {
+      "actual_sha256": "92936e9e939434985ba0928cafbd8c2a248fd1c0f60371b36d3260d6481773fd",
+      "bytes": 2231857,
+      "expected_sha256": "92936e9e939434985ba0928cafbd8c2a248fd1c0f60371b36d3260d6481773fd"
+    },
+    "xauusd_bid_m1_2026_01.csv": {
+      "actual_sha256": "906ee499bcc0236a6b6cb74ecd6c382ccf435d989a779833952a5c2fbe4ea3fe",
+      "bytes": 2231894,
+      "expected_sha256": "906ee499bcc0236a6b6cb74ecd6c382ccf435d989a779833952a5c2fbe4ea3fe"
+    },
+    "xauusd_bid_m1_2026_02.csv": {
+      "actual_sha256": "c58121aa702a061a62ca9ef976f682a613231c5b422e820491d121d347a6d7c9",
+      "bytes": 2015873,
+      "expected_sha256": "c58121aa702a061a62ca9ef976f682a613231c5b422e820491d121d347a6d7c9"
+    },
+    "xauusd_bid_m1_2026_03.csv": {
+      "actual_sha256": "6f1fa7f0497d74ec053755624e9455d7ab50b0a03d1b712504b48f8690af8dab",
+      "bytes": 2231933,
+      "expected_sha256": "6f1fa7f0497d74ec053755624e9455d7ab50b0a03d1b712504b48f8690af8dab"
+    },
+    "xauusd_bid_m1_2026_04.csv": {
+      "actual_sha256": "a976ab5b2511e79a87b6aaffb75d8b04b5295d7085240668faecae0f577aa721",
+      "bytes": 2159984,
+      "expected_sha256": "a976ab5b2511e79a87b6aaffb75d8b04b5295d7085240668faecae0f577aa721"
+    },
+    "xauusd_bid_m1_2026_05.csv": {
+      "actual_sha256": "25398f20bce21bef289fe8321808488ef6165996064f38fab3f44f488dfd5bbd",
+      "bytes": 2231990,
+      "expected_sha256": "25398f20bce21bef289fe8321808488ef6165996064f38fab3f44f488dfd5bbd"
+    },
+    "xauusd_bid_m1_2026_06.csv": {
+      "actual_sha256": "32498557a57cffbc80134be81755f89bb55d95aed6037e95fad259c10a52b284",
+      "bytes": 1823951,
+      "expected_sha256": "32498557a57cffbc80134be81755f89bb55d95aed6037e95fad259c10a52b284"
+    },
+    "xauusd_bid_m1_2026_07.csv": {
+      "actual_sha256": "1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286",
+      "bytes": 1886898,
+      "expected_sha256": "1861d23f4edbaa9cc5c5ca2bd419c9a7d54ef60299a75c5d4e8e8681bd308286"
+    }
+  },
+  "bid_months": 31,
+  "frozen_z4_run_id": 33139524456,
+  "future_price_outcomes_used": false,
+  "status": "E_DISPLAY_EPISODE_INPUT_QA_PASS",
+  "z4_first": "2024-08-02 01:00:00+00:00",
+  "z4_last": "2026-07-31 20:55:00+00:00",
+  "z4_monthly_parts": {
+    "z4_2024_08.pkl": "d67516d2277b9e4c55d2d4dee15ee6aedec0425e1fc94aca674c5f34594aac0c",
+    "z4_2024_09.pkl": "59de547c6d117f82bec23a6900a1812bab29ed3bf56226aa5c98780764a6f19e",
+    "z4_2024_10.pkl": "8d459f6d4e782a8ac72a3a0a842e1800f2ab6c4ec25d5d23c5d24d951a67ebfc",
+    "z4_2024_11.pkl": "534a06d33a591c6d89d99defdb32c86adcc86da9394a8cd82461aaf8ac1dd17b",
+    "z4_2024_12.pkl": "a3feacfa92511e9fac984262d5ef8def82eb5e4f5c59abfbfa241291f2f11a45",
+    "z4_2025_01.pkl": "a8793b45924baec9a3e145e97f6be782620f903e9314343f05659780649322bf",
+    "z4_2025_02.pkl": "345c0f2791e529a82fc0de135415d20e2e2f9176b816c25e882c92299c471bae",
+    "z4_2025_03.pkl": "992e272324216926fa2a7e318aeb8b9fe6a0e75dcb71e65126893fef9357c2d7",
+    "z4_2025_04.pkl": "302a1f5515f02fe8dfbe2bed05744894a353ba60bd9f0597072f7786d85a745b",
+    "z4_2025_05.pkl": "4366ac45189d74fa649795af5cabdf9e0f51aff1acab617d4a1150b736bee227",
+    "z4_2025_06.pkl": "c332af8385aaf2a9c6a8872cb0dc00e836a2a9cdc0a1ff59d0b7448e94ee147b",
+    "z4_2025_07.pkl": "be8d416b694767501e55ebc835d2dfd92d69872f96360218a42af9856a118d2d",
+    "z4_2025_08.pkl": "c4b69a503cfa65827e4e918bd51e9b65b4110e72094102ff1aa6cd209c79ffde",
+    "z4_2025_09.pkl": "a308e9a78bc5a9ae6c0e1bbfd34db9c16903ccdf22ead7ee28b2e6d4e5364d54",
+    "z4_2025_10.pkl": "1726773432d2d5718d20fdc60e8d722dc82f46477273ba26633aad2bcaa71f5b",
+    "z4_2025_11.pkl": "71a3351ee4daca4c24fd59dc01183cd8d831c4dd119c6329e70b8fc0e0bd30ab",
+    "z4_2025_12.pkl": "3b1f66350056bbb3714032cdb6dfa82f1e078ec6c1639d148b3a35ed30accc80",
+    "z4_2026_01.pkl": "a815f159d944487f5404fd25a404a0ecf133b6d84c8f6fe809a9ed286bbf6975",
+    "z4_2026_02.pkl": "9f22d894497372b6b380bc7d357d4d08833251755432ce7303474295e9e9d3b5",
+    "z4_2026_03.pkl": "cf6801bf5ec13af874ee9aa1c09688d7b8d6aa920694b0419323f0785a0d9c80",
+    "z4_2026_04.pkl": "571d81076a2fd95ca661a87c88d9ad7070f7c633eba09f8886114aa235286a9e",
+    "z4_2026_05.pkl": "130ee531be85a930496705d623468165e33148415ae6a4ba26806971d9b4bd52",
+    "z4_2026_06.pkl": "6ba94f1d4cae1bdf14d87f9c94e2f872747e06ce5fe9f23ff895a3a758c4c396",
+    "z4_2026_07.pkl": "c42ffa3f2cb6bf2b7b92413adac7f4947183399d43f3e01d2b8403238db0c603"
+  },
+  "z4_rows": 800180
+}

@@ -1,0 +1,23 @@
+{
+  "architecture": "Z4 + ESM_BOTH_G120M + EPM_M1_R2_A8H + EWM_G60M + ES_M1_8H_R2_T0.50",
+  "family_counts": {
+    "EPM_M1_R2_A8H": 14226,
+    "ESM_BOTH_G120M": 37028,
+    "ES_M1_8H_R2_T0.50": 11587,
+    "EWM_G60M": 21145,
+    "Z4": 4571
+  },
+  "first_snapshot_utc": "2024-08-02 12:00:00+00:00",
+  "future_price_outcomes_used": false,
+  "geometry_parity": {
+    "instrumented_rows": 88557,
+    "mismatch_counts": {},
+    "pass": true,
+    "reference_rows": 88557
+  },
+  "last_snapshot_utc": "2026-07-31 20:55:00+00:00",
+  "real_outcome_authorization": "FORBIDDEN_PENDING_NEW_PRO_GATE",
+  "rows": 88557,
+  "snapshots": 39260,
+  "status": "E_PROVENANCE_INSTRUMENT_V1_PASS"
+}

@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "arming_bar_not_contact": true,
+    "available_bar_count_not_wall_clock": true,
+    "conflicting_duplicates_fail_closed": true,
+    "contact_bar_close_below_invalidates": true,
+    "contact_bar_favorable_high_ignored": true,
+    "episode_expiry_discards_arm": true,
+    "exact_update_time_uses_continuation_geometry": true,
+    "feature_not_available_on_snapshot_open": true,
+    "same_bar_ambiguity_binary_zero": true
+  },
+  "real_outcomes_used": false,
+  "status": "SYNTHETIC_REACTION_LABELER_V1_PASS"
+}

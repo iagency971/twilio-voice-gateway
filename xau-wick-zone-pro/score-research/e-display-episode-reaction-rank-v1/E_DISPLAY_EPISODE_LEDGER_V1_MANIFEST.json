@@ -1,0 +1,22 @@
+{
+  "cross_family_continuation_allowed": false,
+  "dev_rows": 41210,
+  "dev_sessions": 257,
+  "episode_length_median": 1.0,
+  "episode_length_p90": 2.0,
+  "episodes": 66752,
+  "future_price_outcomes_used": false,
+  "model_feature_whitelist": [
+    "zone_width_v",
+    "display_persistence_c5",
+    "current_family"
+  ],
+  "real_outcome_authorization": "FORBIDDEN_PENDING_NEW_PRO_GATE",
+  "replication_rows": 42776,
+  "replication_sessions": 258,
+  "row_hash_canonicalization": "FIELD_AWARE_V2_SERIALIZATION_STABLE",
+  "rows": 83986,
+  "sessions": 515,
+  "status": "E_DISPLAY_EPISODE_SNAPSHOT_V1_BUILT_OUTCOME_BLIND",
+  "timing_rule": "feature_available_time_utc = snapshot_time_utc + 1 minute"
+}

@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "association_definition": true,
+    "cluster_bootstrap_requested_exact": true,
+    "fixed_quartile_labels": true,
+    "lexicographic_reference": true,
+    "missing_feature_excluded": true,
+    "population_sd_positive": true,
+    "prospective_blocks_complete_sessions": true,
+    "quartiles_strict": true,
+    "rank_bounds": true,
+    "three_source_features_only": true,
+    "unseen_family_counted": true
+  },
+  "real_outcomes_used": false,
+  "status": "SYNTHETIC_MODEL_EVAL_V1_PASS"
+}

@@ -1,0 +1,14 @@
+{
+  "checked_columns": [
+    "time",
+    "entry_rank",
+    "family",
+    "center",
+    "zlo",
+    "zhi"
+  ],
+  "future_price_outcomes_used": false,
+  "mismatches": {},
+  "rows": 88557,
+  "status": "E_V04_EXACT_DISPLAY_PARITY_PASS"
+}
