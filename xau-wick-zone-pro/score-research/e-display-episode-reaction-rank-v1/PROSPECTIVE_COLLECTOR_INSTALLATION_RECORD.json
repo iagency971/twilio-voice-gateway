@@ -1,0 +1,11 @@
+{
+  "status": "PROSPECTIVE_COLLECTOR_INSTALLATION_PENDING_EXACT_BLOB_REPLACEMENT",
+  "authorized_gate": "GO_PROSPECTIVE_CONFIRMATION_EXECUTION",
+  "installed_path": ".github/workflows/xau-e-prospective-collector-v1.yml",
+  "required_template_path": "xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/prospective-planning-v1/prospective_collection_workflow_TEMPLATE_v1.yml",
+  "required_template_git_blob": "83a41bc3fed25a7fb77b8b2c6d6d570626b24f9b",
+  "required_template_sha256": "77d1268a9319001b6327136dfaf39d54da7b527e95d0de72c8a7da388768a679",
+  "prospective_start_session_ny": "2026-08-31",
+  "manual_pre_start_execution": "FORBIDDEN",
+  "scheduled_start": "automatic after first eligible session close"
+}
