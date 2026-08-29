@@ -28,9 +28,11 @@ def args():
 def canon(v):
     if isinstance(v,pd.Timestamp): return v.tz_convert('UTC').isoformat()
     if pd.isna(v): return None
+    # Builder hashes Python bool through the integer branch (bool is a subclass of int).
+    # pandas round-trip yields numpy.bool_; normalize both representations identically.
+    if isinstance(v,(bool,np.bool_)): return int(v)
     if isinstance(v,(np.integer,int)): return int(v)
     if isinstance(v,(np.floating,float)): return format(float(v),'.17g')
-    if isinstance(v,(bool,np.bool_)): return bool(v)
     return str(v)
 
 
