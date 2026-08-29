@@ -1,0 +1,122 @@
+{
+  "accepted_findings": [
+    "The frozen Jan-Jul 2024 snapshot ledger is deterministic and passes its declared technical QA.",
+    "Prefix invariance/no-repaint, independent identity parity, row hashes, geometry, session scope and forbidden-column checks pass for that ledger.",
+    "E1/E2/E3 remains display/localization order, not a quality rank.",
+    "No future outcome was used to build or audit the snapshot ledger."
+  ],
+  "audited_state": {
+    "branch_head_at_gate_start": "c2cf09a77c92f1f9ab5038e7ab7f1aa427a16dd7",
+    "episodes": 15835,
+    "ledger_first_snapshot_utc": "2024-01-03T13:00:00+00:00",
+    "ledger_last_snapshot_utc": "2024-07-31T20:55:00+00:00",
+    "ledger_rows": 27636,
+    "ledger_sha256": "3be6b594c515efc2ca2df6aaa1a8ff63525cbd91ef5b9cfae9956c515ac3d740",
+    "sessions_ny": 150,
+    "snapshot_artifact_commit": "278528c2591d25ca49ae6d127f5c6ded237e6b4c",
+    "snapshots": 12561,
+    "source_compressed_binary_sha256": "1a6fc6451b80d7b57a7ce37d005586b59ccf94235d11fc32486a6b9dca7f4a3c",
+    "source_decompressed_payload_sha256": "dee5bfdd1ed6bb0b7eebc19280cb3cb3ee2e35c3da14a14d3ee1ee644a52a920",
+    "workflow_artifact_id": 9715394086,
+    "workflow_run_id": 33254513629
+  },
+  "authorization": {
+    "dev_outcome_generation": "FORBIDDEN",
+    "dev_outcome_reading": "FORBIDDEN",
+    "model_fitting": "FORBIDDEN",
+    "next_authorized_mode": "VERY_HIGH",
+    "next_authorized_work": "PRE_OUTCOME_METHOD_AND_CODE_REPAIR_ONLY",
+    "pine_modification": "FORBIDDEN",
+    "pro_regate_required": true
+  },
+  "future_price_outcomes_used_during_gate": false,
+  "gate_id": "E_INTRINSIC_V1_PRO_PRE_OUTCOME_GATE_2026-08-29",
+  "hard_blockers": [
+    {
+      "close_condition": "Generate, hash and independently QA outcome-free candidate/snapshot ledgers covering all declared historical windows, with required warm-up, before any real label is generated or read.",
+      "finding": "The only frozen real ledger ends on 2024-07-31, while DEV starts at 2024-08-01 and historical replication starts at 2025-08-01.",
+      "id": "B1_TEMPORAL_COVERAGE",
+      "impact": "There are zero frozen feature rows for the declared DEV and replication windows."
+    },
+    {
+      "close_condition": "Freeze and QA a primary identity protocol before outcomes. Preferred: instrument stable causal source/provenance IDs while proving geometry parity. At minimum, obtain separate Pro approval for a family/geometry-preserving display-episode identity and its pre-registered sensitivity analysis.",
+      "finding": "Episode identity is deterministic but post-hoc and materially ambiguous; it may continue across family changes and large geometry changes.",
+      "id": "B2_EPISODE_IDENTITY_CONSTRUCT",
+      "impact": "Two of four proposed model features—episode_age_c5 and origin_family—depend directly on that identity, and first-contact selection also depends on it."
+    },
+    {
+      "close_condition": "Implement and freeze the labeler without running it on real DEV/replication outcomes; test all event-order and timestamp edge cases.",
+      "finding": "The primary reaction definition exists only as prose; no canonical deterministic labeler and synthetic edge-case suite is present.",
+      "id": "B3_REACTION_LABELER_NOT_FROZEN",
+      "impact": "Arming, evolving zone geometry, episode disappearance, bar availability, missing minutes, contact-bar ordering, session truncation and exclusions remain implementation degrees of freedom."
+    },
+    {
+      "close_condition": "Freeze a conservative rule before outcomes, such as a dedicated AMBIGUOUS_CONTACT_BAR_ORDER class or starting favorable-event eligibility only after the contact bar.",
+      "finding": "The preregistration permits the contact bar to satisfy the favorable high, but M1 data cannot establish whether the favorable high occurred before or after the zone contact.",
+      "id": "B4_CONTACT_BAR_ORDERING",
+      "impact": "A pre-contact high can be incorrectly counted as a favorable reaction."
+    },
+    {
+      "close_condition": "Implement and test the single frozen pipeline, lock software versions, and hash all code before real outcomes are opened.",
+      "finding": "No canonical model/training/score/replication/prospective evaluation implementation is present.",
+      "id": "B5_MODEL_EVALUATION_PIPELINE_NOT_FROZEN",
+      "impact": "Transformations, tie handling, convergence behavior, exclusions and gate calculations can still vary after outcomes are visible."
+    },
+    {
+      "close_condition": "Freeze exact formulas. Recommended primary continuous statistic: AUC minus 0.5; 5,000 session-date cluster bootstrap resamples; percentile CI; fixed invalid-resample rule; fixed DEV quantile method and boundary convention; prospective sub-blocks split by complete ordered NY sessions.",
+      "finding": "The term 'continuous score association' and several gate mechanics are not mathematically complete.",
+      "id": "B6_PRIMARY_STATISTIC_UNDERSPECIFIED",
+      "impact": "The primary statistic, confidence interval, quartile ties, invalid bootstrap samples and three sub-block construction could be selected after seeing results."
+    },
+    {
+      "close_condition": "Rename the estimand to a conditional pre-contact/display-episode reaction rank, hash the full generator dependency graph plus raw/Z4 inputs and environment, then create a canonical two-stage seal recording method commit, artifact commit, run ID and artifact digest.",
+      "finding": "The source universe is conditional on an upper Z4, locality within 2v and top-3 sticky display; the current freeze points to trigger commit 111045c while generated artifacts live in 278528c, and upstream generator/data/environment dependencies are not fully sealed for later periods.",
+      "id": "B7_SCOPE_PROVENANCE_AND_SEAL",
+      "impact": "An 'intrinsic E strength' interpretation would overgeneralize, and later-period reproducibility is not yet cryptographically closed."
+    }
+  ],
+  "outcome_blind_identity_diagnostics": {
+    "chosen_transitions_center_shift_gt_0_25_max_v_rate": 0.14092026099483096,
+    "chosen_transitions_center_shift_gt_0_50_max_v_rate": 0.05482586221506652,
+    "chosen_transitions_center_shift_gt_1_00_max_v_rate": 0.01237183289551733,
+    "chosen_transitions_width_ratio_gt_2_rate": 0.26743496313871706,
+    "chosen_transitions_width_ratio_gt_5_rate": 0.0853317515464791,
+    "contiguous_snapshot_pairs": 11760,
+    "continued_transitions": 11801,
+    "current_multiple_match_rate": 0.05408524388367441,
+    "current_rows_in_contiguous_pairs": 25996,
+    "current_rows_with_multiple_possible_prior_matches": 1406,
+    "episode_length_snapshots_max": 13,
+    "episode_length_snapshots_median": 1,
+    "episode_length_snapshots_p75": 2,
+    "episode_length_snapshots_p90": 3,
+    "episode_length_snapshots_p95": 4,
+    "episode_length_snapshots_p99": 6,
+    "episodes_total": 15835,
+    "family_changed_rate": 0.4637742564189475,
+    "family_changed_transitions": 5473,
+    "note": "Diagnostics use only the frozen outcome-free ledger and the frozen identity rule. They do not assess reaction or profitability.",
+    "prior_multiple_match_rate": 0.07103299746173371,
+    "prior_rows_in_contiguous_pairs": 26002,
+    "prior_rows_with_multiple_possible_current_matches": 1847,
+    "singleton_episode_rate": 0.6017682349226398,
+    "singleton_episodes": 9529,
+    "slot_changed_rate": 0.3665791068553512,
+    "slot_changed_transitions": 4326
+  },
+  "outcomes_opened_during_gate": false,
+  "pine_production_modified": false,
+  "required_repairs_before_regate": [
+    "Freeze the conditional estimand and non-overclaiming name.",
+    "Repair and QA episode identity outcome-blind.",
+    "Build outcome-free ledgers for DEV_HISTORY and HISTORICAL_REPLICATION_DIAGNOSTIC before labels.",
+    "Implement and freeze the reaction labeler with timestamp and contact-bar rules.",
+    "Implement and freeze the model/evaluation pipeline and exact statistics.",
+    "Lock dependencies and seal all upstream data/code hashes.",
+    "Run a new Pro pre-outcome gate."
+  ],
+  "scope": "XAUUSD M1 BUY US 08:00-17:00 America/New_York",
+  "status": "NO_GO_DEV_OUTCOME_OPENING",
+  "technical_snapshot_qa": "PASS",
+  "technical_snapshot_qa_status": "E_INTRINSIC_SNAPSHOT_V1_REAL_QA_PASS"
+}
