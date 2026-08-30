@@ -1,0 +1,98 @@
+name: XAU E-zone V2 R4 dense matching ladder
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - .github/workflows/xau-e-zone-score-buy-us-v2-r4-matching-ladder.yml
+  workflow_dispatch:
+
+concurrency:
+  group: xau-e-zone-score-buy-us-v2-r4-ladder
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  PKG: xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2
+  DATA: /tmp/xau-v2-data
+  WORK: /tmp/xau-r4-ladder
+
+jobs:
+  ladder:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 2
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.16'
+
+      - name: Verify R4 is outcome-blind and compile
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
+          python -m py_compile "$PKG/xau_e_zone_v2_r4_matching_ladder.py"
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/xau_e_zone_v2_r4_matching_ladder.py').read_text()
+          assert 'FRACTION_GE2_GATE = 0.80' in s
+          assert 'MAX_ABS_SMD_GATE = 0.10' in s
+          assert 'MIN_SESSION_GAP = 10' in s
+          assert 'future_price_outcomes_used' in s
+          print('R4_FROZEN_PREOUTCOME_DESIGN_STATIC_GATE_PASS')
+          PY
+
+      - name: Build 2022 outcome-blind design population
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$DATA" "$WORK"
+          python "$PKG/xau_e_zone_v2_acquire.py" --output-dir "$DATA" --manifest "$DATA/DATA_INPUT_MANIFEST.json"
+          FILES=$(python - <<'PY'
+          import pandas as pd
+          print(' '.join(f'/tmp/xau-v2-data/xauusd_bid_m1_{p.year:04d}_{p.month:02d}.csv' for p in pd.period_range('2021-11','2022-12',freq='M')))
+          PY
+          )
+          python "$PKG/xau_z4_geometry_only_v2.py" --files $FILES --output-pkl "$WORK/z4.pkl" --output-csv "$WORK/z4.csv" --manifest "$WORK/z4_manifest.json" --tag R4_LADDER_VAL
+          python "$PKG/xau_e_zone_v2_instrument.py" --files $FILES --z4-pkl "$WORK/z4.pkl" --output-features "$WORK/features.csv.gz" --output-display-all "$WORK/display_all.csv.gz" --output-full-pool "$WORK/full_pool.csv.gz" --output-context "$WORK/context.csv.gz" --manifest "$WORK/instrument_manifest.json" --target-start 2022-01-01T00:00:00Z --target-end 2023-01-01T00:00:00Z
+
+      - name: Run frozen outcome-blind R4 ladder
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_zone_v2_r4_matching_ladder.py" --features "$WORK/features.csv.gz" --full-pool "$WORK/full_pool.csv.gz" --context "$WORK/context.csv.gz" --output "$WORK/R4_MATCHING_LADDER_VAL.json"
+          cat "$WORK/R4_MATCHING_LADDER_VAL.json"
+
+      - name: Verify no outcome leakage and publish immutable R4 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/xau-r4-ladder/R4_MATCHING_LADDER_VAL.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='V2_R4_MATCHING_LADDER_OUTCOME_BLIND_COMPLETE'
+          assert x['future_price_outcomes_used'] is False
+          assert x['forbidden_outcome_columns_present'] is False
+          assert x['r3_gate_not_retroactively_relaxed'] is True
+          print('R4_OUTCOME_BLIND_RESULT_GATE_PASS',x['chosen_design'])
+          PY
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: e-zone-score-buy-us-v2-r4-matching-ladder
+          retention-days: 90
+          compression-level: 6
+          path: |
+            /tmp/xau-r4-ladder/R4_MATCHING_LADDER_VAL.json
+            /tmp/xau-r4-ladder/instrument_manifest.json
+            /tmp/xau-r4-ladder/z4_manifest.json
+            /tmp/xau-v2-data/DATA_INPUT_MANIFEST.json
