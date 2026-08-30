@@ -15,6 +15,7 @@ import xau_e_zone_v2_r4_pro_audit_diagnostics as dg
 EF={'ESM_BOTH_G120M','EPM_M1_R2_A8H','EWM_G60M','ES_M1_8H_R2_T0.50'}
 FORB=('primary_binary','primary_class','favorable','adverse_level','event_bar','outcome','mfe','mae','success','reaction','target_hit','stop_hit')
 DESIGN=r4.DESIGNS[0]
+FP_BOUND_FACTOR=64.0
 
 
 def args():
@@ -49,7 +50,58 @@ def main():
     checks['no_outcome_columns_placebos']=not any(any(t in c.lower() for t in FORB) for c in pl.columns)
     checks['matching_same_start_minute']=bool((m.donor_minute_of_session.astype(int)==m.recipient_minute_of_session.astype(int)).all())
     checks['matching_min_session_gap_10']=bool((m.session_index_gap.astype(int)>=10).all())
-    checks['matching_width_exact']=bool(np.allclose(m.donor_zone_width_v,m.recipient_transplanted_zone_width_v,rtol=0,atol=2e-12))
+
+    # Verify the mathematically exact normalized-width preservation using a
+    # deterministic IEEE-754 error bound scaled by the actual price/v
+    # cancellation condition, rather than a fixed absolute tolerance.
+    donor_first=(f.sort_values(['display_episode_id','snapshot_time_utc'])
+                   .groupby('display_episode_id',sort=False).first().reset_index()
+                   [['display_episode_id','center','zlo','zhi','v_snapshot']]
+                   .rename(columns={'display_episode_id':'donor_episode_id','center':'donor_geom_center','zlo':'donor_geom_zlo','zhi':'donor_geom_zhi','v_snapshot':'donor_geom_v'}))
+    placebo_first=(pl.sort_values(['placebo_id','snapshot_time_utc'])
+                     .groupby('placebo_id',sort=False).first().reset_index()
+                     [['placebo_id','center','zlo','zhi','v_snapshot']]
+                     .rename(columns={'center':'recipient_geom_center','zlo':'recipient_geom_zlo','zhi':'recipient_geom_zhi','v_snapshot':'recipient_geom_v'}))
+    wm=(m.merge(donor_first,on='donor_episode_id',how='left',validate='many_to_one')
+          .merge(placebo_first,on='placebo_id',how='left',validate='one_to_one'))
+    width_inputs_complete=not wm[['donor_geom_center','donor_geom_zlo','donor_geom_zhi','donor_geom_v','recipient_geom_center','recipient_geom_zlo','recipient_geom_zhi','recipient_geom_v']].isna().any().any()
+    checks['matching_width_geometry_inputs_complete']=bool(width_inputs_complete)
+    if width_inputs_complete:
+        eps=np.finfo(float).eps;tiny=np.finfo(float).tiny
+        donor_scale=np.maximum.reduce([np.ones(len(wm)),np.abs(wm.donor_geom_center.to_numpy(float)),np.abs(wm.donor_geom_zlo.to_numpy(float)),np.abs(wm.donor_geom_zhi.to_numpy(float))])/np.maximum(wm.donor_geom_v.to_numpy(float),tiny)
+        rec_scale=np.maximum.reduce([np.ones(len(wm)),np.abs(wm.recipient_geom_center.to_numpy(float)),np.abs(wm.recipient_geom_zlo.to_numpy(float)),np.abs(wm.recipient_geom_zhi.to_numpy(float))])/np.maximum(wm.recipient_geom_v.to_numpy(float),tiny)
+        wd=wm.donor_zone_width_v.to_numpy(float);wr=wm.recipient_transplanted_zone_width_v.to_numpy(float)
+        magnitude=np.maximum.reduce([np.ones(len(wm)),np.abs(wd),np.abs(wr)])
+        bound=FP_BOUND_FACTOR*eps*(donor_scale+rec_scale+magnitude)
+        delta=np.abs(wd-wr)
+        donor_from_geom=(wm.donor_geom_zhi.to_numpy(float)-wm.donor_geom_zlo.to_numpy(float))/wm.donor_geom_v.to_numpy(float)
+        recipient_from_geom=(wm.recipient_geom_zhi.to_numpy(float)-wm.recipient_geom_zlo.to_numpy(float))/wm.recipient_geom_v.to_numpy(float)
+        donor_serial_delta=np.abs(wd-donor_from_geom);recipient_serial_delta=np.abs(wr-recipient_from_geom)
+        checks['matching_width_float_roundtrip_bounded']=bool(np.all(delta<=bound))
+        checks['matching_width_donor_geometry_consistent']=bool(np.all(donor_serial_delta<=bound))
+        checks['matching_width_recipient_geometry_consistent']=bool(np.all(recipient_serial_delta<=bound))
+        nz=delta>0
+        report['width_roundtrip']={
+            'authority_rule':'abs(donor_width_v-recipient_width_v) <= 64*eps*(donor_price_scale/v + recipient_price_scale/v + width_scale)',
+            'fp_bound_factor':FP_BOUND_FACTOR,
+            'float64_epsilon':float(eps),
+            'old_fixed_atol_2e12_pass_report_only':bool(np.allclose(wd,wr,rtol=0,atol=2e-12)),
+            'rows_abs_delta_gt_2e12_report_only':int(np.sum(delta>2e-12)),
+            'max_abs_delta':float(delta.max()) if len(delta) else None,
+            'max_relative_delta':float(np.max(delta/np.maximum(np.maximum(np.abs(wd),np.abs(wr)),tiny))) if len(delta) else None,
+            'min_machine_bound':float(bound.min()) if len(bound) else None,
+            'max_machine_bound':float(bound.max()) if len(bound) else None,
+            'minimum_bound_to_delta_ratio_nonzero':float(np.min(bound[nz]/delta[nz])) if np.any(nz) else None,
+            'donor_geometry_max_delta':float(donor_serial_delta.max()) if len(donor_serial_delta) else None,
+            'recipient_geometry_max_delta':float(recipient_serial_delta.max()) if len(recipient_serial_delta) else None,
+            'frozen_repair_evidence':'R4_REP_WIDTH_FLOAT_DIAGNOSTIC_2026-08-30.json',
+            'repair_memo':'PREOUTCOME_IMPLEMENTATION_REPAIR_R4_WIDTH_FLOAT.md'
+        }
+    else:
+        checks['matching_width_float_roundtrip_bounded']=False
+        checks['matching_width_donor_geometry_consistent']=False
+        checks['matching_width_recipient_geometry_consistent']=False
+
     checks['matching_distance_exact']=bool(np.allclose(m.donor_distance_v,m.recipient_distance_v,rtol=0,atol=2e-12))
     checks['matching_logv_caliper_065']=bool((np.abs(m.donor_log_v_snapshot-m.recipient_log_v_snapshot)<=.65+1e-12).all())
     checks['matching_z4_caliper_125']=bool((np.abs(m.donor_nearest_upper_z4_dist_v-m.recipient_nearest_upper_z4_dist_v)<=1.25+1e-12).all())
@@ -58,8 +110,7 @@ def main():
     for _,g in m.groupby('donor_episode_id',sort=False):
         z=g.sort_values('control_rank');ranks=z.control_rank.astype(int).tolist()
         if ranks!=list(range(1,len(ranks)+1)) or np.any(np.diff(z.match_distance.to_numpy(float))<0):rank_ok=False;break
-        vals=z.match_distance.to_numpy(float);rs=z.recipient_session_date_ny.astype(str).tolist()
-        i=0
+        vals=z.match_distance.to_numpy(float);rs=z.recipient_session_date_ny.astype(str).tolist();i=0
         while i<len(vals):
             j=i+1
             while j<len(vals) and vals[j]==vals[i]:j+=1
@@ -79,27 +130,21 @@ def main():
     checks['match_distance_recomputed']=bool(np.allclose(expected,m.match_distance.to_numpy(float),rtol=0,atol=2e-12))
 
     # Authority is the exact frozen neutrality rule used by the generator:
-    # overlap OR center distance <= 0.20*v.  No tolerance is added to that gate.
-    # The former +1e-12 comparison is retained only as a report-only diagnostic
-    # so we can prove whether it generated numerical false positives.
+    # overlap OR center distance <= 0.20*v. No epsilon is added to the gate.
     pb={pd.Timestamp(t):g for t,g in pool.groupby('time',sort=False)}
-    strict_bad_rows=0;overlap_bad_rows=0;near_exact_bad_rows=0;epsilon_only_near_rows=0
-    examples=[]
+    strict_bad_rows=0;overlap_bad_rows=0;near_exact_bad_rows=0;epsilon_only_near_rows=0;examples=[]
     for _,z in pl.iterrows():
         g=pb.get(pd.Timestamp(z.snapshot_time_utc))
         if g is None or not len(g):continue
         ov=np.minimum(float(z.zhi),g.zhi.to_numpy(float))>=np.maximum(float(z.zlo),g.zlo.to_numpy(float))
-        delta=np.abs(g.center.to_numpy(float)-float(z.center));thr=.20*float(z.v_snapshot)
-        near_exact=delta<=thr
-        near_eps=(delta<=thr+1e-12)&(~near_exact)
-        bad=ov|near_exact
+        dd=np.abs(g.center.to_numpy(float)-float(z.center));thr=.20*float(z.v_snapshot)
+        near_exact=dd<=thr;near_eps=(dd<=thr+1e-12)&(~near_exact);bad=ov|near_exact
         if bool(np.any(ov)):overlap_bad_rows+=1
         if bool(np.any(near_exact)):near_exact_bad_rows+=1
         if bool(np.any(near_eps)):epsilon_only_near_rows+=1
         if bool(np.any(bad)):
             strict_bad_rows+=1
-            if len(examples)<20:
-                examples.append({'placebo_id':str(z.placebo_id),'snapshot_time_utc':pd.Timestamp(z.snapshot_time_utc).isoformat(),'overlap':bool(np.any(ov)),'near_exact':bool(np.any(near_exact)),'min_center_distance':float(np.min(delta)),'threshold_0_20v':float(thr)})
+            if len(examples)<20:examples.append({'placebo_id':str(z.placebo_id),'snapshot_time_utc':pd.Timestamp(z.snapshot_time_utc).isoformat(),'overlap':bool(np.any(ov)),'near_exact':bool(np.any(near_exact)),'min_center_distance':float(np.min(dd)),'threshold_0_20v':float(thr)})
     checks['placebo_neutrality_recompute']=strict_bad_rows==0
     report['neutrality_recompute']={'authority_rule':'overlap OR abs(real_center-placebo_center) <= 0.20*v; exact float64 comparison, no epsilon','strict_bad_rows':strict_bad_rows,'overlap_bad_rows':overlap_bad_rows,'near_exact_bad_rows':near_exact_bad_rows,'epsilon_only_near_rows_report_only':epsilon_only_near_rows,'strict_bad_examples':examples}
     checks['row_hash_unique_within_snapshot_slot']=not f.duplicated(['snapshot_time_utc','display_slot_rank']).any()
@@ -108,8 +153,7 @@ def main():
     counts=m.groupby('donor_episode_id').size();starts['_n']=starts.display_episode_id.astype(str).map(counts).fillna(0).astype(int)
     overall=float((starts._n>=2).mean());report['fraction_donors_ge2']=overall;checks['coverage_overall_ge_080']=overall>=.80
     slot={}
-    for k,g in starts.groupby('display_slot_rank',sort=True):
-        v=float((g._n>=2).mean());slot[str(int(k))]=v
+    for k,g in starts.groupby('display_slot_rank',sort=True):slot[str(int(k))]=float((g._n>=2).mean())
     report['coverage_by_slot']=slot;checks['coverage_each_slot_ge_070']=all(v>=.70 for v in slot.values()) and set(slot)=={'1','2','3'}
 
     eligible=set(starts.loc[starts._n>=2,'display_episode_id'].astype(str));me=m[m.donor_episode_id.astype(str).isin(eligible)].copy();n=me.groupby('donor_episode_id').size();me['_w']=1.0/me.donor_episode_id.astype(str).map(n).astype(float);w=me._w.to_numpy(float)
