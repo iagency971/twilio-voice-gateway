@@ -1,0 +1,274 @@
+name: XAU E-zone BUY US V2 R4 sequential execution
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - .github/workflows/xau-e-zone-score-buy-us-v2-r4.yml
+  workflow_dispatch:
+
+concurrency:
+  group: xau-e-zone-score-buy-us-v2-r4-sequential
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PKG: xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2
+  DATA: /tmp/xau-v2-data
+  WORK: /tmp/xau-v2-r4-work
+  REPLAY: /tmp/xau-v2-r4-replay
+  FROZEN_Z4_RUN_ID: '33139524456'
+  V2_FROZEN_Z4_PKL: /tmp/FROZEN_C5_24M.pkl
+  R4_TOKEN: GO_E_ZONE_SCORE_BUY_US_V2_R4_SEQUENTIAL_HISTORICAL_EXECUTION
+
+jobs:
+  execute-r4:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 2
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.16'
+
+      - name: Verify Pro R4 authority before any computation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2')
+          g=json.load(open(p/'E_ZONE_SCORE_BUY_US_V2_R4_PRO_GATE.json'))
+          a=json.load(open(p/'R4_PRO_AUDIT_GATE_RESULT_2026-08-30.json'))
+          v=json.load(open(p/'V04_PARITY_REPRODUCIBILITY_DIAGNOSTIC_2026-08-30.json'))
+          assert g['status']=='PRO_E_ZONE_SCORE_BUY_US_V2_R4_CONTROL_GATE_PASS'
+          assert g['decision']=='GO_R4' and g['r4_design_authorized'] is True
+          assert g['new_r4_execution_authorization_token']=='GO_E_ZONE_SCORE_BUY_US_V2_R4_SEQUENTIAL_HISTORICAL_EXECUTION'
+          assert g['pro_gate_required_after_preoutcome_before_dev'] is False
+          assert g['authorized_design']['id']=='R4_D5_MINIMAL_DENSE'
+          assert a['status']=='R4_PRO_AUDIT_ALL_PREDECLARED_DIAGNOSTIC_GATES_PASS'
+          assert a['future_price_outcomes_used'] is False
+          assert v['exact_float64_parity_pass'] is True and v['max_absolute_delta']==0.0
+          print('R4_PRO_AUTHORITY_PASS')
+          PY
+
+      - name: Install frozen environment and compile R4 implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
+          python - <<'PY'
+          import platform,numpy,pandas,scipy,sklearn
+          assert platform.python_version()=='3.11.16'
+          assert numpy.__version__=='2.3.2' and pandas.__version__=='2.3.1'
+          assert scipy.__version__=='1.16.1' and sklearn.__version__=='1.7.1'
+          print('FROZEN_ENVIRONMENT_PASS')
+          PY
+          python -m py_compile "$PKG"/*.py
+
+      - name: Acquire commit-pinned M1 history
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$DATA" "$WORK" "$REPLAY"
+          python "$PKG/xau_e_zone_v2_acquire.py" --output-dir "$DATA" --manifest "$DATA/DATA_INPUT_MANIFEST.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          new=json.load(open('/tmp/xau-v2-data/DATA_INPUT_MANIFEST.json'))
+          old=json.load(open('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/DATA_INPUT_MANIFEST.json'))
+          checked=0
+          for fn,rec in old['bid_files'].items():
+              if fn in new['files']:
+                  assert new['files'][fn]['sha256']==rec['expected_sha256'];checked+=1
+          assert checked>=31
+          print('FROZEN_V1_OVERLAP_M1_SHA_PARITY_PASS',checked)
+          PY
+
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_Z4_RUN_ID }}
+          pattern: z4br-frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+
+      - name: Assemble exact canonical frozen V0.4 Z4 overlap input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import glob,pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'));assert len(fs)==24,len(fs)
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True);z['time']=pd.to_datetime(z.time,utc=True);z=z.sort_values(['time','side','center']).reset_index(drop=True)
+          assert set(z.columns)=={'time','landmark_i','center','zlo','zhi','side'}
+          assert len(z)==800180
+          z.to_pickle('/tmp/FROZEN_C5_24M.pkl');print('CANONICAL_FROZEN_Z4_PASS',len(z))
+          PY
+
+      - name: Build complete R4 PREOUTCOME package for DEV VAL REP
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_zone_v2_runner_r4.py" --stage PREOUTCOME --data-dir "$DATA" --work-dir "$WORK"
+          test "$(python -c "import json;print(json.load(open('$WORK/PRE_OUTCOME_FREEZE.json'))['status'])")" = "E_ZONE_SCORE_BUY_US_V2_R4_PREOUTCOME_FREEZE_PASS"
+          for K in DEV VAL REP; do
+            test "$(python -c "import json;print(json.load(open('$WORK/$K/preoutcome_qa.json'))['status'])")" = "E_ZONE_SCORE_BUY_US_V2_R4_PREOUTCOME_QA_PASS"
+          done
+
+      - name: Verify exact canonical 2022 R4 selection
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_zone_v2_r4_selection_verify.py" \
+            --features "$WORK/VAL/features.csv.gz" --full-pool "$WORK/VAL/full_pool.csv.gz" --context "$WORK/VAL/context.csv.gz" \
+            --matching "$WORK/VAL/matching.csv.gz" --canonical-r4-json "$PKG/R4_MATCHING_LADDER_VAL.json" --output "$WORK/R4_CANONICAL_SELECTION_VERIFY_VAL.json"
+          test "$(python -c "import json;print(json.load(open('$WORK/R4_CANONICAL_SELECTION_VERIFY_VAL.json'))['status'])")" = "R4_CANONICAL_SELECTION_EXACT_PASS"
+
+      - name: Deterministic replay of all R4 control packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          for K in DEV VAL REP; do
+            mkdir -p "$REPLAY/$K"
+            python "$PKG/xau_e_zone_v2_placebos_r4.py" \
+              --features "$WORK/$K/features.csv.gz" --full-pool "$WORK/$K/full_pool.csv.gz" --context "$WORK/$K/context.csv.gz" \
+              --output "$REPLAY/$K/placebos.csv.gz" --matching-table "$REPLAY/$K/matching.csv.gz" --manifest "$REPLAY/$K/placebo_manifest.json"
+            for F in placebos.csv.gz matching.csv.gz placebo_manifest.json; do
+              test "$(sha256sum "$WORK/$K/$F"|awk '{print $1}')" = "$(sha256sum "$REPLAY/$K/$F"|awk '{print $1}')"
+            done
+          done
+          echo R4_DETERMINISTIC_REPLAY_HASH_PASS
+
+      - name: Fail closed if any outcome artifact exists before DEV
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          w=Path('/tmp/xau-v2-r4-work');bad=[]
+          for pat in ['*_labels.csv.gz','zone_test.json','matched_sets.csv','score_report.json','scored.csv.gz','DEV_FROZEN_MODEL.json','DEV_FREEZE.json']:
+              bad.extend(w.rglob(pat))
+          assert not bad,[str(x) for x in bad]
+          print('NO_V2_FUTURE_OUTCOME_ARTIFACT_BEFORE_DEV_PASS')
+          PY
+
+      - name: Upload immutable R4 PREOUTCOME freeze before any labels
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: e-zone-score-buy-us-v2-r4-preoutcome
+          retention-days: 90
+          compression-level: 6
+          path: |
+            /tmp/xau-v2-data/DATA_INPUT_MANIFEST.json
+            /tmp/xau-v2-r4-work/PRE_OUTCOME_FREEZE.json
+            /tmp/xau-v2-r4-work/R4_CANONICAL_SELECTION_VERIFY_VAL.json
+            /tmp/xau-v2-r4-work/DEV/features.csv.gz
+            /tmp/xau-v2-r4-work/DEV/full_pool.csv.gz
+            /tmp/xau-v2-r4-work/DEV/context.csv.gz
+            /tmp/xau-v2-r4-work/DEV/placebos.csv.gz
+            /tmp/xau-v2-r4-work/DEV/matching.csv.gz
+            /tmp/xau-v2-r4-work/DEV/preoutcome_qa.json
+            /tmp/xau-v2-r4-work/DEV/placebo_manifest.json
+            /tmp/xau-v2-r4-work/VAL/features.csv.gz
+            /tmp/xau-v2-r4-work/VAL/full_pool.csv.gz
+            /tmp/xau-v2-r4-work/VAL/context.csv.gz
+            /tmp/xau-v2-r4-work/VAL/placebos.csv.gz
+            /tmp/xau-v2-r4-work/VAL/matching.csv.gz
+            /tmp/xau-v2-r4-work/VAL/preoutcome_qa.json
+            /tmp/xau-v2-r4-work/VAL/placebo_manifest.json
+            /tmp/xau-v2-r4-work/REP/features.csv.gz
+            /tmp/xau-v2-r4-work/REP/full_pool.csv.gz
+            /tmp/xau-v2-r4-work/REP/context.csv.gz
+            /tmp/xau-v2-r4-work/REP/placebos.csv.gz
+            /tmp/xau-v2-r4-work/REP/matching.csv.gz
+            /tmp/xau-v2-r4-work/REP/preoutcome_qa.json
+            /tmp/xau-v2-r4-work/REP/placebo_manifest.json
+            /tmp/xau-v2-r4-work/PARITY/instrument_manifest.json
+            /tmp/xau-v2-r4-work/PREFIX/prefix_invariance.json
+
+      - name: Open DEV only and freeze model once
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_zone_v2_runner_r4.py" --stage DEV --data-dir "$DATA" --work-dir "$WORK"
+          test "$(python -c "import json;print(json.load(open('$WORK/DEV_FREEZE.json'))['status'])")" = "E_ZONE_SCORE_BUY_US_V2_DEV_FREEZE_PASS"
+
+      - name: Upload immutable DEV freeze
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: e-zone-score-buy-us-v2-r4-dev-freeze
+          retention-days: 90
+          compression-level: 6
+          path: |
+            /tmp/xau-v2-r4-work/PRE_OUTCOME_FREEZE.json
+            /tmp/xau-v2-r4-work/DEV_FREEZE.json
+            /tmp/xau-v2-r4-work/DEV_FROZEN_MODEL.json
+            /tmp/xau-v2-r4-work/DEV/real_labels.csv.gz
+            /tmp/xau-v2-r4-work/DEV/placebo_labels.csv.gz
+            /tmp/xau-v2-r4-work/DEV/zone_test.json
+            /tmp/xau-v2-r4-work/DEV/matched_sets.csv
+            /tmp/xau-v2-r4-work/DEV/score_report.json
+            /tmp/xau-v2-r4-work/DEV/scored.csv.gz
+
+      - name: Execute VAL and conditionally REP without refit
+        shell: bash
+        run: |
+          set -euo pipefail
+          BEFORE=$(sha256sum "$WORK/DEV_FROZEN_MODEL.json"|awk '{print $1}')
+          python "$PKG/xau_e_zone_v2_runner_r4.py" --stage FORWARD --data-dir "$DATA" --work-dir "$WORK"
+          AFTER=$(sha256sum "$WORK/DEV_FROZEN_MODEL.json"|awk '{print $1}')
+          test "$BEFORE" = "$AFTER"
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/xau-v2-r4-work/FINAL_FREEZE.json'))
+          assert x['model_refit_after_DEV'] is False
+          assert x['status'] in {'READY_FOR_PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE','READY_FOR_PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE_VALIDATION_FAILED_REPLICATION_CLOSED'}
+          print(json.dumps(x,indent=2,sort_keys=True))
+          PY
+
+      - name: Materialize final R4 authority summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          w=Path('/tmp/xau-v2-r4-work');f=json.load(open(w/'FINAL_FREEZE.json'))
+          out={'status':'E_ZONE_SCORE_BUY_US_V2_R4_SEQUENTIAL_EXECUTION_COMPLETE','workflow_run_id':int(os.environ['GITHUB_RUN_ID']),'workflow_head_sha':os.environ['GITHUB_SHA'],'final_checkpoint':f['status'],'validation_continuation_pass':f['validation_continuation_pass'],'replication_outcomes_opened':f['replication_outcomes_opened'],'model_refit_after_DEV':f['model_refit_after_DEV'],'r4_design':'R4_D5_MINIMAL_DENSE','preoutcome_freeze_sha256':hashlib.sha256((w/'PRE_OUTCOME_FREEZE.json').read_bytes()).hexdigest(),'dev_model_sha256':hashlib.sha256((w/'DEV_FROZEN_MODEL.json').read_bytes()).hexdigest()}
+          (w/'R4_RUN_AUTHORITY.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - name: Upload complete final frozen R4 package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: e-zone-score-buy-us-v2-r4-final
+          retention-days: 90
+          compression-level: 6
+          path: |
+            /tmp/xau-v2-r4-work/PRE_OUTCOME_FREEZE.json
+            /tmp/xau-v2-r4-work/DEV_FREEZE.json
+            /tmp/xau-v2-r4-work/DEV_FROZEN_MODEL.json
+            /tmp/xau-v2-r4-work/FINAL_FREEZE.json
+            /tmp/xau-v2-r4-work/R4_RUN_AUTHORITY.json
+            /tmp/xau-v2-r4-work/DEV/real_label_manifest.json
+            /tmp/xau-v2-r4-work/DEV/placebo_label_manifest.json
+            /tmp/xau-v2-r4-work/DEV/zone_test.json
+            /tmp/xau-v2-r4-work/DEV/score_report.json
+            /tmp/xau-v2-r4-work/VAL/real_label_manifest.json
+            /tmp/xau-v2-r4-work/VAL/placebo_label_manifest.json
+            /tmp/xau-v2-r4-work/VAL/zone_test.json
+            /tmp/xau-v2-r4-work/VAL/score_report.json
+            /tmp/xau-v2-r4-work/REP/real_label_manifest.json
+            /tmp/xau-v2-r4-work/REP/placebo_label_manifest.json
+            /tmp/xau-v2-r4-work/REP/zone_test.json
+            /tmp/xau-v2-r4-work/REP/score_report.json
