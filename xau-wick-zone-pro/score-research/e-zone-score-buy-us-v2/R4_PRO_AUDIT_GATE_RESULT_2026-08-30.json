@@ -1,0 +1,22 @@
+{
+  "status": "R4_PRO_AUDIT_ALL_PREDECLARED_DIAGNOSTIC_GATES_PASS",
+  "future_price_outcomes_used": false,
+  "workflow_run_id": 33315601726,
+  "workflow_job_id": 99268354251,
+  "workflow_head_sha": "050c53be357a80a5f89f5bced4d791b80dfe9173",
+  "artifact_id": 9733430641,
+  "artifact_zip_sha256": "2f8627f07e6994a91b55ee26c500097be62a230c42b5907f70eb2f4436a09a20",
+  "diagnostic_json_sha256": "9eef0f33b060cfe1c6b2016055fe5d7744f1dbca5c0b2164eb2a15f8d98b5743",
+  "precommitted_gate_file": "R4_PRO_AUDIT_PREDECLARED_DIAGNOSTIC_GATES_2026-08-30.json",
+  "precommitted_gate_commit": "ba27eb95d6658d2cb86ac44de1d9934106f32308",
+  "design": "R4_D5_MINIMAL_DENSE",
+  "gates_passed": {
+    "overall_fraction_donors_ge2_ge_080": true,
+    "each_display_slot_fraction_donors_ge2_ge_070": true,
+    "donor_equal_max_abs_numeric_smd_le_010": true,
+    "donor_equal_max_weighted_ks_le_010": true,
+    "soft_categorical_tvd_le_010": true,
+    "soft_categorical_max_abs_proportion_difference_le_010": true,
+    "eligible_donors_with_two_half_paths_fraction_ge_070": true
+  }
+}
