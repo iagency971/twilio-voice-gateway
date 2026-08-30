@@ -1,0 +1,51 @@
+{
+  "status": "R4_PRO_AUDIT_DIAGNOSTIC_GATES_PREDECLARED_BEFORE_RESULT",
+  "date": "2026-08-30",
+  "outcome_blind": true,
+  "diagnostic_workflow_run_in_progress": 33315181243,
+  "design_under_review": "R4_D5_MINIMAL_DENSE",
+  "design_parameters_may_not_change_from_diagnostic": true,
+  "gates": {
+    "overall_fraction_donors_with_at_least_two_valid_controls_min": 0.80,
+    "each_display_slot_fraction_donors_with_at_least_two_valid_controls_min": 0.70,
+    "estimand_weighting": "each eligible donor has total weight one; each of its selected controls has weight 1/control_n",
+    "numeric_variables": [
+      "trend15_v",
+      "trend60_v",
+      "trend240_v",
+      "nearest_upper_z4_dist_v",
+      "log_v_snapshot"
+    ],
+    "numeric_max_absolute_smd": 0.10,
+    "numeric_max_weighted_ks_distance": 0.10,
+    "soft_categorical_variables": [
+      "weekday_ny",
+      "upper_z4_count_bucket"
+    ],
+    "categorical_max_total_variation_distance": 0.10,
+    "categorical_max_absolute_category_proportion_difference": 0.10,
+    "path_support_population": "donors with at least two valid controls",
+    "path_support_definition": "donor has at least two controls retaining at least max(1, ceil(0.5 * donor_path_snapshots)) snapshots",
+    "path_support_fraction_min": 0.70
+  },
+  "report_only_not_gating": [
+    "coverage by detector family",
+    "full-path retention rate",
+    "selected match-distance quantiles",
+    "selected absolute caliper-difference quantiles"
+  ],
+  "failure_rule": "Failure of any declared gate is NO_GO_R4 before any V2 reaction outcome is opened. No threshold or R4 parameter may be relaxed after the diagnostic result.",
+  "outcomes_forbidden": [
+    "W5",
+    "W15",
+    "W60",
+    "NRB",
+    "MFE",
+    "MAE",
+    "reaction labels",
+    "matched-contact results",
+    "AUC",
+    "model coefficients",
+    "score monotonicity"
+  ]
+}
