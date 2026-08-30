@@ -66,6 +66,7 @@ def base_real(r):
 
 
 def label_one(raw,g,kind):
+ """Frozen legacy full-scan implementation retained as parity authority."""
  g=g.sort_values('feature_available_time_utc').reset_index(drop=True)
  if kind=='REAL':eid=str(g.display_episode_id.iloc[0]);session=str(g.session_date_ny.iloc[0]); baseid={'display_episode_id':eid,'session_date_ny':session}
  else:eid=str(g.placebo_id.iloc[0]);session=str(g.recipient_session_date_ny.iloc[0]);baseid={'placebo_id':eid,'donor_episode_id':str(g.donor_episode_id.iloc[0]),'control_rank':int(g.control_rank.iloc[0]),'donor_session_date_ny':str(g.donor_session_date_ny.iloc[0]),'recipient_session_date_ny':session}
@@ -100,6 +101,63 @@ def label_one(raw,g,kind):
  return {**base,'primary_class':'NEITHER','primary_binary_label':0,'event_bar_open_time_utc':pd.NaT,'completed_post_contact_bars':n}
 
 
+def build_us_session_index(raw):
+ """Index normalized M1 once by NY session; contains exactly us_bar_ok rows."""
+ ny=raw.time.dt.tz_convert('America/New_York')
+ session=ny.dt.strftime('%Y-%m-%d')
+ mask=(ny.dt.hour>=8)&(ny.dt.hour<17)
+ d=raw.loc[mask].copy();d['_session_date_ny']=session.loc[mask].to_numpy()
+ out={}
+ for s,g in d.groupby('_session_date_ny',sort=False):
+  z=g.sort_values('time').reset_index(drop=True)
+  out[str(s)]=(z,z.time.astype('int64').to_numpy())
+ return out
+
+
+def label_one_indexed(session_index,g,kind):
+ """Exact legacy semantics using one prebuilt NY-session timestamp index."""
+ g=g.sort_values('feature_available_time_utc').reset_index(drop=True)
+ if kind=='REAL':eid=str(g.display_episode_id.iloc[0]);session=str(g.session_date_ny.iloc[0]); baseid={'display_episode_id':eid,'session_date_ny':session}
+ else:eid=str(g.placebo_id.iloc[0]);session=str(g.recipient_session_date_ny.iloc[0]);baseid={'placebo_id':eid,'donor_episode_id':str(g.donor_episode_id.iloc[0]),'control_rank':int(g.control_rank.iloc[0]),'donor_session_date_ny':str(g.donor_session_date_ny.iloc[0]),'recipient_session_date_ny':session}
+ start=g.feature_available_time_utc.min(); end=(g.feature_available_time_utc+pd.Timedelta(minutes=5)).max()
+ item=session_index.get(session)
+ if item is None:
+  bars=pd.DataFrame(columns=['time','open','high','low','close']);session_rows=bars;times=np.asarray([],dtype=np.int64)
+ else:
+  session_rows,times=item
+  lo=int(np.searchsorted(times,int(pd.Timestamp(start).value),side='left'));hi=int(np.searchsorted(times,int(pd.Timestamp(end).value),side='left'))
+  bars=session_rows.iloc[lo:hi]
+ armed=False;arm_bar=None;arm_effective=None;contact=None;freeze=None
+ for _,b in bars.iterrows():
+  bt=pd.Timestamp(b.time);r=valid_row_at(g,bt)
+  if r is None:
+   if armed:return {**baseid,'selection_status':'NO_CONTACT_BEFORE_EPISODE_END','arm_bar_open_time_utc':arm_bar,'arm_effective_time_utc':arm_effective}
+   continue
+  if not armed:
+   if float(b.close)>float(r.zhi):armed=True;arm_bar=bt;arm_effective=bt+pd.Timedelta(minutes=1)
+   continue
+  if bt<arm_effective:continue
+  if float(b.high)>=float(r.zlo) and float(b.low)<=float(r.zhi):contact=b;freeze=r;break
+ if not armed:return {**baseid,'selection_status':'NEVER_ARMED'}
+ if contact is None:return {**baseid,'selection_status':'NO_CONTACT_BEFORE_EPISODE_END','arm_bar_open_time_utc':arm_bar,'arm_effective_time_utc':arm_effective}
+ ct=pd.Timestamp(contact.time);v0=float(freeze.v_snapshot);anchor=float(contact.close);fav=anchor+.50*v0;adv=anchor-.50*v0
+ base={**baseid,'selection_status':'PRIMARY_CONTACT','arm_bar_open_time_utc':arm_bar,'arm_effective_time_utc':arm_effective,'contact_bar_open_time_utc':ct,
+       'feature_snapshot_time_utc':pd.Timestamp(freeze.get('snapshot_time_utc',freeze.get('time',pd.NaT))),'feature_available_time_utc':pd.Timestamp(freeze.feature_available_time_utc),
+       'center0':float(freeze.center),'zlo0':float(freeze.zlo),'zhi0':float(freeze.zhi),'v0':v0,'contact_close':anchor,'favorable_level':fav,'adverse_level':adv}
+ if kind=='REAL':base.update(base_real(freeze))
+ if item is None:later=session_rows
+ else:
+  j=int(np.searchsorted(times,int(ct.value),side='right'));later=session_rows.iloc[j:j+30]
+ n=0
+ for _,b in later.iterrows():
+  if n>=30:break
+  n+=1;bt=pd.Timestamp(b.time);f=float(b.high)>=fav;a=float(b.low)<=adv
+  if f and a:return {**base,'primary_class':'AMBIGUOUS_SAME_BAR','primary_binary_label':0,'event_bar_open_time_utc':bt,'completed_post_contact_bars':n}
+  if f:return {**base,'primary_class':'FAVORABLE_FIRST','primary_binary_label':1,'event_bar_open_time_utc':bt,'completed_post_contact_bars':n}
+  if a:return {**base,'primary_class':'ADVERSE_FIRST','primary_binary_label':0,'event_bar_open_time_utc':bt,'completed_post_contact_bars':n}
+ return {**base,'primary_class':'NEITHER','primary_binary_label':0,'event_bar_open_time_utc':pd.NaT,'completed_post_contact_bars':n}
+
+
 def write_gz(d,path):
  raw=d.to_csv(index=False,lineterminator='\n',float_format='%.17g',na_rep='').encode();Path(path).parent.mkdir(parents=True,exist_ok=True)
  with open(path,'wb') as fh:
@@ -109,8 +167,8 @@ def write_gz(d,path):
 def main():
  a=parse_args()
  if a.authorization_token!=TOKEN:raise RuntimeError('V2_OUTCOME_OPENING_BLOCKED')
- raw,qa=normalize_m1(a.m1);p=read_paths(a.paths,a.kind);idcol='display_episode_id' if a.kind=='REAL' else 'placebo_id'
- rows=[label_one(raw,g,a.kind) for _,g in p.groupby(idcol,sort=False)];out=pd.DataFrame(rows)
+ raw,qa=normalize_m1(a.m1);p=read_paths(a.paths,a.kind);idcol='display_episode_id' if a.kind=='REAL' else 'placebo_id';session_index=build_us_session_index(raw)
+ rows=[label_one_indexed(session_index,g,a.kind) for _,g in p.groupby(idcol,sort=False)];out=pd.DataFrame(rows)
  start,end=WINDOWS[a.window]; primary=out[out.selection_status=='PRIMARY_CONTACT'].copy()
  if len(primary):
   t=pd.to_datetime(primary.contact_bar_open_time_utc,utc=True,errors='coerce')
@@ -119,7 +177,8 @@ def main():
  cls={str(k):int(v) for k,v in primary.primary_class.value_counts().sort_index().items()} if len(primary) else {}
  m={'status':'E_ZONE_V2_WIDTH_NEUTRAL_LABELER_COMPLETE','kind':a.kind,'declared_window':a.window,'episodes':int(len(out)),'primary_contacts':int(len(primary)),
     'sessions':int((primary.session_date_ny if a.kind=='REAL' else primary.recipient_session_date_ny).nunique()) if len(primary) else 0,
-    'class_counts':cls,'m1_qa':qa,'width_in_outcome_thresholds':False,'contact_bar_used_for_outcome':False,'horizon_available_m1':30}
+    'class_counts':cls,'m1_qa':qa,'width_in_outcome_thresholds':False,'contact_bar_used_for_outcome':False,'horizon_available_m1':30,
+    'label_engine':'NY_SESSION_INDEX_BINARY_SEARCH_V1','legacy_semantics_preserved':True,'indexed_us_sessions':int(len(session_index))}
  Path(a.manifest).write_text(json.dumps(m,indent=2,sort_keys=True)+'\n');print(json.dumps(m,indent=2,sort_keys=True))
 
 if __name__=='__main__':main()
