@@ -1,0 +1,71 @@
+{
+  "chosen_design": {
+    "bucket_exact": false,
+    "bucket_mismatch_penalty": 0.25,
+    "id": "R4_D5_MINIMAL_DENSE",
+    "logv": 0.65,
+    "max_controls": 5,
+    "min_session_gap": 10,
+    "weekday_exact": false,
+    "weekday_mismatch_penalty": 0.1,
+    "z4": 1.25
+  },
+  "designs_evaluated": [
+    {
+      "balance_smd": {
+        "log_v_snapshot": 0.020220765224718835,
+        "nearest_upper_z4_dist_v": 0.005985506950039604,
+        "trend15_v": -0.08412897508213017,
+        "trend240_v": 0.06144018468331552,
+        "trend60_v": 0.029048340895027426
+      },
+      "controls": 133672,
+      "design": {
+        "bucket_exact": false,
+        "bucket_mismatch_penalty": 0.25,
+        "id": "R4_D5_MINIMAL_DENSE",
+        "logv": 0.65,
+        "max_controls": 5,
+        "min_session_gap": 10,
+        "weekday_exact": false,
+        "weekday_mismatch_penalty": 0.1,
+        "z4": 1.25
+      },
+      "donor_episodes": 35466,
+      "donors_ge2": 29167,
+      "donors_with_5": 21857,
+      "fraction_ge2": 0.8223932780691366,
+      "fraction_with_5": 0.6162803812101731,
+      "max_abs_smd": 0.08412897508213017,
+      "median_controls": 5.0,
+      "median_retained_path_snapshots": 1.0,
+      "preoutcome_feasibility_pass": true
+    }
+  ],
+  "forbidden_outcome_columns_present": false,
+  "future_price_outcomes_used": false,
+  "matching_variables": [
+    "trend15_v",
+    "trend60_v",
+    "trend240_v",
+    "nearest_upper_z4_dist_v",
+    "log_v_snapshot"
+  ],
+  "neutrality_rule": "same R2/R3 causal full-pool overlap or center-within-0.20v exclusion; donor path truncates before first conflict",
+  "r3_d4_reference": {
+    "design": "D4_BUCKET_AS_DISTANCE",
+    "fraction_ge2": 0.7486888851294198,
+    "future_price_outcomes_used": false,
+    "max_abs_smd": 0.08812080255467425
+  },
+  "r3_gate_not_retroactively_relaxed": true,
+  "selection_rule": "first predeclared R4 design with fraction donors >=2 controls >=0.80 and max absolute numeric context SMD <=0.10",
+  "status": "V2_R4_MATCHING_LADDER_OUTCOME_BLIND_COMPLETE",
+  "provenance": {
+    "workflow_run_id": 33313388291,
+    "workflow_job_id": 99262329048,
+    "artifact_id": 9732770448,
+    "artifact_zip_sha256": "eceaec6b3ff0eccd5425d8a4feb4baf1df27651f6808e732bbb05366daece2b5",
+    "source_checkout_commit": "1fee064a66c0941123e461eae43acc01b1a19328"
+  }
+}
