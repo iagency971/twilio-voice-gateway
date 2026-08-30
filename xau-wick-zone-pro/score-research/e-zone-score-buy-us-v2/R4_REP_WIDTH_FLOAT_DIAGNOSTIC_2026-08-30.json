@@ -1,0 +1,34 @@
+{
+  "status": "R4_REP_WIDTH_FLOAT_DIAGNOSTIC_COMPLETE",
+  "date": "2026-08-30",
+  "future_price_outcomes_used": false,
+  "rows": 136253,
+  "nonzero_delta_rows": 134657,
+  "count_abs_delta_gt": {
+    "1e-12": 687,
+    "2e-12": 6,
+    "5e-12": 0,
+    "1e-11": 0,
+    "1e-10": 0
+  },
+  "delta_quantiles": {
+    "0.50": 1.2129186544029835e-13,
+    "0.90": 3.900213485508175e-13,
+    "0.99": 8.381895177933535e-13,
+    "0.999": 1.3865496528708795e-12,
+    "1.0": 3.035488527203256e-12
+  },
+  "max_absolute_delta": 3.035488527203256e-12,
+  "max_relative_delta": 1.6085166385514637e-11,
+  "old_allclose_rtol_0_atol_2e12_pass": false,
+  "diagnostic_interpretation": "The failing QA field compared donor normalized width to a recipient normalized width reconstructed by forming recipient price-space zlo/zhi and subtracting them again. The six rows exceeding the old absolute 2e-12 QA tolerance remain below 3.036e-12 and below 1.61e-11 relative error. Selection, recipient sessions, ranks, causal neutrality, calipers, balance, path support and all other R4 gates pass. This is a floating-point price-space round-trip/cancellation diagnostic, not evidence of a changed R4 design or control geometry.",
+  "repair_rule": "Replace the arbitrary fixed 2e-12 width QA tolerance with a deterministic per-row floating reconstruction bound derived from IEEE-754 epsilon and the price-to-v scale. Keep the old 2e-12 result as report-only. Do not change any placebo level, recipient, rank, matching distance, caliper, neutrality rule, outcome, model or statistical gate.",
+  "provenance": {
+    "workflow_run_id": 33321902439,
+    "workflow_job_id": 99285222973,
+    "workflow_head_sha": "ca1f76fb21eb87a7c0b7fb2ebfa4be2f31fcbcb7",
+    "artifact_id": 9735229340,
+    "artifact_zip_sha256": "94c3e52f8691fd6a71efcdc265e39bdc820c0417e3efbbd01450be2faef04c2e"
+  },
+  "interpretation_guard": "PREOUTCOME_IMPLEMENTATION_DIAGNOSTIC_ONLY_NO_R4_DESIGN_CHANGE_NO_OUTCOME_AUTHORIZATION"
+}
