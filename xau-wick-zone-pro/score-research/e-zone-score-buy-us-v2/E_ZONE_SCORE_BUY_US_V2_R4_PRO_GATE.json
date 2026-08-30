@@ -1,0 +1,77 @@
+{
+  "status": "PRO_E_ZONE_SCORE_BUY_US_V2_R4_CONTROL_GATE_PASS",
+  "decision": "GO_R4",
+  "gate_date": "2026-08-30",
+  "gate_type": "TARGETED_PRO_PRE_OUTCOME_R4_CONTROL_METHOD_GATE",
+  "repository": "iagency971/twilio-voice-gateway",
+  "branch": "agent/xau-wick-zone-pro-dev",
+  "outcome_blind_review": true,
+  "future_v2_reaction_outcomes_opened": false,
+  "r4_design_authorized": true,
+  "authorization_nature": "CONDITIONAL_ON_COMPLETE_R4_PREOUTCOME_REBUILD_AND_ALL_FIXED_PREOUTCOME_GATES",
+  "authorized_design": {
+    "id": "R4_D5_MINIMAL_DENSE",
+    "same_start_minute": true,
+    "min_session_gap": 10,
+    "weekday_exact": false,
+    "weekday_mismatch_penalty": 0.1,
+    "upper_z4_bucket_exact": false,
+    "upper_z4_bucket_mismatch_penalty": 0.25,
+    "log_v_caliper": 0.65,
+    "nearest_upper_z4_dist_v_caliper": 1.25,
+    "max_controls": 5,
+    "max_abs_smd_gate": 0.1,
+    "min_fraction_donors_ge2": 0.8
+  },
+  "r4_ladder_rule": {
+    "selected_design": "R4_D5_MINIMAL_DENSE",
+    "selection_basis": "first predeclared R4 design passing coverage and numeric balance without future outcomes",
+    "D6_D7_D8_execution_or_reconsideration": "FORBIDDEN"
+  },
+  "exact_v04_parity_required": true,
+  "additional_preoutcome_requirements": [
+    "Implement one exact R4_D5 placebo generator and R4 runner; reproduce the canonical 2022 selected recipient sessions, control ranks, match distances, retained path lengths and aggregate counts. No fallback to D6, D7 or D8 is permitted.",
+    "Keep donor family and original E1/E2/E3 slot as labels only; do not reintroduce any requirement for a real recipient E or recipient real display slot.",
+    "Replace the R2-only PREOUTCOME QA assertions with R4 assertions for same start minute, minimum ten-session gap, log-v caliper 0.65, nearest-upper-Z4-distance caliper 1.25v, weekday penalty 0.10, upper-Z4-bucket penalty 0.25, exact deterministic tie ordering, normalized path transplantation and full causal E/Z4 neutrality.",
+    "Use a new R4 execution authorization guard. The prior R2 authorization token and R2 runner are superseded for any new outcome-opening execution.",
+    "Before any reaction label is generated, rebuild and hash complete R4 PREOUTCOME packages for DEV 2020-2021, VAL 2022 and REP 2023 from commit-pinned M1 and geometry-only Z4 inputs.",
+    "In DEV, VAL and REP separately, require at least 80 percent of donor episodes to have at least two valid neutral controls and at least 70 percent within each original display slot E1, E2 and E3.",
+    "In DEV, VAL and REP separately, among donors with at least two controls and with each donor carrying total weight one, require absolute SMD at most 0.10 and weighted KS distance at most 0.10 for trend15_v, trend60_v, trend240_v, nearest_upper_z4_dist_v and log_v_snapshot.",
+    "In DEV, VAL and REP separately, require donor-equal total-variation distance at most 0.10 and maximum absolute category-proportion difference at most 0.10 for weekday_ny and upper_z4_count_bucket.",
+    "In DEV, VAL and REP separately, require at least 70 percent of eligible donors to have at least two controls retaining at least max(1, ceil(0.5 times donor path snapshots)) snapshots. Report full-path retention and family-specific coverage without using them to tune or rescue the design.",
+    "Repeat exact float64 V0.4 geometry parity on the full frozen overlap and prefix invariance in the same PREOUTCOME workflow; any mismatch is a fail-closed stop before DEV. No approximate tolerance substitution is authorized.",
+    "Run deterministic replay/hash checks, freeze all code, input, control, matching, QA, parity and diagnostic artifacts, and assert that no reaction label, matched-contact result, model coefficient, score or other future outcome file exists before DEV.",
+    "If any mandatory PREOUTCOME requirement fails, stop before DEV and return to Pro. No threshold, penalty, caliper, matching variable or control rule may be changed after any future V2 outcome is opened."
+  ],
+  "new_r4_execution_authorization_token": "GO_E_ZONE_SCORE_BUY_US_V2_R4_SEQUENTIAL_HISTORICAL_EXECUTION",
+  "previous_r2_authorization_token_status": "SUPERSEDED_FOR_NEW_EXECUTION",
+  "validation_2022_role": {
+    "future_outcome_validation_preserved": true,
+    "completely_untouched_design_holdout": false,
+    "required_description": "2022 is forward outcome validation under a matching design selected using outcome-blind 2022 geometry and covariates; 2022 matching feasibility is design evidence, not outcome evidence."
+  },
+  "median_one_snapshot_path_is_blocker": false,
+  "pro_gate_required_after_preoutcome_before_dev": false,
+  "preoutcome_failure_action": "STOP_BEFORE_DEV_AND_RETURN_TO_PRO",
+  "downstream_original_gates_unchanged": true,
+  "replication_2023_remains_conditional_on_val_2022": true,
+  "model_refit_after_DEV": false,
+  "pine_modification": "FORBIDDEN_PENDING_FINAL_PRO_GATE",
+  "production_authorization": "NONE",
+  "next_checkpoint": [
+    "READY_FOR_PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE",
+    "READY_FOR_PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE_VALIDATION_FAILED_REPLICATION_CLOSED"
+  ],
+  "audit_evidence": {
+    "r4_ladder_result": "R4_MATCHING_LADDER_VAL.json",
+    "predeclared_diagnostic_gates": "R4_PRO_AUDIT_PREDECLARED_DIAGNOSTIC_GATES_2026-08-30.json",
+    "diagnostic_result": "R4_PRO_AUDIT_DIAGNOSTICS_VAL_2026-08-30.json",
+    "diagnostic_gate_result": "R4_PRO_AUDIT_GATE_RESULT_2026-08-30.json",
+    "diagnostic_workflow_run_id": 33315601726,
+    "diagnostic_workflow_job_id": 99268354251,
+    "diagnostic_artifact_id": 9733430641,
+    "diagnostic_artifact_zip_sha256": "2f8627f07e6994a91b55ee26c500097be62a230c42b5907f70eb2f4436a09a20",
+    "diagnostic_json_sha256": "9eef0f33b060cfe1c6b2016055fe5d7744f1dbca5c0b2164eb2a15f8d98b5743",
+    "exact_v04_parity_evidence": "V04_PARITY_REPRODUCIBILITY_DIAGNOSTIC_2026-08-30.json"
+  }
+}
