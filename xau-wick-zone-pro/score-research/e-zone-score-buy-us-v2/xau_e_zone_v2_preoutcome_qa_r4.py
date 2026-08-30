@@ -78,13 +78,30 @@ def main():
     expected+=(m.recipient_weekday_ny.astype(str).to_numpy()!=m.donor_weekday_ny.astype(str).to_numpy())*r4.WEEKDAY_MISMATCH_PENALTY
     checks['match_distance_recomputed']=bool(np.allclose(expected,m.match_distance.to_numpy(float),rtol=0,atol=2e-12))
 
-    pb={pd.Timestamp(t):g for t,g in pool.groupby('time',sort=False)};neutral_bad=0
+    # Authority is the exact frozen neutrality rule used by the generator:
+    # overlap OR center distance <= 0.20*v.  No tolerance is added to that gate.
+    # The former +1e-12 comparison is retained only as a report-only diagnostic
+    # so we can prove whether it generated numerical false positives.
+    pb={pd.Timestamp(t):g for t,g in pool.groupby('time',sort=False)}
+    strict_bad_rows=0;overlap_bad_rows=0;near_exact_bad_rows=0;epsilon_only_near_rows=0
+    examples=[]
     for _,z in pl.iterrows():
         g=pb.get(pd.Timestamp(z.snapshot_time_utc))
         if g is None or not len(g):continue
-        ov=np.minimum(float(z.zhi),g.zhi.to_numpy(float))>=np.maximum(float(z.zlo),g.zlo.to_numpy(float));near=np.abs(g.center.to_numpy(float)-float(z.center))<=.20*float(z.v_snapshot)+1e-12
-        if bool(np.any(ov|near)):neutral_bad+=1
-    checks['placebo_neutrality_recompute']=neutral_bad==0
+        ov=np.minimum(float(z.zhi),g.zhi.to_numpy(float))>=np.maximum(float(z.zlo),g.zlo.to_numpy(float))
+        delta=np.abs(g.center.to_numpy(float)-float(z.center));thr=.20*float(z.v_snapshot)
+        near_exact=delta<=thr
+        near_eps=(delta<=thr+1e-12)&(~near_exact)
+        bad=ov|near_exact
+        if bool(np.any(ov)):overlap_bad_rows+=1
+        if bool(np.any(near_exact)):near_exact_bad_rows+=1
+        if bool(np.any(near_eps)):epsilon_only_near_rows+=1
+        if bool(np.any(bad)):
+            strict_bad_rows+=1
+            if len(examples)<20:
+                examples.append({'placebo_id':str(z.placebo_id),'snapshot_time_utc':pd.Timestamp(z.snapshot_time_utc).isoformat(),'overlap':bool(np.any(ov)),'near_exact':bool(np.any(near_exact)),'min_center_distance':float(np.min(delta)),'threshold_0_20v':float(thr)})
+    checks['placebo_neutrality_recompute']=strict_bad_rows==0
+    report['neutrality_recompute']={'authority_rule':'overlap OR abs(real_center-placebo_center) <= 0.20*v; exact float64 comparison, no epsilon','strict_bad_rows':strict_bad_rows,'overlap_bad_rows':overlap_bad_rows,'near_exact_bad_rows':near_exact_bad_rows,'epsilon_only_near_rows_report_only':epsilon_only_near_rows,'strict_bad_examples':examples}
     checks['row_hash_unique_within_snapshot_slot']=not f.duplicated(['snapshot_time_utc','display_slot_rank']).any()
 
     starts=f.sort_values(['display_episode_id','snapshot_time_utc']).groupby('display_episode_id',sort=False).first().reset_index()
