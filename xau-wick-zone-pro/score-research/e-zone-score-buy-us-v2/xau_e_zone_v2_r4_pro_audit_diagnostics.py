@@ -29,8 +29,9 @@ def weighted_cat(a,b,w):
  return {'donor_proportions':pa,'recipient_proportions':pb,'differences':dif,'max_abs_proportion_difference':max(map(abs,dif.values()),default=0.0),'total_variation_distance':0.5*sum(abs(x) for x in dif.values())}
 
 def weighted_ks(a,b,w):
- a=np.asarray(a,float);b=np.asarray(b,float);w=np.asarray(w,float);grid=np.unique(np.r_[a,b]);sw=float(w.sum())
- ca=np.array([w[a<=x].sum()/sw for x in grid]);cb=np.array([w[b<=x].sum()/sw for x in grid]);return float(np.max(np.abs(ca-cb)))
+ a=np.asarray(a,float);b=np.asarray(b,float);w=np.asarray(w,float);sw=float(w.sum())
+ v=np.r_[a,b];wa=np.r_[w,np.zeros(len(w))];wb=np.r_[np.zeros(len(w)),w];o=np.argsort(v,kind='mergesort');v=v[o];wa=wa[o];wb=wb[o]
+ starts=np.r_[0,np.flatnonzero(v[1:]!=v[:-1])+1];ca=np.cumsum(np.add.reduceat(wa,starts))/sw;cb=np.cumsum(np.add.reduceat(wb,starts))/sw;return float(np.max(np.abs(ca-cb)))
 
 def summary(x):
  x=np.asarray(x,float);return {'n':int(len(x)),'quantiles':{str(q):float(np.quantile(x,q)) for q in Q}}
@@ -82,7 +83,8 @@ def main():
    rows.append(z)
  m=pd.DataFrame(rows);d=pd.DataFrame(don);eligible=d[d.controls>=2];me=m[m.eid.isin(set(eligible.eid))].copy();w=me.weight.to_numpy(float)
  numeric={}
- for c in r4.MATCH:numeric[c]={'donor_equal_smd':wsmd(me[c],me['recipient_'+c],w),'donor_equal_weighted_ks':weighted_ks(me[c],me['recipient_'+c],w)}
+ for c in r4.MATCH:
+  numeric[c]={'donor_equal_smd':wsmd(me[c],me['recipient_'+c],w),'donor_equal_weighted_ks':weighted_ks(me[c],me['recipient_'+c],w)}
  cats={'weekday':weighted_cat(me.donor_weekday,me.recipient_weekday,w),'upper_z4_count_bucket':weighted_cat(me.donor_bucket,me.recipient_bucket,w)}
  def group(col):
   out={}
