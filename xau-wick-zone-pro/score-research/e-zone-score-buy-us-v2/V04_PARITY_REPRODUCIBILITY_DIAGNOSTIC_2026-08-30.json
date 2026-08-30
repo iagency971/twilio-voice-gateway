@@ -1,0 +1,34 @@
+{
+  "status": "V2_V04_EXACT_PARITY_REPRODUCIBILITY_PASS",
+  "date": "2026-08-30",
+  "future_price_outcomes_used": false,
+  "reference_rows": 88557,
+  "instrumented_rows": 88557,
+  "exact_float64_parity_pass": true,
+  "exact_mismatch_counts": {},
+  "max_absolute_delta": 0.0,
+  "canonical_v1_atol_1e12_comparator_pass": true,
+  "fresh_reproduction": {
+    "workflow_run_id": 33313608974,
+    "workflow_job_id": 99262922569,
+    "workflow_head_sha": "3bfcec783949c98668e8604ca4ac97360c98445c",
+    "artifact_id": 9732845739,
+    "artifact_zip_sha256": "54f7b7a9acb79112e50b815592df5268c110151f51c66ea03634a91431df3871",
+    "frozen_z4_source_run_id": 33139524456,
+    "frozen_z4_rows": 800180
+  },
+  "prior_r2_observation": {
+    "workflow_run_id": 33309215763,
+    "workflow_job_id": 99251102940,
+    "source_checkout_commit": "568bea1cc2b79fa46684cc71467ef1c3769c9782",
+    "reference_rows": 88557,
+    "instrumented_rows": 88557,
+    "exact_mismatch_counts": {
+      "zlo": 3,
+      "zhi": 4
+    },
+    "outcomes_opened": false
+  },
+  "interpretation": "The prior seven exact-float discrepancies were not reproduced under a fresh outcome-blind run using the same frozen M1 source, frozen 24-month Z4 artifacts, Python 3.11.16, numpy 2.3.2, pandas 2.3.1, and exact float64 comparison. Their root cause is not proven. No tolerance relaxation is authorized or required.",
+  "future_gate": "Every new PREOUTCOME execution must rerun exact V0.4 parity and fail closed before any DEV reaction outcome is generated. If any exact mismatch reappears, stop before outcomes and investigate; never downgrade the gate to approximate equality without a separate methodological authorization."
+}
