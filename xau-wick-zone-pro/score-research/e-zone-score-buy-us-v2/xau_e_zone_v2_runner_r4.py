@@ -18,6 +18,7 @@ import xau_e_zone_v2_pipeline as p
 
 TOKEN='GO_E_ZONE_SCORE_BUY_US_V2_R4_SEQUENTIAL_HISTORICAL_EXECUTION'
 ORIGINAL_PY=p.py
+ORIGINAL_FREEZE_PRE=p.freeze_pre
 
 
 def py_r4(name):
@@ -75,7 +76,7 @@ def freeze_pre_r4(data,work):
     for pattern in ['*_labels.csv.gz','zone_test.json','matched_sets.csv','score_report.json','scored.csv.gz','DEV_FROZEN_MODEL.json','DEV_FREEZE.json']:
         forbidden.extend(Path(work).rglob(pattern))
     if forbidden:raise RuntimeError(f'R4_OUTCOME_ARTIFACT_EXISTS_BEFORE_DEV {[str(x) for x in forbidden]}')
-    p.freeze_pre(data,work)
+    ORIGINAL_FREEZE_PRE(data,work)
     fp=Path(work)/'PRE_OUTCOME_FREEZE.json';x=json.load(open(fp));x['status']='E_ZONE_SCORE_BUY_US_V2_R4_PREOUTCOME_FREEZE_PASS';x['authorization_token']=TOKEN;x['r4_design']='R4_D5_MINIMAL_DENSE';x['r2_authorization_superseded']=True;x['future_v2_reaction_outcomes_opened']=False
     x['r4_preoutcome_qa_sha256']={k:p.sha(Path(work)/k/'preoutcome_qa.json') for k in ['DEV','VAL','REP']}
     fp.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
