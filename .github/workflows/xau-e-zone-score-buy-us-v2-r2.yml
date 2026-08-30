@@ -1,0 +1,273 @@
+name: XAU E-zone BUY US validity and score V2 R2
+
+on:
+  push:
+    branches:
+      - agent/xau-wick-zone-pro-dev
+    paths:
+      - .github/workflows/xau-e-zone-score-buy-us-v2-r2.yml
+  workflow_dispatch:
+
+concurrency:
+  group: xau-e-zone-score-buy-us-v2-r2
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  BRANCH: agent/xau-wick-zone-pro-dev
+  PKG: xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2
+  DATA: /tmp/xau-v2-data
+  WORK: /tmp/xau-v2-work
+  FROZEN_Z4_RUN_ID: '33139524456'
+  V2_FROZEN_Z4_PKL: /tmp/FROZEN_C5_24M.pkl
+
+jobs:
+  execute-v2-r2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 2
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.16'
+
+      - name: Verify targeted Pro authorization and R2 pre-outcome repair scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2')
+          g=json.loads((p/'E_ZONE_SCORE_BUY_US_V2_PRO_GATE.json').read_text())
+          assert g['status']=='PRO_E_ZONE_SCORE_BUY_US_V2_METHODOLOGICAL_GATE_PASS'
+          assert g['decision']=='GO_E_ZONE_SCORE_BUY_US_V2_SEQUENTIAL_HISTORICAL_EXECUTION'
+          assert g['scope']['direction']=='BUY_ONLY'
+          assert g['scope']['session']=='08:00-17:00 America/New_York'
+          assert g['matched_placebo_zone_test']['path_transplant']['family_and_slot'].startswith('copied from donor only as labels')
+          assert (p/'PREOUTCOME_IMPLEMENTATION_REPAIR_R2.md').is_file()
+          print('TARGETED_PRO_R2_AUTHORIZATION_PASS')
+          PY
+
+      - name: Install frozen scientific environment and compile V2 R2 code
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
+          python - <<'PY'
+          import platform,numpy,pandas,scipy,sklearn
+          assert platform.python_version()=='3.11.16'
+          assert numpy.__version__=='2.3.2' and pandas.__version__=='2.3.1'
+          assert scipy.__version__=='1.16.1' and sklearn.__version__=='1.7.1'
+          print('FROZEN_ENVIRONMENT_PASS')
+          PY
+          python -m py_compile "$PKG"/*.py
+          test "$(git hash-object "$PKG/xau_e_zone_v2_placebos.py")" = "d19a295509a45dd9c255e1410f8c70fd7833bef3"
+
+      - name: Acquire commit-pinned M1 history 2019-11 through 2026-07
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$DATA" "$WORK"
+          python "$PKG/xau_e_zone_v2_acquire.py" --output-dir "$DATA" --manifest "$DATA/DATA_INPUT_MANIFEST.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          new=json.loads(Path('/tmp/xau-v2-data/DATA_INPUT_MANIFEST.json').read_text())
+          old=json.loads(Path('xau-wick-zone-pro/score-research/e-display-episode-reaction-rank-v1/DATA_INPUT_MANIFEST.json').read_text())
+          checked=0
+          for fn,rec in old['bid_files'].items():
+              if fn in new['files']:
+                  assert new['files'][fn]['sha256']==rec['expected_sha256']
+                  checked+=1
+          assert checked>=31
+          print('FROZEN_V1_OVERLAP_M1_SHA_PARITY_PASS',checked)
+          PY
+
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: iagency971/twilio-voice-gateway
+          run-id: ${{ env.FROZEN_Z4_RUN_ID }}
+          pattern: z4br-frozen-z4-*
+          path: /tmp/frozenparts
+          merge-multiple: true
+
+      - name: Assemble exact canonical V1 frozen 24-month Z4 parity input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import glob
+          import pandas as pd
+          fs=sorted(glob.glob('/tmp/frozenparts/z4_*.pkl'))
+          assert len(fs)==24,len(fs)
+          z=pd.concat([pd.read_pickle(f) for f in fs],ignore_index=True)
+          z['time']=pd.to_datetime(z.time,utc=True)
+          z=z.sort_values(['time','side','center']).reset_index(drop=True)
+          assert set(z.columns)=={'time','landmark_i','center','zlo','zhi','side'}
+          assert z.time.min()>=pd.Timestamp('2024-08-01T00:00:00Z')
+          assert z.time.max()<pd.Timestamp('2026-08-01T00:00:00Z')
+          z.to_pickle('/tmp/FROZEN_C5_24M.pkl')
+          print('CANONICAL_V1_FROZEN_Z4_INPUT_PASS',len(z),z.time.min(),z.time.max())
+          PY
+
+      - name: Build and freeze complete outcome-blind V2 R2 package
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_zone_v2_runner_r2.py" --stage PREOUTCOME --data-dir "$DATA" --work-dir "$WORK"
+          test "$(python -c "import json;print(json.load(open('$WORK/PRE_OUTCOME_FREEZE.json'))['status'])")" = "E_ZONE_SCORE_BUY_US_V2_PREOUTCOME_FREEZE_PASS"
+
+      - name: Prove neutral-control design is not mathematically impossible before outcomes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for k in ['DEV','VAL','REP']:
+              p=Path('/tmp/xau-v2-work')/k
+              m=json.loads((p/'placebo_manifest.json').read_text())
+              mt=__import__('pandas').read_csv(p/'matching.csv.gz')
+              counts=mt.groupby('donor_episode_id').size()
+              eligible=counts[counts>=2]
+              sessions=mt[mt.donor_episode_id.isin(eligible.index)].donor_session_date_ny.nunique()
+              print(k,{'donors_with_at_least_2_controls':int(len(eligible)),'eligible_donor_sessions':int(sessions),'total_donors':m['donor_episodes']})
+              assert len(eligible)>=1000, (k,'fewer than 1000 donors can possibly enter the primary matched-contact estimand')
+              assert sessions>=90, (k,'fewer than 90 donor sessions can possibly enter the primary matched-contact estimand')
+          print('PREOUTCOME_PLACEBO_FEASIBILITY_NECESSARY_CONDITIONS_PASS')
+          PY
+
+      - name: Upload immutable pre-outcome package before any V2 label is generated
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: e-zone-score-buy-us-v2-r2-preoutcome
+          retention-days: 90
+          compression-level: 6
+          path: |
+            /tmp/xau-v2-data/DATA_INPUT_MANIFEST.json
+            /tmp/xau-v2-work/PRE_OUTCOME_FREEZE.json
+            /tmp/xau-v2-work/DEV/features.csv.gz
+            /tmp/xau-v2-work/DEV/display_all.csv.gz
+            /tmp/xau-v2-work/DEV/full_pool.csv.gz
+            /tmp/xau-v2-work/DEV/context.csv.gz
+            /tmp/xau-v2-work/DEV/placebos.csv.gz
+            /tmp/xau-v2-work/DEV/matching.csv.gz
+            /tmp/xau-v2-work/DEV/preoutcome_qa.json
+            /tmp/xau-v2-work/DEV/placebo_manifest.json
+            /tmp/xau-v2-work/VAL/features.csv.gz
+            /tmp/xau-v2-work/VAL/display_all.csv.gz
+            /tmp/xau-v2-work/VAL/full_pool.csv.gz
+            /tmp/xau-v2-work/VAL/context.csv.gz
+            /tmp/xau-v2-work/VAL/placebos.csv.gz
+            /tmp/xau-v2-work/VAL/matching.csv.gz
+            /tmp/xau-v2-work/VAL/preoutcome_qa.json
+            /tmp/xau-v2-work/VAL/placebo_manifest.json
+            /tmp/xau-v2-work/REP/features.csv.gz
+            /tmp/xau-v2-work/REP/display_all.csv.gz
+            /tmp/xau-v2-work/REP/full_pool.csv.gz
+            /tmp/xau-v2-work/REP/context.csv.gz
+            /tmp/xau-v2-work/REP/placebos.csv.gz
+            /tmp/xau-v2-work/REP/matching.csv.gz
+            /tmp/xau-v2-work/REP/preoutcome_qa.json
+            /tmp/xau-v2-work/REP/placebo_manifest.json
+            /tmp/xau-v2-work/PARITY/instrument_manifest.json
+            /tmp/xau-v2-work/PREFIX/prefix_invariance.json
+
+      - name: Open DEV only, fit once, and freeze the V2 model
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_zone_v2_runner_r2.py" --stage DEV --data-dir "$DATA" --work-dir "$WORK"
+          test "$(python -c "import json;print(json.load(open('$WORK/DEV_FREEZE.json'))['status'])")" = "E_ZONE_SCORE_BUY_US_V2_DEV_FREEZE_PASS"
+
+      - name: Upload immutable DEV model freeze before forward validation
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: e-zone-score-buy-us-v2-r2-dev-freeze
+          retention-days: 90
+          compression-level: 6
+          path: |
+            /tmp/xau-v2-work/PRE_OUTCOME_FREEZE.json
+            /tmp/xau-v2-work/DEV_FREEZE.json
+            /tmp/xau-v2-work/DEV_FROZEN_MODEL.json
+            /tmp/xau-v2-work/DEV/real_labels.csv.gz
+            /tmp/xau-v2-work/DEV/placebo_labels.csv.gz
+            /tmp/xau-v2-work/DEV/zone_test.json
+            /tmp/xau-v2-work/DEV/matched_sets.csv
+            /tmp/xau-v2-work/DEV/score_report.json
+            /tmp/xau-v2-work/DEV/scored.csv.gz
+
+      - name: Execute 2022 validation and conditionally 2023 replication without refit
+        shell: bash
+        run: |
+          set -euo pipefail
+          BEFORE=$(sha256sum "$WORK/DEV_FROZEN_MODEL.json" | awk '{print $1}')
+          python "$PKG/xau_e_zone_v2_runner_r2.py" --stage FORWARD --data-dir "$DATA" --work-dir "$WORK"
+          AFTER=$(sha256sum "$WORK/DEV_FROZEN_MODEL.json" | awk '{print $1}')
+          test "$BEFORE" = "$AFTER"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/xau-v2-work/FINAL_FREEZE.json').read_text())
+          assert x['model_refit_after_DEV'] is False
+          assert x['status'] in {'READY_FOR_PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE','READY_FOR_PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE_VALIDATION_FAILED_REPLICATION_CLOSED'}
+          print(x['status'])
+          PY
+
+      - name: Materialize canonical final evidence directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST="$PKG/final-freeze-r2-${GITHUB_RUN_ID}"
+          mkdir -p "$DEST/DEV" "$DEST/VAL"
+          cp "$WORK/PRE_OUTCOME_FREEZE.json" "$WORK/DEV_FREEZE.json" "$WORK/DEV_FROZEN_MODEL.json" "$WORK/FINAL_FREEZE.json" "$DEST/"
+          cp "$PKG/PREOUTCOME_IMPLEMENTATION_REPAIR_R2.md" "$DEST/"
+          for K in DEV VAL; do
+            for F in real_labels.csv.gz placebo_labels.csv.gz real_label_manifest.json placebo_label_manifest.json zone_test.json matched_sets.csv score_report.json scored.csv.gz preoutcome_qa.json instrument_manifest.json placebo_manifest.json matching.csv.gz; do
+              test ! -f "$WORK/$K/$F" || cp "$WORK/$K/$F" "$DEST/$K/$F"
+            done
+          done
+          if test -d "$WORK/REP" && test -f "$WORK/REP/real_labels.csv.gz"; then
+            mkdir -p "$DEST/REP"
+            for F in real_labels.csv.gz placebo_labels.csv.gz real_label_manifest.json placebo_label_manifest.json zone_test.json matched_sets.csv score_report.json scored.csv.gz preoutcome_qa.json instrument_manifest.json placebo_manifest.json matching.csv.gz; do
+              test ! -f "$WORK/REP/$F" || cp "$WORK/REP/$F" "$DEST/REP/$F"
+            done
+          fi
+          cp "$WORK/PARITY/instrument_manifest.json" "$DEST/V04_OVERLAP_PARITY.json"
+          cp "$WORK/PREFIX/prefix_invariance.json" "$DEST/PREFIX_INVARIANCE.json"
+          cp "$DATA/DATA_INPUT_MANIFEST.json" "$DEST/DATA_INPUT_MANIFEST.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=Path(os.environ['PKG'])/f"final-freeze-r2-{os.environ['GITHUB_RUN_ID']}"
+          x={'status':'E_ZONE_SCORE_BUY_US_V2_R2_CANONICAL_FINAL_PACKAGE','workflow_run_id':int(os.environ['GITHUB_RUN_ID']),'workflow_head_sha':os.environ['GITHUB_SHA'],'final_status':json.loads((d/'FINAL_FREEZE.json').read_text())['status'],'preoutcome_repair':'R2'}
+          (d/'RUN_AUTHORITY.json').write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          PY
+
+      - name: Upload complete final frozen package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: e-zone-score-buy-us-v2-r2-final
+          retention-days: 90
+          compression-level: 6
+          path: xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/final-freeze-r2-${{ github.run_id }}
+
+      - name: Commit final canonical package and Pro-gate request
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$PKG/final-freeze-r2-${GITHUB_RUN_ID}" "$PKG/STATUS.md" "$PKG/FINAL_PRO_GATE_REQUEST.json"
+          git commit -m "freeze final BUY US E-zone V2 R2 validation package run ${GITHUB_RUN_ID}"
+          git pull --rebase origin "$BRANCH"
+          git push origin HEAD:"$BRANCH"
