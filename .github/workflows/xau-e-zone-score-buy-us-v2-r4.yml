@@ -5,6 +5,12 @@ on:
     branches: [agent/xau-wick-zone-pro-dev]
     paths:
       - .github/workflows/xau-e-zone-score-buy-us-v2-r4.yml
+      - xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/xau_e_zone_v2_placebos_r4.py
+      - xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/xau_e_zone_v2_preoutcome_qa_r4.py
+      - xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/xau_e_zone_v2_runner_r4.py
+      - xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/xau_e_zone_v2_r4_selection_verify.py
+      - xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/xau_e_zone_v2_labeler_r4.py
+      - xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/xau_e_zone_v2_score_model_r4.py
   workflow_dispatch:
 
 concurrency:
