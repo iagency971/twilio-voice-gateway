@@ -33,6 +33,30 @@ jobs:
         with:
           python-version: '3.11.16'
 
+      - name: Verify precommitted outcome-blind diagnostic gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/R4_PRO_AUDIT_PREDECLARED_DIAGNOSTIC_GATES_2026-08-30.json')
+          x=json.loads(p.read_text())
+          g=x['gates']
+          assert x['status']=='R4_PRO_AUDIT_DIAGNOSTIC_GATES_PREDECLARED_BEFORE_RESULT'
+          assert x['outcome_blind'] is True
+          assert x['design_under_review']=='R4_D5_MINIMAL_DENSE'
+          assert x['design_parameters_may_not_change_from_diagnostic'] is True
+          assert g['overall_fraction_donors_with_at_least_two_valid_controls_min']==0.80
+          assert g['each_display_slot_fraction_donors_with_at_least_two_valid_controls_min']==0.70
+          assert g['numeric_max_absolute_smd']==0.10
+          assert g['numeric_max_weighted_ks_distance']==0.10
+          assert g['categorical_max_total_variation_distance']==0.10
+          assert g['categorical_max_absolute_category_proportion_difference']==0.10
+          assert g['path_support_fraction_min']==0.70
+          print('PRECOMMITTED_R4_PRO_DIAGNOSTIC_GATES_PASS')
+          PY
+
       - name: Install frozen environment and compile outcome-blind audit
         shell: bash
         run: |
@@ -61,22 +85,35 @@ jobs:
           python "$PKG/xau_e_zone_v2_r4_pro_audit_diagnostics.py" --features "$WORK/features.csv.gz" --full-pool "$WORK/full_pool.csv.gz" --context "$WORK/context.csv.gz" --output "$WORK/R4_PRO_AUDIT_DIAGNOSTICS_VAL.json"
           python - <<'PY'
           import json
+          from pathlib import Path
           x=json.load(open('/tmp/xau-r4-pro-audit/R4_PRO_AUDIT_DIAGNOSTICS_VAL.json'))
+          g=json.load(open('xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/R4_PRO_AUDIT_PREDECLARED_DIAGNOSTIC_GATES_2026-08-30.json'))['gates']
           assert x['status']=='V2_R4_PRO_AUDIT_DISTRIBUTIONAL_DIAGNOSTIC_COMPLETE'
           assert x['future_price_outcomes_used'] is False
           assert x['overall']['donors']==35466
           assert x['overall']['controls']==133672
           assert x['overall']['donors_ge2']==29167
-          print(json.dumps(x,sort_keys=True))
+          assert x['overall']['fraction_ge2']>=g['overall_fraction_donors_with_at_least_two_valid_controls_min']
+          assert all(v['fraction_ge2']>=g['each_display_slot_fraction_donors_with_at_least_two_valid_controls_min'] for v in x['coverage_by_slot'].values())
+          assert max(abs(v['donor_equal_smd']) for v in x['estimand_weighted_numeric_balance'].values())<=g['numeric_max_absolute_smd']
+          assert max(v['donor_equal_weighted_ks'] for v in x['estimand_weighted_numeric_balance'].values())<=g['numeric_max_weighted_ks_distance']
+          assert max(v['total_variation_distance'] for v in x['estimand_weighted_categorical_balance'].values())<=g['categorical_max_total_variation_distance']
+          assert max(v['max_abs_proportion_difference'] for v in x['estimand_weighted_categorical_balance'].values())<=g['categorical_max_absolute_category_proportion_difference']
+          assert x['overall']['fraction_eligible_donors_two_half_paths']>=g['path_support_fraction_min']
+          y={'status':'R4_PRO_AUDIT_ALL_PREDECLARED_DIAGNOSTIC_GATES_PASS','future_price_outcomes_used':False,'workflow_run_id':int(__import__('os').environ['GITHUB_RUN_ID']),'workflow_head_sha':__import__('os').environ['GITHUB_SHA']}
+          Path('/tmp/xau-r4-pro-audit/R4_PRO_AUDIT_GATE_RESULT.json').write_text(json.dumps(y,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(y,sort_keys=True))
           PY
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: e-zone-v2-r4-pro-audit-diagnostics
+          name: e-zone-v2-r4-pro-audit-diagnostics-predeclared
           retention-days: 90
           compression-level: 6
           path: |
             /tmp/xau-r4-pro-audit/R4_PRO_AUDIT_DIAGNOSTICS_VAL.json
+            /tmp/xau-r4-pro-audit/R4_PRO_AUDIT_GATE_RESULT.json
             /tmp/xau-r4-pro-audit/instrument_manifest.json
             /tmp/xau-r4-pro-audit/z4_manifest.json
             /tmp/xau-v2-data/DATA_INPUT_MANIFEST.json
+            xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2/R4_PRO_AUDIT_PREDECLARED_DIAGNOSTIC_GATES_2026-08-30.json
