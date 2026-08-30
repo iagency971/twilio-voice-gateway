@@ -1,0 +1,107 @@
+name: XAU E-zone V2 placebo feasibility diagnostic
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - .github/workflows/xau-e-zone-score-buy-us-v2-placebo-feasibility-diag.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PKG: xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2
+  DATA: /tmp/xau-v2-data
+  WORK: /tmp/placebo-feas
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: agent/xau-wick-zone-pro-dev
+          fetch-depth: 2
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.16'
+      - name: Build frozen 2022 outcome-blind population
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$PKG/requirements-lock.txt"
+          mkdir -p "$DATA" "$WORK"
+          python "$PKG/xau_e_zone_v2_acquire.py" --output-dir "$DATA" --manifest "$DATA/DATA_INPUT_MANIFEST.json"
+          FILES=$(python - <<'PY'
+          import pandas as pd
+          print(' '.join(f'/tmp/xau-v2-data/xauusd_bid_m1_{p.year:04d}_{p.month:02d}.csv' for p in pd.period_range('2021-11','2022-12',freq='M')))
+          PY
+          )
+          python "$PKG/xau_z4_geometry_only_v2.py" --files $FILES --output-pkl "$WORK/z4.pkl" --output-csv "$WORK/z4.csv" --manifest "$WORK/z4_manifest.json" --tag FEAS_VAL
+          python "$PKG/xau_e_zone_v2_instrument.py" --files $FILES --z4-pkl "$WORK/z4.pkl" --output-features "$WORK/features.csv.gz" --output-display-all "$WORK/display_all.csv.gz" --output-full-pool "$WORK/full_pool.csv.gz" --output-context "$WORK/context.csv.gz" --manifest "$WORK/instrument_manifest.json" --target-start 2022-01-01T00:00:00Z --target-end 2023-01-01T00:00:00Z
+      - name: Profile exact matching funnel before neutrality
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import numpy as np,pandas as pd
+          f=pd.read_csv('/tmp/placebo-feas/features.csv.gz',float_precision='round_trip')
+          ctx=pd.read_csv('/tmp/placebo-feas/context.csv.gz',float_precision='round_trip')
+          f['snapshot_time_utc']=pd.to_datetime(f.snapshot_time_utc,utc=True)
+          f['log_v_snapshot']=np.log(f.v_snapshot.astype(float));ctx['log_v_snapshot']=np.log(ctx.v_snapshot.astype(float))
+          ctx=ctx.sort_values(['session_date_ny','minute_of_session','time']).drop_duplicates(['session_date_ny','minute_of_session'],keep='last')
+          sessions=sorted(ctx.session_date_ny.astype(str).unique()); si={s:i for i,s in enumerate(sessions)}
+          key={(str(r.session_date_ny),int(r.minute_of_session)):r for _,r in ctx.iterrows()}
+          starts=f.sort_values(['display_episode_id','snapshot_time_utc']).groupby('display_episode_id',sort=False).first().reset_index()
+          stages=['session_distance','same_weekday','same_z4_bucket','logv_caliper','z4dist_caliper']
+          vals={s:[] for s in stages}
+          final_counts=[]
+          for _,d in starts.iterrows():
+              ds=str(d.session_date_ny); di=si[ds]; minute=int(d.minute_of_session)
+              c=[s for s in sessions if s!=ds and abs(si[s]-di)>=10 and key.get((s,minute)) is not None]
+              vals['session_distance'].append(len(c))
+              c=[s for s in c if str(key[(s,minute)].weekday_ny)==str(d.weekday_ny)]
+              vals['same_weekday'].append(len(c))
+              c=[s for s in c if str(key[(s,minute)].upper_z4_count_bucket)==str(d.upper_z4_count_bucket)]
+              vals['same_z4_bucket'].append(len(c))
+              c=[s for s in c if abs(float(key[(s,minute)].log_v_snapshot)-float(d.log_v_snapshot))<=.20]
+              vals['logv_caliper'].append(len(c))
+              c=[s for s in c if abs(float(key[(s,minute)].nearest_upper_z4_dist_v)-float(d.nearest_upper_z4_dist_v))<=.25]
+              vals['z4dist_caliper'].append(len(c)); final_counts.append(len(c))
+          def summ(a):
+              a=np.asarray(a,int)
+              return {'mean':float(a.mean()),'median':float(np.median(a)),'p90':float(np.quantile(a,.9)),'ge1':int((a>=1).sum()),'ge2':int((a>=2).sum()),'ge5':int((a>=5).sum()),'fraction_ge2':float((a>=2).mean())}
+          out={'status':'V2_PLACEBO_MATCHING_FUNNEL_OUTCOME_BLIND','future_price_outcomes_used':False,'donor_episodes':int(len(starts)),'stages':{s:summ(vals[s]) for s in stages}}
+          Path('/tmp/placebo-feas/MATCHING_FUNNEL.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - name: Apply frozen R2 neutrality and quantify loss
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_e_zone_v2_placebos_r2.py" --features "$WORK/features.csv.gz" --full-pool "$WORK/full_pool.csv.gz" --context "$WORK/context.csv.gz" --output "$WORK/placebos.csv.gz" --matching-table "$WORK/matching.csv.gz" --manifest "$WORK/placebo_manifest.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          funnel=json.loads(Path('/tmp/placebo-feas/MATCHING_FUNNEL.json').read_text())
+          m=pd.read_csv('/tmp/placebo-feas/matching.csv.gz')
+          c=m.groupby('donor_episode_id').size()
+          selected={'donors_with_any_control':int(len(c)),'donors_with_ge2_controls':int((c>=2).sum()),'donors_with_5_controls':int((c>=5).sum()),'control_episodes':int(len(m))}
+          pre=funnel['stages']['z4dist_caliper']
+          out={'status':'V2_PLACEBO_FEASIBILITY_DIAGNOSTIC_OUTCOME_BLIND','future_price_outcomes_used':False,'matching_funnel':funnel,'post_neutrality':selected,'pre_neutrality_donors_ge2':pre['ge2'],'post_neutrality_donors_ge2':selected['donors_with_ge2_controls'],'neutrality_or_path_loss_from_ge2_pool':int(pre['ge2']-selected['donors_with_ge2_controls'])}
+          Path('/tmp/placebo-feas/PLACEBO_FEASIBILITY_DIAGNOSTIC.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - name: Commit diagnostic evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp "$WORK/PLACEBO_FEASIBILITY_DIAGNOSTIC.json" "$PKG/PLACEBO_FEASIBILITY_DIAGNOSTIC_VAL_R3.json"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$PKG/PLACEBO_FEASIBILITY_DIAGNOSTIC_VAL_R3.json"
+          git commit -m 'record outcome-blind V2 placebo feasibility diagnostic'
+          git pull --rebase origin agent/xau-wick-zone-pro-dev
+          git push origin HEAD:agent/xau-wick-zone-pro-dev
