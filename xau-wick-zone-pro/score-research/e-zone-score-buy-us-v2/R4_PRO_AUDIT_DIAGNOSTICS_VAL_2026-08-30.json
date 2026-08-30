@@ -1,0 +1,230 @@
+{
+  "coverage_by_family": {
+    "EPM_M1_R2_A8H": {
+      "donors": 6249,
+      "donors_ge2": 5276,
+      "fraction_ge2": 0.8442950872139542,
+      "fraction_two_full_paths": 0.7529204672747639,
+      "fraction_two_half_paths": 0.8268522963674187,
+      "fraction_two_min2_paths": 0.7614018242918867,
+      "median_controls": 5.0
+    },
+    "ESM_BOTH_G120M": {
+      "donors": 15379,
+      "donors_ge2": 13291,
+      "fraction_ge2": 0.8642304441121009,
+      "fraction_two_full_paths": 0.7325573834449574,
+      "fraction_two_half_paths": 0.8335392418232654,
+      "fraction_two_min2_paths": 0.7514792899408284,
+      "median_controls": 5.0
+    },
+    "ES_M1_8H_R2_T0.50": {
+      "donors": 5223,
+      "donors_ge2": 3672,
+      "fraction_ge2": 0.7030442274554853,
+      "fraction_two_full_paths": 0.6034845874018763,
+      "fraction_two_half_paths": 0.6802603867509094,
+      "fraction_two_min2_paths": 0.610951560405897,
+      "median_controls": 4.0
+    },
+    "EWM_G60M": {
+      "donors": 8615,
+      "donors_ge2": 6928,
+      "fraction_ge2": 0.804178757980267,
+      "fraction_two_full_paths": 0.6978525827045851,
+      "fraction_two_half_paths": 0.7838653511317469,
+      "fraction_two_min2_paths": 0.7107370864770749,
+      "median_controls": 5.0
+    }
+  },
+  "coverage_by_slot": {
+    "1": {
+      "donors": 14094,
+      "donors_ge2": 11333,
+      "fraction_ge2": 0.8041010359018022,
+      "fraction_two_full_paths": 0.7069675039023698,
+      "fraction_two_half_paths": 0.7832410955016319,
+      "fraction_two_min2_paths": 0.7170427132112955,
+      "median_controls": 5.0
+    },
+    "2": {
+      "donors": 13011,
+      "donors_ge2": 10775,
+      "fraction_ge2": 0.8281454154177235,
+      "fraction_two_full_paths": 0.7090923065098763,
+      "fraction_two_half_paths": 0.8027822611636308,
+      "fraction_two_min2_paths": 0.7241564829759435,
+      "median_controls": 5.0
+    },
+    "3": {
+      "donors": 8361,
+      "donors_ge2": 7059,
+      "fraction_ge2": 0.8442770003588087,
+      "fraction_two_full_paths": 0.7110393493601244,
+      "fraction_two_half_paths": 0.8142566678626959,
+      "fraction_two_min2_paths": 0.7296974046166727,
+      "median_controls": 5.0
+    }
+  },
+  "design": {
+    "bucket_mismatch_penalty": 0.25,
+    "id": "R4_D5_MINIMAL_DENSE",
+    "logv": 0.65,
+    "max_controls": 5,
+    "min_session_gap": 10,
+    "weekday_mismatch_penalty": 0.1,
+    "z4": 1.25
+  },
+  "estimand_weighted_categorical_balance": {
+    "upper_z4_count_bucket": {
+      "differences": {
+        "1": 0.026181986491582987,
+        "2": 0.017126089987543003,
+        "3+": -0.043308076479126045
+      },
+      "donor_proportions": {
+        "1": 0.22474028868241505,
+        "2": 0.18431789350978842,
+        "3+": 0.5909418178077963
+      },
+      "max_abs_proportion_difference": 0.043308076479126045,
+      "recipient_proportions": {
+        "1": 0.19855830219083206,
+        "2": 0.1671918035222454,
+        "3+": 0.6342498942869224
+      },
+      "total_variation_distance": 0.04330807647912602
+    },
+    "weekday": {
+      "differences": {
+        "0": -0.02408029622518601,
+        "1": 0.0026176843693214713,
+        "2": 0.003569102067404961,
+        "3": 0.01012674140866962,
+        "4": 0.007766768379789957
+      },
+      "donor_proportions": {
+        "0": 0.18946069187780706,
+        "1": 0.21510611307299343,
+        "2": 0.18003222820310621,
+        "3": 0.20691192100661704,
+        "4": 0.2084890458394761
+      },
+      "max_abs_proportion_difference": 0.02408029622518601,
+      "recipient_proportions": {
+        "0": 0.21354098810299307,
+        "1": 0.21248842870367196,
+        "2": 0.17646312613570125,
+        "3": 0.19678517959794742,
+        "4": 0.20072227745968615
+      },
+      "total_variation_distance": 0.02408029622518601
+    }
+  },
+  "estimand_weighted_numeric_balance": {
+    "log_v_snapshot": {
+      "donor_equal_smd": 0.021979696061581434,
+      "donor_equal_weighted_ks": 0.015020971188904109
+    },
+    "nearest_upper_z4_dist_v": {
+      "donor_equal_smd": 0.006814410252143949,
+      "donor_equal_weighted_ks": 0.013070136341300831
+    },
+    "trend15_v": {
+      "donor_equal_smd": -0.08227767288928874,
+      "donor_equal_weighted_ks": 0.07956251928547664
+    },
+    "trend240_v": {
+      "donor_equal_smd": 0.060008958045086984,
+      "donor_equal_weighted_ks": 0.08052479400235635
+    },
+    "trend60_v": {
+      "donor_equal_smd": 0.02906263233554425,
+      "donor_equal_weighted_ks": 0.0648626872835758
+    }
+  },
+  "future_price_outcomes_used": false,
+  "overall": {
+    "controls": 133672,
+    "donor_path_length": {
+      "n": 35466,
+      "quantiles": {
+        "0.0": 1.0,
+        "0.1": 1.0,
+        "0.25": 1.0,
+        "0.5": 1.0,
+        "0.75": 1.0,
+        "0.9": 2.0,
+        "1.0": 10.0
+      }
+    },
+    "donors": 35466,
+    "donors_ge2": 29167,
+    "fraction_eligible_donors_two_full_paths": 0.8617615798676587,
+    "fraction_eligible_donors_two_half_paths": 0.9700003428532246,
+    "fraction_eligible_donors_two_min2_paths": 0.8786985291596667,
+    "fraction_ge2": 0.8223932780691366,
+    "fraction_selected_controls_full_path": 0.8464599916212819,
+    "retained_path_length": {
+      "n": 133672,
+      "quantiles": {
+        "0.0": 1.0,
+        "0.1": 1.0,
+        "0.25": 1.0,
+        "0.5": 1.0,
+        "0.75": 1.0,
+        "0.9": 1.0,
+        "1.0": 5.0
+      }
+    },
+    "retention_ratio": {
+      "n": 133672,
+      "quantiles": {
+        "0.0": 0.1,
+        "0.1": 0.5,
+        "0.25": 1.0,
+        "0.5": 1.0,
+        "0.75": 1.0,
+        "0.9": 1.0,
+        "1.0": 1.0
+      }
+    }
+  },
+  "selected_abs_delta_logv": {
+    "n": 133672,
+    "quantiles": {
+      "0.0": 0.0,
+      "0.1": 0.04274430463623254,
+      "0.25": 0.10931691571364022,
+      "0.5": 0.23021854383396917,
+      "0.75": 0.38478490287061323,
+      "0.9": 0.5151985881591025,
+      "1.0": 0.6499998494037307
+    }
+  },
+  "selected_abs_delta_z4": {
+    "n": 133672,
+    "quantiles": {
+      "0.0": 1.992184195387381e-12,
+      "0.1": 0.12021941574221362,
+      "0.25": 0.2991596558376841,
+      "0.5": 0.6051912568272542,
+      "0.75": 0.92300984988036,
+      "0.9": 1.1173245487420975,
+      "1.0": 1.2499653951442076
+    }
+  },
+  "selected_match_distance": {
+    "n": 133672,
+    "quantiles": {
+      "0.0": 0.02267259622309467,
+      "0.1": 1.0015084267552987,
+      "0.25": 1.681101357626582,
+      "0.5": 2.9841245573998885,
+      "0.75": 5.55905752364927,
+      "0.9": 9.920924959760878,
+      "1.0": 370.210336125522
+    }
+  },
+  "status": "V2_R4_PRO_AUDIT_DISTRIBUTIONAL_DIAGNOSTIC_COMPLETE"
+}
