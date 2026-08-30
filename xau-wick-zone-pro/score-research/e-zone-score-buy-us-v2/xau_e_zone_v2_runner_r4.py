@@ -44,7 +44,8 @@ for extra in [
     'V04_PARITY_REPRODUCIBILITY_DIAGNOSTIC_2026-08-30.json',
     'R4_REP_WIDTH_FLOAT_DIAGNOSTIC_2026-08-30.json',
     'PREOUTCOME_IMPLEMENTATION_REPAIR_R4_WIDTH_FLOAT.md',
-    'xau_e_zone_v2_rep_width_float_diagnostic.py'
+    'xau_e_zone_v2_rep_width_float_diagnostic.py',
+    'R4_DEV_LABELER_PERFORMANCE_REPAIR_PREDECLARATION_2026-08-30.md'
 ]:
     if extra not in p.CODE_FILES:p.CODE_FILES.append(extra)
 
