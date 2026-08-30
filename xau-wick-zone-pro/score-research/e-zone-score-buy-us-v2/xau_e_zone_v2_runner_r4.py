@@ -82,7 +82,24 @@ def freeze_pre_r4(data,work):
     fp.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
 
 
+def require_authority_freeze(stage,work):
+    if stage not in {'DEV','FORWARD'}:return
+    root=Path(work)/'R4_PREOUTCOME_AUTHORITY_FREEZE.json'
+    if not root.is_file():raise RuntimeError('R4_FINAL_PREOUTCOME_AUTHORITY_FREEZE_MISSING')
+    x=json.load(open(root))
+    if x.get('status')!='E_ZONE_SCORE_BUY_US_V2_R4_PREOUTCOME_AUTHORITY_FREEZE_PASS':raise RuntimeError('R4_FINAL_PREOUTCOME_AUTHORITY_FREEZE_INVALID')
+    if x.get('future_v2_reaction_outcomes_opened') is not False:raise RuntimeError('R4_AUTHORITY_FREEZE_OUTCOME_GUARD_FAIL')
+    if x.get('r4_design')!='R4_D5_MINIMAL_DENSE':raise RuntimeError('R4_AUTHORITY_FREEZE_DESIGN_FAIL')
+    if stage=='FORWARD':
+        dev=Path(work)/'DEV_FREEZE.json'
+        if not dev.is_file() or json.load(open(dev)).get('status')!='E_ZONE_SCORE_BUY_US_V2_DEV_FREEZE_PASS':raise RuntimeError('R4_DEV_FREEZE_REQUIRED_BEFORE_FORWARD')
+
+
 p.prepare_window=prepare_window_r4
 p.parity=parity_r4
 p.freeze_pre=freeze_pre_r4
+
+_stage=sys.argv[sys.argv.index('--stage')+1] if '--stage' in sys.argv else None
+_work=Path(sys.argv[sys.argv.index('--work-dir')+1]) if '--work-dir' in sys.argv else None
+if _stage and _work:require_authority_freeze(_stage,_work)
 p.main()
