@@ -37,8 +37,13 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: agent/xau-wick-zone-pro-dev
           fetch-depth: 2
+      - name: Verify exact triggering commit checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          echo EXACT_TRIGGERING_COMMIT_CHECKOUT_PASS "$GITHUB_SHA"
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.11.16'
@@ -108,8 +113,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for K in DEV VAL REP; do mkdir -p "$REPLAY/$K";python "$PKG/xau_e_zone_v2_placebos_r4.py" --features "$WORK/$K/features.csv.gz" --full-pool "$WORK/$K/full_pool.csv.gz" --context "$WORK/$K/context.csv.gz" --output "$REPLAY/$K/placebos.csv.gz" --matching-table "$REPLAY/$K/matching.csv.gz" --manifest "$REPLAY/$K/placebo_manifest.json";for F in placebos.csv.gz matching.csv.gz placebo_manifest.json; do test "$(sha256sum "$WORK/$K/$F"|awk '{print $1}')" = "$(sha256sum "$REPLAY/$K/$F"|awk '{print $1}')";done;done
-          echo R4_DETERMINISTIC_REPLAY_HASH_PASS
+          for K in DEV VAL REP; do
+            mkdir -p "$REPLAY/$K"
+            python "$PKG/xau_e_zone_v2_placebos_r4.py" --features "$WORK/$K/features.csv.gz" --full-pool "$WORK/$K/full_pool.csv.gz" --context "$WORK/$K/context.csv.gz" --output "$REPLAY/$K/placebos.csv.gz" --matching-table "$REPLAY/$K/matching.csv.gz" --manifest "$REPLAY/$K/placebo_manifest.json"
+          done
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          w=Path('/tmp/xau-v2-r4-work');r=Path('/tmp/xau-v2-r4-replay');checks={}
+          def h(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          for k in ['DEV','VAL','REP']:
+              checks[k]={}
+              for f in ['placebos.csv.gz','matching.csv.gz','placebo_manifest.json']:
+                  a=h(w/k/f);b=h(r/k/f);assert a==b,(k,f,a,b);checks[k][f]=a
+          out={'status':'R4_DETERMINISTIC_REPLAY_HASH_PASS','future_price_outcomes_used':False,'sha256':checks}
+          (w/'R4_DETERMINISTIC_REPLAY.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps(out,sort_keys=True))
+          PY
       - name: Fail closed if any outcome artifact exists before DEV
         shell: bash
         run: |
@@ -120,6 +139,29 @@ jobs:
           for pat in ['*_labels.csv.gz','zone_test.json','matched_sets.csv','score_report.json','scored.csv.gz','DEV_FROZEN_MODEL.json','DEV_FREEZE.json']:bad.extend(w.rglob(pat))
           assert not bad,[str(x) for x in bad];print('NO_V2_FUTURE_OUTCOME_ARTIFACT_BEFORE_DEV_PASS')
           PY
+      - name: Materialize final R4 PREOUTCOME authority freeze
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          w=Path('/tmp/xau-v2-r4-work');d=Path('/tmp/xau-v2-data')
+          def h(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();assert head==os.environ['GITHUB_SHA']
+          pre=json.load(open(w/'PRE_OUTCOME_FREEZE.json'));sel=json.load(open(w/'R4_CANONICAL_SELECTION_VERIFY_VAL.json'));rep=json.load(open(w/'R4_DETERMINISTIC_REPLAY.json'))
+          assert pre['status']=='E_ZONE_SCORE_BUY_US_V2_R4_PREOUTCOME_FREEZE_PASS' and pre['outcomes_opened'] is False
+          assert sel['status']=='R4_CANONICAL_SELECTION_EXACT_PASS' and sel['future_price_outcomes_used'] is False
+          assert rep['status']=='R4_DETERMINISTIC_REPLAY_HASH_PASS' and rep['future_price_outcomes_used'] is False
+          for k in ['DEV','VAL','REP']:
+              q=json.load(open(w/k/'preoutcome_qa.json'));assert q['status']=='E_ZONE_SCORE_BUY_US_V2_R4_PREOUTCOME_QA_PASS' and q['future_price_outcomes_used'] is False
+          parity=json.load(open(w/'PARITY/instrument_manifest.json'));assert parity['geometry_parity']['pass'] is True
+          prefix=json.load(open(w/'PREFIX/prefix_invariance.json'));assert prefix['status']=='E_ZONE_V2_PREFIX_INVARIANCE_PASS'
+          required=[w/'PRE_OUTCOME_FREEZE.json',w/'R4_CANONICAL_SELECTION_VERIFY_VAL.json',w/'R4_DETERMINISTIC_REPLAY.json',w/'PARITY/instrument_manifest.json',w/'PREFIX/prefix_invariance.json',d/'DATA_INPUT_MANIFEST.json']+[w/k/'preoutcome_qa.json' for k in ['DEV','VAL','REP']]
+          evidence={str(p):h(p) for p in required}
+          out={'status':'E_ZONE_SCORE_BUY_US_V2_R4_PREOUTCOME_AUTHORITY_FREEZE_PASS','workflow_run_id':int(os.environ['GITHUB_RUN_ID']),'workflow_head_sha':os.environ['GITHUB_SHA'],'checked_out_head_sha':head,'r4_design':'R4_D5_MINIMAL_DENSE','authorization_token':'GO_E_ZONE_SCORE_BUY_US_V2_R4_SEQUENTIAL_HISTORICAL_EXECUTION','future_v2_reaction_outcomes_opened':False,'nested_preoutcome_freeze_sha256':h(w/'PRE_OUTCOME_FREEZE.json'),'canonical_selection_verify_sha256':h(w/'R4_CANONICAL_SELECTION_VERIFY_VAL.json'),'deterministic_replay_sha256':h(w/'R4_DETERMINISTIC_REPLAY.json'),'evidence_sha256':evidence}
+          (w/'R4_PREOUTCOME_AUTHORITY_FREEZE.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps(out,indent=2,sort_keys=True))
+          PY
       - name: Upload immutable R4 PREOUTCOME freeze before any labels
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -129,7 +171,9 @@ jobs:
           path: |
             /tmp/xau-v2-data/DATA_INPUT_MANIFEST.json
             /tmp/xau-v2-r4-work/PRE_OUTCOME_FREEZE.json
+            /tmp/xau-v2-r4-work/R4_PREOUTCOME_AUTHORITY_FREEZE.json
             /tmp/xau-v2-r4-work/R4_CANONICAL_SELECTION_VERIFY_VAL.json
+            /tmp/xau-v2-r4-work/R4_DETERMINISTIC_REPLAY.json
             /tmp/xau-v2-r4-work/DEV/features.csv.gz
             /tmp/xau-v2-r4-work/DEV/full_pool.csv.gz
             /tmp/xau-v2-r4-work/DEV/context.csv.gz
@@ -165,6 +209,7 @@ jobs:
           retention-days: 90
           compression-level: 6
           path: |
+            /tmp/xau-v2-r4-work/R4_PREOUTCOME_AUTHORITY_FREEZE.json
             /tmp/xau-v2-r4-work/PRE_OUTCOME_FREEZE.json
             /tmp/xau-v2-r4-work/DEV_FREEZE.json
             /tmp/xau-v2-r4-work/DEV_FROZEN_MODEL.json
@@ -190,7 +235,7 @@ jobs:
           python - <<'PY'
           import json,os,hashlib
           from pathlib import Path
-          w=Path('/tmp/xau-v2-r4-work');f=json.load(open(w/'FINAL_FREEZE.json'));out={'status':'E_ZONE_SCORE_BUY_US_V2_R4_SEQUENTIAL_EXECUTION_COMPLETE','workflow_run_id':int(os.environ['GITHUB_RUN_ID']),'workflow_head_sha':os.environ['GITHUB_SHA'],'final_checkpoint':f['status'],'validation_continuation_pass':f['validation_continuation_pass'],'replication_outcomes_opened':f['replication_outcomes_opened'],'model_refit_after_DEV':f['model_refit_after_DEV'],'r4_design':'R4_D5_MINIMAL_DENSE','preoutcome_freeze_sha256':hashlib.sha256((w/'PRE_OUTCOME_FREEZE.json').read_bytes()).hexdigest(),'dev_model_sha256':hashlib.sha256((w/'DEV_FROZEN_MODEL.json').read_bytes()).hexdigest()};(w/'R4_RUN_AUTHORITY.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps(out,indent=2,sort_keys=True))
+          w=Path('/tmp/xau-v2-r4-work');f=json.load(open(w/'FINAL_FREEZE.json'));out={'status':'E_ZONE_SCORE_BUY_US_V2_R4_SEQUENTIAL_EXECUTION_COMPLETE','workflow_run_id':int(os.environ['GITHUB_RUN_ID']),'workflow_head_sha':os.environ['GITHUB_SHA'],'final_checkpoint':f['status'],'validation_continuation_pass':f['validation_continuation_pass'],'replication_outcomes_opened':f['replication_outcomes_opened'],'model_refit_after_DEV':f['model_refit_after_DEV'],'r4_design':'R4_D5_MINIMAL_DENSE','preoutcome_authority_freeze_sha256':hashlib.sha256((w/'R4_PREOUTCOME_AUTHORITY_FREEZE.json').read_bytes()).hexdigest(),'preoutcome_freeze_sha256':hashlib.sha256((w/'PRE_OUTCOME_FREEZE.json').read_bytes()).hexdigest(),'dev_model_sha256':hashlib.sha256((w/'DEV_FROZEN_MODEL.json').read_bytes()).hexdigest()};(w/'R4_RUN_AUTHORITY.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n');print(json.dumps(out,indent=2,sort_keys=True))
           PY
       - name: Upload complete final frozen R4 package
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -199,6 +244,7 @@ jobs:
           retention-days: 90
           compression-level: 6
           path: |
+            /tmp/xau-v2-r4-work/R4_PREOUTCOME_AUTHORITY_FREEZE.json
             /tmp/xau-v2-r4-work/PRE_OUTCOME_FREEZE.json
             /tmp/xau-v2-r4-work/DEV_FREEZE.json
             /tmp/xau-v2-r4-work/DEV_FROZEN_MODEL.json
