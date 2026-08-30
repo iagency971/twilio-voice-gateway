@@ -13,7 +13,6 @@ DESIGNS=[
  {'id':'D3_CONTEXT_WIDE','weekday_exact':False,'bucket_exact':True,'logv':.50,'z4':1.00},
  {'id':'D4_BUCKET_AS_DISTANCE','weekday_exact':False,'bucket_exact':False,'logv':.50,'z4':1.00},
 ]
-BAL=[('log_v_snapshot','log_v_snapshot'),('nearest_upper_z4_dist_v','nearest_upper_z4_dist_v'),('trend15_v','trend15_v'),('trend60_v','trend60_v'),('trend240_v','trend240_v')]
 
 def args():
  p=argparse.ArgumentParser();p.add_argument('--features',required=True);p.add_argument('--full-pool',required=True);p.add_argument('--context',required=True);p.add_argument('--output',required=True);return p.parse_args()
@@ -34,7 +33,9 @@ def main():
  f['log_v_snapshot']=np.log(f.v_snapshot.astype(float));ctx['log_v_snapshot']=np.log(ctx.v_snapshot.astype(float))
  ctx=ctx.sort_values(['session_date_ny','minute_of_session','time']).drop_duplicates(['session_date_ny','minute_of_session'],keep='last')
  sessions=sorted(ctx.session_date_ny.astype(str).unique());si={s:i for i,s in enumerate(sessions)}
- by_min={int(m):g for m,g in ctx.groupby('minute_of_session',sort=False)}; pool_by={pd.Timestamp(t):g for t,g in pool.groupby('time',sort=False)}
+ by_min={int(m):g for m,g in ctx.groupby('minute_of_session',sort=False)}
+ ctx_key={(str(r.session_date_ny),int(r.minute_of_session)):r for _,r in ctx.iterrows()}
+ pool_by={pd.Timestamp(t):g for t,g in pool.groupby('time',sort=False)}
  starts=f.sort_values(['display_episode_id','snapshot_time_utc']).groupby('display_episode_id',sort=False).first().reset_index()
  paths={str(k):g.sort_values('snapshot_time_utc') for k,g in f.groupby('display_episode_id',sort=False)}
  stats={c:(float(ctx[c].mean()),float(ctx[c].std(ddof=0)) or 1.0) for c in MATCH}
@@ -65,9 +66,9 @@ def main():
     temp=[]
     for _,dr in donor.iterrows():
      off=int(round((pd.Timestamp(dr.snapshot_time_utc)-pd.Timestamp(d0.snapshot_time_utc)).total_seconds()/300.0));target=minute+off*5
-     rrctx=ctx[(ctx.session_date_ny.astype(str)==rs)&(ctx.minute_of_session.astype(int)==target)]
-     if not len(rrctx):break
-     rr=rrctx.iloc[-1];rv=float(rr.v_snapshot);center=float(rr.close)-float(dr.distance_v)*rv
+     rr=ctx_key.get((rs,target))
+     if rr is None:break
+     rv=float(rr.v_snapshot);center=float(rr.close)-float(dr.distance_v)*rv
      lo=center-float((float(dr.center)-float(dr.zlo))/float(dr.v_snapshot))*rv;hi=center+float((float(dr.zhi)-float(dr.center))/float(dr.v_snapshot))*rv
      pg=pool_by.get(pd.Timestamp(rr.time),pd.DataFrame())
      if len(pg) and (overlaps(lo,hi,pg) or bool(np.any(np.abs(pg.center.to_numpy(float)-center)<=.20*rv))):break
@@ -84,7 +85,7 @@ def main():
   sc=np.asarray(selected_counts,int);m=pd.DataFrame(matches);balance={}
   if len(m):
    for c in MATCH:
-    dc='donor_'+c;rc='recipient_'+c;balance[c]=smd(m[dc],m[rc])
+    balance[c]=smd(m['donor_'+c],m['recipient_'+c])
   frac2=float((sc>=2).mean());frac5=float((sc>=5).mean());maxs=max([abs(x) for x in balance.values()],default=float('inf'))
   feasible=bool(frac2>=.80 and maxs<=.10)
   reports.append({'design':des,'donor_episodes':int(len(sc)),'controls':int(sc.sum()),'donors_ge2':int((sc>=2).sum()),'fraction_ge2':frac2,'donors_with_5':int((sc>=5).sum()),'fraction_with_5':frac5,'median_controls':float(np.median(sc)),'median_retained_path_snapshots':float(np.median(path_lengths)) if path_lengths else None,'balance_smd':balance,'max_abs_smd':maxs,'preoutcome_feasibility_pass':feasible})
