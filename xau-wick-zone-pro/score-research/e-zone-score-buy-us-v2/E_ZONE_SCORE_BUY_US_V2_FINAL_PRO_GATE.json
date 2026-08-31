@@ -1,0 +1,139 @@
+{
+  "status": "PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE_COMPLETE_VALIDATION_FAILED",
+  "decision": "NO_GO_PINE_SCORE_NO_STATISTICAL_VALIDATION",
+  "gate_date": "2026-08-31",
+  "gate_type": "FINAL_PRO_SCIENTIFIC_ADJUDICATION",
+  "repository": "iagency971/twilio-voice-gateway",
+  "branch": "agent/xau-wick-zone-pro-dev",
+  "execution_integrity": {
+    "status": "PASS",
+    "authoritative_workflow_run_id": 33334031028,
+    "workflow_conclusion": "success",
+    "workflow_head_sha": "5fe152e250684e35f55236c01cc51fbc9a8fed46",
+    "r4_design": "R4_D5_MINIMAL_DENSE",
+    "preoutcome_passed_and_frozen": true,
+    "model_fit_once_on_dev": true,
+    "model_refit_after_dev": false,
+    "validation_evaluated_with_frozen_model": true,
+    "replication_outcomes_opened": false,
+    "final_artifact_id": 9742754436,
+    "final_artifact_sha256": "9612fc99b1a0a61a89f580573952441ab5f0e7fc95e41d422cb20623996a501b",
+    "final_artifact_sha256_verified": true,
+    "dev_frozen_model_sha256": "299728a8bbb2efbb912c225a77eb2725a8cb11d14a03deb6fa6e11e33fe5c9ff",
+    "dev_zone_test_sha256": "32495d38e2cd015610af0490ccdf0d1491356d9406344c56c6d0e7ce42ca3960",
+    "dev_score_report_sha256": "e86cf97a3e79f39118ea2b5c7ba4fedc6ee7eb80779e6d88b6a01493714d47ad",
+    "val_zone_test_sha256": "22b4f5c30f5d1cff14c424e2960ca68e08dab0af80b991e5e0a5aa32a7ac1330",
+    "val_score_report_sha256": "746732ab896593d8cb81af4eb6499d0ce5c7b5493180a72c7bc945118327471a"
+  },
+  "scientific_result": "VALID_NON_CONFIRMATORY_RESULT",
+  "pooled_zone_verdict": {
+    "status": "NOT_VALIDATED",
+    "dev": {
+      "real_primary_contacts": 34144,
+      "matched_real_contacts": 20962,
+      "fraction_with_at_least_two_contacted_controls": 0.6139292408622306,
+      "minimum_required_fraction": 0.70,
+      "effect": 0.010582641605444788,
+      "ci95": [-0.002619442661713221, 0.02397619060954849],
+      "one_sided_p": 0.057588482303539294,
+      "pass": false
+    },
+    "validation_2022": {
+      "real_primary_contacts": 18110,
+      "matched_real_contacts": 10282,
+      "fraction_with_at_least_two_contacted_controls": 0.5677526228602982,
+      "minimum_required_fraction": 0.70,
+      "effect": 0.0006435194190494877,
+      "ci95": [-0.019190093965536607, 0.01931412438150859],
+      "one_sided_p": 0.48890221955608876,
+      "pass": false
+    },
+    "interpretation": "The weak positive DEV estimate did not satisfy the frozen gate and did not reproduce in 2022. The validation estimate is essentially zero and its confidence interval includes both negative and positive effects. Displayed E zones are not statistically validated as better BUY reaction locations than the frozen matched neutral controls under this outcome."
+  },
+  "slot_verdicts": {
+    "E1": {
+      "status": "NOT_VALIDATED",
+      "validation_effect": -0.005042263873575876,
+      "validation_ci95": [-0.028532077697174814, 0.017562896008708074],
+      "validation_holm_adjusted_one_sided_p": 0.9002199560087982,
+      "validation_score_auc": 0.5145133240482972
+    },
+    "E2": {
+      "status": "NOT_VALIDATED",
+      "validation_effect": 0.002014507953155059,
+      "validation_ci95": [-0.024689236611701273, 0.028289070652630047],
+      "validation_holm_adjusted_one_sided_p": 0.9002199560087982,
+      "validation_score_auc": 0.5110433872996772
+    },
+    "E3": {
+      "status": "NOT_VALIDATED",
+      "validation_effect": 0.01127780651836525,
+      "validation_ci95": [-0.024093717112669024, 0.04458154118441566],
+      "validation_holm_adjusted_one_sided_p": 0.8242351529694062,
+      "validation_score_auc": 0.4852401920848296,
+      "validation_score_q4_minus_q1": -0.05322455322455327
+    },
+    "rule": "No slot may be called validated. Replication was not opened, and none of the validation diagnostics satisfies the frozen slot rule."
+  },
+  "score_verdict": {
+    "status": "NOT_VALIDATED",
+    "dev": {
+      "auc": 0.5127249739023011,
+      "auc_ci95": [0.5061120573940001, 0.5193041316083061],
+      "q4_minus_q1": 0.03218133222369901,
+      "q4_minus_q1_ci95": [0.015476736689361047, 0.048750627968000296],
+      "full_minus_nuisance_auc": 0.001849752813415595,
+      "full_minus_nuisance_ci95": [-0.0004053683350313253, 0.0042116040153445285],
+      "pass": false,
+      "failed_checks": [
+        "full_minus_nuisance_ci_lower_gt_0"
+      ]
+    },
+    "validation_2022": {
+      "auc": 0.5079023841155954,
+      "auc_ci95": [0.4985930088679133, 0.5174002904202132],
+      "q4_minus_q1": 0.01832380708797965,
+      "q4_minus_q1_ci95": [-0.0026079798195881216, 0.040172996725543884],
+      "full_minus_nuisance_auc": 0.0014784573740417306,
+      "full_minus_nuisance_ci95": [-0.0019414774008409297, 0.004964159816542685],
+      "quartiles_monotone": false,
+      "positive_width_quintiles": 3,
+      "required_positive_width_quintiles": 4,
+      "pass": false,
+      "failed_checks": [
+        "displayed_auc_ci_lower_gt_05",
+        "q4_q1_ci_lower_gt_0",
+        "quartiles_monotone",
+        "width_quintiles_4_of_5_positive",
+        "full_minus_nuisance_ci_lower_gt_0"
+      ]
+    },
+    "width_deconfounding_checks_passed": true,
+    "interpretation": "The V2 construction substantially removed the mechanical width dependency, but the remaining strength-only score did not show reliable incremental predictive value beyond nuisance context and did not pass forward validation."
+  },
+  "validation_continuation_pass": false,
+  "replication_2023": {
+    "status": "CLOSED_BY_FROZEN_VALIDATION_GATE",
+    "outcomes_opened": false,
+    "may_be_opened_as_v2_rescue": false
+  },
+  "authorizations": {
+    "statistical_validation_of_pooled_e_zones": false,
+    "statistical_validation_of_e1": false,
+    "statistical_validation_of_e2": false,
+    "statistical_validation_of_e3": false,
+    "pine_quality_score": false,
+    "pine_strength_grading_or_labels_from_v2": false,
+    "production_or_trading_claim": false,
+    "existing_visual_zones_status": "EXPLORATORY_ONLY_NOT_STATISTICALLY_VALIDATED",
+    "production_authorization": "NONE"
+  },
+  "study_closure": {
+    "v2_status": "CLOSED",
+    "post_hoc_rescue_with_dev_or_validation_outcomes": "FORBIDDEN",
+    "threshold_feature_model_matching_or_gate_changes_within_v2": "FORBIDDEN",
+    "replication_2023_remains_sealed_for_v2": true,
+    "future_research": "A materially new V3 may be considered only under a separately preregistered, outcome-blind protocol before any 2023 outcome is opened. It must not be presented as a rescue or successful completion of V2."
+  },
+  "memo": "XAUUSD_E_ZONE_SCORE_BUY_US_V2_FINAL_PRO_GATE_MEMO_2026-08-31.md"
+}
