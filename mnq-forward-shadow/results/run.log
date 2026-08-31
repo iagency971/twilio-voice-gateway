@@ -1,21 +1,21 @@
 {
   "status": "FORWARD_INSUFFICIENT_FOR_LIVE",
-  "latest_complete_day": "2026-08-28",
+  "latest_complete_day": "2026-08-31",
   "primary": {
-    "n": 22,
-    "mean": 0.3318168857621838,
-    "sum": 7.299971486768044,
-    "pf": 1.810747957354776,
-    "win_rate": 0.45454545454545453,
+    "n": 31,
+    "mean": 0.37412009189119527,
+    "sum": 11.597722848627054,
+    "pf": 2.024950167612248,
+    "win_rate": 0.4838709677419355,
     "max_dd": 3.412942605791073,
     "losing_streak": 5
   },
   "stress": {
-    "n": 22,
-    "mean": 0.25472480688459576,
-    "sum": 5.603945751461106,
-    "pf": 1.563270991506906,
-    "win_rate": 0.45454545454545453,
+    "n": 31,
+    "mean": 0.2958037955269679,
+    "sum": 9.169917661336004,
+    "pf": 1.7304712740315071,
+    "win_rate": 0.4838709677419355,
     "max_dd": 3.8015944700650244,
     "losing_streak": 5
   },
@@ -30,20 +30,29 @@
       "losing_streak": 2
     },
     "2026-08-22/2026-08-28": {
-      "n": 19,
-      "mean": 0.36275593637451947,
-      "sum": 6.89236279111587,
-      "pf": 1.882192215587213,
-      "win_rate": 0.47368421052631576,
+      "n": 24,
+      "mean": 0.33983574886440976,
+      "sum": 8.156057972745835,
+      "pf": 1.8163216427869362,
+      "win_rate": 0.5,
       "max_dd": 3.285375998225377,
       "losing_streak": 3
+    },
+    "2026-08-29/2026-09-04": {
+      "n": 4,
+      "mean": 0.7585140450572618,
+      "sum": 3.0340561802290473,
+      "pf": 23.82234906157587,
+      "win_rate": 0.5,
+      "max_dd": 0.13294232649071347,
+      "losing_streak": 2
     }
   },
-  "positive_weeks": 2,
-  "remove_best_10pct_mean": -0.06894614913923117,
+  "positive_weeks": 3,
+  "remove_best_10pct_mean": 0.04282006945008873,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "4e15f57ae234e06f07672c48d296dbfdd93ce40a490f19b14c9bad28bb99557e"
+  "ledger_sha256": "9e13ddb383015de4bcda479bfe619d93d0ff2983626b8f27a06ce99f3254d918"
 }
