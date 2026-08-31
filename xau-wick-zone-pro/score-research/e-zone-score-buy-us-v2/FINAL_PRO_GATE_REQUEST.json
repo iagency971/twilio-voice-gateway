@@ -1,0 +1,15 @@
+{
+  "status": "READY_FOR_PRO_E_ZONE_SCORE_BUY_US_V2_FINAL_GATE_VALIDATION_FAILED_REPLICATION_CLOSED",
+  "request": "Final Pro adjudication of completed R4 sequential E-zone validity and width-neutral score study",
+  "workflow_run_id": 33334031028,
+  "workflow_head_sha": "5fe152e250684e35f55236c01cc51fbc9a8fed46",
+  "r4_design": "R4_D5_MINIMAL_DENSE",
+  "validation_continuation_pass": false,
+  "replication_outcomes_opened": false,
+  "model_refit_after_DEV": false,
+  "final_result_file": "R4_FINAL_EXECUTION_RESULT_2026-08-31.json",
+  "final_artifact_id": 9742754436,
+  "final_artifact_sha256": "9612fc99b1a0a61a89f580573952441ab5f0e7fc95e41d422cb20623996a501b",
+  "pine_modification": "FORBIDDEN_PENDING_FINAL_PRO_GATE",
+  "production_authorization": "NONE"
+}
