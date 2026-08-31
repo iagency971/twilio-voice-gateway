@@ -1,0 +1,97 @@
+name: XAU Z4 corridor V3 outcome-blind control ladder
+
+on:
+  push:
+    branches: [agent/xau-wick-zone-pro-dev]
+    paths:
+      - .github/workflows/xau-z4-corridor-v3-control-ladder.yml
+      - xau-wick-zone-pro/entry-research/XAUUSD_Z4_CORRIDOR_V3_CONTROL_LADDER_PREDECL_2026-08-31.json
+      - xau-wick-zone-pro/entry-research/xau_z4_corridor_v3_preoutcome_control_ladder.py
+      - xau-wick-zone-pro/entry-research/xau_z4_corridor_v3_control_ladder_runner.py
+  workflow_dispatch:
+
+concurrency:
+  group: xau-z4-corridor-v3-control-ladder
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PKG: xau-wick-zone-pro/entry-research
+  V2: xau-wick-zone-pro/score-research/e-zone-score-buy-us-v2
+  DATA: /tmp/xau-v3-ladder-data
+  WORK: /tmp/xau-v3-ladder-work
+
+jobs:
+  ladder:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+      - name: Verify exact triggering commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.16'
+      - name: Install frozen environment and verify outcome-blind authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$V2/requirements-lock.txt"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('xau-wick-zone-pro/entry-research')
+          x=json.load(open(p/'XAUUSD_Z4_CORRIDOR_V3_CONTROL_LADDER_PREDECL_2026-08-31.json'))
+          assert x['future_v3_reaction_outcomes_opened'] is False
+          assert x['minimum_fraction_contacted_candidates_ge2_contacted_controls']==0.60
+          assert x['quality_gates_changed'] is False and x['candidate_geometry_changed'] is False
+          assert x['rep_2023_reaction_status']=='SEALED'
+          print('V3_CONTROL_LADDER_OUTCOME_BLIND_AUTHORITY_PASS')
+          PY
+          python -m py_compile "$PKG/xau_z4_corridor_v3_preoutcome_control_ladder.py" "$PKG/xau_z4_corridor_v3_control_ladder_runner.py"
+      - name: Acquire commit-pinned M1 history
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$DATA" "$WORK"
+          python "$V2/xau_e_zone_v2_acquire.py" --output-dir "$DATA" --manifest "$DATA/DATA_INPUT_MANIFEST.json"
+      - name: Evaluate predeclared control ladder and freeze first all-window PASS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$PKG/xau_z4_corridor_v3_control_ladder_runner.py" --data-dir "$DATA" --work-dir "$WORK"
+          test "$(python -c "import json;print(json.load(open('$WORK/V3_PREOUTCOME_FREEZE.json'))['status'])")" = "Z4_CORRIDOR_V3_COMPLETE_PREOUTCOME_FREEZE_PASS"
+          test "$(python -c "import json;print(json.load(open('$WORK/V3_PREOUTCOME_FREEZE.json'))['v3_reaction_outcomes_opened'])")" = "False"
+      - name: Fail closed on any reaction artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          w=Path('/tmp/xau-v3-ladder-work');bad=[]
+          for pat in ['*reaction*label*','*outcome*','*score_report*','*mfe*','*mae*','*DEV_MODEL*']:
+              bad.extend(w.rglob(pat))
+          assert not bad,[str(x) for x in bad]
+          print('NO_V3_REACTION_OUTCOME_ARTIFACT_PASS')
+          PY
+      - name: Upload selected immutable V3 PREOUTCOME package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: z4-corridor-v3-selected-preoutcome
+          retention-days: 90
+          compression-level: 6
+          path: |
+            /tmp/xau-v3-ladder-work/V3_CONTROL_LADDER_SELECTION.json
+            /tmp/xau-v3-ladder-work/V3_PREOUTCOME_FREEZE.json
+            /tmp/xau-v3-ladder-work/SELECTED/DEV
+            /tmp/xau-v3-ladder-work/SELECTED/VAL
+            /tmp/xau-v3-ladder-work/SELECTED/REP
+            /tmp/xau-v3-ladder-data/DATA_INPUT_MANIFEST.json
