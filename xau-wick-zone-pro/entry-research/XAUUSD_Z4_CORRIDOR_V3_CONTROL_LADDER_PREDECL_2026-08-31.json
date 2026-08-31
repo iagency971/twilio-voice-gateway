@@ -1,0 +1,30 @@
+{
+  "status": "Z4_CORRIDOR_V3_CONTROL_LADDER_PREDECLARED",
+  "date": "2026-08-31",
+  "scope": "XAUUSD BID M1 BUY US Z4 corridor V3",
+  "reason": "Initial PREOUTCOME design D0 failed only the frozen >=60% contacted-candidate support gate: 1180/2772 = 42.5685% in DEV. No V3 post-contact reaction outcome has been opened.",
+  "future_v3_reaction_outcomes_opened": false,
+  "candidate_families_changed": false,
+  "candidate_geometry_changed": false,
+  "reaction_outcome_changed": false,
+  "quality_gates_changed": false,
+  "minimum_fraction_contacted_candidates_ge2_contacted_controls": 0.60,
+  "maximum_absolute_smd": 0.10,
+  "selection_rule": "Evaluate designs in order using only candidate/control construction, contact occurrence, support and prespecified balance covariates in DEV, VAL and sealed REP. Select the first design passing every PREOUTCOME gate in all three windows. Stop without V3 reaction outcomes if none passes.",
+  "designs": [
+    {"id":"D0","offsets_v_birth":[-0.50,-0.25,0.25,0.50]},
+    {"id":"D1","offsets_v_birth":[-0.50,-0.33,-0.17,0.17,0.33,0.50]},
+    {"id":"D2","offsets_v_birth":[-0.65,-0.50,-0.35,-0.20,0.20,0.35,0.50,0.65]},
+    {"id":"D3","offsets_v_birth":[-0.80,-0.65,-0.50,-0.35,-0.20,0.20,0.35,0.50,0.65,0.80]}
+  ],
+  "neutrality_rules_unchanged": [
+    "control strictly inside frozen MAIN-TARGET corridor",
+    "control below current close at birth",
+    "control farther than 0.10*v_birth from every causal V3 structural cluster",
+    "prospective censoring if a structural cluster is later born within 0.10*v_birth",
+    "same first-contact-from-above and gap-pass semantics as candidate"
+  ],
+  "rep_2023_reaction_status": "SEALED",
+  "pine_authorization": "NONE",
+  "production_authorization": "NONE"
+}
