@@ -1,0 +1,114 @@
+{
+  "status": "PRO_Z4_CORRIDOR_RETRACE_LEVEL_REACTION_V3_METHOD_GATE_PASS",
+  "decision": "GO_V3_PREOUTCOME_IMPLEMENTATION",
+  "gate_date": "2026-08-31",
+  "gate_type": "TARGETED_PRO_PREOUTCOME_METHOD_GATE",
+  "repository": "iagency971/twilio-voice-gateway",
+  "branch": "agent/xau-wick-zone-pro-dev",
+  "scope": {
+    "instrument": "XAUUSD BID M1",
+    "direction": "BUY_ONLY",
+    "session": "08:00-17:00 America/New_York",
+    "main_anchors": "causal MAIN Z4 broken upward plus nearest higher causal TARGET Z4",
+    "candidate_region": "strict open corridor main_zhi < level < target_zlo"
+  },
+  "outcome_blind_v3": true,
+  "v3_reaction_outcomes_opened": false,
+  "parent_preregistration": "XAUUSD_Z4_CORRIDOR_RETRACE_LEVEL_REACTION_V3_PREREG_2026-08-31.md",
+  "exact_rules_addendum": "XAUUSD_Z4_CORRIDOR_RETRACE_LEVEL_REACTION_V3_PREREG_ADDENDUM_A_EXACT_CAUSAL_RULES_2026-08-31.md",
+  "candidate_families": [
+    "BROKEN_PIVOT_HIGH",
+    "POST_BREAK_PIVOT_LOW",
+    "BULL_FVG_MID"
+  ],
+  "forbidden_inputs": [
+    "displayed E1/E2/E3 zones",
+    "V1 E score",
+    "V2 E score",
+    "E family",
+    "E slot/rank",
+    "E score thresholds",
+    "Fibonacci levels",
+    "hand-drawn levels",
+    "post-outcome subgroup rescue"
+  ],
+  "legacy_br70_status": "FORBIDDEN_AS_V3_TRIGGER",
+  "primary_reaction": {
+    "anchor": "contact M1 close",
+    "contact_bar_used": false,
+    "favorable_v": 0.5,
+    "adverse_v": -0.5,
+    "horizon_available_m1": 10,
+    "same_bar_both": "FAILURE",
+    "neither": "FAILURE"
+  },
+  "neutral_control_offsets_v_birth": [-0.5, -0.25, 0.25, 0.5],
+  "minimum_contacted_controls": 2,
+  "cluster_distance_rule": "abs(level_a-level_b) <= 0.10*min(v_birth_a,v_birth_b), connected components, uncontacted clusters only",
+  "broken_pivot_high_memory_available_m1": 240,
+  "execution_modes": [
+    "TOUCH_NEXT_OPEN",
+    "CONTACT_RECLAIM_NEXT_OPEN",
+    "CONTACT_BULL_RECLAIM_NEXT_OPEN",
+    "ONE_BAR_FIRST_BULL_RECLAIM"
+  ],
+  "execution_usefulness_gate": {
+    "minimum_executions": 300,
+    "minimum_sessions": 60,
+    "post_entry_first_passage_rate_gt": 0.5,
+    "post_entry_ci95_lower_gt": 0.5,
+    "median_entry_drift_v_lte": 0.25,
+    "missed_primary_success_share_lt": 0.2
+  },
+  "windows": {
+    "DEV": ["2020-01-01T00:00:00Z", "2022-01-01T00:00:00Z"],
+    "VAL": ["2022-01-01T00:00:00Z", "2023-01-01T00:00:00Z"],
+    "REP": ["2023-01-01T00:00:00Z", "2024-01-01T00:00:00Z"]
+  },
+  "rep_2023_status": "SEALED_UNTIL_COMPLETE_VAL_CONTINUATION_PASS",
+  "pooled_quality_gates": {
+    "dev_min_matched_contacts": 1000,
+    "val_min_matched_contacts": 500,
+    "dev_min_sessions": 120,
+    "val_min_sessions": 80,
+    "min_fraction_contacted_candidates_ge2_controls": 0.6,
+    "max_abs_smd": 0.1,
+    "balanced_variables": [
+      "relative_corridor_coordinate",
+      "contact_minute",
+      "log_v_contact",
+      "trend15_v",
+      "trend60_v",
+      "trend240_v"
+    ]
+  },
+  "dev_continuation_requires": [
+    "all mandatory DEV quality gates",
+    "matched effect > 0",
+    "bootstrap 95% lower bound > 0"
+  ],
+  "val_continuation_requires": [
+    "all mandatory VAL quality gates",
+    "matched effect > 0",
+    "bootstrap 95% lower bound > 0",
+    "at least one complete low-latency execution-usefulness PASS"
+  ],
+  "rep_final_requires": [
+    "same pooled location direction and 95% lower-bound standard",
+    "same complete execution-usefulness gate for at least one frozen mode",
+    "no refit or threshold change"
+  ],
+  "engineering_gates_before_dev": [
+    "synthetic causal candidate/contact tests",
+    "legacy Z4 breakout/corridor parity",
+    "indexed M1/session access with no per-candidate full-dataframe scans",
+    "deterministic replay hash equality",
+    "one-month outcome-blind candidate-generation runtime benchmark",
+    "complete PREOUTCOME manifest/hash freeze",
+    "assert no V3 reaction outcome artifact before authorization"
+  ],
+  "execution_authorization": "GO_Z4_CORRIDOR_RETRACE_LEVEL_REACTION_V3_PREOUTCOME_ONLY",
+  "outcome_authorization_before_preoutcome_pass": "NONE",
+  "pine_authorization": "NONE",
+  "production_authorization": "NONE"
+}
