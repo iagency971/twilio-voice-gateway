@@ -77,8 +77,14 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           w=Path('/tmp/xau-v3-ladder-work');bad=[]
-          for pat in ['*reaction*label*','*outcome*','*score_report*','*mfe*','*mae*','*DEV_MODEL*']:
-              bad.extend(w.rglob(pat))
+          forbidden=('reaction_label','outcome','score_report','mfe','mae','dev_model')
+          for p in w.rglob('*'):
+              if not p.is_file():
+                  continue
+              # PREOUTCOME is a methodological/QA filename and is explicitly allowed.
+              n=p.name.lower().replace('preoutcome','')
+              if any(tok in n for tok in forbidden):
+                  bad.append(p)
           assert not bad,[str(x) for x in bad]
           print('NO_V3_REACTION_OUTCOME_ARTIFACT_PASS')
           PY
