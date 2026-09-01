@@ -1,0 +1,12 @@
+{
+  "checkpoint_reached": false,
+  "locked_checkpoint": null,
+  "model_eligible_primary_contact_count": 0,
+  "performance_fields_exposed": false,
+  "prospective_start_session": "2026-08-31",
+  "represented_session_count": 0,
+  "represented_session_dates": [],
+  "status": "PROSPECTIVE_PRECHECKPOINT_STATUS_OUTCOME_BLIND",
+  "threshold_contacts": 1000,
+  "threshold_sessions": 90
+}
