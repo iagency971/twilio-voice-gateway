@@ -1,0 +1,15 @@
+{
+  "anchored_at_utc": "2026-09-01T01:53:06Z",
+  "authorization_scope": "OUTCOME_BLIND_COLLECTION_UNTIL_LOCKED_SINGLE_CHECKPOINT",
+  "checkpoint_evaluator_sha256": "2facd467b9276a48c6c558677c3f2bd81ebf1dca7560c51d599b8a078bd41524",
+  "collector_template_sha256": "77d1268a9319001b6327136dfaf39d54da7b527e95d0de72c8a7da388768a679",
+  "gate_artifact_bytes_verified": true,
+  "gate_artifact_id": 9722291765,
+  "gate_artifact_name": "xau-e-v1-pro-pre-prospective-execution-gate",
+  "gate_sha256": "4ee1c7d3a36baa0583b8c81d8de8c075d1c32222c9deec1207bf4e91f6d10e30",
+  "gate_workflow_head_sha": "b2199e27c4ce4d57e46c0108b25007f957d2b04f",
+  "gate_workflow_run_id": 33278660304,
+  "planning_seal_sha256": "f088d1a18f5686c628e9e00811438dff09902c38290c84ce8c946a5e55d4d49a",
+  "scheduler_workflow_sha256": "24311ebb10f946669c8ed80ff328336d01f3f17faf5c9bf23b022fcfa417db52",
+  "status": "PROSPECTIVE_EXECUTION_AUTHORIZATION_ANCHOR_PASS"
+}
