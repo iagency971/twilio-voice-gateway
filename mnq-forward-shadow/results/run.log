@@ -40,19 +40,19 @@
     },
     "2026-08-29/2026-09-04": {
       "n": 10,
-      "mean": 0.0897259911078044,
-      "sum": 0.8972599110780439,
-      "pf": 1.2022032732151164,
+      "mean": 0.08972599110780441,
+      "sum": 0.8972599110780441,
+      "pf": 1.2022032732151169,
       "win_rate": 0.4,
-      "max_dd": 4.304473036827772,
+      "max_dd": 4.304473036827771,
       "losing_streak": 4
     }
   },
   "positive_weeks": 3,
-  "remove_best_10pct_mean": -0.029716799818139673,
+  "remove_best_10pct_mean": -0.029716799818139645,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "4f9adde56f0a12af9fa2b93c0422aed1c37f283235c231b1cef0a73c55dd6e36"
+  "ledger_sha256": "92e47b748382caf47ce5e58883eb108b39f7b0df38e98b307dbeaf7dda47ef58"
 }
