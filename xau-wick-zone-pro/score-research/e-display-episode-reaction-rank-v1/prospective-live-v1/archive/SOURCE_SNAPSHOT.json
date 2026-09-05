@@ -8,7 +8,7 @@
       "first_time_utc": "2026-08-02T00:00:00+00:00",
       "last_time_utc": "2026-08-20T23:58:00+00:00",
       "month": "2026-08",
-      "observed_at_utc": "2026-09-04T01:05:53Z",
+      "observed_at_utc": "2026-09-05T01:08:03Z",
       "repository_path": "xauusd/bid/m1/xauusd_bid_m1_2026_08.csv",
       "rows": 24115,
       "source_sha256": "4f61d531018a8e8c37b1f410945e1d23d59fee96cde13bef223dcc9e63d0f852",
@@ -17,7 +17,7 @@
       "verified_download_git_blob_sha": "eac2cab31176755f93109dff6127c5aa92090319"
     }
   ],
-  "observed_at_utc": "2026-09-04T01:05:53Z",
+  "observed_at_utc": "2026-09-05T01:08:03Z",
   "repository": "kevingtlin/Market-Data-Lab",
   "status": "COMMIT_PINNED_SOURCE_OBSERVATION_PASS",
   "upstream_head_commit": "922f83a60cc574e7395fb27397077288055a1ef6"
