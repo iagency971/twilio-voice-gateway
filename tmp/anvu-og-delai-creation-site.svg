@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#071033"/><stop offset="0.58" stop-color="#12184d"/><stop offset="1" stop-color="#4037b9"/></linearGradient>
+  <linearGradient id="pill" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4451d4"/><stop offset="1" stop-color="#6758ef"/></linearGradient>
+</defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<g opacity="0.18" fill="none" stroke="#b4aaff" stroke-width="2"><path d="M720 38 C850 84 982 10 1200 20"/><path d="M720 95 C875 135 1020 45 1200 72"/><path d="M720 155 C870 200 1040 110 1200 134"/></g>
+<g font-family="Arial, Helvetica, sans-serif" fill="#fff">
+  <text x="64" y="90" font-size="36" font-weight="700" letter-spacing="2">ANVU</text>
+  <rect x="64" y="116" width="168" height="44" rx="22" fill="url(#pill)" stroke="#9388ff" stroke-width="1"/>
+  <rect x="81" y="128" width="20" height="20" rx="4" fill="none" stroke="#fff" stroke-width="2"/><path d="M91 129v18" stroke="#fff" stroke-width="1"/>
+  <text x="114" y="146" font-size="22" font-weight="700">Guide ANVU</text>
+  <text x="64" y="252" font-size="58" font-weight="700">Combien de temps</text>
+  <text x="64" y="315" font-size="58" font-weight="700">pour créer un site</text>
+  <text x="64" y="378" font-size="58" font-weight="700">en Guadeloupe ?</text>
+  <rect x="64" y="424" width="152" height="7" rx="4" fill="#7967ff"/>
+  <text x="64" y="486" font-size="26">Des délais réalistes selon le projet</text>
+  <text x="64" y="520" font-size="18" fill="#bec6e8">2 à 8 semaines pour les périmètres standards</text>
+</g>
+<g font-family="Arial, Helvetica, sans-serif">
+  <rect x="670" y="108" width="470" height="428" rx="30" fill="#0b1341" fill-opacity="0.92" stroke="#887cff" stroke-width="2"/>
+  <text x="710" y="174" font-size="28" font-weight="700" fill="#fff">Repères de délai</text>
+  <text x="710" y="204" font-size="18" fill="#c3c9e5">Le calendrier dépend du périmètre.</text>
+  <g font-size="18" font-weight="700">
+    <rect x="705" y="226" width="403" height="57" rx="16" fill="#202a6b" stroke="#776af3"/>
+    <circle cx="737" cy="254" r="14" fill="none" stroke="#9d91ff" stroke-width="2"/><path d="M737 254v-8m0 8 7 4" stroke="#c5bfff" stroke-width="2"/>
+    <text x="765" y="261" fill="#fff">Site essentiel</text><text x="991" y="261" fill="#a496ff">2 à 3 sem.</text>
+    <rect x="705" y="298" width="403" height="57" rx="16" fill="#202a6b" stroke="#776af3"/>
+    <circle cx="737" cy="326" r="14" fill="none" stroke="#9d91ff" stroke-width="2"/><path d="M737 326v-8m0 8 7 4" stroke="#c5bfff" stroke-width="2"/>
+    <text x="765" y="333" fill="#fff">Site vitrine local</text><text x="991" y="333" fill="#a496ff">4 à 6 sem.</text>
+    <rect x="705" y="370" width="403" height="57" rx="16" fill="#202a6b" stroke="#776af3"/>
+    <circle cx="737" cy="398" r="14" fill="none" stroke="#9d91ff" stroke-width="2"/><path d="M737 398v-8m0 8 7 4" stroke="#c5bfff" stroke-width="2"/>
+    <text x="765" y="405" fill="#fff">Visibilité locale &amp; IA</text><text x="991" y="405" fill="#a496ff">6 à 8 sem.</text>
+    <rect x="705" y="442" width="403" height="57" rx="16" fill="#342870" stroke="#776af3"/>
+    <rect x="728" y="459" width="18" height="18" rx="3" fill="none" stroke="#b4aaff" stroke-width="2"/><path d="M728 465h18" stroke="#b4aaff"/>
+    <text x="765" y="478" fill="#fff">Réservation / e-commerce</text><text x="1012" y="478" fill="#a496ff">Sur devis</text>
+  </g>
+  <text x="710" y="524" font-size="17" fill="#aab2d8">Contenus · validations · fonctionnalités</text>
+</g>
+</svg>
