@@ -1,0 +1,12 @@
+{
+  "status": "V11_VALIDATION_NO_GO",
+  "eligible_subset_count": 8,
+  "selected_models": [
+    "ema_rev",
+    "open_drive",
+    "pd_rev"
+  ],
+  "selected_risk_pct": 0.7561057852930282,
+  "selected_step1_days_dev_stress": 153.90648748398792,
+  "validation_pass": false
+}

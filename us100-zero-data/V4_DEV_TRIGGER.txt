@@ -1,0 +1,5 @@
+family=OPENING_IMPULSE_PULLBACK_V4
+dev_years=2021-2023
+oos_2024=SEALED
+confirm_2025_jan_apr=SEALED
+source_commit=50052606c16d71850755e6dbdda02d43b4399c2b

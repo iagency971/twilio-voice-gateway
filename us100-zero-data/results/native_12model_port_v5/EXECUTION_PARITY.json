@@ -1,0 +1,6 @@
+{
+  "pass": true,
+  "max_abs_diff": 0.0,
+  "n": 2000,
+  "atol": 1e-12
+}

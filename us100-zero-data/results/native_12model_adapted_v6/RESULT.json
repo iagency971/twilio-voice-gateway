@@ -1,0 +1,1503 @@
+{
+  "status": "V6_DEV_NO_GO_ENSEMBLE_SANITY",
+  "raw_sha": "c2c705318ff19aee4fb1137b7ec2102e98a848b297701b334e1b777a0d5b7d31",
+  "allowed": [
+    "kalman_mom__long",
+    "kalman_mom__short",
+    "open_drive__long",
+    "ou_rev__long",
+    "pm_mom__long",
+    "vwap_rev__long",
+    "vwap_rev__short"
+  ],
+  "combo_diagnostics_2021_2023": {
+    "ema_rev__long": {
+      "primary": {
+        "n": 55,
+        "mean": 0.23435919387148982,
+        "sum": 12.88975566293194,
+        "pf": 1.6267403140878156,
+        "win_rate": 0.509090909090909,
+        "max_dd": 3.424973072605168,
+        "losing_streak": 3
+      },
+      "stress": {
+        "n": 55,
+        "mean": 0.218007861158983,
+        "sum": 11.990432363744064,
+        "pf": 1.5710316848693293,
+        "win_rate": 0.509090909090909,
+        "max_dd": 3.5185462529662694,
+        "losing_streak": 3
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 16,
+          "mean": 0.43557953086440543,
+          "sum": 6.969272493830487,
+          "pf": 2.1379428099539206,
+          "win_rate": 0.625,
+          "max_dd": 3.0628861229853603,
+          "losing_streak": 3
+        },
+        "2022": {
+          "n": 14,
+          "mean": 0.20629779906689735,
+          "sum": 2.888169186936563,
+          "pf": 1.5596004919818989,
+          "win_rate": 0.42857142857142855,
+          "max_dd": 3.0615979844676073,
+          "losing_streak": 3
+        },
+        "2023": {
+          "n": 25,
+          "mean": 0.12129255928659566,
+          "sum": 3.0323139821648915,
+          "pf": 1.3267309939358687,
+          "win_rate": 0.48,
+          "max_dd": 3.0671307942219754,
+          "losing_streak": 3
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.12129255928659566,
+      "gates": {
+        "n_ge_60": false,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": false
+    },
+    "ema_rev__short": {
+      "primary": {
+        "n": 42,
+        "mean": 0.15761412626771,
+        "sum": 6.619793303243819,
+        "pf": 1.3777683316827791,
+        "win_rate": 0.38095238095238093,
+        "max_dd": 8.249057134378223,
+        "losing_streak": 12
+      },
+      "stress": {
+        "n": 42,
+        "mean": 0.14219441221671542,
+        "sum": 5.972165313102047,
+        "pf": 1.3332269287470488,
+        "win_rate": 0.38095238095238093,
+        "max_dd": 8.438814951047346,
+        "losing_streak": 12
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 6,
+          "mean": -0.5209889463141016,
+          "sum": -3.1259336778846096,
+          "pf": 0.38816775844175616,
+          "win_rate": 0.16666666666666666,
+          "max_dd": 5.109135258912364,
+          "losing_streak": 5
+        },
+        "2022": {
+          "n": 29,
+          "mean": 0.31714726270557636,
+          "sum": 9.197270618461715,
+          "pf": 1.9854776520407271,
+          "win_rate": 0.41379310344827586,
+          "max_dd": 3.13992187546586,
+          "losing_streak": 7
+        },
+        "2023": {
+          "n": 7,
+          "mean": 0.07835090895238757,
+          "sum": 0.5484563626667129,
+          "pf": 1.177984704101671,
+          "win_rate": 0.42857142857142855,
+          "max_dd": 2.0599639249639248,
+          "losing_streak": 3
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.5209889463141016,
+      "gates": {
+        "n_ge_60": false,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": false
+    },
+    "kalman_mom__long": {
+      "primary": {
+        "n": 135,
+        "mean": 0.18252371281897672,
+        "sum": 24.64070123056186,
+        "pf": 1.4852535014172785,
+        "win_rate": 0.45185185185185184,
+        "max_dd": 11.935669771707786,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 135,
+        "mean": 0.1643177498117155,
+        "sum": 22.182896224581594,
+        "pf": 1.4254937801111873,
+        "win_rate": 0.45185185185185184,
+        "max_dd": 12.460373586817663,
+        "losing_streak": 7
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 43,
+          "mean": 0.23607571250757844,
+          "sum": 10.151255637825873,
+          "pf": 1.8096153393383365,
+          "win_rate": 0.4883720930232558,
+          "max_dd": 2.530816495623255,
+          "losing_streak": 3
+        },
+        "2022": {
+          "n": 38,
+          "mean": 0.14893203441396305,
+          "sum": 5.659417307730596,
+          "pf": 1.364024254586909,
+          "win_rate": 0.39473684210526316,
+          "max_dd": 6.764066982739788,
+          "losing_streak": 7
+        },
+        "2023": {
+          "n": 54,
+          "mean": 0.1635190423149146,
+          "sum": 8.830028285005389,
+          "pf": 1.3890935194690255,
+          "win_rate": 0.46296296296296297,
+          "max_dd": 7.198065825039288,
+          "losing_streak": 6
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.14893203441396305,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": true
+    },
+    "kalman_mom__short": {
+      "primary": {
+        "n": 113,
+        "mean": 0.19742944409681712,
+        "sum": 22.309527182940336,
+        "pf": 1.4686444044021014,
+        "win_rate": 0.39823008849557523,
+        "max_dd": 7.804879696544321,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 113,
+        "mean": 0.17955169446652952,
+        "sum": 20.289341474717837,
+        "pf": 1.4155372614401662,
+        "win_rate": 0.39823008849557523,
+        "max_dd": 8.596925156963005,
+        "losing_streak": 8
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 23,
+          "mean": 0.37845696874867263,
+          "sum": 8.70451028121947,
+          "pf": 2.051610368252603,
+          "win_rate": 0.4782608695652174,
+          "max_dd": 2.1384978101455783,
+          "losing_streak": 3
+        },
+        "2022": {
+          "n": 68,
+          "mean": 0.16321585042335995,
+          "sum": 11.098677828788476,
+          "pf": 1.3468114663446684,
+          "win_rate": 0.38235294117647056,
+          "max_dd": 7.804879696544328,
+          "losing_streak": 8
+        },
+        "2023": {
+          "n": 22,
+          "mean": 0.11392450331510862,
+          "sum": 2.5063390729323896,
+          "pf": 1.3421615357824486,
+          "win_rate": 0.36363636363636365,
+          "max_dd": 3.098300304193525,
+          "losing_streak": 4
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.11392450331510862,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": true
+    },
+    "open_drive__long": {
+      "primary": {
+        "n": 84,
+        "mean": 0.2808326693122235,
+        "sum": 23.589944222226773,
+        "pf": 1.843371079500237,
+        "win_rate": 0.4523809523809524,
+        "max_dd": 6.621458650137026,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 84,
+        "mean": 0.26459023218509625,
+        "sum": 22.225579503548087,
+        "pf": 1.7741182104436186,
+        "win_rate": 0.4523809523809524,
+        "max_dd": 6.753407441046068,
+        "losing_streak": 5
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 38,
+          "mean": 0.12735404460953,
+          "sum": 4.83945369516214,
+          "pf": 1.3123853985696998,
+          "win_rate": 0.39473684210526316,
+          "max_dd": 6.621458650137026,
+          "losing_streak": 5
+        },
+        "2022": {
+          "n": 9,
+          "mean": 0.7572971274017196,
+          "sum": 6.815674146615477,
+          "pf": 4.2786842463368995,
+          "win_rate": 0.5555555555555556,
+          "max_dd": 1.019160583941605,
+          "losing_streak": 1
+        },
+        "2023": {
+          "n": 37,
+          "mean": 0.3225626048770044,
+          "sum": 11.934816380449162,
+          "pf": 2.1475456698483955,
+          "win_rate": 0.4864864864864865,
+          "max_dd": 3.3740229342098305,
+          "losing_streak": 5
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.12735404460953,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": true
+    },
+    "or_rev__long": {
+      "primary": {
+        "n": 130,
+        "mean": 0.10609673757103569,
+        "sum": 13.792575884234639,
+        "pf": 1.220295857053378,
+        "win_rate": 0.4230769230769231,
+        "max_dd": 8.128718419299968,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 130,
+        "mean": 0.08980453354302578,
+        "sum": 11.674589360593352,
+        "pf": 1.1828855742161397,
+        "win_rate": 0.4230769230769231,
+        "max_dd": 8.965644055524548,
+        "losing_streak": 6
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 53,
+          "mean": 0.029435618852585062,
+          "sum": 1.5600877991870084,
+          "pf": 1.0563138553167837,
+          "win_rate": 0.37735849056603776,
+          "max_dd": 5.65307627174855,
+          "losing_streak": 4
+        },
+        "2022": {
+          "n": 18,
+          "mean": -0.26160190274533585,
+          "sum": -4.708834249416046,
+          "pf": 0.616224106364314,
+          "win_rate": 0.2777777777777778,
+          "max_dd": 8.128718419299966,
+          "losing_streak": 6
+        },
+        "2023": {
+          "n": 59,
+          "mean": 0.2871410565163335,
+          "sum": 16.941322334463674,
+          "pf": 1.7484194100128698,
+          "win_rate": 0.5084745762711864,
+          "max_dd": 3.784840041745227,
+          "losing_streak": 5
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.26160190274533585,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": false
+    },
+    "or_rev__short": {
+      "primary": {
+        "n": 114,
+        "mean": 0.029439632815896923,
+        "sum": 3.3561181410122494,
+        "pf": 1.060335085159028,
+        "win_rate": 0.32456140350877194,
+        "max_dd": 10.570026039337813,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 114,
+        "mean": 0.013462982497755002,
+        "sum": 1.5347800047440703,
+        "pf": 1.0269910831883065,
+        "win_rate": 0.32456140350877194,
+        "max_dd": 11.229328648346645,
+        "losing_streak": 7
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 27,
+          "mean": -0.20537796334880157,
+          "sum": -5.545205010417642,
+          "pf": 0.6158122919566686,
+          "win_rate": 0.25925925925925924,
+          "max_dd": 9.052679465064458,
+          "losing_streak": 7
+        },
+        "2022": {
+          "n": 62,
+          "mean": 0.07589775407258052,
+          "sum": 4.705660752499992,
+          "pf": 1.163023349327088,
+          "win_rate": 0.3225806451612903,
+          "max_dd": 4.442241843399707,
+          "losing_streak": 7
+        },
+        "2023": {
+          "n": 25,
+          "mean": 0.16782649595719584,
+          "sum": 4.195662398929896,
+          "pf": 1.3403879157343952,
+          "win_rate": 0.4,
+          "max_dd": 4.264812485259296,
+          "losing_streak": 4
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.20537796334880157,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": false,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": false,
+        "stress_pf_ge_1_15": false
+      },
+      "eligible": false
+    },
+    "ou_lunch__long": {
+      "primary": {
+        "n": 102,
+        "mean": 0.01205484083619912,
+        "sum": 1.2295937652923101,
+        "pf": 1.0271263745273354,
+        "win_rate": 0.4117647058823529,
+        "max_dd": 9.177613052127862,
+        "losing_streak": 4
+      },
+      "stress": {
+        "n": 102,
+        "mean": -0.004997663559723677,
+        "sum": -0.5097616830918151,
+        "pf": 0.9889996327409271,
+        "win_rate": 0.4117647058823529,
+        "max_dd": 10.194458794727188,
+        "losing_streak": 4
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 39,
+          "mean": 0.21144698205249426,
+          "sum": 8.246432300047276,
+          "pf": 1.5714294957969515,
+          "win_rate": 0.48717948717948717,
+          "max_dd": 3.9708952205636594,
+          "losing_streak": 4
+        },
+        "2022": {
+          "n": 28,
+          "mean": -0.0400174445162193,
+          "sum": -1.1204884464541405,
+          "pf": 0.916353314150373,
+          "win_rate": 0.39285714285714285,
+          "max_dd": 3.068863005983266,
+          "losing_streak": 3
+        },
+        "2023": {
+          "n": 35,
+          "mean": -0.1684671453800237,
+          "sum": -5.896350088300829,
+          "pf": 0.6630969807168106,
+          "win_rate": 0.34285714285714286,
+          "max_dd": 8.686816755325799,
+          "losing_streak": 4
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.1684671453800237,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": false,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": false,
+        "stress_pf_ge_1_15": false
+      },
+      "eligible": false
+    },
+    "ou_lunch__short": {
+      "primary": {
+        "n": 96,
+        "mean": 0.17268244059381865,
+        "sum": 16.57751429700659,
+        "pf": 1.4667031757518239,
+        "win_rate": 0.4479166666666667,
+        "max_dd": 10.076749318556166,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 96,
+        "mean": 0.15540163047716918,
+        "sum": 14.918556525808242,
+        "pf": 1.4093556769225497,
+        "win_rate": 0.4479166666666667,
+        "max_dd": 10.396423090652602,
+        "losing_streak": 8
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 30,
+          "mean": -0.1764400087621146,
+          "sum": -5.293200262863438,
+          "pf": 0.6788321529204032,
+          "win_rate": 0.3,
+          "max_dd": 10.076749318556166,
+          "losing_streak": 8
+        },
+        "2022": {
+          "n": 44,
+          "mean": 0.4814285140267957,
+          "sum": 21.18285461717901,
+          "pf": 2.9708744464459853,
+          "win_rate": 0.5681818181818182,
+          "max_dd": 4.087808686411627,
+          "losing_streak": 4
+        },
+        "2023": {
+          "n": 22,
+          "mean": 0.031266361031409985,
+          "sum": 0.6878599426910197,
+          "pf": 1.082960490182051,
+          "win_rate": 0.4090909090909091,
+          "max_dd": 4.104514957611746,
+          "losing_streak": 5
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.1764400087621146,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": false
+    },
+    "ou_rev__long": {
+      "primary": {
+        "n": 287,
+        "mean": 0.13257615277964147,
+        "sum": 38.0493558477571,
+        "pf": 1.330240033356444,
+        "win_rate": 0.49477351916376305,
+        "max_dd": 6.8968610807537996,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 287,
+        "mean": 0.11710477621327574,
+        "sum": 33.609070773210135,
+        "pf": 1.2861502655144583,
+        "win_rate": 0.49477351916376305,
+        "max_dd": 7.186540489489783,
+        "losing_streak": 5
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 112,
+          "mean": 0.14089070113131413,
+          "sum": 15.779758526707182,
+          "pf": 1.349557906063255,
+          "win_rate": 0.49107142857142855,
+          "max_dd": 6.8968610807537996,
+          "losing_streak": 5
+        },
+        "2022": {
+          "n": 70,
+          "mean": 0.19821986473514713,
+          "sum": 13.8753905314603,
+          "pf": 1.563222702131181,
+          "win_rate": 0.5285714285714286,
+          "max_dd": 3.079479792496287,
+          "losing_streak": 4
+        },
+        "2023": {
+          "n": 105,
+          "mean": 0.07994482656752015,
+          "sum": 8.394206789589616,
+          "pf": 1.1847336190743893,
+          "win_rate": 0.47619047619047616,
+          "max_dd": 6.4346648243882205,
+          "losing_streak": 5
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.07994482656752015,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": true
+    },
+    "ou_rev__short": {
+      "primary": {
+        "n": 211,
+        "mean": 0.18550635434341,
+        "sum": 39.14184076645951,
+        "pf": 1.4690325544225566,
+        "win_rate": 0.43601895734597157,
+        "max_dd": 11.288373181716477,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 211,
+        "mean": 0.1700212375503843,
+        "sum": 35.87448112313109,
+        "pf": 1.4204663170628458,
+        "win_rate": 0.43601895734597157,
+        "max_dd": 12.405115375732331,
+        "losing_streak": 7
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 67,
+          "mean": -0.16781368242367667,
+          "sum": -11.243516722386337,
+          "pf": 0.6782257835733583,
+          "win_rate": 0.3283582089552239,
+          "max_dd": 11.243516722386333,
+          "losing_streak": 7
+        },
+        "2022": {
+          "n": 109,
+          "mean": 0.42009565506309055,
+          "sum": 45.79042640187687,
+          "pf": 2.3444310425532864,
+          "win_rate": 0.5137614678899083,
+          "max_dd": 5.520982420207048,
+          "losing_streak": 4
+        },
+        "2023": {
+          "n": 35,
+          "mean": 0.13128374534197076,
+          "sum": 4.594931086968977,
+          "pf": 1.3179728921471887,
+          "win_rate": 0.4,
+          "max_dd": 6.031016005398813,
+          "losing_streak": 5
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.16781368242367667,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": false
+    },
+    "pd_rev__long": {
+      "primary": {
+        "n": 39,
+        "mean": 0.6767195722782773,
+        "sum": 26.392063318852813,
+        "pf": 5.260918980825417,
+        "win_rate": 0.7692307692307693,
+        "max_dd": 1.0453582757977244,
+        "losing_streak": 2
+      },
+      "stress": {
+        "n": 39,
+        "mean": 0.6606970746984732,
+        "sum": 25.767185913240453,
+        "pf": 5.063083491959425,
+        "win_rate": 0.7692307692307693,
+        "max_dd": 1.0799169621197997,
+        "losing_streak": 2
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 16,
+          "mean": 0.40199844479842584,
+          "sum": 6.431975116774813,
+          "pf": 3.0688799635385458,
+          "win_rate": 0.6875,
+          "max_dd": 1.0240825688073407,
+          "losing_streak": 2
+        },
+        "2022": {
+          "n": 8,
+          "mean": 0.6624599235641891,
+          "sum": 5.299679388513513,
+          "pf": 3.595275433014908,
+          "win_rate": 0.75,
+          "max_dd": 1.0225321888412022,
+          "losing_streak": 1
+        },
+        "2023": {
+          "n": 15,
+          "mean": 0.9773605875709658,
+          "sum": 14.660408813564487,
+          "pf": 15.055752888711476,
+          "win_rate": 0.8666666666666667,
+          "max_dd": 1.0201923076923078,
+          "losing_streak": 1
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.40199844479842584,
+      "gates": {
+        "n_ge_60": false,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": false
+    },
+    "pd_rev__short": {
+      "primary": {
+        "n": 31,
+        "mean": -0.04356615521453167,
+        "sum": -1.3505508116504819,
+        "pf": 0.9122864588188131,
+        "win_rate": 0.3870967741935484,
+        "max_dd": 7.1661134971253535,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 31,
+        "mean": -0.05965372862611296,
+        "sum": -1.8492655874095019,
+        "pf": 0.8822122836684012,
+        "win_rate": 0.3870967741935484,
+        "max_dd": 7.296550967678676,
+        "losing_streak": 8
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 9,
+          "mean": -0.02956243656983583,
+          "sum": -0.26606192912852245,
+          "pf": 0.935137565914649,
+          "win_rate": 0.4444444444444444,
+          "max_dd": 1.138378140583894,
+          "losing_streak": 2
+        },
+        "2022": {
+          "n": 18,
+          "mean": -0.17219251601210972,
+          "sum": -3.0994652882179747,
+          "pf": 0.6976354913770302,
+          "win_rate": 0.3333333333333333,
+          "max_dd": 7.1661134971253535,
+          "losing_streak": 8
+        },
+        "2023": {
+          "n": 4,
+          "mean": 0.503744101424004,
+          "sum": 2.014976405696016,
+          "pf": 2.9289632010340765,
+          "win_rate": 0.5,
+          "max_dd": 1.0445903813073416,
+          "losing_streak": 2
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.17219251601210972,
+      "gates": {
+        "n_ge_60": false,
+        "mean_ge_0_10": false,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": false,
+        "stress_pf_ge_1_15": false
+      },
+      "eligible": false
+    },
+    "pm_mom__long": {
+      "primary": {
+        "n": 164,
+        "mean": 0.15805343558999962,
+        "sum": 25.920763436759938,
+        "pf": 1.4186263151817458,
+        "win_rate": 0.5487804878048781,
+        "max_dd": 5.1137353195863655,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 164,
+        "mean": 0.14170282223243486,
+        "sum": 23.239262846119317,
+        "pf": 1.3683098192191125,
+        "win_rate": 0.5487804878048781,
+        "max_dd": 5.200390801175978,
+        "losing_streak": 5
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 49,
+          "mean": 0.17116476292522254,
+          "sum": 8.387073383335904,
+          "pf": 1.4461549502392272,
+          "win_rate": 0.5510204081632653,
+          "max_dd": 4.085090975809684,
+          "losing_streak": 4
+        },
+        "2022": {
+          "n": 37,
+          "mean": 0.008181291275745793,
+          "sum": 0.30270777720259434,
+          "pf": 1.018469829916384,
+          "win_rate": 0.5135135135135135,
+          "max_dd": 5.1137353195863655,
+          "losing_streak": 5
+        },
+        "2023": {
+          "n": 78,
+          "mean": 0.22091002918232613,
+          "sum": 17.23098227622144,
+          "pf": 1.644612929526011,
+          "win_rate": 0.5641025641025641,
+          "max_dd": 5.097218498011323,
+          "losing_streak": 5
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.008181291275745793,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": true
+    },
+    "pm_mom__short": {
+      "primary": {
+        "n": 161,
+        "mean": 0.07600491224972084,
+        "sum": 12.236790872205054,
+        "pf": 1.175216473754474,
+        "win_rate": 0.453416149068323,
+        "max_dd": 8.90404674670582,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 161,
+        "mean": 0.06052217617245496,
+        "sum": 9.744070363765248,
+        "pf": 1.136780748020874,
+        "win_rate": 0.453416149068323,
+        "max_dd": 9.708335723766393,
+        "losing_streak": 6
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 31,
+          "mean": -0.19393414865268677,
+          "sum": -6.011958608233289,
+          "pf": 0.6099533682262723,
+          "win_rate": 0.3548387096774194,
+          "max_dd": 7.642704107340647,
+          "losing_streak": 6
+        },
+        "2022": {
+          "n": 100,
+          "mean": 0.1196308296220625,
+          "sum": 11.96308296220625,
+          "pf": 1.2909459478884298,
+          "win_rate": 0.46,
+          "max_dd": 6.615110718583254,
+          "losing_streak": 4
+        },
+        "2023": {
+          "n": 30,
+          "mean": 0.20952221727440304,
+          "sum": 6.285666518232091,
+          "pf": 1.4723647728157796,
+          "win_rate": 0.5333333333333333,
+          "max_dd": 3.071648746575052,
+          "losing_streak": 3
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.19393414865268677,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": false,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": false,
+        "stress_pf_ge_1_15": false
+      },
+      "eligible": false
+    },
+    "sweep__long": {
+      "primary": {
+        "n": 29,
+        "mean": -0.2521742039295322,
+        "sum": -7.313051913956434,
+        "pf": 0.5530942574140666,
+        "win_rate": 0.27586206896551724,
+        "max_dd": 10.309069086285525,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 29,
+        "mean": -0.26520433989506315,
+        "sum": -7.690925856956832,
+        "pf": 0.5378295238154874,
+        "win_rate": 0.27586206896551724,
+        "max_dd": 10.487691730562771,
+        "losing_streak": 10
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 12,
+          "mean": -0.12438568469228255,
+          "sum": -1.4926282163073905,
+          "pf": 0.7098862118130184,
+          "win_rate": 0.3333333333333333,
+          "max_dd": 3.137938362527121,
+          "losing_streak": 4
+        },
+        "2022": {
+          "n": 6,
+          "mean": 0.23945031457783636,
+          "sum": 1.436701887467018,
+          "pf": 1.4707498310229177,
+          "win_rate": 0.5,
+          "max_dd": 3.0519435011694647,
+          "losing_streak": 3
+        },
+        "2023": {
+          "n": 11,
+          "mean": -0.6597386895560055,
+          "sum": -7.25712558511606,
+          "pf": 0.11138983155728871,
+          "win_rate": 0.09090909090909091,
+          "max_dd": 8.166827077653375,
+          "losing_streak": 10
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.6597386895560055,
+      "gates": {
+        "n_ge_60": false,
+        "mean_ge_0_10": false,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": false,
+        "stress_pf_ge_1_15": false
+      },
+      "eligible": false
+    },
+    "sweep__short": {
+      "primary": {
+        "n": 12,
+        "mean": -0.04459779508018256,
+        "sum": -0.5351735409621907,
+        "pf": 0.8706462044795962,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 2.0595238774489393,
+        "losing_streak": 3
+      },
+      "stress": {
+        "n": 12,
+        "mean": -0.05748956146954031,
+        "sum": -0.6898747376344837,
+        "pf": 0.8373659360578464,
+        "win_rate": 0.3333333333333333,
+        "max_dd": 2.1048754031243213,
+        "losing_streak": 3
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 3,
+          "mean": 0.0072922679172680764,
+          "sum": 0.02187680375180423,
+          "pf": 1.0212230949129146,
+          "win_rate": 0.3333333333333333,
+          "max_dd": 1.0308017676767673,
+          "losing_streak": 2
+        },
+        "2022": {
+          "n": 5,
+          "mean": 0.15647296741653594,
+          "sum": 0.7823648370826797,
+          "pf": 1.7472732348285624,
+          "win_rate": 0.4,
+          "max_dd": 1.046959533164824,
+          "losing_streak": 3
+        },
+        "2023": {
+          "n": 4,
+          "mean": -0.33485379544916866,
+          "sum": -1.3394151817966746,
+          "pf": 0.3496481412705146,
+          "win_rate": 0.25,
+          "max_dd": 2.0595238774489393,
+          "losing_streak": 3
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.33485379544916866,
+      "gates": {
+        "n_ge_60": false,
+        "mean_ge_0_10": false,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": false,
+        "stress_pf_ge_1_15": false
+      },
+      "eligible": false
+    },
+    "trend__long": {
+      "primary": {
+        "n": 64,
+        "mean": 0.2178679923152606,
+        "sum": 13.943551508176679,
+        "pf": 1.5894241130760207,
+        "win_rate": 0.5,
+        "max_dd": 6.417246582984718,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 64,
+        "mean": 0.20209396510028677,
+        "sum": 12.934013766418353,
+        "pf": 1.5354321982821082,
+        "win_rate": 0.5,
+        "max_dd": 6.537691748180728,
+        "losing_streak": 5
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 28,
+          "mean": 0.29560652165942713,
+          "sum": 8.27698260646396,
+          "pf": 2.142497196500307,
+          "win_rate": 0.5714285714285714,
+          "max_dd": 2.2071406531602182,
+          "losing_streak": 2
+        },
+        "2022": {
+          "n": 6,
+          "mean": -0.24997351353775876,
+          "sum": -1.4998410812265526,
+          "pf": 0.633305471405837,
+          "win_rate": 0.3333333333333333,
+          "max_dd": 4.090164876407232,
+          "losing_streak": 4
+        },
+        "2023": {
+          "n": 30,
+          "mean": 0.23888033276464243,
+          "sum": 7.166409982939273,
+          "pf": 1.5816219837979517,
+          "win_rate": 0.4666666666666667,
+          "max_dd": 3.6072075557813914,
+          "losing_streak": 3
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.24997351353775876,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": false
+    },
+    "trend__short": {
+      "primary": {
+        "n": 135,
+        "mean": 0.04983901031583429,
+        "sum": 6.72826639263763,
+        "pf": 1.109343309823286,
+        "win_rate": 0.4074074074074074,
+        "max_dd": 15.158028239764711,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 135,
+        "mean": 0.03545358708382658,
+        "sum": 4.786234256316588,
+        "pf": 1.0763333839962472,
+        "win_rate": 0.4074074074074074,
+        "max_dd": 15.644592753778907,
+        "losing_streak": 8
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 44,
+          "mean": 0.1625108283978642,
+          "sum": 7.150476449506026,
+          "pf": 1.4633150866426594,
+          "win_rate": 0.4772727272727273,
+          "max_dd": 3.136521303358937,
+          "losing_streak": 4
+        },
+        "2022": {
+          "n": 54,
+          "mean": -0.13877699427886372,
+          "sum": -7.493957691058641,
+          "pf": 0.7636934089469438,
+          "win_rate": 0.3148148148148148,
+          "max_dd": 15.158028239764711,
+          "losing_streak": 8
+        },
+        "2023": {
+          "n": 37,
+          "mean": 0.1911283144375742,
+          "sum": 7.071747634190245,
+          "pf": 1.4915285571361432,
+          "win_rate": 0.4594594594594595,
+          "max_dd": 4.840073495086683,
+          "losing_streak": 3
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.13877699427886372,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": false,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": false,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": false,
+        "stress_pf_ge_1_15": false
+      },
+      "eligible": false
+    },
+    "vwap_rev__long": {
+      "primary": {
+        "n": 114,
+        "mean": 0.1946272184849718,
+        "sum": 22.187502907286785,
+        "pf": 1.4786252694250097,
+        "win_rate": 0.49122807017543857,
+        "max_dd": 7.5733358718804205,
+        "losing_streak": 6
+      },
+      "stress": {
+        "n": 114,
+        "mean": 0.17669607319486047,
+        "sum": 20.143352344214094,
+        "pf": 1.425051047927528,
+        "win_rate": 0.49122807017543857,
+        "max_dd": 7.837074451434704,
+        "losing_streak": 6
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 51,
+          "mean": 0.011247344120495483,
+          "sum": 0.5736145501452696,
+          "pf": 1.023259506959228,
+          "win_rate": 0.45098039215686275,
+          "max_dd": 7.5733358718804205,
+          "losing_streak": 6
+        },
+        "2022": {
+          "n": 20,
+          "mean": 0.5575592091506966,
+          "sum": 11.151184183013932,
+          "pf": 3.1422712220597897,
+          "win_rate": 0.55,
+          "max_dd": 1.1335175020900738,
+          "losing_streak": 2
+        },
+        "2023": {
+          "n": 43,
+          "mean": 0.24331870172389725,
+          "sum": 10.462704174127582,
+          "pf": 1.6344911910468019,
+          "win_rate": 0.5116279069767442,
+          "max_dd": 3.12069978664426,
+          "losing_streak": 3
+        }
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.011247344120495483,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": true
+    },
+    "vwap_rev__short": {
+      "primary": {
+        "n": 70,
+        "mean": 0.18167695564555336,
+        "sum": 12.717386895188735,
+        "pf": 1.398254773039503,
+        "win_rate": 0.44285714285714284,
+        "max_dd": 5.549085615752343,
+        "losing_streak": 5
+      },
+      "stress": {
+        "n": 70,
+        "mean": 0.1635230674287702,
+        "sum": 11.446614720013915,
+        "pf": 1.3506553492244846,
+        "win_rate": 0.44285714285714284,
+        "max_dd": 6.064878059450048,
+        "losing_streak": 5
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 18,
+          "mean": -0.04413503447385124,
+          "sum": -0.7944306205293223,
+          "pf": 0.9142107779618006,
+          "win_rate": 0.3888888888888889,
+          "max_dd": 3.0951354472481585,
+          "losing_streak": 4
+        },
+        "2022": {
+          "n": 40,
+          "mean": 0.25847643782677177,
+          "sum": 10.33905751307087,
+          "pf": 1.5572803831200965,
+          "win_rate": 0.425,
+          "max_dd": 4.522966212767267,
+          "losing_streak": 3
+        },
+        "2023": {
+          "n": 12,
+          "mean": 0.2643966668872654,
+          "sum": 3.1727600026471845,
+          "pf": 1.7701195983919829,
+          "win_rate": 0.5833333333333334,
+          "max_dd": 2.0699525745257494,
+          "losing_streak": 3
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.04413503447385124,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": true
+    },
+    "vwap_scalp__long": {
+      "primary": {
+        "n": 87,
+        "mean": 0.051431122420031755,
+        "sum": 4.474507650542763,
+        "pf": 1.1238435677711514,
+        "win_rate": 0.4482758620689655,
+        "max_dd": 9.193564020849454,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 87,
+        "mean": 0.033493221976635366,
+        "sum": 2.913910311967277,
+        "pf": 1.0787723971611989,
+        "win_rate": 0.4482758620689655,
+        "max_dd": 9.723130094449074,
+        "losing_streak": 7
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 31,
+          "mean": -0.006554485066643839,
+          "sum": -0.20318903706595903,
+          "pf": 0.9848603063598472,
+          "win_rate": 0.41935483870967744,
+          "max_dd": 4.333009649988667,
+          "losing_streak": 7
+        },
+        "2022": {
+          "n": 27,
+          "mean": 0.013012026728933394,
+          "sum": 0.35132472168120166,
+          "pf": 1.028384596169451,
+          "win_rate": 0.4074074074074074,
+          "max_dd": 4.943726546200822,
+          "losing_streak": 6
+        },
+        "2023": {
+          "n": 29,
+          "mean": 0.1491852402043973,
+          "sum": 4.326371965927522,
+          "pf": 1.418732371723081,
+          "win_rate": 0.5172413793103449,
+          "max_dd": 4.516032134358339,
+          "losing_streak": 5
+        }
+      },
+      "positive_years": 2,
+      "worst_year_mean": -0.006554485066643839,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": false,
+        "pf_ge_1_25": false,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": true,
+        "worst_year_mean_ge_minus_0_05": true,
+        "stress_mean_ge_0_07": false,
+        "stress_pf_ge_1_15": false
+      },
+      "eligible": false
+    },
+    "vwap_scalp__short": {
+      "primary": {
+        "n": 86,
+        "mean": 0.1399312038040628,
+        "sum": 12.0340835271494,
+        "pf": 1.4419024479143139,
+        "win_rate": 0.3953488372093023,
+        "max_dd": 9.273580888076307,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 86,
+        "mean": 0.12203976247145051,
+        "sum": 10.495419572544744,
+        "pf": 1.3725551993071308,
+        "win_rate": 0.3953488372093023,
+        "max_dd": 9.556853401440463,
+        "losing_streak": 8
+      },
+      "by_year_primary": {
+        "2021": {
+          "n": 25,
+          "mean": -0.1670696232958338,
+          "sum": -4.176740582395845,
+          "pf": 0.599220367617245,
+          "win_rate": 0.28,
+          "max_dd": 9.273580888076307,
+          "losing_streak": 8
+        },
+        "2022": {
+          "n": 44,
+          "mean": 0.5037722990711153,
+          "sum": 22.165981159129075,
+          "pf": 3.606346306282863,
+          "win_rate": 0.5227272727272727,
+          "max_dd": 1.2933662726852404,
+          "losing_streak": 5
+        },
+        "2023": {
+          "n": 17,
+          "mean": -0.35030335585787215,
+          "sum": -5.955157049583827,
+          "pf": 0.28305418567551066,
+          "win_rate": 0.23529411764705882,
+          "max_dd": 6.438781503732205,
+          "losing_streak": 7
+        }
+      },
+      "positive_years": 1,
+      "worst_year_mean": -0.35030335585787215,
+      "gates": {
+        "n_ge_60": true,
+        "mean_ge_0_10": true,
+        "pf_ge_1_25": true,
+        "maxdd_le_12": true,
+        "positive_years_ge_2": false,
+        "worst_year_mean_ge_minus_0_05": false,
+        "stress_mean_ge_0_07": true,
+        "stress_pf_ge_1_15": true
+      },
+      "eligible": false
+    }
+  },
+  "dev_ensemble": {
+    "primary": {
+      "n": 967,
+      "mean": 0.17519667189526528,
+      "sum": 169.4151817227215,
+      "pf": 1.443750990718067,
+      "win_rate": 0.4788004136504654,
+      "max_dd": 11.842579631315731,
+      "losing_streak": 9
+    },
+    "stress": {
+      "n": 967,
+      "mean": 0.15836206606660286,
+      "sum": 153.13611788640497,
+      "pf": 1.3923995649243812,
+      "win_rate": 0.4788004136504654,
+      "max_dd": 12.257168043116604,
+      "losing_streak": 9
+    },
+    "sessions": 746,
+    "trades_per_day": 1.2962466487935658
+  },
+  "dev_by_year": {
+    "2021": {
+      "n": 334,
+      "mean": 0.14263842950259437,
+      "sum": 47.641235453866514,
+      "pf": 1.3550811363106912,
+      "win_rate": 0.47604790419161674,
+      "max_dd": 11.842579631315731,
+      "losing_streak": 9
+    },
+    "2022": {
+      "n": 282,
+      "mean": 0.2100784017300789,
+      "sum": 59.24210928788225,
+      "pf": 1.517802271134567,
+      "win_rate": 0.46099290780141844,
+      "max_dd": 8.875607423946743,
+      "losing_streak": 7
+    },
+    "2023": {
+      "n": 351,
+      "mean": 0.17815338171217313,
+      "sum": 62.53183698097276,
+      "pf": 1.4694611897526901,
+      "win_rate": 0.49572649572649574,
+      "max_dd": 10.83958813862819,
+      "losing_streak": 6
+    }
+  },
+  "dev_gates": {
+    "n_ge_1000": false,
+    "tpd_ge_2": false,
+    "mean_ge_0_15": true,
+    "pf_ge_1_35": true,
+    "maxdd_le_12": true,
+    "all_3_years_positive": true,
+    "stress_mean_ge_0_12": true,
+    "stress_pf_ge_1_25": true
+  },
+  "validation_status": "NOT_OPENED"
+}

@@ -1,0 +1,1 @@
+Trigger V18d exact cached-simulation walk-forward audit. No methodology change.

@@ -1,0 +1,105 @@
+/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/us100-zero-data/run_or_family_oos_jan_apr_2025_v1_2.py:63: DtypeWarning: Columns (0: time) have mixed types. Specify dtype option on import or set low_memory=False.
+  d = pd.read_csv(p, sep=";")
+{
+  "status": "OR_FAMILY_V1_JAN_APR_2025_OOS_NO_GO",
+  "classification": "SEALED_JAN_APR_2025_SINGLE_VARIANT_OOS",
+  "source_repo": "CodyOutcast/Academic-Paper-Data-Source",
+  "source_commit": "50052606c16d71850755e6dbdda02d43b4399c2b",
+  "selected": {
+    "family": "ORB",
+    "range_min": 30,
+    "rr": 2.0
+  },
+  "dev_runner_git_blob_sha": "d0b6fc1789d876a677eeeb0f3e0027ad1554179c",
+  "data_qa": {
+    "rows": 114914,
+    "first": "2025-01-02 01:00:00",
+    "last": "2025-04-30 23:59:00",
+    "duplicates": 0,
+    "ohlc_violations": 0,
+    "bad_spread": 0,
+    "candidate_sessions": 83,
+    "median_recorded_spread_points": 2.0,
+    "median_spread_price": 0.2,
+    "sha256": "ac18e3f2a9f7c5d75ff056afa57f024a14c62b940723d5fa24904808d8cd6516",
+    "pass": true
+  },
+  "PRIMARY": {
+    "n": 83,
+    "mean": 0.14359319885664867,
+    "sum": 11.91823550510184,
+    "pf": 1.3809934830906907,
+    "win_rate": 0.5060240963855421,
+    "max_dd": 4.084147511014768,
+    "losing_streak": 5,
+    "sessions": 83,
+    "frequency": 1.0
+  },
+  "STRESS": {
+    "n": 83,
+    "mean": 0.1423858992510461,
+    "sum": 11.818029637836826,
+    "pf": 1.37757874423911,
+    "win_rate": 0.5060240963855421,
+    "max_dd": 4.088723716978917,
+    "losing_streak": 5,
+    "sessions": 83,
+    "frequency": 1.0
+  },
+  "monthly_primary": {
+    "2025-01": {
+      "n": 21,
+      "mean": -0.02979896102913379,
+      "sum": -0.6257781816118096,
+      "pf": 0.930502290458388,
+      "win_rate": 0.42857142857142855,
+      "max_dd": 3.0,
+      "losing_streak": 3
+    },
+    "2025-02": {
+      "n": 20,
+      "mean": 0.210082168262926,
+      "sum": 4.20164336525852,
+      "pf": 1.6572992224162146,
+      "win_rate": 0.55,
+      "max_dd": 2.497108234646105,
+      "losing_streak": 4
+    },
+    "2025-03": {
+      "n": 21,
+      "mean": 0.21321503870864142,
+      "sum": 4.47751581288147,
+      "pf": 1.6182541416731115,
+      "win_rate": 0.5238095238095238,
+      "max_dd": 4.0,
+      "losing_streak": 4
+    },
+    "2025-04": {
+      "n": 21,
+      "mean": 0.18404069088446,
+      "sum": 3.8648545085736603,
+      "pf": 1.4471546496654248,
+      "win_rate": 0.5238095238095238,
+      "max_dd": 4.061729615399377,
+      "losing_streak": 5
+    }
+  },
+  "positive_months": 3,
+  "remove_best_10pct": {
+    "removed_n": 9,
+    "remaining_mean": -0.07341437139378665
+  },
+  "gate": {
+    "n_ge_30": true,
+    "frequency_ge_0_40": true,
+    "primary_expectancy_ge_0_05": true,
+    "primary_pf_ge_1_15": true,
+    "primary_max_dd_le_12R": true,
+    "positive_months_ge_3_of_4": true,
+    "stress_expectancy_gt_0": true,
+    "stress_pf_ge_1_05": true,
+    "remove_best_10pct_mean_ge_0": false
+  },
+  "pass": false,
+  "no_other_2025_variant_opened": true
+}

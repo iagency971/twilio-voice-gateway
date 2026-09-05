@@ -1,0 +1,253 @@
+{
+  "status": "V10_ROBUST_FOR_FREE_TRIAL",
+  "classification": "FIXED_040_BLOCK_LENGTH_FLOATING_PROBE_STRESS",
+  "raw_sha": "c2c705318ff19aee4fb1137b7ec2102e98a848b297701b334e1b777a0d5b7d31",
+  "risk_fraction": 0.004,
+  "risk_dollars_10k": 40.0,
+  "floating_probe_r": -1.0,
+  "n_complete_sessions": 1075,
+  "n_simulations": 25000,
+  "block_lengths": [
+    5,
+    10,
+    20
+  ],
+  "results": {
+    "5": {
+      "PRIMARY": {
+        "step1_pass_probability": 0.99876,
+        "step1_days": {
+          "median": 42.0,
+          "p25": 30.0,
+          "p75": 58.0,
+          "p90": 79.0
+        },
+        "step1_failure_shares": {
+          "daily_loss": 0.0,
+          "total_loss": 0.00124,
+          "timeout": 0.0
+        },
+        "step2_conditional_pass_probability": 0.9988786094757499,
+        "step2_days": {
+          "median": 20.0,
+          "p25": 13.0,
+          "p75": 31.0,
+          "p90": 46.0
+        },
+        "step2_failure_shares_given_step1_pass": {
+          "daily_loss": 0.0,
+          "total_loss": 0.00112139052425007,
+          "timeout": 0.0
+        },
+        "combined_2step_pass_probability": 0.99764,
+        "combined_total_days": {
+          "median": 66.0,
+          "p25": 51.0,
+          "p75": 87.0,
+          "p90": 112.0
+        },
+        "combined_median_max_closed_dd_pct_full_passes": 0.03610631720255666,
+        "n_step1_pass": 24969,
+        "n_full_pass": 24941
+      },
+      "STRESS": {
+        "step1_pass_probability": 0.99728,
+        "step1_days": {
+          "median": 45.0,
+          "p25": 32.0,
+          "p75": 64.0,
+          "p90": 88.0
+        },
+        "step1_failure_shares": {
+          "daily_loss": 0.0,
+          "total_loss": 0.0026,
+          "timeout": 0.00012
+        },
+        "step2_conditional_pass_probability": 0.9975934541954116,
+        "step2_days": {
+          "median": 21.0,
+          "p25": 14.0,
+          "p75": 34.0,
+          "p90": 52.0
+        },
+        "step2_failure_shares_given_step1_pass": {
+          "daily_loss": 0.0,
+          "total_loss": 0.002406545804588481,
+          "timeout": 0.0
+        },
+        "combined_2step_pass_probability": 0.99488,
+        "combined_total_days": {
+          "median": 72.0,
+          "p25": 54.0,
+          "p75": 96.0,
+          "p90": 123.0
+        },
+        "combined_median_max_closed_dd_pct_full_passes": 0.038803719627259786,
+        "n_step1_pass": 24932,
+        "n_full_pass": 24872
+      }
+    },
+    "10": {
+      "PRIMARY": {
+        "step1_pass_probability": 0.99844,
+        "step1_days": {
+          "median": 41.0,
+          "p25": 30.0,
+          "p75": 58.0,
+          "p90": 79.0
+        },
+        "step1_failure_shares": {
+          "daily_loss": 0.0,
+          "total_loss": 0.00144,
+          "timeout": 0.00012
+        },
+        "step2_conditional_pass_probability": 0.9986779375826289,
+        "step2_days": {
+          "median": 19.0,
+          "p25": 13.0,
+          "p75": 31.0,
+          "p90": 47.0
+        },
+        "step2_failure_shares_given_step1_pass": {
+          "daily_loss": 0.0,
+          "total_loss": 0.001322062417371099,
+          "timeout": 0.0
+        },
+        "combined_2step_pass_probability": 0.99712,
+        "combined_total_days": {
+          "median": 66.0,
+          "p25": 50.0,
+          "p75": 87.0,
+          "p90": 111.0
+        },
+        "combined_median_max_closed_dd_pct_full_passes": 0.0365358098619313,
+        "n_step1_pass": 24961,
+        "n_full_pass": 24928
+      },
+      "STRESS": {
+        "step1_pass_probability": 0.997,
+        "step1_days": {
+          "median": 45.0,
+          "p25": 32.0,
+          "p75": 64.0,
+          "p90": 89.0
+        },
+        "step1_failure_shares": {
+          "daily_loss": 0.0,
+          "total_loss": 0.00276,
+          "timeout": 0.00024
+        },
+        "step2_conditional_pass_probability": 0.997753259779338,
+        "step2_days": {
+          "median": 20.0,
+          "p25": 13.0,
+          "p75": 33.0,
+          "p90": 52.0
+        },
+        "step2_failure_shares_given_step1_pass": {
+          "daily_loss": 0.0,
+          "total_loss": 0.0022066198595787363,
+          "timeout": 4.012036108324975e-05
+        },
+        "combined_2step_pass_probability": 0.99476,
+        "combined_total_days": {
+          "median": 72.0,
+          "p25": 53.0,
+          "p75": 96.0,
+          "p90": 125.0
+        },
+        "combined_median_max_closed_dd_pct_full_passes": 0.0396247893358458,
+        "n_step1_pass": 24925,
+        "n_full_pass": 24869
+      }
+    },
+    "20": {
+      "PRIMARY": {
+        "step1_pass_probability": 0.99924,
+        "step1_days": {
+          "median": 41.0,
+          "p25": 30.0,
+          "p75": 59.0,
+          "p90": 80.0
+        },
+        "step1_failure_shares": {
+          "daily_loss": 0.0,
+          "total_loss": 0.00072,
+          "timeout": 4e-05
+        },
+        "step2_conditional_pass_probability": 0.9990793002682038,
+        "step2_days": {
+          "median": 19.0,
+          "p25": 12.0,
+          "p75": 31.0,
+          "p90": 47.0
+        },
+        "step2_failure_shares_given_step1_pass": {
+          "daily_loss": 0.0,
+          "total_loss": 0.0009206997317961651,
+          "timeout": 0.0
+        },
+        "combined_2step_pass_probability": 0.99832,
+        "combined_total_days": {
+          "median": 66.0,
+          "p25": 50.0,
+          "p75": 87.0,
+          "p90": 113.0
+        },
+        "combined_median_max_closed_dd_pct_full_passes": 0.03749028925457844,
+        "n_step1_pass": 24981,
+        "n_full_pass": 24958
+      },
+      "STRESS": {
+        "step1_pass_probability": 0.99768,
+        "step1_days": {
+          "median": 45.0,
+          "p25": 32.0,
+          "p75": 65.0,
+          "p90": 91.0
+        },
+        "step1_failure_shares": {
+          "daily_loss": 0.0,
+          "total_loss": 0.00208,
+          "timeout": 0.00024
+        },
+        "step2_conditional_pass_probability": 0.998516558415524,
+        "step2_days": {
+          "median": 20.0,
+          "p25": 13.0,
+          "p75": 34.0,
+          "p90": 53.0
+        },
+        "step2_failure_shares_given_step1_pass": {
+          "daily_loss": 0.0,
+          "total_loss": 0.0014834415844759844,
+          "timeout": 0.0
+        },
+        "combined_2step_pass_probability": 0.9962,
+        "combined_total_days": {
+          "median": 71.0,
+          "p25": 53.0,
+          "p75": 97.0,
+          "p90": 127.0
+        },
+        "combined_median_max_closed_dd_pct_full_passes": 0.040270108743785366,
+        "n_step1_pass": 24942,
+        "n_full_pass": 24905
+      }
+    }
+  },
+  "robustness_gate_20day_stress": {
+    "step1_pass_ge_80pct": true,
+    "combined_pass_ge_70pct": true,
+    "median_step1_le_55": true,
+    "median_combined_le_90": true,
+    "daily_loss_share_le_10pct": true,
+    "total_loss_share_le_15pct": true
+  },
+  "pass": true,
+  "limitations": [
+    "-1R floating probe is a conservative proxy because true trade MAE is unavailable.",
+    "Historical block bootstrap cannot guarantee future regimes.",
+    "Direct FTMO spread/fill parity still requires prospective Free Trial validation."
+  ]
+}

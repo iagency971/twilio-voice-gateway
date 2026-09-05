@@ -1,0 +1,135 @@
+/home/runner/work/twilio-voice-gateway/twilio-voice-gateway/us100-zero-data/run_native_12model_port_v5.py:61: DtypeWarning: Columns (0: time) have mixed types. Specify dtype option on import or set low_memory=False.
+  d = pd.read_csv(p, sep=";")
+{
+  "status": "V17_TRUE_CAUSAL_BRANCH_SUBSET_SELECTED",
+  "selected": {
+    "branches": [
+      "ema_rev__long",
+      "kalman_mom__long",
+      "kalman_mom__short",
+      "open_drive__long",
+      "ou_lunch__long",
+      "ou_lunch__short",
+      "ou_rev__long",
+      "pd_rev__long",
+      "pm_mom__long",
+      "pm_mom__short",
+      "sweep__short",
+      "trend__long",
+      "vwap_rev__short",
+      "vwap_scalp__long"
+    ],
+    "branch_count": 14,
+    "screen_pace": 47.58457218076865,
+    "diag": {
+      "preconflict": 4535,
+      "postconflict": 3747,
+      "postquality": 3566
+    },
+    "dev_stats": {
+      "n": 1688,
+      "mean": 0.17363844804887893,
+      "sum": 293.1017003065076,
+      "pf": 1.4480872611747573,
+      "win_rate": 0.48578199052132703,
+      "max_dd": 11.397342426824112,
+      "losing_streak": 8
+    },
+    "dev_remove_best10": -0.031067351245794968,
+    "dev_risk_choice": {
+      "risk": 0.007,
+      "pace": 36.35988070351785,
+      "stats": {
+        "n": 1688,
+        "mean": 0.17363844804887893,
+        "sum": 293.1017003065076,
+        "pf": 1.4480872611747573,
+        "win_rate": 0.48578199052132703,
+        "max_dd": 11.397342426824112,
+        "losing_streak": 8
+      },
+      "worst_intraday_r": -5.246978229614766,
+      "min_cumulative_r": -2.982075755384436,
+      "years": {
+        "2021": 69.68371669784244,
+        "2022": 113.87822621874076,
+        "2023": 109.53975738992446
+      },
+      "r_per_session": 0.3928977215904928
+    }
+  },
+  "periods": {
+    "DEV": {
+      "n": 1688,
+      "trades_per_session": 2.2627345844504023,
+      "stress": {
+        "n": 1688,
+        "mean": 0.17363844804887893,
+        "sum": 293.1017003065076,
+        "pf": 1.4480872611747573,
+        "win_rate": 0.48578199052132703,
+        "max_dd": 11.397342426824112,
+        "losing_streak": 8
+      },
+      "r_per_session": 0.3928977215904928,
+      "scaled_dd_pct": 0.07978139698776879,
+      "scaled_worst_intraday_pct": 0.03672884760730336,
+      "implied_step1_days": 36.35988070351785,
+      "remove_best10_mean": -0.031067351245794968
+    },
+    "2024": {
+      "n": 673,
+      "trades_per_session": 2.7357723577235773,
+      "stress": {
+        "n": 673,
+        "mean": 0.2156445140590693,
+        "sum": 145.12875796175362,
+        "pf": 1.6280501649799988,
+        "win_rate": 0.4814264487369985,
+        "max_dd": 9.34077558419365,
+        "losing_streak": 9
+      },
+      "r_per_session": 0.5899543006575351,
+      "scaled_dd_pct": 0.06538542908935556,
+      "scaled_worst_intraday_pct": 0.029195418044273867,
+      "implied_step1_days": 24.21495066616534,
+      "remove_best10_mean": 0.01737450792031779
+    },
+    "2025": {
+      "n": 167,
+      "trades_per_session": 2.0120481927710845,
+      "stress": {
+        "n": 167,
+        "mean": 0.41267161980641015,
+        "sum": 68.9161605076705,
+        "pf": 2.190254422584182,
+        "win_rate": 0.5269461077844312,
+        "max_dd": 4.264299422437674,
+        "losing_streak": 7
+      },
+      "r_per_session": 0.8303151868394035,
+      "scaled_dd_pct": 0.029850095957063717,
+      "scaled_worst_intraday_pct": 0.029043100005455423,
+      "implied_step1_days": 17.20517041256693,
+      "remove_best10_mean": 0.17951427759393354
+    },
+    "ALL": {
+      "n": 2528,
+      "trades_per_session": 2.351627906976744,
+      "stress": {
+        "n": 2528,
+        "mean": 0.20061179540187174,
+        "sum": 507.14661877593176,
+        "pf": 1.5377464864245258,
+        "win_rate": 0.4873417721518987,
+        "max_dd": 11.397342426824112,
+        "losing_streak": 9
+      },
+      "r_per_session": 0.47176429653575047,
+      "scaled_dd_pct": 0.07978139698776879,
+      "scaled_worst_intraday_pct": 0.03672884760730336,
+      "implied_step1_days": 30.281465533989834,
+      "remove_best10_mean": -0.005111396095125611
+    }
+  }
+}

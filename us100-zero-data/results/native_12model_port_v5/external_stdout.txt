@@ -1,0 +1,172 @@
+NQ: 1,526,414 bars  (2021-01-03 18:00:00 -> 2025-04-30 16:59:00)
+Building daily bars from intraday data...
+Daily bars: 1114
+Scanning models...
+  ema_rev: 207 signals
+  kalman_mom: 552 signals
+  open_drive: 142 signals
+  or_rev: 397 signals
+  ou_lunch: 435 signals
+  ou_rev: 1080 signals
+  pd_rev: 147 signals
+  pm_mom: 707 signals
+  sweep: 81 signals
+  trend: 801 signals
+  vwap_rev: 370 signals
+  vwap_scalp: 400 signals
+  total: 5319 signals
+Simulating...
+  3482 trades
+Trades -> /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/us100-zero-data/results/native_12model_port_v5/external_trades_raw.csv
+
+=================================================================
+  MULTI-MODEL NQ STRATEGY — BACKTEST RESULTS
+=================================================================
+Metric            Value
+----------------  --------
+Total Trades      3482
+Trading Days      1018
+Trades/Day        3.4
+Win Rate          45.2%
+Avg Win (R)       1.26
+Avg Loss (R)      -0.71
+Expectancy (R)    0.183
+Profit Factor     1.47
+Total R           637.5
+Max Drawdown (R)  -19.9
+Avg Risk (ticks)  50.5
+Total PnL ($)     $637,547
+
+--- By Model ---
+  ema_rev  155 trades  43% WR  avg +0.17R  total +26.0R
+  kalman_mom  374 trades  44% WR  avg +0.23R  total +86.3R
+  open_drive  120 trades  48% WR  avg +0.30R  total +35.7R
+  or_rev  354 trades  39% WR  avg +0.16R  total +55.7R
+  ou_lunch  286 trades  42% WR  avg +0.12R  total +34.1R
+  ou_rev  738 trades  47% WR  avg +0.20R  total +149.4R
+  pd_rev  102 trades  54% WR  avg +0.32R  total +32.2R
+  pm_mom  488 trades  52% WR  avg +0.20R  total +95.9R
+  sweep    62 trades  34% WR  avg -0.09R  total -5.6R
+  trend   299 trades  44% WR  avg +0.12R  total +35.2R
+  vwap_rev  260 trades  44% WR  avg +0.18R  total +47.5R
+  vwap_scalp  244 trades  44% WR  avg +0.19R  total +45.2R
+
+--- By Setup Type ---
+  ema_rev_long                80 trades  49% WR  avg +0.24R
+  ema_rev_short               75 trades  36% WR  avg +0.09R
+  kalman_mom_long            226 trades  45% WR  avg +0.17R
+  kalman_mom_short           148 trades  43% WR  avg +0.32R
+  open_drive_long            120 trades  48% WR  avg +0.30R
+  or_rev_long                202 trades  44% WR  avg +0.19R
+  or_rev_short               152 trades  33% WR  avg +0.11R
+  ou_lunch_long              147 trades  42% WR  avg +0.10R
+  ou_lunch_short             139 trades  42% WR  avg +0.14R
+  ou_rev_long                435 trades  51% WR  avg +0.21R
+  ou_rev_short               303 trades  42% WR  avg +0.19R
+  pd_pdh_short                41 trades  44% WR  avg +0.16R
+  pd_pdl_long                 61 trades  61% WR  avg +0.42R
+  pm_mom_long                277 trades  57% WR  avg +0.26R
+  pm_mom_short               211 trades  45% WR  avg +0.11R
+  sweep_pdh_short             16 trades  25% WR  avg -0.21R
+  sweep_pdl_long              46 trades  37% WR  avg -0.05R
+  trend_cont_long            105 trades  48% WR  avg +0.18R
+  trend_cont_short           194 trades  42% WR  avg +0.08R
+  vwap_rev_long              166 trades  46% WR  avg +0.23R
+  vwap_rev_short              94 trades  39% WR  avg +0.10R
+  vwap_scalp_long            135 trades  48% WR  avg +0.20R
+  vwap_scalp_short           109 trades  39% WR  avg +0.16R
+
+--- By Exit ---
+  stop                1214 trades  avg -1.01R
+  stop_ambiguous        2 trades  avg -1.01R
+  target               14 trades  avg +2.00R
+  time_stop             5 trades  avg -0.32R
+  trail               2247 trades  avg +0.82R
+
+--- Monthly ---
+  2021-01    -0.5R   70 trades  41% WR
+  2021-02    +4.6R   60 trades  42% WR
+  2021-03    -3.4R   92 trades  37% WR
+  2021-04   +14.4R   48 trades  56% WR
+  2021-05    +1.1R   67 trades  39% WR
+  2021-06   +10.2R   36 trades  50% WR
+  2021-07   +11.5R   60 trades  50% WR
+  2021-08    +4.4R   54 trades  48% WR
+  2021-09    -4.2R   93 trades  39% WR
+  2021-10    +0.5R   49 trades  39% WR
+  2021-11   +18.1R   68 trades  50% WR
+  2021-12    +4.8R   74 trades  42% WR
+  2022-01   +23.7R   54 trades  44% WR
+  2022-02   +29.8R   57 trades  46% WR
+  2022-03   +14.8R   91 trades  43% WR
+  2022-04    +3.0R   64 trades  41% WR
+  2022-05   +19.9R   66 trades  41% WR
+  2022-06    +9.0R   85 trades  41% WR
+  2022-07   +18.3R   82 trades  45% WR
+  2022-08   +15.6R   79 trades  51% WR
+  2022-09   +19.4R   72 trades  50% WR
+  2022-10   +18.5R   66 trades  52% WR
+  2022-11   -10.1R   70 trades  33% WR
+  2022-12   +19.0R   68 trades  50% WR
+  2023-01    -1.2R   53 trades  38% WR
+  2023-02    +1.3R   63 trades  44% WR
+  2023-03   +31.3R   63 trades  54% WR
+  2023-04    +6.2R   63 trades  54% WR
+  2023-05   +14.7R   62 trades  52% WR
+  2023-06    +0.2R   56 trades  41% WR
+  2023-07    +7.1R   55 trades  44% WR
+  2023-08    +0.4R  102 trades  39% WR
+  2023-09   +21.9R   66 trades  56% WR
+  2023-10   +13.5R   72 trades  43% WR
+  2023-11   +17.5R   47 trades  53% WR
+  2023-12   +13.1R   34 trades  56% WR
+  2024-01   +16.4R   81 trades  52% WR
+  2024-02   +19.9R   72 trades  53% WR
+  2024-03    +1.5R   66 trades  38% WR
+  2024-04   +12.9R  100 trades  40% WR
+  2024-05    +7.8R   60 trades  47% WR
+  2024-06   +23.4R   50 trades  56% WR
+  2024-07   +10.7R   88 trades  39% WR
+  2024-08   +19.9R   70 trades  41% WR
+  2024-09   +18.5R   77 trades  44% WR
+  2024-10   +18.4R   65 trades  43% WR
+  2024-11   +24.8R   85 trades  51% WR
+  2024-12   +15.9R   58 trades  48% WR
+  2025-01   +20.8R   66 trades  48% WR
+  2025-02   +21.8R   57 trades  49% WR
+  2025-03   +17.1R   72 trades  42% WR
+  2025-04   +19.3R   54 trades  44% WR
+=================================================================
+
+================================================================================
+  TOPSTEP 50K — FUNDED PAYOUT PROJECTION
+  Eval: 20 MNQ | TopStep 50K Express
+  Payout cap: $2K max, ≤50% balance, 5 green days ($150+)
+================================================================================
+
+  --- Per-account funded performance (65 trading days, biweekly payouts) ---
+   MNQ   Surv     Avg$     Med$     P75$     P90$   AvgN
+     5    99%  $ 3,216  $ 3,063  $ 4,369  $ 5,503    2.6
+     6    99%  $ 3,800  $ 3,575  $ 5,205  $ 6,567    2.6
+     7    96%  $ 4,268  $ 3,971  $ 5,854  $ 7,548    2.5
+     8    82%  $ 4,556  $ 4,000  $ 6,366  $ 8,383    2.5
+     9    70%  $ 4,376  $ 4,000  $ 6,400  $ 8,341    2.2
+
+  --- SUMMER PLAN (June → August, 8 MNQ funded) ---
+  Buy 1 eval(s) → ~1 pass
+    Cost: $78 (evals $78 + resets $0)
+    Payouts: avg $4,556  good $6,366  great $8,383
+    Net profit: avg $4,478  good $6,288
+  Buy 2 eval(s) → ~2 pass
+    Cost: $156 (evals $156 + resets $0)
+    Payouts: avg $9,112  good $12,731  great $16,766
+    Net profit: avg $8,956  good $12,575
+  Buy 3 eval(s) → ~2 pass
+    Cost: $279 (evals $234 + resets $45)
+    Payouts: avg $9,112  good $12,731  great $16,766
+    Net profit: avg $8,833  good $12,452
+  Buy 5 eval(s) → ~4 pass
+    Cost: $435 (evals $390 + resets $45)
+    Payouts: avg $18,224  good $25,463  great $33,532
+    Net profit: avg $17,789  good $25,028
+================================================================================

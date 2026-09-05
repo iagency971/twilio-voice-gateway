@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "decisive": {
+    "step1_pass_probability": 0.92304,
+    "step1_days": {
+      "median": 31.0,
+      "p25": 19.0,
+      "p75": 48.0,
+      "p90": 68.0
+    },
+    "step1_failure_shares": {
+      "daily_loss": 0.07128,
+      "total_loss": 0.00568,
+      "timeout": 0.0
+    },
+    "step2_conditional_pass_probability": 0.9585283411336454,
+    "step2_days": {
+      "median": 14.0,
+      "p25": 8.0,
+      "p75": 26.0,
+      "p90": 41.0
+    },
+    "step2_failure_shares_given_step1_pass": {
+      "daily_loss": 0.0360114404576183,
+      "total_loss": 0.00546021840873635,
+      "timeout": 0.0
+    },
+    "combined_2step_pass_probability": 0.88476,
+    "combined_total_days": {
+      "median": 51.0,
+      "p25": 35.0,
+      "p75": 71.0,
+      "p90": 96.0
+    },
+    "combined_median_max_closed_dd_pct_full_passes": 0.04612974833093291,
+    "n_step1_pass": 23076,
+    "n_full_pass": 22119
+  },
+  "gate": {
+    "step1_pass_ge_80pct": true,
+    "combined_pass_ge_70pct": true,
+    "median_step1_le_55": true,
+    "median_combined_le_90": true,
+    "daily_loss_share_le_10pct": true,
+    "total_loss_share_le_15pct": true
+  }
+}

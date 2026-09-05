@@ -1,0 +1,1653 @@
+{
+  "status": "V12_PROMISING_FOR_MONTE_CARLO",
+  "implementation_note": "V12.2 NumPy mask acceleration; frozen V12 logic unchanged",
+  "ledger_sha256": "ff8e6f0bcac9cea7590f9b6ae614bd70cef8a1d22878cfa00ff0dcf5bd06354d",
+  "expected_raw_sha": "c2c705318ff19aee4fb1137b7ec2102e98a848b297701b334e1b777a0d5b7d31",
+  "models": [
+    "ema_rev",
+    "kalman_mom",
+    "open_drive",
+    "or_rev",
+    "ou_lunch",
+    "ou_rev",
+    "pd_rev",
+    "pm_mom",
+    "sweep",
+    "trend",
+    "vwap_rev",
+    "vwap_scalp"
+  ],
+  "subsets_tested": 4095,
+  "quality_eligible_subsets": 4067,
+  "admissible_subset_risk_pairs": 24149,
+  "top_30_pairs": [
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom"
+      ],
+      "model_count": 6,
+      "risk_fraction": 0.008,
+      "risk_dollars_10k": 80.0,
+      "primary": {
+        "n": 1322,
+        "mean": 0.17431163769462077,
+        "sum": 230.43998503228866,
+        "pf": 1.446189820142808,
+        "win_rate": 0.4742813918305598,
+        "max_dd": 10.672527430737901,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1322,
+        "mean": 0.1581280032615358,
+        "sum": 209.04522031175034,
+        "pf": 1.3961119397577917,
+        "win_rate": 0.4742813918305598,
+        "max_dd": 11.017062611014538,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09906299560298318,
+      "remove_best10_mean": -0.035890648016579235,
+      "trades_per_session": 1.772117962466488,
+      "stress_r_per_session": 0.280221474948727,
+      "stress_worst_intraday_r": -5.246978229614767,
+      "stress_scaled_dd_pct": 0.08813650088811631,
+      "stress_scaled_worst_intraday_pct": 0.04197582583691813,
+      "dev_path": {
+        "breach": false,
+        "final": 1.6723617624940028,
+        "maxdd": 0.08813650088811631,
+        "worstday": -0.04197582583691813,
+        "min_cumulative": -0.05069557145129406
+      },
+      "implied_step1_days": 44.607573357063956,
+      "implied_step2_days": 22.303786678531978
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_scalp"
+      ],
+      "model_count": 9,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1892,
+        "mean": 0.15086020199423575,
+        "sum": 285.427502173094,
+        "pf": 1.3826808782306907,
+        "win_rate": 0.4608879492600423,
+        "max_dd": 12.603917306610725,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1892,
+        "mean": 0.13455792445122292,
+        "sum": 254.58359306171377,
+        "pf": 1.3338590604100706,
+        "win_rate": 0.4608879492600423,
+        "max_dd": 13.357321888322417,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.08997790720084863,
+      "remove_best10_mean": -0.058618156935065786,
+      "trades_per_session": 2.5361930294906165,
+      "stress_r_per_session": 0.3412648700559166,
+      "stress_worst_intraday_r": -6.41169065876458,
+      "stress_scaled_dd_pct": 0.08682259227409571,
+      "stress_scaled_worst_intraday_pct": 0.04167598928196977,
+      "dev_path": {
+        "breach": false,
+        "final": 1.6547933549011393,
+        "maxdd": 0.08682259227409571,
+        "worstday": -0.04167598928196977,
+        "min_cumulative": -0.03870135620861348
+      },
+      "implied_step1_days": 45.08115758324202,
+      "implied_step2_days": 22.54057879162101
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev",
+        "vwap_scalp"
+      ],
+      "model_count": 8,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1793,
+        "mean": 0.15397134961100303,
+        "sum": 276.07062985252844,
+        "pf": 1.388289438795296,
+        "win_rate": 0.4651422197434467,
+        "max_dd": 12.869014047354153,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 1793,
+        "mean": 0.13732723513645217,
+        "sum": 246.22773259965874,
+        "pf": 1.3386839632308685,
+        "win_rate": 0.4651422197434467,
+        "max_dd": 13.701215152825274,
+        "losing_streak": 9
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.060298340723319695,
+      "remove_best10_mean": -0.05614970494818599,
+      "trades_per_session": 2.403485254691689,
+      "stress_r_per_session": 0.3300639847180412,
+      "stress_worst_intraday_r": -6.239905163998714,
+      "stress_scaled_dd_pct": 0.08905789849336428,
+      "stress_scaled_worst_intraday_pct": 0.04055938356599164,
+      "dev_path": {
+        "breach": false,
+        "final": 1.6004802618977818,
+        "maxdd": 0.08905789849336428,
+        "worstday": -0.04055938356599164,
+        "min_cumulative": -0.03657916257006256
+      },
+      "implied_step1_days": 46.61100906770477,
+      "implied_step2_days": 23.305504533852385
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.007,
+      "risk_dollars_10k": 70.0,
+      "primary": {
+        "n": 1521,
+        "mean": 0.16509651737876593,
+        "sum": 251.11180293310298,
+        "pf": 1.4173709225848887,
+        "win_rate": 0.46942800788954636,
+        "max_dd": 12.212011635328722,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1521,
+        "mean": 0.14908972277086474,
+        "sum": 226.7654683344853,
+        "pf": 1.3689638835962106,
+        "win_rate": 0.46942800788954636,
+        "max_dd": 12.549210851235458,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.11627238019334665,
+      "remove_best10_mean": -0.04673826487601318,
+      "trades_per_session": 2.03887399463807,
+      "stress_r_per_session": 0.3039751586253154,
+      "stress_worst_intraday_r": -5.651371027485747,
+      "stress_scaled_dd_pct": 0.08784447595864821,
+      "stress_scaled_worst_intraday_pct": 0.03955959719240023,
+      "dev_path": {
+        "breach": false,
+        "final": 1.587358278341397,
+        "maxdd": 0.08784447595864821,
+        "worstday": -0.03955959719240023,
+        "min_cumulative": -0.04587102858712957
+      },
+      "implied_step1_days": 46.99632150968983,
+      "implied_step2_days": 23.498160754844914
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom"
+      ],
+      "model_count": 6,
+      "risk_fraction": 0.0075,
+      "risk_dollars_10k": 75.0,
+      "primary": {
+        "n": 1322,
+        "mean": 0.17431163769462077,
+        "sum": 230.43998503228866,
+        "pf": 1.446189820142808,
+        "win_rate": 0.4742813918305598,
+        "max_dd": 10.672527430737901,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1322,
+        "mean": 0.1581280032615358,
+        "sum": 209.04522031175034,
+        "pf": 1.3961119397577917,
+        "win_rate": 0.4742813918305598,
+        "max_dd": 11.017062611014538,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09906299560298318,
+      "remove_best10_mean": -0.035890648016579235,
+      "trades_per_session": 1.772117962466488,
+      "stress_r_per_session": 0.280221474948727,
+      "stress_worst_intraday_r": -5.246978229614767,
+      "stress_scaled_dd_pct": 0.08262796958260903,
+      "stress_scaled_worst_intraday_pct": 0.03935233672211075,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5678391523381274,
+        "maxdd": 0.08262796958260903,
+        "worstday": -0.03935233672211075,
+        "min_cumulative": -0.04752709823558818
+      },
+      "implied_step1_days": 47.58141158086823,
+      "implied_step2_days": 23.790705790434114
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend"
+      ],
+      "model_count": 8,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1719,
+        "mean": 0.15643915706538797,
+        "sum": 268.9189109954019,
+        "pf": 1.3940202542041902,
+        "win_rate": 0.46480511925538104,
+        "max_dd": 11.235638008955092,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1719,
+        "mean": 0.14029916415194982,
+        "sum": 241.17426317720174,
+        "pf": 1.3458265019038955,
+        "win_rate": 0.46480511925538104,
+        "max_dd": 12.470480811708512,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.10707172285004889,
+      "remove_best10_mean": -0.053757985515236376,
+      "trades_per_session": 2.304289544235925,
+      "stress_r_per_session": 0.32328989702037764,
+      "stress_worst_intraday_r": -6.690900942015659,
+      "stress_scaled_dd_pct": 0.08105812527610533,
+      "stress_scaled_worst_intraday_pct": 0.04349085612310179,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5676327106518113,
+        "maxdd": 0.08105812527610533,
+        "worstday": -0.04349085612310179,
+        "min_cumulative": -0.04332129131056346
+      },
+      "implied_step1_days": 47.58767758104628,
+      "implied_step2_days": 23.79383879052314
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.007,
+      "risk_dollars_10k": 70.0,
+      "primary": {
+        "n": 1520,
+        "mean": 0.1633204559832813,
+        "sum": 248.24709309458757,
+        "pf": 1.4156080583606208,
+        "win_rate": 0.46842105263157896,
+        "max_dd": 11.73222480106358,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1520,
+        "mean": 0.14700922049635973,
+        "sum": 223.4540151544668,
+        "pf": 1.3660017302035954,
+        "win_rate": 0.46842105263157896,
+        "max_dd": 12.294814789351506,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09095837209688297,
+      "remove_best10_mean": -0.045225428234156824,
+      "trades_per_session": 2.037533512064343,
+      "stress_r_per_session": 0.29953621334378927,
+      "stress_worst_intraday_r": -6.239905163998714,
+      "stress_scaled_dd_pct": 0.08606370352546054,
+      "stress_scaled_worst_intraday_pct": 0.043679336147991,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5641781060812676,
+        "maxdd": 0.08606370352546054,
+        "worstday": -0.043679336147991,
+        "min_cumulative": -0.0443586250198823
+      },
+      "implied_step1_days": 47.69277853331884,
+      "implied_step2_days": 23.84638926665942
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1506,
+        "mean": 0.17619181595933875,
+        "sum": 265.34487483476414,
+        "pf": 1.4461442574066827,
+        "win_rate": 0.47410358565737054,
+        "max_dd": 12.539225054690355,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 1506,
+        "mean": 0.1597843209667851,
+        "sum": 240.63518737597838,
+        "pf": 1.3959269622954666,
+        "win_rate": 0.47410358565737054,
+        "max_dd": 12.869458130124357,
+        "losing_streak": 9
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.08433196686187694,
+      "remove_best10_mean": -0.036504342469007627,
+      "trades_per_session": 2.0187667560321714,
+      "stress_r_per_session": 0.32256727530292006,
+      "stress_worst_intraday_r": -5.246978229614767,
+      "stress_scaled_dd_pct": 0.08365147784580831,
+      "stress_scaled_worst_intraday_pct": 0.034105358492495984,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5641287179438594,
+        "maxdd": 0.08365147784580831,
+        "worstday": -0.034105358492495984,
+        "min_cumulative": -0.050897492512280595
+      },
+      "implied_step1_days": 47.69428445637528,
+      "implied_step2_days": 23.84714222818764
+    },
+    {
+      "models": [
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev"
+      ],
+      "model_count": 6,
+      "risk_fraction": 0.007,
+      "risk_dollars_10k": 70.0,
+      "primary": {
+        "n": 1409,
+        "mean": 0.17447503610261778,
+        "sum": 245.83532586858843,
+        "pf": 1.4416244189954042,
+        "win_rate": 0.4755145493257629,
+        "max_dd": 11.78250242736313,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1409,
+        "mean": 0.1580359046835573,
+        "sum": 222.67258969913223,
+        "pf": 1.3914388413440961,
+        "win_rate": 0.4755145493257629,
+        "max_dd": 12.408706037339044,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.07998177967372687,
+      "remove_best10_mean": -0.03771651063520772,
+      "trades_per_session": 1.888739946380697,
+      "stress_r_per_session": 0.29848872613824695,
+      "stress_worst_intraday_r": -6.2154896799963915,
+      "stress_scaled_dd_pct": 0.08686094226137331,
+      "stress_scaled_worst_intraday_pct": 0.04350842775997474,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5587081278939257,
+        "maxdd": 0.08686094226137331,
+        "worstday": -0.04350842775997474,
+        "min_cumulative": -0.05481268424399449
+      },
+      "implied_step1_days": 47.86014691589312,
+      "implied_step2_days": 23.93007345794656
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_rev"
+      ],
+      "model_count": 8,
+      "risk_fraction": 0.006,
+      "risk_dollars_10k": 60.0,
+      "primary": {
+        "n": 1705,
+        "mean": 0.16775172594462082,
+        "sum": 286.0166927355785,
+        "pf": 1.4206493239195148,
+        "win_rate": 0.4697947214076246,
+        "max_dd": 13.623391718355391,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1705,
+        "mean": 0.15152811460335092,
+        "sum": 258.3554353987133,
+        "pf": 1.371929961431,
+        "win_rate": 0.4697947214076246,
+        "max_dd": 14.34078985428971,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.10131119996880043,
+      "remove_best10_mean": -0.04610648624783488,
+      "trades_per_session": 2.285522788203753,
+      "stress_r_per_session": 0.3463209589795085,
+      "stress_worst_intraday_r": -5.651371027485747,
+      "stress_scaled_dd_pct": 0.08604473912573826,
+      "stress_scaled_worst_intraday_pct": 0.033908226164914484,
+      "dev_path": {
+        "breach": false,
+        "final": 1.55013261239228,
+        "maxdd": 0.08604473912573826,
+        "worstday": -0.033908226164914484,
+        "min_cumulative": -0.058574803682270714
+      },
+      "implied_step1_days": 48.124914864459065,
+      "implied_step2_days": 24.062457432229532
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_rev"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1621,
+        "mean": 0.16189188680650937,
+        "sum": 262.4267485133517,
+        "pf": 1.4025135851107462,
+        "win_rate": 0.47069710055521286,
+        "max_dd": 13.420001387985536,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1621,
+        "mean": 0.1456692510149076,
+        "sum": 236.12985589516524,
+        "pf": 1.3545898994576147,
+        "win_rate": 0.47069710055521286,
+        "max_dd": 13.685449328998367,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09938210036578345,
+      "remove_best10_mean": -0.05215510284711272,
+      "trades_per_session": 2.1729222520107236,
+      "stress_r_per_session": 0.31652795696402847,
+      "stress_worst_intraday_r": -5.651371027485747,
+      "stress_scaled_dd_pct": 0.08895542063848938,
+      "stress_scaled_worst_intraday_pct": 0.036733911678657354,
+      "dev_path": {
+        "breach": false,
+        "final": 1.534844063318574,
+        "maxdd": 0.08895542063848938,
+        "worstday": -0.036733911678657354,
+        "min_cumulative": -0.040222499929487315
+      },
+      "implied_step1_days": 48.60428611796763,
+      "implied_step2_days": 24.302143058983816
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev"
+      ],
+      "model_count": 8,
+      "risk_fraction": 0.006,
+      "risk_dollars_10k": 60.0,
+      "primary": {
+        "n": 1704,
+        "mean": 0.16616900404757223,
+        "sum": 283.1519828970631,
+        "pf": 1.4191118071309925,
+        "win_rate": 0.4688967136150235,
+        "max_dd": 13.783983397835021,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1704,
+        "mean": 0.14967369848514955,
+        "sum": 255.04398221869482,
+        "pf": 1.3693286089704029,
+        "win_rate": 0.4688967136150235,
+        "max_dd": 14.532705809610924,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.07910263533580822,
+      "remove_best10_mean": -0.04580276658657419,
+      "trades_per_session": 2.284182305630027,
+      "stress_r_per_session": 0.3418820136979823,
+      "stress_worst_intraday_r": -6.239905163998714,
+      "stress_scaled_dd_pct": 0.08719623485766555,
+      "stress_scaled_worst_intraday_pct": 0.037439430983992286,
+      "dev_path": {
+        "breach": false,
+        "final": 1.530263893312169,
+        "maxdd": 0.08719623485766555,
+        "worstday": -0.037439430983992286,
+        "min_cumulative": -0.04775946181357814
+      },
+      "implied_step1_days": 48.74976161041908,
+      "implied_step2_days": 24.37488080520954
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev"
+      ],
+      "model_count": 6,
+      "risk_fraction": 0.007,
+      "risk_dollars_10k": 70.0,
+      "primary": {
+        "n": 1422,
+        "mean": 0.17001049972752277,
+        "sum": 241.75493061253738,
+        "pf": 1.4265408284404406,
+        "win_rate": 0.47538677918424754,
+        "max_dd": 12.40364624779862,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 1422,
+        "mean": 0.15359325448131525,
+        "sum": 218.40960787243029,
+        "pf": 1.3771757517840366,
+        "win_rate": 0.47538677918424754,
+        "max_dd": 12.656633129621415,
+        "losing_streak": 9
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.08062484905142157,
+      "remove_best10_mean": -0.04282890859454029,
+      "trades_per_session": 1.906166219839142,
+      "stress_r_per_session": 0.29277427328744005,
+      "stress_worst_intraday_r": -5.2006824901564475,
+      "stress_scaled_dd_pct": 0.0885964319073499,
+      "stress_scaled_worst_intraday_pct": 0.03640477743109513,
+      "dev_path": {
+        "breach": false,
+        "final": 1.528867255107012,
+        "maxdd": 0.0885964319073499,
+        "worstday": -0.03640477743109513,
+        "min_cumulative": -0.037660357903497255
+      },
+      "implied_step1_days": 48.79429509056915,
+      "implied_step2_days": 24.397147545284575
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "sweep",
+        "trend"
+      ],
+      "model_count": 8,
+      "risk_fraction": 0.007,
+      "risk_dollars_10k": 70.0,
+      "primary": {
+        "n": 1562,
+        "mean": 0.15573852591433057,
+        "sum": 243.26357747818435,
+        "pf": 1.3910031731205166,
+        "win_rate": 0.4647887323943662,
+        "max_dd": 12.22718504573335,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1562,
+        "mean": 0.1398109268501242,
+        "sum": 218.38466773989398,
+        "pf": 1.3436512070022568,
+        "win_rate": 0.4647887323943662,
+        "max_dd": 12.575944955281699,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.1098038950515845,
+      "remove_best10_mean": -0.05569543382136853,
+      "trades_per_session": 2.0938337801608577,
+      "stress_r_per_session": 0.2927408414743887,
+      "stress_worst_intraday_r": -5.651371027485747,
+      "stress_scaled_dd_pct": 0.08803161468697189,
+      "stress_scaled_worst_intraday_pct": 0.03955959719240023,
+      "dev_path": {
+        "breach": false,
+        "final": 1.528692674179258,
+        "maxdd": 0.08803161468697189,
+        "worstday": -0.03955959719240023,
+        "min_cumulative": -0.04873382539997614
+      },
+      "implied_step1_days": 48.7998675339058,
+      "implied_step2_days": 24.3999337669529
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_scalp"
+      ],
+      "model_count": 9,
+      "risk_fraction": 0.006,
+      "risk_dollars_10k": 60.0,
+      "primary": {
+        "n": 1892,
+        "mean": 0.15086020199423575,
+        "sum": 285.427502173094,
+        "pf": 1.3826808782306907,
+        "win_rate": 0.4608879492600423,
+        "max_dd": 12.603917306610725,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1892,
+        "mean": 0.13455792445122292,
+        "sum": 254.58359306171377,
+        "pf": 1.3338590604100706,
+        "win_rate": 0.4608879492600423,
+        "max_dd": 13.357321888322417,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.08997790720084863,
+      "remove_best10_mean": -0.058618156935065786,
+      "trades_per_session": 2.5361930294906165,
+      "stress_r_per_session": 0.3412648700559166,
+      "stress_worst_intraday_r": -6.41169065876458,
+      "stress_scaled_dd_pct": 0.0801439313299345,
+      "stress_scaled_worst_intraday_pct": 0.03847014395258748,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5275015583702827,
+        "maxdd": 0.0801439313299345,
+        "worstday": -0.03847014395258748,
+        "min_cumulative": -0.03572432880795091
+      },
+      "implied_step1_days": 48.837920715178846,
+      "implied_step2_days": 24.418960357589423
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1620,
+        "mean": 0.1602234806634792,
+        "sum": 259.5620386748363,
+        "pf": 1.4007881059588252,
+        "win_rate": 0.4697530864197531,
+        "max_dd": 11.892153992851064,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1620,
+        "mean": 0.14371506340441156,
+        "sum": 232.81840271514673,
+        "pf": 1.3517689778453839,
+        "win_rate": 0.4697530864197531,
+        "max_dd": 12.922914585851544,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.07550743229188384,
+      "remove_best10_mean": -0.050748309748333595,
+      "trades_per_session": 2.1715817694369974,
+      "stress_r_per_session": 0.3120890116825023,
+      "stress_worst_intraday_r": -6.239905163998714,
+      "stress_scaled_dd_pct": 0.08399894480803503,
+      "stress_scaled_worst_intraday_pct": 0.04055938356599164,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5133196176484538,
+        "maxdd": 0.08399894480803503,
+        "worstday": -0.04055938356599164,
+        "min_cumulative": -0.034970332338961733
+      },
+      "implied_step1_days": 49.29560096228773,
+      "implied_step2_days": 24.647800481143864
+    },
+    {
+      "models": [
+        "kalman_mom",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_rev"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1722,
+        "mean": 0.15140784414022931,
+        "sum": 260.72430760947486,
+        "pf": 1.3752892412349942,
+        "win_rate": 0.46689895470383275,
+        "max_dd": 11.680595933690064,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 1722,
+        "mean": 0.1350615871434585,
+        "sum": 232.57605306103557,
+        "pf": 1.3276696669430317,
+        "win_rate": 0.46689895470383275,
+        "max_dd": 13.069894319508164,
+        "losing_streak": 9
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.08945162626586584,
+      "remove_best10_mean": -0.06134213472075042,
+      "trades_per_session": 2.3083109919571045,
+      "stress_r_per_session": 0.31176414619441767,
+      "stress_worst_intraday_r": -6.690900942015659,
+      "stress_scaled_dd_pct": 0.08495431307680305,
+      "stress_scaled_worst_intraday_pct": 0.04349085612310179,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5117443448967312,
+        "maxdd": 0.08495431307680305,
+        "worstday": -0.04349085612310179,
+        "min_cumulative": -0.045690341204489955
+      },
+      "implied_step1_days": 49.34696812449198,
+      "implied_step2_days": 24.67348406224599
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "sweep",
+        "vwap_rev"
+      ],
+      "model_count": 8,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1547,
+        "mean": 0.16644902998050776,
+        "sum": 257.4966493798455,
+        "pf": 1.418522025146361,
+        "win_rate": 0.46929541047188106,
+        "max_dd": 12.539225054690355,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1547,
+        "mean": 0.1501321181521571,
+        "sum": 232.25438678138704,
+        "pf": 1.3694438625233105,
+        "win_rate": 0.46929541047188106,
+        "max_dd": 12.869458130124361,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.07879405002891392,
+      "remove_best10_mean": -0.045849555121321175,
+      "trades_per_session": 2.0737265415549597,
+      "stress_r_per_session": 0.31133295815199336,
+      "stress_worst_intraday_r": -5.246978229614767,
+      "stress_scaled_dd_pct": 0.08365147784580834,
+      "stress_scaled_worst_intraday_pct": 0.034105358492495984,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5096535140790157,
+        "maxdd": 0.08365147784580834,
+        "worstday": -0.034105358492495984,
+        "min_cumulative": -0.053555803838495286
+      },
+      "implied_step1_days": 49.41531239074466,
+      "implied_step2_days": 24.70765619537233
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "sweep"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.0075,
+      "risk_dollars_10k": 75.0,
+      "primary": {
+        "n": 1363,
+        "mean": 0.1633101684353412,
+        "sum": 222.59175957737006,
+        "pf": 1.4145385090198406,
+        "win_rate": 0.46881878209831257,
+        "max_dd": 10.888286932586112,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 1363,
+        "mean": 0.14722261167803305,
+        "sum": 200.66441971715906,
+        "pf": 1.3657584239127374,
+        "win_rate": 0.46881878209831257,
+        "max_dd": 11.394972084367481,
+        "losing_streak": 9
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09210606302274711,
+      "remove_best10_mean": -0.046473265459949335,
+      "trades_per_session": 1.8270777479892761,
+      "stress_r_per_session": 0.26898715779780036,
+      "stress_worst_intraday_r": -5.246978229614767,
+      "stress_scaled_dd_pct": 0.08546229063275611,
+      "stress_scaled_worst_intraday_pct": 0.03935233672211075,
+      "dev_path": {
+        "breach": false,
+        "final": 1.504983147878693,
+        "maxdd": 0.08546229063275611,
+        "worstday": -0.03935233672211075,
+        "min_cumulative": -0.047809110430710136
+      },
+      "implied_step1_days": 49.568661353550944,
+      "implied_step2_days": 24.784330676775472
+    },
+    {
+      "models": [
+        "kalman_mom",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev"
+      ],
+      "model_count": 6,
+      "risk_fraction": 0.007,
+      "risk_dollars_10k": 70.0,
+      "primary": {
+        "n": 1523,
+        "mean": 0.15761818102998068,
+        "sum": 240.05248970866057,
+        "pf": 1.3938260856601163,
+        "win_rate": 0.47078135259356535,
+        "max_dd": 11.131473817785121,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 1523,
+        "mean": 0.14107406765482638,
+        "sum": 214.8558050383006,
+        "pf": 1.3449115024876555,
+        "win_rate": 0.47078135259356535,
+        "max_dd": 11.846081891872615,
+        "losing_streak": 7
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.07103576158384198,
+      "remove_best10_mean": -0.05378117783704766,
+      "trades_per_session": 2.0415549597855227,
+      "stress_r_per_session": 0.2880104625178292,
+      "stress_worst_intraday_r": -6.239905163998714,
+      "stress_scaled_dd_pct": 0.08292257324310831,
+      "stress_scaled_worst_intraday_pct": 0.043679336147991,
+      "dev_path": {
+        "breach": false,
+        "final": 1.503990635268104,
+        "maxdd": 0.08292257324310831,
+        "worstday": -0.043679336147991,
+        "min_cumulative": -0.037660357903497255
+      },
+      "implied_step1_days": 49.601372675237215,
+      "implied_step2_days": 24.800686337618608
+    },
+    {
+      "models": [
+        "kalman_mom",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev"
+      ],
+      "model_count": 5,
+      "risk_fraction": 0.0075,
+      "risk_dollars_10k": 75.0,
+      "primary": {
+        "n": 1325,
+        "mean": 0.16773236350668805,
+        "sum": 222.24538164636166,
+        "pf": 1.4203695240289747,
+        "win_rate": 0.4769811320754717,
+        "max_dd": 11.38167972060197,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1325,
+        "mean": 0.15128076241176164,
+        "sum": 200.44701019558417,
+        "pf": 1.3710979566034986,
+        "win_rate": 0.4769811320754717,
+        "max_dd": 11.617930200751129,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.07568548834303351,
+      "remove_best10_mean": -0.04454005757498841,
+      "trades_per_session": 1.7761394101876675,
+      "stress_r_per_session": 0.268695724122767,
+      "stress_worst_intraday_r": -5.195745868307726,
+      "stress_scaled_dd_pct": 0.08713447650563347,
+      "stress_scaled_worst_intraday_pct": 0.03896809401230794,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5033525764668811,
+        "maxdd": 0.08713447650563347,
+        "worstday": -0.03896809401230794,
+        "min_cumulative": -0.04035038346803277
+      },
+      "implied_step1_days": 49.6224246845154,
+      "implied_step2_days": 24.8112123422577
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_rev"
+      ],
+      "model_count": 8,
+      "risk_fraction": 0.006,
+      "risk_dollars_10k": 60.0,
+      "primary": {
+        "n": 1819,
+        "mean": 0.15405929443411245,
+        "sum": 280.2338565756506,
+        "pf": 1.3824054224797568,
+        "win_rate": 0.46619021440351843,
+        "max_dd": 12.651014916029538,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1819,
+        "mean": 0.13773427748096848,
+        "sum": 250.53865073788168,
+        "pf": 1.3346278853152578,
+        "win_rate": 0.46619021440351843,
+        "max_dd": 14.175761616420061,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09267396825572292,
+      "remove_best10_mean": -0.058196577393265045,
+      "trades_per_session": 2.4383378016085793,
+      "stress_r_per_session": 0.3358426953590907,
+      "stress_worst_intraday_r": -6.690900942015659,
+      "stress_scaled_dd_pct": 0.08505456969852036,
+      "stress_scaled_worst_intraday_pct": 0.04014540565209396,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5032319044272902,
+        "maxdd": 0.08505456969852036,
+        "worstday": -0.04014540565209396,
+        "min_cumulative": -0.042760890061322845
+      },
+      "implied_step1_days": 49.626408127907276,
+      "implied_step2_days": 24.813204063953638
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_rev"
+      ],
+      "model_count": 9,
+      "risk_fraction": 0.0055,
+      "risk_dollars_10k": 55.0,
+      "primary": {
+        "n": 1903,
+        "mean": 0.15965517645710847,
+        "sum": 303.8238007978774,
+        "pf": 1.3993531756508983,
+        "win_rate": 0.465580662112454,
+        "max_dd": 13.797867965622943,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1903,
+        "mean": 0.14333380464604825,
+        "sum": 272.7642302414298,
+        "pf": 1.35085868597112,
+        "win_rate": 0.465580662112454,
+        "max_dd": 15.279527952281367,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09479952132256916,
+      "remove_best10_mean": -0.05343446096414482,
+      "trades_per_session": 2.5509383378016084,
+      "stress_r_per_session": 0.3656356973745708,
+      "stress_worst_intraday_r": -6.690900942015659,
+      "stress_scaled_dd_pct": 0.0840374037375475,
+      "stress_scaled_worst_intraday_pct": 0.03679995518108613,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5002032663278637,
+        "maxdd": 0.0840374037375475,
+        "worstday": -0.03679995518108613,
+        "min_cumulative": -0.058856629581035595
+      },
+      "implied_step1_days": 49.72659483844668,
+      "implied_step2_days": 24.86329741922334
+    },
+    {
+      "models": [
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "sweep",
+        "vwap_rev"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.007,
+      "risk_dollars_10k": 70.0,
+      "primary": {
+        "n": 1450,
+        "mean": 0.16412903476804813,
+        "sum": 237.9871004136698,
+        "pf": 1.4123398077456857,
+        "win_rate": 0.4703448275862069,
+        "max_dd": 12.114723903374134,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1450,
+        "mean": 0.14778744076175238,
+        "sum": 214.29178910454095,
+        "pf": 1.3633669053124375,
+        "win_rate": 0.4703448275862069,
+        "max_dd": 12.780075384586578,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.07432398707274913,
+      "remove_best10_mean": -0.04761764984916106,
+      "trades_per_session": 1.9436997319034852,
+      "stress_r_per_session": 0.2872544089873203,
+      "stress_worst_intraday_r": -6.2154896799963915,
+      "stress_scaled_dd_pct": 0.08946052769210605,
+      "stress_scaled_worst_intraday_pct": 0.04350842775997474,
+      "dev_path": {
+        "breach": false,
+        "final": 1.5000425237317867,
+        "maxdd": 0.08946052769210605,
+        "worstday": -0.04350842775997474,
+        "min_cumulative": -0.05767548105684108
+      },
+      "implied_step1_days": 49.73192347534994,
+      "implied_step2_days": 24.86596173767497
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "sweep",
+        "trend",
+        "vwap_rev"
+      ],
+      "model_count": 9,
+      "risk_fraction": 0.006,
+      "risk_dollars_10k": 60.0,
+      "primary": {
+        "n": 1746,
+        "mean": 0.15931756430736532,
+        "sum": 278.16846728065985,
+        "pf": 1.3971327856017344,
+        "win_rate": 0.46563573883161513,
+        "max_dd": 13.955613194366395,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1746,
+        "mean": 0.14316989393134136,
+        "sum": 249.974634804122,
+        "pf": 1.349362057832332,
+        "win_rate": 0.46563573883161513,
+        "max_dd": 14.712159201537247,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09602777344567748,
+      "remove_best10_mean": -0.054160755307162675,
+      "trades_per_session": 2.3404825737265416,
+      "stress_r_per_session": 0.3350866418285818,
+      "stress_worst_intraday_r": -5.651371027485747,
+      "stress_scaled_dd_pct": 0.08827295520922349,
+      "stress_scaled_worst_intraday_pct": 0.033908226164914484,
+      "dev_path": {
+        "breach": false,
+        "final": 1.499847808824732,
+        "maxdd": 0.08827295520922349,
+        "worstday": -0.033908226164914484,
+        "min_cumulative": -0.061028629521853506
+      },
+      "implied_step1_days": 49.73837982832133,
+      "implied_step2_days": 24.869189914160664
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_rev",
+        "vwap_scalp"
+      ],
+      "model_count": 9,
+      "risk_fraction": 0.0055,
+      "risk_dollars_10k": 55.0,
+      "primary": {
+        "n": 1878,
+        "mean": 0.1610890755661718,
+        "sum": 302.52528391327064,
+        "pf": 1.4070009156924135,
+        "win_rate": 0.4653887113951012,
+        "max_dd": 15.17976378522777,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1878,
+        "mean": 0.1447096726747739,
+        "sum": 271.76476528322536,
+        "pf": 1.3576804711543966,
+        "win_rate": 0.4653887113951012,
+        "max_dd": 15.82670018581981,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.08474883288854569,
+      "remove_best10_mean": -0.05087842782858141,
+      "trades_per_session": 2.517426273458445,
+      "stress_r_per_session": 0.3642959320150474,
+      "stress_worst_intraday_r": -5.372160744234668,
+      "stress_scaled_dd_pct": 0.08704685102200894,
+      "stress_scaled_worst_intraday_pct": 0.02954688409329067,
+      "dev_path": {
+        "breach": false,
+        "final": 1.4947062090577394,
+        "maxdd": 0.08704685102200894,
+        "worstday": -0.02954688409329067,
+        "min_cumulative": -0.04549516913454341
+      },
+      "implied_step1_days": 49.90947354599385,
+      "implied_step2_days": 24.954736772996924
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom"
+      ],
+      "model_count": 5,
+      "risk_fraction": 0.008,
+      "risk_dollars_10k": 80.0,
+      "primary": {
+        "n": 1238,
+        "mean": 0.16708403942654435,
+        "sum": 206.8500408100619,
+        "pf": 1.4234471942776772,
+        "win_rate": 0.47576736672051695,
+        "max_dd": 10.672527430737901,
+        "losing_streak": 8
+      },
+      "stress": {
+        "n": 1238,
+        "mean": 0.15090439483699697,
+        "sum": 186.81964080820225,
+        "pf": 1.3743640833552886,
+        "win_rate": 0.47576736672051695,
+        "max_dd": 11.017062611014541,
+        "losing_streak": 8
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09617304973672305,
+      "remove_best10_mean": -0.04169811775679727,
+      "trades_per_session": 1.6595174262734584,
+      "stress_r_per_session": 0.250428472933247,
+      "stress_worst_intraday_r": -5.2006824901564475,
+      "stress_scaled_dd_pct": 0.08813650088811634,
+      "stress_scaled_worst_intraday_pct": 0.04160545992125158,
+      "dev_path": {
+        "breach": false,
+        "final": 1.4945571264656181,
+        "maxdd": 0.08813650088811634,
+        "worstday": -0.04160545992125158,
+        "min_cumulative": -0.04241312870320246
+      },
+      "implied_step1_days": 49.9144520333035,
+      "implied_step2_days": 24.95722601665175
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "open_drive",
+        "or_rev",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "trend",
+        "vwap_rev"
+      ],
+      "model_count": 9,
+      "risk_fraction": 0.0055,
+      "risk_dollars_10k": 55.0,
+      "primary": {
+        "n": 1949,
+        "mean": 0.1555491979275656,
+        "sum": 303.16538676082536,
+        "pf": 1.3798232468317544,
+        "win_rate": 0.4581836839404823,
+        "max_dd": 14.684882117822802,
+        "losing_streak": 11
+      },
+      "stress": {
+        "n": 1949,
+        "mean": 0.13933545652337137,
+        "sum": 271.5648047640508,
+        "pf": 1.3330724192996506,
+        "win_rate": 0.4581836839404823,
+        "max_dd": 15.873886213093044,
+        "losing_streak": 11
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.08215111564433979,
+      "remove_best10_mean": -0.0668561457145947,
+      "trades_per_session": 2.6126005361930296,
+      "stress_r_per_session": 0.3640278884236606,
+      "stress_worst_intraday_r": -6.695003102957442,
+      "stress_scaled_dd_pct": 0.08730637417201174,
+      "stress_scaled_worst_intraday_pct": 0.03682251706626593,
+      "dev_path": {
+        "breach": false,
+        "final": 1.4936064262022792,
+        "maxdd": 0.08730637417201174,
+        "worstday": -0.03682251706626593,
+        "min_cumulative": -0.07843879707670057
+      },
+      "implied_step1_days": 49.94622324281359,
+      "implied_step2_days": 24.973111621406794
+    },
+    {
+      "models": [
+        "kalman_mom",
+        "ou_lunch",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "vwap_rev",
+        "vwap_scalp"
+      ],
+      "model_count": 7,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1696,
+        "mean": 0.1512742222207268,
+        "sum": 256.56108088635267,
+        "pf": 1.381275496498906,
+        "win_rate": 0.4658018867924528,
+        "max_dd": 12.701201126611721,
+        "losing_streak": 9
+      },
+      "stress": {
+        "n": 1696,
+        "mean": 0.13459029181769613,
+        "sum": 228.26513492281265,
+        "pf": 1.3317357790747346,
+        "win_rate": 0.4658018867924528,
+        "max_dd": 13.603683404834022,
+        "losing_streak": 9
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.05567191550267109,
+      "remove_best10_mean": -0.058190034574680034,
+      "trades_per_session": 2.2734584450402147,
+      "stress_r_per_session": 0.30598543555336816,
+      "stress_worst_intraday_r": -6.239905163998714,
+      "stress_scaled_dd_pct": 0.08842394213142114,
+      "stress_scaled_worst_intraday_pct": 0.04055938356599164,
+      "dev_path": {
+        "breach": false,
+        "final": 1.483723376998282,
+        "maxdd": 0.08842394213142114,
+        "worstday": -0.04055938356599164,
+        "min_cumulative": -0.03594520620811944
+      },
+      "implied_step1_days": 50.27891395155013,
+      "implied_step2_days": 25.139456975775065
+    },
+    {
+      "models": [
+        "ema_rev",
+        "kalman_mom",
+        "ou_rev",
+        "pd_rev",
+        "pm_mom",
+        "sweep",
+        "trend",
+        "vwap_rev"
+      ],
+      "model_count": 8,
+      "risk_fraction": 0.0065,
+      "risk_dollars_10k": 65.0,
+      "primary": {
+        "n": 1662,
+        "mean": 0.15317600665369016,
+        "sum": 254.57852305843306,
+        "pf": 1.3785717792311678,
+        "win_rate": 0.46630565583634176,
+        "max_dd": 13.420001387985536,
+        "losing_streak": 10
+      },
+      "stress": {
+        "n": 1662,
+        "mean": 0.13703312593295663,
+        "sum": 227.74905530057393,
+        "pf": 1.3316058163357996,
+        "win_rate": 0.46630565583634176,
+        "max_dd": 13.685449328998367,
+        "losing_streak": 10
+      },
+      "positive_years": 3,
+      "worst_year_mean": 0.09377323120282446,
+      "remove_best10_mean": -0.06043898201988428,
+      "trades_per_session": 2.227882037533512,
+      "stress_r_per_session": 0.30529363981310176,
+      "stress_worst_intraday_r": -5.651371027485747,
+      "stress_scaled_dd_pct": 0.08895542063848938,
+      "stress_scaled_worst_intraday_pct": 0.036733911678657354,
+      "dev_path": {
+        "breach": false,
+        "final": 1.4803688594537305,
+        "maxdd": 0.08895542063848938,
+        "worstday": -0.036733911678657354,
+        "min_cumulative": -0.042880811255702
+      },
+      "implied_step1_days": 50.39284602860944,
+      "implied_step2_days": 25.19642301430472
+    }
+  ],
+  "selected_dev": {
+    "models": [
+      "ema_rev",
+      "kalman_mom",
+      "open_drive",
+      "ou_rev",
+      "pd_rev",
+      "pm_mom"
+    ],
+    "model_count": 6,
+    "risk_fraction": 0.008,
+    "risk_dollars_10k": 80.0,
+    "primary": {
+      "n": 1322,
+      "mean": 0.17431163769462077,
+      "sum": 230.43998503228866,
+      "pf": 1.446189820142808,
+      "win_rate": 0.4742813918305598,
+      "max_dd": 10.672527430737901,
+      "losing_streak": 8
+    },
+    "stress": {
+      "n": 1322,
+      "mean": 0.1581280032615358,
+      "sum": 209.04522031175034,
+      "pf": 1.3961119397577917,
+      "win_rate": 0.4742813918305598,
+      "max_dd": 11.017062611014538,
+      "losing_streak": 8
+    },
+    "positive_years": 3,
+    "worst_year_mean": 0.09906299560298318,
+    "remove_best10_mean": -0.035890648016579235,
+    "trades_per_session": 1.772117962466488,
+    "stress_r_per_session": 0.280221474948727,
+    "stress_worst_intraday_r": -5.246978229614767,
+    "stress_scaled_dd_pct": 0.08813650088811631,
+    "stress_scaled_worst_intraday_pct": 0.04197582583691813,
+    "dev_path": {
+      "breach": false,
+      "final": 1.6723617624940028,
+      "maxdd": 0.08813650088811631,
+      "worstday": -0.04197582583691813,
+      "min_cumulative": -0.05069557145129406
+    },
+    "implied_step1_days": 44.607573357063956,
+    "implied_step2_days": 22.303786678531978
+  },
+  "validation": {
+    "2024": {
+      "year": 2024,
+      "sessions": 246,
+      "n": 504,
+      "trades_per_session": 2.048780487804878,
+      "primary": {
+        "n": 504,
+        "mean": 0.19387512569594287,
+        "sum": 97.7130633507552,
+        "pf": 1.535291744606472,
+        "win_rate": 0.4742063492063492,
+        "max_dd": 6.952735981145331,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 504,
+        "mean": 0.17776689019471223,
+        "sum": 89.59451265813496,
+        "pf": 1.4795482165039553,
+        "win_rate": 0.4742063492063492,
+        "max_dd": 7.4390941289917905,
+        "losing_streak": 7
+      },
+      "risk_fraction": 0.008,
+      "risk_dollars_10k": 80.0,
+      "stress_worst_intraday_r": -4.159188152642365,
+      "stress_scaled_dd_pct": 0.059512753031934325,
+      "stress_scaled_worst_intraday_pct": 0.03327350522113892,
+      "stress_r_per_session": 0.3642053360086787,
+      "stress_step1_days_implied": 34.321298355997,
+      "stress_step2_days_implied": 17.1606491779985,
+      "stress_path_step1": {
+        "status": "PASS",
+        "days": 26,
+        "final": 0.10023355463961438
+      },
+      "stress_path_step2": {
+        "status": "PASS",
+        "days": 8,
+        "final": 0.051509219995044694
+      }
+    },
+    "2025": {
+      "year": 2025,
+      "sessions": 83,
+      "n": 151,
+      "trades_per_session": 1.819277108433735,
+      "primary": {
+        "n": 151,
+        "mean": 0.43377847740125564,
+        "sum": 65.5005500875896,
+        "pf": 2.2017795992362044,
+        "win_rate": 0.5033112582781457,
+        "max_dd": 4.167064096501477,
+        "losing_streak": 7
+      },
+      "stress": {
+        "n": 151,
+        "mean": 0.41840584065135933,
+        "sum": 63.17928193835526,
+        "pf": 2.1353362565128706,
+        "win_rate": 0.5033112582781457,
+        "max_dd": 4.299575815524591,
+        "losing_streak": 7
+      },
+      "risk_fraction": 0.008,
+      "risk_dollars_10k": 80.0,
+      "stress_worst_intraday_r": -4.128362417464621,
+      "stress_scaled_dd_pct": 0.03439660652419673,
+      "stress_scaled_worst_intraday_pct": 0.03302689933971697,
+      "stress_r_per_session": 0.7611961679319911,
+      "stress_step1_days_implied": 16.421522501827425,
+      "stress_step2_days_implied": 8.210761250913713,
+      "stress_path_step1": {
+        "status": "PASS",
+        "days": 13,
+        "final": 0.10159262712675593
+      },
+      "stress_path_step2": {
+        "status": "PASS",
+        "days": 5,
+        "final": 0.052459725454169805
+      }
+    },
+    "gates": {
+      "2024_stress_sum_gt_0": true,
+      "2024_stress_pf_ge_1_10": true,
+      "2025_stress_sum_gt_0": true,
+      "2025_stress_pf_ge_1_10": true,
+      "2024_dd_lt_9pct": true,
+      "2025_dd_lt_9pct": true,
+      "2024_intraday_lt_4_5pct": true,
+      "2025_intraday_lt_4_5pct": true,
+      "2024_step1_pace_le_45": true,
+      "2025_step1_pace_le_45": true
+    }
+  },
+  "pass": true
+}
