@@ -1,7 +1,7 @@
-NQ: 25,363 bars  (2026-08-13 00:09:00 -> 2026-09-09 19:00:00)
+NQ: 25,486 bars  (2026-08-13 00:09:00 -> 2026-09-09 21:02:00)
 Auto-detected history file: /tmp/mnq_forward_shadow/external/data/Dataset_NQ_1min_2022_2025.csv
 Prepended 0 historical bars for regime warmup
-Combined: 25,363 bars  (2026-08-13 00:09:00 -> 2026-09-09 19:00:00)
+Combined: 25,486 bars  (2026-08-13 00:09:00 -> 2026-09-09 21:02:00)
 Daily bars: 272
 Scanning models...
   ema_rev: 4 signals
