@@ -72,5 +72,5 @@
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "c3034c118c3d49051f91066c538afb5c921bf16516ae533e403d44d626a9aaf7"
+  "ledger_sha256": "e462bb135c71422bc34aa9c3bad6ae7858ca201a14d9730c72cbb0e06824bd66"
 }
