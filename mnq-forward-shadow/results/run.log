@@ -58,8 +58,8 @@
     },
     "2026-09-12/2026-09-18": {
       "n": 15,
-      "mean": 0.23354483575800913,
-      "sum": 3.503172536370137,
+      "mean": 0.23354483575800916,
+      "sum": 3.5031725363701374,
       "pf": 1.738147095532381,
       "win_rate": 0.4,
       "max_dd": 4.499472803248152,
@@ -72,5 +72,5 @@
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "b6743f6d0a7c52a77f97e1a84cff88e4364c5a59122ee24195c9bcadb2c7d889"
+  "ledger_sha256": "a9eb2cd072127d20c658e45b3c34bd2359e117fd0f503a23c320667174d2319d"
 }
