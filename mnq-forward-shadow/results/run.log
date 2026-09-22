@@ -1,21 +1,21 @@
 {
   "status": "FORWARD_EARLY_CHECKPOINT_DESCRIPTIVE_ONLY",
-  "latest_complete_day": "2026-09-21",
+  "latest_complete_day": "2026-09-22",
   "primary": {
-    "n": 67,
-    "mean": 0.2674431309707341,
-    "sum": 17.918689775039184,
-    "pf": 1.6644466924115549,
-    "win_rate": 0.4626865671641791,
-    "max_dd": 4.499472803248154,
+    "n": 65,
+    "mean": 0.23503563545156403,
+    "sum": 15.277316304351661,
+    "pf": 1.566950701331806,
+    "win_rate": 0.4461538461538462,
+    "max_dd": 4.499472803248155,
     "losing_streak": 6
   },
   "stress": {
-    "n": 67,
-    "mean": 0.18809480337593554,
-    "sum": 12.60235182618768,
-    "pf": 1.4234505509281759,
-    "win_rate": 0.4626865671641791,
+    "n": 65,
+    "mean": 0.15634094083477482,
+    "sum": 10.162161154260364,
+    "pf": 1.3419345927148922,
+    "win_rate": 0.4461538461538462,
     "max_dd": 5.860739737553251,
     "losing_streak": 6
   },
@@ -30,11 +30,11 @@
       "losing_streak": 2
     },
     "2026-08-22/2026-08-28": {
-      "n": 24,
-      "mean": 0.33983574886440976,
-      "sum": 8.156057972745835,
-      "pf": 1.8163216427869362,
-      "win_rate": 0.5,
+      "n": 19,
+      "mean": 0.36275593637451947,
+      "sum": 6.89236279111587,
+      "pf": 1.882192215587213,
+      "win_rate": 0.47368421052631576,
       "max_dd": 3.285375998225377,
       "losing_streak": 3
     },
@@ -66,20 +66,20 @@
       "losing_streak": 6
     },
     "2026-09-19/2026-09-25": {
-      "n": 1,
-      "mean": 1.974489795918368,
-      "sum": 1.974489795918368,
-      "pf": 1e+99,
-      "win_rate": 1.0,
-      "max_dd": 0.0,
-      "losing_streak": 0
+      "n": 4,
+      "mean": 0.14920287671520238,
+      "sum": 0.5968115068608095,
+      "pf": 1.2766743585042086,
+      "win_rate": 0.5,
+      "max_dd": 2.157090053763441,
+      "losing_streak": 2
     }
   },
   "positive_weeks": 6,
-  "remove_best_10pct_mean": 0.00254639154355966,
+  "remove_best_10pct_mean": -0.04290672375989555,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "a21af888715b597f5964fd6855c98413e800d45f205e9032b2a885310a1ae044"
+  "ledger_sha256": "8880884a23caaf288d6656067b395ab9307c557a46e34b83e402362264d1bc81"
 }
