@@ -1,23 +1,23 @@
 {
   "status": "PROXY_FORWARD_NO_GO",
-  "latest_complete_day": "2026-10-01",
+  "latest_complete_day": "2026-10-02",
   "primary": {
-    "n": 101,
-    "mean": 0.17854012731365748,
-    "sum": 18.032552858679406,
-    "pf": 1.4217991628625857,
-    "win_rate": 0.4158415841584158,
-    "max_dd": 6.060070536057207,
-    "losing_streak": 6
+    "n": 109,
+    "mean": 0.11652342843278073,
+    "sum": 12.7010536991731,
+    "pf": 1.2576814700366707,
+    "win_rate": 0.3944954128440367,
+    "max_dd": 11.294349378137225,
+    "losing_streak": 7
   },
   "stress": {
-    "n": 101,
-    "mean": 0.10068955604837894,
-    "sum": 10.169645160886272,
-    "pf": 1.2153512396668287,
-    "win_rate": 0.4158415841584158,
-    "max_dd": 7.558852059762346,
-    "losing_streak": 6
+    "n": 109,
+    "mean": 0.039033519080395956,
+    "sum": 4.2546535797631595,
+    "pf": 1.0784003090348284,
+    "win_rate": 0.3944954128440367,
+    "max_dd": 13.53870970017704,
+    "losing_streak": 7
   },
   "weekly": {
     "2026-08-15/2026-08-21": {
@@ -75,20 +75,20 @@
       "losing_streak": 2
     },
     "2026-09-26/2026-10-02": {
-      "n": 23,
-      "mean": -0.20678780214783227,
-      "sum": -4.756119449400142,
-      "pf": 0.6119543358622404,
-      "win_rate": 0.30434782608695654,
-      "max_dd": 6.060070536057206,
-      "losing_streak": 4
+      "n": 31,
+      "mean": -0.32540705190020813,
+      "sum": -10.087618608906451,
+      "pf": 0.4632768648397872,
+      "win_rate": 0.25806451612903225,
+      "max_dd": 11.294349378137222,
+      "losing_streak": 7
     }
   },
   "positive_weeks": 6,
-  "remove_best_10pct_mean": -0.09330011804559975,
+  "remove_best_10pct_mean": -0.14008683452663556,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "9d1749d833e8952187b570feaadf1db0a5d79adfcc887552aafc07b90fbd78c5"
+  "ledger_sha256": "7197183990988d991a6255f4d6d204e1647fa24c439eaab998f7699f9c2d387e"
 }
