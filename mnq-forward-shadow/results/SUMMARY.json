@@ -1,21 +1,21 @@
 {
   "status": "PROXY_FORWARD_NO_GO",
-  "latest_complete_day": "2026-10-05",
+  "latest_complete_day": "2026-10-06",
   "primary": {
-    "n": 111,
-    "mean": 0.12306872222755141,
-    "sum": 13.660628167258206,
-    "pf": 1.2711508969950833,
-    "win_rate": 0.3963963963963964,
+    "n": 114,
+    "mean": 0.14577194327430942,
+    "sum": 16.618001533271276,
+    "pf": 1.3298520365858522,
+    "win_rate": 0.41228070175438597,
     "max_dd": 11.294349378137225,
     "losing_streak": 7
   },
   "stress": {
-    "n": 111,
-    "mean": 0.045307402386212094,
-    "sum": 5.0291216648695425,
-    "pf": 1.0907065596714538,
-    "win_rate": 0.3963963963963964,
+    "n": 114,
+    "mean": 0.06785825821150328,
+    "sum": 7.735841436111373,
+    "pf": 1.1395256686142912,
+    "win_rate": 0.41228070175438597,
     "max_dd": 13.584433922762964,
     "losing_streak": 7
   },
@@ -84,20 +84,20 @@
       "losing_streak": 7
     },
     "2026-10-03/2026-10-09": {
-      "n": 2,
-      "mean": 0.4797872340425533,
-      "sum": 0.9595744680851066,
-      "pf": 1.8800000000000006,
-      "win_rate": 0.5,
+      "n": 5,
+      "mean": 0.7833895668196358,
+      "sum": 3.916947834098179,
+      "pf": 4.592127769807111,
+      "win_rate": 0.8,
       "max_dd": 1.0904255319148932,
       "losing_streak": 1
     }
   },
   "positive_weeks": 7,
-  "remove_best_10pct_mean": -0.14968621530833512,
+  "remove_best_10pct_mean": -0.1162898230344324,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "8fa55ebf63bde6dc85b7f63cd2c09d150d3e2edf2e1db2e4e2907972fa10af67"
+  "ledger_sha256": "42b13f8c5efc00503cc4520cc5d9db180edecfe19ab1a394a29012b6b1f4d0e1"
 }
