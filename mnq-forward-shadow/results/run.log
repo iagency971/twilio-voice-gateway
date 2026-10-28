@@ -36,23 +36,23 @@ See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace 
   data.sort_index(level=0, axis=1, inplace=True)
 {
   "status": "PROXY_FORWARD_NO_GO",
-  "latest_complete_day": "2026-10-26",
+  "latest_complete_day": "2026-10-27",
   "primary": {
     "n": 183,
-    "mean": 0.157351004078308,
-    "sum": 28.79523374633036,
-    "pf": 1.3578441114310027,
+    "mean": 0.16250816951683772,
+    "sum": 29.738995021581303,
+    "pf": 1.3741812900050132,
     "win_rate": 0.4207650273224044,
-    "max_dd": 13.874609754370246,
+    "max_dd": 12.365182711470561,
     "losing_streak": 7
   },
   "stress": {
     "n": 183,
-    "mean": 0.07993221712610542,
-    "sum": 14.627595734077293,
-    "pf": 1.165397288872421,
+    "mean": 0.08502752996224512,
+    "sum": 15.560037983090856,
+    "pf": 1.1779177986098286,
     "win_rate": 0.4207650273224044,
-    "max_dd": 16.626382829985427,
+    "max_dd": 14.721933922762961,
     "losing_streak": 7
   },
   "weekly": {
@@ -111,12 +111,12 @@ See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace 
       "losing_streak": 2
     },
     "2026-09-26/2026-10-02": {
-      "n": 37,
-      "mean": -0.3423751077064722,
-      "sum": -12.667878985139472,
-      "pf": 0.45217880208053873,
-      "win_rate": 0.2702702702702703,
-      "max_dd": 13.874609754370242,
+      "n": 32,
+      "mean": -0.34870162319499337,
+      "sum": -11.158451942239788,
+      "pf": 0.43830451080023053,
+      "win_rate": 0.25,
+      "max_dd": 12.365182711470554,
       "losing_streak": 7
     },
     "2026-10-03/2026-10-09": {
@@ -147,20 +147,20 @@ See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace 
       "losing_streak": 4
     },
     "2026-10-24/2026-10-30": {
-      "n": 2,
-      "mean": 1.7941796971953339,
-      "sum": 3.5883593943906678,
-      "pf": 67.70126874279123,
-      "win_rate": 0.5,
-      "max_dd": 0.05379746835443038,
-      "losing_streak": 1
+      "n": 7,
+      "mean": 0.43181337524884666,
+      "sum": 3.0226936267419267,
+      "pf": 2.302267650436483,
+      "win_rate": 0.42857142857142855,
+      "max_dd": 2.2673026724106458,
+      "losing_streak": 3
     }
   },
   "positive_weeks": 9,
-  "remove_best_10pct_mean": -0.11352305325404725,
+  "remove_best_10pct_mean": -0.10776841133178537,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "2427f3e1ff3de994b242031a40e341c814275f153265ed5cb87a15f84b324b8e"
+  "ledger_sha256": "11fe39d98661c85402a5fad074c4a4af67854c9e1c0892653d652b0b13f79580"
 }
