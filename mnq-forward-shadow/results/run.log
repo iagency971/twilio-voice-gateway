@@ -36,22 +36,22 @@ See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace 
   data.sort_index(level=0, axis=1, inplace=True)
 {
   "status": "PROXY_FORWARD_NO_GO",
-  "latest_complete_day": "2026-10-29",
+  "latest_complete_day": "2026-10-30",
   "primary": {
-    "n": 190,
-    "mean": 0.18195213647356578,
-    "sum": 34.5709059299775,
-    "pf": 1.4229959564762842,
-    "win_rate": 0.4263157894736842,
+    "n": 198,
+    "mean": 0.16968790744489745,
+    "sum": 33.5982056740897,
+    "pf": 1.394128081666007,
+    "win_rate": 0.41919191919191917,
     "max_dd": 11.294349378137225,
     "losing_streak": 7
   },
   "stress": {
-    "n": 190,
-    "mean": 0.10447251800685647,
-    "sum": 19.84977842130273,
-    "pf": 1.2206905835880941,
-    "win_rate": 0.4263157894736842,
+    "n": 198,
+    "mean": 0.09213688882609516,
+    "sum": 18.243103987566844,
+    "pf": 1.1941790539745742,
+    "win_rate": 0.41919191919191917,
     "max_dd": 13.584433922762964,
     "losing_streak": 7
   },
@@ -147,20 +147,20 @@ See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace 
       "losing_streak": 4
     },
     "2026-10-24/2026-10-30": {
-      "n": 14,
-      "mean": 0.40451682053707666,
-      "sum": 5.663235487519073,
-      "pf": 2.00356449684718,
-      "win_rate": 0.42857142857142855,
-      "max_dd": 3.322020461160176,
-      "losing_streak": 4
+      "n": 22,
+      "mean": 0.21320614689233028,
+      "sum": 4.690535231631266,
+      "pf": 1.511991655520513,
+      "win_rate": 0.36363636363636365,
+      "max_dd": 4.60470488629315,
+      "losing_streak": 7
     }
   },
   "positive_weeks": 10,
-  "remove_best_10pct_mean": -0.08223640031670193,
+  "remove_best_10pct_mean": -0.09402306237191402,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "24e698c78950ab2573c1f473051fd7815ee0898c03d47f2cb26e128791596b38"
+  "ledger_sha256": "4c179d8704ac1dba4164a24c0b882ead12d1226a511e0fff385a60acf13a1f41"
 }
