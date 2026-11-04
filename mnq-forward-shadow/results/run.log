@@ -1,59 +1,23 @@
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  quotes.sort_index(inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/multi.py:220: Pandas4Warning: The inplace keyword in DataFrame.rename is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  data.rename(columns=ctx.isins, inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/multi.py:224: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  data.sort_index(level=0, axis=1, inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  quotes.sort_index(inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/multi.py:220: Pandas4Warning: The inplace keyword in DataFrame.rename is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  data.rename(columns=ctx.isins, inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/multi.py:224: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  data.sort_index(level=0, axis=1, inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  quotes.sort_index(inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/multi.py:220: Pandas4Warning: The inplace keyword in DataFrame.rename is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  data.rename(columns=ctx.isins, inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/multi.py:224: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  data.sort_index(level=0, axis=1, inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  quotes.sort_index(inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/multi.py:220: Pandas4Warning: The inplace keyword in DataFrame.rename is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  data.rename(columns=ctx.isins, inplace=True)
-/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/yfinance/multi.py:224: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
-See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
-  data.sort_index(level=0, axis=1, inplace=True)
 {
   "status": "PROXY_FORWARD_NO_GO",
-  "latest_complete_day": "2026-11-02",
+  "latest_complete_day": "2026-11-03",
   "primary": {
-    "n": 205,
-    "mean": 0.18852968448662225,
-    "sum": 38.64858531975756,
-    "pf": 1.4415808380971857,
-    "win_rate": 0.424390243902439,
+    "n": 207,
+    "mean": 0.18202977672975548,
+    "sum": 37.680163783059385,
+    "pf": 1.4250371235979347,
+    "win_rate": 0.42028985507246375,
     "max_dd": 11.294349378137225,
-    "losing_streak": 7
+    "losing_streak": 9
   },
   "stress": {
-    "n": 205,
-    "mean": 0.11099540354641461,
-    "sum": 22.754057727014995,
-    "pf": 1.2358268540648623,
-    "win_rate": 0.424390243902439,
+    "n": 207,
+    "mean": 0.10467789651734313,
+    "sum": 21.66832457909003,
+    "pf": 1.2217044135423032,
+    "win_rate": 0.42028985507246375,
     "max_dd": 13.584433922762964,
-    "losing_streak": 7
+    "losing_streak": 9
   },
   "weekly": {
     "2026-08-15/2026-08-21": {
@@ -120,56 +84,56 @@ See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace 
       "losing_streak": 7
     },
     "2026-10-03/2026-10-09": {
-      "n": 17,
-      "mean": 0.26022130731740917,
-      "sum": 4.423762224395956,
-      "pf": 1.7775048124943493,
-      "win_rate": 0.5294117647058824,
+      "n": 15,
+      "mean": 0.34816931979386645,
+      "sum": 5.222539796907997,
+      "pf": 2.1516875792309165,
+      "win_rate": 0.6,
       "max_dd": 3.340600416328124,
       "losing_streak": 4
     },
     "2026-10-10/2026-10-16": {
-      "n": 25,
-      "mean": 0.4511872961238086,
-      "sum": 11.279682403095215,
-      "pf": 2.1418442713889494,
-      "win_rate": 0.52,
+      "n": 23,
+      "mean": 0.4523128963035444,
+      "sum": 10.403196614981521,
+      "pf": 2.063283112297276,
+      "win_rate": 0.5217391304347826,
       "max_dd": 3.270526237220202,
       "losing_streak": 2
     },
     "2026-10-17/2026-10-23": {
-      "n": 25,
-      "mean": 0.020973320690466472,
-      "sum": 0.5243330172616618,
-      "pf": 1.0467883041450052,
-      "win_rate": 0.4,
-      "max_dd": 3.643943075658192,
+      "n": 27,
+      "mean": 0.08225465900439205,
+      "sum": 2.2208757931185854,
+      "pf": 1.1968676696038385,
+      "win_rate": 0.4074074074074074,
+      "max_dd": 3.643943075658191,
       "losing_streak": 3
     },
     "2026-10-24/2026-10-30": {
-      "n": 25,
-      "mean": 0.2611157701675062,
-      "sum": 6.527894254187656,
-      "pf": 1.6357760002545547,
-      "win_rate": 0.4,
-      "max_dd": 4.604704886293152,
-      "losing_streak": 7
+      "n": 27,
+      "mean": 0.05134673486832406,
+      "sum": 1.3863618414447496,
+      "pf": 1.1102850284526637,
+      "win_rate": 0.2962962962962963,
+      "max_dd": 5.793687099731886,
+      "losing_streak": 9
     },
     "2026-10-31/2026-11-06": {
-      "n": 4,
-      "mean": 0.7979649304109915,
-      "sum": 3.191859721643966,
-      "pf": 3.6794688718988926,
-      "win_rate": 0.5,
+      "n": 6,
+      "mean": 0.9576893395722399,
+      "sum": 5.746136037433439,
+      "pf": 5.823705923413622,
+      "win_rate": 0.6666666666666666,
       "max_dd": 1.1912285136501515,
       "losing_streak": 2
     }
   },
   "positive_weeks": 11,
-  "remove_best_10pct_mean": -0.07920928545824502,
+  "remove_best_10pct_mean": -0.08293468629410625,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "633b77e280e8d134e29032a5eae1ad7aa78571bec50784a16b385cf0737e9bf8"
+  "ledger_sha256": "6b179e0a2cfcc86ae06796b84e5072d1e1d919f440a74aebd119f0b61c1cdefa"
 }
