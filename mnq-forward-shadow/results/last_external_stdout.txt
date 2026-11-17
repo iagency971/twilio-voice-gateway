@@ -1,22 +1,21 @@
-NQ: 27,292 bars  (2026-10-18 18:10:00 -> 2026-11-13 16:59:00)
+NQ: 25,931 bars  (2026-10-21 00:09:00 -> 2026-11-16 23:58:00)
 Auto-detected history file: /tmp/mnq_forward_shadow/external/data/Dataset_NQ_1min_2022_2025.csv
 Prepended 0 historical bars for regime warmup
-Combined: 27,292 bars  (2026-10-18 18:10:00 -> 2026-11-13 16:59:00)
-Daily bars: 273
+Combined: 25,931 bars  (2026-10-21 00:09:00 -> 2026-11-16 23:58:00)
+Daily bars: 272
 Scanning models...
   ema_rev: 9 signals
-  kalman_mom: 14 signals
+  kalman_mom: 12 signals
   or_rev: 6 signals
-  ou_lunch: 8 signals
-  ou_rev: 24 signals
-  pm_mom: 18 signals
-  sweep: 1 signals
-  trend: 14 signals
-  vwap_rev: 5 signals
-  vwap_scalp: 3 signals
-  total: 102 signals
+  ou_lunch: 9 signals
+  ou_rev: 17 signals
+  pm_mom: 16 signals
+  trend: 11 signals
+  vwap_rev: 6 signals
+  vwap_scalp: 2 signals
+  total: 88 signals
 Simulating...
-  60 trades
+  54 trades
 Trades -> /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/mnq-forward-shadow/results/latest_external_trades.csv
 
 =================================================================
@@ -24,53 +23,52 @@ Trades -> /home/runner/work/twilio-voice-gateway/twilio-voice-gateway/mnq-forwar
 =================================================================
 Metric            Value
 ----------------  -------
-Total Trades      60
-Trading Days      19
-Trades/Day        3.2
-Win Rate          46.7%
-Avg Win (R)       1.77
-Avg Loss (R)      -0.57
-Expectancy (R)    0.522
-Profit Factor     2.73
-Total R           31.3
+Total Trades      54
+Trading Days      18
+Trades/Day        3.0
+Win Rate          37.0%
+Avg Win (R)       1.96
+Avg Loss (R)      -0.56
+Expectancy (R)    0.370
+Profit Factor     2.04
+Total R           20.0
 Max Drawdown (R)  -4.4
-Avg Risk (ticks)  55.3
-Total PnL ($)     $31,324
+Avg Risk (ticks)  55.1
+Total PnL ($)     $19,970
 
 --- By Model ---
-  ema_rev    8 trades  62% WR  avg +0.76R  total +6.1R
-  kalman_mom    9 trades  22% WR  avg -0.35R  total -3.2R
-  or_rev    5 trades  40% WR  avg +0.66R  total +3.3R
-  ou_lunch    6 trades  83% WR  avg +1.76R  total +10.6R
-  ou_rev   15 trades  47% WR  avg +0.51R  total +7.7R
-  pm_mom   11 trades  36% WR  avg +0.28R  total +3.1R
-  trend     3 trades  100% WR  avg +1.59R  total +4.8R
+  ema_rev    8 trades  50% WR  avg +0.48R  total +3.9R
+  kalman_mom    7 trades  14% WR  avg -0.47R  total -3.3R
+  or_rev    4 trades  25% WR  avg +0.50R  total +2.0R
+  ou_lunch    7 trades  71% WR  avg +1.37R  total +9.6R
+  ou_rev   12 trades  33% WR  avg +0.34R  total +4.1R
+  pm_mom   11 trades  27% WR  avg +0.15R  total +1.6R
+  trend     2 trades  100% WR  avg +1.58R  total +3.2R
   vwap_rev    3 trades  0% WR  avg -0.34R  total -1.0R
 
 --- By Setup Type ---
-  ema_rev_long                 6 trades  83% WR  avg +1.01R
+  ema_rev_long                 6 trades  67% WR  avg +0.64R
   ema_rev_short                2 trades  0% WR  avg -0.00R
-  kalman_mom_long              8 trades  25% WR  avg -0.27R
-  kalman_mom_short             1 trades  0% WR  avg -1.01R
-  or_rev_long                  5 trades  40% WR  avg +0.66R
-  ou_lunch_long                6 trades  83% WR  avg +1.76R
-  ou_rev_long                 12 trades  42% WR  avg +0.42R
-  ou_rev_short                 3 trades  67% WR  avg +0.89R
-  pm_mom_long                 10 trades  30% WR  avg +0.16R
+  kalman_mom_long              7 trades  14% WR  avg -0.47R
+  or_rev_long                  4 trades  25% WR  avg +0.50R
+  ou_lunch_long                7 trades  71% WR  avg +1.37R
+  ou_rev_long                 11 trades  36% WR  avg +0.37R
+  ou_rev_short                 1 trades  0% WR  avg -0.00R
+  pm_mom_long                 10 trades  20% WR  avg +0.01R
   pm_mom_short                 1 trades  100% WR  avg +1.50R
-  trend_cont_long              2 trades  100% WR  avg +1.66R
+  trend_cont_long              1 trades  100% WR  avg +1.71R
   trend_cont_short             1 trades  100% WR  avg +1.46R
   vwap_rev_long                1 trades  0% WR  avg -0.01R
   vwap_rev_short               2 trades  0% WR  avg -0.51R
 
 --- By Exit ---
-  stop                 15 trades  avg -1.01R
+  stop                 16 trades  avg -1.01R
   target                2 trades  avg +2.35R
-  trail                43 trades  avg +0.97R
+  trail                36 trades  avg +0.87R
 
 --- Monthly ---
-  2026-10    +9.0R   31 trades  45% WR
-  2026-11   +22.4R   29 trades  48% WR
+  2026-10    +3.8R   25 trades  36% WR
+  2026-11   +16.2R   29 trades  38% WR
 =================================================================
 
 ================================================================================
