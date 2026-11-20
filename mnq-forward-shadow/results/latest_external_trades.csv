@@ -1,6 +1,4 @@
 entry_time,exit_time,direction,model,tag,entry,exit,stop,target,reason,risk_ticks,total_r,moved_be,partial_taken
-2026-10-22 10:57:00,2026-10-22 10:58:00,long,vwap_scalp,vwap_scalp_long,29261.25,29284.1875,29249.0,29346.25,trail,49.0,1.8724489795918366,True,True
-2026-10-22 11:20:00,2026-10-22 11:21:00,long,ou_rev,ou_rev_long,29298.5,29331.9375,29278.5,29405.25,trail,80.0,1.671875,True,True
 2026-10-23 13:17:00,2026-10-23 13:18:00,long,ema_rev,ema_rev_long,29158.75,29176.4375,29144.0,29186.5,trail,59.0,1.1991525423728813,True,True
 2026-10-23 13:42:00,2026-10-23 13:43:00,long,pm_mom,pm_mom_long,29175.75,29157.6875,29157.75,29211.75,stop,72.0,-1.0034722222222223,False,False
 2026-10-26 12:44:00,2026-10-26 12:45:00,long,ema_rev,ema_rev_long,29430.25,29416.9375,29417.0,29460.25,stop,53.0,-1.0047169811320755,False,False
@@ -64,3 +62,4 @@ entry_time,exit_time,direction,model,tag,entry,exit,stop,target,reason,risk_tick
 2026-11-18 12:54:00,2026-11-18 12:54:00,short,kalman_mom,kalman_mom_short,27175.75,27187.8125,27187.75,27145.75,stop,48.0,-1.0052083333333333,False,False
 2026-11-18 13:13:00,2026-11-18 13:14:00,long,ema_rev,ema_rev_long,27100.0,27114.9375,27087.5,27140.0,trail,50.0,1.195,True,True
 2026-11-18 13:40:00,2026-11-18 13:41:00,long,pm_mom,pm_mom_long,27263.25,27243.9375,27244.0,27294.75,stop,77.0,-1.0032467532467533,False,False
+2026-11-19 10:39:00,2026-11-19 10:39:00,short,kalman_mom,kalman_mom_short,27136.5,27112.0,27147.75,27112.0,target,45.0,2.1777777777777776,False,False
