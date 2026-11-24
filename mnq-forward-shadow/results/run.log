@@ -1,21 +1,21 @@
 {
   "status": "PROXY_FORWARD_NO_GO",
-  "latest_complete_day": "2026-11-20",
+  "latest_complete_day": "2026-11-23",
   "primary": {
-    "n": 245,
-    "mean": 0.22339044517443743,
-    "sum": 54.73065906773717,
-    "pf": 1.5396384478308494,
-    "win_rate": 0.4204081632653061,
+    "n": 242,
+    "mean": 0.24429129071435163,
+    "sum": 59.11849235287309,
+    "pf": 1.5893301374220414,
+    "win_rate": 0.41735537190082644,
     "max_dd": 11.294349378137225,
     "losing_streak": 7
   },
   "stress": {
-    "n": 245,
-    "mean": 0.14684672662564247,
-    "sum": 35.977448023282406,
-    "pf": 1.3207399947330234,
-    "win_rate": 0.4204081632653061,
+    "n": 242,
+    "mean": 0.167754002551033,
+    "sum": 40.59646861734999,
+    "pf": 1.3658529905608672,
+    "win_rate": 0.41735537190082644,
     "max_dd": 13.584433922762964,
     "losing_streak": 7
   },
@@ -111,12 +111,12 @@
       "losing_streak": 6
     },
     "2026-10-24/2026-10-30": {
-      "n": 25,
-      "mean": 0.2611157701675062,
-      "sum": 6.527894254187656,
-      "pf": 1.6357760002545547,
-      "win_rate": 0.4,
-      "max_dd": 4.604704886293152,
+      "n": 21,
+      "mean": 0.14574893044397963,
+      "sum": 3.0607275393235724,
+      "pf": 1.3340912886418106,
+      "win_rate": 0.3333333333333333,
+      "max_dd": 4.604704886293151,
       "losing_streak": 7
     },
     "2026-10-31/2026-11-06": {
@@ -145,13 +145,22 @@
       "win_rate": 0.21428571428571427,
       "max_dd": 5.509621789982201,
       "losing_streak": 6
+    },
+    "2026-11-21/2026-11-27": {
+      "n": 1,
+      "mean": 7.8549999999999995,
+      "sum": 7.8549999999999995,
+      "pf": 1e+99,
+      "win_rate": 1.0,
+      "max_dd": 0.0,
+      "losing_streak": 0
     }
   },
-  "positive_weeks": 11,
-  "remove_best_10pct_mean": -0.051496074412851554,
+  "positive_weeks": 12,
+  "remove_best_10pct_mean": -0.05939358686105673,
   "notes": [
     "Yahoo NQ=F shadow proxy only; not official CME validation.",
     "Frozen external model commit; no post-forward retuning allowed."
   ],
-  "ledger_sha256": "62ae8264000a21e6e962da936d639f539c0bca36af4b797745e41189227c1da3"
+  "ledger_sha256": "57b2d582d66f7a5178fdbdf09bdbd39f2a3ee58b0f6ea932c23bc23c1593b90a"
 }
